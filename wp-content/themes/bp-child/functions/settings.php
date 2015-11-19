@@ -66,6 +66,13 @@ function create_compliancetest_settings_page()
         }
         update_option('generate_profile_sqs_queue_name', $_POST['generate_profile_sqs_queue_name']);
 
+        if (isset($_POST['saff_upload_via_sqs']) && $_POST['saff_upload_via_sqs'] == 'on') {
+            update_option('saff_upload_via_sqs', 'yes');
+        } else {
+            update_option('saff_upload_via_sqs', 'no');
+        }
+        update_option('saff_upload_via_sqs_queue_name', $_POST['saff_upload_via_sqs_queue_name']);
+
         if( isset( $_POST['validate_via_sqs'] ) && $_POST['validate_via_sqs'] == 'on' ) {
             update_option('validate_via_sqs', 'yes');
         } else{
@@ -574,6 +581,14 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Max non-bulk CopyCount limit:</b></label></td>
                             <td><input type="text" name="max_non_bulk_copycount_factor" id="max_expansion_factor" size="15" value="<?php echo get_option('max_non_bulk_copycount_factor')?>" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>SAFF Upload via SQS:</b></label></td>
+                            <td><input type="checkbox" name="saff_upload_via_sqs" id="saff_upload_via_sqs" size="50" <?php if( get_option('saff_upload_via_sqs') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>SAFF Upload SQS Queue Name:</b></label></td>
+                            <td><input type="text" name="saff_upload_via_sqs_queue_name" id="saff_upload_via_sqs_queue_name" size="50" value="<?php echo get_option('saff_upload_via_sqs_queue_name')?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
