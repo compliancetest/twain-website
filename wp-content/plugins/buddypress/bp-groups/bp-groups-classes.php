@@ -163,7 +163,13 @@ class BP_Groups_Group {
 	 */
 	public function populate() {
 		global $wpdb, $bp;
-
+		foreach($bp->groups as $k => $v) {
+			if(strpos($k, 'table_') !== false){
+				if(strpos($v, 'wp_') === false) {
+					$bp->groups->$k = 'wp_' . $v;
+				}
+			}
+		}
 		if ( $group = $wpdb->get_row( $wpdb->prepare( "SELECT g.* FROM {$bp->groups->table_name} g WHERE g.id = %d", $this->id ) ) ) {
 			bp_groups_update_meta_cache( $this->id );
 
