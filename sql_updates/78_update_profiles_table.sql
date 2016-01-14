@@ -1,1 +1,0 @@
-ALTER TABLE `wp_community_profile_instances` ADD `content_length` INT NOT NULL ;

@@ -1,1 +1,0 @@
-ALTER TABLE `wp_pricing_plans_attributes` ADD `order` INT NOT NULL ;

@@ -1,1 +1,0 @@
-ALTER TABLE `wp_users_subscriptions` ADD COLUMN `force_e2e_routing` BOOLEAN DEFAULT FALSE;

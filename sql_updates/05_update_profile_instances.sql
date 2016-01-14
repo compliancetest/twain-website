@@ -1,1 +1,0 @@
-ALTER TABLE `wp_community_profile_instances` ADD COLUMN `lookup` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1;

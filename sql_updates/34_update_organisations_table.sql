@@ -1,1 +1,0 @@
-ALTER TABLE `wp_organisations` DROP `admin_id`;

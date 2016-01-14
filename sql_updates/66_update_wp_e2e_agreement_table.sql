@@ -1,2 +1,0 @@
-ALTER TABLE `wp_e2e_agreement` ADD `requestor_name` VARCHAR( 255 ) NOT NULL AFTER `requester_service_id` ;
-ALTER TABLE `wp_e2e_agreement` ADD `responder_name` VARCHAR( 255 ) NOT NULL AFTER `responder_service_id` ;

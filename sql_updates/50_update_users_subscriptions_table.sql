@@ -1,1 +1,0 @@
-ALTER TABLE `wp_users_subscriptions` ADD `limited_error_checking` BOOLEAN NOT NULL DEFAULT FALSE ;

@@ -1,1 +1,0 @@
-ALTER TABLE `wp_organisations_charge` ADD `discount` INT NOT NULL DEFAULT '0';

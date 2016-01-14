@@ -1,1 +1,0 @@
-RENAME TABLE `wp_users_cards` TO `wp_organisations_payment_methods`;

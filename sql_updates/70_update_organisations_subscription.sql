@@ -1,1 +1,0 @@
-ALTER TABLE `wp_organisations_subscriptions` ADD `voucher` VARCHAR( 255 ) NOT NULL AFTER `pricing_plan_id` ;

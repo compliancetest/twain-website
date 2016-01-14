@@ -1,1 +1,0 @@
-ALTER TABLE `wp_bp_groups_downloads` ADD COLUMN `download_file` BLOB;

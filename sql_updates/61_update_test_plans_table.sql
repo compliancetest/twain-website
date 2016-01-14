@@ -1,1 +1,0 @@
-ALTER TABLE `wp_test_plans_excluded_cases` CHANGE `date` `date` datetime;

@@ -1,2 +1,0 @@
-ALTER TABLE `wp_organisations` ADD COLUMN `organisation_description` text default '' AFTER `organisation_name`;
-ALTER TABLE `wp_organisations` ADD COLUMN `organisation_website` varchar(1000) DEFAULT '' AFTER organisation_description;

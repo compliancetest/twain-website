@@ -1,5 +1,0 @@
-<?php
-/**
-* Profile Type Popoup
-*/
-

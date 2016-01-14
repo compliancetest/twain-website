@@ -1,1 +1,0 @@
-ALTER TABLE `wp_community_profile_types` ADD `is_displayed` BOOLEAN NOT NULL DEFAULT TRUE ;

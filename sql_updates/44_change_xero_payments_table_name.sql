@@ -1,1 +1,0 @@
-ALTER TABLE `wp_xero_payments` RENAME TO `wp_organisations_payments`;
