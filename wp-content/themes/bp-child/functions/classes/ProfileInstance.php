@@ -51,12 +51,16 @@ class ProfileInstance
         }
 
         $is_bulk = false;
-        if ($file_size >= get_option('s3_bulk_treshold')) {
-            $is_bulk = true;
-        }
+
         if ($is_expanded || $mark_as_pending) {
             $status = 'pending';
         }
+
+        if ($file_size >= get_option('s3_bulk_treshold')) {
+            $is_bulk = true;
+            $is_expanded = true;
+        }
+
         if ($validate_via_sqs && $send_sqs_message) {
             $status = 'pending';
 
