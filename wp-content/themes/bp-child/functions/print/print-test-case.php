@@ -2,7 +2,7 @@
 /**
 * Print Test Case Page
 */
-$case = new TestCase(get_the_ID());
+$case = new TestCases(get_the_ID());
 $case->load();
 $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
 $community_id = get_post_meta($test_suite_id, "community_id", true);

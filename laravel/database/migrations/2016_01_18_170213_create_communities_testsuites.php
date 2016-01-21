@@ -13,8 +13,9 @@ class CreateCommunitiesTestsuites extends Migration
     public function up()
     {
         Schema::create('communities_testsuites', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('community_id')->unsigned();
+            $table->primary('id');
+            $table->string('id', 36);
+            $table->string('community_id', 36);
             $table->integer('testsuite_id')->unsigned();
         });
 

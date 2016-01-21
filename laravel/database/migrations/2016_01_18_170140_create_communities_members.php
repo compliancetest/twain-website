@@ -13,14 +13,17 @@ class CreateCommunitiesMembers extends Migration
     public function up()
     {
         Schema::create('communities_members', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('community_id')->unsigned();
+            $table->primary('id');
+            $table->string('id', 36);
+            $table->string('community_id');
             $table->integer('user_id')->unsigned();
             $table->string('user_title');
             $table->boolean('is_admin');
             $table->boolean('is_mod');
             $table->boolean('is_banned');
             $table->boolean('invite_sent');
+            $table->integer('inviter_id');
+            $table->boolean('is_confirmed');
             $table->timestamps();
         });
 

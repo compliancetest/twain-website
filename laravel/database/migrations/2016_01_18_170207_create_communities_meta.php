@@ -13,8 +13,9 @@ class CreateCommunitiesMeta extends Migration
     public function up()
     {
         Schema::create('communities_meta', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('community_id')->unsigned();
+            $table->primary('id');
+            $table->string('id', 36);
+            $table->string('community_id', 36);
             $table->string('meta_key');
             $table->text('meta_value');
         });

@@ -13,12 +13,13 @@ class CreateCommunities extends Migration
     public function up()
     {
         Schema::create('communities', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary('id');
+            $table->string('id', 36);
             $table->integer('creator_id');
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->boolean('status');
+            $table->string('status');
             $table->timestamps();
         });
     }

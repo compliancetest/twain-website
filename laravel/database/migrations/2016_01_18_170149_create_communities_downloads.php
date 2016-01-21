@@ -13,8 +13,9 @@ class CreateCommunitiesDownloads extends Migration
     public function up()
     {
         Schema::create('communities_downloads', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('community_id')->unsigned();
+            $table->primary('id');
+            $table->string('id', 36);
+            $table->string('community_id', 36);
             $table->string('title');
             $table->text('description');
             $table->text('license');

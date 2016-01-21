@@ -14,7 +14,7 @@ if( ($caseID != null && !can_edit_test_case($caseID)) || ($caseID == null && !ca
 
 $isNew = true;
 
-$case = new TestCase($caseID);
+$case = new TestCases($caseID);
 $case->load();
 
 if(!$case->id)

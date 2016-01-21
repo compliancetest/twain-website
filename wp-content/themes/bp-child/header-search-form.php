@@ -1,7 +1,7 @@
 <div class="header-search">
     <form action="/search-results/">
         <div class="header-search-box">
-            <input type="text" name="q" class="header-search-field" value="<?php echo htmlspecialchars($_GET['q']) ?>" placeholder="Search" />
+            <input type="text" name="q" class="header-search-field" value="<?php echo htmlspecialchars(@$_GET['q']) ?>" placeholder="Search" />
             <div class="header-search-type">
                 <div class="header-search-type-inner">
                     <select class="header-search-type-field">

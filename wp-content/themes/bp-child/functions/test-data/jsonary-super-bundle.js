@@ -9563,7 +9563,6 @@
 				this.addColumn(columnName, title, function (data, context) {
 					if (!context.data.readOnly()) {
 						return '<td></td>';
-						return '<td></td>';
 					}
 					var result = '<td>';
 					if (!context.parent.uiState.linkRel) {

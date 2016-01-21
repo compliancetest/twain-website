@@ -75,7 +75,7 @@ function sendMessage()
             echo '<error>Invalid Request!</error>';
         } else {
             $suiteObj = new TestSuite($suite_id);
-            $caseObj = new TestCase($case_id);
+            $caseObj = new TestCases($case_id);
             $caseObj->load();
 
             $pricingPlanId = $wpdb->get_var($wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id()));
@@ -205,7 +205,7 @@ function loadMessageTemplate()
 
         if ($current_case_id != $row->case_id) {
             //Getting Case Message Templates
-            $caseObj = new TestCase($row->case_id);
+            $caseObj = new TestCases($row->case_id);
 
             $caseTemplates = $caseObj->loadMessageTemplates();
             echo '<templates>';
@@ -317,7 +317,7 @@ function getCaseTemplatesAndProfiles()
         $cases = get_post_meta($case_id, 'test_suite');
         if (is_array($cases) && in_array($suite_id, $cases)) {
             //Getting Case Message Templates
-            $caseObj = new TestCase($case_id);
+            $caseObj = new TestCases($case_id);
 
             $caseTemplates = $caseObj->loadMessageTemplates();
             echo '<templates>';
@@ -371,7 +371,7 @@ function getTestCases()
         if (!isset($_POST['only-cases'])) {
             if ($cases) {
                 //Getting Case Message Templates
-                $caseObj = new TestCase($cases[0]->ID);
+                $caseObj = new TestCases($cases[0]->ID);
 
                 $caseTemplates = $caseObj->loadMessageTemplates();
                 echo '<templates>';
@@ -415,7 +415,7 @@ function _getHarnessProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
-    $case = new TestCase($case_id);
+    $case = new TestCases($case_id);
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
@@ -468,7 +468,7 @@ function _getTesterProfilesHTML($case_id, $defaults = array())
     $html .= '<div class="grid-cell width30P"><b>Type</b></div>';
     $html .= '<div class="clear"></div>';
     $html .= '</div>';
-    $case = new TestCase($case_id);
+    $case = new TestCases($case_id);
     $case->load();
     $suiteObj = new TestSuite();
     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
@@ -530,7 +530,7 @@ function _getTesterAndHarnessProfileInstances($case_id, $user_id)
 {
     global $wpdb;
 
-    $caseObj = new TestCase($case_id);
+    $caseObj = new TestCases($case_id);
     $caseObj->loadProfileInstances();
 
     $ids = $wpdb->escape($caseObj->profileInstances);
@@ -646,7 +646,7 @@ function showTriggerMessageBox()
             $prevMessages = getUserPreviousMessageTemplates($user_id);
 
             //Getting Harness Profiles
-            $caseObj = new TestCase($current_case_id);
+            $caseObj = new TestCases($current_case_id);
             /*$caseObj->loadProfileInstances();
             $harnessProfiles = $caseObj->getProfileInstanceRows();*/
 
@@ -704,7 +704,7 @@ function showTriggerMessageBox()
                                         $pricingPlanId = $wpdb->get_var($wpdb->prepare("SELECT pricing_plan_id FROM wp_organisations_subscriptions WHERE user_id = %d ", get_current_user_id()));
                                         ?>
                                         <?php foreach ($cases AS $c):
-                                            $cs = new TestCase($c->ID);
+                                            $cs = new TestCases($c->ID);
                                             $cs->load();
                                             ?>
                                             <option value="<?php echo $c->ID ?>"
@@ -994,7 +994,7 @@ function uploadMessage()
             $filesize = $file['size'];
 
             $suiteObj = new TestSuite($suite_id);
-            $caseObj = new TestCase($case_id);
+            $caseObj = new TestCases($case_id);
             $caseObj->load();
 
             $fileId = $caseObj->testCaseID . "_" . $subscription->harness_username;
