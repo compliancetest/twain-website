@@ -50,6 +50,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'wordpress.admin' => \App\Http\Middleware\WordpressAdmin::class,
         'wordpress.auth' => \App\Http\Middleware\WordpressAuth::class,
+        'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
 
     ];
 }

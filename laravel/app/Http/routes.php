@@ -4,6 +4,24 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('communities', 'CommunitiesController@index');
 
+    Route::group(['middleware' => ['wordpress.auth', 'community.admin']], function () {
+        Route::get('downloads/{community}/create', 'CommunityDownloadsController@create');
+
+        Route::get('downloads/{community}/edit/{download}', 'CommunityDownloadsController@edit');
+
+        Route::get('downloads/{community}/agreement/{download}', 'CommunityDownloadsController@agreement');
+
+        Route::get('downloads/{community}/getfile/{download}', 'CommunityDownloadsController@getfile');
+
+        Route::get('downloads/{community}/confirmdelete/{download}', 'CommunityDownloadsController@confirmDelete');
+
+        Route::delete('downloads/{community}/{download}', 'CommunityDownloadsController@destroy');
+
+        Route::patch('downloads/{community}/{download}', 'CommunityDownloadsController@update');
+
+        Route::post('downloads/{community}', 'CommunityDownloadsController@store');
+    });
+
 
     Route::group(['middleware' => ['wordpress.auth']], function () {
         Route::get('communities/popups/{slug}/join/{acceptedterms?}', 'CommunityMembershipController@join');
@@ -16,11 +34,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
 
-        Route::get('communities/downloads/create', 'CommunityDownloadsController@create');
 
-        Route::get('communities/downloads/{download}/agreement', 'CommunityDownloadsController@create');
-
-        Route::post('communities/downloads', 'CommunityDownloadsController@store');
     });
 
     Route::group(['middleware' => ['wordpress.admin']], function () {

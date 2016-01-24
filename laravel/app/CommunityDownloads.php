@@ -10,7 +10,7 @@ class CommunityDownloads extends Model
 
     public $incrementing = false;
 
-    protected $fillable = [];
+    protected $fillable = ['version', 'description', 'license', 'token', 'size', 'location', 'title', 'version_description'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

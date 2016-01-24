@@ -19,22 +19,22 @@
 
                         @if($file->license || $communityLicense)
 
-                            <a href="/communities/downloads/{{ $file->id }}/agreement"
+                            <a href="/downloads/{{ $community->slug }}/agreement/{{ $file->id }}/"
                                class="download-link" rel="has-license">{{ $file->title }}</a>
 
                         @else
 
-                            <a href="/communities/downloads/{{ $file->id }}/agreement"
-                               class="download-link"><?php echo $file->name?></a>
+                            <a href="/downloads/{{ $community->slug }}/getfile/{{ $file->id }}"
+                               class="download-link">{{ $file->name }}</a>
 
                         @endif
 
                         <br/>
 
-                        @if($file->version){ ?>
+                        @if($file->version)
                             Version:
                             <b>{{ $file->version }}</b>
-                            @if($file->version_description) {{ $file->version_description }} @endif
+                            @if($file->version_description) ({{ $file->version_description }}) @endif
                             <br/>
 
                         @endif
@@ -44,18 +44,18 @@
                     </div>
 
                     <div class="grid-list-cell width15P tocenter">
-                        <?php echo formatBytes($file->size); ?>
+                        {{ formatBytes($file->size) }}
                     </div>
 
                     <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">
 
                         @if($file->license || $communityLicense)
 
-                            <a href="/communities/downloads/{{ $file->id }}/agreement"
+                            <a href="/downloads/{{ $community->slug }}/agreement/{{ $file->id }}/"
                                class="license-link has-license download-link" rel="has-license">License<br/>Agreement<span
                                         class="simple_tooltip"><span></span>To download this file<br/>you have to read &<br/>agree Licence Agreement</span></a>
                         @else
-                            <a href="/communities/downloads/{{ $file->id }}/agreement"
+                            <a href="/downloads/{{ $community->slug }}/getfile/{{ $file->id }}"
                                class="license-link download-link">License<br/>Agreement</a>
 
                         @endif
@@ -66,13 +66,13 @@
                     <div class="grid-list-cell width10P">
 
                         @if($community->isAdmin())
-                            <a href="/communities/downloads/{{ $file->id }}/edit/"
-                               class="action-btn blue-edit-btn icon-btn">
+                            <a href="/downloads/{{ $community->slug }}/edit/{{ $file->id }}/"
+                               class="action-btn blue-edit-btn icon-btn edit-file-link">
                                 <span class="p"></span><span class="simple_tooltip"><span></span>Edit</span>
                             </a>
 
-                            <a href="/communities/downloads/{{ $file->id }}/delete/"
-                               class="action-btn delete-btn icon-btn no-submit">
+                            <a href="/downloads/{{ $community->slug }}/confirmdelete/{{ $file->id }}"
+                               class="action-btn delete-btn icon-btn delete-file-link">
                                 <span class="p"></span><span class="simple_tooltip"><span></span>Delete</span>
                             </a>
 
@@ -114,9 +114,19 @@
 </div>
 
 <script>
-    jQuery(document).ready(function($){
-        $('#add-new-download').on('click', function(){
-            $("#new-downloads").load("/communities/downloads/create");
+    jQuery(document).ready(function(){
+        jQuery('#add-new-download').on('click', function(){
+            jQuery("#new-downloads").load("/downloads/{{ $community->slug }}/create");
+        });
+        jQuery('.edit-file-link').on('click', function(e){
+            e.preventDefault();
+            if(jQuery('.grid-file-edit-row')){
+                jQuery('.grid-file-edit-row').remove();
+            }
+            var link = jQuery(this).attr('href');
+            jQuery(this).closest('div.grid-list-row').after('<div class="grid-list-row grid-file-edit-row"></div>');
+            jQuery('.grid-file-edit-row').load(link);
+            return false;
         });
     });
 </script>
