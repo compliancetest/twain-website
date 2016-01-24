@@ -43,6 +43,14 @@ class Community extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function downloads()
+    {
+        return $this->hasMany('App\CommunityDownloads');
+    }
+
+    /**
      * Get all approved community members
      * @return array|null
      */

@@ -14,7 +14,7 @@ class CommunityRequest extends Request
      */
     public function authorize()
     {
-        return is_super_admin();
+        return true;
     }
 
     /**
