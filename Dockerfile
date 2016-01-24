@@ -10,4 +10,6 @@ RUN apt-get update && \
 RUN rm -rf /var/www/html
 ADD . /var/www/html
 EXPOSE 80
-CMD ["/bin/bash", "/etc/init.d/apache2 start"]
+ADD start.sh /start.sh
+RUN chmod 0755 /start.sh
+CMD ["bash", "start.sh"]
