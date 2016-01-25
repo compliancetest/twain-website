@@ -18,6 +18,7 @@ class CloudSearch {
 
     public function __construct()
     {
+        return false;
         $this->_client = get_transient( 'cloud_search_object' );
         if( ! $this->_client ) {
             $this->_domainName = get_option('cloudsearch_domain_name');

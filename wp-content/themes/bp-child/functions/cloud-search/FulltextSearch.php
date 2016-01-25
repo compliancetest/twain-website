@@ -22,6 +22,7 @@ class FulltextSearch {
     );
 
     public function __construct(){
+        return false;
         $this->_client = get_transient( 'fulltext_cloud_search_object' );
         if( ! $this->_client ) {
             $this->_domainName = get_option('cloudsearch_fulltext_domain_name');
