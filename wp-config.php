@@ -16,16 +16,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'twain');
+define('DB_NAME', getenv('DB_MYSQL_DATABASENAME'));
 
 /** MySQL database username */
-define('DB_USER', 'twain');
+define('DB_USER', getenv('DB_MYSQL_USERNAME'));
 
 /** MySQL database password */
-define('DB_PASSWORD', 'cb8682e0ff4721');
+define('DB_PASSWORD', getenv('DB_MYSQL_PASSWORD'));
 
 /** MySQL hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', getenv('DB_MYSQL_DNS'));
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -35,6 +35,9 @@ define('DB_COLLATE', '');
 
 /** Enable W3 Total Cache */
 define('WP_CACHE', true); // Added by W3 Total Cache
+if(!getenv('FORCE_SSL_ADMIN')) {
+	define('FORCE_SSL_ADMIN', true);
+}
 
 /**#@+
  * Authentication Unique Keys and Salts.
