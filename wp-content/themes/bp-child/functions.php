@@ -1,4 +1,9 @@
 <?php
+
+if (stripos(get_option('siteurl'), 'https://') === 0) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 //Session Start
 if(!session_id())
     session_start();
