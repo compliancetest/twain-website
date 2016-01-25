@@ -36,6 +36,8 @@ define('DB_COLLATE', '');
 /** Enable W3 Total Cache */
 define('WP_CACHE', true); // Added by W3 Total Cache
 
+define('FORCE_SSL_ADMIN', true);
+
 /**#@+
  * Authentication Unique Keys and Salts.
  *
