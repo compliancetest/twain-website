@@ -12,8 +12,8 @@ php_flag session.use_only_cookies On
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
