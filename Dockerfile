@@ -11,7 +11,6 @@ RUN apt-get update && \
 
 ADD apache2.conf /etc/apache2/apache2.conf
 ADD . /var/www/html
-RUN chmod -R 777 /var/www/html/wp-content/uploads
 EXPOSE 80
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
