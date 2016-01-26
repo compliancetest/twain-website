@@ -395,7 +395,7 @@ $xeroItems = ct_get_xero_items();
                <div class="clear"></div>
            </div>
            <?php
-               $availableTemplates = $suite->getAvailableTemplates();
+               $availableTemplates = array();//$suite->getAvailableTemplates();
            ?>
            <select class="select medium-input availableTemplates" style="display: none;" id="availableTemplates">
                <option value="">Select a Template</option>
