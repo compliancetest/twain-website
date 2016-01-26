@@ -408,16 +408,16 @@ class TestCase
     public function getAvailableInitMessages()
     {
         $messages = array();
-        
-        foreach($this->testSuite as $sid)
-        {
-            $msgs = explode(',',  cp_get_post_meta($sid, 'init_message', true));
-            foreach($msgs as $m)
-            {
-                if(!trim($m) || in_array(trim($m), $messages))
-                    continue;
-                    
-                $messages[] = trim($m);
+
+        if(is_iterable($this->testSuite)) {
+            foreach ($this->testSuite as $sid) {
+                $msgs = explode(',', cp_get_post_meta($sid, 'init_message', true));
+                foreach ($msgs as $m) {
+                    if (!trim($m) || in_array(trim($m), $messages))
+                        continue;
+
+                    $messages[] = trim($m);
+                }
             }
         }
         
