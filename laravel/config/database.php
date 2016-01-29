@@ -84,6 +84,17 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
         ],
+        'sqlite_testing' => [
+            'driver'   => 'sqlite',
+            'database' => storage_path().'/testing.sqlite',
+            'prefix'   => '',
+        ],
+
+        'sqlite_unit_testing' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ],
 
     ],
 

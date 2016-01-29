@@ -24,7 +24,7 @@
                                         <div class="grid_cell nopaddingtop width30P">
                                             <div class="item-avatar width25P left">
                                                 <a href="/communities/{{ $community->slug }}/">
-                                                    <img src="{{ @$community->getAllMeta()['logo'] }}" class="avatar group-38-avatar avatar-50 photo" alt="Community logo of {{ $community->title }}" title="{{ $community->title }}" height="50" width="50"></a>
+                                                    <img src="{{ $community->getMeta('logo') }}" class="avatar group-38-avatar avatar-50 photo" alt="Community logo of {{ $community->title }}" title="{{ $community->title }}" height="50" width="50"></a>
                                             </div>
                                             <div class="width75P left">
                                                 <h5><a href="/communities/{{ $community->slug }}/">{{ $community->title }}</a></h5>

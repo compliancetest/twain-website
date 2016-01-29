@@ -1,5 +1,5 @@
 <?php
-    $communityLicense = @$community->getAllMeta()['license_agreements'];
+    $communityLicense = $community->getMeta('license_agreements');
 ?>
 <div id="downloads-container" class="tab-content white_bcg padding10">
     <div id="uploaded-files">

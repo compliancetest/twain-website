@@ -1,4 +1,4 @@
-<ul class="tabs <?php echo $community->getMember(get_current_user_id()) ? 'no-ajax' : '' ?>">
+<ul class="tabs <?php echo $community->hasAccess() ? 'no-ajax' : '' ?>">
     <li class="<?php echo ($action == 'testsuites') ? 'active' : ''?>">
         <a href="<?php echo $community->getUrl()?>" rel="testsuites-container" class="<?php echo ($action == 'testsuites' || $action == '') ? 'selected' : ''?>">
             <span class="left icon" id="icon_test_suites"></span>
@@ -58,7 +58,7 @@
             <span class="clear"></span>
         </a>
     </li>
-    <?php if($community->isAdmin(get_current_user_id())) { ?>
+    <?php if(Auth::check() && $community->isAdmin(Auth::user()->ID)) { ?>
     <li class="<?php echo ($action == 'admin') ? 'active' : ''?>">
         <a href="<?php echo $community->getUrl()?>admin" rel="group_admin_page" class="<?php echo ($action == 'admin') ? 'selected' : ''?>">
             <span class="left icon" id="icon_admin"></span>

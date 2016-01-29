@@ -156,10 +156,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /**
-         * Wordpress
-         */
-        App\Providers\WordpressServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
 

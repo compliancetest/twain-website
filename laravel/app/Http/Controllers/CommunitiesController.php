@@ -69,7 +69,7 @@ class CommunitiesController extends Controller
     public function show($slug, $action = 'testsuites')
     {
         $community = Community::findBySlug($slug);
-        $communityMeta = $community->getAllMeta();
+        $communityMeta = $community->getMeta();
         return view('pages.communities.show', compact('community', 'communityMeta', 'action'));
     }
 
@@ -82,7 +82,7 @@ class CommunitiesController extends Controller
     public function edit($slug, $step)
     {
         $community = Community::findBySlug($slug);
-        $communityMeta = $community->getAllMeta();
+        $communityMeta = $community->getMeta();
         $viewPath = 'pages.communities.edit.steps.' . $step;
         $submitButtonText = 'Edit Community and Continue';
         if(view()->exists($viewPath)) {
@@ -155,7 +155,7 @@ class CommunitiesController extends Controller
     public function terms($slug)
     {
         $community = Community::findBySlug($slug);
-        $communityMeta = $community->getAllMeta();
+        $communityMeta = $community->getMeta();
         return view('pages.communities.popups.terms', compact('community', 'communityMeta'));
     }
 

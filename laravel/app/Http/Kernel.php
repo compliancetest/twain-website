@@ -48,9 +48,8 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'wordpress.admin' => \App\Http\Middleware\WordpressAdmin::class,
-        'wordpress.auth' => \App\Http\Middleware\WordpressAuth::class,
         'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
+        'community.user' => \App\Http\Middleware\CommunityUser::class,
 
     ];
 }

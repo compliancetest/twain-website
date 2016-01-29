@@ -40,7 +40,11 @@
                 </div>
 
                 <div id="item-body">
-                    @include('pages.communities.partials.show.'.$action)
+                    @if($community->hasAccess())
+                        @include('pages.communities.partials.show.'.$action)
+                    @else
+                        <p class="padding20-10">You must be a registered member of the site to view this content. Registration is free - just go to the home page and click on the Signup button.</p>
+                    @endif
                 </div>
             </div>
         </div>

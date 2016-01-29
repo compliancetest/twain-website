@@ -1,6 +1,5 @@
 <?php
 
-require __DIR__ . '/../../wp-load.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -53,5 +52,7 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+
+require __DIR__ . '/../../wp-load.php';
 
 return $app;

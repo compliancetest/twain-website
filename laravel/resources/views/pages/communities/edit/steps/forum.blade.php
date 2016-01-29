@@ -28,7 +28,7 @@
                             bulletin-board style fashion.</p>
 
                         <div class="checkbox">
-                            <label><input name="community-forum" id="community-forum" @if(@$community->getAllMeta()['forum_id']) checked="checked" @endif value="1"
+                            <label><input name="community-forum" id="community-forum" @if($community->getMeta('forum_id')) checked="checked" @endif value="1"
                                           type="checkbox"> Yes. I want this community to have a forum.</label>
                         </div>
 

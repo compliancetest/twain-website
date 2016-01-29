@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class Community extends Model
 {
@@ -69,6 +71,30 @@ class Community extends Model
     }
 
     /**
+     * Get CONFIRMED community member record
+     * @return array|null
+     */
+    public function getActiveMember($userId)
+    {
+        return $this->members()->where(['user_id' => $userId, 'is_confirmed' => true])->first();
+    }
+
+    public function hasAccess($userId = false)
+    {
+        //non-logged in user cant view community content
+        if(!Auth::check()){
+            return false;
+        }
+        if(!$userId){
+            $userId = Auth::user()->ID;
+        }
+        if($this->getActiveMember($userId)){
+            return true;
+        }
+        return false;
+
+    }
+    /**
      * Get community admins
      * @return array|null
      */
@@ -101,8 +127,11 @@ class Community extends Model
      */
     public function isAdmin($userId = false)
     {
+        if(!Auth::check()){
+            return false;
+        }
         if (!$userId) {
-            $userId = get_current_user_id();
+            $userId = Auth::user()->ID;
         }
         return (boolean)$this->members()->where(['is_admin' => true, 'user_id' => $userId])->first();
     }
@@ -113,16 +142,21 @@ class Community extends Model
      */
     public function getUrl()
     {
-        return home_url() . '/communities/' . $this->slug . '/';
+        return URL::to('/') . '/communities/' . $this->slug . '/';
     }
 
 
     /**
-     * Get all community configs as assoc array
+     * Get one entry as string / all community configs as assoc array
      * @return mixed
      */
-    public function getAllMeta()
+    public function getMeta($key = false)
     {
+        if($key){
+            return $this->meta->keyBy('meta_key')->map(function ($item) {
+                return $item['meta_value'];
+            })->get($key, null);
+        }
         return $this->meta->keyBy('meta_key')->map(function ($item) {
             return $item['meta_value'];
         })->toArray();

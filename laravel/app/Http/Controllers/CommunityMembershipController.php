@@ -21,7 +21,7 @@ class CommunityMembershipController extends Controller
     public function join($slug, $isChecked = false)
     {
         $community = Community::findBySlug($slug);
-        $communityMeta = $community->getAllMeta();
+        $communityMeta = $community->getMeta();
         return view('pages.communities.popups.join', compact('community', 'communityMeta', 'isChecked'));
     }
 

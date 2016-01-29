@@ -42,8 +42,34 @@ function compliancetest_login()
         if($user->user_status == 3)
         {
             addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).', 'notice');
-            wp_logout();    
-        }        
+            wp_logout();
+        }
+
+        $key = md5(time().$user->data->id);
+        update_user_meta($user->data->ID, 'sso_key', $key);
+        $wpdb->update('wp_users',
+            array('user_activation_key' => $key),
+            array('ID' => $user->data->ID),
+            array('%s'),
+            array('%d')
+
+                        );
+//        require ABSPATH . 'laravel/bootstrap/autoload.php';
+//
+//        $app = require_once ABSPATH . 'laravel/bootstrap/app.php';
+//
+//        $response = $app->make('Illuminate\Contracts\Http\Kernel')
+//            ->handle(Illuminate\Http\Request::capture());
+//
+//
+//
+//        $app['session']->driver()->start();
+//
+//        $app['auth']->loginUsingId($user->data->ID);
+//
+//        $app['session']->driver()->save();
+
+
         $result['status'] = 'success';
         $result['redirect_to'] = get_user_meta($user->ID, 'dashboard_page_url', true);
         if ($result['redirect_to'] == '') {

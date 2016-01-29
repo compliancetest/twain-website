@@ -2,53 +2,62 @@
 
 Route::group(['middleware' => ['web']], function () {
 
+
+    Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
+
     Route::get('communities', 'CommunitiesController@index');
 
-    Route::group(['middleware' => ['wordpress.auth', 'community.admin']], function () {
-        Route::get('downloads/{community}/create', 'CommunityDownloadsController@create');
+    Route::group(['prefix' => 'downloads', 'middleware' => ['auth', 'community.admin']], function () {
+        Route::get('{community}/create', 'CommunityDownloadsController@create');
 
-        Route::get('downloads/{community}/edit/{download}', 'CommunityDownloadsController@edit');
+        Route::get('{community}/edit/{download}', 'CommunityDownloadsController@edit');
 
-        Route::get('downloads/{community}/agreement/{download}', 'CommunityDownloadsController@agreement');
+        Route::delete('{community}/{download}', 'CommunityDownloadsController@destroy');
 
-        Route::get('downloads/{community}/getfile/{download}', 'CommunityDownloadsController@getfile');
+        Route::patch('{community}/{download}', 'CommunityDownloadsController@update');
 
-        Route::get('downloads/{community}/confirmdelete/{download}', 'CommunityDownloadsController@confirmDelete');
+        Route::post('{community}', 'CommunityDownloadsController@store');
+    });
 
-        Route::delete('downloads/{community}/{download}', 'CommunityDownloadsController@destroy');
+    Route::group(['prefix' => 'downloads', 'middleware' => ['auth', 'community.user']], function () {
 
-        Route::patch('downloads/{community}/{download}', 'CommunityDownloadsController@update');
+        Route::get('{community}/agreement/{download}', 'CommunityDownloadsController@agreement');
 
-        Route::post('downloads/{community}', 'CommunityDownloadsController@store');
+        Route::get('{community}/getfile/{download}', 'CommunityDownloadsController@getfile');
+
+        Route::get('{community}/confirmdelete/{download}', 'CommunityDownloadsController@confirmDelete');
+
     });
 
 
-    Route::group(['middleware' => ['wordpress.auth']], function () {
-        Route::get('communities/popups/{slug}/join/{acceptedterms?}', 'CommunityMembershipController@join');
-        Route::get('communities/popups/{slug}/terms', 'CommunitiesController@terms');
-
-        Route::get('communities/popups/{slug}/leave', 'CommunityMembershipController@confirmLeave');
-        Route::delete('communities/popups/{slug}/leave', 'CommunityMembershipController@leave');
-
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('communities/popups/{community}/join/{acceptedterms?}', 'CommunityMembershipController@join');
+        Route::get('communities/popups/{community}/terms', 'CommunitiesController@terms');
         Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
 
+        //user should be community member to leave it
+        Route::group(['middleware' => ['community.user']], function () {
+            Route::get('communities/popups/{community}/leave', 'CommunityMembershipController@confirmLeave');
+            Route::delete('communities/popups/{community}/leave', 'CommunityMembershipController@leave');
+        });
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
-
-
     });
 
-    Route::group(['middleware' => ['wordpress.admin']], function () {
+    Route::group(['middleware' => ['auth']], function () {
 
+        //any registered user can create community
         Route::get('communities/create/', 'CommunitiesController@create');
-
-        Route::get('communities/edit/{community}/step/{step}/', 'CommunitiesController@edit');
-
         Route::post('communities', 'CommunitiesController@store');
 
-        Route::patch('communities/{slug}', 'CommunitiesController@update');
-        Route::delete('communities/{slug}', 'CommunitiesController@destroy');
+        Route::group(['middleware' => ['community.admin']], function () {
+
+            Route::get('communities/edit/{community}/step/{step}/', 'CommunitiesController@edit');
+            Route::patch('communities/{community}', 'CommunitiesController@update');
+            Route::delete('communities/{community}', 'CommunitiesController@destroy');
+
+        });
     });
 
-    Route::get('communities/{slug}/{action?}', 'CommunitiesController@show');
+    Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
 
 });
