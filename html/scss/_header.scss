@@ -1,0 +1,198 @@
+#header{
+    @include bgSpriteX(header-bg);
+    height: 80px;
+    @include legacy-pie-clearfix;
+
+    .logo{
+        float: left;
+        margin: 15px 0 0 0;
+    }
+}
+
+.header-account{
+    float: right;
+    margin: 9px 0 0 0;
+    text-align: right;
+
+    .header-user-info{
+        display: inline-block;
+        vertical-align: top;
+
+        .header-welcome{
+            color: #666;
+            font-size: 12px;
+            margin: 0 38px 0 0;
+            padding: 1px 0 0 0;
+            text-align: right;
+            line-height: 14px;
+
+            strong{
+                display: block;
+                color: #298bdf;
+                font-size: 15px;
+                font-weight: 700;
+            }
+        }
+
+        .avatar{
+            border: 1px solid #bbb;
+            @include border-radius(3px);
+            float: right;
+            height: 32px;
+            width: 32px;
+        }
+    }
+
+    .account-menu{
+        vertical-align: top;
+        display: inline-block;
+        margin: 0;
+
+        li{
+            float: left;
+        }
+    }
+
+}
+
+.header-search{
+    clear: both;
+    padding: 3px 0 0 0;
+}
+
+.header-search-box{
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    position: relative;
+    width: 100%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 300px;
+}
+
+.header-search-box .header-search-field{
+    width: 100%;
+    background: none;
+    border: 0;
+    height: 26px;
+    padding: 4px 118px 4px 8px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.header-search-submit{
+    display: block;
+    text-align: center;
+    border: 1px solid #5089d0;
+    background: #5699ec;
+    width: 29px;
+    height: 28px;
+    position: absolute;
+    right: 0;
+    top: -1px;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+}
+
+.header-search-submit-icon{
+    background: url("../images/btn-sprites.png") no-repeat 0 -1750px;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    text-indent: -9999em;
+    margin: 6px 0 3px 0;
+}
+
+.header-search-type{
+    margin: 2px 0;
+    border-left: 1px solid #dfdfdf;
+    float: right;
+    width: 85px;
+    position: absolute;
+    right: 27px;
+    top: 0;
+}
+
+.header-search-type-field{
+    height: 22px;
+    border: 0;
+    background: transparent;
+    color: #2c80e8;
+    font-size: 11px;
+    padding-left: 5px;
+    width: 112px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Open Sans', 'Arial',sans-serif;
+}
+
+.header-search-type-field:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+.header-search-type-field option{
+    padding: 1px 5px;
+}
+
+.header-search-type-inner{
+    background: #fff url("../images/bg/dropdown-arrow.png") no-repeat 62px 50%;
+}
+
+#navbar{
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+
+    .navbar-wrapper{
+        @include bgSpriteX(menu-bg);
+        background-repeat: repeat;
+        background-color: #2b82cd;
+        border-top: 1px solid #2a5c85;
+        border-bottom: 1px solid #2a5c85;
+    }
+
+    .menu{
+        li{
+            float: left;
+            position: relative;
+
+            &:before{
+                @include commonSprite(menu-separator);
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
+            a{
+                display: block;
+                color: #fff;
+                font-weight: 400;
+                font-family: 'Open Sans', Arial, sans-serif;
+                font-size: 13px;
+                text-shadow: 0 1px 0 #20436b;
+                padding: 0 20px;
+                line-height: 36px;
+                position: relative;
+                height: 37px;
+
+                &:hover{
+                    text-decoration: none;
+                    text-shadow: none;
+                    @include box-shadow(0 0 10px #133d68 inset);
+                    background: rgba(0,0,0,0.1);
+                    padding: 1px 20px;
+                    margin: -1px 0;
+                }
+
+            }
+
+        }
+    }
+}

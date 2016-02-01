@@ -1,0 +1,16 @@
+//Sprite for all common elements
+$common: sprite-map("common/*.png", $layout: smart);
+$bgX: sprite-map("bg/*.png", $icons-layout: vertical, $icons-foobar-repeat: repeat-x);
+
+@mixin commonSprite($image-name) {
+  display: inline-block;
+  background-image: sprite-url($common);
+  background-position: round(nth(sprite-position($common, $image-name), 1)) round(nth(sprite-position($common, $image-name), 2));
+  height: image-height(sprite-file($common, $image-name));
+  width: image-width(sprite-file($common, $image-name));
+}
+
+@mixin bgSpriteX($image-name) {
+  background-image: sprite-url($bgX);
+  background-position: round(nth(sprite-position($bgX, $image-name), 1)) round(nth(sprite-position($bgX, $image-name), 2));
+}
