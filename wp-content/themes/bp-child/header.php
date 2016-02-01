@@ -2,7 +2,7 @@
 <html>
     <head profile="http://gmpg.org/xfn/11">
         <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />        
-        <link rel="icon" href="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/drummond_group_logo.png" type="image/x-icon">
         <?php if ( current_theme_supports( 'bp-default-responsive' ) ) : ?><meta name="viewport" content="width=device-width, initial-scale=1.0" /><?php endif; ?>
         <title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
         <?php do_action( 'bp_head' ) ?>
@@ -69,7 +69,7 @@
                     do_action('cp_header_login_form');
                 }
                 ?>
-                <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+                <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>" style="height: 52px;"/></a>
                 <?php if (of_get_option('msg_of_day_title') || of_get_option('msg_of_day_content')): ?>
                 <div class="message-of-day-head">
                     <div class="message-of-day-head-inner">
