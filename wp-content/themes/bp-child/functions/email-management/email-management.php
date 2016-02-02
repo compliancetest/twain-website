@@ -909,6 +909,14 @@ function cp_send_email($to, $template_name, $data = array())
     }
     
     $phpmailer->IsSMTP();
+
+    $phpmailer->Host = getenv('SMTP_HOST');
+    $phpmailer->SMTPAuth = true;
+    $phpmailer->SMTPSecure = "tls";
+    $phpmailer->Port = getenv('SMTP_PORT');
+    $phpmailer->Username = getenv('SMTP_USER');
+    $phpmailer->Password = getenv('SMTP_PASSWORD');
+
     $phpmailer->IsHTML(true);
     $phpmailer->Subject = $emailTitle;
     $phpmailer->Body = $emailContent;

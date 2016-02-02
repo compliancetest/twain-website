@@ -522,7 +522,7 @@ if(!is_user_logged_in())
                                     <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
                                 </div>
                                 <div class="field width90P">        
-                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
                                 </div>
                                 <div class="clear"></div>
 
