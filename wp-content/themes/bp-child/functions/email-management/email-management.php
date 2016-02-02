@@ -872,12 +872,10 @@ function cp_send_email($to, $template_name, $data = array())
     
     $supportName = get_option('support_name');
     if(!$supportName)
-        $supportName = 'ComplianceTest';
+        $supportName = 'Twain';
         
-    $supportEmail = get_option('support_email');
-    if(!$supportEmail)
-        $supportEmail = 'support@compliancetest.net';
-    
+    $supportEmail = getenv('SMTP_FROM');
+
     $emailTitle = get_option($template_name . "_email_title");
     $emailContent = get_option($template_name . "_email_content");
     
