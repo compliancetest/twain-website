@@ -1717,10 +1717,10 @@ html {
 
 /* line 27, ../scss/bootstrap/_scaffolding.scss */
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.42857;
-  color: #333333;
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.16667;
+  color: #666;
   background-color: #fff;
 }
 
@@ -1776,7 +1776,7 @@ img {
 /* line 93, ../scss/bootstrap/_scaffolding.scss */
 .img-thumbnail {
   padding: 4px;
-  line-height: 1.42857;
+  line-height: 1.16667;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -1795,8 +1795,8 @@ img {
 
 /* line 113, ../scss/bootstrap/_scaffolding.scss */
 hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 14px;
+  margin-bottom: 14px;
   border: 0;
   border-top: 1px solid #eeeeee;
 }
@@ -1860,8 +1860,8 @@ h6 .small,
 h1, .h1,
 h2, .h2,
 h3, .h3 {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 14px;
+  margin-bottom: 7px;
 }
 /* line 30, ../scss/bootstrap/_type.scss */
 h1 small,
@@ -1880,8 +1880,8 @@ h3 .small, .h3 small,
 h4, .h4,
 h5, .h5,
 h6, .h6 {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 /* line 41, ../scss/bootstrap/_type.scss */
 h4 small,
@@ -1898,57 +1898,57 @@ h6 .small, .h6 small,
 
 /* line 47, ../scss/bootstrap/_type.scss */
 h1, .h1 {
-  font-size: 36px;
+  font-size: 31px;
 }
 
 /* line 48, ../scss/bootstrap/_type.scss */
 h2, .h2 {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 /* line 49, ../scss/bootstrap/_type.scss */
 h3, .h3 {
-  font-size: 24px;
+  font-size: 21px;
 }
 
 /* line 50, ../scss/bootstrap/_type.scss */
 h4, .h4 {
-  font-size: 18px;
+  font-size: 15px;
 }
 
 /* line 51, ../scss/bootstrap/_type.scss */
 h5, .h5 {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* line 52, ../scss/bootstrap/_type.scss */
 h6, .h6 {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 /* line 58, ../scss/bootstrap/_type.scss */
 p {
-  margin: 0 0 10px;
+  margin: 0 0 7px;
 }
 
 /* line 62, ../scss/bootstrap/_type.scss */
 .lead {
-  margin-bottom: 20px;
-  font-size: 16px;
+  margin-bottom: 14px;
+  font-size: 13px;
   font-weight: 300;
   line-height: 1.4;
 }
 @media (min-width: 768px) {
   /* line 62, ../scss/bootstrap/_type.scss */
   .lead {
-    font-size: 21px;
+    font-size: 18px;
   }
 }
 
 /* line 78, ../scss/bootstrap/_type.scss */
 small,
 .small {
-  font-size: 85%;
+  font-size: 91%;
 }
 
 /* line 83, ../scss/bootstrap/_type.scss */
@@ -2120,8 +2120,8 @@ a.bg-danger:focus {
 
 /* line 138, ../scss/bootstrap/_type.scss */
 .page-header {
-  padding-bottom: 9px;
-  margin: 40px 0 20px;
+  padding-bottom: 6px;
+  margin: 28px 0 14px;
   border-bottom: 1px solid #eeeeee;
 }
 
@@ -2129,7 +2129,7 @@ a.bg-danger:focus {
 ul,
 ol {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 }
 /* line 153, ../scss/bootstrap/_type.scss */
 ul ul,
@@ -2161,13 +2161,13 @@ ol ol {
 /* line 185, ../scss/bootstrap/_type.scss */
 dl {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 /* line 189, ../scss/bootstrap/_type.scss */
 dt,
 dd {
-  line-height: 1.42857;
+  line-height: 1.16667;
 }
 
 /* line 193, ../scss/bootstrap/_type.scss */
@@ -2220,9 +2220,9 @@ abbr[data-original-title] {
 
 /* line 241, ../scss/bootstrap/_type.scss */
 blockquote {
-  padding: 10px 20px;
-  margin: 0 0 20px;
-  font-size: 17.5px;
+  padding: 7px 14px;
+  margin: 0 0 14px;
+  font-size: 15px;
   border-left: 5px solid #eeeeee;
 }
 /* line 250, ../scss/bootstrap/_type.scss */
@@ -2237,7 +2237,7 @@ blockquote small,
 blockquote .small {
   display: block;
   font-size: 80%;
-  line-height: 1.42857;
+  line-height: 1.16667;
   color: #777777;
 }
 /* line 265, ../scss/bootstrap/_type.scss */
@@ -2277,9 +2277,9 @@ blockquote.pull-right .small:after {
 
 /* line 294, ../scss/bootstrap/_type.scss */
 address {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   font-style: normal;
-  line-height: 1.42857;
+  line-height: 1.16667;
 }
 
 /* line 7, ../scss/bootstrap/_code.scss */
@@ -2319,10 +2319,10 @@ kbd kbd {
 /* line 41, ../scss/bootstrap/_code.scss */
 pre {
   display: block;
-  padding: 9.5px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  line-height: 1.42857;
+  padding: 6.5px;
+  margin: 0 0 7px;
+  font-size: 11px;
+  line-height: 1.16667;
   word-break: break-all;
   word-wrap: break-word;
   color: #333333;
@@ -3486,7 +3486,7 @@ th {
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 /* line 31, ../scss/bootstrap/_tables.scss */
 .table > thead > tr > th,
@@ -3496,7 +3496,7 @@ th {
 .table > tfoot > tr > th,
 .table > tfoot > tr > td {
   padding: 8px;
-  line-height: 1.42857;
+  line-height: 1.16667;
   vertical-align: top;
   border-top: 1px solid #ddd;
 }
@@ -3686,7 +3686,7 @@ table th[class*="col-"] {
   /* line 171, ../scss/bootstrap/_tables.scss */
   .table-responsive {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10.5px;
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 1px solid #ddd;
@@ -3748,8 +3748,8 @@ legend {
   display: block;
   width: 100%;
   padding: 0;
-  margin-bottom: 20px;
-  font-size: 21px;
+  margin-bottom: 14px;
+  font-size: 18px;
   line-height: inherit;
   color: #333333;
   border: 0;
@@ -3809,8 +3809,8 @@ input[type="checkbox"]:focus {
 output {
   display: block;
   padding-top: 7px;
-  font-size: 14px;
-  line-height: 1.42857;
+  font-size: 12px;
+  line-height: 1.16667;
   color: #555555;
 }
 
@@ -3818,10 +3818,10 @@ output {
 .form-control {
   display: block;
   width: 100%;
-  height: 34px;
+  height: 28px;
   padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857;
+  font-size: 12px;
+  line-height: 1.16667;
   color: #555555;
   background-color: #fff;
   background-image: none;
@@ -3884,7 +3884,7 @@ input[type="search"] {
   input[type="time"].form-control,
   input[type="datetime-local"].form-control,
   input[type="month"].form-control {
-    line-height: 34px;
+    line-height: 28px;
   }
   /* line 197, ../scss/bootstrap/_forms.scss */
   input[type="date"].input-sm, .input-group-sm > input[type="date"].form-control,
@@ -3905,7 +3905,7 @@ input[type="search"] {
   .input-group-sm > input[type="month"].input-group-addon,
   .input-group-sm > .input-group-btn > input[type="month"].btn, .input-group-sm
   input[type="month"] {
-    line-height: 30px;
+    line-height: 28px;
   }
   /* line 202, ../scss/bootstrap/_forms.scss */
   input[type="date"].input-lg, .input-group-lg > input[type="date"].form-control,
@@ -3926,7 +3926,7 @@ input[type="search"] {
   .input-group-lg > input[type="month"].input-group-addon,
   .input-group-lg > .input-group-btn > input[type="month"].btn, .input-group-lg
   input[type="month"] {
-    line-height: 46px;
+    line-height: 42px;
   }
 }
 /* line 215, ../scss/bootstrap/_forms.scss */
@@ -3945,7 +3945,7 @@ input[type="search"] {
 /* line 231, ../scss/bootstrap/_forms.scss */
 .radio label,
 .checkbox label {
-  min-height: 20px;
+  min-height: 14px;
   padding-left: 20px;
   margin-bottom: 0;
   font-weight: normal;
@@ -4014,7 +4014,7 @@ input[type="checkbox"] {
   padding-top: 7px;
   padding-bottom: 7px;
   margin-bottom: 0;
-  min-height: 34px;
+  min-height: 26px;
 }
 /* line 315, ../scss/bootstrap/_forms.scss */
 .form-control-static.input-lg, .input-group-lg > .form-control-static.form-control,
@@ -4030,9 +4030,9 @@ input[type="checkbox"] {
 .input-sm, .input-group-sm > .form-control,
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .btn {
-  height: 30px;
+  height: 28px;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -4041,8 +4041,8 @@ input[type="checkbox"] {
 select.input-sm, .input-group-sm > select.form-control,
 .input-group-sm > select.input-group-addon,
 .input-group-sm > .input-group-btn > select.btn {
-  height: 30px;
-  line-height: 30px;
+  height: 28px;
+  line-height: 28px;
 }
 
 /* line 84, ../scss/bootstrap/mixins/_forms.scss */
@@ -4058,16 +4058,16 @@ select[multiple].input-sm,
 
 /* line 333, ../scss/bootstrap/_forms.scss */
 .form-group-sm .form-control {
-  height: 30px;
+  height: 28px;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   border-radius: 3px;
 }
 /* line 340, ../scss/bootstrap/_forms.scss */
 .form-group-sm select.form-control {
-  height: 30px;
-  line-height: 30px;
+  height: 28px;
+  line-height: 28px;
 }
 /* line 344, ../scss/bootstrap/_forms.scss */
 .form-group-sm textarea.form-control,
@@ -4076,10 +4076,10 @@ select[multiple].input-sm,
 }
 /* line 348, ../scss/bootstrap/_forms.scss */
 .form-group-sm .form-control-static {
-  height: 30px;
-  min-height: 32px;
+  height: 28px;
+  min-height: 25px;
   padding: 6px 10px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
 }
 
@@ -4087,9 +4087,9 @@ select[multiple].input-sm,
 .input-lg, .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
-  height: 46px;
+  height: 42px;
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.33333;
   border-radius: 6px;
 }
@@ -4098,8 +4098,8 @@ select[multiple].input-sm,
 select.input-lg, .input-group-lg > select.form-control,
 .input-group-lg > select.input-group-addon,
 .input-group-lg > .input-group-btn > select.btn {
-  height: 46px;
-  line-height: 46px;
+  height: 42px;
+  line-height: 42px;
 }
 
 /* line 84, ../scss/bootstrap/mixins/_forms.scss */
@@ -4115,16 +4115,16 @@ select[multiple].input-lg,
 
 /* line 359, ../scss/bootstrap/_forms.scss */
 .form-group-lg .form-control {
-  height: 46px;
+  height: 42px;
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.33333;
   border-radius: 6px;
 }
 /* line 366, ../scss/bootstrap/_forms.scss */
 .form-group-lg select.form-control {
-  height: 46px;
-  line-height: 46px;
+  height: 42px;
+  line-height: 42px;
 }
 /* line 370, ../scss/bootstrap/_forms.scss */
 .form-group-lg textarea.form-control,
@@ -4133,10 +4133,10 @@ select[multiple].input-lg,
 }
 /* line 374, ../scss/bootstrap/_forms.scss */
 .form-group-lg .form-control-static {
-  height: 46px;
-  min-height: 38px;
+  height: 42px;
+  min-height: 29px;
   padding: 11px 16px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.33333;
 }
 
@@ -4146,7 +4146,7 @@ select[multiple].input-lg,
 }
 /* line 393, ../scss/bootstrap/_forms.scss */
 .has-feedback .form-control {
-  padding-right: 42.5px;
+  padding-right: 35px;
 }
 
 /* line 398, ../scss/bootstrap/_forms.scss */
@@ -4156,9 +4156,9 @@ select[multiple].input-lg,
   right: 0;
   z-index: 2;
   display: block;
-  width: 34px;
-  height: 34px;
-  line-height: 34px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
   text-align: center;
   pointer-events: none;
 }
@@ -4169,9 +4169,9 @@ select[multiple].input-lg,
 .input-group-lg > .input-group-btn > .btn + .form-control-feedback,
 .input-group-lg + .form-control-feedback,
 .form-group-lg .form-control + .form-control-feedback {
-  width: 46px;
-  height: 46px;
-  line-height: 46px;
+  width: 42px;
+  height: 42px;
+  line-height: 42px;
 }
 
 /* line 417, ../scss/bootstrap/_forms.scss */
@@ -4180,9 +4180,9 @@ select[multiple].input-lg,
 .input-group-sm > .input-group-btn > .btn + .form-control-feedback,
 .input-group-sm + .form-control-feedback,
 .form-group-sm .form-control + .form-control-feedback {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
 }
 
 /* line 8, ../scss/bootstrap/mixins/_forms.scss */
@@ -4283,7 +4283,7 @@ select[multiple].input-lg,
 
 /* line 439, ../scss/bootstrap/_forms.scss */
 .has-feedback label ~ .form-control-feedback {
-  top: 25px;
+  top: 19px;
 }
 /* line 442, ../scss/bootstrap/_forms.scss */
 .has-feedback label.sr-only ~ .form-control-feedback {
@@ -4295,7 +4295,7 @@ select[multiple].input-lg,
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #737373;
+  color: #a6a6a6;
 }
 
 @media (min-width: 768px) {
@@ -4372,7 +4372,7 @@ select[multiple].input-lg,
 /* line 569, ../scss/bootstrap/_forms.scss */
 .form-horizontal .radio,
 .form-horizontal .checkbox {
-  min-height: 27px;
+  min-height: 21px;
 }
 /* line 575, ../scss/bootstrap/_forms.scss */
 .form-horizontal .form-group {
@@ -4404,14 +4404,14 @@ select[multiple].input-lg,
   /* line 603, ../scss/bootstrap/_forms.scss */
   .form-horizontal .form-group-lg .control-label {
     padding-top: 11px;
-    font-size: 18px;
+    font-size: 15px;
   }
 }
 @media (min-width: 768px) {
   /* line 611, ../scss/bootstrap/_forms.scss */
   .form-horizontal .form-group-sm .control-label {
     padding-top: 6px;
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 
@@ -4428,8 +4428,8 @@ select[multiple].input-lg,
   border: 1px solid transparent;
   white-space: nowrap;
   padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857;
+  font-size: 12px;
+  line-height: 1.16667;
   border-radius: 4px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -4769,7 +4769,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 /* line 135, ../scss/bootstrap/_buttons.scss */
 .btn-lg, .btn-group-lg > .btn {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.33333;
   border-radius: 6px;
 }
@@ -4777,7 +4777,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 /* line 139, ../scss/bootstrap/_buttons.scss */
 .btn-sm, .btn-group-sm > .btn {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -4785,7 +4785,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 /* line 143, ../scss/bootstrap/_buttons.scss */
 .btn-xs, .btn-group-xs > .btn {
   padding: 1px 5px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -4888,7 +4888,7 @@ tbody.collapse.in {
   padding: 5px 0;
   margin: 2px 0 0;
   list-style: none;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -4906,7 +4906,7 @@ tbody.collapse.in {
 /* line 60, ../scss/bootstrap/_dropdowns.scss */
 .dropdown-menu .divider {
   height: 1px;
-  margin: 9px 0;
+  margin: 6px 0;
   overflow: hidden;
   background-color: #e5e5e5;
 }
@@ -4916,7 +4916,7 @@ tbody.collapse.in {
   padding: 3px 20px;
   clear: both;
   font-weight: normal;
-  line-height: 1.42857;
+  line-height: 1.16667;
   color: #333333;
   white-space: nowrap;
 }
@@ -4974,8 +4974,8 @@ tbody.collapse.in {
 .dropdown-header {
   display: block;
   padding: 3px 20px;
-  font-size: 12px;
-  line-height: 1.42857;
+  font-size: 11px;
+  line-height: 1.16667;
   color: #777777;
   white-space: nowrap;
 }
@@ -5320,7 +5320,7 @@ tbody.collapse.in {
 /* line 77, ../scss/bootstrap/_input-groups.scss */
 .input-group-addon {
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
   line-height: 1;
   color: #555555;
@@ -5334,7 +5334,7 @@ tbody.collapse.in {
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .input-group-addon.btn {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11px;
   border-radius: 3px;
 }
 /* line 94, ../scss/bootstrap/_input-groups.scss */
@@ -5342,7 +5342,7 @@ tbody.collapse.in {
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .input-group-addon.btn {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15px;
   border-radius: 6px;
 }
 /* line 101, ../scss/bootstrap/_input-groups.scss */
@@ -5465,7 +5465,7 @@ tbody.collapse.in {
 /* line 59, ../scss/bootstrap/_navs.scss */
 .nav .nav-divider {
   height: 1px;
-  margin: 9px 0;
+  margin: 6px 0;
   overflow: hidden;
   background-color: #e5e5e5;
 }
@@ -5486,7 +5486,7 @@ tbody.collapse.in {
 /* line 84, ../scss/bootstrap/_navs.scss */
 .nav-tabs > li > a {
   margin-right: 2px;
-  line-height: 1.42857;
+  line-height: 1.16667;
   border: 1px solid transparent;
   border-radius: 4px 4px 0 0;
 }
@@ -5614,7 +5614,7 @@ tbody.collapse.in {
 .navbar {
   position: relative;
   min-height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   border: 1px solid transparent;
 }
 /* line 14, ../scss/bootstrap/mixins/_clearfix.scss */
@@ -5772,9 +5772,9 @@ tbody.collapse.in {
 /* line 163, ../scss/bootstrap/_navbar.scss */
 .navbar-brand {
   float: left;
-  padding: 15px 15px;
-  font-size: 18px;
-  line-height: 20px;
+  padding: 18px 15px;
+  font-size: 15px;
+  line-height: 14px;
   height: 50px;
 }
 /* line 170, ../scss/bootstrap/_navbar.scss */
@@ -5829,13 +5829,13 @@ tbody.collapse.in {
 
 /* line 232, ../scss/bootstrap/_navbar.scss */
 .navbar-nav {
-  margin: 7.5px -15px;
+  margin: 9px -15px;
 }
 /* line 235, ../scss/bootstrap/_navbar.scss */
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 10px;
-  line-height: 20px;
+  line-height: 14px;
 }
 @media (max-width: 767px) {
   /* line 243, ../scss/bootstrap/_navbar.scss */
@@ -5855,7 +5855,7 @@ tbody.collapse.in {
   }
   /* line 255, ../scss/bootstrap/_navbar.scss */
   .navbar-nav .open .dropdown-menu > li > a {
-    line-height: 20px;
+    line-height: 14px;
   }
   /* line 257, ../scss/bootstrap/_navbar.scss */
   .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-nav .open .dropdown-menu > li > a:focus {
@@ -5874,8 +5874,8 @@ tbody.collapse.in {
   }
   /* line 272, ../scss/bootstrap/_navbar.scss */
   .navbar-nav > li > a {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 18px;
+    padding-bottom: 18px;
   }
 }
 
@@ -5888,8 +5888,8 @@ tbody.collapse.in {
   border-bottom: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 11px;
+  margin-bottom: 11px;
 }
 @media (min-width: 768px) {
   /* line 478, ../scss/bootstrap/_forms.scss */
@@ -5994,13 +5994,13 @@ tbody.collapse.in {
 
 /* line 343, ../scss/bootstrap/_navbar.scss */
 .navbar-btn {
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 11px;
+  margin-bottom: 11px;
 }
 /* line 346, ../scss/bootstrap/_navbar.scss */
 .navbar-btn.btn-sm, .btn-group-sm > .navbar-btn.btn {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 11px;
+  margin-bottom: 11px;
 }
 /* line 349, ../scss/bootstrap/_navbar.scss */
 .navbar-btn.btn-xs, .btn-group-xs > .navbar-btn.btn {
@@ -6010,8 +6010,8 @@ tbody.collapse.in {
 
 /* line 359, ../scss/bootstrap/_navbar.scss */
 .navbar-text {
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 18px;
+  margin-bottom: 18px;
 }
 @media (min-width: 768px) {
   /* line 359, ../scss/bootstrap/_navbar.scss */
@@ -6251,7 +6251,7 @@ tbody.collapse.in {
 /* line 6, ../scss/bootstrap/_breadcrumbs.scss */
 .breadcrumb {
   padding: 8px 15px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   list-style: none;
   background-color: #f5f5f5;
   border-radius: 4px;
@@ -6275,7 +6275,7 @@ tbody.collapse.in {
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: 20px 0;
+  margin: 14px 0;
   border-radius: 4px;
 }
 /* line 10, ../scss/bootstrap/_pagination.scss */
@@ -6288,7 +6288,7 @@ tbody.collapse.in {
   position: relative;
   float: left;
   padding: 6px 12px;
-  line-height: 1.42857;
+  line-height: 1.16667;
   text-decoration: none;
   color: #337ab7;
   background-color: #fff;
@@ -6345,7 +6345,7 @@ tbody.collapse.in {
 .pagination-lg > li > a,
 .pagination-lg > li > span {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.33333;
 }
 /* line 12, ../scss/bootstrap/mixins/_pagination.scss */
@@ -6365,7 +6365,7 @@ tbody.collapse.in {
 .pagination-sm > li > a,
 .pagination-sm > li > span {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
 }
 /* line 12, ../scss/bootstrap/mixins/_pagination.scss */
@@ -6384,7 +6384,7 @@ tbody.collapse.in {
 /* line 6, ../scss/bootstrap/_pager.scss */
 .pager {
   padding-left: 0;
-  margin: 20px 0;
+  margin: 14px 0;
   list-style: none;
   text-align: center;
 }
@@ -6525,7 +6525,7 @@ a.label:hover, a.label:focus {
   display: inline-block;
   min-width: 10px;
   padding: 3px 7px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   color: #fff;
   line-height: 1;
@@ -6590,7 +6590,7 @@ a.badge:hover, a.badge:focus {
 /* line 18, ../scss/bootstrap/_jumbotron.scss */
 .jumbotron p {
   margin-bottom: 15px;
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 200;
 }
 /* line 24, ../scss/bootstrap/_jumbotron.scss */
@@ -6621,7 +6621,7 @@ a.badge:hover, a.badge:focus {
   /* line 49, ../scss/bootstrap/_jumbotron.scss */
   .jumbotron h1,
   .jumbotron .h1 {
-    font-size: 63px;
+    font-size: 54px;
   }
 }
 
@@ -6629,8 +6629,8 @@ a.badge:hover, a.badge:focus {
 .thumbnail {
   display: block;
   padding: 4px;
-  margin-bottom: 20px;
-  line-height: 1.42857;
+  margin-bottom: 14px;
+  line-height: 1.16667;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -6650,7 +6650,7 @@ a.badge:hover, a.badge:focus {
 /* line 27, ../scss/bootstrap/_thumbnails.scss */
 .thumbnail .caption {
   padding: 9px;
-  color: #333333;
+  color: #666;
 }
 
 /* line 34, ../scss/bootstrap/_thumbnails.scss */
@@ -6663,7 +6663,7 @@ a.thumbnail.active {
 /* line 9, ../scss/bootstrap/_alerts.scss */
 .alert {
   padding: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   border: 1px solid transparent;
   border-radius: 4px;
 }
@@ -6779,8 +6779,8 @@ a.thumbnail.active {
 /* line 26, ../scss/bootstrap/_progress-bars.scss */
 .progress {
   overflow: hidden;
-  height: 20px;
-  margin-bottom: 20px;
+  height: 14px;
+  margin-bottom: 14px;
   background-color: #f5f5f5;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -6792,8 +6792,8 @@ a.thumbnail.active {
   float: left;
   width: 0%;
   height: 100%;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 11px;
+  line-height: 14px;
   color: #fff;
   text-align: center;
   background-color: #337ab7;
@@ -7171,7 +7171,7 @@ button.list-group-item-danger.active:focus {
 
 /* line 7, ../scss/bootstrap/_panels.scss */
 .panel {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -7209,7 +7209,7 @@ button.list-group-item-danger.active:focus {
 .panel-title {
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: inherit;
 }
 /* line 39, ../scss/bootstrap/_panels.scss */
@@ -7433,7 +7433,7 @@ button.list-group-item-danger.active:focus {
 
 /* line 222, ../scss/bootstrap/_panels.scss */
 .panel-group {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 /* line 226, ../scss/bootstrap/_panels.scss */
 .panel-group .panel {
@@ -7671,7 +7671,7 @@ button.list-group-item-danger.active:focus {
 /* line 6, ../scss/bootstrap/_close.scss */
 .close {
   float: right;
-  font-size: 21px;
+  font-size: 18px;
   font-weight: bold;
   line-height: 1;
   color: #000;
@@ -7804,7 +7804,7 @@ button.close {
 /* line 90, ../scss/bootstrap/_modals.scss */
 .modal-title {
   margin: 0;
-  line-height: 1.42857;
+  line-height: 1.16667;
 }
 
 /* line 97, ../scss/bootstrap/_modals.scss */
@@ -7880,12 +7880,12 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-break: auto;
-  line-height: 1.42857;
+  line-height: 1.16667;
   text-align: left;
   text-align: start;
   text-decoration: none;
@@ -7895,7 +7895,7 @@ button.close {
   word-break: normal;
   word-spacing: normal;
   word-wrap: normal;
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
@@ -8018,12 +8018,12 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-break: auto;
-  line-height: 1.42857;
+  line-height: 1.16667;
   text-align: left;
   text-align: start;
   text-decoration: none;
@@ -8033,7 +8033,7 @@ button.close {
   word-break: normal;
   word-spacing: normal;
   word-wrap: normal;
-  font-size: 14px;
+  font-size: 12px;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ccc;
@@ -8063,7 +8063,7 @@ button.close {
 .popover-title {
   margin: 0;
   padding: 8px 14px;
-  font-size: 14px;
+  font-size: 12px;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0;
@@ -8791,7 +8791,7 @@ button.close {
     display: none !important;
   }
 }
-/* line 1, ../scss/_common.scss */
+/* line 5, ../scss/_common.scss */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -8800,20 +8800,43 @@ button.close {
   padding: 0;
 }
 
-/* line 7, ../scss/_common.scss */
+/* line 11, ../scss/_common.scss */
 ul {
   list-style: none;
 }
 
-/* line 1, ../scss/_header.scss */
-#header {
+/* Sticky footer styles
+-------------------------------------------------- */
+@media (min-width: 767px) {
+  /* line 4, ../scss/blocks/_sticky-footer.scss */
+  html, body {
+    height: 100%;
+  }
+
+  /* line 7, ../scss/blocks/_sticky-footer.scss */
+  .main-wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -155px 0;
+    padding: 0 0 155px 0;
+    background: #fff url('../images/separate-bg/content.jpg?1454338576') repeat-x 50% 121px;
+  }
+
+  /* line 15, ../scss/blocks/_sticky-footer.scss */
+  .footer {
+    height: 155px;
+  }
+}
+/* line 3, ../scss/_header.scss */
+#header .header-inner {
   background-image: url('../images/bg.png');
   background-position: 0 0;
   height: 80px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
-#header:after {
+/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+#header .header-inner:after {
   content: "\0020";
   display: block;
   height: 0;
@@ -8821,24 +8844,24 @@ ul {
   overflow: hidden;
   visibility: hidden;
 }
-/* line 6, ../scss/_header.scss */
+/* line 9, ../scss/_header.scss */
 #header .logo {
   float: left;
   margin: 15px 0 0 0;
 }
 
-/* line 12, ../scss/_header.scss */
+/* line 15, ../scss/_header.scss */
 .header-account {
   float: right;
   margin: 9px 0 0 0;
   text-align: right;
 }
-/* line 17, ../scss/_header.scss */
+/* line 20, ../scss/_header.scss */
 .header-account .header-user-info {
   display: inline-block;
   vertical-align: top;
 }
-/* line 21, ../scss/_header.scss */
+/* line 24, ../scss/_header.scss */
 .header-account .header-user-info .header-welcome {
   color: #666;
   font-size: 12px;
@@ -8847,14 +8870,14 @@ ul {
   text-align: right;
   line-height: 14px;
 }
-/* line 29, ../scss/_header.scss */
+/* line 32, ../scss/_header.scss */
 .header-account .header-user-info .header-welcome strong {
   display: block;
   color: #298bdf;
   font-size: 15px;
   font-weight: 700;
 }
-/* line 37, ../scss/_header.scss */
+/* line 40, ../scss/_header.scss */
 .header-account .header-user-info .avatar {
   border: 1px solid #bbb;
   -moz-border-radius: 3px;
@@ -8864,51 +8887,45 @@ ul {
   height: 32px;
   width: 32px;
 }
-/* line 46, ../scss/_header.scss */
+/* line 49, ../scss/_header.scss */
 .header-account .account-menu {
   vertical-align: top;
   display: inline-block;
   margin: 0;
 }
-/* line 51, ../scss/_header.scss */
+/* line 54, ../scss/_header.scss */
 .header-account .account-menu li {
   float: left;
 }
 
-/* line 58, ../scss/_header.scss */
+/* line 61, ../scss/_header.scss */
 .header-search {
   clear: both;
   padding: 3px 0 0 0;
 }
 
-/* line 63, ../scss/_header.scss */
+/* line 66, ../scss/_header.scss */
 .header-search-box {
   background: #fff;
   border: 1px solid #dfdfdf;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  min-width: 300px;
   position: relative;
   width: 100%;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  min-width: 300px;
 }
 
-/* line 77, ../scss/_header.scss */
+/* line 75, ../scss/_header.scss */
 .header-search-box .header-search-field {
   width: 100%;
   background: none;
   border: 0;
   height: 26px;
   padding: 4px 118px 4px 8px;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
-/* line 88, ../scss/_header.scss */
+/* line 83, ../scss/_header.scss */
 .header-search-submit {
   display: block;
   text-align: center;
@@ -8923,17 +8940,18 @@ ul {
   cursor: pointer;
 }
 
-/* line 102, ../scss/_header.scss */
+/* line 97, ../scss/_header.scss */
 .header-search-submit-icon {
-  background: url("../images/btn-sprites.png") no-repeat 0 -1750px;
   display: inline-block;
-  width: 11px;
+  background-image: url('../images/common.png');
+  background-position: -3px 0;
   height: 11px;
+  width: 11px;
   text-indent: -9999em;
   margin: 6px 0 3px 0;
 }
 
-/* line 111, ../scss/_header.scss */
+/* line 103, ../scss/_header.scss */
 .header-search-type {
   margin: 2px 0;
   border-left: 1px solid #dfdfdf;
@@ -8944,7 +8962,7 @@ ul {
   top: 0;
 }
 
-/* line 121, ../scss/_header.scss */
+/* line 113, ../scss/_header.scss */
 .header-search-type-field {
   height: 22px;
   border: 0;
@@ -8959,28 +8977,28 @@ ul {
   font-family: 'Open Sans', 'Arial',sans-serif;
 }
 
-/* line 135, ../scss/_header.scss */
+/* line 127, ../scss/_header.scss */
 .header-search-type-field:focus {
   box-shadow: none;
   outline: none;
 }
 
-/* line 140, ../scss/_header.scss */
+/* line 132, ../scss/_header.scss */
 .header-search-type-field option {
   padding: 1px 5px;
 }
 
-/* line 144, ../scss/_header.scss */
+/* line 136, ../scss/_header.scss */
 .header-search-type-inner {
   background: #fff url("../images/bg/dropdown-arrow.png") no-repeat 62px 50%;
 }
 
-/* line 148, ../scss/_header.scss */
+/* line 140, ../scss/_header.scss */
 #navbar {
   border-top: 1px solid #fff;
   border-bottom: 1px solid #fff;
 }
-/* line 152, ../scss/_header.scss */
+/* line 144, ../scss/_header.scss */
 #navbar .navbar-wrapper {
   background-image: url('../images/bg.png');
   background-position: 0 -80px;
@@ -8989,16 +9007,16 @@ ul {
   border-top: 1px solid #2a5c85;
   border-bottom: 1px solid #2a5c85;
 }
-/* line 161, ../scss/_header.scss */
+/* line 153, ../scss/_header.scss */
 #navbar .menu li {
   float: left;
   position: relative;
 }
-/* line 165, ../scss/_header.scss */
+/* line 157, ../scss/_header.scss */
 #navbar .menu li:before {
   display: inline-block;
   background-image: url('../images/common.png');
-  background-position: 0 0;
+  background-position: -14px 0;
   height: 37px;
   width: 2px;
   content: '';
@@ -9006,7 +9024,7 @@ ul {
   left: 0;
   top: 0;
 }
-/* line 173, ../scss/_header.scss */
+/* line 165, ../scss/_header.scss */
 #navbar .menu li a {
   display: block;
   color: #fff;
@@ -9019,7 +9037,7 @@ ul {
   position: relative;
   height: 37px;
 }
-/* line 185, ../scss/_header.scss */
+/* line 177, ../scss/_header.scss */
 #navbar .menu li a:hover {
   text-decoration: none;
   text-shadow: none;
@@ -9028,4 +9046,117 @@ ul {
   background: rgba(0, 0, 0, 0.1);
   padding: 1px 20px;
   margin: -1px 0;
+}
+
+/* line 1, ../scss/_footer.scss */
+#footer {
+  background: url('../images/separate-bg/footer.png?1454338576') repeat 0 0;
+  border-top: 1px solid #D8D8D8;
+  padding: 0 0 30px 0;
+  text-align: center;
+}
+/* line 8, ../scss/_footer.scss */
+#footer .footer-block {
+  border-top: 6px solid #666;
+  padding: 17px 0 0 0;
+  float: left;
+  text-align: left;
+}
+/* line 14, ../scss/_footer.scss */
+#footer .footer-block .footer-title {
+  font-size: 16px;
+  text-shadow: 0 1px 0 #fff;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+/* line 22, ../scss/_footer.scss */
+#footer .footer-block li a {
+  color: #666;
+  font-size: 11px;
+  position: relative;
+  padding: 0 0 0 14px;
+  display: block;
+  line-height: 18px;
+}
+@media (max-width: 480px) {
+  /* line 22, ../scss/_footer.scss */
+  #footer .footer-block li a {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+/* line 36, ../scss/_footer.scss */
+#footer .footer-block li a:before {
+  content: '';
+  display: inline-block;
+  background-image: url('../images/common.png');
+  background-position: 0 0;
+  height: 6px;
+  width: 3px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin: -2px 0 0 0;
+}
+/* line 48, ../scss/_footer.scss */
+#footer .footer-company-info {
+  width: 200px;
+  float: left;
+}
+@media (max-width: 480px) {
+  /* line 48, ../scss/_footer.scss */
+  #footer .footer-company-info {
+    width: 100%;
+    float: none;
+  }
+}
+/* line 59, ../scss/_footer.scss */
+#footer .footer-site-info {
+  width: 155px;
+  display: inline-block;
+  float: none;
+  text-align: left;
+}
+@media (max-width: 480px) {
+  /* line 59, ../scss/_footer.scss */
+  #footer .footer-site-info {
+    width: 100%;
+    display: block;
+  }
+}
+/* line 72, ../scss/_footer.scss */
+#footer .footer-copyright {
+  float: right;
+  width: 44.5%;
+  padding-top: 15px;
+}
+@media (min-width: 767px) {
+  /* line 72, ../scss/_footer.scss */
+  #footer .footer-copyright {
+    max-width: 445px;
+  }
+}
+@media (max-width: 767px) {
+  /* line 72, ../scss/_footer.scss */
+  #footer .footer-copyright {
+    width: 100%;
+    clear: both;
+    margin: 25px 0 0 0;
+    max-width: none;
+  }
+}
+/* line 88, ../scss/_footer.scss */
+#footer .footer-copyright .twitter-logo {
+  display: inline-block;
+  background-image: url('../images/common.png');
+  background-position: 0 -37px;
+  height: 24px;
+  width: 24px;
+  float: right;
+  text-indent: -99999px;
+}
+/* line 94, ../scss/_footer.scss */
+#footer .footer-copyright .copyright {
+  font-weight: 600;
+  margin: 0 0 10px 0;
 }

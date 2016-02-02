@@ -1,0 +1,19 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+@media (min-width: $screen-xs-max) {
+  html, body {
+    height: 100%;
+  }
+  .main-wrapper{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -155px 0;
+    padding: 0 0 155px 0;
+    background: #fff image-url('separate-bg/content.jpg') repeat-x 50% 121px;
+  }
+  .footer {
+    height: 155px;
+  }
+
+}
