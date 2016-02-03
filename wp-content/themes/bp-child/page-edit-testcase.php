@@ -310,7 +310,7 @@ get_header();
         <div class="grid-box grid-box-expandable grid-box-opened" id="choose-init-msg-box">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Choose Initiating Message</h5>
+               <h5 class="left">Choose Operational Triplet</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">

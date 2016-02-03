@@ -460,17 +460,14 @@ Template Name Posts: Test Suite
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
                         <div class="grid_cell nopaddingtop width20P toleft single_line">Test Scenario</div>
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
-						<div class="grid_cell nopaddingtop width8P toleft single_line">Test Case</div>
-						<div class="grid_cell nopaddingtop width8P toleft tocenter single_line">Published</div>
-						<div class="grid_cell nopaddingtop width6P toleft tocenter">Tester<br/>Role</div>
-						<div class="grid_cell nopaddingtop width6P toleft tocenter">Harness<br/>Role(s)</div>
-						<div class="grid_cell nopaddingtop width6P toleft tocenter single_line">Initiator</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Levels</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Outcome<br/>Type</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
+						<div class="grid_cell nopaddingtop width7P toleft">Test Case</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Conf<br/>Levels</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
+						<div class="grid_cell nopaddingtop width8P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
-						<div class="grid_cell nopaddingtop width8P toleft tocenter">Initiating<br/>Message</div>
-						<div class="grid_cell nopaddingtop width17P toleft single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop width12P toleft tocenter">Operational<br>Triplet</div>
+						<div class="grid_cell nopaddingtop toleft width20P single_line">Test Intent Description</div>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
@@ -577,27 +574,21 @@ Template Name Posts: Test Suite
                             $caseStatus = get_post_meta($row->ID ,'test_case_status', true);
                             ?>
                             <div class="grid_row white_bcg tocenter testcase_line ">
+
                                 <div class="grid_cell nopaddingtop tocenter relative width2P" >
                                     <span class="status_btn status_circle has-tooltip status_<?php echo sanitize_title($caseStatus)?>">
                                         <?php echo substr($caseStatus == 'Deprecated' ? "C" : $caseStatus, 0, 1)
                                     ?><span class="simple_tooltip"><?php echo $caseStatus?><span></span></span></span>                                
                                 </div>
+
                                 <div class="grid_cell nopaddingtop toleft width10P" >
                                     <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width10P">
-                                    <?php echo formatDate(get_post_meta($row->ID ,'published', true))?>
-                                </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
+
+                                <div class="grid_cell nopaddingtop tocenter width8P">
                                     <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
-                                    <?php echo get_post_meta($row->ID ,'choose_harness_role', true)?>
-                                </div>
-                                <div class="grid_cell nopaddingtop  toleft tocenter width7P">
-                                    <?php echo ucfirst(get_post_meta($row->ID ,'choose_initiator', true))?>
-                                </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width6P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width12P">
                                     <?php 
                                         $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
                                         $lArr = array();
@@ -612,10 +603,10 @@ Template Name Posts: Test Suite
                                         echo implode(", ", $lArr);
                                     ?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width6P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
                                     <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width6P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width12P">
                                     <?php $test_pattern_number = get_post_meta($row->ID ,'message_count', true) ?>
                                     <?php $test_patterns_description = get_test_patterns_description($test_pattern_number); ?>
                                     <a href="<?php echo get_site_url() ?>/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $test_pattern_number; ?> has-tooltip">
@@ -625,10 +616,10 @@ Template Name Posts: Test Suite
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
                                     <?php echo get_post_meta($row->ID ,'bulk', true) ?>
                                 </div>-->
-                                <div class="grid_cell nopaddingtop toleft tocenter width11P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width14P text-nowrap padding0-10">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width21P' : 'width24P' ?> toleft">
+                                <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width24P' : 'width30P' ?> toleft">
                                     <div class="right10">
                                         <?php 
                                             $tDesc = get_post_meta($row->ID ,'test_intent_description', true);
@@ -651,7 +642,7 @@ Template Name Posts: Test Suite
                                     </div>
                                 </div>                            
                                 <?php if(can_edit_test_case($row->ID) || can_delete_test_case($row->ID)){ ?>
-                                <div class="grid_cell nopaddingtop toleft tocenter grid_action_cell width4P">
+                                <div class="grid_cell nopaddingtop tocenter toright grid_action_cell width8P">
                                     
                                     <?php if(can_edit_test_case($row->ID)){ ?>
                                     <a href="/edit-test-case?id=<?php echo $row->ID?>" class="action-btn icon-btn edit-btn has-tooltip"><span class="p"></span><span class="simple_tooltip">Edit Case<span></span></span></a>
