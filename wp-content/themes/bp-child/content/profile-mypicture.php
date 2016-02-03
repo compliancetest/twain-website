@@ -14,7 +14,7 @@ if(!defined('ABSPATH'))
         </div>
         <div class="grid-box-body">
             <div class="grid-row">
-              <form action="/" method="post" id="avatar-upload-form" class="standard-form" enctype="multipart/form-data">
+              <form action="" method="post" id="avatar-upload-form" class="standard-form" enctype="multipart/form-data">
                 <?php if ( 'crop-image' == bp_get_avatar_admin_step() ){ ?> <!-- Crop Image -->
                     <p><?php _e( 'Crop Your New Avatar', 'buddypress' ); ?></p>
 
