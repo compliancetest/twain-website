@@ -4,6 +4,7 @@ if (stripos(get_option('siteurl'), 'https://') === 0) {
     $_SERVER['HTTPS'] = 'on';
 }
 
+define('DEFAULT_AVATAR', '/wp-content/themes/bp-child/images/default-group-avatar.png');
 //Session Start
 if(!session_id())
     session_start();
