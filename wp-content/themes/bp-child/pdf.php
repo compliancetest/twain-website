@@ -53,9 +53,9 @@ $pdf = new CPPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('ComplianceTest');
-$pdf->SetTitle('ComplianceTest Certificate');
-$pdf->SetSubject('ComplianceTest Certificate');
+$pdf->SetAuthor(get_option('tw_site_title'));
+$pdf->SetTitle(get_option('tw_site_title').' Certificate');
+$pdf->SetSubject(get_option('tw_site_title').' Certificate');
 
 // set margins
 $pdf->SetMargins(12, 29, 12, true);
@@ -332,7 +332,7 @@ $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', tru
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-$pdf->Output('ComplianceTest-certificate.pdf', 'I');
+$pdf->Output(get_option('tw_site_title').'-certificate.pdf', 'I');
 
 //============================================================+
 // END OF FILE

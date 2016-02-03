@@ -149,7 +149,7 @@ $esb = new ManageESB();
            <?php } ?>
            <?php else: ?>
            <div>
-                <p>This section shows the degree to which the transactions you have executed against ComplianceTest have satisfied the requirements of the test plans you have created for the products you are testing.</p>
+                <p>This section shows the degree to which the transactions you have executed against <?php echo get_option('tw_site_title');?> have satisfied the requirements of the test plans you have created for the products you are testing.</p>
                 If you are seeing this message, it means you have yet to subscribe to one or more test suites, create entries for the products you wish to test, and then create test plans to confirm the operation of your products against test suites.
            </div>
            <?php endif; ?>
@@ -176,7 +176,7 @@ $esb = new ManageESB();
     <div id="invalid_roles_levels" class="popup-box" style="display:none; width: 500px">
         <div class="popup-box-header radius6 noradiusbottom">Pricing Plan Coverage</div>
         <div class="popup-box-content">
-            The pricing plan associated with this subscription does not cover the selected combination of role and conformance level. Please consult with your organisation's administrator within ComplianceTest to understand the available combinations.
+            The pricing plan associated with this subscription does not cover the selected combination of role and conformance level. Please consult with your organisation's administrator within <?php echo get_option('tw_site_title');?> to understand the available combinations.
         </div>
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>

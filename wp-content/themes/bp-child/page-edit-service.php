@@ -16,7 +16,7 @@ else
     $isNew = false;
     
 if ( ! Service::can_edit( get_current_user_id(), $service->id ) ) {
-    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_option('tw_site_title').' site.', 'error');
 
     wp_redirect("/");
     exit;

@@ -178,7 +178,7 @@ function display_insufficient_privilege_box($privilege)
     ?>
     <div class="popup-box" style="display: none; width: 450px">
         <div class="popup-box-header radius6 noradiusbottom">Insufficient Privileges</div>
-        <div class="popup-box-content"><p class="message error">You do not have the "<?php echo $title?>" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.</p></div>                    
+        <div class="popup-box-content"><p class="message error">You do not have the "<?php echo $title?>" privilege necessary for this action. Please contact your organisation administrator for the <?php echo get_option('tw_site_title');?> site.</p></div>
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>            
             <div class="clear"></div>

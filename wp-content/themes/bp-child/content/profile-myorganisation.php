@@ -40,9 +40,9 @@ if (!$org_membership) {
         <div class="grid-box-body">
             <?php if( ! $org_membership ):?>
                 <div class="grid-row edit_org_text" data-state="1">
-                    At present you are <b>not part of any organisation</b> known to ComplianceTest.
+                    At present you are <b>not part of any organisation</b> known to <?php echo get_option('tw_site_title');?>.
                     <div style="padding-bottom: 5px;"></div>
-                    If you plan to undertake testing with ComplianceTest, you either need to <a href="#" class="join_organisation">join an existing organisation</a>
+                    If you plan to undertake testing with <?php echo get_option('tw_site_title');?>, you either need to <a href="#" class="join_organisation">join an existing organisation</a>
                     or <a href="#" class="create_organisation">create a new organisation</a> and become its administrator.
                     <div style="padding-bottom: 5px;"></div>
                     To join an existing organisation, you will need to know its organisation key, which your organisation administrator can provide.</br>
@@ -83,7 +83,7 @@ if (!$org_membership) {
                         <div class="grid-cell width30P"><label>Organisation Key</label></div>
                         <input type="text" name="user_organisation_key" value="" class="grid-cell in_input width70P user_organisation_key">
                         <div class="has-defined-tooltip">
-                            <span class="simple_tooltip" style="width: 370px; bottom: 33px; margin-left: -110px;"><span></span>If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation on ComplianceTest. If not, you will be asked if you'd like to register your organisation when attempting to access the harness details on a test suite summary page.</span>
+                            <span class="simple_tooltip" style="width: 370px; bottom: 33px; margin-left: -110px;"><span></span>If your organisation is already registered on <?php echo get_option('tw_site_title');?>, ask your administrator for your organisation key to immediately become a member of your organisation on <?php echo get_option('tw_site_title');?>. If not, you will be asked if you'd like to register your organisation when attempting to access the harness details on a test suite summary page.</span>
                         </div>
                         <div class="clear"></div>
                     </div>

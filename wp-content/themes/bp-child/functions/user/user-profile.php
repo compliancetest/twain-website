@@ -620,7 +620,7 @@ function cp_user_organisation_edit(){
         //check that organisation name not used in Xero
         $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
         if ($is_name_used_in_xero || $is_abn_used) {
-            $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ComplianceTest.';
+            $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on '.get_option('tw_site_title').'.';
         }
     }
     if( false === $message_error ) {

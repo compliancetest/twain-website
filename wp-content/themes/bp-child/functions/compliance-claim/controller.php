@@ -210,9 +210,9 @@ function createClaimPDF($claim_id, $planID )
 
     // Set document meta information
     $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('ComplianceTest');
-    $pdf->SetTitle('ComplianceTest Certificate');
-    $pdf->SetSubject('ComplianceTest Certificate');
+    $pdf->SetAuthor(get_option('tw_site_title'));
+    $pdf->SetTitle(get_option('tw_site_title').' Certificate');
+    $pdf->SetSubject(get_option('tw_site_title').' Certificate');
 
     // Set margins
     $pdf->SetMargins(12, 29, 12, true);
@@ -679,7 +679,7 @@ function createClaimPDF($claim_id, $planID )
     
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
-    $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+    $pdfString = $pdf->Output(get_option('tw_site_title').'-certificate.pdf', 'S');
 
     foreach( $fArr AS $f ){
         unlink( $f );

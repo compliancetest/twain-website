@@ -8,7 +8,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'User Registered',
             'title' => 'User Registered',
-            'shortcodes' => '[name], [username], [email], [website_url], [env], [password], [link], [organisation]',
+            'shortcodes' => '[name], [username], [email], [website_url], [env], [password], [link], [organisation], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -23,7 +23,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'User Verification Success',
             'title' => 'User Verification Success',
-            'shortcodes' => '[name], [email], [website_url], [env], [username]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -38,7 +38,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Re-send Verification Email',
             'title' => 'Re-send Verification Email',
-            'shortcodes' => '[name],[username], [email], [website_url], [env], [link]',
+            'shortcodes' => '[name],[username], [email], [website_url], [env], [link], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -49,7 +49,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Email Address Changed',
             'title' => 'Email Address Changed',
-            'shortcodes' => '[name], [username], [email], [website_url], [env], [link]',
+            'shortcodes' => '[name], [username], [email], [website_url], [env], [link], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -64,7 +64,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Changed Email Address<br/> Verification Success',
             'title' => 'Changed Email Address Verification Success',
-            'shortcodes' => '[name], [email], [website_url], [env], [username]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -79,7 +79,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Forgot Password',
             'title' => 'Forgot Password',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [link]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [link], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -90,7 +90,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Password Changed',
             'title' => 'Password Changed',
-            'shortcodes' => '[name], [email], [website_url], [env], [username]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -107,7 +107,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Organisation Record Created',
             'title' => 'Organisation Record Created',
-            'shortcodes' => '[requester_name], [requester_email], [organisation], [organisation_website], [organisation_description], [organisation_abn], [website_url], [env]',
+            'shortcodes' => '[requester_name], [requester_email], [organisation], [organisation_website], [organisation_description], [organisation_abn], [website_url], [env], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -122,7 +122,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Request a Subscription<br />to Organisation Admin',
             'title' => 'Send a Request to Organisation Admin',
-            'shortcodes' => '[requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email], [organisation_name]',
+            'shortcodes' => '[requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email], [organisation_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Organisation Admin',
@@ -136,7 +136,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Organisation Subscription<br /> Purchased',
             'title' => 'Organisation Subscription Purchased',
-            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [paid_amount],[community_url]',
+            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [paid_amount],[community_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -151,7 +151,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Unsubscribe Subscription',
             'title' => 'Unsubscribe Subscription',
-            'shortcodes' => '[name], [email], [website_url], [env], [suite_name]',
+            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -166,7 +166,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Organisation Subscription<br /> Cancelled',
             'title' => 'Organisation Subscription Cancelled',
-            'shortcodes' => '[name], [email], [website_url], [env], [suite_name]',
+            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -181,7 +181,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Allocate Subscription to User',
             'title' => 'Allocate Subscription to User',
-            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [community_url], [nickname], [organisation]',
+            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [community_url], [nickname], [organisation], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -196,7 +196,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Payment Processing Problem',
             'title' => 'Payment Processing Problem',
-            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [monthly_fee], [method_nickname]',
+            'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [monthly_fee], [method_nickname], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -213,7 +213,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Membership Request Received',
             'title' => 'Membership Request Received',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [organisation]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [organisation], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Admin',
@@ -224,7 +224,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Membership Request Approved',
             'title' => 'Membership Request Approved',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [settings_link]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [settings_link], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -240,7 +240,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Membership Request Rejected',
             'title' => 'Membership Request Rejected',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -256,7 +256,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Member Leave Community',
             'title' => 'Member Leave Community',
-            'shortcodes' => '[name], [email], [website_url], [env], [community], [community_url]',
+            'shortcodes' => '[name], [email], [website_url], [env], [community], [community_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Admin',
@@ -268,7 +268,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Member Promoted',
             'title' => 'Member Promoted',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [settings_link], [member_type]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [settings_link], [member_type], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -284,7 +284,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Remove Member',
             'title' => 'Remove Member From Community',
-            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url]',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -302,7 +302,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Test Suite Changed',
             'title' => 'Test Suite Changed',
-            'shortcodes' => '[name], [website_url], [env], [community], [community_url], [suite_name], [suite_url], [editor_name]',
+            'shortcodes' => '[name], [website_url], [env], [community], [community_url], [suite_name], [suite_url], [editor_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -313,7 +313,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Test Case Changed',
             'title' => 'Test Case Changed',
-            'shortcodes' => '[name], [website_url], [env], [suite_name], [suite_url], [case_name], [case_url], [editor_name]',
+            'shortcodes' => '[name], [website_url], [env], [suite_name], [suite_url], [case_name], [case_url], [editor_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -328,7 +328,7 @@ $ct_email_templates = array(
             'title' => 'Ticket Created',
             'shortcodes' => '[website_url], [env], [customer_name], [customer_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content] <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -350,7 +350,7 @@ $ct_email_templates = array(
             'title' => 'Ticket Updated',
             'shortcodes' => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -372,7 +372,7 @@ $ct_email_templates = array(
             'title' => 'Ticket Started',
             'shortcodes' => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -394,7 +394,7 @@ $ct_email_templates = array(
             'title' => 'Ticket Resolved',
             'shortcodes' => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -416,7 +416,7 @@ $ct_email_templates = array(
             'title' => 'Ticket Closed',
             'shortcodes' => '[website_url], [env], [customer_name], [customer_email], [support_name], [support_email]<br />
                                 [ticket_id], [ticket_title], [ticket_url], [ticket_type], [ticket_status], [ticket_priority], [ticket_content], [message]<small>(New Message)</small> <br />
-                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price]',
+                                [time_to_pay], [time_to_response], [time_to_resolve], [hourly_price]<small>($/hr)</small>, [ticket_total_price], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -485,7 +485,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'New Forum Post',
             'title' => 'Forum New Post',
-            'shortcodes' => '[name], [username], [email], [website_url], [env], [topic_author_name], [topic_title], [topic_content], [community], [topic_url]',
+            'shortcodes' => '[name], [username], [email], [website_url], [env], [topic_author_name], [topic_title], [topic_content], [community], [topic_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -496,7 +496,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Reply Forum Post',
             'title' => 'Form Reply Post',
-            'shortcodes' => '[name], [username], [email], [website_url], [env], [reply_author_name], [topic_title], [reply_content], [community], [reply_url]',
+            'shortcodes' => '[name], [username], [email], [website_url], [env], [reply_author_name], [topic_title], [reply_content], [community], [reply_url], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -510,7 +510,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Claim is made',
             'title' => 'Claim is made',
-            'shortcodes' => '[claim_id], [product_url],[product_name], [username], [useremail], [issuer], [certificate], [suite_name],[suite_url], [conformance_level], [role], [status], [date]',
+            'shortcodes' => '[claim_id], [product_url],[product_name], [username], [useremail], [issuer], [certificate], [suite_name],[suite_url], [conformance_level], [role], [status], [date], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Admin',
@@ -523,7 +523,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E Test request',
             'title' => 'E2E Test request',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -542,7 +542,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E test request accepted',
             'title' => 'E2E test request accepted',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -561,7 +561,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E test request rejected',
             'title' => 'E2E test request rejected',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -580,7 +580,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E test claim made',
             'title' => 'E2E test claim made',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -599,7 +599,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E test claim failed',
             'title' => 'E2E test claim failed',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -618,7 +618,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'E2E test claim confirmed',
             'title' => 'E2E test claim confirmed',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name]',
+            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
             'fields' => array(
                 array(
                     'title' => 'For Sender',
@@ -751,7 +751,7 @@ function create_email_management_page()
         <input type="hidden" name="tab" id="email-tab-idx" value="0"/>
 
         <div class="wrap">
-            <h2>ComplianceTest Email Templates</h2>
+            <h2><?php echo get_option('tw_site_title');?> Email Templates</h2>
             <br/>
 
             <div>
@@ -914,6 +914,8 @@ function cp_send_email($to, $template_name, $data = array())
     //Add [env] and [website_url] shortcodes
     $data['[website_url]'] = get_site_url();
     $data['[env]'] = get_option('env');
+    $data['[site_title]'] = get_option('tw_site_title');
+    $data['[site_org]'] = get_option('tw_site_organisation');
 
     $shortCodes = array_keys($data);
     $values = array_values($data);

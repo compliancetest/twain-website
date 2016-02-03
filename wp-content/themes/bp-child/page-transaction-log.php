@@ -827,7 +827,7 @@ get_header();
         <div class="space10"></div>
         <div class="grid-box-body">
             <div class="tbody">
-                <div><span class="bold">ComplianceTest: </span><span id="receipt_compliancetest"></span></div>
+                <div><span class="bold"><?php echo get_option('tw_site_title');?>: </span><span id="receipt_compliancetest"></span></div>
                 <div class="space10"></div>
                 <div><span class="bold">Gateway Network: </span><span id="receipt_gateway"></span></div>
             </div>
