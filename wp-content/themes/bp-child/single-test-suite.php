@@ -462,12 +462,12 @@ Template Name Posts: Test Suite
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
 						<div class="grid_cell nopaddingtop width7P toleft">Test Case</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
-						<div class="grid_cell nopaddingtop width8P toleft tocenter">Conf<br/>Levels</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Levels</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
-						<div class="grid_cell nopaddingtop width8P toleft tocenter">Test<br/>Pattern</div>
+						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
-						<div class="grid_cell nopaddingtop width12P toleft tocenter">Operational<br>Triplet</div>
-						<div class="grid_cell nopaddingtop toleft width20P single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop width18P toleft tocenter">Operational<br>Triplet</div>
+						<div class="grid_cell nopaddingtop toleft  <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width20P' : 'width24P' ?> single_line">Test Intent Description</div>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
@@ -588,7 +588,7 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop tocenter width8P">
                                     <?php echo get_post_meta($row->ID ,'choose_tester_role', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width12P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
                                     <?php 
                                         $levels = get_post_meta($row->ID ,'conformance_level_' . $suite->id);
                                         $lArr = array();
@@ -606,7 +606,7 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop toleft tocenter width8P">
                                     <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width12P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
                                     <?php $test_pattern_number = get_post_meta($row->ID ,'message_count', true) ?>
                                     <?php $test_patterns_description = get_test_patterns_description($test_pattern_number); ?>
                                     <a href="<?php echo get_site_url() ?>/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $test_pattern_number; ?> has-tooltip">
@@ -614,9 +614,8 @@ Template Name Posts: Test Suite
                                     </a>
                                 </div>
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                    <?php echo get_post_meta($row->ID ,'bulk', true) ?>
                                 </div>-->
-                                <div class="grid_cell nopaddingtop toleft tocenter width14P text-nowrap padding0-10">
+                                <div class="grid_cell nopaddingtop toleft tocenter width22P text-nowrap padding0-10">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width24P' : 'width30P' ?> toleft">

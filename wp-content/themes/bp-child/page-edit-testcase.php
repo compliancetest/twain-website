@@ -802,6 +802,7 @@ get_header();
             })
 
             jQuery('body').on('change', 'input[name="suite_id[]"], select[name="choose_tester_role"], select[name="choose_harness_role"]', function () {
+                jQuery('#case-template-data  .field-row:gt(0)').remove();
                 if (jQuery('input[name="suite_id[]"]:checked').length < 1) {
                     jQuery('#choose-conf-level-box .column').html('');
                     jQuery('#choose-roles-box select').each(function () {
@@ -809,7 +810,6 @@ get_header();
                     })
                     jQuery('#choose-scenarios-box .column').html('');
                     jQuery('#choose-init-msg-box  select option:gt(0)').remove();
-                    jQuery('#case-template-data  .field-row:gt(0)').remove();
                     jQuery('#profile-instances').html('');
                     return false;
                 }
