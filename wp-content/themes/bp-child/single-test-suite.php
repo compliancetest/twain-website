@@ -622,22 +622,22 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width24P' : 'width30P' ?> toleft">
                                     <div class="right10">
                                         <?php 
-                                            $tDesc = get_post_meta($row->ID ,'test_intent_description', true);
-                                            if(!$tDesc){
-                                                $rString = '';
-                                            }else{
-                                                $htmlCut = new HtmlCutString($tDesc, 100);
-                                                $rtString = $htmlCut->cut();    
-                                            }
-                                                
-                                            
-                                            echo $rtString;
-                                            /*
+//                                            $tDesc = get_post_meta($row->ID ,'test_intent_description', true);
+//                                            if(!$tDesc){
+//                                                $rString = '';
+//                                            }else{
+//                                                $htmlCut = new HtmlCutString($tDesc, 100);
+//                                                $rtString = $htmlCut->cut();
+//                                            }
+//
+//
+//                                            echo $rtString;
+
                                             $intentDesc = strip_tags( get_post_meta($row->ID ,'test_intent_description', true) );
                                             if(strlen($intentDesc) > 100)
                                                 echo substr($intentDesc, 0, 100) . " ... ";
                                             else
-                                                echo $intentDesc;*/
+                                                echo $intentDesc;
                                         ?>
                                     </div>
                                 </div>                            

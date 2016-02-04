@@ -7,9 +7,6 @@ function remove_case_name_id_map($postid)
     if (get_post_type($postid) != 'test-case')
         return $postid;
     
-    $esb = new ManageESB();
-    $esb->deleteTestCaseNameIDMap($postid);
-    
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id'=> $postid));
     
     return $postid;
@@ -183,11 +180,7 @@ function deleteCase()
         exit;
     }
     
-    //Remove Data From Backend
-/*    $esb = new ManageESB();
-    $esb->deleteTestCaseNameIDMap($id);
-    
-    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));*/
+    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));
     
     cp_sort_test_cases($familyMark, $majorVersion);
     
@@ -467,7 +460,7 @@ function saveCase()
     
     $case = new TestCase($id);
     $case->load();
-    
+
     if(!$id)
         $isNew = true;
     else
@@ -519,7 +512,7 @@ function saveCase()
     
     //Check Version Updated or not
     $version_updated = false;
-    if( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) )
+    if( !$isNew && ( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) ))
     {
         $version_updated =  true;
     }
@@ -581,9 +574,7 @@ function saveCase()
         caseNameUpdated($case->familyMark, $testCaseId);
     }
     
-    $esb = new ManageESB();
-    $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);        
-    
+
     delete_post_meta($id, 'test_suite');
     
     //update post metas
@@ -785,8 +776,6 @@ function caseNameUpdated($familyMark, $new)
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE family_mark=%d", $familyMark);
     $suites = $wpdb->get_results($query);
     
-    $esb = new ManageESB();
-    
     foreach($suites as $row)
     {
         $versions = array();
@@ -811,8 +800,6 @@ function caseNameUpdated($familyMark, $new)
         cp_update_post_meta($post->ID, 'test_case_id', $new);
         
         
-        $esb->saveTestCaseInfo($post->ID, $new . "_V" . implode(".", $versions), get_post_meta($post->ID, 'outcome_type', true), get_post_meta($post->ID, 'message_count', true));        
-    
     }
     
 }
