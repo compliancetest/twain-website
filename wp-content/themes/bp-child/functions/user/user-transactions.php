@@ -210,8 +210,6 @@ function cp_save_transaction_log()
         $esb = new ManageESB();
         $rows =$esb->getTransactionLogByID($ids);
         
-        $rest = new CPRest();
-        
         foreach($rows as $row)
         {
             $caseDBId = intval($_POST['case' . $row->ID]);
@@ -237,33 +235,6 @@ function cp_save_transaction_log()
             
             ManageESB::$esbdb->query($query);
             
-            //Recalculate Test Outcome
-            if($row->TEST_CASE_DB_ID != $caseDBId && $caseDBId)
-            {
-                //Getting Versions
-                $version_major = get_post_meta($caseDBId, 'version_major', true);
-                $version_minor = get_post_meta($caseDBId, 'version_minor', true);
-                $version_patch = get_post_meta($caseDBId, 'version_patch', true);
-                
-                $versions = array();
-        
-                $versions[] = $version_major;    
-                $versions[] = $version_minor;
-                
-                if($version_patch)
-                    $versions[] = $version_patch;
-                
-                $case_name = get_post_meta($caseDBId, 'test_case_id', true);
-                
-                $testCaseId = $case_name . "_V" . implode(".", $versions);
-                
-                $xmlData = '<api:calculateTestCaseOutcomeRequest xmlns:api="http://compliancetest.net/api">
-                              <api:testCaseId>' . $testCaseId . '</api:testCaseId>
-                              <api:conversationId>' . $row->CONVERSATION_ID . '</api:conversationId>
-                            </api:calculateTestCaseOutcomeRequest>';
-                $result = $rest->doMetadataAPI("testcase/outcome", $xmlData, true, true, true);                
-                
-            }
         }
         
     }
