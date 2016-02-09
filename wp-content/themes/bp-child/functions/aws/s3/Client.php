@@ -11,7 +11,7 @@ class S3Wrapper{
         $this->_client = S3Client::factory(array(
             'key'    => get_option( 'aws_s3_key' ),
             'secret' => get_option( 'aws_s3_secret' ),
-            'region' => 'ap-southeast-2',
+            'region' => 'us-west-2',
             'signature' => 'v4'
         ));
     }
