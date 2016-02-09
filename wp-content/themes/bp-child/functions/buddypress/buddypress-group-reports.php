@@ -46,7 +46,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
             $excel2->getActiveSheet()->setCellValue('A7', '4')
                 ->setCellValue('C7', '5');
             $objWriter = PHPExcel_IOFactory::createWriter($excel2, 'Excel2007');
-            $objWriter->save( 'SuperStreamTestProgress.xls' );
+            $objWriter->save( 'TWAINTestProgress.xls' );
         }
     }
 

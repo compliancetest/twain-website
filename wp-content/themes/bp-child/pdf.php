@@ -21,7 +21,7 @@ class CPPDF extends TCPDF {
         $this->Rect(0,0,210,20,'F','',$fill_color = array(91, 117, 182));
 
         $header_logo = K_PATH_IMAGES."header-logo.png";
-        $this->Image($header_logo, 4, 4, 45, 0, 'PNG', 'https://www.compliancetest.net/', 'N', false, $dpi=300, '', false, false, 0, false, false, false, false);
+        $this->Image($header_logo, 4, 4, 45, 0, 'PNG', home_url(), 'N', false, $dpi=300, '', false, false, 0, false, false, false, false);
 
         $drummond_group = K_PATH_IMAGES."drummond-group.png";
         $this->Image($drummond_group, 165, 3, 40, 0, 'PNG', '', 'N', false, $dpi=300, '', false, false, 0, false, false, false, false);
@@ -39,7 +39,7 @@ class CPPDF extends TCPDF {
         $this->SetTextColor(255,255,255);
 
         // Left link
-        $this->Write(10, 'www.compliancetest.net', 'https://www.compliancetest.net/', false, 'L', true);
+        $this->Write(10, home_url(), home_url(), false, 'L', true);
 
         // Right logo
         $image_file = K_PATH_IMAGES."powered-by-gosource.png";
@@ -53,9 +53,9 @@ $pdf = new CPPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor(get_option('tw_site_title'));
-$pdf->SetTitle(get_option('tw_site_title').' Certificate');
-$pdf->SetSubject(get_option('tw_site_title').' Certificate');
+$pdf->SetAuthor(get_site_title());
+$pdf->SetTitle(get_site_title().' Certificate');
+$pdf->SetSubject(get_site_title().' Certificate');
 
 // set margins
 $pdf->SetMargins(12, 29, 12, true);
@@ -137,7 +137,7 @@ $certificate_data_info = '
     </tr>
     <tr>
         <th>Test Suite</th>
-        <td>SuperStream Contributions</td>
+        <td>Contributions</td>
     </tr>
     <tr>
         <th>Test Suite Version</th>
@@ -199,9 +199,9 @@ $style = array(
 );
 
 // QRCODE,H : QR-CODE Best error correction
-$pdf->write2DBarcode('http://www.compliancetest.net/product/ebms3-messenger/', 'QRCODE,H', '', '', 40, 40, $style, 'N');
+$pdf->write2DBarcode(home_url() . '/product/ebms3-messenger/', 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-$link = '<div style="text-align:center;"><a href="http://www.compliancetest.net/product/ebms3-messenger/" target="_blank" style="font-size:13pt; text-decoration:none;">http://www.compliancetest.net/product/ebms3-messenger/</a></div>';
+$link = '<div style="text-align:center;"><a href="'.home_url(). '/product/ebms3-messenger/" target="_blank" style="font-size:13pt; text-decoration:none;">'.home_url(). '/product/ebms3-messenger/</a></div>';
 
 $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
 // ---------------------------------------------------------
@@ -332,7 +332,7 @@ $pdf->writeHTMLCell(0, 0, '', '', $test_cases_table_html, 0, 1, 0, true, '', tru
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-$pdf->Output(get_option('tw_site_title').'-certificate.pdf', 'I');
+$pdf->Output(get_site_title().'-certificate.pdf', 'I');
 
 //============================================================+
 // END OF FILE

@@ -232,7 +232,7 @@ get_header();
             </div>
             <div class="field-row notice-txt">
                 <div class="grid-cell">
-                    <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="https://www.compliancetest.net/customer-tc/" target="_blank">Terms & Conditions</a>
+                    <input type="checkbox" name="agree_terms" value="agree" id="agree_customer_terms"> I agree with the <a href="<?php echo home_url();?>/customer-tc/" target="_blank">Terms & Conditions</a>
                 </div>
                 <div class="clear"></div>
             </div>                

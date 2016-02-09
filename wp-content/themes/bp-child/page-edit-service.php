@@ -16,7 +16,7 @@ else
     $isNew = false;
     
 if ( ! Service::can_edit( get_current_user_id(), $service->id ) ) {
-    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_option('tw_site_title').' site.', 'error');
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_site_title().' site.', 'error');
 
     wp_redirect("/");
     exit;
@@ -127,7 +127,7 @@ $user_test_suites = get_suites_with_claims();
                                     <label>Service Description:</label>
                                     <div class="has-defined-tooltip">
                                         <textarea cols="" rows="" class="textarea" id="product_description" name="product_description"><?php echo $service->service_description?></textarea>
-                                        <span style="width: 535px; margin-left: -270px; bottom: 112px; display: none;" class="simple_tooltip">Enter a brief description including any special instructions or limitations - eg 'Our SuperStream Contributions service. Contributions must include Member ID (SuperannuationFundDetails.MemberClient.Identifier) and registrations must include insurance salary (SuperannuationFundDetails.AnnualSalaryforInsurance.Amount)<span></span></span>
+                                        <span style="width: 535px; margin-left: -270px; bottom: 112px; display: none;" class="simple_tooltip">Enter a brief description including any special instructions or limitations<span></span></span>
                                     </div>
                                 </div>
 

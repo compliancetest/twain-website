@@ -751,7 +751,7 @@ function create_email_management_page()
         <input type="hidden" name="tab" id="email-tab-idx" value="0"/>
 
         <div class="wrap">
-            <h2><?php echo get_option('tw_site_title');?> Email Templates</h2>
+            <h2><?php echo get_site_title();?> Email Templates</h2>
             <br/>
 
             <div>
@@ -914,7 +914,7 @@ function cp_send_email($to, $template_name, $data = array())
     //Add [env] and [website_url] shortcodes
     $data['[website_url]'] = get_site_url();
     $data['[env]'] = get_option('env');
-    $data['[site_title]'] = get_option('tw_site_title');
+    $data['[site_title]'] = get_site_title();
     $data['[site_org]'] = get_option('tw_site_organisation');
 
     $shortCodes = array_keys($data);

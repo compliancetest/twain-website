@@ -132,9 +132,9 @@ function cp_process_test_data_actions()
 
             $objPHPExcel = new PHPExcel();
 
-            $objPHPExcel->getProperties()->setCreator(get_option('tw_site_title'));
+            $objPHPExcel->getProperties()->setCreator(get_site_title());
 
-            $objPHPExcel->getProperties()->setTitle(get_option('tw_site_title'));
+            $objPHPExcel->getProperties()->setTitle(get_site_title());
             $objPHPExcel->setActiveSheetIndex(0)->setTitle('Messages');
 
             $esb = new ManageESB();

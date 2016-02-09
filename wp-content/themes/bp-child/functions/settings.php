@@ -227,7 +227,7 @@ function create_compliancetest_settings_page()
 </style>
 <div class="wrap">    
     <div class="icon32" id="icon-tools"> <br /> </div>    
-    <h2>Compliancetest Setting</h2>            
+    <h2><?php echo get_site_title();?> Setting</h2>
     <div id="compliancetest-settings">
         <div id="compliancetest-settings-nav">
             <ul>                
@@ -251,7 +251,7 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Site Title:</b></label></td>
                             <td>
-                                <input type="text" name="tw_site_title" id="tw_site_title" value="<?php echo get_option('tw_site_title')?>" size="50" autocomplete="off" />
+                                <input type="text" name="tw_site_title" id="tw_site_title" value="<?php echo get_site_title()?>" size="50" autocomplete="off" />
                             </td>
                         </tr>
                         <tr>

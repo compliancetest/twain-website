@@ -207,7 +207,7 @@ class BatchJob
     public function generateTestingReport()
     {
         send_reports_to_s3();
-        return array('status' => 'success', 'message' => 'SuperStream testing progress report was generated successfully');
+        return array('status' => 'success', 'message' => 'Testing progress report was generated successfully');
     }
 
     /**

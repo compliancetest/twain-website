@@ -106,7 +106,7 @@ function saveProductService()
     
     if (($isNew || !is_super_admin()) && !can_maintain_product_and_service($user_id, $id)) 
     {
-        addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_option('tw_site_title').' site.', 'error');
+        addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_site_title().' site.', 'error');
         wp_redirect(get_site_url());
         exit;
     }
@@ -136,7 +136,7 @@ function saveProductService()
     
     if($count > 0)
     {
-        addMessage("Product IDs must be unique across all products configured on ".get_option('tw_site_title').". The Product ID entered is already in use by another product, potentially for another organisation. Please enter a different product ID. We recommend a combination of owner, product name and version, e.g. {owner}_{product name}_{product version}, with spaces replaced with dashes.", "error");
+        addMessage("Product IDs must be unique across all products configured on ".get_site_title().". The Product ID entered is already in use by another product, potentially for another organisation. Please enter a different product ID. We recommend a combination of owner, product name and version, e.g. {owner}_{product name}_{product version}, with spaces replaced with dashes.", "error");
         
         $_SESSION['product_data'] = $_POST;
         
@@ -374,7 +374,7 @@ function can_delete( $product_id, $user_id )
 
     $response = array( 'status' => 'success', 'message' => '' );
     if( ( ! is_super_admin() ) && ! can_maintain_product_and_service( $user_id, $product_id ) ) {
-        $response['message'] = 'You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_option('tw_site_title').' site.';
+        $response['message'] = 'You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_site_title().' site.';
         $response['status'] = 'error';
     }
 
