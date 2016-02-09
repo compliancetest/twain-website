@@ -6,7 +6,10 @@ function remove_case_name_id_map($postid)
     
     if (get_post_type($postid) != 'test-case')
         return $postid;
-    
+
+    $esb = new ManageESB();
+    $esb->deleteTestCaseNameIDMap($postid);
+
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id'=> $postid));
     
     return $postid;
@@ -573,7 +576,9 @@ function saveCase()
     {
         caseNameUpdated($case->familyMark, $testCaseId);
     }
-    
+
+    $esb = new ManageESB();
+    $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);
 
     delete_post_meta($id, 'test_suite');
     
@@ -775,7 +780,9 @@ function caseNameUpdated($familyMark, $new)
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE family_mark=%d", $familyMark);
     $suites = $wpdb->get_results($query);
-    
+
+    $esb = new ManageESB();
+
     foreach($suites as $row)
     {
         $versions = array();
@@ -798,8 +805,8 @@ function caseNameUpdated($familyMark, $new)
         wp_update_post(array('ID' => $post->ID, 'post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])));
         $wpdb->update($wpdb->prefix . "test_cases", array('case_name' => $new), array('case_id' => $row->case_id));
         cp_update_post_meta($post->ID, 'test_case_id', $new);
-        
-        
+
+        $esb->saveTestCaseInfo($post->ID, $new . "_V" . implode(".", $versions), get_post_meta($post->ID, 'outcome_type', true), get_post_meta($post->ID, 'message_count', true));
     }
     
 }
