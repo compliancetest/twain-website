@@ -22,7 +22,7 @@ class FulltextSearch {
     );
 
     public function __construct(){
-        return false;
+        return true;
         $this->_client = get_transient( 'fulltext_cloud_search_object' );
         if( ! $this->_client ) {
             $this->_domainName = get_option('cloudsearch_fulltext_domain_name');
@@ -41,6 +41,7 @@ class FulltextSearch {
     }
 
     public function search( $params = false, $full_results = false ){
+        return true;
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
@@ -146,6 +147,7 @@ class FulltextSearch {
     }
 
     public function fullUpload( $post_id = false ){
+        return true;
         global $wpdb;
         $data = $response_data = array();
         if( $post_id ){
@@ -247,6 +249,7 @@ class FulltextSearch {
     }
 
     public function fullDelete( $post_id = false ){
+        return true;
         global $wpdb;
         $data = $response_data = array();
         if( $post_id ){
@@ -284,6 +287,7 @@ class FulltextSearch {
         return $response_data;
     }
     private function _processPost( $post ){
+        return true;
         switch( $post->post_type ){
             case 'page':
                 $data = array(
@@ -388,6 +392,7 @@ class FulltextSearch {
     }
 
     public function delete_item( $id ){
+        return true;
         $data = array();
         array_push( $data, array( 'type' => 'delete', 'id' => $id  ) );
         $data = $this->_client->uploadDocuments( array( 'documents' => json_encode( $data ), 'contentType' => 'application/json' ) );

@@ -18,7 +18,7 @@ class CloudSearch {
 
     public function __construct()
     {
-        return false;
+        return true;
         $this->_client = get_transient( 'cloud_search_object' );
         if( ! $this->_client ) {
             $this->_domainName = get_option('cloudsearch_domain_name');
@@ -36,6 +36,7 @@ class CloudSearch {
     }
 
     public function search( $params = false, $full_results = false ){
+        return true;
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
@@ -142,6 +143,7 @@ class CloudSearch {
      * You can delete uploaded items using _delete_all_items method
      */
     public  function _initial_upload(){
+        return true;
         global $wpdb;
 
         // step 1 - upload test plans
@@ -403,6 +405,7 @@ class CloudSearch {
      * from CloudSearch domain. You can use _initial_upload function to re-upload all items
      */
     public  function _delete_all_items(){
+        return true;
 
         //Remove All Results
         $results = $this->search( array(), true );
@@ -432,6 +435,7 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_update_test_plan( $plan_id ){
+        return true;
         global $wpdb;
         $test_plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_test_plans WHERE id = %d", $plan_id ) );
         if( ! $test_plan ){
@@ -447,6 +451,7 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_update_claim( $claim_id ){
+        return true;
         global $wpdb;
         $claim = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_compliance_claims WHERE id = %d", $claim_id ) );
         if( ! $claim ){
@@ -462,6 +467,7 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_update_agreement( $agreement_id ){
+        return true;
         global $wpdb;
         $agreement = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id ) );
         if( ! $agreement ){
@@ -480,6 +486,7 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_update_service( $service_id ){
+        return true;
         $service = new Service( $service_id );
         $service->load();
         if( ! $service->id ){
@@ -497,6 +504,7 @@ class CloudSearch {
      * @return mixed
      */
     public function cloud_search_delete_item( $id, $type ){
+        return true;
         $data = array();
         if( $type == 'agreement' ){
             array_push( $data, array( 'type' => 'delete', 'id' => $type.'_requester_'.$id  ) );
