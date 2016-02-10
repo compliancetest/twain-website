@@ -70,7 +70,7 @@ class FulltextSearch
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
                 } else {
-                    $groups_str = ' ( or ( term field=community_id 32 ) ( term field=community_id 35 ) ) ';
+                    $groups_str = ' ( or ( term field=community_id 1 ) ) ';
                 }
                 $private_where = '';
                 $organisation_members = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id()));
@@ -167,8 +167,8 @@ class FulltextSearch
                     }
                 }
                 if (empty($communityNames)) {
-                    $communityNames = array('ebMS3', 'SuperStream');
-                    $groups['groups'] = array(32, 35);
+                    $communityNames = array('TWAIN');
+                    $groups['groups'] = array(1);
                 }
                 if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
                     continue;
@@ -177,7 +177,7 @@ class FulltextSearch
                 if (in_array($post->post_type, array('event', 'blog', 'press-release'))) {
                     $community_id = ( integer )get_post_meta($post->ID, 'blog_community_id', true);
                     if ($community_id === 0 || $community_id === 1) {
-                        $groups['groups'] = array(32, 35);
+                        $groups['groups'] = array(1);
                         $post_data['visibility'] = 1;
                     } else {
                         $communityNames = array($wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $community_id)));
@@ -218,8 +218,8 @@ class FulltextSearch
                     }
                 }
                 if (empty($communityNames)) {
-                    $communityNames = array('ebMS3', 'SuperStream');
-                    $groups['groups'] = array(32, 35);
+                    $communityNames = array('TWAIN');
+                    $groups['groups'] = array(1);
                 }
                 $temp_data = array(
                     'community' => $communityNames,
