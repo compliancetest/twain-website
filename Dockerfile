@@ -9,6 +9,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/www/html
 
+ADD apache2.conf /etc/apache2/apache2.conf
 ADD . /var/www/html
 EXPOSE 80
 ADD start.sh /start.sh
