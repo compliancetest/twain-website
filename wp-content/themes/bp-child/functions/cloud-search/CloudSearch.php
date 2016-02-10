@@ -65,7 +65,7 @@ class CloudSearch
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
                 } else {
-                    $groups_str = ' ( or ( term field=community_id 32 ) ( term field=community_id 35 ) ) ';
+                    $groups_str = ' ( or ( term field=community_id 1 ) ) ';
                 }
                 $private_where = '';
                 $organisation_members = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id()));
@@ -176,7 +176,7 @@ class CloudSearch
             $test_suite->load();
             if ($product->visibility == 'Public') {
                 $visibility = 1;
-                $communities = array(32, 35);
+                $communities = array(1);
             } else {
                 if ($product->visibility == 'Community') {
                     $visibility = 2;
@@ -241,7 +241,7 @@ class CloudSearch
             $test_suite->load();
             if ($product->visibility == 'Public') {
                 $visibility = 1;
-                $communities = array(32, 35);
+                $communities = array(1);
             } else {
                 if ($product->visibility == 'Community') {
                     $visibility = 2;
@@ -299,7 +299,7 @@ class CloudSearch
             $service->load();
             if ($requester_service->service_visibility == 'Public') {
                 $v = 1;
-                $communities = array(32, 35);
+                $communities = array(1);
             } else {
                 $requester_test_suite = new TestSuite($requester_service->service_suite_id);
                 $requester_test_suite->load();
@@ -367,7 +367,7 @@ class CloudSearch
             $test_suite->load();
             if ($service->service_visibility == 'Public') {
                 $v = 1;
-                $communities = array(32, 35);
+                $communities = array(1);
             } else if ($service->service_visibility == 'Community') {
                 $v = 2;
                 $communities = array($test_suite->community_id);
