@@ -3,7 +3,7 @@
 require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
 use Aws\CloudSearch\CloudSearchClient;
 
-class CloudSearch
+class CloudSearch extends BaseAWS
 {
 
     private $_domainName = '';
@@ -22,13 +22,11 @@ class CloudSearch
     public function __construct()
     {
         $this->_client = get_transient('cloud_search_object');
-        if( ! $this->_client ) {
+        if (!$this->_client) {
+
             $this->_domainName = get_option('cloudsearch_domain_name');
-            $configClient = CloudSearchClient::factory(array(
-                'key' => get_option('aws_s3_key'),
-                'secret' => get_option('aws_s3_secret'),
-                'region' => 'us-west-2'
-            ));
+
+            $configClient = CloudSearchClient::factory(self::getAWSConfigs());
 
             $this->_client = $configClient->getDomainClient($this->_domainName, array(
                 'credentials' => $configClient->getCredentials()

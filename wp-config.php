@@ -38,6 +38,9 @@ define('WP_CACHE', true); // Added by W3 Total Cache
 if(!getenv('FORCE_SSL_ADMIN')) {
 	define('FORCE_SSL_ADMIN', true);
 }
+if(getenv('ENVIRONMENT')){
+	define('ENVIRONMENT', true);
+}
 
 /**#@+
  * Authentication Unique Keys and Salts.

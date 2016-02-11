@@ -2,7 +2,7 @@
 require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
 use Aws\CloudSearch\CloudSearchClient;
 
-class FulltextSearch
+class FulltextSearch extends BaseAWS
 {
 
     private $_domainName = '';
@@ -27,13 +27,10 @@ class FulltextSearch
     {
         $this->_client = get_transient('fulltext_cloud_search_object');
         if (!$this->_client) {
+
             $this->_domainName = get_option('cloudsearch_fulltext_domain_name');
 
-            $configClient = CloudSearchClient::factory(array(
-                'key' => get_option('aws_s3_key'),
-                'secret' => get_option('aws_s3_secret'),
-                'region' => 'us-west-2'
-            ));
+            $configClient = CloudSearchClient::factory(self::getAWSConfigs());
 
             $this->_client = $configClient->getDomainClient($this->_domainName, array(
                 'credentials' => $configClient->getCredentials()
