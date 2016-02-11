@@ -39,7 +39,7 @@ if(!getenv('FORCE_SSL_ADMIN')) {
 	define('FORCE_SSL_ADMIN', true);
 }
 if(getenv('ENVIRONMENT')){
-	define('ENVIRONMENT', true);
+	define('ENVIRONMENT', getenv('ENVIRONMENT'));
 }
 
 /**#@+
