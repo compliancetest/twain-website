@@ -51,6 +51,11 @@ function create_compliancetest_settings_page()
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
         update_option('s3_bulk_treshold', $_POST['s3_bulk_treshold']);
         update_option('aws_s3_key', $_POST['aws_s3_key']);
+        if (isset($_POST['aws_s3_use_metaserver']) && $_POST['aws_s3_use_metaserver'] == 'on') {
+            update_option('aws_s3_use_metaserver', 'yes');
+        } else {
+            update_option('aws_s3_use_metaserver', 'no');
+        }
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
@@ -507,6 +512,12 @@ function create_compliancetest_settings_page()
                             <td><label><b>BulkProfileThreshold:</b></label></td>
                             <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>
                         </tr>
+
+                        <tr>
+                            <td><label><b>Use metadata Server:</b></label></td>
+                            <td><input type="checkbox" name="aws_s3_use_metaserver" id="aws_s3_use_metaserver" size="50" <?php if( get_option('aws_s3_use_metaserver') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>
                             <td><input type="text" name="aws_s3_key" id="aws_s3_key" size="50" value="<?php echo get_option('aws_s3_key')?>" autocomplete="off" /></td>

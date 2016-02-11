@@ -12,11 +12,9 @@ class BaseAWS
         $configs = array(
             'region' => 'us-west-2',
         );
-        $key = get_option('aws_s3_key');
-        $secret = get_option('aws_s3_secret');
-        if ($secret && $key) {
-            $configs['key'] = $key;
-            $configs['secret'] = $secret;
+        if (get_option('aws_s3_use_metaserver') != 'yes') {
+            $configs['key'] = get_option('aws_s3_key');
+            $configs['secret'] = get_option('aws_s3_secret');
         }
 
         return $configs;
