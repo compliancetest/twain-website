@@ -14,7 +14,7 @@ class BaseAWS
         );
         $key = get_option('aws_s3_key');
         $secret = get_option('aws_s3_secret');
-        if (!$secret || !$key) {
+        if ($secret && $key) {
             $configs['key'] = $key;
             $configs['secret'] = $secret;
         }
