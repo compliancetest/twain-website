@@ -167,6 +167,8 @@ require_once(THE_FUNCTION . '/e2e-agreements/controller.php');
 //Processes
 require_once(THE_FUNCTION . '/processes/class.process.php');
 
+require_once(THE_FUNCTION . '/aws/BaseAWS.php');
+
 //CloudSearch
 require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
@@ -178,6 +180,7 @@ require_once(THE_FUNCTION . '/aws/s3/Client.php');
 require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
 require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+
 
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');

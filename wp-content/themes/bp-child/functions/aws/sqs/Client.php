@@ -2,7 +2,7 @@
 require_once(THE_FUNCTION . '/aws/sdk/aws-autoloader.php');
 use Aws\Sqs\SqsClient;
 
-class SqsWrapper
+class SqsWrapper extends BaseAWS
 {
 
     private $_client;
@@ -11,11 +11,8 @@ class SqsWrapper
 
     public function __construct($queueName = false)
     {
-        $this->_client = SqsClient::factory(array(
-            'key' => get_option('aws_s3_key'),
-            'secret' => get_option('aws_s3_secret'),
-            'region' => 'ap-southeast-2'
-        ));
+        $this->_client = SqsClient::factory(self::getAWSConfigs());
+
         if (!$queueName) {
             $this->_queueName = get_option('sqs_queue_name');
             $this->_bulkQueueName = get_option('bulk_sqs_queue_name');
