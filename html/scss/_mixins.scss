@@ -1,5 +1,6 @@
 //Sprite for all common elements
 $common: sprite-map("common/*.png", $layout: smart);
+$icons: sprite-map("icons/*.png", $layout: smart);
 $bgX: sprite-map("bg/*.png", $icons-layout: vertical, $icons-foobar-repeat: repeat-x);
 
 @mixin commonSprite($image-name) {
@@ -13,4 +14,12 @@ $bgX: sprite-map("bg/*.png", $icons-layout: vertical, $icons-foobar-repeat: repe
 @mixin bgSpriteX($image-name) {
   background-image: sprite-url($bgX);
   background-position: round(nth(sprite-position($bgX, $image-name), 1)) round(nth(sprite-position($bgX, $image-name), 2));
+}
+
+@mixin iconsSprite($image-name) {
+  display: inline-block;
+  background-image: sprite-url($icons);
+  background-position: round(nth(sprite-position($icons, $image-name), 1)) round(nth(sprite-position($icons, $image-name), 2));
+  height: image-height(sprite-file($icons, $image-name));
+  width: image-width(sprite-file($icons, $image-name));
 }

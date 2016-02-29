@@ -49,10 +49,14 @@
     .account-menu{
         vertical-align: top;
         display: inline-block;
-        margin: 0;
+        margin: 1px 0 0 2px;
 
         li{
             float: left;
+
+            .btn{
+                margin-left: 14px;
+            }
         }
     }
 
@@ -70,6 +74,7 @@
     min-width: 300px;
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .header-search-box .header-search-field{
