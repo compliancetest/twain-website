@@ -2,12 +2,13 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+use Illuminate\Database\Eloquent\Model;
+
+class TestCase extends Model
 {
 
-    protected $table = 'wp_users';
+    protected $table = 'wp_testcase';
     /**
      * The attributes that are mass assignable.
      *
@@ -25,8 +26,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
-
-    public function getAuthPassword(){
-        return $this->user_pass;
-    }
 }

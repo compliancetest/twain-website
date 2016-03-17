@@ -12,6 +12,13 @@
 |
 */
 
+
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1',['middleware' => 'api.auth'], function ($api) {
+
+        $api->get('testcases/{id}', 'App\Api\Controllers\TestCasesController@show');
+});
 Route::group(['middleware' => ['web']], function () {
     Route::resource('communities', 'CommunitiesController');
 });
