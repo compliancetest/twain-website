@@ -213,7 +213,7 @@ class S3Wrapper extends BaseAWS
     public static function getLink($bucket, $fileName)
     {
         $s3 = new S3Wrapper();
-        return urldecode($s3->_client->getObjectUrl(get_option('aws_s3_url') . '/' . $bucket, $fileName));
+        return urldecode($s3->_client->getObjectUrl(rtrim(get_option('aws_s3_url') . '/' . $bucket, '/'), $fileName));
     }
 
     public static function getDownloadLink($bucket, $fileName, $name = false)
@@ -231,6 +231,11 @@ class S3Wrapper extends BaseAWS
     public static function getUrlWithDomain($link)
     {
         return str_replace('http://', 'https://s3-ap-southeast-2.amazonaws.com/', $link);
+    }
+
+    public static function getCaseImageUrl($caseId, $file)
+    {
+        return self::getLink('', ENVIRONMENT .'/case_images/' .$caseId.'/'. $file);
     }
 
 }

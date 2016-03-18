@@ -390,61 +390,49 @@ get_header();
                     <div class="grid-box-body">
                         <div class="column">
                             <div id="case-template-data">
-                                <h6><B>Message Templates</b></h6>
+                                <h6><B>Scanned Images</b></h6>
 
                                 <div class="field-row">
                                     <div class="grid-cell width35P">
-                                        <label>Template Title</label>
+                                        <label>Image</label>
                                     </div>
                                     <div class="grid-cell width45P">
-                                        <label>Template URI</label>
+                                        <label>Description</label>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
-                                <?php
-                                $suiteTemplates = $case->getAvailableMessageTemplates();
 
-                                foreach ($suiteTemplates as $idx => $row) {
-                                    $checked = false;
-                                    foreach ($case->messageTemplates as $crow) {
-                                        if ($crow['name'] == $row['name'] && $crow['url'] == $row['url']) {
-                                            $checked = true;
-                                            break;
-                                        }
-                                    }
-                                    ?>
-                                    <div class="field-row">
+                                <?php foreach($case->imagesData as $image):?>
+                                    <div class="field-row images_row">
                                         <div class="grid-cell width35P">
-                                            <input type="checkbox" name="message_template_id[]"
-                                                   value="<?php echo $idx ?>" <?php echo $checked ? 'checked="checked"' : '' ?> />
-                                            <input type="text" name="message_template_name<?php echo $idx ?>"
-                                                   value="<?php echo $row['name'] ?>" class="input"
-                                                   readonly="readonly"/>
+                                                <input type="hidden" name="saved_images[]" value="<?php echo $image['name'];?>"/>
+                                                <img style="width: 30px; height: 30px;" src="<?php echo S3Wrapper::getCaseImageUrl($caseID, $image['name']);?>">
                                         </div>
-                                        <div class="grid-cell width55P">
-                                            <input type="text" name="message_template_url<?php echo $idx ?>"
-                                                   value="<?php echo $row['url'] ?>" class="input medium-input"
-                                                   readonly="readonly"/>
+                                        <div class="grid-cell width45P">
+                                            <input type="text" name="saved_images_description[]"
+                                                   value="<?php echo $image['description'];?>" class="input medium-input" style="width: 450px;"/>
+                                        </div>
+                                        <div class="grid-cell width10P" style="float: right">
+                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
                                         </div>
                                         <div class="clear"></div>
                                     </div>
-                                <?php } ?>
+                                <?php endforeach;?>
+
+                                <div class="field-row">
+                                    <div class="grid-cell">
+                                        <a href="#" class="action-btn add-new-btn" id="add-image"><span class="p"></span><span class="t">Add image</span></a>
+                                    </div>
+                                </div>
+
+
                             </div>
 
-                            <h6><B>Profile Data</b></h6>
+                            <h6><B>Test Data Profile</b></h6>
 
                             <div class="field-row">
-                                <div class="grid-cell width15P">
-                                    <label>Profile Name</label>
-                                </div>
-                                <div class="grid-cell width10P">
-                                    <label>Purpose</label>
-                                </div>
-                                <div class="grid-cell width15P">
-                                    <label>Type</label>
-                                </div>
-                                <div class="grid-cell width45P">
-                                    <label>URL</label>
+                                <div class="grid-cell width100P">
+                                    <label>Attach JSON configuration profile file</label>
                                 </div>
                                 <div class="grid-cell width5P">
 
@@ -452,80 +440,32 @@ get_header();
 
                                 <div class="clear"></div>
                             </div>
-                            <div id="profile-instances">
-                                <?php
-                                $profileInstances = $case->getAvailableProfileInstances();
-                                $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
-                                $testSuitesRoles = array($case->testerRole, $case->harnessRole);
-                                foreach ($profileInstances as $instance) {
-                                    $profileName = $instance->profile_name;
+                            <div id="profile-instances" class="field-row">
+                                <select name="test_data_profile" style="width:300px;;">
+                                    <?php
+                                    $suiteObj->load();
+                                    $profileInstances = getCommunityProfileInstatnces($suiteObj->community_id);
+                                    foreach ($profileInstances as $instance) {
+                                        $profileName = $instance->profile_name;
 
-                                    $profileTypeName = $generalProfileType = $instance->profile_type_title;
-                                    $pJSON = json_decode(base64_decode($instance->schema));
-                                    if ($pJSON->Version) {
-                                        $version = array();
-                                        foreach (get_object_vars($pJSON->Version) as $k => $v) {
-                                            $version[] = $v;
-                                        }
-                                        $profileTypeName .= " v" . implode(".", $version);
-                                    }
-                                    if (!$instance->lookup && !cp_checked($instance->id, $case->profileInstances)) {
-                                        continue;
-                                    }
-                                    if (!empty($testSuitesRolesProfilesTypes)) {
-                                        $isAllowed = false;
-                                        foreach ($testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes) {
-                                            if ((in_array($cRoleName, $testSuitesRoles) && in_array($generalProfileType, $cProfilesTypes)) || cp_checked($instance->id, $case->profileInstances)) {
-                                                $isAllowed = true;
+                                        $profileTypeName = $generalProfileType = $instance->profile_type_title;
+                                        $pJSON = json_decode(base64_decode($instance->schema));
+                                        if ($pJSON->Version) {
+                                            $version = array();
+                                            foreach (get_object_vars($pJSON->Version) as $k => $v) {
+                                                $version[] = $v;
                                             }
+                                            $profileTypeName .= " v" . implode(".", $version);
                                         }
-                                        if (!$isAllowed) {
+                                        if (!$instance->lookup && !cp_selected($instance->id, $case->profileInstances)) {
                                             continue;
                                         }
+                                        ?>
+                                        <option value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_data_profile) ?>><?php echo $profileName;?></option>
+                                        <?php
                                     }
-                                    $instanceObj = S3Wrapper::getProfile($instance->token);
                                     ?>
-                                    <div class="field-row">
-                                        <div class="grid-cell width15P">
-                                            <input type="checkbox" name="profile_instances[]"
-                                                   value="<?php echo $instance->id ?>" <?php echo cp_checked($instance->id, $case->profileInstances) ?> />
-                                            <a href="<?php echo get_site_url() ?>?td-action=<?php echo wp_create_nonce('view-profile-instance') ?>&id=<?php echo $instance->id ?>"
-                                               rel="custom-popup" cp-type="ajax">
-                                                <?php
-                                                echo $profileName;
-                                                if ($instanceObj->Profile->Version) {
-                                                    if (is_object($instanceObj->Profile->Version)) {
-                                                        $version = array();
-                                                        foreach (get_object_vars($instanceObj->Profile->Version) as $k => $v) {
-                                                            $version[] = $v;
-                                                        }
-                                                        echo " v" . implode(".", $version);
-                                                    } else {
-                                                        echo " v " . $instanceObj->Profile->Version;
-                                                    }
-                                                }
-                                                ?>
-                                            </a>
-                                        </div>
-                                        <div class="grid-cell width10P">
-                                            <label><?php echo $instanceObj->Profile->Purpose ?></label>
-                                        </div>
-                                        <div class="grid-cell width15P">
-                                            <a href="<?php echo get_site_url() ?>?td-action=<?php echo wp_create_nonce('view-profile-type') ?>&id=<?php echo $instance->type_id ?>"
-                                               rel="custom-popup" cp-type="ajax" class="view-profile-type-link">
-                                                <?php echo $profileTypeName; ?>
-                                            </a>
-                                        </div>
-                                        <div class="grid-cell width45P">
-                                            <input type="text" readonly="readonly"
-                                                   value="<?php echo get_site_url() ?>/get-profile?id=<?php echo $instance->token ?>"
-                                                   class="input width100P"/>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
+                                    </select>
                             </div>
                             <div class="field-row noborder"></div>
                         </div>
@@ -542,61 +482,32 @@ get_header();
                     <div class="grid-box-body">
                         <div class="column">
                             <div class="field-row">
-                                <div class="grid-cell">
-                                    <label>Protocol Binding:</label>
-                                    <input type="text" name="protocol_binding2"
-                                           value="<?php echo $case->protocolBinding ?>" class="input"/>
-                                </div>
-                                <div class="grid-cell">
-                                    <label>Test trigger URL:</label>
-                                    <input type="text" name="test_url" value="<?php echo $case->testEndpointURL ?>"
-                                           class="input medium-input"/>
-                                </div>
-                                <div class="clear"></div>
+                                <label>Attach JSON test execution file</label>
                             </div>
-                            <?php foreach ($case->testExecutionData as $row) { ?>
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Property Name:</label>
-                                        <input type="text" name="property_name_exec[]"
-                                               value="<?php echo $row['name'] ?>" class="input"/>
-                                    </div>
-                                    <div class="grid-cell">
-                                        <label>Property Value:</label>
-                                        <input type="text" name="property_value_exec[]"
-                                               value="<?php echo $row['value'] ?>" class="input medium-input"/>
-                                    </div>
-                                    <div class="grid-cell">
-                                        <label>&nbsp;</label>
-                                        <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            <?php } ?>
-                            <?php if ($isNew) { ?>
-                                <div class="field-row">
-                                    <div class="grid-cell">
-                                        <label>Property Name:</label>
-                                        <input type="text" name="property_name_exec[]" value="" class="input"/>
-                                    </div>
-                                    <div class="grid-cell">
-                                        <label>Property Value:</label>
-                                        <input type="text" name="property_value_exec[]" value=""
-                                               class="input medium-input"/>
-                                    </div>
-                                    <div class="grid-cell">
-                                        <label>&nbsp;</label>
-                                        <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            <?php } ?>
-                            <div class="btn-row">
-                                <div class="grid-cell">
-                                    <a href="#" class="action-btn add-new-btn" id="add-test-exec-data"><span
-                                            class="p"></span><span class="t">New Property</span></a>
-                                </div>
-                                <div class="clear"></div>
+                            <div class="field-row">
+                                <select name="test_execution" style="width:300px;">
+                                    <?php
+                                    foreach ($profileInstances as $instance) {
+                                        $profileName = $instance->profile_name;
+
+                                        $profileTypeName = $generalProfileType = $instance->profile_type_title;
+                                        $pJSON = json_decode(base64_decode($instance->schema));
+                                        if ($pJSON->Version) {
+                                            $version = array();
+                                            foreach (get_object_vars($pJSON->Version) as $k => $v) {
+                                                $version[] = $v;
+                                            }
+                                            $profileTypeName .= " v" . implode(".", $version);
+                                        }
+                                        if (!$instance->lookup && !cp_selected($instance->id, $case->profileInstances)) {
+                                            continue;
+                                        }
+                                        ?>
+                                        <option value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_execution) ?>><?php echo $profileName;?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                    </select>
                             </div>
                         </div>
                     </div>
@@ -728,7 +639,7 @@ get_header();
                                                                 id="send-notification" value="1" autocomplete="off"/>
                                         Send Notification to subscribers</label></div>
                             <?php } ?>
-                            <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span
+                            <a type="submit" class="action-btn process-btn submit-btn left15"><span class="p"></span><span
                                     class="t">SAVE TEST CASE</span></a>
                             <a href="<?php echo get_permalink($_SESSION['test_suite_id']) ?>"
                                class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
@@ -855,10 +766,12 @@ get_header();
 
                 jQuery('#saving-wrapper').show();
                 jQuery('#edit_test_case_wrapper .grid-box-footer .message').remove();
-                jQuery.ajax({
+
+                // You should sterilise the file names
+                $('#caseForm').ajaxSubmit({
                     url: "/",
                     type: "post",
-                    data: jQuery("#caseForm").serialize() + "&byAjax=1",
+                    mimeType:"multipart/form-data",
                     dataType: 'json',
                     success: function (rsp) {
                         if (rsp.status == 'success') {
@@ -916,6 +829,24 @@ get_header();
                 minHeight: 100,
                 maxHeight: 100
             })
+
+            $('#add-image').on('click', function(e){
+                e.preventDefault();
+                $('#add-image').closest('.field-row').before('<div class="field-row">'+
+                                    '<div class="grid-cell width35P">'+
+                                        '<input type="file" name="images[]" value="" />'+
+                                    '</div>'+
+                                    '<div class="grid-cell width45P">'+
+                                        '<input type="text" name="images_description[]"'+
+                                               'value="" class="input medium-input" style="width: 450px;"/>'+
+                                    '</div>'+
+                                    '<div class="grid-cell width10P" style="float: right">'+
+                                        '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>'+
+                                    '</div>'+
+                                    '<div class="clear"></div>'+
+                                '</div>');
+                    customizeFileTag();
+            });
 
         });
     </script>

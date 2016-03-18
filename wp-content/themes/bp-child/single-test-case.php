@@ -149,120 +149,46 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
 					</div>
 				</div>
 
-                <div class="grids noradiusbottom">
-                    <?php if (!empty($case->testEndpointURL) || !empty($case->protocolBinding) ): ?>
-                        <div class="grid_row white_bcg nopaddingbottom noborderbottom">
-                            <div class="grid_cell width20P left size13 bold">Test trigger endpoint URL:</div>
-                            <div class="grid_cell width75P left"><a href="<?php echo $case->testEndpointURL?>" class="blue_txt"><?php echo $case->testEndpointURL ; ?></a></div>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="grid_row white_bcg nopaddingbottom noborderbottom">
-                            <div class="grid_cell width20P left size13 bold">Protocol Binding:</div>
-                            <div class="grid_cell width75P left"><?php echo $case->protocolBinding ; ?></div>
-                            <div class="clear"></div>
-                        </div>
-                    <?php endif; ?>
-					<?php
-					foreach($case->testExecutionData as $key => $row){
-                    ?>
-						<div class="grid_row white_bcg nopaddingbottom noborderbottom <?php if($key == (count($case->testExecutionData)-1)) {echo "paddingbottom10";} ?>">
-							<div class="grid_cell width20P left size13 bold"><?php  echo $row['name'].':';?></div>
-							<div class="grid_cell width75P left">
-                                <?php if(strpos($row['value'], 'http://') !== false || strpos($row['value'], 'https://') !== false){ ?>
-                                <a href="<?php echo $row['value']; ?>" class="blue_txt"><?php echo $row['value']; ?></a>
-                                <?php }else{ ?>
-                                <?php echo $row['value']?>
-                                <?php } ?>
-                            </div>
-							<div class="clear"></div>
-						</div>	
-					<?php	
-					} 
-                    ?>
+                <div class="grids noradiusbottom padding20-10">
+                   <?php $instance = ProfileInstance::getProfileBy('id', $case->test_execution);?>
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name; ?></a>
 				</div>
 						
 			</div>
-			
-            <div class="clear"></div>
-			<div class="space7"></div>
-            <div class="grid_cell width100P toleft">
-                <div class="grid_head lighter_gray_bcg2 related">
-                    <div class="grid_row nopaddingbottom nopaddingtop">
-                        <div class="grid_cell width100P size14 normal shadowwhite">Message Templates</div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="grids noradiusbottom">
-                    <?php
-                    foreach($case->messageTemplates as $key => $row){
-                        ?>
-                        <div class="grid_row white_bcg nopaddingbottom noborderbottom <?php if($key == (count($case->messageTemplates)-1)) {echo "paddingbottom10";} ?>">
-                            <div class="grid_cell width45P left size13 bold"><?php  echo $row['name'].':';?></div>
-                            <div class="grid_cell width5P left"></div>
-                            <div class="grid_cell width45P left">
-                                <?php if(strpos($row['url'], 'http://') !== false || strpos($row['url'], 'https://') !== false){ ?>
-                                    <a href="<?php echo $row['url']; ?>" class="blue_txt"><?php echo $row['url']; ?></a>
-                                <?php }else{ ?>
-                                    <?php echo $row['url']?>
-                                <?php } ?>
-                            </div>
+
+            <?php if($case->imagesData):?>
+                <div class="clear"></div>
+                <div class="space7"></div>
+                <div class="grid_cell width100P toleft">
+                    <div class="grid_head lighter_gray_bcg2 related">
+                        <div class="grid_row nopaddingbottom nopaddingtop">
+                            <div class="grid_cell width100P size14 normal shadowwhite">Scanned Images</div>
                             <div class="clear"></div>
                         </div>
-                    <?php
-                    } ?>
-
+                    </div>
+                    <div class="grids noradiusbottom">
+                        <?php foreach($case->imagesData as $image):?>
+                            <div style="float: left; margin-right: 20px; margin-top: 20px; display: block; max-width: 150px;">
+                                <img style="width: 150px; height: 150px;" src="<?php echo S3Wrapper::getCaseImageUrl($case->id, $image['name']);?>" alt="<?php echo $image['description'];?>">
+                                <p style="text-align: center;"><?php echo $image['description'];?></p>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
                 </div>
-            </div>
+            <?php endif;?>
 
             <div class="clear"></div>
             <div class="space7"></div>
 			<div class="grid_cell width100P toleft">
                 <div class="grid_head lighter_gray_bcg2 related">
                     <div class="grid_row nopaddingbottom nopaddingtop">
-                        <div class="grid_cell width100P size14 normal shadowwhite">Test Data Profiles</div>
+                        <div class="grid_cell width100P size14 normal shadowwhite">Test Data Profile</div>
                         <div class="clear"></div>
                     </div>
                 </div>
-                <div class="grid_head">
-                    <div class="grid_row padding5-10">
-                        <div class="grid_cell width15P">Name</div>
-                        <div class="grid_cell width15P left5P">Purpose</div>
-                        <div class="grid_cell width10P left5P">Type</div>
-                        <div class="grid_cell width40P left5P">URL</div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="grids">
-                    <?php                    
-                    
-                    $profileInstances = $case->getProfileInstanceRows();                    
-                    foreach( $profileInstances AS $instance ){
-                        if( $instance->validation_status != 'valid' ){
-                            continue;
-                        }
-                    ?>
-                            <div class="grid_row white_bcg padding5-10">
-                                <div class="grid_cell width15P">
-                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" rel="custom-popup" cp-type="ajax">
-                                        <?php echo $instance->profile_name?>
-                                    </a>
-                                </div>
-                                <div class="grid_cell width15P left5P">
-                                    <?php echo $instance->purpose?>
-                                </div>
-                                <div class="grid_cell width10P left5P">
-                                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-type')?>&id=<?php echo $instance->type_id?>" rel="custom-popup" cp-type="ajax" class="view-profile-type-link">
-                                        <?php echo $instance->profile_type_title; ?>
-                                    </a>
-                                </div>
-                                <div class="grid_cell width40P left5P">
-                                <input type="text" readonly="readonly" value="<?php echo get_site_url()?>/get-profile?id=<?php echo $instance->token?>" class="input width100P" />
-                                </div>
-                                <div class="clear"></div>
-                            </div>    
-                    <?php    
-                    } ?>
+                <div class="grids noradiusbottom padding20-10">
+                    <?php $instance = ProfileInstance::getProfileBy('id', $case->test_data_profile);?>
+                    <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view-profile-instance')?>&id=<?php echo $instance->id?>" class="view-profile-instance-link"><?php echo $instance->profile_name; ?></a>
                 </div>
                         
             </div>
