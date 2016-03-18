@@ -507,7 +507,7 @@ get_header();
                                 <select name="test_execution" style="width:300px;">
                                     <option value=""></option>
                                     <?php
-                                    $testSuitesRoles = array($case->harnessRole);
+                                    $testSuitesRoles = array('TCEF');
                                     foreach ($profileInstances as $instance) {
                                         $profileName = $instance->profile_name;
 
