@@ -199,7 +199,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     </div>
                 <?php endif; ?>
 
-                 <?php if ($case->test_execution): ?>
+                 <?php if ($case->test_data_profile): ?>
 
                     <div class="clear"></div>
                     <div class="space7"></div>
