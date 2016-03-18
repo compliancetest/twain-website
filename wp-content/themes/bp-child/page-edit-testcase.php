@@ -523,16 +523,12 @@ get_header();
                                         if (!$instance->lookup && !cp_selected($instance->id, $case->profileInstances)) {
                                             continue;
                                         }
-                                        if (!empty($testSuitesRolesProfilesTypes)) {
-                                            $isAllowed = false;
-                                            foreach ($testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes) {
-                                                if ((in_array($cRoleName, $testSuitesRoles) && in_array($generalProfileType, $cProfilesTypes)) || cp_checked($instance->id, $case->profileInstances)) {
-                                                    $isAllowed = true;
-                                                }
-                                            }
-                                            if (!$isAllowed) {
-                                                continue;
-                                            }
+                                        $isAllowed = false;
+                                        if($generalProfileType == 'TCEF'){
+                                            $isAllowed = true;
+                                        }
+                                        if (!$isAllowed) {
+                                            continue;
                                         }
                                         ?>
                                         <option
@@ -747,7 +743,7 @@ get_header();
             })
 
             jQuery('body').on('change', 'input[name="suite_id[]"], select[name="choose_tester_role"], select[name="choose_harness_role"]', function () {
-                jQuery('#case-template-data  .field-row:gt(0)').remove();
+//                jQuery('#case-template-data  .field-row:gt(0)').remove();
                 if (jQuery('input[name="suite_id[]"]:checked').length < 1) {
                     jQuery('#choose-conf-level-box .column').html('');
                     jQuery('#choose-roles-box select').each(function () {
@@ -755,7 +751,7 @@ get_header();
                     })
                     jQuery('#choose-scenarios-box .column').html('');
                     jQuery('#choose-init-msg-box  select option:gt(0)').remove();
-                    jQuery('#profile-instances').html('');
+//                    jQuery('#profile-instances').html('');
                     return false;
                 }
                 jQuery('#suites-box .loading1, #choose-conf-level-box .loading1, #choose-roles-box .loading1, #choose-init-msg-box .loading1, #test-data-box .loading1, #choose-scenarios-box .loading1').show();
@@ -781,10 +777,10 @@ get_header();
                             jQuery('#choose-scenarios-box .column').append(jQuery(rsp).find('scenario').text());
 
                             jQuery('#choose-init-msg-box select[name="choose_init_message"]').replaceWith(jQuery(rsp).find('initmsg').text());
-                            jQuery('#profile-instances').html(jQuery(rsp).find('profiles').text());
-                            jQuery("#profile-instances a[rel='custom-popup']").cplightbox();
+//                            jQuery('#profile-instances').html(jQuery(rsp).find('profiles').text());
+//                            jQuery("#profile-instances a[rel='custom-popup']").cplightbox();
 
-                            jQuery('#case-template-data').append(jQuery(rsp).find('templates').text());
+//                            jQuery('#case-template-data').append(jQuery(rsp).find('templates').text());
                         }
                     }
                 })
