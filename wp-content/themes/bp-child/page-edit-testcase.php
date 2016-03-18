@@ -402,29 +402,33 @@ get_header();
                                     <div class="clear"></div>
                                 </div>
 
-                                <?php foreach($case->imagesData as $image):?>
+                                <?php foreach ($case->imagesData as $image): ?>
                                     <div class="field-row images_row">
                                         <div class="grid-cell width35P">
-                                                <input type="hidden" name="saved_images[]" value="<?php echo $image['name'];?>"/>
-                                                <img style="width: 30px; height: 30px;" src="<?php echo S3Wrapper::getCaseImageUrl($caseID, $image['name']);?>">
+                                            <input type="hidden" name="saved_images[]"
+                                                   value="<?php echo $image['name']; ?>"/>
+                                            <img style="width: 30px; height: 30px;"
+                                                 src="<?php echo S3Wrapper::getCaseImageUrl($caseID, $image['name']); ?>">
                                         </div>
                                         <div class="grid-cell width45P">
                                             <input type="text" name="saved_images_description[]"
-                                                   value="<?php echo $image['description'];?>" class="input medium-input" style="width: 450px;"/>
+                                                   value="<?php echo $image['description']; ?>"
+                                                   class="input medium-input" style="width: 450px;"/>
                                         </div>
                                         <div class="grid-cell width10P" style="float: right">
-                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>
+                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span
+                                                    class="p"></span></a>
                                         </div>
                                         <div class="clear"></div>
                                     </div>
-                                <?php endforeach;?>
+                                <?php endforeach; ?>
 
                                 <div class="field-row">
                                     <div class="grid-cell">
-                                        <a href="#" class="action-btn add-new-btn" id="add-image"><span class="p"></span><span class="t">Add image</span></a>
+                                        <a href="#" class="action-btn add-new-btn" id="add-image"><span
+                                                class="p"></span><span class="t">Add image</span></a>
                                     </div>
                                 </div>
-
 
                             </div>
 
@@ -442,9 +446,12 @@ get_header();
                             </div>
                             <div id="profile-instances" class="field-row">
                                 <select name="test_data_profile" style="width:300px;;">
+                                    <option value=""></option>
                                     <?php
                                     $suiteObj->load();
-                                    $profileInstances = getCommunityProfileInstatnces($suiteObj->community_id);
+                                    $profileInstances = $case->getAvailableProfileInstances();
+                                    $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
+                                    $testSuitesRoles = array($case->testerRole);
                                     foreach ($profileInstances as $instance) {
                                         $profileName = $instance->profile_name;
 
@@ -460,12 +467,24 @@ get_header();
                                         if (!$instance->lookup && !cp_selected($instance->id, $case->profileInstances)) {
                                             continue;
                                         }
+                                        if (!empty($testSuitesRolesProfilesTypes)) {
+                                            $isAllowed = false;
+                                            foreach ($testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes) {
+                                                if ((in_array($cRoleName, $testSuitesRoles) && in_array($generalProfileType, $cProfilesTypes)) || cp_checked($instance->id, $case->profileInstances)) {
+                                                    $isAllowed = true;
+                                                }
+                                            }
+                                            if (!$isAllowed) {
+                                                continue;
+                                            }
+                                        }
                                         ?>
-                                        <option value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_data_profile) ?>><?php echo $profileName;?></option>
+                                        <option
+                                            value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_data_profile) ?>><?php echo $profileName; ?></option>
                                         <?php
                                     }
                                     ?>
-                                    </select>
+                                </select>
                             </div>
                             <div class="field-row noborder"></div>
                         </div>
@@ -486,7 +505,9 @@ get_header();
                             </div>
                             <div class="field-row">
                                 <select name="test_execution" style="width:300px;">
+                                    <option value=""></option>
                                     <?php
+                                    $testSuitesRoles = array($case->harnessRole);
                                     foreach ($profileInstances as $instance) {
                                         $profileName = $instance->profile_name;
 
@@ -502,12 +523,24 @@ get_header();
                                         if (!$instance->lookup && !cp_selected($instance->id, $case->profileInstances)) {
                                             continue;
                                         }
+                                        if (!empty($testSuitesRolesProfilesTypes)) {
+                                            $isAllowed = false;
+                                            foreach ($testSuitesRolesProfilesTypes AS $cRoleName => $cProfilesTypes) {
+                                                if ((in_array($cRoleName, $testSuitesRoles) && in_array($generalProfileType, $cProfilesTypes)) || cp_checked($instance->id, $case->profileInstances)) {
+                                                    $isAllowed = true;
+                                                }
+                                            }
+                                            if (!$isAllowed) {
+                                                continue;
+                                            }
+                                        }
                                         ?>
-                                        <option value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_execution) ?>><?php echo $profileName;?></option>
+                                        <option
+                                            value="<?php echo $instance->id ?>" <?php echo cp_selected($instance->id, $case->test_execution) ?>><?php echo $profileName; ?></option>
                                         <?php
                                     }
                                     ?>
-                                    </select>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -639,7 +672,8 @@ get_header();
                                                                 id="send-notification" value="1" autocomplete="off"/>
                                         Send Notification to subscribers</label></div>
                             <?php } ?>
-                            <a type="submit" class="action-btn process-btn submit-btn left15"><span class="p"></span><span
+                            <a type="submit" class="action-btn process-btn submit-btn left15"><span
+                                    class="p"></span><span
                                     class="t">SAVE TEST CASE</span></a>
                             <a href="<?php echo get_permalink($_SESSION['test_suite_id']) ?>"
                                class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
@@ -771,7 +805,7 @@ get_header();
                 $('#caseForm').ajaxSubmit({
                     url: "/",
                     type: "post",
-                    mimeType:"multipart/form-data",
+                    mimeType: "multipart/form-data",
                     dataType: 'json',
                     success: function (rsp) {
                         if (rsp.status == 'success') {
@@ -830,22 +864,22 @@ get_header();
                 maxHeight: 100
             })
 
-            $('#add-image').on('click', function(e){
+            $('#add-image').on('click', function (e) {
                 e.preventDefault();
-                $('#add-image').closest('.field-row').before('<div class="field-row">'+
-                                    '<div class="grid-cell width35P">'+
-                                        '<input type="file" name="images[]" value="" />'+
-                                    '</div>'+
-                                    '<div class="grid-cell width45P">'+
-                                        '<input type="text" name="images_description[]"'+
-                                               'value="" class="input medium-input" style="width: 450px;"/>'+
-                                    '</div>'+
-                                    '<div class="grid-cell width10P" style="float: right">'+
-                                        '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>'+
-                                    '</div>'+
-                                    '<div class="clear"></div>'+
-                                '</div>');
-                    customizeFileTag();
+                $('#add-image').closest('.field-row').before('<div class="field-row">' +
+                    '<div class="grid-cell width35P">' +
+                    '<input type="file" name="images[]" value="" />' +
+                    '</div>' +
+                    '<div class="grid-cell width45P">' +
+                    '<input type="text" name="images_description[]"' +
+                    'value="" class="input medium-input" style="width: 450px;"/>' +
+                    '</div>' +
+                    '<div class="grid-cell width10P" style="float: right">' +
+                    '<a href="#" class="action-btn blue-delete-btn icon-btn"><span class="p"></span></a>' +
+                    '</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>');
+                customizeFileTag();
             });
 
         });

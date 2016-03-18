@@ -606,7 +606,7 @@ function saveCase()
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
 
     cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
-    cp_update_post_meta($id, 'test_data_profiles', $_POST['test_data_profile']);
+    cp_update_post_meta($id, 'test_data_profile', $_POST['test_data_profile']);
 
     $imagesToSave = array();
 
