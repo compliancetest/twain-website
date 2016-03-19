@@ -16,7 +16,7 @@ class CommunitiesController extends Controller
      */
     public function index()
     {
-        $process = curl_init('http://twain.my/api/testcases/1123');
+        $process = curl_init('http://twain.my/api/testcases/49621?produsct_id=1231');
         $headers = array(
             'Authorization: Basic '. base64_encode("cerner.app@mailinator.com:$4Tnavipass") // <---
         );
