@@ -604,7 +604,33 @@ function saveCase()
     cp_update_post_meta($id, 'version_major', $_POST['version_major']);
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
-    
+
+    cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
+    cp_update_post_meta($id, 'test_data_profile', $_POST['test_data_profile']);
+
+    $imagesToSave = array();
+
+    if(!empty($_POST['saved_images'])){
+        foreach($_POST['saved_images'] as $savedImageKey => $savedImage){
+            $imagesToSave[] = array('name' => $savedImage, 'description' => $_POST['saved_images_description'][$savedImageKey]);
+        }
+    }
+
+    if(!empty($_FILES['images'])){
+        $s3 = new S3Wrapper();
+        $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
+        foreach($_FILES['images']['name'] as $imageKey => $imageName){
+            $tmpPath = $_FILES['images']['tmp_name'][$imageKey];
+            $extension = pathinfo($imageName, PATHINFO_EXTENSION);
+            if(!$_FILES['images']['error'][$imageKey] && @is_array(getimagesize($tmpPath)) && in_array($extension, $allowedExtensions)){
+                $imageName = md5(microtime() . $imageName . $imageKey) . '.' . $extension;
+                $s3->putObject(ENVIRONMENT .'/case_images/' .$id.'/'. $imageName, file_get_contents($tmpPath), pathinfo($tmpPath, FILEINFO_MIME));
+                $imagesToSave[] = array('name' => $imageName, 'description' => @$_POST['images_description'][$imageKey]);
+            }
+        }
+    }
+    update_post_meta($id, 'imagesData', json_encode($imagesToSave));
+
     $_POST['test_intent_description'] = str_replace('&', '&amp;', str_replace('&amp;', '&', $_POST['test_intent_description']));
     $_POST['test_intent_description'] = str_replace('&nbsp;', '', $_POST['test_intent_description']);
     update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);

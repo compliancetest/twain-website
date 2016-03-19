@@ -251,7 +251,7 @@ class ProfileInstance
     }
 
     /**
-     * @param $profileType
+     * @param $profile
      * @return bool
      */
     public static function canBeDeleted( $profile )
@@ -307,5 +307,15 @@ class ProfileInstance
         );
         $sqs = new \SqsWrapper(get_option('generate_profile_sqs_queue_name'));
         $sqs->sendMessage($message);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserProfiles($userId)
+    {
+        global $wpdb;
+        return $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_community_profile_instances WHERE user_id = %d", $userId));
     }
 }
