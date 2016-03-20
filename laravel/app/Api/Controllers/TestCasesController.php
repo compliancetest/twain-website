@@ -19,13 +19,12 @@ class TestCasesController extends Controller
      *
      * @apiDescription Method used to get Execution Profile data
      *
-     * @apiError 404 Test Case not found
+     * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
      * {"errors":{"message":"Test Case not found"},"code":404}
      *
-     * @apiError 404 Test Case doen't have test execution profile
      * @apiErrorExample {json} No profile error response:
-     * {"errors":{"message":"Test Case don't have test execution profile"}}
+     * {"errors":{"message":"Test Case doesn't have test execution profile"},"code":404}
      *
      * @apiSampleRequest http://hostname/api/v1/testcases/123/product/123
      * @apiSuccessExample {json} Success-Response:

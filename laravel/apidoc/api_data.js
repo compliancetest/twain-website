@@ -69,7 +69,7 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "404",
-            "description": "<p>Test Case not found</p>"
+            "description": "<p>Not Found</p>"
           }
         ]
       },
@@ -81,7 +81,7 @@ define({ "api": [
         },
         {
           "title": "No profile error response:",
-          "content": "{\"errors\":{\"message\":\"Test Case don't have test execution profile\"}}",
+          "content": "{\"errors\":{\"message\":\"Test Case doesn't have test execution profile\"},\"code\":404}",
           "type": "json"
         }
       ]
