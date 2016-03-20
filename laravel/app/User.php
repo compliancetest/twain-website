@@ -28,7 +28,8 @@ class User extends Authenticatable
         'user_pass',
     ];
 
-    public function getAuthPassword(){
+    public function getAuthPassword()
+    {
         return $this->user_pass;
     }
 }
