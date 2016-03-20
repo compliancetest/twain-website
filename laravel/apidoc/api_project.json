@@ -1,14 +1,14 @@
 {
-  "name": "example",
-  "version": "1",
-  "description": "",
+  "name": "Drummond Group TWAIN Testing Platform API",
+  "version": "1.0.0",
+  "description": "Drummond Group TWAIN Testing Platform API",
   "title": "",
-  "url": "",
+  "url": "/api",
   "sampleUrl": false,
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2016-03-19T10:20:24.458Z",
+    "time": "2016-03-20T14:11:34.917Z",
     "url": "http://apidocjs.com",
     "version": "0.15.1"
   }

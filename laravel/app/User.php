@@ -14,8 +14,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'user_email', 'password',
+        'user_email', 'user_pass',
     ];
+
+    protected $username = 'user_email';
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -23,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
+        'user_pass',
     ];
 
     public function getAuthPassword(){

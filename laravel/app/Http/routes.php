@@ -12,13 +12,15 @@
 |
 */
 
+Route::group(array('prefix' => 'api/v1'), function()
+    {
+        Route::get('testcases/{testcaseid}/product/{productid}', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => 'simpleauth']);
+        Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => 'simpleauth']);
 
-$api = app('Dingo\Api\Routing\Router');
+        Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => 'simpleauth']);
 
-$api->version('v1',['middleware' => 'api.auth'], function ($api) {
+    });
 
-        $api->get('testcases/{id}', 'App\Api\Controllers\TestCasesController@show');
-});
 Route::group(['middleware' => ['web']], function () {
     Route::resource('communities', 'CommunitiesController');
 });
