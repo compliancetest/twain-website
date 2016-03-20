@@ -73,8 +73,68 @@
         </header>
 
 
-        <div class="container">
+        <div class="container main-container">
+            <div class="dashboard-menu">
+                <ul>
+                    <li class="organisation-tab"><a href="#" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
+                    <li class="communities-tab"><a class="active" data-tooltip="tooltip" href="#" title="My community memberships">Communities</a></li>
+                    <li class="test-suites-tab"><a href="#" data-tooltip="tooltip" title="My test suite subscriptions">Test Suites</a></li>
+                    <li class="test-data-tab"><a href="#" data-tooltip="tooltip" title="My profile data">Test Data</a></li>
+                    <li class="products-tab"><a href="#" data-tooltip="tooltip" title="My products under test">Products</a></li>
+                    <li class="coverage-tab"><a href="#" data-tooltip="tooltip" title="Completeness of my testing">Coverage</a></li>
+                    <li class="transactions-tab"><a href="#" data-tooltip="tooltip" title="My test transactions">Transactions</a></li>
+                    <li class="support-tab"><a href="#" data-tooltip="tooltip" title="My support tickets">Support</a></li>
+                    <li class="profile-tab"><a href="#" data-tooltip="tooltip" title="My profile">Profile</a></li>
+                    <li class="agreements-tab"><a href="#" data-tooltip="tooltip" title="My Agreements">Agreements</a></li>
+                </ul>
+            </div>
 
+            <div class="main-content">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="col-sm-1">Since</th>
+                                <th class="col-sm-1">Role</th>
+                                <th class="col-sm-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#">SuperStream</a></td>
+                                <td>2013-06-29</td>
+                                <td><div style="height: 24px; width: 10px;">Admin</div></td>
+                                <td><a class="" href="#myModal" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">SuperStream</a></td>
+                                <td>2013-06-29</td>
+                                <td>Admin</td>
+                                <td><a class="" href="#myModal" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                        Confirm Community Membership Cancellation
+                    </div>
+                    <div class="modal-body">
+                        This will cancel your membership of the SuperStream community. Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

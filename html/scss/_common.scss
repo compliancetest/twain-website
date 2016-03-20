@@ -11,3 +11,23 @@
 ul{
     list-style: none;
 }
+
+.main-container{
+    padding-top: 25px;
+}
+
+.main-content{
+    @include box-shadow(0 0 5px #999);
+    background: #fff;
+    padding: 20px;
+}
+
+body.modal-open,
+.modal-open .navbar-fixed-top,
+.modal-open .navbar-fixed-bottom {
+    margin-right: 0;
+}
+
+.modal-dialog {
+    z-index: 1050;
+}

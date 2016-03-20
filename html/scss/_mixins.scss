@@ -2,6 +2,7 @@
 $common: sprite-map("common/*.png", $layout: smart);
 $icons: sprite-map("icons/*.png", $layout: smart);
 $bgX: sprite-map("bg/*.png", $icons-layout: vertical, $icons-foobar-repeat: repeat-x);
+$dashboardIcons: sprite-map("dashboard-icons/*.png", $icons-layout: smart);
 
 @mixin commonSprite($image-name) {
   display: inline-block;
@@ -22,4 +23,9 @@ $bgX: sprite-map("bg/*.png", $icons-layout: vertical, $icons-foobar-repeat: repe
   background-position: round(nth(sprite-position($icons, $image-name), 1)) round(nth(sprite-position($icons, $image-name), 2));
   height: image-height(sprite-file($icons, $image-name));
   width: image-width(sprite-file($icons, $image-name));
+}
+
+@mixin dashboardIconsSprite($image-name) {
+  background-image: sprite-url($dashboardIcons);
+  background-position: round(nth(sprite-position($dashboardIcons, $image-name), 1)) round(nth(sprite-position($dashboardIcons, $image-name), 2));
 }
