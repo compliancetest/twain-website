@@ -28,7 +28,7 @@ if(is_user_logged_in()){
     exit;
 }
 if( ! check_user_has_make_agreement_priv() ){
-    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAKE_AGREEMENTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_site_title().' site.', 'error');
     wp_redirect("/");
     exit;
 }

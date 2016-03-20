@@ -6,10 +6,10 @@ function remove_case_name_id_map($postid)
     
     if (get_post_type($postid) != 'test-case')
         return $postid;
-    
+
     $esb = new ManageESB();
     $esb->deleteTestCaseNameIDMap($postid);
-    
+
     $wpdb->delete($wpdb->prefix . "test_cases", array('case_id'=> $postid));
     
     return $postid;
@@ -183,11 +183,7 @@ function deleteCase()
         exit;
     }
     
-    //Remove Data From Backend
-/*    $esb = new ManageESB();
-    $esb->deleteTestCaseNameIDMap($id);
-    
-    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));*/
+    $wpdb->delete($wpdb->prefix . "test_cases", array('case_id' => $id));
     
     cp_sort_test_cases($familyMark, $majorVersion);
     
@@ -467,7 +463,7 @@ function saveCase()
     
     $case = new TestCase($id);
     $case->load();
-    
+
     if(!$id)
         $isNew = true;
     else
@@ -519,7 +515,7 @@ function saveCase()
     
     //Check Version Updated or not
     $version_updated = false;
-    if( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) )
+    if( !$isNew && ( intval($case->version_major) != intval($_POST['version_major']) || intval($case->version_minor) != intval($_POST['version_minor']) || intval($case->version_patch) != intval($_POST['version_patch']) ))
     {
         $version_updated =  true;
     }
@@ -580,10 +576,10 @@ function saveCase()
     {
         caseNameUpdated($case->familyMark, $testCaseId);
     }
-    
+
     $esb = new ManageESB();
-    $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);        
-    
+    $esb->saveTestCaseInfo($id, $testCaseId . "_V" . implode(".", $versions), $_POST['outcome_type'], $_POST['message_count']);
+
     delete_post_meta($id, 'test_suite');
     
     //update post metas
@@ -608,7 +604,33 @@ function saveCase()
     cp_update_post_meta($id, 'version_major', $_POST['version_major']);
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
-    
+
+    cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
+    cp_update_post_meta($id, 'test_data_profile', $_POST['test_data_profile']);
+
+    $imagesToSave = array();
+
+    if(!empty($_POST['saved_images'])){
+        foreach($_POST['saved_images'] as $savedImageKey => $savedImage){
+            $imagesToSave[] = array('name' => $savedImage, 'description' => $_POST['saved_images_description'][$savedImageKey]);
+        }
+    }
+
+    if(!empty($_FILES['images'])){
+        $s3 = new S3Wrapper();
+        $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
+        foreach($_FILES['images']['name'] as $imageKey => $imageName){
+            $tmpPath = $_FILES['images']['tmp_name'][$imageKey];
+            $extension = pathinfo($imageName, PATHINFO_EXTENSION);
+            if(!$_FILES['images']['error'][$imageKey] && @is_array(getimagesize($tmpPath)) && in_array($extension, $allowedExtensions)){
+                $imageName = md5(microtime() . $imageName . $imageKey) . '.' . $extension;
+                $s3->putObject(ENVIRONMENT .'/case_images/' .$id.'/'. $imageName, file_get_contents($tmpPath), pathinfo($tmpPath, FILEINFO_MIME));
+                $imagesToSave[] = array('name' => $imageName, 'description' => @$_POST['images_description'][$imageKey]);
+            }
+        }
+    }
+    update_post_meta($id, 'imagesData', json_encode($imagesToSave));
+
     $_POST['test_intent_description'] = str_replace('&', '&amp;', str_replace('&amp;', '&', $_POST['test_intent_description']));
     $_POST['test_intent_description'] = str_replace('&nbsp;', '', $_POST['test_intent_description']);
     update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
@@ -784,9 +806,9 @@ function caseNameUpdated($familyMark, $new)
     
     $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "test_cases WHERE family_mark=%d", $familyMark);
     $suites = $wpdb->get_results($query);
-    
+
     $esb = new ManageESB();
-    
+
     foreach($suites as $row)
     {
         $versions = array();
@@ -809,10 +831,8 @@ function caseNameUpdated($familyMark, $new)
         wp_update_post(array('ID' => $post->ID, 'post_title' => $post_title, 'post_name' => $guid[1], 'guid' => str_replace('%pagename%', $guid[1], $guid[0])));
         $wpdb->update($wpdb->prefix . "test_cases", array('case_name' => $new), array('case_id' => $row->case_id));
         cp_update_post_meta($post->ID, 'test_case_id', $new);
-        
-        
-        $esb->saveTestCaseInfo($post->ID, $new . "_V" . implode(".", $versions), get_post_meta($post->ID, 'outcome_type', true), get_post_meta($post->ID, 'message_count', true));        
-    
+
+        $esb->saveTestCaseInfo($post->ID, $new . "_V" . implode(".", $versions), get_post_meta($post->ID, 'outcome_type', true), get_post_meta($post->ID, 'message_count', true));
     }
     
 }

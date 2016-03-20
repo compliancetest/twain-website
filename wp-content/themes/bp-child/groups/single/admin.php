@@ -349,7 +349,12 @@
 //                                    bp_group_request_user_link();
                                 ?>
                                 <li>
-                                    <?php bp_group_request_user_avatar_thumb(); ?>
+                                    <?php $userAvatar = get_avatar($rEmail, 28);?>
+                                    <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                        <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="28" height="28">
+                                    <?php else:?>
+                                        <?php echo get_avatar($rEmail, 28);  ?>
+                                    <?php endif;?>
                                     <span class="member-info">
                                         <span class="m-name"><?php echo $rName?></span><br />
                                         <span class="m-email"><?php echo $rEmail?></span>
@@ -413,7 +418,12 @@
                         ?>
                         <li>
                             <input type="checkbox" name="id[]" value="<?php echo $members_template->member->ID?>" class="chk" />
-                            <?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_member_user_id(), 'type' => 'thumb', 'width' => 28, 'height' => 28, 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_member_name() ) ) ); ?>
+                            <?php $userAvatar = get_avatar($tEmail, 28);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
+                            <?php else:?>
+                                <?php echo get_avatar($tEmail, 28);  ?>
+                            <?php endif;?>
                             <span class="member-info">
                                 <span class="m-name"><?php echo $tName ?></span>
                                 <span class="m-email"><?php echo $tEmail?></span>
@@ -455,7 +465,12 @@
                         ?>
                         <li>
                             <input type="checkbox" name="id[]" value="<?php echo $members_template->member->ID?>" class="chk" />
-                            <?php echo bp_core_fetch_avatar( array( 'item_id' => bp_get_member_user_id(), 'type' => 'thumb', 'width' => 28, 'height' => 28, 'alt' => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_member_name() ) ) ); ?>
+                            <?php $userAvatar = get_avatar($tEmail, 28);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
+                            <?php else:?>
+                                <?php echo get_avatar($tEmail, 28);  ?>
+                            <?php endif;?>
                             <span class="member-info">
                                 <span class="m-name"><?php echo $tName ?></span>
                                 <span class="m-email"><?php echo $tEmail?></span>
@@ -493,7 +508,12 @@
                         ?>
                         <li>
                             <input type="checkbox" name="id[]" value="<?php echo $members_template->member->user_id?>" class="chk" />
-                            <?php bp_group_member_avatar_mini(28, 28); ?>                        
+                            <?php $userAvatar = get_avatar($tEmail, 28);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
+                            <?php else:?>
+                                <?php echo get_avatar($tEmail, 28);  ?>
+                            <?php endif;?>
                             <span class="member-info">
                                 <span class="m-name"><?php echo $tName ?></span> 
                                 <?php if ( bp_get_group_member_is_banned() ) _e( ' <font color="#ce1515"><i>(banned)</i></font>', 'buddypress'); ?><br />

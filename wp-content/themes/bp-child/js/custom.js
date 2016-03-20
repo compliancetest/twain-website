@@ -194,33 +194,33 @@ jQuery(document).ready(function($) {
         mEvent = 'touchstart';
     }
                 
-	jQuery('.has_dd_1').on(mEvent, function(e){
-        $('.normal_dd:not(.what_is)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
-        $('.what_is').toggleClass('block');
-        $('.has_dd_1 a').toggleClass('hover');
-        e.stopImmediatePropagation();
-        return false;
-        
-    });
+    //jQuery('.has_dd_1').on(mEvent, function(e){
+    //    $('.normal_dd:not(.what_is)').removeClass('block');
+    //    $('#menu-header_menu .menu-item:not(.has_dd_1) a').removeClass('hover');
+    //    $('.what_is').toggleClass('block');
+    //    $('.has_dd_1 a').toggleClass('hover');
+    //    e.stopImmediatePropagation();
+    //    return false;
+    //
+    //});
     jQuery('.has_dd_2').on(mEvent, function(e){
         $('.normal_dd:not(.why_compliance)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_2) a').removeClass('hover');
-        $('.why_compliance').toggleClass('block');        
-        $('.has_dd_2 a').toggleClass('hover');        
+        $('.why_compliance').toggleClass('block');
+        $('.has_dd_2 a').toggleClass('hover');
         e.stopImmediatePropagation();
         return false;
-        
+
     });
-    jQuery('.has_dd_3').on(mEvent, function(e){
-        $('.normal_dd:not(.compliancetest_serv)').removeClass('block');
-        $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
-        $('.compliancetest_serv').toggleClass('block');
-        $('.has_dd_3 a').toggleClass('hover');
-        e.stopImmediatePropagation();
-        return false;
-        
-    });
+    //jQuery('.has_dd_3').on(mEvent, function(e){
+    //    $('.normal_dd:not(.compliancetest_serv)').removeClass('block');
+    //    $('#menu-header_menu .menu-item:not(.has_dd_3) a').removeClass('hover');
+    //    $('.compliancetest_serv').toggleClass('block');
+    //    $('.has_dd_3 a').toggleClass('hover');
+    //    e.stopImmediatePropagation();
+    //    return false;
+    //
+    //});
     jQuery('.has_dd_4').on(mEvent, function(e){
         $('.normal_dd:not(.help_faq)').removeClass('block');
         $('#menu-header_menu .menu-item:not(.has_dd_4) a').removeClass('hover');        

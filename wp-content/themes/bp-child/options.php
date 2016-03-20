@@ -130,22 +130,22 @@ function optionsframework_options() {
 	
 	/*What Is ComplianceTest? */    
     $options[] = array(
-        'name' => __('WHAT IS ComplianceTest?', 'options_framework_theme'),
+        'name' => __('WHAT IS '.get_site_title().'?', 'options_framework_theme'),
         'desc' => __('More Information - Link'),
         'id' => 'what_is_compliancetest_more_link',
         'type' => 'text');
 	$options[] = array(		
-		'desc' => __('WHAT IS ComplianceTest? - Item Title'),
+		'desc' => __('WHAT IS '.get_site_title().'? - Item Title'),
 		'id' => 'what_t',
 		'type' => 'text');	
 
 	$options[] = array(
-		'desc' => __('WHAT IS ComplianceTest? - Item Icon'),
+		'desc' => __('WHAT IS '.get_site_title().'? - Item Icon'),
 		'id' => 'what_icon',
 		'type' => 'upload');	
 
 	$options[] = array(
-		'desc' => __('WHAT IS ComplianceTest? - Item Description'),
+		'desc' => __('WHAT IS '.get_site_title().'? - Item Description'),
 		'id' => 'what_d',
 		'type' => 'textarea');		
 	
@@ -180,10 +180,10 @@ function optionsframework_options() {
 		'type' => 'textarea');			
 	
 		
-	/*WHY ComplianceTest? */
+	/*WHY? */
     
 	$options[] = array(
-        'name' => __('WHY ComplianceTest?', 'options_framework_theme'),
+        'name' => __('WHY '.get_site_title().'?', 'options_framework_theme'),
         'desc' => __('More Information - Link'),
         'id' => 'why_compliancetest_more_link',
         'type' => 'text');
@@ -263,9 +263,9 @@ function optionsframework_options() {
 		'id' => 'confidence_d',
 		'type' => 'textarea');		
 		
-	/* ComplianceTest SERVICES */
+	/* SERVICES */
     $options[] = array(
-        'name' => __('ComplianceTest SERVICES', 'options_framework_theme'),
+        'name' => __(get_site_organisation().' SERVICES', 'options_framework_theme'),
         'desc' => __('More Information - Link'),
         'id' => 'compliancetest_service_more_link',
         'type' => 'text');

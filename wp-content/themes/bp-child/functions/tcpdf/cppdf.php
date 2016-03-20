@@ -12,7 +12,7 @@ class CPPDF extends TCPDF {
         $this->Rect(0, 0, 210, 20, 'F', '', $fill_color = array(91, 117, 182));
 
         $header_logo = K_PATH_IMAGES . "header-logo.png";
-        $this->Image($header_logo, 4, 4, 45, 0, 'PNG', 'https://www.compliancetest.net/', 'N', false, $dpi = 300, '', false, false, 0, false, false, false, false);
+        $this->Image($header_logo, 4, 4, 45, 0, 'PNG', home_url(), 'N', false, $dpi = 300, '', false, false, 0, false, false, false, false);
 
         $drummond_group = K_PATH_IMAGES . "drummond-group.png";
         $this->Image($drummond_group, 165, 3, 40, 0, 'PNG', '', 'N', false, $dpi = 300, '', false, false, 0, false, false, false, false);
@@ -32,7 +32,7 @@ class CPPDF extends TCPDF {
         $this->SetTextColor(255, 255, 255);
 
         // Left link
-        $this->Write(10, 'www.compliancetest.net', 'https://www.compliancetest.net/', false, 'L', true);
+        $this->Write(10, home_url(), home_url(), false, 'L', true);
 
         // Right logo
         $image_file = K_PATH_IMAGES . "powered-by-gosource.png";

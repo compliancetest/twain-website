@@ -12,7 +12,7 @@ class CT_Xero {
 
     const OAUTH_CALLBACK = 'oob';
 
-    const USER_AGENT = 'ComplianceTest Pty Ltd';
+    const USER_AGENT = 'Drummond Group TWAIN Testing Platform Pty Ltd';
 
     public static $data = null;
     public function __construct(){

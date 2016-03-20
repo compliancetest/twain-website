@@ -55,7 +55,12 @@
                         </div>
 
                         <div class="header-user-info">
-                            <?php echo get_avatar($current_user->user_email, 32);  ?>
+                            <?php $userAvatar = get_avatar($current_user->user_email, 32);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
+                            <?php else:?>
+                                <?php echo get_avatar($current_user->user_email, 32);  ?>
+                            <?php endif;?>
                             <div class="header-welcome">
                                 Welcome
                                 <strong class="header-username"><?php echo cp_get_user_display_name($current_user) ;?></strong>

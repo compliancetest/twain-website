@@ -6,7 +6,7 @@
 add_action('admin_menu', 'add_compliancetest_settings_page');
 function add_compliancetest_settings_page()
 {
-    add_options_page('ComplianceTest Settings', 'ComplianceTest Settings', 'administrator', 'compliancetest-settings', 'create_compliancetest_settings_page');
+    add_options_page('TWAIN Settings', 'TWAIN Settings', 'administrator', 'compliancetest-settings', 'create_compliancetest_settings_page');
     
     add_action('admin_init', 'register_eway_settings');
 }
@@ -40,9 +40,10 @@ function create_compliancetest_settings_page()
         
     }
     
-    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-token-price')){
+    else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-website-settings')){
         //Save Options
-        update_option('token_price', $_POST['token_price']);
+        update_option('tw_site_title', $_POST['tw_site_title']);
+        update_option('tw_site_organisation', $_POST['tw_site_organisation']);
         
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
@@ -50,6 +51,11 @@ function create_compliancetest_settings_page()
         update_option('s3_xml_max_size', $_POST['s3_xml_max_size']);
         update_option('s3_bulk_treshold', $_POST['s3_bulk_treshold']);
         update_option('aws_s3_key', $_POST['aws_s3_key']);
+        if (isset($_POST['aws_s3_use_metaserver']) && $_POST['aws_s3_use_metaserver'] == 'on') {
+            update_option('aws_s3_use_metaserver', 'yes');
+        } else {
+            update_option('aws_s3_use_metaserver', 'no');
+        }
         update_option('aws_s3_secret', $_POST['aws_s3_secret']);
         update_option('aws_s3_url', $_POST['aws_s3_url']);
         update_option('s3_message_bucket', $_POST['s3_message_bucket']);
@@ -226,14 +232,14 @@ function create_compliancetest_settings_page()
 </style>
 <div class="wrap">    
     <div class="icon32" id="icon-tools"> <br /> </div>    
-    <h2>Compliancetest Setting</h2>            
+    <h2><?php echo get_site_title();?> Setting</h2>
     <div id="compliancetest-settings">
         <div id="compliancetest-settings-nav">
             <ul>                
                 <li><a href="#ct-eway-settings">eWay Settings</a></li>
                 <li><a href="#ct-esb-settings">ESB Settings</a></li>
                 <li><a href="#ct-subscriptions-settings">Subscriptions Settings</a></li>
-                <li><a href="#ct-token-price">Token Price</a></li>
+                <li><a href="#ct-website">Website settings</a></li>
                 <li><a href="#ct-recaptcha-settings">Recaptcha Settings</a></li>
                 <li><a href="#ct-mailchimp-settings">Mailchimp Settings</a></li>
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
@@ -243,18 +249,24 @@ function create_compliancetest_settings_page()
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
-            <div id="ct-token-price">
-                <h3>Token Price</h3>
+            <div id="ct-website">
+                <h3>Website</h3>
                 <form method="post" action="">
-                    <table class="widefat">
+                    <table  class="widefat">
                         <tr>
-                            <td><label><b>Price:</b></label></td>
-                            <td>$<input type="text" name="token_price" id="token_price" size="15" value="<?php echo get_option('token_price')?>" autocomplete="off" /> / token</td>
+                            <td><label><b>Site Title:</b></label></td>
+                            <td>
+                                <input type="text" name="tw_site_title" id="tw_site_title" value="<?php echo get_site_title()?>" size="50" autocomplete="off" />
+                            </td>
                         </tr>
-                    </table>   
+                        <tr>
+                            <td><label><b>Site Organisation:</b></label></td>
+                            <td><input type="text" name="tw_site_organisation" id="tw_site_organisation" value="<?php echo get_option('tw_site_organisation')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                    </table>
                     <?php submit_button()   ?>
-                    <?php wp_nonce_field('save-token-price'); ?>
-                    <input type="hidden" name="tab_index" value="3">
+                    <?php wp_nonce_field('save-website-settings'); ?>
+                    <input type="hidden" name="tab_index" value="4">
                 </form>
             </div>
             <div id="ct-eway-settings">
@@ -500,6 +512,12 @@ function create_compliancetest_settings_page()
                             <td><label><b>BulkProfileThreshold:</b></label></td>
                             <td><input type="text" name="s3_bulk_treshold" id="s3_xml_max_size" size="15" value="<?php echo get_option('s3_bulk_treshold')?>" autocomplete="off" /> Bytes</td>
                         </tr>
+
+                        <tr>
+                            <td><label><b>Use metadata Server:</b></label></td>
+                            <td><input type="checkbox" name="aws_s3_use_metaserver" id="aws_s3_use_metaserver" size="50" <?php if( get_option('aws_s3_use_metaserver') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+
                         <tr>
                             <td><label><b>S3 Access Key:</b></label></td>
                             <td><input type="text" name="aws_s3_key" id="aws_s3_key" size="50" value="<?php echo get_option('aws_s3_key')?>" autocomplete="off" /></td>

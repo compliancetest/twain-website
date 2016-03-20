@@ -13,7 +13,7 @@
                     <div class="home-collage-content">
                         <h2 class="home-collage-title">B2B Interoperability</h2>
                         <h3 class="home-collage-subtitle">Made Easy</h3>
-                        <p class="home-collage-text">ComplianceTest supports end-to-end automation of B2B processes by providing:</p>
+                        <p class="home-collage-text"><?php echo get_site_title();?> supports end-to-end automation of B2B processes by providing:</p>
                         <ul class="home-collage-fetures">
                             <li>A community-centric approach to standards compliance</li>
                             <li>An automated self-service test harness</li>

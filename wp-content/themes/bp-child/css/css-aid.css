@@ -2824,3 +2824,7 @@ table.result-table{
     text-align: center;
     width: 60px;
 }
+
+.text-nowrap{
+	word-wrap: break-word;
+}

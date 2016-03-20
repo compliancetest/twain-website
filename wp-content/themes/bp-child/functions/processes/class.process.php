@@ -22,11 +22,12 @@ class Process
     }
 
     public static function get_process_by_id( $id ){
-        global $wpdb;
+        return array();
         return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_processes WHERE id = %d ", $id ) );
     }
 
     public static function get_all( ){
+        return array();
         global $wpdb;
         return $wpdb->get_results("SELECT * FROM wp_processes");
     }
