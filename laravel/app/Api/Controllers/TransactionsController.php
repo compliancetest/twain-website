@@ -2,33 +2,58 @@
 
 namespace App\Api\Controllers;
 
-use App\Profile;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
+use App\Jobs\ProcessTransactionLog;
+use Aws\Laravel\AwsFacade as AWS;
 use Symfony\Component\HttpKernel;
+use Validator;
 
 class TransactionsController extends BaseApiController
 {
 
     /**
-     * @api {post6} /v1/transactions Create / update transaction entry
+     * @api {post} /v1/transactions Create transaction
      *
-     * @apiName getProfile
-     * @apiGroup Profiles
+     * @apiName createTansaction
+     * @apiGroup Transactions
      *
-     * @apiSampleRequest http://hostname/api/profiles/123
      * @apiSuccessExample {json} Success-Response:
-     * {"data":{"Profile":{"Type":"TCEF","Purpose":"TCEF for Application test case","Title":"CAP-01a_v1.0 TEFC","Description":"Test Case Execution Flow for CAP-01a test case","Version":{"Major":1,"Minor":0}},"Meta":{"SystemUnderTest":"Application","Capabilities":[{"Cap":"CAP_SUPPORTEDCAPS"}],"InitialState":4},"TestSteps":[[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_USERINTERFACE","Messages":"MSG_ENABLEDS","pUserinterface":{"ShowUI":true}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":1}]}]]},"code":200}
-     * @apiError 404 Profile not found
-     * @apiErrorExample {json} Error-Response:
-     * {"message":"Profile not found","status_code":404}
+     * {
+     *       "message": "File Uploaded",
+     *       "code": 201
+     *   }
+     * @apiError 422 Required field missed
+     * @apiErrorExample {json} Validation error:
+     * {"errors":{"file":["The file field is required."],"test_case_id":["The test case id field is required."],"execution_id":["The execution id field is required."]},"code":422}
      *
-     * @apiHeader (Headers) {String} Authorization:Basic Authorization value (base64_encode(login:password)).
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
      * @apiVersion 1.0.0
      */
-    public function create()
+    public function create(\Illuminate\Http\Request $request)
     {
-        return $this->respond('Success');
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:zip',
+            'test_case_id' => 'required|exists:wp_test_cases,case_id',
+            'execution_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $fileName = getenv('APP_ENV') . '/transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+
+        $s3 = Aws::createClient('s3');
+        $s3->putObject(array(
+            'Bucket' => 'data.twain.gosource.com.au',
+            'Key' => $fileName,
+            'Body' => file_get_contents($request->file('file')),
+        ));
+
+        //adding entry to sqs. it will be processed in background
+        $this->dispatch(new ProcessTransactionLog($fileName));
+
+        return $this->respondCreated('Transaction added');
     }
 }

@@ -21,7 +21,7 @@ class ProfilesController extends BaseApiController
      * @apiErrorExample {json} Error-Response:
      * {"message":"Profile not found","status_code":404}
      *
-     * @apiHeader (Headers) {String} Authorization:Basic Authorization value (base64_encode(login:password)).
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
      * @apiVersion 1.0.0
      */

@@ -54,10 +54,10 @@ return [
 
          'mysql' => [
             'driver'    => 'mysql',
-            'host'      => getenv('DB_MYSQL_DNS'),
-            'database'  => getenv('DB_MYSQL_DATABASENAME'),
-            'username'  => getenv('DB_MYSQL_USERNAME'),
-            'password'  => getenv('DB_MYSQL_PASSWORD'),
+            'host'      => getenv('DB_MYSQL_DNS') ? getenv('DB_MYSQL_DNS') : env('DB_HOST', 'localhost'),
+            'database'  => getenv('DB_MYSQL_DATABASENAME') ? getenv('DB_MYSQL_DATABASENAME') : env('DB_DATABASE', 'forge'),
+            'username'  => getenv('DB_MYSQL_USERNAME') ? getenv('DB_MYSQL_USERNAME') : env('DB_USERNAME', 'forge'),
+            'password'  => getenv('DB_MYSQL_PASSWORD') ? getenv('DB_MYSQL_PASSWORD') : env('DB_PASSWORD', 'forge'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
