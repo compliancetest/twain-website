@@ -11,7 +11,7 @@ class CT_TicketStatus
     {
         global $wpdb;
         
-        $query = "SELECT * FROM " . TABLE_TICKET_STATUSES . " ORDER BY $orderby $order";
+        $query = "SELECT * FROM wp_ticket_statuses ORDER BY $orderby $order";
         $rows = $wpdb->get_results($query);
         
         return $rows;

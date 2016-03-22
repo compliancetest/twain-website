@@ -153,7 +153,7 @@ class BaseApiController extends Controller{
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->respond([
-                'message' => $message
+                'errors' => $message
             ]);
     }
 
