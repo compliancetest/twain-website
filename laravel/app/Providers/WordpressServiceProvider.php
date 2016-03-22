@@ -15,8 +15,10 @@ class WordpressServiceProvider extends ServiceProvider
     }
 
     public function register() {
-        // Load wordpress bootstrap file
+        //loading wordpress files only for web requests
+        //we dont need wordpress for php artisan requests
         if(!App::runningInConsole()) {
+            // Load wordpress bootstrap file
             require __DIR__ . '/../../../wp-load.php';
         }
     }
