@@ -8815,7 +8815,7 @@ body.modal-open,
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -17px;
+  background-position: 0 -29px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -8890,9 +8890,11 @@ body.modal-open,
 /* line 1, ../scss/blocks/_buttons.scss */
 .btn {
   position: relative;
+  border-width: 1px;
+  border-style: solid;
 }
 
-/* line 5, ../scss/blocks/_buttons.scss */
+/* line 7, ../scss/blocks/_buttons.scss */
 .btn-default {
   font-family: "Open Sans", Arial, sans-serif;
   border-color: #3577ad;
@@ -8910,7 +8912,7 @@ body.modal-open,
   /**For Old Browser **/
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 21, ../scss/blocks/_buttons.scss */
+/* line 23, ../scss/blocks/_buttons.scss */
 .btn-default:hover, .btn-default:active, .btn-default:focus {
   background: #288ce2;
   color: #fff;
@@ -8919,7 +8921,7 @@ body.modal-open,
 
 /* line 30, ../scss/blocks/_buttons.scss */
 .btn-danger {
-  border-color: #C33A3A;
+  border-color: #c33a3a;
   background: #f47273;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DB5353), to(#C33A3A));
   background: -webkit-linear-gradient(top, #DB5353, #C33A3A);
@@ -8933,15 +8935,15 @@ body.modal-open,
 /* line 42, ../scss/blocks/_buttons.scss */
 .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
   background: #D84F4F;
-  border-color: inherit;
+  border-color: #c33a3a;
 }
 
-/* line 50, ../scss/blocks/_buttons.scss */
+/* line 49, ../scss/blocks/_buttons.scss */
 .btn-logout {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 54, ../scss/blocks/_buttons.scss */
+/* line 53, ../scss/blocks/_buttons.scss */
 .btn-logout:before {
   position: absolute;
   display: inline-block;
@@ -8954,12 +8956,12 @@ body.modal-open,
   top: 7px;
 }
 
-/* line 64, ../scss/blocks/_buttons.scss */
+/* line 62, ../scss/blocks/_buttons.scss */
 .btn-dropdown {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 68, ../scss/blocks/_buttons.scss */
+/* line 66, ../scss/blocks/_buttons.scss */
 .btn-dropdown:before {
   position: absolute;
   display: inline-block;
@@ -8970,6 +8972,34 @@ body.modal-open,
   content: '';
   left: 5px;
   top: 11px;
+}
+
+/* line 75, ../scss/blocks/_buttons.scss */
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  text-indent: -999999px;
+}
+
+/* line 82, ../scss/blocks/_buttons.scss */
+.btn-icon:after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+/* line 29, ../scss/_mixins.scss */
+.btn-delete:after {
+  background-image: url('../images/icons.png');
+  background-position: 0 -17px;
+  height: 12px;
+  width: 12px;
 }
 
 /* line 1, ../scss/blocks/_dashboard-menu.scss */
@@ -9142,10 +9172,9 @@ body.modal-open,
 
 /* line 1, ../scss/blocks/_tables.scss */
 .table {
-  border-bottom: 1px solid #1767ab;
   border-collapse: inherit;
 }
-/* line 8, ../scss/blocks/_tables.scss */
+/* line 7, ../scss/blocks/_tables.scss */
 .table > thead > tr > th {
   color: #ececec;
   font-size: 13px;
@@ -9153,27 +9182,32 @@ body.modal-open,
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   background: #de6262 url('../images/separate-bg/table-header.png?1453146388') repeat-x 0 0;
-  border: 1px solid  #e33f3f;
+  border: 1px solid #e33f3f;
+  border-left: 0;
   border-top: solid 1px #b56a79;
   line-height: 14px;
 }
-/* line 26, ../scss/blocks/_tables.scss */
+/* line 18, ../scss/blocks/_tables.scss */
+.table > thead > tr > th:first-child {
+  border-left: 1px solid #e33f3f;
+}
+/* line 30, ../scss/blocks/_tables.scss */
 .table > caption + thead > tr:first-child > th,
 .table > colgroup + thead > tr:first-child > th,
 .table > thead:first-child > tr:first-child > th {
   border-top: solid 1px #b56a79;
 }
-/* line 32, ../scss/blocks/_tables.scss */
+/* line 36, ../scss/blocks/_tables.scss */
 .table > tbody {
   border-right: 1px solid #ccc;
 }
-/* line 35, ../scss/blocks/_tables.scss */
+/* line 39, ../scss/blocks/_tables.scss */
 .table > tbody > tr {
   background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1453146388') repeat 0 0;
 }
-/* line 38, ../scss/blocks/_tables.scss */
+/* line 42, ../scss/blocks/_tables.scss */
 .table > tbody > tr > td {
-  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #f5f5f5;
   color: #3c3f43;
@@ -9181,15 +9215,19 @@ body.modal-open,
   font-weight: 600;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
 }
-/* line 47, ../scss/blocks/_tables.scss */
+/* line 51, ../scss/blocks/_tables.scss */
+.table > tbody > tr > td:first-child {
+  border-left: 1px solid #ccc;
+}
+/* line 55, ../scss/blocks/_tables.scss */
 .table > tbody > tr > td a {
   text-decoration: underline;
 }
-/* line 50, ../scss/blocks/_tables.scss */
+/* line 58, ../scss/blocks/_tables.scss */
 .table > tbody > tr > td a:hover {
   text-decoration: none;
 }
-/* line 58, ../scss/blocks/_tables.scss */
+/* line 66, ../scss/blocks/_tables.scss */
 .table > tbody > tr:nth-child(2n+1) {
   background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1453146388') repeat 0 0;
 }

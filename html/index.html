@@ -105,13 +105,13 @@
                                 <td><a href="#">SuperStream</a></td>
                                 <td>2013-06-29</td>
                                 <td><div style="height: 24px; width: 10px;">Admin</div></td>
-                                <td><a class="" href="#myModal" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td><a id="btn-remove" class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                             <tr>
                                 <td><a href="#">SuperStream</a></td>
                                 <td>2013-06-29</td>
                                 <td>Admin</td>
-                                <td><a class="" href="#myModal" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td><a class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -119,7 +119,7 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal fade" id="confirmRemoveMembership" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -130,7 +130,7 @@
                         This will cancel your membership of the SuperStream community. Are you sure?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Confirm</button>
+                        <a class="btn btn-primary btn-ok">Confirm</a>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>

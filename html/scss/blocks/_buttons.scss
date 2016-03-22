@@ -1,8 +1,10 @@
-.btn{
+.btn {
   position: relative;
+  border-width: 1px;
+  border-style: solid;
 }
 
-.btn-default{
+.btn-default {
   font-family: $font-family-sans-serif;
   border-color: #3577ad;
   background: #2d83cd;
@@ -16,19 +18,17 @@
   -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
   color: #fff;
   text-shadow: 0 -1px 0 #777778; /**For Old Browser **/
-  text-shadow: 0 -1px 0 rgba(0,0,0, 0.35);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 
-  &:hover, &:active, &:focus{
+  &:hover, &:active, &:focus {
     background: #288ce2;
     color: #fff;
     border-color: inherit;
   }
 }
 
-
-
-.btn-danger{
-  border-color: #C33A3A;
+.btn-danger {
+  border-color: #c33a3a;
   background: #f47273;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DB5353), to(#C33A3A));
   background: -webkit-linear-gradient(top, #DB5353, #C33A3A);
@@ -39,19 +39,18 @@
   -moz-box-shadow: 0 1px 0 0 #E68080 inset;
   -webkit-box-shadow: 0 1px 0 0 #E68080 inset;
 
-  &:hover, &:active, &:focus{
+  &:hover, &:active, &:focus {
     background: #D84F4F;
-    border-color: inherit;
+    border-color: #c33a3a;
   }
 
 }
 
-
-.btn-logout{
+.btn-logout {
   padding-left: 22px;
   padding-right: 5px;
 
-  &:before{
+  &:before {
     position: absolute;
     @include iconsSprite(logout);
     content: '';
@@ -60,16 +59,37 @@
   }
 }
 
-
-.btn-dropdown{
+.btn-dropdown {
   padding-left: 22px;
   padding-right: 5px;
 
-  &:before{
+  &:before {
     position: absolute;
     @include iconsSprite(arrow-bottom);
     content: '';
     left: 5px;
     top: 11px;
   }
+}
+
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  text-indent: -999999px;
+}
+
+.btn-icon:after{
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.btn-delete{
+  @include btnIconsSprite(btn-delete-icon);
 }
