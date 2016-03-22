@@ -3,11 +3,9 @@
 namespace App\Api\Controllers;
 
 use App\Profile;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel;
 
-class ProfilesController extends Controller
+class ProfilesController extends BaseApiController
 {
 
     /**
@@ -33,20 +31,11 @@ class ProfilesController extends Controller
             $profile = Profile::find($profileId);
 
             if ($profile) {
-                return JsonResponse::create(
-                    [
-                        'data' => \S3Wrapper::getProfile($profile->token),
-                        'code' => 200
-                    ],
-                    200);
+                return $this->respond(\S3Wrapper::getProfile($profile->token));
             }
 
-            return JsonResponse::create(
-                [
-                    'errors' => ['message' => 'Profile not found'],
-                    'code' => 404
-                ],
-                404);
+            return $this->respondNotFound('Profile not found');
+
         }
     }
 }

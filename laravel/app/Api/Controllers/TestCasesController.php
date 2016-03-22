@@ -5,10 +5,9 @@ namespace App\Api\Controllers;
 use App\Profile;
 use App\TestCase;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel;
 
-class TestCasesController extends Controller
+class TestCasesController extends BaseApiController
 {
 
     /**
@@ -38,29 +37,15 @@ class TestCasesController extends Controller
     {
         $testCase = TestCase::find($testCaseId);
         if (!$testCase) {
-            return JsonResponse::create(
-                [
-                    'errors' => ['message' => 'Test Case not found'],
-                    'code' => 404
-                ],
-                404);
+            return $this->respondNotFound("Test Case not found");
         }
         $profileId = $testCase->getTestExecutionProfileId();
         $profile = Profile::find($profileId);
         if ($profile) {
-            return JsonResponse::create(
-                [
-                    'data' => \S3Wrapper::getProfile(Profile::find($profileId)->token),
-                    'code' => 200
-                ],
-                200);
+            return $this->respond(\S3Wrapper::getProfile(Profile::find($profileId)->token));
         }
-        return JsonResponse::create(
-            [
-                'errors' => ['message' => "Test Case don't have test execution profile"],
-                'code' => 404
-            ],
-            404);
+
+        return $this->respondNotFound("Test Case don't have test execution profile");
     }
 
     /**
@@ -92,31 +77,16 @@ class TestCasesController extends Controller
     {
         $testCase = TestCase::find($testCaseId);
         if (!$testCase) {
-            return JsonResponse::create(
-                [
-                    'errors' => ['message' => "Test Case not found"],
-                    'code' => 404
-                ],
-                404);
+            return $this->respondNotFound("Test Case not found");
         }
         $profiles = Profile::where('id', $testCase->getTestExecutionProfileId())->orWhere('id', $testCase->getTestDataProfileId())->get();
         if (!$profiles->count()) {
-            return JsonResponse::create(
-                [
-                    'errors' => ['message' => "Test Case doesn't have any profiles"],
-                    'code' => 404
-                ],
-                404);
+            return $this->respondNotFound("Test Case doesn't have any profiles");
         }
         $responseData = [];
         foreach ($profiles as $profile) {
             $responseData[] = \S3Wrapper::getProfile($profile->token);
         }
-        return JsonResponse::create(
-            [
-                'data' => $responseData,
-                'code' => 200
-            ],
-            200);
+        return $this->respond($responseData);
     }
 }

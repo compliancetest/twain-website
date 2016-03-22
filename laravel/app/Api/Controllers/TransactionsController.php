@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel;
 
-class TransactionsController extends Controller
+class TransactionsController extends BaseApiController
 {
 
     /**
@@ -29,11 +29,6 @@ class TransactionsController extends Controller
      */
     public function create()
     {
-        return JsonResponse::create(
-            [
-                'data' => ['message' => 'POST'],
-                'code' => 200
-            ],
-            200);
+        return $this->respond('Success');
     }
 }
