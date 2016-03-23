@@ -19,6 +19,7 @@ class WordpressServiceProvider extends ServiceProvider
         //we dont need wordpress for php artisan requests
         if(!App::runningInConsole()) {
             // Load wordpress bootstrap file
+            $GLOBALS['loadFromLaravel'] = 'yes';
             require __DIR__ . '/../../../wp-load.php';
         }
     }

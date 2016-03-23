@@ -2,6 +2,8 @@
 
 namespace App\Api\Controllers;
 
+use App\Jobs\ProcessTransactionLog;
+use Aws\Laravel\AwsFacade as AWS;
 use Symfony\Component\HttpKernel;
 use Validator;
 
@@ -14,14 +16,13 @@ class TransactionsController extends BaseApiController
      * @apiName createTansaction
      * @apiGroup Transactions
      *
-     * @apiSampleRequest /api/v1/transactions
      * @apiSuccessExample {json} Success-Response:
      * {
      *       "message": "File Uploaded",
      *       "code": 201
      *   }
      * @apiError 422 Required field missed
-     * @apiErrorExample {json} Error-Response:
+     * @apiErrorExample {json} Validation error:
      * {"errors":{"file":["The file field is required."],"test_case_id":["The test case id field is required."],"execution_id":["The execution id field is required."]},"code":422}
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
@@ -40,11 +41,19 @@ class TransactionsController extends BaseApiController
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
-        $s3 = new \S3Wrapper;
-        $s3->putObject('transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName(),
-            file_get_contents($request->file('file')),
-            $request->file('file')->getClientMimeType(),
-            'data.twain.gosource.com.au');
+
+        $fileName = getenv('APP_ENV') . '/transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+
+        $s3 = Aws::createClient('s3');
+        $s3->putObject(array(
+            'Bucket' => 'data.twain.gosource.com.au',
+            'Key' => $fileName,
+            'Source' => file_get_contents($request->file('file')),
+        ));
+
+        //adding entry to sqs. it will be processed in background
+        $this->dispatch(new ProcessTransactionLog($fileName));
+
         return $this->respondCreated('File Uploaded');
     }
 }

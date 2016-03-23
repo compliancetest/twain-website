@@ -97,6 +97,16 @@ class BaseApiController extends Controller{
         return $this->setStatusCode(IlluminateResponse::HTTP_SERVICE_UNAVAILABLE)->respondWithError($message);
     }
 
+    /**
+     * Resnd response data as array with 'data' key
+     * @param $data
+     * @return mixed
+     */
+     public function respondWithData($data)
+    {
+        return $this->respond(['data' => $data]);
+    }
+
 
     /**
      * Function to return a generic response.
@@ -108,9 +118,7 @@ class BaseApiController extends Controller{
     public function respond($data, $headers = [])
     {
         $responseData = ['code' => $this->getStatusCode()];
-        if(!is_array($data)){
-            $data = ['data' => $data];
-        }
+
         return JsonResponse::create(array_merge($data, $responseData), $this->getStatusCode(), $headers);
     }
 
@@ -126,7 +134,6 @@ class BaseApiController extends Controller{
         return $this->respond([
             'error' => [
                 'message' => $message,
-                'status_code' => $this->getStatusCode()
             ]
         ]);
     }
