@@ -16,7 +16,6 @@ jQuery(document).ready(function($) {
 
 });
 
-
 var isTouchDevice = 'ontouchstart' in document.documentElement;
 
 var Page = {
@@ -24,31 +23,25 @@ var Page = {
 
         dashboardMenu:  function() {
 
-            jQuery('.dropdown-submenu').hover(function() {
-                jQuery(this).addClass('open');
+            $('.dropdown-submenu').hover(function() {
+                $(this).addClass('open');
             }, function() {
-                jQuery(this).removeClass('open');
+                $(this).removeClass('open');
             });
 
-
-            // Dropdown Menus
-            jQuery(window).resize(function(){
-                if (jQuery('#main-wrapper').width() - 1000 < 800) {
-                    jQuery('.dashboard-menu').addClass('leftmenu');
-                } else {
-                    jQuery('.dashboard-menu').removeClass('leftmenu');
+            $('.dropdown-menu li').each(function () {
+                if ($(this).find('.dropdown-menu').length > 0) {
+                    $(this).addClass('dropdown-submenu');
                 }
             });
 
-            if (jQuery('#main-wrapper').width() - 1000 < 800) {
-                jQuery('.dashboard-menu').addClass('leftmenu');
+            var windowWidth = $('#main-wrapper').width();
+
+            if (windowWidth <= 640){
+                var dashboardMenu = $('#header-dashboard-menu').detach();
+                dashboardMenu.insertBefore('#navbar');
             }
 
-            jQuery('.dropdown-menu li').each(function () {
-                if (jQuery(this).find('.dropdown-menu').length > 0) {
-                    jQuery(this).addClass('dropdown-submenu');
-                }
-            });
         }
     }
-}
+};
