@@ -1,0 +1,46 @@
+.community-header{
+  border-bottom: 1px solid #e1e1e1;
+  @include box-shadow(0 0 50px #ededed inset);
+  padding: 20px;
+  margin-top: -20px;
+
+  .community-logo{
+    float: left;
+    width: 86px;
+    margin: 0 30px 0 0;
+
+    img{
+      width: 100%;
+    }
+  }
+
+  .community-short-description{
+    overflow: hidden;
+    max-width: 640px;
+
+    h3{
+      margin: 0 0 8px 0;
+      font-weight: 600;
+      font-size: 18px;
+      color: #666;
+    }
+
+    p{
+      line-height: 16px;
+    }
+  }
+
+  .community-membership-action{
+    float: right;
+    margin: 0 0 0 15px;
+  }
+}
+
+
+.community-tabs{
+  border: 1px solid #e1e1e1;
+  padding: 10px;
+  background: #f9f9f9;
+  @include border-radius(6px);
+  margin: 20px 0 0 0;
+}

@@ -10,12 +10,13 @@ ul{
 
 .main-container{
     padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .main-content{
     @include box-shadow(0 0 5px #999);
     background: #fff;
-    padding: 20px;
+    padding: 20px 15px;
 }
 
 body.modal-open,

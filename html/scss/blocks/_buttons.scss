@@ -93,3 +93,22 @@
 .btn-delete{
   @include btnIconsSprite(btn-delete-icon);
 }
+
+.btn-lg{
+  font-size: 16px;
+  font-weight: 700;
+  padding: 11px 18px;
+  line-height: 1;
+
+  &.btn-danger{
+    color: #fff;
+    background-color: #aa221e;
+    @include background-image(linear-gradient(top, #cc2e27, #981716));
+    @include box-shadow(0 1px 1px rgba(255, 255, 255, 0.5) inset);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover{
+      @include background-image(linear-gradient(top, #981716, #cc2e27));
+    }
+  }
+}

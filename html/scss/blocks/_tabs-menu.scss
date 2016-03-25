@@ -120,6 +120,34 @@
                 @include dashboardIconsSprite(agreements-active);
             }
 
+            &.articles-tab a:before{
+                @include dashboardIconsSprite(articles);
+            }
+            &.articles-tab a.active:before{
+                @include dashboardIconsSprite(articles-active);
+            }
+
+            &.forum-tab a:before{
+                @include dashboardIconsSprite(forum);
+            }
+            &.forum-tab a.active:before{
+                @include dashboardIconsSprite(forum-active);
+            }
+
+            &.downloads-tab a:before{
+                @include dashboardIconsSprite(downloads);
+            }
+            &.downloads-tab a.active:before{
+                @include dashboardIconsSprite(downloads-active);
+            }
+
+            &.reports-tab a:before{
+                @include dashboardIconsSprite(reports);
+            }
+            &.reports-tab a.active:before{
+                @include dashboardIconsSprite(reports-active);
+            }
+
         }
     }
 
