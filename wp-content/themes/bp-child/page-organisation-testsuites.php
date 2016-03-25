@@ -298,7 +298,7 @@ jQuery(document).ready(function(){
         }
         if(jQuery('#pricing_plan_id_span').val() == '')
         {
-            jQuery('#pricing_plan_id_span').addClass('input-error');
+            jQuery('#pricing_plan_id_span').addClass('select-error');
             isValid = false;
         }
         
