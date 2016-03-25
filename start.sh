@@ -4,6 +4,5 @@ cd /var/www/html/laravel
 #/usr/local/bin/composer install --prefer-source --no-interaction
 /usr/local/bin/composer update
 
-#/usr/sbin/apache2ctl -D FOREGROUND
-service apache2 restart
+/usr/sbin/apache2ctl -D FOREGROUND
 tail -f /var/log/apache2/error.log
