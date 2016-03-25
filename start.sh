@@ -5,5 +5,5 @@ cd /var/www/html/laravel
 /usr/local/bin/composer update
 
 #/usr/sbin/apache2ctl -D FOREGROUND
-sudo service apache2 restart
+service apache2 restart
 tail -f /var/log/apache2/error.log
