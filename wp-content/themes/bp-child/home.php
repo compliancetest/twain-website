@@ -44,8 +44,10 @@
                 <div id="software-vendors-panel">
                     <div class="tab-content-text">
                         <?php echo $home_settings['tab_1_content']; ?>
-                        <br>
-                        <a href="<?php echo $home_settings['tab_1_button_link']; ?>" class="view-sample-btn">View Sample</a>
+                        <?php if(!empty($home_settings['tab_1_button_link'])):?>
+                            <br>
+                            <a href="<?php echo $home_settings['tab_1_button_link']; ?>" class="view-sample-btn">View Sample</a>
+                        <?php endif;?>
                     </div>
                     <div class="tab-content-image">
                         <img src="<?php echo $home_settings['tab_1_image']; ?>" alt=""/>
@@ -54,8 +56,10 @@
                 <div id="organisations-panel">
                     <div class="tab-content-text">
                         <?php echo $home_settings['tab_2_content']; ?>
-                        <br>
-                        <a href="<?php echo $home_settings['tab_2_button_link']; ?>" class="view-sample-btn">View Sample</a>
+                        <?php if(!empty($home_settings['tab_2_button_link'])):?>
+                            <br>
+                            <a href="<?php echo $home_settings['tab_2_button_link']; ?>" class="view-sample-btn">View Sample</a>
+                        <?php endif;?>
                     </div>
                     <div class="tab-content-image">
                         <img src="<?php echo $home_settings['tab_2_image']; ?>" alt=""/>
