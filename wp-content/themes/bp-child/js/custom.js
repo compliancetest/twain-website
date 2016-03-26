@@ -459,7 +459,7 @@ jQuery(document).ready(function($) {
     //Fix the footer Position
     if(jQuery('body').height() > jQuery('#wrapper').height())
     {
-        jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height());
+        jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height() - 100);
     }        
     
     customizeFileTag();
