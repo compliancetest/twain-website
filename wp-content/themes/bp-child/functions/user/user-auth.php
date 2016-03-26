@@ -456,7 +456,7 @@ if(!is_user_logged_in())
                                     'value_remember' => false );
 
                             cp_login_form($args); ?>
-                            <a href="<?php echo get_bloginfo('url');?>/reset-password/" id="recover_pass">Forgot Password</a>
+<!--                            <a href="--><?php //echo get_bloginfo('url');?><!--/reset-password/" id="recover_pass">Forgot Password</a>-->
                             <div class="clear"></div>
                             <div class="space10"></div>
                             <div class="message" style="display: none;"></div>
