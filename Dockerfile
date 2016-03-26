@@ -11,6 +11,7 @@ RUN apt-get update && \
 
 ADD apache2.conf /etc/apache2/apache2.conf
 ADD . /var/www/html
+
 EXPOSE 80
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
