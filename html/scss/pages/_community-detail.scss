@@ -43,4 +43,103 @@
   background: #f9f9f9;
   @include border-radius(6px);
   margin: 20px 0 0 0;
+
+  .community-tab-content{
+    padding: 20px 10px;
+    border: 1px solid #e1e1e1;
+    @include box-shadow(0 0 3px #ddd);
+  }
+
+  .result-content-panel{
+    width: 80%;
+    float: left;
+
+    @media only screen and (max-width: $mobile-size) {
+      width: 100%;
+    }
+
+    .result-content-panel-inner{
+      border-right: 1px solid #d8d8d8;
+      padding-right: 20px;
+      margin-right: 20px;
+    }
+
+    .test-suite-name{
+      color: $app-blue;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: underline;
+
+      &:hover{
+        text-decoration: none;
+      }
+    }
+
+    .test-suite-description{
+      font-size: 12px;
+      line-height: 16px;
+      margin: 7px 0 0 0;
+    }
+
+  }
+
+  .filter-panel{
+    float: right;
+    width: 20%;
+
+    @media only screen and (max-width: $mobile-size) {
+      width: 100%;
+    }
+
+    .collapsible-panel{
+      padding: 10px 0 0 0;
+      margin: 0;
+    }
+
+    .filter-title{
+      border-bottom: 1px solid #a0a0a0;
+      color: #666;
+      cursor: pointer;
+      font-weight: 700;
+      margin-bottom: 10px;
+      padding: 0 0 5px 12px;
+      position: relative;
+
+      &:before{
+        content: '';
+        display: block;
+        position: absolute;
+        @include triangle(bottom,#666,3px);
+        top: 3px;
+        left: 0;
+      }
+
+      &.collapsed:before{
+        @include triangle(right,#666,3px);
+        left: 1px;
+        top: 3px;
+      }
+    }
+
+    .filter-body{
+      ul{
+        padding: 0 0 4px 0;
+      }
+
+      label{
+        font-weight: normal;
+        color: $app-blue;
+        margin: 3px 0 0 0;
+
+        input{
+          margin: 0;
+          top: 1px;
+          position: relative;
+        }
+      }
+
+    }
+
+  }
 }
+

@@ -50,76 +50,55 @@
 
                     <div class="community-tab-content">
 
-                        <div class="community-test-suites">
-                            <div>
+                        <div class="community-test-suites row">
+                            <div class="col-md-12">
 
                                 <div class="filter-panel">
                                     <div class="collapsible-panel-group" id="accordion">
                                         <div class="collapsible-panel">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseType">Type</h4>
-                                            </div>
-                                            <div id="collapseType" class="panel-collapse collapse in">
-                                                <div class="panel-body">
-                                                    <ul>
-                                                        <li><label><input type="checkbox" value="type1" name="type[]"> Type 1</label></li>
-                                                        <li><label><input type="checkbox" value="type2" name="type[]"> Type 2</label></li>
-                                                    </ul>
-                                                </div>
+                                            <div class="filter-title collapsed" data-toggle="collapse" data-target="#collapseType">Type</div>
+                                            <div id="collapseType" class="filter-body collapse">
+                                                <ul>
+                                                    <li><label><input type="checkbox" value="type1" name="type[]"> Type 1</label></li>
+                                                    <li><label><input type="checkbox" value="type2" name="type[]"> Type 2</label></li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="collapsible-panel">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseIssuer">Issuer</h4>
-                                            </div>
-                                            <div id="collapseIssuer" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    <ul>
-                                                        <li><label><input type="checkbox" value="option1" name="issuer[]"> Option 1</label></li>
-                                                        <li><label><input type="checkbox" value="option2" name="issuer[]"> Option 2</label></li>
-                                                    </ul>
-                                                </div>
+                                            <div class="filter-title" data-toggle="collapse" data-target="#collapseIssuer">Issuer</div>
+                                            <div id="collapseIssuer" class="filter-body collapse in">
+                                                <ul>
+                                                    <li><label><input type="checkbox" value="option1" name="issuer[]"> ATO (2)</label></li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="collapsible-panel">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseYearOfIssue">Year of Issue</h4>
-                                            </div>
-                                            <div id="collapseYearOfIssue" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    <div class="panel-body">
-                                                        <ul>
-                                                            <li><label><input type="checkbox" value="option1" name="issue_year[]"> Option 1</label></li>
-                                                            <li><label><input type="checkbox" value="option2" name="issue_year[]"> Option 2</label></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                            <div class="filter-title collapsed" data-toggle="collapse" data-target="#collapseYearOfIssue">Year of Issue</div>
+                                            <div id="collapseYearOfIssue" class="filter-body collapse">
+                                                <ul>
+                                                    <li><label><input type="checkbox" value="option1" name="issue_year[]"> 2014 (1)</label></li>
+                                                    <li><label><input type="checkbox" value="option2" name="issue_year[]"> 2013 (2)</label></li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="collapsible-panel">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title" data-toggle="collapse" data-target="#collapseStatus">Status</h4>
-                                            </div>
-                                            <div id="collapseStatus" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    <div class="panel-body">
-                                                        <ul>
-                                                            <li><label><input type="checkbox" value="option1" name="status[]"> Option 1</label></li>
-                                                            <li><label><input type="checkbox" value="option2" name="status[]"> Option 2</label></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                            <div class="filter-title collapsed" data-toggle="collapse" data-target="#collapseStatus">Status</div>
+                                            <div id="collapseStatus" class="filter-body collapse">
+                                                <ul>
+                                                    <li><label><input type="checkbox" value="option1" name="status[]"> Active (1)</label></li>
+                                                    <li><label><input type="checkbox" value="option2" name="status[]"> Draft (2)</label></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="tab-content-panel">
-                                    <div class="table-responsive">
+                                <div class="result-content-panel">
+                                    <div class="table-responsive result-content-panel-inner">
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
+                                                    <th class="text-left">Name</th>
                                                     <th>Published</th>
                                                     <th>Status</th>
                                                     <th>Products</th>
@@ -127,6 +106,92 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Contributions v1.0</a>
+                                                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2014-01-13</td>
+                                                    <td class="text-center"><span class="status status-partial">Partial</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Contributions v1.01</a>
+                                                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2014-06-23</td>
+                                                    <td class="text-center"><span class="status status-active">Active</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Contributions v1.1</a>
+                                                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2014-06-30</td>
+                                                    <td class="text-center"><span class="status status-active">Active</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Contributions v1.2</a>
+                                                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2014-06-28</td>
+                                                    <td class="text-center"><span class="status status-active">Active</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Contributions v1.3</a>
+                                                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2014-09-07</td>
+                                                    <td class="text-center"><span class="status status-active">Active</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="test-suite-name">Rollovers v1.0</a>
+                                                        <p class="test-suite-description">SuperStream Rollovers Test Suite</p>
+                                                    </td>
+                                                    <td class="text-center">2013-07-01</td>
+                                                    <td class="text-center"><span class="status status-draft">Draft</span></td>
+                                                    <td class="text-center"><a href="#" class="btn btn-sm btn-white">view</a></td>
+                                                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="btn btn-icon btn-default btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                                                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')"  data-tooltip="tooltip" title="Delete Suite"></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

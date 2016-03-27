@@ -1,0 +1,58 @@
+.status{
+  color: #fff;
+  border-style: solid;
+  border-width: 1px;
+  height: 22px;
+  text-align: center;
+  line-height: 19px;
+  min-width: 78px;
+  display: inline-block;
+  @include border-radius(5px);
+  @include box-shadow(0 1px 0 rgba(255, 255, 255, 0.23) inset);
+  font-size: 11px;
+  padding: 0 5px;
+
+  &.status-active{
+    border-color: #47a518;
+    background: #48a719;
+    @include background-image(linear-gradient(top, #55c21f, #47a518));
+  }
+  &.status-build{
+    border-color: #6527a4;
+    background: #7536b5;
+    @include background-image(linear-gradient(top, #8950c2, #6122a1));
+  }
+  &.status-draft{
+    border-color: #a0a0a0;
+    background: #8f8f8f;
+    @include background-image(linear-gradient(top, #ababab, #7b7b7b));
+  }
+  &.status-suspended,
+  &.status-inarrears,
+  &.status-deprecated{
+    border-color: #e96208;
+    background: #f36f16;
+    @include background-image(linear-gradient(top, #fb7821, #e96208));
+  }
+  &.status-obsolete{
+    border-color: #9d1d1c;
+    background: #b92621;
+    @include background-image(linear-gradient(top, #c32d27, #991817));
+  }
+  &.status-partial{
+    border-color: #3c7db3;
+    background: #2c85d0;
+    @include background-image(linear-gradient(top, #469ce6, #3577ae));
+  }
+  &.status-frozen{
+    border-color: #c51e1e;
+    background: #dc1515;
+    @include background-image(linear-gradient(top, #f20c0c, #c51e1e));
+  }
+  &.status-unsubscribing{
+    border-color: #9f9f9f;
+    background: #8a8a8a;
+    @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
+    @include box-shadow(0 1px 0 0 #b8b8b8 inset);
+  }
+}
