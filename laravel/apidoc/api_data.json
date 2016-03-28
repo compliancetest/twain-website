@@ -52,7 +52,7 @@
   },
   {
     "type": "get",
-    "url": "/v1/testcases/:test_case_id/product/:product_id",
+    "url": "/v1/testcase",
     "title": "Request Test Execution profile",
     "name": "getExecutionProfile",
     "group": "TestCases",
@@ -65,6 +65,12 @@
             "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
           }
         ]
       },
@@ -72,6 +78,11 @@
         {
           "title": "TestCase not found error:",
           "content": "{\"error\":{\"message\":\"Test Case not found\"},\"code\":404}",
+          "type": "json"
+        },
+        {
+          "title": "TetsCase not configured:",
+          "content": "{\"error\":{\"message\":\"Please set testing details\"},\"code\":422}",
           "type": "json"
         },
         {

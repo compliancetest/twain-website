@@ -2,7 +2,7 @@
 
 $segments = ( isset($_SERVER['REQUEST_URI']) ? explode('/', trim($_SERVER['REQUEST_URI'],'/')) : array('/') );
 
-$urls = ['api'];
+$urls = ['api', 'testingdetails'];
 
 if ( in_array($segments[0], $urls) !== false ) {
     require_once __DIR__ . '/laravel/public/index.php';

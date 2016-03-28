@@ -149,7 +149,7 @@ get_header();
             ?>
         </div>
         <div class="padding10">
-            <a href="<?php echo get_site_url() ?>?ct-message-action=<?php echo wp_create_nonce('show-execution') ?>"
+            <a href="/testingdetails/"
                id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"
                onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>
 <!--            --><?php //if (PricingPlan::isSupportBulk() && \User\User::isGatewayConfigured()): ?>

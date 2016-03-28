@@ -448,6 +448,11 @@ jQuery(document).ready(function(){
         jQuery('#uploadMessageForm').submit();        
         return false;
     })
+
+    jQuery('body').on('click', '#saveTestingDetailsButton', function(){
+        jQuery('#saveTestingDetails').submit();
+        return false;
+    })
     
     /**
     * Upload Message
@@ -486,6 +491,41 @@ jQuery(document).ready(function(){
         jQuery('#upload-message-box .loading-with-text b').html('SENDING MESSAGE');
         jQuery('#upload-message-box .loading-with-text').show();
         
+        return true;
+    })
+
+    /**
+     * Save testing details data
+     */
+    jQuery('body').on('submit', '#saveTestingDetails', function(){
+        jQuery('#upload-message-box .popup-box-content').find('.message').remove();
+        jQuery('#upload-message-box .popup-box-content').find('.input-error').removeClass('input-error');
+        jQuery('#upload-message-box .popup-box-content').find('.select-error').removeClass('select-error');
+        var isValid = true;
+        if(!jQuery('#um-test-suite').val())
+        {
+            jQuery('#um-test-suite').addClass('select-error');
+            isValid = false;
+        }
+        if(!jQuery('#um-test-case').val())
+        {
+            jQuery('#um-test-case').addClass('select-error');
+            isValid = false;
+        }
+        if(!jQuery('#um-product').val())
+        {
+            jQuery('#um-product').addClass('select-error');
+            isValid = false;
+        }
+        if(!isValid)
+        {
+            showUploadMessageResultMessage('Please complete fields in red.', 'error');
+            return false;
+        }
+
+        jQuery('#upload-message-box .loading-with-text b').html('SENDING');
+        jQuery('#upload-message-box .loading-with-text').show();
+
         return true;
     })
     

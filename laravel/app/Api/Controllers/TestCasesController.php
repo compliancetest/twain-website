@@ -4,14 +4,16 @@ namespace App\Api\Controllers;
 
 use App\Profile;
 use App\TestCase;
+use App\TestingDetail;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel;
 
 class TestCasesController extends BaseApiController
 {
 
     /**
-     * @api {get} /v1/testcases/:test_case_id/product/:product_id Request Test Execution profile
+     * @api {get} /v1/testcase Request Test Execution profile
      *
      * @apiName getExecutionProfile
      * @apiGroup TestCases
@@ -21,6 +23,10 @@ class TestCasesController extends BaseApiController
      * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
      * {"error":{"message":"Test Case not found"},"code":404}
+     *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} TetsCase not configured:
+     * {"error":{"message":"Please set testing details"},"code":422}
      *
      * @apiErrorExample {json} No profile error response:
      * {"error":{"message":"Test Case doesn't have any profiles"},"code":404}
@@ -32,12 +38,18 @@ class TestCasesController extends BaseApiController
      *
      * @apiVersion 1.0.0
      */
-    public function show($testCaseId, $productId)
+    public function show()
     {
-        $testCase = TestCase::find($testCaseId);
+        $testingDetails = TestingDetail::where(['is_running' => 1, 'user_id' => Auth::user()->ID])->first();
+        if (!count($testingDetails)) {
+            return $this->respondUnprocessableEntity("Please set testing details");
+        }
+
+        $testCase = TestCase::find($testingDetails->test_case_id);
         if (!$testCase) {
             return $this->respondNotFound("Test Case not found");
         }
+
         $profileId = $testCase->getTestExecutionProfileId();
         $profile = Profile::find($profileId);
         if ($profile) {
