@@ -51,7 +51,7 @@ class TestingDetailsController extends Controller
         }
         $model->save();
         addMessage('Testing details has been saved successfully.', 'success');
-        return redirect('my-transaction-log');
+        return redirect()->secure('my-transaction-log');
     }
 
 }
