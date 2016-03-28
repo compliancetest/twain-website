@@ -27,6 +27,8 @@ function ct_process_message_actions()
         loadMessageTemplate();
     } else if (wp_verify_nonce($action, 'upload-message')) {
         showUploadMessageBox();
+    }else if (wp_verify_nonce($action, 'show-execution')) {
+        showSelectExecutionProfile();
     } else if (wp_verify_nonce($action, 'send-uploaded-message')) {
         uploadMessage();
     }
@@ -917,6 +919,135 @@ function showUploadMessageBox()
                                     <label for="um-filename">File Name</label>
                                     <input type="text" class="input" name="filename" id="um-filename"/><br/>
                                     <small>(If it's blank, the uploaded file's name will be used.)</small>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popup-box-footer radius6 noradiustop">
+                        <a href="#" class="action-btn process-btn submit-btn has-tooltip" id="upload-message-link"><span
+                                class="p"></span><span class="t">Confirm</span><span class="simple_tooltip">Confirm Trigger Message<span></span></span></a>
+                        <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span
+                                class="t">Cancel</span></a>
+
+                        <div class="clear"></div>
+                    </div>
+                    <a class="close_btn"></a>
+
+                    <div class="loading loading-with-text radius6">
+                        <div><b>PROCESSING YOUR PAYMENT</b><span>Please wait...</span></div>
+                    </div>
+                    <input type="hidden" name="ct-message-action"
+                           value="<?php echo wp_create_nonce('send-uploaded-message') ?>"/>
+                </form>
+            </div>
+            <?php
+        }
+    }
+
+    exit;
+}
+
+
+function showSelectExecutionProfile()
+{
+    $user_id = get_current_user_id();
+
+    //Getting Subscribed Test Suites
+    $suites = getUserSubscriptions();
+
+
+    if (!$suites) {
+        ?>
+        <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
+            <div class="popup-box-header radius6 noradiusbottom">Upload Message</div>
+            <div class="popup-box-content grid-box-body">
+                <p class="message warning">You need to purchase subscription for at least one test suite to Upload
+                    message.</p>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span
+                        class="t">Close</span></a>
+
+                <div class="clear"></div>
+            </div>
+            <a class="close_btn"></a>
+        </div>
+        <?php
+    } else {
+        if (!$suites) //User has not yet defined his profile.
+        {
+            ?>
+            <div class="popup-box" id="trigger-message-box" style="display: none; width: 555px;">
+                <div class="popup-box-header radius6 noradiusbottom">Trigger Message</div>
+                <div class="popup-box-content grid-box-body">
+                    <p class="message notice">You have not defined your profile, yet. Please go to <a
+                            href="<?php echo get_site_url() ?>/my-profile">My Profile &gt; My Test Suite Subscriptions
+                            &gt; Harness Details</a> to define your proifle.</p>
+                </div>
+                <div class="popup-box-footer radius6 noradiustop">
+                    <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
+
+                    <div class="clear"></div>
+                </div>
+                <a class="close_btn"></a>
+            </div>
+            <?php
+        } else {
+            $lastData = null;
+            $products = getUserProductsAndServices($user_id);
+
+            $current_suite_id = $suites[0]->suite_id;
+
+            $current_product_id = null;
+
+            //Getting Test Cases
+            $suiteObj = new TestSuite($current_suite_id);
+            $cases = $suiteObj->loadTesterInitiatedTestCases();
+            $current_case_id = $cases[0]->ID;
+
+            ?>
+            <div class="popup-box" id="upload-message-box" style="display: none; width: 555px;">
+                <form name="messageForm" id="uploadMessageForm" action="" enctype="multipart/form-data" method="post">
+                    <div class="popup-box-header radius6 noradiusbottom">Select Testing Details</div>
+                    <div class="popup-box-content grid-box-body">
+
+                        <div class="info-section">
+                            <div class="field-row">
+                                <div class="grid-cell width250">
+                                    <label for="tm-test-suite">Test Suite</label>
+                                    <select name="test-suite" id="um-test-suite" class="select">
+                                        <?php foreach ($suites as $s) { ?>
+                                            <option
+                                                value="<?php echo $s->suite_id ?>" <?php echo $s->suite_id == $current_suite_id ? 'selected="selected"' : '' ?>><?php echo $s->suite_title ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="grid-cell width250 left15">
+                                    <label for="um-test-suite">Test Case</label>
+                                    <select name="test-case" id="um-test-case" class="select">
+                                        <?php foreach ($cases as $c) { ?>
+                                            <option
+                                                value="<?php echo $c->ID ?>" <?php echo $c->ID == $current_case_id ? 'selected="selected"' : '' ?>><?php echo $c->post_title ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="field-row">
+                                <div class="grid-cell width100P">
+                                    <label for="um-product">Product</label>
+                                    <select name="product" id="um-product" class="select">
+                                        <option value="">Select a Product</option>
+                                        <?php foreach ($products as $p) { ?>
+                                            <?php
+                                            $version = get_post_meta($p->ID, 'product_version', true);
+                                            if (!empty($version)) $version = ' v' . $version;
+                                            ?>
+                                            <option
+                                                value="<?php echo $p->ID ?>" <?php echo $p->ID == $current_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) . $version; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                                 <div class="clear"></div>
                             </div>
