@@ -14,6 +14,8 @@
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../',  '.env.'.getenv('ENVIRONMENT'));
+$dotenv->load();
 
 /*
 |--------------------------------------------------------------------------
