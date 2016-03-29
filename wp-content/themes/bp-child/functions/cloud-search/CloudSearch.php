@@ -139,6 +139,77 @@ class CloudSearch extends BaseAWS
     }
 
     /**
+     * Function returns only buckets data for current search string
+     * @return bool
+     */
+    public function getFilters($params = false)
+    {
+        global $wpdb;
+        $str = array();
+        $str['return'] = '_no_fields';
+        $str['facet'] = '{ "type": {}, "test_type": {}, "test_suite": {}, "owner": {}, "level": {}, "role": {}, "status": {} }';
+        $str['size'] = SEARCH_RESULTS_LIMIT;
+        $l = '';
+        $range_checked = false;
+        if (is_user_logged_in()) {
+            if (is_super_admin()) {
+                //super admin should see all items
+                $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
+            } else {
+                //usual user should see only own and community items
+                $groups = groups_get_user_groups(get_current_user_id());
+                $groups_str = '';
+                foreach ($groups['groups'] AS $group_id) {
+                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                }
+                if (!empty($groups_str)) {
+                    $groups_str = ' ( or ' . $groups_str . ' ) ';
+                } else {
+                    $groups_str = ' ( or ( term field=community_id 1 ) ) ';
+                }
+                $private_where = '';
+                $organisation_members = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id()));
+                if ($organisation_members) {
+                    foreach ($organisation_members AS $organisation_members) {
+                        $private_where .= '( term field=user_id ' . $organisation_members->user_id . ' )';
+                    }
+                }
+                if (!empty($private_where)) {
+                    $private_where = ' ( or ' . $private_where . ' ) ';
+                } else {
+                    $private_where = " ( term field=user_id " . get_current_user_id() . " ) ";
+                }
+                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 ) " . $private_where . "   ) ( and ( term field=visibility 2 ) " . $groups_str . " ) )";//(  )
+            }
+        } else {
+            //non-logged in user should see only public items
+            $l .= "  ( term field=visibility 1 )";
+        }
+
+        foreach ($params AS $k => $v) {
+            if ($k == 'q') {
+                if (!empty($v)) {
+                    $str['query'] = $v;
+                }
+            }
+        }
+
+        if (!empty($l)) {
+            $str['filterQuery'] = ' ( and ' . $l . ' ) ';
+        }
+        if (!isset($str['query'])) {
+            $str['query'] = 'matchall';
+            $str['queryParser'] = 'structured';
+        }
+        try {
+            $r = $this->_client->search($str);
+        } catch (Exception $e) {
+            return false;
+        }
+        return $r;
+    }
+
+    /**
      * Function used to upload all items to CloudSearch domain.
      * You can delete uploaded items using _delete_all_items method
      */

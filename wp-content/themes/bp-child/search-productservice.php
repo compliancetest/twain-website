@@ -31,6 +31,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
 $results = $cloud_search->search($_GET);
+$allFilters = $cloud_search->getFilters($_GET);
 if ($is_download) {
     $results = $cloud_search->search($_GET, true);
     generate_and_download($results);
@@ -59,8 +60,8 @@ get_header();
                             <label for="implementation-type-filter">Type</label>
                             <select name="type" id="implementation-type-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/type/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/type/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/type/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/type/buckets') AS $v): ?>
                                         <?php if ($v['value'] == 'Web Service'): ?>
                                             <option
                                                 value="<?php echo $v['value']; ?>" <?php if (isset($_GET['type']) && $_GET['type'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo 'Service'; ?></option>
@@ -79,8 +80,8 @@ get_header();
                             <label for="owner-filter">Owner</label>
                             <select name="owner" id="owner-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/owner/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/owner/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/owner/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/owner/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['owner']) && $_GET['owner'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -91,8 +92,8 @@ get_header();
                             <label for="test-suite-filter">Test Suite</label>
                             <select name="test_suite" id="test-suite-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/test_suite/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/test_suite/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/test_suite/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/test_suite/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['test_suite']) && $_GET['test_suite'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -103,8 +104,8 @@ get_header();
                             <label for="test-type-filter">Test Type</label>
                             <select name="test_type" id="test-type-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/test_type/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/test_type/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/test_type/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/test_type/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['test_type']) && $_GET['test_type'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -115,8 +116,8 @@ get_header();
                             <label for="role-filter">Role</label>
                             <select name="role" id="role-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/role/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/role/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/role/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/role/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['role']) && $_GET['role'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -127,8 +128,8 @@ get_header();
                             <label for="level-filter">Level</label>
                             <select name="level" id="level-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/level/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/level/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/level/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/level/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['level']) && $_GET['level'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -139,8 +140,8 @@ get_header();
                             <label for="test-status-filter">Status</label>
                             <select name="status" id="test-status-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results->getPath('facets/status/buckets'))): ?>
-                                    <?php foreach ($results->getPath('facets/status/buckets') AS $v): ?>
+                                <?php if (is_array($allFilters->getPath('facets/status/buckets'))): ?>
+                                    <?php foreach ($allFilters->getPath('facets/status/buckets') AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>"<?php if (isset($_GET['status']) && $_GET['status'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
