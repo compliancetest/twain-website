@@ -28,7 +28,7 @@ if (!defined('ABSPATH'))
                                  alt="<?php _e('Avatar preview', 'buddypress'); ?>"/>
                         </div>
 
-                        <a href="#" class="action-btn submit-btn process-btn right"
+                        <a href="#" onclick="jQuery('#avatar-upload-form').submit();return false;" class="action-btn submit-btn process-btn right"
                            style="margin-top: 120px; margin-right: 10px;"><span class="p"></span><span class="t">Crop Image</span></a>
                         <div class="clear"></div>
                         <div class="space10"></div>
