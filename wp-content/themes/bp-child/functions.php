@@ -1038,7 +1038,7 @@ function cp_get_user_display_name($user)
     }
 
     //Now only show user first name
-    return $user->display_name;
+    return get_user_meta($user->ID, 'first_name', true) . ' ' . get_user_meta($user->ID, 'last_name', true);
 }
 
 /**

@@ -22,14 +22,14 @@ $user = get_userdata($profileID);
             <?php else:?>
                 <?php echo get_avatar($user->data->user_email, 150);  ?>
             <?php endif;?>
-	    </a>        
+	    </a>
     </div><!-- #item-header-avatar -->
 
     <div id="item-header-content" class="profile-title">
 	    <h3 class="left">
 		    <a href="<?php bp_displayed_user_link(); ?>">
-                <?php                     
-                    echo cp_get_user_display_name($profileID) 
+                <?php
+                    echo cp_get_user_display_name($profileID)
                 ?>
             </a>
         </h3>
