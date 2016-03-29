@@ -8,7 +8,7 @@ class FulltextSearch extends BaseAWS
     private $_domainName = '';
 
     private $_allowed_post_types = array(
-        'press-release', 'blog', 'event', 'page', 'forum', 'product-service', 'service', 'test-case', 'test-suite', 'topic', 'bp_doc'
+        'press-release', 'blog', 'event', 'page', 'product-service', 'service', 'test-case', 'test-suite'
     );
 
     private $_allowedSortFields = array(
@@ -145,6 +145,79 @@ class FulltextSearch extends BaseAWS
         return $r;
     }
 
+    /**
+     * Function returns only buckets data for current search string
+     *
+     */
+    public function getFilters($params)
+    {
+        global $wpdb;
+        $str = array();
+        $str['return'] = '_no_fields';
+        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {} }';
+        $str['size'] = SEARCH_RESULTS_LIMIT;
+        $l = '';
+        $range_checked = false;
+        if (is_user_logged_in()) {
+            if (is_super_admin()) {
+                //super admin should see all items
+                $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
+            } else {
+                //usual user should see only own and community items
+                $groups = groups_get_user_groups(get_current_user_id());
+                $groups_str = '';
+                foreach ($groups['groups'] AS $group_id) {
+                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                }
+                if (!empty($groups_str)) {
+                    $groups_str = ' ( or ' . $groups_str . ' ) ';
+                } else {
+                    $groups_str = ' ( or ( term field=community_id 1 ) ) ';
+                }
+                $private_where = '';
+                $organisation_members = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id()));
+                if ($organisation_members) {
+                    foreach ($organisation_members AS $organisation_members) {
+                        $private_where .= '( term field=post_author_id ' . $organisation_members->user_id . ' )';
+                    }
+                }
+                if (!empty($private_where)) {
+                    $private_where = ' ( or ' . $private_where . ' ) ';
+                } else {
+                    $private_where = " ( term field=post_author_id " . get_current_user_id() . " ) ";
+                }
+                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 )  " . $private_where . " ) ( and ( term field=visibility 2 ) " . $groups_str . " ) )";
+            }
+        } else {
+            //non-logged in user should see only public items
+            $l .= "  ( term field=visibility 1 )";
+        }
+
+        foreach ($params AS $k => $v) {
+            if ($k == 'q') {
+                if (!empty($v)) {
+                    $str['query'] = $v;
+                }
+            }
+        }
+
+        $str['sort'] = '_score desc';
+
+        if (!empty($l)) {
+            $str['filterQuery'] = ' ( and ' . $l . ' ) ';
+        }
+        if (!isset($str['query'])) {
+            $str['query'] = 'matchall';
+            $str['queryParser'] = 'structured';
+        }
+        try {
+            $r = $this->_client->search($str);
+        } catch (Exception $e) {
+            return false;
+        }
+        return $r;
+    }
+
     public function fullUpload($post_id = false)
     {
         global $wpdb;
@@ -170,6 +243,16 @@ class FulltextSearch extends BaseAWS
                 if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
                     continue;
                 }
+                if ($post->post_type == 'test-case' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT case_id FROM wp_test_cases WHERE family_mark IN( SELECT family_mark FROM wp_test_cases WHERE case_id = %d ) ORDER BY case_id DESC LIMIT 1", $post->ID))) {
+                    continue;
+                }
+
+                //this pages shouldn't appear in search results
+                if (in_array($post->post_title, array('add-new-service', 'Edit Test Case', 'Edit Product and Service', 'Edit Test Suite',
+                    'Message Envelope', 'View Validation Error', 'My Messages', 'Inbox', 'Sentbox', 'Compose', 'View', 'Members', 'Get Profile', 'View Message Template',
+                    'My Organisation', 'Test Suites', 'get-profile-meta', 'Users', 'Edit Service', 'Add New Product and Service', 'Reset Password', 'Sitemap'))) {
+                    continue;
+                }
                 $post_data = $this->_processPost($post);
                 if (in_array($post->post_type, array('event', 'blog', 'press-release'))) {
                     $community_id = ( integer )get_post_meta($post->ID, 'blog_community_id', true);
@@ -181,6 +264,13 @@ class FulltextSearch extends BaseAWS
                         $groups['groups'] = array($community_id);
                         $post_data['visibility'] = 2;
                     }
+                }
+
+                //this pages should be visible only to logged in users
+                if (in_array($post->post_title, array('Add New Product and Service', 'Add New Test Case', 'Add New Test Suite', 'My Profile',
+                    'My Transaction Log', 'Test Suite Coverage', 'My Products', 'My Support Tickets', 'My Test Suites', 'My Test Data', 'My Communities',
+                    'Add new service', 'Agreements', 'Add New Test Case', 'Add New Test Suite'))) {
+                    $post_data['visibility'] = 2;
                 }
                 $temp_data = array(
                     'community' => $communityNames,
@@ -228,7 +318,7 @@ class FulltextSearch extends BaseAWS
                     'post_title' => $test_scenario->code,
                     'post_type' => 'Test Scenario',
                     'post_id' => $post->ID,
-                    'visibility' => 1,
+                    'visibility' => 2,
                     'community_id' => $groups['groups'],
                     'for_search' => $test_scenario->description . 'Test Scenario' . $test_scenario->code . cp_get_user_fullname($post->post_author),
                     'link' => get_permalink($post->ID)
@@ -321,7 +411,7 @@ class FulltextSearch extends BaseAWS
             case 'test-case':
                 $data = array(
                     'type' => 'Test Case',
-                    'visibility' => 1,
+                    'visibility' => 2,
                     'for_search' => 'Test Case',
                     'descr' => get_post_meta($post->ID, 'test_intent_description', true)
                 );
@@ -332,30 +422,6 @@ class FulltextSearch extends BaseAWS
                     'visibility' => 1,
                     'for_search' => 'Test Suite',
                     'descr' => get_post_meta($post->ID, 'ts_description', true)
-                );
-                break;
-            case 'topic':
-                $data = array(
-                    'type' => 'Forum Topic',
-                    'visibility' => 1,
-                    'for_search' => 'Forum Topic',
-                    'descr' => $post->post_content
-                );
-                break;
-            case 'forum':
-                $data = array(
-                    'type' => 'Forum Post',
-                    'visibility' => 1,
-                    'for_search' => 'Forum Post',
-                    'descr' => $post->post_content
-                );
-                break;
-            case 'bp_doc':
-                $data = array(
-                    'type' => 'Wiki Article',
-                    'visibility' => 1,
-                    'for_search' => 'Wiki Article',
-                    'descr' => $post->post_content
                 );
                 break;
             case 'blog':

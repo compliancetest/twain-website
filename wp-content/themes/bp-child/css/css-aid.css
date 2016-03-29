@@ -2400,15 +2400,17 @@ tr {
 
 .flat-pagination .prev,
 .flat-pagination .next{
-    background: none;
     text-indent: 0;
     width: auto;
+	padding: 0 4px;
 }
 
 .flat-pagination a.prev:hover,
 .flat-pagination a.next:hover{
     text-decoration: underline;
     background: none;
+	background: #2c80e8;
+	padding: 0 4px;
 }
 
 
