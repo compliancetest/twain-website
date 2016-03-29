@@ -28,7 +28,7 @@ class TestingDetailsController extends Controller
         $current_suite_id = $suites[0]->suite_id;
 
         $suiteObj = new \TestSuite($current_suite_id);
-        $cases = $suiteObj->loadTesterInitiatedTestCases();
+        $cases = $suiteObj->loadTestCases(array(), array(), 'Active');
 
         $currentTestingDetails = TestingDetail::where(['user_id' => $userId, 'is_running' => 1])->first();
         return view('pages.testingdetails.show', compact('cases', 'products', 'suites', 'currentTestingDetails'));
