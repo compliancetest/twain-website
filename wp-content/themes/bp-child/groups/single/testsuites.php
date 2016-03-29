@@ -1,31 +1,31 @@
 <?php
 /**
-* Test Suite Page
-*/
+ * Test Suite Page
+ */
 global $groups_template;
 $group = $groups_template->group;
 //Getting Test Suites
 $args = array(
-        'post_type' => 'test-suite', 
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and'),
-        'meta_query' => array(
-            array(
-                'key' => 'community_id',
-                'value' => $group->id,
-                'compare' => '='
-            )
-        ),
-        'orderby' => 'title',
-        'order' => 'ASC'
-    );
+    'post_type' => 'test-suite',
+    'posts_per_page' => -1,
+    'tax_query' => array('relation' => 'and'),
+    'meta_query' => array(
+        array(
+            'key' => 'community_id',
+            'value' => $group->id,
+            'compare' => '='
+        )
+    ),
+    'orderby' => 'title',
+    'order' => 'ASC'
+);
 
-if(!groups_is_user_admin(get_current_user_id(), bp_get_group_id())){
-    $args['meta_query'][] =  array(
-                'key' => 'hide_suite',
-                'value' => 0,
-                'compare' => '='
-            );
+if (!groups_is_user_admin(get_current_user_id(), bp_get_group_id())) {
+    $args['meta_query'][] = array(
+        'key' => 'hide_suite',
+        'value' => 0,
+        'compare' => '='
+    );
 }
 
 //Getting Filter Params
@@ -34,181 +34,209 @@ $filterIssuer = getFilterParam('issuer');
 $filterYear = getFilterParam('year');
 $filterStatus = getFilterParam('status');
 
-foreach($filterType as $f)
-{
+foreach ($filterType as $f) {
     $args['tax_query'][] = array('taxonomy' => 'test_suite_type', 'field' => 'slug', 'terms' => $f);
 }
-foreach($filterIssuer as $v)
-{
+foreach ($filterIssuer as $v) {
     $args['meta_query'][] = array('key' => 'ts_issuer', 'value' => $v, 'compare' => '=');
 }
-foreach($filterYear as $v)
-{
+foreach ($filterYear as $v) {
     $args['meta_query'][] = array('key' => 'ts_issue_date', 'value' => $v . "-", 'compare' => 'LIKE');
 }
-foreach($filterStatus as $v)
-{
+foreach ($filterStatus as $v) {
     $args['meta_query'][] = array('key' => 'ts_status', 'value' => $v, 'compare' => '=');
 }
 
-$testsuites = get_posts( $args );
+$testsuites = get_posts($args);
 
 $roles = array();
 ?>
 <div id="testsuites-container" class="tab-content white_bcg">
-    <?php if(count($testsuites) > 0) {?>     
-    <div class="column four_fifths left padding20-10">        
-        <div class="grid dark_gray_txt" id="test_suites_tab_grid">
-            <div class="grid_head grid_head_border">
-                <div class="padding10 nopaddingtop">
-                    <div class="grid_cell nopaddingtop width40P">Name</div>                    
-                    <div class="grid_cell nopaddingtop width10P tocenter">Published</div>
-                    <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
-                    <div class="grid_cell nopaddingtop width15P tocenter">Products</div>
-                    <div class="grid_cell nopaddingtop width10P tocenter two-lines">Notify Changes</div>
-                    <div class="grid_cell nopaddingtop width10P tocenter">Action</div>
-                    <div class="clear"></div>
+    <?php if (count($testsuites) > 0) { ?>
+        <div class="column four_fifths left padding20-10">
+            <div class="grid dark_gray_txt" id="test_suites_tab_grid">
+                <div class="grid_head grid_head_border">
+                    <div class="padding10 nopaddingtop">
+                        <div class="grid_cell nopaddingtop width40P">Name</div>
+                        <div class="grid_cell nopaddingtop width10P tocenter">Published</div>
+                        <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
+                        <div class="grid_cell nopaddingtop width15P tocenter">Products</div>
+                        <div class="grid_cell nopaddingtop width10P tocenter two-lines">Notify Changes</div>
+                        <div class="grid_cell nopaddingtop width10P tocenter">Action</div>
+                        <div class="clear"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="grid_body noborder">
-            <?php
-                //For Right Panels
-                $tsTypes = array();
-                $tsIssuers = array();
-                $tsIssueYears = array();
-                $tsStatuses = array();
-                
-                foreach($testsuites as $row){
-            ?>
-            <div class="grid_row grid_row_border relative">
-                <div class="grid_cell width40P">
-                    <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
-                    <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
-                </div>                
-                <div class="grid_cell width10P tocenter">
-                <?php
-                    $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
-                    echo formatDate($issueDate);
-                ?>
-                </div>
-                <div class="grid_cell width15P tocenter">
-                    <?php 
-                    $issueStatus = get_post_meta($row->ID, 'ts_status', true);
-                    echo '<span class="status_btn status_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
+                <div class="grid_body noborder">
+                    <?php
+                    //For Right Panels
+                    $tsTypes = array();
+                    $tsIssuers = array();
+                    $tsIssueYears = array();
+                    $tsStatuses = array();
+
+                    foreach ($testsuites as $row) {
+                        ?>
+                        <div class="grid_row grid_row_border relative">
+                            <div class="grid_cell width40P">
+                                <h5><a href="<?php echo get_permalink($row->ID) ?>"
+                                       class="blue_txt"><?php echo apply_filters('the_title', $row->post_title) ?></a>
+                                </h5>
+                                <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
+                            </div>
+                            <div class="grid_cell width10P tocenter">
+                                <?php
+                                $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
+                                echo formatDate($issueDate);
+                                ?>
+                            </div>
+                            <div class="grid_cell width15P tocenter">
+                                <?php
+                                $issueStatus = get_post_meta($row->ID, 'ts_status', true);
+                                echo '<span class="status_btn status_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
+                                ?>
+                            </div>
+                            <div class="grid_cell width15P tocenter">
+                                <a href="#" onclick="return false;" class="white_grey_btn view_products_btn"><b></b>VIEW</a>
+                            </div>
+                            <div class="grid_cell width10P tocenter notify-changes">
+                                <input type="checkbox" name="notify_changes<?php echo $row->ID ?>"
+                                       value="<?php echo $row->ID ?>" <?php if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $row->ID, true)) { ?> checked="checked" <?php } ?> />
+                                <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt=""
+                                     style="display: none;"/>
+                            </div>
+                            <div class="grid_cell width10P tocenter">
+                                <?php if (groups_is_user_admin(get_current_user_id(), bp_get_group_id())) { ?>
+                                    <a href="/edit-test-suite?id=<?php echo $row->ID ?>"
+                                       class="action-btn edit-btn icon-btn has-tooltip left10"><span
+                                            class="p"></span><span class="simple_tooltip">Edit Suite<span></span></span></a>
+                                    <a href="?suite_id=<?php echo $row->ID ?>&_wpnonce=<?php echo wp_create_nonce('delete-suite') ?>&return=<?php echo base64_encode(bp_get_group_permalink($group)) ?>"
+                                       class="action-btn delete-btn icon-btn has-tooltip left5"
+                                       onclick="return confirm('Are you sure to delete this test suite?')"><span
+                                            class="p"></span><span
+                                            class="simple_tooltip">Delete Suite<span></span></span></a>
+                                <?php } else { ?>
+                                    -
+                                <?php } ?>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+                        <?php
+                        $typeList = wp_get_post_terms($row->ID, 'test_suite_type', array("fields" => "all"));
+                        foreach ($typeList as $r) {
+                            $tsTypes[$r->name] = isset($tsTypes[$r->name]) ? $tsTypes[$r->name] + 1 : 1;
+                        }
+
+                        $issuer = get_post_meta($row->ID, 'ts_issuer', true);
+                        $tsIssuers[$issuer] = isset($tsIssuers[$issuer]) ? $tsIssuers[$issuer] + 1 : 1;
+
+                        $tsYear = date('Y', strtotime($issueDate));
+                        $tsIssueYears[$tsYear] = isset($tsIssueYears[$tsYear]) ? $tsIssueYears[$tsYear] + 1 : 1;
+
+                        $tsStatuses[$issueStatus] = isset($tsStatuses[$issueStatus]) ? $tsStatuses[$issueStatus] + 1 : 1;
+                    }
                     ?>
+
                 </div>
-                <div class="grid_cell width15P tocenter">
-                    <a href="#" class="white_grey_btn view_products_btn"><b></b>VIEW</a>
+            </div>
+
+        </div>
+        <div class="column fifth right expendables">
+            <form name="form_filter" id="form_filter" action="<?php echo bp_get_group_permalink() ?>" method="get">
+                <div class="expandable">
+                    <h6 class="exp_title">Type</h6>
+
+                    <div class="exp_content">
+                        <?php
+                        foreach ($tsTypes as $k => $v) {
+                            ?>
+                            <label for="<?php echo $k ?>" class="blue_txt">
+                                <input type="checkbox" name="type[]" value="<?php echo $k ?>"
+                                       id="<?php echo $k ?>" <?php echo in_array($k, $filterType) ? 'checked="checked"' : '' ?>
+                                       class="input_filter"> <?php echo $k ?> (<?php echo $v ?>)
+                            </label>
+                            <div class="clear"></div>
+                            <?php
+                        }
+                        ?>
+                    </div>
                 </div>
-                <div class="grid_cell width10P tocenter notify-changes">
-                    <input type="checkbox" name="notify_changes<?php echo $row->ID?>" value="<?php echo $row->ID?>" <?php if(get_user_meta(get_current_user_id(), 'notify_suite_changes' . $row->ID, true)){?> checked="checked" <?php }?> />
-                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY?>/images/loading-small.gif" alt="" style="display: none;" />
-                </div>                              
-                <div class="grid_cell width10P tocenter">
-                    <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
-                    <a href="/edit-test-suite?id=<?php echo $row->ID?>" class="action-btn edit-btn icon-btn has-tooltip left10"><span class="p"></span><span class="simple_tooltip">Edit Suite<span></span></span></a>
-                    <a href="?suite_id=<?php echo $row->ID?>&_wpnonce=<?php echo wp_create_nonce('delete-suite')?>&return=<?php echo base64_encode(bp_get_group_permalink($group))?>" class="action-btn delete-btn icon-btn has-tooltip left5" onclick="return confirm('Are you sure to delete this test suite?')"><span class="p"></span><span class="simple_tooltip">Delete Suite<span></span></span></a>
-                    <?php }else{ ?>
-                    -
-                    <?php } ?>
+                <div class="expandable">
+                    <h6 class="exp_title">Issuer</h6>
+
+                    <div class="exp_content">
+                        <?php
+                        foreach ($tsIssuers as $k => $v) {
+                            ?>
+                            <label for="<?php echo $k ?>" class="blue_txt"><input type="checkbox"
+                                                                                  name="issuer[]" <?php echo in_array($k, $filterIssuer) ? 'checked="checked"' : '' ?>
+                                                                                  value="<?php echo $k ?>"
+                                                                                  id="<?php echo $k ?>"
+                                                                                  class="input_filter"> <?php echo $k ?>
+                                (<?php echo $v ?>)</label>
+                            <div class="clear"></div>
+                            <?php
+                        }
+                        ?>
+                    </div>
                 </div>
-                
-                <div class="clear"></div>
-            </div>
-            <?php
-                    $typeList = wp_get_post_terms($row->ID, 'test_suite_type', array("fields" => "all"));
-                    foreach($typeList as $r)
-                    {
-                        $tsTypes[$r->name] = isset($tsTypes[$r->name]) ? $tsTypes[$r->name] + 1 : 1;
-                    }    
-                    
-                    $issuer = get_post_meta($row->ID, 'ts_issuer', true);
-                    $tsIssuers[$issuer] = isset($tsIssuers[$issuer]) ? $tsIssuers[$issuer] + 1 : 1;
-                    
-                    $tsYear = date('Y', strtotime($issueDate));
-                    $tsIssueYears[$tsYear] = isset($tsIssueYears[$tsYear]) ? $tsIssueYears[$tsYear] + 1 : 1;
-                    
-                    $tsStatuses[$issueStatus] = isset($tsStatuses[$issueStatus]) ? $tsStatuses[$issueStatus] + 1 : 1;                    
-                }
-            ?>
-                
-            </div>
+                <div class="expandable">
+                    <h6 class="exp_title">Year of Issue</h6>
+
+                    <div class="exp_content">
+                        <?php
+                        foreach ($tsIssueYears as $k => $v) {
+                            ?>
+                            <label for="<?php echo $k ?>" class="blue_txt"><input type="checkbox"
+                                                                                  name="year[]" <?php echo in_array($k, $filterYear) ? 'checked="checked"' : '' ?>
+                                                                                  value="<?php echo $k ?>"
+                                                                                  id="<?php echo $k ?>"
+                                                                                  class="input_filter"> <?php echo $k ?>
+                                (<?php echo $v ?>)</label>
+                            <div class="clear"></div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <h6 class="exp_title">Status</h6>
+
+                    <div class="exp_content">
+                        <?php
+                        foreach ($tsStatuses as $k => $v) {
+                            ?>
+                            <label for="<?php echo $k ?>" class="blue_txt"><input type="checkbox"
+                                                                                  name="status[]" <?php echo in_array($k, $filterStatus) ? 'checked="checked"' : '' ?>
+                                                                                  value="<?php echo $k ?>"
+                                                                                  id="<?php echo $k ?>"
+                                                                                  class="input_filter"> <?php echo $k ?>
+                                (<?php echo $v ?>)</label>
+                            <div class="clear"></div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            </form>
         </div>
-        
-    </div>
-    <div class="column fifth right expendables">
-        <form name="form_filter" id="form_filter" action="<?php echo bp_get_group_permalink() ?>" method="get">
-        <div class="expandable">
-            <h6 class="exp_title">Type</h6>
-            <div class="exp_content">
-            <?php
-                foreach ($tsTypes as $k => $v){
-            ?>
-                <label for="<?php echo $k?>" class="blue_txt">
-                    <input type="checkbox" name="type[]" value="<?php echo $k?>" id="<?php echo $k?>" <?php echo in_array($k, $filterType) ? 'checked="checked"' : '' ?> class="input_filter"> <?php echo $k?> (<?php echo $v?>)
-                </label>
-                <div class="clear"></div>
-            <?php
-                }
-            ?>
-            </div>
-        </div>
-        <div class="expandable">
-            <h6 class="exp_title">Issuer</h6>
-            <div class="exp_content">
-            <?php
-                foreach ($tsIssuers as $k => $v){
-            ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="issuer[]" <?php echo in_array($k, $filterIssuer) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
-                <div class="clear"></div>
-            <?php
-                }
-            ?>
-            </div>
-        </div>
-        <div class="expandable">
-            <h6 class="exp_title">Year of Issue</h6>
-            <div class="exp_content">
-            <?php
-                foreach ($tsIssueYears as $k => $v){
-            ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="year[]" <?php echo in_array($k, $filterYear) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
-                <div class="clear"></div>
-            <?php
-                }
-            ?>
-            </div>
-        </div>
-        <div class="expandable">
-            <h6 class="exp_title">Status</h6>
-            <div class="exp_content">
-            <?php
-                foreach ($tsStatuses as $k => $v){
-            ?>
-                <label for="<?php echo $k?>" class="blue_txt"><input type="checkbox" name="status[]" <?php echo in_array($k, $filterStatus) ? 'checked="checked"' : '' ?> value="<?php echo $k?>" id="<?php echo $k?>" class="input_filter"> <?php echo $k?> (<?php echo $v?>)</label>
-                <div class="clear"></div>
-            <?php
-                }
-            ?>
-            </div>
-        </div>
-        </form>
-    </div>
-    <div class="clear"></div>        
-    <div class="loading"></div>
-    <?php }else{ ?>
-    <p class="column">No Data Found!</p>
+        <div class="clear"></div>
+        <div class="loading"></div>
+    <?php } else { ?>
+        <p class="column">No Data Found!</p>
     <?php } ?>
-    <?php if(groups_is_user_admin(get_current_user_id(), bp_get_group_id())){ ?>
-    <div class="column">
-    <a href="/add-new-test-suite?community_id=<?php echo bp_get_group_id()?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
-    <div class="clear"></div>
-    </div>
+    <?php if (groups_is_user_admin(get_current_user_id(), bp_get_group_id())) { ?>
+        <div class="column">
+            <a href="/add-new-test-suite?community_id=<?php echo bp_get_group_id() ?>"
+               class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Suite</span></a>
+
+            <div class="clear"></div>
+        </div>
     <?php } ?>
 </div>
 <script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery('.notify-changes input[type="checkbox"]').click(function(){
+    jQuery(document).ready(function () {
+        jQuery('.notify-changes input[type="checkbox"]').click(function () {
             var chObj = jQuery(this);
             chObj.next().show();
             chObj.hide();
@@ -218,9 +246,9 @@ $roles = array();
                 url: '/?cp-action=<?php echo wp_create_nonce('suite-notify-changes')?>',
                 type: 'post',
                 data: {id: sID, checked: isChecked ? 1 : 0},
-                complete: function(rsp){
+                complete: function (rsp) {
                     chObj.next().hide();
-                    chObj.show();        
+                    chObj.show();
                 }
             });
         })
