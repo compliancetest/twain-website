@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Twain</title>
+        <title>Communities | Twain</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css">
@@ -40,28 +40,29 @@
                     <table class="table colored-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th class="text-left">Name</th>
                                 <th class="col-sm-1">Since</th>
-                                <th class="col-sm-1">Role</th>
+                                <th class="col-sm-1 text-left">Role</th>
                                 <th class="col-sm-1">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><a href="communities-detail.php">SuperStream</a></td>
-                                <td>2013-06-29</td>
-                                <td><div style="height: 24px; width: 10px;">Admin</div></td>
-                                <td><a id="btn-remove" class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td class="text-center">2013-06-29</td>
+                                <td>Admin</td>
+                                <td class="text-center"><a id="btn-remove" class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                             <tr>
                                 <td><a href="communities-detail.php">SuperStream</a></td>
-                                <td>2013-06-29</td>
+                                <td class="text-center">2013-06-29</td>
                                 <td>Admin</td>
-                                <td><a class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td class="text-center"><a class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <a class="btn btn-success btn-with-icon btn-add">Add</a>
             </div>
         </div>
         <!-- Modal -->
@@ -76,8 +77,8 @@
                         This will cancel your membership of the SuperStream community. Are you sure?
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-primary btn-ok">Confirm</a>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                        <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

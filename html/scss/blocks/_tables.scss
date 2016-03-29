@@ -37,6 +37,10 @@
                 &:first-child{
                     border-left: 1px solid #e33f3f;
                 }
+
+                &.text-left{
+                    text-align: left;
+                }
             }
 
         }

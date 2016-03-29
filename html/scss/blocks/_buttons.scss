@@ -1,12 +1,31 @@
 .btn {
   position: relative;
-  border-width: 1px;
-  border-style: solid;
+  border: 1px solid;
   cursor: pointer;
+  font-family: $font-family-sans-serif;
+  font-size: 11px;
+  padding: 5px 12px;
+  height: 24px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+
+  &:hover{
+    color: #fff;
+  }
 }
 
 .btn-default {
-  font-family: $font-family-sans-serif;
+  border-color: #9f9f9f;
+  background: #8a8a8a;
+  color: #fff;
+  @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
+  @include box-shadow(0 1px 0 0 #b8b8b8 inset);
+
+  &:hover, &:active, &:focus {
+    background: #a0a0a0;
+  }
+}
+
+.btn-primary {
   border-color: #3577ad;
   background: #2d83cd;
   @include background-image(linear-gradient(top, #2690ea, #3577ad));
@@ -17,8 +36,19 @@
 
   &:hover, &:active, &:focus {
     background: #288ce2;
-    color: #fff;
     border-color: #3577ad;
+  }
+}
+
+.btn-success {
+  border-color: #369817;
+  background: #39a517;
+  @include background-image(linear-gradient(top, #3eb618, #369817));
+  @include box-shadow(0 1px 0 0 #95d780 inset);
+
+  &:hover, &:active, &:focus {
+    background: #3eb518;
+    border-color: #369817;
   }
 }
 
@@ -32,7 +62,6 @@
     background: #d84f4f;
     border-color: #c33a3a;
   }
-
 }
 
 .btn-logout {
@@ -61,13 +90,59 @@
   }
 }
 
+.btn-lg{
+  font-size: 16px;
+  font-weight: 700;
+  padding: 11px 18px;
+  height: 40px;
+  line-height: 1;
+
+  &.btn-danger{
+    color: #fff;
+    background-color: #aa221e;
+    @include background-image(linear-gradient(top, #cc2e27, #981716));
+    @include box-shadow(0 1px 1px rgba(255, 255, 255, 0.5) inset);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover{
+      @include background-image(linear-gradient(top, #981716, #cc2e27));
+    }
+  }
+}
+
+// Images for buttons with text and icons
+.btn-with-icon{
+  padding-left: 30px;
+  padding-right: 6px;
+
+  &:before{
+    display: block;
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+  }
+}
+
+.btn-confirm{
+  @include btnIconsSprite(btn-confirm);
+}
+
+.btn-cancel{
+  @include btnIconsSprite(btn-cancel);
+}
+
+.btn-add{
+  @include btnIconsSprite(btn-add);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 
-  &:after{
+  &:before{
     content: '';
     display: block;
     position: absolute;
@@ -84,24 +159,72 @@
   &.btn-edit{
     @include btnIconsSprite(btn-icon-edit);
   }
+  &.btn-copy{
+    @include btnIconsSprite(btn-icon-copy);
+  }
+  &.btn-download{
+    @include btnIconsSprite(btn-icon-download);
+  }
+  &.btn-upload{
+    @include btnIconsSprite(btn-icon-upload);
+  }
+  &.btn-details{
+    @include btnIconsSprite(btn-icon-view);
+  }
+  &.btn-view{
+    @include btnIconsSprite(btn-icon-view);
+  }
+  &.btn-print{
+    @include btnIconsSprite(btn-icon-print);
+  }
+  &.btn-history{
+    @include btnIconsSprite(btn-icon-filter);
+  }
+  &.btn-filter{
+    @include btnIconsSprite(btn-icon-filter);
+  }
+  &.btn-trigger{
+    @include btnIconsSprite(btn-icon-trigger);
+  }
+  &.btn-back{
+    @include btnIconsSprite(btn-icon-back);
+  }
+  &.btn-settings{
+    @include btnIconsSprite(btn-icon-settings);
+  }
+  &.btn-logout{
+    @include btnIconsSprite(btn-icon-logout);
+  }
 
 }
 
-.btn-lg{
-  font-size: 16px;
-  font-weight: 700;
-  padding: 11px 18px;
-  line-height: 1;
+.view-products-btn{
+  position: relative;
+  padding: 0 5px 0 20px;
+  color: #959595;
+  text-transform: uppercase;
+  font-size: 10px;
+  border: 1px solid #e1e1e1;
+  height: 20px;
+  text-align: center;
+  line-height: 19px;
+  display: inline-block;
+  margin: 0 auto;
+  @include border-radius(3px);
+  box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.23) inset;
+  background: #f6f7f6;
+  @include background-image(linear-gradient(top, #fefefe, #f3f3f3));
 
-  &.btn-danger{
-    color: #fff;
-    background-color: #aa221e;
-    @include background-image(linear-gradient(top, #cc2e27, #981716));
-    @include box-shadow(0 1px 1px rgba(255, 255, 255, 0.5) inset);
-    border: 1px solid rgba(0, 0, 0, 0.2);
+  &:before{
+    content: '';
+    @include iconsSprite(btn-icon-view-grey);
+    position: absolute;
+    left: 6px;
+    top: 7px;
+  }
 
-    &:hover{
-      @include background-image(linear-gradient(top, #981716, #cc2e27));
-    }
+  &:hover{
+    text-decoration: none;
+    color: #959595;
   }
 }

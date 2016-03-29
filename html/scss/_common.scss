@@ -34,3 +34,9 @@ body.modal-open,
         display: none !important;
     }
 }
+
+@media only screen and (max-width: $mobile-size) {
+    .hidden-desktop {
+        display: none !important;
+    }
+}

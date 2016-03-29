@@ -16,7 +16,7 @@
 
   .community-short-description{
     overflow: hidden;
-    max-width: 640px;
+    max-width: 740px;
 
     h3{
       margin: 0 0 8px 0;
@@ -143,3 +143,20 @@
   }
 }
 
+.community-reports-list{
+  tr{
+
+    td{
+      border-top: 0;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    td:first-child{
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+
+  }
+}

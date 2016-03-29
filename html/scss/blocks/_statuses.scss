@@ -56,3 +56,15 @@
     @include box-shadow(0 1px 0 0 #b8b8b8 inset);
   }
 }
+
+//Statuses in circle for profile and features
+.item-pending{
+  @include iconsSprite(item-pending);
+}
+.item-valid{
+  @include iconsSprite(item-valid);
+}
+.item-invalid{
+  @include iconsSprite(item-invalid);
+}
+
