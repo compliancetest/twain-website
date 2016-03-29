@@ -9,21 +9,27 @@
 
 $profileID = bp_current_user_id();
 
+$user = get_userdata($profileID);
 ?>
 
-<?php do_action('bp_before_member_header'); ?>
+<?php do_action( 'bp_before_member_header' ); ?>
 <div class="page-title-block column">
     <div id="item-header-avatar" class="profile-avatar">
-        <a href="<?php bp_displayed_user_link(); ?>">
-            <?php bp_displayed_user_avatar('type=full'); ?>
-        </a>
+	    <a href="<?php bp_displayed_user_link(); ?>">
+		    <?php $userAvatar = get_avatar($user->data->user_email, 150);?>
+            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150" height="150">
+            <?php else:?>
+                <?php echo get_avatar($user->data->user_email, 150);  ?>
+            <?php endif;?>
+	    </a>        
     </div><!-- #item-header-avatar -->
 
     <div id="item-header-content" class="profile-title">
-        <h3 class="left">
-            <a href="<?php bp_displayed_user_link(); ?>">
-                <?php
-                echo get_user_meta($profileID, 'first_name', true) . ' ' . get_user_meta($profileID, 'last_name', true);
+	    <h3 class="left">
+		    <a href="<?php bp_displayed_user_link(); ?>">
+                <?php                     
+                    echo cp_get_user_display_name($profileID) 
                 ?>
             </a>
         </h3>
