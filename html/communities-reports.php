@@ -66,6 +66,7 @@
                             <li class="forum-tab"><a href="communities-forum.php">Forum</a></li>
                             <li class="downloads-tab"><a href="communities-downloads.php">Downloads</a></li>
                             <li class="reports-tab"><a href="communities-reports.php" class="active">Reports</a></li>
+                            <li class="admin-tab"><a href="communities-admin.php">Admin</a></li>
                         </ul>
                     </div>
 

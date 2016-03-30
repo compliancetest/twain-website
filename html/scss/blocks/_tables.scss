@@ -5,12 +5,23 @@
                 text-align: center;
                 font-size: 13px;
                 font-weight: 600;
-                border-bottom: 1px solid #a0a0a0;
+                border-bottom: 1px solid $table-border-color;
                 vertical-align: middle;
 
                 &.text-left{
                     text-align: left;
                 }
+            }
+        }
+    }
+
+    > tbody,
+    > tfoot {
+        > tr {
+            > td.empty-row {
+                vertical-align: middle;
+                text-align: center;
+                border-bottom: 1px solid $table-border-color;
             }
         }
     }

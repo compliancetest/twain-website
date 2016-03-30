@@ -136,6 +136,14 @@
   @include btnIconsSprite(btn-add);
 }
 
+.btn-delete{
+  @include btnIconsSprite(btn-delete);
+}
+
+.btn-upload{
+  @include btnIconsSprite(btn-upload);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;

@@ -148,6 +148,13 @@
                 @include dashboardIconsSprite(reports-active);
             }
 
+            &.admin-tab a:before{
+                @include dashboardIconsSprite(admin);
+            }
+            &.admin-tab a.active:before{
+                @include dashboardIconsSprite(admin-active);
+            }
+
         }
     }
 

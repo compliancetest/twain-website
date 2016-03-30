@@ -3498,12 +3498,12 @@ th {
   padding: 15px 10px;
   line-height: 1.16667;
   vertical-align: top;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #d8d8d8;
 }
 /* line 41, ../scss/bootstrap/_tables.scss */
 .table > thead > tr > th {
   vertical-align: bottom;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #d8d8d8;
 }
 /* line 50, ../scss/bootstrap/_tables.scss */
 .table > caption + thead > tr:first-child > th,
@@ -3516,7 +3516,7 @@ th {
 }
 /* line 57, ../scss/bootstrap/_tables.scss */
 .table > tbody + tbody {
-  border-top: 2px solid #ddd;
+  border-top: 2px solid #d8d8d8;
 }
 /* line 62, ../scss/bootstrap/_tables.scss */
 .table .table {
@@ -3535,7 +3535,7 @@ th {
 
 /* line 88, ../scss/bootstrap/_tables.scss */
 .table-bordered {
-  border: 1px solid #ddd;
+  border: 1px solid #d8d8d8;
 }
 /* line 94, ../scss/bootstrap/_tables.scss */
 .table-bordered > thead > tr > th,
@@ -3544,7 +3544,7 @@ th {
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > th,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid #ddd;
+  border: 1px solid #d8d8d8;
 }
 /* line 101, ../scss/bootstrap/_tables.scss */
 .table-bordered > thead > tr > th,
@@ -3689,7 +3689,7 @@ table th[class*="col-"] {
     margin-bottom: 10.5px;
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid #ddd;
+    border: 1px solid #d8d8d8;
   }
   /* line 183, ../scss/bootstrap/_tables.scss */
   .table-responsive > .table {
@@ -7307,7 +7307,7 @@ button.list-group-item-danger.active:focus {
 .panel > .panel-body + .table-responsive,
 .panel > .table + .panel-body,
 .panel > .table-responsive + .panel-body {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #d8d8d8;
 }
 /* line 170, ../scss/bootstrap/_panels.scss */
 .panel > .table > tbody:first-child > tr:first-child th,
@@ -8828,7 +8828,7 @@ body.modal-open,
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -217px;
+  background-position: 0 -181px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -8892,7 +8892,7 @@ body.modal-open,
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1458491305') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1456756501') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9005,7 +9005,7 @@ body.modal-open,
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -82px;
+  background-position: -10px -55px;
   height: 12px;
   width: 13px;
   content: '';
@@ -9023,7 +9023,7 @@ body.modal-open,
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -65px;
+  background-position: 0 -106px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9080,7 +9080,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -287px;
+  background-position: 0 -275px;
   height: 24px;
   width: 18px;
 }
@@ -9088,7 +9088,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -263px;
+  background-position: 0 -203px;
   height: 24px;
   width: 18px;
 }
@@ -9096,19 +9096,35 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -239px;
+  background-position: 0 -299px;
   height: 24px;
   width: 18px;
 }
 
-/* line 139, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-delete:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -251px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 29, ../scss/_mixins.scss */
+.btn-upload:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -227px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 147, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 145, ../scss/blocks/_buttons.scss */
+/* line 153, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9122,103 +9138,103 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -43px;
+  background-position: -12px -21px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -10px;
+  background-position: 0 -21px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-copy:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -10px;
+  background-position: 0 -55px;
   height: 11px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -106px;
+  background-position: -12px -79px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -130px;
+  background-position: 0 -67px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-details:before {
   background-image: url('../images/icons.png');
-  background-position: -10px 0;
+  background-position: 0 0;
   height: 9px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-view:before {
   background-image: url('../images/icons.png');
-  background-position: -10px 0;
+  background-position: 0 0;
   height: 9px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -142px;
+  background-position: -11px -106px;
   height: 13px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 0;
+  background-position: -12px 0;
   height: 10px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-filter:before {
   background-image: url('../images/icons.png');
-  background-position: 0 0;
+  background-position: -12px 0;
   height: 10px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -54px;
+  background-position: -13px -32px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -21px;
+  background-position: -10px -10px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -94px;
+  background-position: -12px -67px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-logout:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -70px;
+  background-position: -10px -43px;
   height: 12px;
   width: 14px;
 }
 
-/* line 201, ../scss/blocks/_buttons.scss */
+/* line 209, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9243,19 +9259,19 @@ body.modal-open,
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 218, ../scss/blocks/_buttons.scss */
+/* line 226, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -43px;
+  background-position: 0 -10px;
   height: 7px;
   width: 10px;
   position: absolute;
   left: 6px;
   top: 7px;
 }
-/* line 226, ../scss/blocks/_buttons.scss */
+/* line 234, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
@@ -9331,142 +9347,152 @@ body.modal-open,
 /* line 53, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.organisation-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -208px;
+  background-position: 0 -240px;
 }
 /* line 56, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.organisation-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -192px;
+  background-position: 0 -224px;
 }
 /* line 60, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.communities-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -80px;
+  background-position: 0 -112px;
 }
 /* line 63, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.communities-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -64px;
+  background-position: 0 -96px;
 }
 /* line 67, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.test-suites-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -400px;
+  background-position: 0 -432px;
 }
 /* line 70, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.test-suites-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -384px;
+  background-position: 0 -416px;
 }
 /* line 74, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.test-data-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -368px;
+  background-position: 0 -400px;
 }
 /* line 77, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.test-data-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -352px;
+  background-position: 0 -384px;
 }
 /* line 81, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.products-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -240px;
+  background-position: 0 -272px;
 }
 /* line 84, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.products-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -224px;
+  background-position: 0 -256px;
 }
 /* line 88, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.coverage-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -112px;
+  background-position: 0 -144px;
 }
 /* line 91, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.coverage-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -96px;
+  background-position: 0 -128px;
 }
 /* line 95, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.transactions-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -432px;
+  background-position: 0 -464px;
 }
 /* line 98, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.transactions-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -416px;
+  background-position: 0 -448px;
 }
 /* line 102, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.support-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -336px;
+  background-position: 0 -368px;
 }
 /* line 105, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.support-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -320px;
+  background-position: 0 -352px;
 }
 /* line 109, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.profile-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -272px;
+  background-position: 0 -304px;
 }
 /* line 112, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.profile-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -256px;
+  background-position: 0 -288px;
 }
 /* line 116, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.agreements-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -16px;
+  background-position: 0 -48px;
 }
 /* line 119, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.agreements-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 0;
+  background-position: 0 -32px;
 }
 /* line 123, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.articles-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -48px;
+  background-position: 0 -80px;
 }
 /* line 126, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.articles-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -32px;
+  background-position: 0 -64px;
 }
 /* line 130, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.forum-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -176px;
+  background-position: 0 -208px;
 }
 /* line 133, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.forum-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -160px;
+  background-position: 0 -192px;
 }
 /* line 137, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.downloads-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -144px;
+  background-position: 0 -176px;
 }
 /* line 140, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.downloads-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -128px;
+  background-position: 0 -160px;
 }
 /* line 144, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.reports-tab a:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -304px;
+  background-position: 0 -336px;
 }
 /* line 147, ../scss/blocks/_tabs-menu.scss */
 .tabs-menu ul li.reports-tab a.active:before {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -288px;
+  background-position: 0 -320px;
+}
+/* line 151, ../scss/blocks/_tabs-menu.scss */
+.tabs-menu ul li.admin-tab a:before {
+  background-image: url('../images/dashboard-icons.png');
+  background-position: 0 -16px;
+}
+/* line 154, ../scss/blocks/_tabs-menu.scss */
+.tabs-menu ul li.admin-tab a.active:before {
+  background-image: url('../images/dashboard-icons.png');
+  background-position: 0 0;
 }
 
 /* line 4, ../scss/blocks/_tables.scss */
@@ -9474,55 +9500,62 @@ body.modal-open,
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  border-bottom: 1px solid #a0a0a0;
+  border-bottom: 1px solid #d8d8d8;
   vertical-align: middle;
 }
 /* line 11, ../scss/blocks/_tables.scss */
 .table > thead > tr > th.text-left {
   text-align: left;
 }
+/* line 21, ../scss/blocks/_tables.scss */
+.table > tbody > tr > td.empty-row,
+.table > tfoot > tr > td.empty-row {
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 1px solid #d8d8d8;
+}
 
-/* line 19, ../scss/blocks/_tables.scss */
+/* line 30, ../scss/blocks/_tables.scss */
 .colored-table {
   border-collapse: inherit;
 }
-/* line 25, ../scss/blocks/_tables.scss */
+/* line 36, ../scss/blocks/_tables.scss */
 .colored-table > thead > tr > th {
   color: #ececec;
   font-size: 13px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1453146388') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1458553303') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
   line-height: 14px;
   padding: 8px 10px;
 }
-/* line 37, ../scss/blocks/_tables.scss */
+/* line 48, ../scss/blocks/_tables.scss */
 .colored-table > thead > tr > th:first-child {
   border-left: 1px solid #e33f3f;
 }
-/* line 41, ../scss/blocks/_tables.scss */
+/* line 52, ../scss/blocks/_tables.scss */
 .colored-table > thead > tr > th.text-left {
   text-align: left;
 }
-/* line 53, ../scss/blocks/_tables.scss */
+/* line 64, ../scss/blocks/_tables.scss */
 .colored-table > caption + thead > tr:first-child > th,
 .colored-table > colgroup + thead > tr:first-child > th,
 .colored-table > thead:first-child > tr:first-child > th {
   border-top: solid 1px #b56a79;
 }
-/* line 59, ../scss/blocks/_tables.scss */
+/* line 70, ../scss/blocks/_tables.scss */
 .colored-table > tbody {
   border-right: 1px solid #ccc;
 }
-/* line 62, ../scss/blocks/_tables.scss */
+/* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1453146388') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1458553303') repeat 0 0;
 }
-/* line 65, ../scss/blocks/_tables.scss */
+/* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -9533,21 +9566,21 @@ body.modal-open,
   font-weight: 600;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
 }
-/* line 75, ../scss/blocks/_tables.scss */
+/* line 86, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td:first-child {
   border-left: 1px solid #ccc;
 }
-/* line 79, ../scss/blocks/_tables.scss */
+/* line 90, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td a {
   text-decoration: underline;
 }
-/* line 82, ../scss/blocks/_tables.scss */
+/* line 93, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td a:hover {
   text-decoration: none;
 }
-/* line 90, ../scss/blocks/_tables.scss */
+/* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1453146388') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1458553303') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9663,7 +9696,7 @@ body.modal-open,
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -155px;
+  background-position: 0 -119px;
   height: 20px;
   width: 20px;
 }
@@ -9672,7 +9705,7 @@ body.modal-open,
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -175px;
+  background-position: 0 -160px;
   height: 21px;
   width: 21px;
 }
@@ -9681,7 +9714,7 @@ body.modal-open,
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -196px;
+  background-position: 0 -139px;
   height: 21px;
   width: 21px;
 }
@@ -9740,60 +9773,61 @@ body.modal-open,
 .community-tabs .community-tab-content {
   padding: 20px 10px;
   border: 1px solid #e1e1e1;
+  background: #fff;
   -webkit-box-shadow: 0 0 3px #ddd;
   box-shadow: 0 0 3px #ddd;
 }
-/* line 53, ../scss/pages/_community-detail.scss */
+/* line 54, ../scss/pages/_community-detail.scss */
 .community-tabs .result-content-panel {
   width: 80%;
   float: left;
 }
 @media only screen and (max-width: 640px) {
-  /* line 53, ../scss/pages/_community-detail.scss */
+  /* line 54, ../scss/pages/_community-detail.scss */
   .community-tabs .result-content-panel {
     width: 100%;
   }
 }
-/* line 61, ../scss/pages/_community-detail.scss */
+/* line 62, ../scss/pages/_community-detail.scss */
 .community-tabs .result-content-panel .result-content-panel-inner {
   border-right: 1px solid #d8d8d8;
   padding-right: 20px;
   margin-right: 20px;
 }
-/* line 67, ../scss/pages/_community-detail.scss */
+/* line 68, ../scss/pages/_community-detail.scss */
 .community-tabs .result-content-panel .test-suite-name {
   color: #2c80e8;
   font-size: 15px;
   font-weight: 600;
   text-decoration: underline;
 }
-/* line 73, ../scss/pages/_community-detail.scss */
+/* line 74, ../scss/pages/_community-detail.scss */
 .community-tabs .result-content-panel .test-suite-name:hover {
   text-decoration: none;
 }
-/* line 78, ../scss/pages/_community-detail.scss */
+/* line 79, ../scss/pages/_community-detail.scss */
 .community-tabs .result-content-panel .test-suite-description {
   font-size: 12px;
   line-height: 16px;
   margin: 7px 0 0 0;
 }
-/* line 86, ../scss/pages/_community-detail.scss */
+/* line 87, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel {
   float: right;
   width: 20%;
 }
 @media only screen and (max-width: 640px) {
-  /* line 86, ../scss/pages/_community-detail.scss */
+  /* line 87, ../scss/pages/_community-detail.scss */
   .community-tabs .filter-panel {
     width: 100%;
   }
 }
-/* line 94, ../scss/pages/_community-detail.scss */
+/* line 95, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .collapsible-panel {
   padding: 10px 0 0 0;
   margin: 0;
 }
-/* line 99, ../scss/pages/_community-detail.scss */
+/* line 100, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-title {
   border-bottom: 1px solid #a0a0a0;
   color: #666;
@@ -9803,7 +9837,7 @@ body.modal-open,
   padding: 0 0 5px 12px;
   position: relative;
 }
-/* line 108, ../scss/pages/_community-detail.scss */
+/* line 109, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-title:before {
   content: '';
   display: block;
@@ -9818,7 +9852,7 @@ body.modal-open,
   top: 3px;
   left: 0;
 }
-/* line 117, ../scss/pages/_community-detail.scss */
+/* line 118, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-title.collapsed:before {
   width: 0;
   height: 0;
@@ -9830,40 +9864,121 @@ body.modal-open,
   left: 1px;
   top: 3px;
 }
-/* line 125, ../scss/pages/_community-detail.scss */
+/* line 126, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-body ul {
   padding: 0 0 4px 0;
 }
-/* line 129, ../scss/pages/_community-detail.scss */
+/* line 130, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-body label {
   font-weight: normal;
   color: #2c80e8;
   margin: 3px 0 0 0;
 }
-/* line 134, ../scss/pages/_community-detail.scss */
+/* line 135, ../scss/pages/_community-detail.scss */
 .community-tabs .filter-panel .filter-body label input {
   margin: 0;
   top: 1px;
   position: relative;
 }
 
-/* line 149, ../scss/pages/_community-detail.scss */
+/* line 150, ../scss/pages/_community-detail.scss */
 .community-reports-list tr td {
   border-top: 0;
   border-bottom: 1px solid #ddd;
   vertical-align: middle;
 }
-/* line 155, ../scss/pages/_community-detail.scss */
+/* line 156, ../scss/pages/_community-detail.scss */
 .community-reports-list tr td:first-child {
   font-weight: 600;
   font-size: 13px;
+}
+
+/* line 1, ../scss/pages/_community-downalods.scss */
+.downloads-list-table {
+  margin: 0;
+}
+
+/* line 5, ../scss/pages/_community-downalods.scss */
+.add-new-download-default {
+  border-bottom: 1px solid #d8d8d8;
+  background: #f8f8f8;
+  text-align: center;
+  padding: 10px 0;
+}
+/* line 11, ../scss/pages/_community-downalods.scss */
+.add-new-download-default .add-new-download-link {
+  height: 30px;
+  display: inline-block;
+  position: relative;
+  color: #2c80e8;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 30px;
+  padding: 0 0 0 40px;
+}
+/* line 21, ../scss/pages/_community-downalods.scss */
+.add-new-download-default .add-new-download-link:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -323px;
+  height: 29px;
+  width: 29px;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* line 31, ../scss/pages/_community-downalods.scss */
+.form-actions {
+  background: #e8e8e8;
+  padding: 6px 12px;
+  *zoom: 1;
+  border-bottom: 1px solid #d8d8d8;
+  border-top: 1px solid #d8d8d8;
+}
+/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+.form-actions:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+/* line 38, ../scss/pages/_community-downalods.scss */
+.form-actions .add-new-download-link {
+  float: left;
+  height: 16px;
+  position: relative;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  padding: 0 0 0 22px;
+  margin: 4px 0 0 0;
+}
+/* line 48, ../scss/pages/_community-downalods.scss */
+.form-actions .add-new-download-link:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -91px;
+  height: 15px;
+  width: 15px;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+/* line 58, ../scss/pages/_community-downalods.scss */
+.form-actions .btn {
+  margin-left: 7px;
 }
 
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -10371,104 +10486,104 @@ body.modal-open,
 .account-menu .dashboard-dropdown-menu > li .menu-organisation:after {
   top: 8px;
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -208px;
+  background-position: 0 -240px;
 }
 /* line 465, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-organisation:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -192px;
+  background-position: 0 -224px;
 }
 /* line 469, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-communities:after {
   top: 9px;
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -80px;
+  background-position: 0 -112px;
 }
 /* line 473, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-communities:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -64px;
+  background-position: 0 -96px;
 }
 /* line 477, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-test-suites:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -400px;
+  background-position: 0 -432px;
 }
 /* line 480, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-test-suites:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -384px;
+  background-position: 0 -416px;
 }
 /* line 484, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-test-data:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -368px;
+  background-position: 0 -400px;
 }
 /* line 487, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-test-data:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -352px;
+  background-position: 0 -384px;
 }
 /* line 491, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-products:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -240px;
+  background-position: 0 -272px;
 }
 /* line 494, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-products:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -224px;
+  background-position: 0 -256px;
 }
 /* line 498, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-coverage:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -112px;
+  background-position: 0 -144px;
 }
 /* line 501, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-coverage:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -96px;
+  background-position: 0 -128px;
 }
 /* line 505, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-transactions:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -432px;
+  background-position: 0 -464px;
 }
 /* line 508, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-transactions:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -416px;
+  background-position: 0 -448px;
 }
 /* line 512, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-support:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -336px;
+  background-position: 0 -368px;
 }
 /* line 515, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-support:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -320px;
+  background-position: 0 -352px;
 }
 /* line 519, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-profile:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -272px;
+  background-position: 0 -304px;
 }
 /* line 522, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-profile:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -256px;
+  background-position: 0 -288px;
 }
 /* line 526, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li .menu-agreements:after {
   top: 9px;
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 -16px;
+  background-position: 0 -48px;
 }
 /* line 530, ../scss/_header.scss */
 .account-menu .dashboard-dropdown-menu > li:hover .menu-agreements:after {
   background-image: url('../images/dashboard-icons.png');
-  background-position: 0 0;
+  background-position: 0 -32px;
 }
 
 @media only screen and (max-width: 640px) {
@@ -10484,7 +10599,7 @@ body.modal-open,
 }
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1458491305') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1456756501') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

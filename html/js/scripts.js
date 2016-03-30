@@ -43,5 +43,44 @@ var Page = {
             }
 
         }
+    },
+
+    communityDownloads: {
+
+        init: function(){
+            this.showUploadForms();
+            this.addFileSection();
+            this.removeFileSection();
+        },
+
+        showUploadForms: function(){
+            $('#add-new-download').click(function(e){
+                e.preventDefault();
+                var showElementId = $(this).attr('href');
+                $(this).parent().hide();
+                $(showElementId).show();
+            });
+        },
+
+        addFileSection: function(){
+                var self = this;
+
+                $('#add-more-file').click(function(e){
+                    e.preventDefault();
+                    var sectionStructure = $('.file-description-section').first().clone();
+                    sectionStructure.find("input,textarea").val("");
+                    $('.form-actions').before(sectionStructure);
+                    self.removeFileSection();
+                });
+        },
+        removeFileSection: function(){
+            $('.file-description-section .btn-delete').off('click').on('click', function(e){
+                e.preventDefault();
+                $(this).parents('.file-description-section').remove();
+            });
+        }
+
     }
+
+
 };
