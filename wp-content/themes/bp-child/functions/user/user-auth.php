@@ -319,6 +319,10 @@ function cp_reset_password()
             return;
         }
 
+        if (!\User\User::isPasswordValid($_POST['pass1'])) {
+            addMessage('Use upper and lower case letters, numbers and symbols like ! " ? $ % ^ & ).', 'error');
+            return;
+        }
         do_action('password_reset', $user, $_POST['pass1']);
         wp_set_password($_POST['pass1'], $user->ID);
 
@@ -404,23 +408,6 @@ if (!is_user_logged_in()) {
         ob_start();
         ?>
         <div id="registration-popup" class="popup-box" style="display: none;">
-            <?php /*
-            <div id="dinamic_pop" class="dinamic_pop radius6">
-                <p class="headline bottom30">Add New User</p>
-                <div class="pop_add_user">
-                    <div class="wrap_wline">
-                        <label for="user_org_email">User E-mail</label> <input type="email" id="user_org_email" name="user_org_email"/></p> 
-                    </div>
-                    <div>
-                        <label for="user_org_role">Role</label>
-                        <select>
-                            <option value="">Admin</option>
-                            <option value="">Tester</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
- */ ?>
 
             <div id="registration">
                 <div class="popup-box-header radius6 noradiusbottom">User Registration</div>
