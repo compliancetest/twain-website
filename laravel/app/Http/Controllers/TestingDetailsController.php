@@ -31,7 +31,10 @@ class TestingDetailsController extends Controller
         $cases = $suiteObj->loadTestCases(array(), array(), 'Active');
 
         $currentTestingDetails = TestingDetail::where(['user_id' => $userId, 'is_running' => 1])->first();
-        return view('pages.testingdetails.show', compact('cases', 'products', 'suites', 'currentTestingDetails'));
+
+        $isReadOnly = (boolean) $currentTestingDetails;
+
+        return view('pages.testingdetails.show', compact('cases', 'products', 'suites', 'currentTestingDetails', 'isReadOnly'));
     }
 
     /**
