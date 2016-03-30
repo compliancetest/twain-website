@@ -56,7 +56,7 @@ function cp_change_avatar()
             );
 
             if ( ! bp_core_avatar_handle_crop( $args ) ) {
-                addMessage( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
+//                addMessage( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
             } else {
                 addMessage( __( 'Your new avatar was uploaded successfully.', 'buddypress' ) );
 //                do_action( 'xprofile_avatar_uploaded' );
