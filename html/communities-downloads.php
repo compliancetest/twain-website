@@ -30,8 +30,8 @@
                             <li class="test-data-tab"><a href="communities-test-data.php">Test Data</a></li>
                             <li class="articles-tab"><a href="communities-articles.php">Articles</a></li>
                             <li class="forum-tab"><a href="communities-forum.php">Forum</a></li>
-                            <li class="downloads-tab"><a href="communities-downloads.php">Downloads</a></li>
-                            <li class="reports-tab"><a href="communities-reports.php" class="active">Reports</a></li>
+                            <li class="downloads-tab"><a href="communities-downloads.php" class="active">Downloads</a></li>
+                            <li class="reports-tab"><a href="communities-reports.php">Reports</a></li>
                             <li class="admin-tab"><a href="communities-admin.php">Admin</a></li>
                         </ul>
                     </div>
@@ -51,7 +51,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr style="display: none;">
+                                        <tr>
                                             <td>
                                                 <a href="#">Contributions_1.0_SoapUI_Reference_Client_V2.5.xml </a>
                                                 <p>
@@ -68,7 +68,7 @@
                                                 <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" title="Delete"></a>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr style="display: none;">
                                             <td colspan="5" class="empty-row ">No file uploaded yet</td>
                                         </tr>
                                     </tbody>
@@ -79,26 +79,74 @@
                             <div class="add-new-download-default">
                                 <a href="#add-new-download-section" id="add-new-download" class="add-new-download-link">Upload New File(s)</a>
                             </div>
-                            <div id="add-new-download-section" style="display: none;">
+                            <div id="add-new-download-section" style="display: block;">
+                                <div id="file-description-template" style="display: none;">
+                                    <div class="file-description-section">
+                                        <div class="upload-file-field">
+                                            <input type="file" name="file[]" class="input-file" />
+                                        </div>
+
+                                        <div class="file-description-fields">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">File Version:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="file_version[]" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">Description:</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea cols="20" rows="5" name="file_description[]" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">File License Agreement:</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea cols="20" rows="5" name="file_license[]" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="btn btn-danger btn-with-icon btn-delete">Remove</a>
+                                    </div>
+                                </div>
                                 <form name="newfileform" id="newfileform" action="" enctype="multipart/form-data" method="post">
                                     <h3>Upload New File(s)</h3>
                                     <div class="file-description-section">
-                                        <label>File Version:</label>
-                                        <input type="text" class="input" name="file_version[]" value="" />
+                                        <div class="upload-file-field">
+                                            <input type="file" name="file[]" class="input-file" />
+                                        </div>
 
-                                        <input type="file" name="file[]" class="input-file" />
+                                        <div class="file-description-fields">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">File Version:</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="file_version[]" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">Description:</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea cols="20" rows="5" name="file_description[]" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">File License Agreement:</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea cols="20" rows="5" name="file_license[]" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <a href="#" class="btn btn-danger btn-with-icon btn-delete">Remove</a>
-
-                                        <label>Description:</label>
-                                        <textarea cols="20" rows="5" name="file_description[]" class="text"></textarea>
-                                        <label>File License Agreement:</label>
-                                        <textarea cols="20" rows="5" name="file_license[]" class="text"></textarea>
                                     </div>
                                     <div class="form-actions">
                                         <a href="#" id="add-more-file" class="add-new-download-link">Add New File</a>
                                         <div class="pull-right">
                                             <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload &amp; Save</a>
-                                            <a href="#" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
+                                            <a href="#" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-files">Cancel</a>
                                         </div>
                                     </div>
                                 </form>

@@ -49,8 +49,10 @@ var Page = {
 
         init: function(){
             this.showUploadForms();
+            this.hideUploadForms();
             this.addFileSection();
             this.removeFileSection();
+            customizeFileTag();
         },
 
         showUploadForms: function(){
@@ -62,15 +64,50 @@ var Page = {
             });
         },
 
+        hideUploadForms: function(){
+            $('#cancel-add-new-files').click(function(e){
+                e.preventDefault();
+                $('#add-new-download-section').hide();
+                $('.add-new-download-default').show();
+            });
+        },
+
         addFileSection: function(){
-                var self = this;
+            var self = this;
+            var fileDescriptionTemplate = '<div class="file-description-section">' +
+                '<div class="upload-file-field">' +
+                    '<input type="file" name="file[]" class="input-file" />' +
+                '</div>' +
+                '<div class="file-description-fields">' +
+                '<div class="form-horizontal">' +
+                '<div class="form-group">' +
+                '<label class="col-sm-3 control-label">File Version:</label>' +
+                '<div class="col-sm-9">' +
+                '<input type="text" class="form-control" name="file_version[]" value="" />' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label class="col-sm-3 control-label">Description:</label>' +
+                '<div class="col-sm-9">' +
+                '<textarea cols="20" rows="5" name="file_description[]" class="form-control"></textarea>' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label class="col-sm-3 control-label">File License Agreement:</label>' +
+                '<div class="col-sm-9">' +
+                '<textarea cols="20" rows="5" name="file_license[]" class="form-control"></textarea>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<a href="#" class="btn btn-danger btn-with-icon btn-delete">Remove</a>' +
+                '</div>';
 
                 $('#add-more-file').click(function(e){
                     e.preventDefault();
-                    var sectionStructure = $('.file-description-section').first().clone();
-                    sectionStructure.find("input,textarea").val("");
-                    $('.form-actions').before(sectionStructure);
+                    $('.form-actions').before(fileDescriptionTemplate);
                     self.removeFileSection();
+                    customizeFileTag();
                 });
         },
         removeFileSection: function(){
@@ -84,3 +121,38 @@ var Page = {
 
 
 };
+
+
+function customizeFileTag()
+{
+    jQuery('input[type="file"]').each(function(){
+        if(!jQuery(this).data('file-customized'))
+        {
+            jQuery(this).wrap('<span class="custom-file-tag"><span class="btn btn-primary btn-with-icon btn-browse"></span></span>');
+            jQuery(this).parent().append('Browse');
+            if(jQuery(this).data('file-type')) {
+                jQuery(this).parent().before('<span class="file-value file-type-' + jQuery(this).data('file-type') + '">Choose File<span class="file-extensions">' + jQuery(this).attr('file-extensions') + '</span></span>');
+            } else {
+                jQuery(this).parent().before('<span class="file-value file-type-default">Choose File</span>');
+            }
+
+            jQuery(this).change(function(){
+                var fileName = jQuery(this).val();
+                fileName = fileName.replace(/\\/g, "/");
+                fName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
+                if(!fName)
+                {
+                    jQuery(this).parent().parent().find('.file-value').html('Choose File');
+                }else{
+                    fExt = fileName.substr(fileName.lastIndexOf("."));
+                    if(fName.length > 16)
+                    {
+                        fName = fName.substr(0, 7) + "..." + fName.substring(fName.length - 6);
+                    }
+                    jQuery(this).parent().parent().find('.file-value').html(fName + fExt);
+                }
+            })
+            jQuery(this).data('file-customized', 1);
+        }
+    })
+}

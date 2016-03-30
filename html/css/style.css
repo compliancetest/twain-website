@@ -8892,7 +8892,7 @@ body.modal-open,
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1456756501') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1458491305') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -8912,7 +8912,7 @@ body.modal-open,
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
 /* line 11, ../scss/blocks/_buttons.scss */
-.btn:hover {
+.btn:hover, .btn:focus {
   color: #fff;
 }
 
@@ -9080,7 +9080,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -275px;
+  background-position: 0 -227px;
   height: 24px;
   width: 18px;
 }
@@ -9096,7 +9096,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -299px;
+  background-position: 0 -251px;
   height: 24px;
   width: 18px;
 }
@@ -9104,7 +9104,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -251px;
+  background-position: 0 -275px;
   height: 24px;
   width: 18px;
 }
@@ -9112,19 +9112,27 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -227px;
+  background-position: 0 -299px;
   height: 24px;
   width: 18px;
 }
 
-/* line 147, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-browse:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -323px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 151, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 153, ../scss/blocks/_buttons.scss */
+/* line 157, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9138,14 +9146,14 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -21px;
+  background-position: 0 -21px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -21px;
+  background-position: -12px -21px;
   height: 11px;
   width: 12px;
 }
@@ -9159,14 +9167,14 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -79px;
+  background-position: 0 -79px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -67px;
+  background-position: -12px -67px;
   height: 12px;
   width: 12px;
 }
@@ -9222,7 +9230,7 @@ body.modal-open,
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -67px;
+  background-position: -12px -79px;
   height: 12px;
   width: 12px;
 }
@@ -9234,7 +9242,7 @@ body.modal-open,
   width: 14px;
 }
 
-/* line 209, ../scss/blocks/_buttons.scss */
+/* line 213, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9259,7 +9267,7 @@ body.modal-open,
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 226, ../scss/blocks/_buttons.scss */
+/* line 230, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9271,10 +9279,49 @@ body.modal-open,
   left: 6px;
   top: 7px;
 }
-/* line 234, ../scss/blocks/_buttons.scss */
+/* line 238, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
+}
+
+/* line 246, ../scss/blocks/_buttons.scss */
+.custom-file-tag .btn-file {
+  overflow: hidden;
+  position: relative;
+}
+/* line 251, ../scss/blocks/_buttons.scss */
+.custom-file-tag input {
+  height: 100%;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+/* line 260, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-value {
+  position: relative;
+  padding: 7px 10px 7px 0;
+  display: inline-block;
+}
+/* line 266, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-type-default {
+  padding-left: 30px;
+}
+/* line 270, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-type-default:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -347px;
+  height: 28px;
+  width: 21px;
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
 }
 
 /* line 1, ../scss/blocks/_tabs-menu.scss */
@@ -9526,7 +9573,7 @@ body.modal-open,
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1458553303') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1453146388') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9553,7 +9600,7 @@ body.modal-open,
 }
 /* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1458553303') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1453146388') repeat 0 0;
 }
 /* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -9580,7 +9627,7 @@ body.modal-open,
 }
 /* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1458553303') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1453146388') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9920,7 +9967,7 @@ body.modal-open,
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -323px;
+  background-position: 0 -431px;
   height: 29px;
   width: 29px;
   content: '';
@@ -9930,6 +9977,55 @@ body.modal-open,
 }
 
 /* line 31, ../scss/pages/_community-downalods.scss */
+.add-new-download-section {
+  background: #f8f8f8;
+}
+
+/* line 35, ../scss/pages/_community-downalods.scss */
+.file-description-section {
+  padding: 10px 20px;
+  position: relative;
+}
+/* line 39, ../scss/pages/_community-downalods.scss */
+.file-description-section .upload-file-field {
+  float: left;
+  width: 245px;
+}
+/* line 44, ../scss/pages/_community-downalods.scss */
+.file-description-section .file-description-fields {
+  clear: both;
+  padding-top: 15px;
+}
+/* line 49, ../scss/pages/_community-downalods.scss */
+.file-description-section .custom-file-tag .file-value {
+  max-width: 160px;
+  margin-right: 5px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+}
+@media only screen and (min-width: 640px) {
+  /* line 58, ../scss/pages/_community-downalods.scss */
+  .file-description-section .btn-delete {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+  }
+  /* line 64, ../scss/pages/_community-downalods.scss */
+  .file-description-section .file-description-fields {
+    clear: none;
+    padding: 0;
+    margin: 0 0 0 250px;
+    overflow: hidden;
+  }
+}
+/* line 72, ../scss/pages/_community-downalods.scss */
+.file-description-section + .file-description-section {
+  border-top: 1px solid #e8e8e8;
+  padding-top: 20px;
+}
+
+/* line 79, ../scss/pages/_community-downalods.scss */
 .form-actions {
   background: #e8e8e8;
   padding: 6px 12px;
@@ -9937,7 +10033,7 @@ body.modal-open,
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after {
   content: "\0020";
   display: block;
@@ -9946,7 +10042,7 @@ body.modal-open,
   overflow: hidden;
   visibility: hidden;
 }
-/* line 38, ../scss/pages/_community-downalods.scss */
+/* line 86, ../scss/pages/_community-downalods.scss */
 .form-actions .add-new-download-link {
   float: left;
   height: 16px;
@@ -9957,7 +10053,7 @@ body.modal-open,
   padding: 0 0 0 22px;
   margin: 4px 0 0 0;
 }
-/* line 48, ../scss/pages/_community-downalods.scss */
+/* line 96, ../scss/pages/_community-downalods.scss */
 .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -9969,7 +10065,7 @@ body.modal-open,
   left: 0;
   top: 0;
 }
-/* line 58, ../scss/pages/_community-downalods.scss */
+/* line 106, ../scss/pages/_community-downalods.scss */
 .form-actions .btn {
   margin-left: 7px;
 }
@@ -9978,7 +10074,7 @@ body.modal-open,
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -10599,7 +10695,7 @@ body.modal-open,
 }
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1456756501') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1458491305') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

@@ -28,6 +28,54 @@
   }
 }
 
+.add-new-download-section{
+  background: #f8f8f8;
+}
+
+.file-description-section{
+  padding: 10px 20px;
+  position: relative;
+
+  .upload-file-field{
+    float: left;
+    width: 245px;
+  }
+
+  .file-description-fields{
+    clear: both;
+    padding-top: 15px;
+  }
+
+  .custom-file-tag .file-value{
+    max-width: 160px;
+    margin-right: 5px;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+
+  @media only screen and (min-width: $mobile-size) {
+    .btn-delete{
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+    }
+
+    .file-description-fields{
+      clear: none;
+      padding: 0;
+      margin: 0 0 0 250px;
+      overflow: hidden;
+    }
+  }
+
+  & + .file-description-section{
+    border-top: 1px solid #e8e8e8;
+    padding-top: 20px;
+  }
+
+}
+
 .form-actions{
   background: #e8e8e8;
   padding: 6px 12px;
