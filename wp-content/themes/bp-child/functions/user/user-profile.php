@@ -133,12 +133,7 @@ function cp_user_detail_edit()
         }
     }
 
-    if ($currentEmail != $email) {
-        echo 'email_changed';
-    } else {
-        echo 'success';
-    }
-
+    echo 'success';
     exit();
 }
 
