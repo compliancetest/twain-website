@@ -290,8 +290,6 @@ function cp_request_reset_password()
         '[email]' => $user->user_email,
         '[link]' => network_site_url("reset-password/?cp-action=" . wp_create_nonce('pre_reset_password') . "&key=$key&login=" . rawurlencode($user_login), 'login')
     );
-    _trace($data);
-    die;
     cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'forgot_password', $data);
 
     addMessage('A message will be sent to your email address');
