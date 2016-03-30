@@ -31,6 +31,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
 $results = $cloud_search->search($_GET);
+$allFacets = $cloud_search->getFilters($_GET);
 
 if ($is_download) {
     $results = $cloud_search->search($_GET, true);
@@ -60,9 +61,9 @@ get_header();
                             <label for="content-type-filter">Type</label>
                             <select name="post_type" id="content-type-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results['facets']['post_type']['buckets'])): ?>
-                                    <?php sort($results['facets']['post_type']['buckets']); ?>
-                                    <?php foreach ($results['facets']['post_type']['buckets'] AS $v): ?>
+                                <?php if (is_array($allFacets['facets']['post_type']['buckets'])): ?>
+                                    <?php sort($allFacets['facets']['post_type']['buckets']); ?>
+                                    <?php foreach ($allFacets['facets']['post_type']['buckets'] AS $v): ?>
                                         <option
                                             value="<?php echo $v['value']; ?>" <?php if (isset($_GET['post_type']) && $_GET['post_type'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
@@ -73,8 +74,8 @@ get_header();
                             <label for="community-filter">Community</label>
                             <select name="community" id="community-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($results['facets']['community']['buckets'])): ?>
-                                    <?php foreach ($results['facets']['community']['buckets'] AS $v): ?>
+                                <?php if (is_array($allFacets['facets']['community']['buckets'])): ?>
+                                    <?php foreach ($allFacets['facets']['community']['buckets'] AS $v): ?>
                                         <?php if ($v['value'] == 'All') continue; ?>
                                         <option
                                             value="<?php echo $v['value']; ?>" <?php if (isset($_GET['community']) && $_GET['community'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
