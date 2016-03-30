@@ -365,9 +365,11 @@
                 success: function(rsp)
                 {
                     hideGridBoxLoadingWrapper(form);
-                    if(rsp == 'success')
-                    {
+                    if(rsp == 'success') {
                         showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
+                        document.location.reload();
+                    }else if(rsp == 'email_changed'){
+                         showGridBoxResultMessage(form, 'A confirmation email has been sent to your email account. Please verify your email address using the link it contains.', 'success');
                         document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp, 'error');
