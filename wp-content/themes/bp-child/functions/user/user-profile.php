@@ -137,7 +137,7 @@ function cp_user_detail_edit()
     }
 
     if ($currentEmail != $email) {
-        echo 'A confirmation email has been sent to your email account. Please verify your email address using the link it contains.';
+        echo 'email_changed';
     } else {
         echo 'success';
     }
