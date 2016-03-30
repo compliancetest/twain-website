@@ -250,7 +250,8 @@ class FulltextSearch extends BaseAWS
                 //this pages shouldn't appear in search results
                 if (in_array($post->post_title, array('add-new-service', 'Edit Test Case', 'Edit Product and Service', 'Edit Test Suite',
                     'Message Envelope', 'View Validation Error', 'My Messages', 'Inbox', 'Sentbox', 'Compose', 'View', 'Members', 'Get Profile', 'View Message Template',
-                    'My Organisation', 'Test Suites', 'get-profile-meta', 'Users', 'Edit Service', 'Add New Product and Service', 'Reset Password', 'Sitemap'))) {
+                    'My Organisation', 'Test Suites', 'get-profile-meta', 'Users', 'Edit Service', 'Add New Product and Service', 'Reset Password', 'Sitemap',
+                    'Add New Test Case', 'Add New Test Suite', 'Add new service', 'search-registry'))) {
                     continue;
                 }
                 $post_data = $this->_processPost($post);
