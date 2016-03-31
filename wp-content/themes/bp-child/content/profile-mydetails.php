@@ -41,8 +41,8 @@ if (!defined('ABSPATH'))
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Phone Number</label></div>
-                            <div data-name="phone_number" data-value="<?php echo $phone; ?>"
-                                 class="grid-cell in_input"><?php echo !$phone ? '-' : $phone; ?></div>
+                            <div data-name="phone_number" data-value="<?php echo htmlentities($phone); ?>"
+                                 class="grid-cell in_input"><?php echo !$phone ? '-' : htmlentities($phone); ?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
