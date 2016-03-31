@@ -52,6 +52,12 @@ function cp_user_detail_edit()
         exit;
     }
 
+    if (!preg_match('#[^0-9]#', str_replace(array('+', ' ', '(', ')', '-'), '', $_POST['phone_number'])) != 1)
+    {
+        echo "Invalid phone number";
+        exit;
+    }
+
     //Update Phonenumber
     update_user_meta($user_id, 'phone_number', htmlentities($_POST['phone_number']));
     update_user_meta($user_id, 'description', htmlentities($_POST['biography']));
