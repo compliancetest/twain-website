@@ -31,7 +31,7 @@ get_header();
             <div class="space10"></div>
             <form method="post" action="">
                 <p>
-                    <i><?php _e('Hint: To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ).'); ?></i>
+                    <i><?php _e('Hint: To make it stronger, use upper and lower case letters, numbers and symbols like ! " ? $ % ^ &amp; ). Minimal password length is 8 symbols.'); ?></i>
                 </p>
 
                 <div class="field-row">
