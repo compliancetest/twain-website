@@ -74,9 +74,31 @@ if (!defined('ABSPATH'))
                                  data-value="<?php echo $timezone ?>"><?php echo $timezone ?></div>
                             <?php $timezone_list = DateTimeZone::listIdentifiers(DateTimeZone::ALL); ?>
                             <select name="timezone" id="timezone" class="select" style="display: none;">
+                                <?php
+                                    $dateTimeZoneGmt = new DateTimeZone("GMT");
+                                    $dateTimeGmt = new DateTime("now", $dateTimeZoneGmt);
+                                ?>
                                 <?php foreach ($timezone_list as $t): ?>
+                                    <?php
+                                    if($t == 'UTC'){
+                                        continue;
+                                    }
+                                    $dateTimeZone = new DateTimeZone($t);
+                                    $dateTime = new DateTime("now", $dateTimeZone);
+                                    $timeOffset = $dateTimeZone->getOffset($dateTimeGmt) / 3600;
+                                    $timestr = '';
+                                    if($timeOffset <= 0){
+                                        if($timeOffset == 0){
+                                            $timestr = ' (GMT)';
+                                        } else {
+                                            $timestr = ' (GMT-' . sprintf("%02d", abs($timeOffset)) . ':00)';
+                                        }
+                                    } else {
+                                        $timestr = ' (GMT+'.sprintf("%02d", $timeOffset).':00)';
+                                    }
+                                    ?>
                                     <option
-                                        value="<?php echo $t; ?>" <?php echo cp_selected($t, $timezone) ?>><?php echo $t; ?></option>
+                                        value="<?php echo $t; ?>" <?php echo cp_selected($t, $timezone) ?>><?php echo $t . ''.$timestr.''; ?></option>
                                 <?php endforeach; ?>
                             </select>
 
