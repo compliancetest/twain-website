@@ -320,7 +320,7 @@ function cp_reset_password()
         }
 
         if (!\User\User::isPasswordValid($_POST['pass1'])) {
-            addMessage('Use upper and lower case letters, numbers and symbols like ! " ? $ % ^ & ).', 'error');
+            addMessage('Use upper and lower case letters, numbers and symbols like ! " ? $ % ^ & ). Minimal password length is 8 symbols.', 'error');
             return;
         }
         do_action('password_reset', $user, $_POST['pass1']);
