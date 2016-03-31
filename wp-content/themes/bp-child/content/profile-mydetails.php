@@ -71,7 +71,7 @@ if (!defined('ABSPATH'))
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>About me</label></div>
-                            <div data-name="biography" data-value="<?php echo $biography ?>" class="grid-cell in_input"
+                            <div data-name="biography" data-value="<?php echo $biography ?>" class="grid-cell in_input" style="word-wrap: break-word;overflow-wrap: break-word;width: 70%;"
                                  data-type="textarea"><?php echo !$biography ? '-' : _convertLineSymbolToBR($biography) ?></div>
                             <div class="clear"></div>
                             <?php wp_nonce_field('my_details_edit', 'cp-action'); ?>

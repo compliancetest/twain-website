@@ -27,7 +27,7 @@ if (!$org_membership) {
             <h5 class="left">My Organisation</h5>
             <?php if($user_status != 3 ){?>
                 <?php if( ! $org_membership ):?>
-                    <a class="gbh-btn right create_organisation gbh-btn-create-join" href="javascript: void(0);">Create Organisation<span class="simple_tooltip radius6" style="width: 130px;margin-left: -60px;">Create Organisationn<span></span></span></a>
+                    <a class="gbh-btn right create_organisation gbh-btn-create-join" href="javascript: void(0);">Create Organisation<span class="simple_tooltip radius6" style="width: 130px;margin-left: -60px;">Create Organisation<span></span></span></a>
                     <a class="gbh-btn right gbh-btn-create-org join_organisation" href="javascript: void(0);">Join Organisation<span class="simple_tooltip radius6">Join Organisation<span></span></span></a>
                 <?php else:?>
                     <?php if( ! $org_membership->is_admin ):?>
