@@ -119,6 +119,16 @@ function cp_user_detail_edit()
                 echo 'Invalid password!';
                 exit;
             }
+
+            if (!wp_check_password($_POST['curr_pass'], $current_user->data->user_pass, $user_id)) {
+                echo 'Your current password is incorrect.';
+                exit;
+            }
+
+            if ($_POST['curr_pass'] == $newPass) {
+                echo 'New password should be different to old one';
+                exit;
+            }
             //update password
             wp_update_user(array('ID' => $user_id, 'user_pass' => $confPass));
             $data = array(

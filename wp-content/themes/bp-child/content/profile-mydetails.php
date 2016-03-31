@@ -61,6 +61,14 @@ if (!defined('ABSPATH'))
                             </div>
                             <div class="clear"></div>
                         </div>
+                        <div class="grid-row current_password" style="display: none;">
+                            <div class="grid-cell width30P"><label>Current Password</label></div>
+                            <div data-name="curr_pass" data-value=""
+                                 data-title="Your current password"
+                                 class="grid-cell in_input input_pass" data-type="password">*********
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>About me</label></div>
                             <div data-name="biography" data-value="<?php echo $biography ?>" class="grid-cell in_input"
