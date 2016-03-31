@@ -368,7 +368,8 @@
                 {
                     hideGridBoxLoadingWrapper(form);
                     if(rsp == 'success') {
-                        showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
+                        $('#my_details .btn-row a').hide();
+                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
                         document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp, 'error');
