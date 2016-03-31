@@ -243,6 +243,7 @@
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             var timezoneText = $(".timezone-text");
             jQuery(thisParentId).find('.message').remove();
+           $('#my_profile .gbh-btn-edit').hide();
             if( findInputs == 0){
 
                 $(thisParentId+' .btn-row').fadeIn();
@@ -323,7 +324,7 @@
             var findInputs = $(thisParentId+' .grid-row input:visible').size();            
             $(thisParentId).find('.message').remove();
             //if( findInputs == 0){
-
+            $('#my_profile .gbh-btn-edit').show();
             $('.current_password').hide();
             $(thisParentId+' .btn-row').fadeIn();
              $(thisParentId).addClass('grid-box-editing');
