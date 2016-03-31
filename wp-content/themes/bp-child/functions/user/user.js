@@ -365,8 +365,7 @@
                 success: function(rsp)
                 {
                     hideGridBoxLoadingWrapper(form);
-                    if(rsp == 'success')
-                    {
+                    if(rsp == 'success') {
                         showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
                         document.location.reload();
                     }else{
