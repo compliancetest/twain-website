@@ -59,7 +59,7 @@ if (!defined('ABSPATH'))
                         <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
                         <p>
                             
-                                <input type="file" name="file" id="file" class="left input-file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />
+                                <input type="file" name="file" id="file" class="left input-file" file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" style="cursor: pointer;"/>
                                 <div class="clear"></div>
                                 <br />                                                                
                                 <a href="#" class="action-btn submit-btn upload-btn greyed-out-btn subm_send"><span class="p"></span><span class="t">Upload Image</span></a>
