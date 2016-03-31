@@ -385,7 +385,7 @@ class FulltextSearch extends BaseAWS
                     'type' => 'Page',
                     'visibility' => 1,
                     'for_search' => 'Page',
-                    'descr' => $post->post_content
+                    'descr' => trim(str_replace(array('Back to Documentation Home', 'Back to documentation home'), '',$post->post_content))
                 );
                 break;
 

@@ -1474,7 +1474,7 @@ function generate_and_download_site( $data ){
             $row_data = $row['fields'];
                 $tempArray = array(
                     strip_tags($row_data['post_title'][0]),
-                    trim(strip_tags(str_replace(array('Back to Documentation Home', 'Back to documentation home', '&nbsp;'), '', html_entity_decode($row_data['post_content'][0])))),
+                    trim(strip_tags(html_entity_decode($row_data['post_content'][0]))),
                     $row_data['post_type'][0],
                     ! empty( $row_data['community'] ) && is_array( $row_data['community'] ) ? implode( ',', $row_data['community'] ) : '',
                     date( 'Y-m-d', strtotime( $row_data['last_updated_date'][0] ) )
