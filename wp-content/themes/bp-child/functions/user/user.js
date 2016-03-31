@@ -247,6 +247,7 @@
 
                 $(thisParentId+' .btn-row').fadeIn();
                  $(thisParentId).addClass('grid-box-editing');
+                $('.current_password').show();
                 //transform all divs in inputs
                 $(thisParentId+' .grid-cell.in_input').each(function(){                    
                    var thisTextVal = $(this).attr('data-value'); 
@@ -323,6 +324,7 @@
             $(thisParentId).find('.message').remove();
             //if( findInputs == 0){
 
+            $('.current_password').hide();
             $(thisParentId+' .btn-row').fadeIn();
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
