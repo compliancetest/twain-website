@@ -106,7 +106,7 @@ function cp_user_detail_edit()
 
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'email_changed', $data);
         cp_send_email_to_admin('email_changed_admin', $data);
-        addMessage('A confirmation email has been sent to your email account. Please verify your email address using the link it contains.');
+        addMessage('A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.');
     }
     
     //Update Password
