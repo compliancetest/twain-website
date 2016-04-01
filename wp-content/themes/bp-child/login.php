@@ -2,11 +2,14 @@
 /*
  * Template Name: Login page
  */
-get_header();
+
 if (is_user_logged_in()) {
     wp_redirect('/');
     exit();
 }
+
+get_header();
+
 $userIP = \LoginAttempts\LoginAttempts::getUserIP();
 $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
 ?>
