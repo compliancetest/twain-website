@@ -16,7 +16,7 @@ if (!defined('ABSPATH'))
         <div class="grid-box-body">
             <div class="grid-row">
                 <form action="" method="post" id="avatar-upload-form" class="standard-form"
-                      enctype="multipart/form-data">
+                      enctype="multipart/form-data" style="display: none;">
                     <?php if ('crop-image' == bp_get_avatar_admin_step()) { ?> <!-- Crop Image -->
                         <p><?php _e('Crop Your New Avatar', 'buddypress'); ?></p>
 
@@ -110,5 +110,7 @@ if (!defined('ABSPATH'))
             }
         });
 
+        showGridBoxLoadingWrapper(null);
+        setTimeout("jQuery('#avatar-upload-form').show();", 1500);
     });
 </script>
