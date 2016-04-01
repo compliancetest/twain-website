@@ -469,7 +469,7 @@ if (!is_user_logged_in()) {
                                 <div class="clear"></div>
 
                                 <div class="field">
-                                    <label for="organisation_id">Organisation Key</label>
+                                    <label for="organisation_id">Organisation Key (optional)</label>
 
                                     <div class="has-field-tooltip" style="width: 165px;">
                                         <input type="text" class="field-tooltip" title="" autocomplete="off"
@@ -514,8 +514,8 @@ if (!is_user_logged_in()) {
                                     <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
                                 </div>
                                 <div class="field width90P">
-                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the
-                                        <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms &
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id" class="cursor-pointer"><label for="acc_tc">I accept the
+                                        <a href="#site-terms-box" data-type="inline" id="agree_terms" cp-closeWhenClickOveraly="0">Terms &
                                             Conditions.</a></label>
                                 </div>
                                 <div class="clear"></div>
