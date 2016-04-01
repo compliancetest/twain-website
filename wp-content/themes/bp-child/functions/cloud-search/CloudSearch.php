@@ -119,7 +119,7 @@ class CloudSearch extends BaseAWS
                 }
             } else {
                 if ($v !== 'All' && $k != 'order' && in_array($k, $this->_allowedFields)) {
-                    $l .= " (term field=" . $k . " '" . urldecode($v) . "') ";
+                    $l .= " (term field=" . $k . " '" . str_replace('&ndash;', '&#8211;', htmlentities($v)) . "') ";
                 }
             }
         }
