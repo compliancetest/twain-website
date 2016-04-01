@@ -3,10 +3,16 @@
     $(document).ready(function(){
         //Terms and Conditions
         $('#agree_terms').cplightbox({});
-        $('#site-terms-box .cancel-btn').cplightbox({});
+        $('#site-terms-box .cancel-btn').cplightbox({
+            onLoad: function(){
+                $('#acc_tc_id').prop('checked', false);
+                $(window).scrollTop(0);
+            }
+        });
         $('#site-terms-box .process-btn').cplightbox({
             onLoad: function(){
                 $('#acc_tc_id').prop('checked', true);
+                $(window).scrollTop(0);
             }
         });
         
