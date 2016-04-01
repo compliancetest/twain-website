@@ -95,7 +95,7 @@ get_header();
                                 <?php if (is_array($allFilters->getPath('facets/test_suite/buckets'))): ?>
                                     <?php foreach ($allFilters->getPath('facets/test_suite/buckets') AS $v): ?>
                                         <option
-                                            value="<?php echo $v['value']; ?>"<?php if (isset($_GET['test_suite']) && $_GET['test_suite'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
+                                            value="<?php echo $v['value']; ?>"<?php if (isset($_GET['test_suite']) && $_GET['test_suite'] == html_entity_decode($v['value'])): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
