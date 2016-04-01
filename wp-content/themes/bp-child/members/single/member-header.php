@@ -54,7 +54,7 @@ $user = get_userdata($profileID);
         <?php
         $biography = get_user_meta($profileID, 'description', true);
         ?>
-        <p class="profile-biography"><?php echo _convertLineSymbolToBR($biography) ?></p>
+        <p class="profile-biography" style="word-wrap: break-word;overflow-wrap: break-word;"><?php echo _convertLineSymbolToBR($biography) ?></p>
         <?php do_action('bp_before_member_header_meta'); ?>
 
     </div><!-- #item-header-content -->
