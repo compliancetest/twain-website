@@ -3825,7 +3825,7 @@ output {
   color: #555555;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -5272,7 +5272,7 @@ tbody.collapse.in {
   color: #555555;
   text-align: center;
   background-color: #eeeeee;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
 }
 /* line 89, ../scss/bootstrap/_input-groups.scss */
@@ -8795,6 +8795,23 @@ body.modal-open,
   margin-left: -150px;
 }
 
+/* line 1, ../scss/blocks/_forms.scss */
+label {
+  font-weight: 600;
+}
+
+/* line 6, ../scss/blocks/_forms.scss */
+.form-control:focus {
+  -webkit-box-shadow: 0 0 10px -2px rgba(52, 119, 175, 0.75);
+  box-shadow: 0 0 10px -2px rgba(52, 119, 175, 0.75);
+  border-color: #ddd;
+}
+
+/* line 11, ../scss/blocks/_forms.scss */
+select.form-control {
+  padding-top: 3px;
+}
+
 /* line 1, ../scss/blocks/_modals.scss */
 .modal-backdrop.in {
   opacity: 0.7;
@@ -8913,7 +8930,7 @@ body.modal-open,
   cursor: pointer;
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 11px;
-  padding: 5px 12px;
+  padding: 4px 12px 5px 12px;
   height: 24px;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
@@ -9288,12 +9305,19 @@ body.modal-open,
   color: #959595;
 }
 
-/* line 246, ../scss/blocks/_buttons.scss */
+/* line 245, ../scss/blocks/_buttons.scss */
+.custom-file-tag {
+  display: inline-block;
+  margin: 0 0 10px 0;
+}
+/* line 249, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
+  display: inline-block;
+  vertical-align: middle;
 }
-/* line 251, ../scss/blocks/_buttons.scss */
+/* line 256, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9303,28 +9327,44 @@ body.modal-open,
   top: 0;
   z-index: 100;
 }
-/* line 260, ../scss/blocks/_buttons.scss */
-.custom-file-tag .file-value {
+/* line 265, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-label-wrap {
   position: relative;
-  padding: 7px 10px 7px 0;
+  padding: 7px 10px 0 30px;
   display: inline-block;
+  vertical-align: middle;
 }
-/* line 266, ../scss/blocks/_buttons.scss */
-.custom-file-tag .file-type-default {
-  padding-left: 30px;
+/* line 271, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-label-wrap:before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
 }
-/* line 270, ../scss/blocks/_buttons.scss */
+/* line 279, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-label-wrap.file-ext-restriction {
+  padding-top: 0;
+}
+/* line 285, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-extensions {
+  display: block;
+}
+/* line 291, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -473px;
   height: 28px;
   width: 21px;
-  display: block;
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
+}
+/* line 297, ../scss/blocks/_buttons.scss */
+.custom-file-tag .file-type-image:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -417px;
+  height: 28px;
+  width: 21px;
 }
 
 /* line 1, ../scss/blocks/_tabs-menu.scss */
@@ -9777,6 +9817,40 @@ body.modal-open,
   width: 21px;
 }
 
+/* line 1, ../scss/blocks/_colored-box.scss */
+.colored-box {
+  margin: 0 0 20px 0;
+}
+/* line 4, ../scss/blocks/_colored-box.scss */
+.colored-box .colored-box-header {
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1453146388') repeat-x 0 0;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  line-height: 16px;
+  -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) inset;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) inset;
+  -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid #1d76c0;
+}
+/* line 16, ../scss/blocks/_colored-box.scss */
+.colored-box .colored-box-content {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #b7b7b7;
+}
+/* line 22, ../scss/blocks/_colored-box.scss */
+.colored-box .colored-box-footer {
+  margin-top: -1px;
+  background: #f0f0f0;
+  -webkit-box-shadow: 0 12px 10px -10px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 12px 10px -10px rgba(0, 0, 0, 0.2) inset;
+  padding: 15px;
+}
+
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -10093,6 +10167,42 @@ body.modal-open,
 /* line 291, ../scss/pages/_community.scss */
 .community-lists .community-name p {
   margin: 10px 0 0 0;
+}
+
+/* line 297, ../scss/pages/_community.scss */
+.community-admin {
+  padding: 10px 15px;
+}
+/* line 300, ../scss/pages/_community.scss */
+.community-admin .profile-type-list {
+  width: 100%;
+}
+/* line 304, ../scss/pages/_community.scss */
+.community-admin .profile-type-list > thead > tr > th {
+  text-align: center;
+}
+/* line 307, ../scss/pages/_community.scss */
+.community-admin .profile-type-list > thead > tr > th:first-child {
+  text-align: left;
+}
+/* line 314, ../scss/pages/_community.scss */
+.community-admin .profile-type-list > tbody > tr > td {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  text-align: center;
+}
+/* line 319, ../scss/pages/_community.scss */
+.community-admin .profile-type-list > tbody > tr > td:first-child {
+  text-align: left;
+}
+/* line 325, ../scss/pages/_community.scss */
+.community-admin .profile-type-list .btn {
+  margin: 0 2px;
+}
+/* line 330, ../scss/pages/_community.scss */
+.community-admin .upload-file-field {
+  display: inline-block;
+  margin: 0 10px 0 0;
 }
 
 /* line 1, ../scss/pages/_community-downalods.scss */

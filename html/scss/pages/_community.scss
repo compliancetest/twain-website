@@ -293,3 +293,42 @@
     }
   }
 }
+
+.community-admin{
+  padding: 10px 15px;
+
+  .profile-type-list{
+    width: 100%;
+
+    > thead > tr {
+      > th {
+        text-align: center;
+
+        &:first-child {
+          text-align: left;
+        }
+      }
+    }
+
+    > tbody > tr{
+      > td{
+        padding-top: 3px;
+        padding-bottom: 3px;
+        text-align: center;
+
+        &:first-child{
+          text-align: left;
+        }
+      }
+    }
+
+    .btn{
+      margin: 0 2px;
+    }
+  }
+
+  .upload-file-field{
+    display: inline-block;
+    margin: 0 10px 0 0;
+  }
+}

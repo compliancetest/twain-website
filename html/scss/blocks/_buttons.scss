@@ -4,7 +4,7 @@
   cursor: pointer;
   font-family: $font-family-sans-serif;
   font-size: 11px;
-  padding: 5px 12px;
+  padding: 4px 12px 5px 12px;
   height: 24px;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 
@@ -243,9 +243,14 @@
 
 
 .custom-file-tag{
+  display: inline-block;
+  margin: 0 0 10px 0;
+
   .btn-file{
     overflow: hidden;
     position: relative;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   input{
@@ -257,23 +262,40 @@
     z-index: 100;
   }
 
-  .file-value{
+  .file-label-wrap{
     position: relative;
-    padding: 7px 10px 7px 0;
+    padding: 7px 10px 0 30px;
     display: inline-block;
-  }
-
-  .file-type-default{
-    padding-left: 30px;
-
+    vertical-align: middle;
 
     &:before{
-      @include iconsSprite(file-type-simple);
       display: block;
       position: absolute;
       content: '';
       top: 0;
       left: 0;
+    }
+
+    &.file-ext-restriction{
+      padding-top: 0;
+    }
+
+  }
+
+  .file-extensions{
+    display: block;
+  }
+
+
+  .file-type-default{
+    &:before{
+      @include iconsSprite(file-type-simple);
+    }
+  }
+
+  .file-type-image{
+    &:before{
+      @include iconsSprite(file-type-image);
     }
   }
 }

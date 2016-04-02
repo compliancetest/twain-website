@@ -1,0 +1,340 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Community Name | Admin | Twain</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div id="main-wrapper">
+
+        <?php include_once('parts/header.php'); ?>
+
+        <div class="container main-container">
+            <div class="main-content">
+
+                <div class="community-tabs">
+                    <div class="tabs-menu">
+                        <ul>
+                            <li class="test-suites-tab"><a href="communities-test-suites.php">Test Suites</a></li>
+                            <li class="test-data-tab"><a href="communities-test-data.php">Test Data</a></li>
+                            <li class="articles-tab"><a href="communities-articles.php">Articles</a></li>
+                            <li class="forum-tab"><a href="communities-forum.php">Forum</a></li>
+                            <li class="downloads-tab"><a href="communities-downloads.php">Downloads</a></li>
+                            <li class="reports-tab"><a href="communities-reports.php">Reports</a></li>
+                            <li class="admin-tab"><a href="communities-admin.php" class="active">Admin</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="community-tab-content">
+
+                        <div class="community-admin">
+                            <p>You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.</p>
+
+                            <form action="">
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Details</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <div class="form-group">
+                                                        <label for="communityName">Community Name</label>
+                                                        <input type="text" name="group-name" class="form-control" id="communityName" value="SuperStream">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="communityDescription">Community Description</label>
+                                                        <textarea name="group-desc" rows="5" class="form-control" id="communityDescription">SuperStream aims to improve efficiency in the Australian Superannuation industry through data standards. "Rollovers", where savings are transferred from one fund to another (mandatory for APRA regulated funds by July 1 2013 and all funds by July 1 2014). "Member Contributions", where regular payments are made by employers to funds of the employees choice (mandated for large employers by 1 July 2014 and all employers by 1 July 2015.</textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="communityTermsAndConditions">Terms and Conditions</label>
+                                                        <textarea name="terms_and_conditions" rows="5" class="form-control" id="communityTermsAndConditions"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="communityObligationToClaim">Obligation to Claim</label>
+                                                        <textarea name="obligation_for_claim" rows="5" class="form-control" id="communityObligationToClaim"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="communityNotificationEmailContent">Notification Email Content</label>
+                                                        <textarea name="notification_email_of_changes" rows="5" class="form-control" id="communityNotificationEmailContent">There have been some changes to the SuperStream community content!</textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Notify community members of changes via email</label>
+                                                        <label>
+                                                            <input type="radio" name="group-notify-members" value="1"> Yes
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="group-notify-members" value="0"> No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="colored-box-footer">
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Display Image</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-add">Upload Image</a>
+                                                    <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Image</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Details</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <p><span style="color: #ce1515;">WARNING</span>: Deleting this community will completely remove ALL content associated with it. There is no way back, please be careful with this option.</p>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="checkbox" value="1" id="delete-group-understand" name="delete-group-understand"> I understand the consequences of deleting this community.
+                                                        </label>
+                                                    </div>
+                                                    <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Community</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Profile Types</div>
+                                            <div class="colored-box-body">
+                                                <div class="table-responsive">
+                                                    <table class="colored-table profile-type-list">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Instances</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>TICK v1.1 </td>
+                                                                <td>16</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Product v4.1</td>
+                                                                <td>2</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Employer v2.5.1</td>
+                                                                <td>6</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Clearing House v2.3.1</td>
+                                                                <td>164</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Employer v2.11.1</td>
+                                                                <td>1099</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Product v5.6.1</td>
+                                                                <td>291</td>
+                                                                <td class="text-nowrap">
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Filter v1.1</td>
+                                                                <td>18</td>
+                                                                <td>
+                                                                    <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                                    <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="colored-box-content">
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-add">Add New Profile Type</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Members</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Privacy Options</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" value="public" name="group-status">
+                                                            <strong>This is a public community</strong>
+                                                        </label>
+                                                        <ul>
+                                                            <li>Any site member can join this community.</li>
+                                                            <li>This community will be listed in the communities directory and in search results.</li>
+                                                            <li>Community content and activity will be visible to any site member.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" checked="checked" value="private" name="group-status">
+                                                            <b>This is a private community</b>
+                                                        </label>
+                                                        <ul>
+                                                            <li>Only users who request membership and are accepted can join the community.</li>
+                                                            <li>This community will be listed in the communities directory and in search results.</li>
+                                                            <li>Community content and activity will only be visible to members of the community.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" value="hidden" name="group-status">
+                                                            <b>This is a hidden community</b>
+                                                        </label>
+                                                        <ul>
+                                                            <li>Only users who are invited can join the community.</li>
+                                                            <li>This community will not be listed in the communities directory or search results.</li>
+                                                            <li>Community content and activity will only be visible to members of the community.</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="colored-box-footer">
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Community Invitations</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                </div>
+                                            </div>
+                                            <div class="colored-box-footer">
+                                                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Community Articles</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <div class="form-group">
+                                                        <label for="bp-docs[group-enable]"> <input type="checkbox" checked="checked" value="1" id="bp-docs-group-enable" name="bp-docs[group-enable]"> Enable Articles for this community</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="bp-docs[can-create-admins]">Minimum role to associate Article with this community:</label>
+                                                        <select class="form-control" name="bp-docs[can-create]">
+                                                            <option selected="selected" value="admin">Community Admin</option>
+                                                            <option value="mod">Community Support</option>
+                                                            <option value="member">Community Member</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="colored-box-footer">
+                                                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Generate JSON</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <div class="upload-file-field">
+                                                        <input type="file" name="file[]" class="input-file" data-file-type="image" data-file-extensions="(.xls, .xlsx file)" />
+                                                    </div>
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Generate JSON</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="colored-box">
+                                            <div class="colored-box-header">Generate FVS</div>
+                                            <div class="colored-box-body">
+                                                <div class="colored-box-content">
+                                                    <div class="upload-file-field">
+                                                        <input type="file" name="file[]" class="input-file" data-file-type="image" data-file-extensions="(.xls, .xlsx file)" />
+                                                    </div>
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload</a>
+                                                </div>
+                                            </div>
+                                            <div class="colored-box-footer">
+                                                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Generate FVS</a>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <?php include_once('parts/footer.php'); ?>
+    <script>
+        jQuery(document).ready(function($) {
+            Page.communityDownloads.init();
+        });
+    </script>
+
+    </body>
+</html>

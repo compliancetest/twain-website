@@ -161,9 +161,9 @@ function customizeFileTag()
             jQuery(this).wrap('<span class="custom-file-tag"><span class="btn btn-primary btn-with-icon btn-browse"></span></span>');
             jQuery(this).parent().append('Browse');
             if(jQuery(this).data('file-type')) {
-                jQuery(this).parent().before('<span class="file-value file-type-' + jQuery(this).data('file-type') + '">Choose File<span class="file-extensions">' + jQuery(this).attr('file-extensions') + '</span></span>');
+                jQuery(this).parent().before('<span class="file-label-wrap file-ext-restriction file-type-' + jQuery(this).data('file-type') + '"><span class="file-value">Choose File</span><span class="file-extensions">' + jQuery(this).data('file-extensions') + '</span></span>');
             } else {
-                jQuery(this).parent().before('<span class="file-value file-type-default">Choose File</span>');
+                jQuery(this).parent().before('<span class="file-label-wrap file-type-default"><span class="file-value">Choose File</span></span>');
             }
 
             jQuery(this).change(function(){

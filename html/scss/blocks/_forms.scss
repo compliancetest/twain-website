@@ -1,0 +1,13 @@
+label{
+  font-weight: 600;
+}
+
+.form-control{
+  &:focus{
+    @include box-shadow(0 0 10px -2px rgba(52, 119, 175, 0.75));
+    border-color: $input-border;
+  }
+}
+select.form-control{
+  padding-top: 3px;
+}
