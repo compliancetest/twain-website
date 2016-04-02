@@ -45,6 +45,36 @@ var Page = {
         }
     },
 
+    communities: {
+        init: function(){
+            var self = this;
+
+            $('.joinCommunity').click(function(){
+                self.showJoinCommunityModal($(this));
+            });
+
+            $('#registerInCommunity').click(function(){
+                self.submitCommunityRequest($(this));
+            });
+        },
+
+        showJoinCommunityModal: function(el){
+            var elAttr = {
+                href: el.attr('href'),
+                communityId: el.data('community-id')
+            };
+            $('#registerInCommunity').data('community-id', elAttr.communityId);
+            $(elAttr.href).modal();
+        },
+        submitCommunityRequest: function(el){
+            var communityId =  el.data('community-id');
+            //@todo-ilya: Add loader and actions after response
+            alert('todo: Send ajax request');
+        }
+
+    },
+
+
     communityDownloads: {
 
         init: function(){

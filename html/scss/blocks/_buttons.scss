@@ -180,17 +180,17 @@
   &.btn-upload{
     @include btnIconsSprite(btn-icon-upload);
   }
-  &.btn-details{
+  &.btn-details, &.btn-view{
     @include btnIconsSprite(btn-icon-view);
-  }
-  &.btn-view{
-    @include btnIconsSprite(btn-icon-view);
+    &:before{
+      top: 6px;
+    }
   }
   &.btn-print{
     @include btnIconsSprite(btn-icon-print);
   }
   &.btn-history{
-    @include btnIconsSprite(btn-icon-filter);
+    @include btnIconsSprite(btn-icon-history);
   }
   &.btn-filter{
     @include btnIconsSprite(btn-icon-filter);

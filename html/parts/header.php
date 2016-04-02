@@ -10,7 +10,7 @@
                     </div>
                     <ul class="account-menu">
                         <li class="dashboard-menu">
-                            <a href="#" class="btn btn-default btn-dropdown" data-toggle-block="#header-dashboard-menu">Dashboard</a>
+                            <a href="#" class="btn btn-primary btn-dropdown" data-toggle-block="#header-dashboard-menu">Dashboard</a>
                             <ul class="dropdown-menu dashboard-dropdown-menu" id="header-dashboard-menu">
                                 <li class="first">
                                     <a data-title="Organisation" href="http://compliancetest.lc/my-organisation/" class="menu-organisation">Organisation</a>

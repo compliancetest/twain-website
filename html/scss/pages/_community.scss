@@ -161,3 +161,135 @@
 
   }
 }
+
+.community-articles{
+  .table{
+    th a{
+      position: relative;
+      display: inline-block;
+
+      &.current-orderby{
+        padding-right: 20px;
+
+        &:hover{
+          text-decoration: none;
+        }
+
+        &:before{
+          display: block;
+          position: absolute;
+          right: 0;
+          top: 0;
+          content: '';
+        }
+
+        &.asc:before{
+          @include iconsSprite(sort-col-asc);
+        }
+        &.desc:before{
+          @include iconsSprite(sort-col-desc);
+        }
+      }
+    }
+  }
+
+  .attachment-cell{
+    padding: 0 0 0 20px;
+    position: relative;
+
+    &.has-attachment:before{
+      display: block;
+      position: absolute;
+      content: '';
+      left: 0;
+      top: 50%;
+      @include iconsSprite(paperclip);
+      margin-top: -(image-height('icons/paperclip.png')/2);
+    }
+  }
+
+  .btn-icon{
+    margin: 0 3px;
+  }
+}
+
+.popup-terms-box{
+  border-top: 1px solid #cfcfcf;
+  padding: 10px 0 0 0;
+  margin: 10px 0 0 0
+}
+
+.modal-terms-content{
+  line-height: 16px;
+
+  ol{
+    margin: 10px 20px 0 20px;
+  }
+
+}
+
+.community-search{
+  margin-top: -20px;
+  margin-bottom: 20px;
+  padding: 20px 15px;
+  border-bottom: 1px solid #e1e1e1;
+
+
+  .search-form{
+    position: relative;
+
+    .search-form-input{
+      border: 2px solid #d8d8d8;
+      @include border-radius(8px);
+      padding: 10px 35px 10px 10px;
+      width: 100%;
+
+      &:focus{
+        @include box-shadow(0 0 10px -2px rgba(52, 119, 175, 0.75));
+      }
+    }
+  }
+
+  .search-result-count{
+    color: #1f5aa4;
+    font-size: 18px;
+    line-height: 40px;
+  }
+
+  .submit-search-btn{
+    background: none;
+    width: 35px;
+    height: 38px;
+    border: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    .submit-search-btn-icon{
+      @include iconsSprite(submit-search-btn);
+      text-indent: -999999px;
+    }
+
+  }
+}
+
+.community-lists{
+
+  .community-name{
+    a{
+      font-size: 15px;
+      text-decoration: underline;
+      font-weight: 600;
+      color: #2c80e8;
+      
+      &:hover{
+        text-decoration: none;
+      }
+      
+    }
+
+    p{
+      margin: 10px 0 0 0;
+    }
+  }
+}
