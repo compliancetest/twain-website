@@ -42,7 +42,7 @@ class TransactionsController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $fileName = getenv('APP_ENV') . '/transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+        $fileName = getenv('ENVIRONMENT') . '/transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
 
         $s3 = Aws::createClient('s3');
         $s3->putObject(array(
