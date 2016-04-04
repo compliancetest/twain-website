@@ -2830,3 +2830,6 @@ table.result-table{
 .text-nowrap{
 	word-wrap: break-word;
 }
+.cursor-pointer {
+	cursor: pointer;
+}
