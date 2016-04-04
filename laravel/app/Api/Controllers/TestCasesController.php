@@ -56,9 +56,9 @@ class TestCasesController extends BaseApiController
         $profile = Profile::find($profileId);
         if ($profile) {
             return $this->respondWithData([
-                'test_case_id' => $testCase->getStringId(),
-                'test_suite_id' => TestSuite::find($testingDetails->test_suite_id)->getStringId(),
-                'product_id' => Post::find($testingDetails->product_id)->getProductStringId(),
+                'test_case_id' => Post::find($testCase->case_id)->post_name,
+                'test_suite_id' => Post::find($testingDetails->test_suite_id)->post_name,
+                'product_id' => Post::find($testingDetails->product_id)->post_name,
                 'profile' => $profile->getProfileFromS3(),
             ]);
         }

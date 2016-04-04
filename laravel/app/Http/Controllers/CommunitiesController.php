@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\PostMeta;
+use Aws\Laravel\AwsFacade;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -17,12 +19,12 @@ class CommunitiesController extends Controller
      */
     public function index()
     {
-        $fileName = '15235285_Document_Imaging.zip';//basename($this->fileName);
-        $filePath = '/var/www/website/laravel/storage/app/public/transactions/';//base_path() . '/storage/app/public/transactions/';
+        $fileName = '1_v2.1.3_2016-04-04_032442.zip';//basename($this->fileName);
+        $filePath = base_path() . '/storage/app/public/transactions/';
 //        $s3 = AwsFacade::createClient('s3');
 //        $s3->getObject(array(
 //            'Bucket' => 'data.twain.gosource.com.au',
-//            'Key' => 'local/transactions/4962/12323/15235285_Document_Imaging.zip',
+//            'Key' => 'local/transactions/4962/1234567889/1_v2.1.3_2016-04-04_032442.zip',
 //            'SaveAs' => $filePath . $fileName
 //        ))['Body'];
 //        $za = new \ZipArchive();
@@ -32,7 +34,14 @@ class CommunitiesController extends Controller
 //        @unlink($filePath.$fileName);
 
         $rootFolder = $this->getFolderName($filePath);
-        $product = Post::where(['post_title' => explode('_', $rootFolder, 2)[1], 'post_type' => 'product-service'])->first()->toArray();
+        $productIdentifier = explode('_', $rootFolder, 2)[1];
+
+        $where = [
+            'meta_key' => 'product_id',
+            'meta_value' => $productIdentifier
+        ];
+        $productId = PostMeta::where($where)->first()->post_id;
+        $product = Post::find($productId);
         var_dump($product);
 
         $testSuiteFolder = $this->getFolderName($filePath . $rootFolder);
@@ -48,6 +57,9 @@ class CommunitiesController extends Controller
         var_dump($executionId);
 
 
+        //execution log
+        $executionLogData = json_decode(file_get_contents($filePath . $rootFolder. '/'. $testSuiteFolder . '/'.$testCaseFolder.'/'.$executionIdFolder.'/execution_log/execution_log.json'), true);
+        var_dump($executionLogData);
         die;
         $objects = new \RecursiveDirectoryIterator($filePath . $object->getFileName(), \RecursiveDirectoryIterator::SKIP_DOTS);
         $rootPath = $filePath . $object->getFileName();

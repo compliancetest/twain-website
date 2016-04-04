@@ -48,7 +48,7 @@ class TransactionsController extends BaseApiController
         $s3->putObject(array(
             'Bucket' => 'data.twain.gosource.com.au',
             'Key' => $fileName,
-            'Source' => file_get_contents($request->file('file')),
+            'Body' => file_get_contents($request->file('file')->getPath().'/'.$request->file('file')->getFilename()),
         ));
 
         //adding entry to sqs. it will be processed in background
