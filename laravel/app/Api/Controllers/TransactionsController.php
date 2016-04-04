@@ -34,7 +34,7 @@ class TransactionsController extends BaseApiController
 
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:zip',
-            'test_case_id' => 'required|exists:wp_test_cases,case_id',
+            'test_case_id' => 'required|exists:wp_posts,post_name',
             'execution_id' => 'required',
         ]);
 
