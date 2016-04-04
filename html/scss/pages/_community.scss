@@ -370,12 +370,21 @@
         overflow: hidden;
         text-align: center;
 
+        @media only screen and (max-width: $mobile-size) {
+          display: block;
+        }
+
         &:before{
           content: '';
           @include iconsSprite(button-group-delimeter);
           position: absolute;
           left: 0;
           top: 0;
+
+          @media only screen and (max-width: $mobile-size) {
+            display: none;
+          }
+
         }
 
         &:first-child:before{
@@ -521,6 +530,47 @@
     li{
       color: #127dbb;
       font-weight: 700;
+    }
+  }
+
+  .community-image-management{
+    .community-image{
+      float: left;
+      width: 100px;
+
+      @media only screen and (max-width: $mobile-size) {
+        float: none;
+        text-align: center;
+        width: 100%;
+      }
+
+      img{
+        width: 100px;
+        height: 100px;
+        border: 1px solid #959595;
+        @include box-shadow(0 0 10px 1px #999);
+      }
+    }
+
+    .community-avatar-description{
+      margin: 10px 0 0 0;
+
+      @media only screen and (min-width: $mobile-size+1) {
+        margin: 0 0 0 115px;
+      }
+
+      p{
+        font-weight: 600;
+        line-height: 16px;
+        color: #666;
+        font-size: 13px;
+        margin: 0 0 12px 0;
+      }
+
+      .upload-file-field{
+        margin: 0 0 10px 0;
+        display: block;
+      }
     }
   }
 

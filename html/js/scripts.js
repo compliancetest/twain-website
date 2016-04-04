@@ -12,6 +12,11 @@ jQuery(document).ready(function($) {
         $($(this).data('toggle-block')).toggle();
     });
 
+    $('.redactor_editor').redactor({
+        minHeight: 80
+    });
+
+
     Page.header.dashboardMenu();
 
 });
@@ -201,4 +206,9 @@ function customizeFileTag()
             jQuery(this).data('file-customized', 1);
         }
     })
+}
+
+
+function getRedactorSettings(){
+
 }

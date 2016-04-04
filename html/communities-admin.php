@@ -53,22 +53,35 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="communityDescription">Community Description</label>
-                                                    <textarea name="group-desc" rows="5" class="form-control" id="communityDescription">SuperStream aims to improve efficiency in the Australian Superannuation industry through data standards. "Rollovers", where savings are transferred from one fund to another (mandatory for APRA regulated funds by July 1 2013 and all funds by July 1 2014). "Member Contributions", where regular payments are made by employers to funds of the employees choice (mandated for large employers by 1 July 2014 and all employers by 1 July 2015.</textarea>
+                                                    <textarea name="group-desc" rows="5" class="form-control redactor_editor" data-air="true" id="communityDescription">SuperStream aims to improve efficiency in the Australian Superannuation industry through data standards. "Rollovers", where savings are transferred from one fund to another (mandatory for APRA regulated funds by July 1 2013 and all funds by July 1 2014). "Member Contributions", where regular payments are made by employers to funds of the employees choice (mandated for large employers by 1 July 2014 and all employers by 1 July 2015.</textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="communityTermsAndConditions">Terms and Conditions</label>
-                                                    <textarea name="terms_and_conditions" rows="5" class="form-control" id="communityTermsAndConditions"></textarea>
+                                                    <textarea name="terms_and_conditions" rows="5" class="form-control redactor_editor" data-air="true" id="communityTermsAndConditions">
+                                                        <p>These terms and conditions are specific to the SuperStream Community and supplement the general terms and conditions for registration on <a href="http://www.compliancetest.net">www.compliancetest.net</a> </p>
+                                                        <ol>
+                                                            <li>In order to access the SuperStream Community features, you must become a member of the community.</li><li>Membership of the SuperStream Community is limited to persons or organisations that have an active role in implementation (or implementation support) of the SuperStream standards (eg Funds, Administrators, Employers, Gateways, Software providers).</li><li>We reserve the right to terminate your membership at any time if you breach these terms and conditions.</li><li>You are responsible for all and any Content you contribute via the community forum or wiki.  When you provide Content you retain ownership of the intellectual property in that information however you grant all current and future community members unrestricted and royalty free rights to use your content for any purpose that supports the implementation of SuperStream stndards.   This licence ends when you cease your membership except for Content which has already been released as part of the Service.</li><li>We reserve the right but will not have an obligation to remove or refuse to distribute any Content.  We also reserve the right to adapt or modify your Content for any reason including for distribution purposes.</li><li>By posting Content on this website, you provide us with an undertaking that such Content does not infringe the rights of someone else and that it does not violate the law in any other way such as by being defamatory, being of racist content or is threatening.</li><li>To the extent permitted by law, you release and discharge us from any liability or claim arising out of any loss or damage that may be suffered or incurred as a result of your participation in the SuperStream community.</li><li>We respect your privacy. Our compliance with privacy legislation is set out in our separate Privacy Policy which may be accessed from our home page.</li></ol>
+                                                    </textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="licenseAgreements">License Agreements</label>
+                                                    <textarea name="license_agreements" rows="5" class="form-control redactor_editor" data-air="true" id="licenseAgreements">
+                                                        <p>The software tools provided via the "Downloads" Tab on this community dashboard are provided for use by SuperStream community members and ComplianceTest service subscribers. &nbsp;</p><ol>
+                                                        <li>The tools may be used by registered community members only.</li><li>There is no charge for use of the tools beyond the normal subscription fee for test suites.</li><li>The tools remain the copyright and intellectual property of Compliance Test.</li></ol>
+                                                    </textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="communityObligationToClaim">Obligation to Claim</label>
-                                                    <textarea name="obligation_for_claim" rows="5" class="form-control" id="communityObligationToClaim"></textarea>
+                                                    <textarea name="obligation_for_claim" rows="5" class="form-control redactor_editor" data-air="true" id="communityObligationToClaim">
+                                                        <p>By making this claim, I confirm that I have executed the SuperStream test cases using the product / version for which this compliance claim is made. I understand that this claim constitutes a "self-certification" to the effect that the product / version has completed testing and does not imply any warranty against any interoperability problems with the product. I understand that either the issuing authority or ComplianceTest may revoke the claim in the event that future problems indicate that tests may not have been properly completed. Once published, this claim entitles me to use the "ComplianceTested" Logo with the product for which this claim is made. The claim ID can be used as the certification reference on the ATO product register.</p>
+                                                    </textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="communityNotificationEmailContent">Notification Email Content</label>
-                                                    <textarea name="notification_email_of_changes" rows="5" class="form-control" id="communityNotificationEmailContent">There have been some changes to the SuperStream community content!</textarea>
+                                                    <textarea name="notification_email_of_changes" rows="5" class="form-control redactor_editor" data-air="true" id="communityNotificationEmailContent">There have been some changes to the SuperStream community content!</textarea>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Notify community members of changes via email</label>
+                                                    <label>Notify community members of changes via email</label><br>
                                                     <label>
                                                         <input type="radio" name="group-notify-members" value="1"> Yes
                                                     </label>
@@ -87,9 +100,19 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Display Image</div>
                                         <div class="colored-box-body">
-                                            <div class="colored-box-content">
-                                                <a href="#" class="btn btn-success btn-with-icon btn-add">Upload Image</a>
-                                                <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Image</a>
+                                            <div class="colored-box-content community-image-management">
+                                                <div class="community-image">
+                                                    <img src="images/gravatar.jpg" alt="">
+                                                </div>
+                                                <div class="community-avatar-description">
+                                                    <p>Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.</p>
+                                                    <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
+                                                    <div class="upload-file-field">
+                                                        <input type="file" name="file" class="input-file" data-file-type="image" data-file-extensions="(.jpg, .png, .gif or .jpeg file)" />
+                                                    </div>
+                                                    <a href="#" class="btn btn-success btn-with-icon btn-add">Upload Image</a>
+                                                    <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Image</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -591,6 +614,7 @@
     </div>
 
     <?php include_once('parts/footer.php'); ?>
+    <script src="js/vendor/redactor.js"></script>
     <script>
         jQuery(document).ready(function($) {
             Page.communityAdmin.init();
