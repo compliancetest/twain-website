@@ -79,7 +79,7 @@
                             <div class="add-new-download-default">
                                 <a href="#add-new-download-section" id="add-new-download" class="add-new-download-link">Upload New File(s)</a>
                             </div>
-                            <div id="add-new-download-section" style="display: block;">
+                            <div id="add-new-download-section" style="display: none;">
                                 <div id="file-description-template" style="display: none;">
                                     <div class="file-description-section">
                                         <div class="upload-file-field">
