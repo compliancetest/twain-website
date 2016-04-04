@@ -37,4 +37,17 @@ class TestCase extends Model
         return false;
     }
 
+    /**
+     * Method used to generate string ID, e.g. 'SC-01 v1.0'
+     * @return string
+     */
+    public function getStringId()
+    {
+        $strId = $this->case_name . ' v' . $this->version_major . '.' . $this->version_minor;
+        if ($this->version_patch) {
+            $strId .= '.' . $this->version_patch;
+        }
+        return $strId;
+    }
+
 }
