@@ -559,6 +559,11 @@ jQuery(document).ready(function($) {
     
     //Fix table height
     fixTdHeight(jQuery('.fix-table-height'));
+
+    jQuery('.view-profile-type-link, .view-profile-instance-link').on('click', function(){
+        jQuery('html, body').animate({ scrollTop: 0 }, 'fast');
+    });
+
 });
 
 function customizeFileTag()
