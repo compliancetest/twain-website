@@ -17,6 +17,10 @@
     padding: 20px;
     background: #fff;
     border: 1px solid #b7b7b7;
+
+    @media only screen and (max-width: $mobile-size) {
+      padding: 20px 10px;
+    }
   }
 
   .colored-box-footer{

@@ -297,6 +297,11 @@
 .community-admin{
   padding: 10px 15px;
 
+  @media only screen and (max-width: $mobile-size) {
+    padding: 10px 0;
+  }
+
+
   .profile-type-list{
     width: 100%;
 
@@ -331,4 +336,192 @@
     display: inline-block;
     margin: 0 10px 0 0;
   }
+
+  .privacy-options-list{
+    margin: 0 0 0 17px;
+  }
+
+  .community-invitation-options{
+    li{
+      margin: 7px 0 0 0;
+
+      &:first-child{
+        margin-top: 0;
+      }
+    }
+  }
+
+  .members-management{
+
+
+    .members-group-action{
+      border: 1px solid #a9a9a9;
+      @include border-radius(3px);
+
+      ul{
+        display: table;
+        width: 100%;
+        margin: 0;
+      }
+
+      li{
+        display: table-cell;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+
+        &:before{
+          content: '';
+          @include iconsSprite(button-group-delimeter);
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+
+        &:first-child:before{
+          display: none;
+        }
+
+        a{
+          display: block;
+          font-size: 11px;
+          color: #5f6670;
+          padding: 5px 10px;
+          text-shadow: 0 -1px 1px #fff;
+          @include background-image(linear-gradient(top, #e9ebed, #d8d8d8));
+
+          &:hover,
+          &.selected{
+            background: #127dbb;
+            color: #fff;
+            text-shadow: 0 -1px 1px #0d5783;
+            text-decoration: none;
+          }
+
+        }
+
+      }
+
+    }
+
+    .member-type-header{
+      margin: 10px 0;
+      font-weight: 700;
+      line-height: 16px;
+    }
+
+    .member-list{
+      li{
+        margin: 0 0 7px 0;
+        overflow: hidden;
+
+        &.clearfix{
+          margin: 0;
+          overflow: visible;
+        }
+
+        label{
+          float: left;
+        }
+
+        input{
+          float: left;
+          margin: 8px 0 0 0;
+        }
+
+        .avatar{
+          width: 30px;
+          height: 30px;
+          margin: 0 0 0 5px;
+          border: 1px solid #959595;
+        }
+
+        .member-info{
+          overflow: hidden;
+          margin: 0 0 0 55px;
+          display: block;
+
+          .member-name, .member-email{
+            color: #127dbb;
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            margin: 1px 0 0 0;
+          }
+
+          .member-email{
+            font-size: 10px;
+            margin-top: -4px;
+          }
+
+          .btn{
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+
+  }
+
+  .pending-requests{
+    .member-list{
+      width: 100%;
+
+      li{
+        padding: 12px 0;
+        margin: 0 0 12px 0;
+        border-bottom: 1px solid #959595;
+        overflow: hidden;
+
+        .avatar{
+          float: left;
+          margin: 0;
+        }
+
+        .member-info{
+          overflow: hidden;
+          margin: 0 0 0 40px;
+
+          .member-activity{
+            font-size: 10px;
+            font-style: italic;
+            margin-top: -1px;
+          }
+        }
+
+        .action{
+          float: right;
+          margin: 4px 0 0 0;
+
+          .btn{
+            margin: 0 0 0 5px;
+
+            &:first-child{
+              margin-left: 0;
+            }
+          }
+        }
+      }
+      
+    }
+  }
+
+  .loaded-files{
+    margin: 10px -20px -20px -20px;
+    border-top: 2px solid #b7b7b7;
+    border-bottom: 1px solid #b7b7b7;
+    padding: 10px 20px;
+
+    @media only screen and (max-width: $mobile-size) {
+      margin: 10px -10px -20px -10px;
+      padding: 10px -5px;
+    }
+
+
+    li{
+      color: #127dbb;
+      font-weight: 700;
+    }
+  }
+
 }

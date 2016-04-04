@@ -147,6 +147,22 @@ var Page = {
             });
         }
 
+    },
+
+    communityAdmin: {
+        init: function(){
+            this.groupMembersActions();
+            customizeFileTag();
+        },
+
+        groupMembersActions: function(){
+            $('#membersGroupAction a').click(function(e){
+                e.preventDefault();
+                var action = $(this).data('action');
+                $('input[name="action"]').val(action);
+                $('#groupMembersForm').submit();
+            })
+        }
     }
 
 
