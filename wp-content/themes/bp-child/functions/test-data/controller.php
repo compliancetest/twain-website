@@ -567,9 +567,11 @@ function viewProfileType()
             <?php }?>
         </div>
         <script type="text/javascript">
+            jQuery('.view-profile-type-box').hide();
             var t_data = Jsonary.create(<?php echo base64_decode($row->schema)?>).readOnlyCopy();
             var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);
+            setTimeout("jQuery('.popup-box').css('width', jQuery('.jsonary').width() + 100); jQuery('.view-profile-type-box').show();", 500);
         </script>
     <?php
     }
