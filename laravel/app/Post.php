@@ -18,9 +18,6 @@ class Post extends Model
     {
         $identifierRow = PostMeta::where(['post_id' => $this->ID])->get()->keyBy('meta_key');
         $strId = $identifierRow['product_id']->meta_value;
-        if (!empty($identifierRow['product_version'])) {
-            $strId .= ' v' . $identifierRow['product_version']->meta_value;
-        }
         return $strId;
     }
 }
