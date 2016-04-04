@@ -9,7 +9,7 @@ $data = [
         'L5MOD/' . AwsServiceProvider::VERSION,
     ]
 ];
-if(getenv('APP_ENV') == 'local'){
+if(getenv('ENVIRONMENT') == 'local'){
     $data['credentials'] = [
         'key' => 'AKIAI5A2F2WZFQUDE77A',
         'secret' => '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',
