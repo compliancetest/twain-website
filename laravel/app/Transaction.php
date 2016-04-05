@@ -11,6 +11,6 @@ class Transaction extends Model
     public $incrementing = false;
 
     protected $fillable = [
-
+        'execution_id', 'test_case_id'
     ];
 }
