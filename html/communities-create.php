@@ -38,11 +38,11 @@
                                             <div class="colored-box-content">
                                                 <div class="form-group">
                                                     <label for="community-name">Community Name (required):</label>
-                                                    <input type="text" value="" class="form-control" id="community-name" size="80" name="community-name" data-rule-required="true" required   data-msg-required="Please fill this field">
+                                                    <input type="text" value="" class="form-control" id="community-name" size="80" name="community-name" required data-msg-required="Please fill this field">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="community-desc">Community Description (required): </label>
-                                                    <textarea rows="5" class="form-control" id="community-desc" name="community-desc"></textarea>
+                                                    <textarea rows="5" class="form-control" id="community-desc" name="community-desc" required data-msg-required="Please fill this field"></textarea>
                                                 </div>
                                             </div>
                                         </div>
