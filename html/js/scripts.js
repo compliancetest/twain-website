@@ -12,11 +12,6 @@ jQuery(document).ready(function($) {
         $($(this).data('toggle-block')).toggle();
     });
 
-    $('.redactor_editor').redactor({
-        minHeight: 80
-    });
-
-
     Page.header.dashboardMenu();
 
 });
@@ -158,6 +153,11 @@ var Page = {
         init: function(){
             this.groupMembersActions();
             customizeFileTag();
+
+            $('.redactor_editor').redactor({
+                minHeight: 80
+            });
+
         },
 
         groupMembersActions: function(){
