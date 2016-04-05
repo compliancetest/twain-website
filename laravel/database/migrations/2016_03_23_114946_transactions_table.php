@@ -21,7 +21,7 @@ class TransactionsTable extends Migration
             $table->integer('test_case_id');
             $table->integer('subscription_id');
             $table->boolean('audit_record');
-            $table->integer('test_outcome_status_id');
+            $table->uuid('test_outcome_status_id');
             $table->integer('organisation_id');
             $table->timestamps();
 			$table->primary('id');
@@ -30,6 +30,7 @@ class TransactionsTable extends Migration
         Schema::create('transactions_logs', function(Blueprint $table) {
             $table->uuid('id');
             $table->uuid('transaction_id');
+            $table->string('execution_id');
             $table->string('test_step');
             $table->string('from');
             $table->string('to');

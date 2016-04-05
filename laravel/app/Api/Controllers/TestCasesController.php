@@ -5,9 +5,7 @@ namespace App\Api\Controllers;
 use App\Profile;
 use App\TestCase;
 use App\TestingDetail;
-use App\TestSuite;
 use App\Post;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel;
 
@@ -42,7 +40,7 @@ class TestCasesController extends BaseApiController
      */
     public function show()
     {
-        $testingDetails = TestingDetail::where(['is_running' => 1, 'user_id' => Auth::user()->ID])->first();
+        $testingDetails = TestingDetail::where(['is_running' => 1, 'user_id' => \Auth::user()->ID])->first();
         if (!count($testingDetails)) {
             return $this->respondUnprocessableEntity("Please set testing details");
         }

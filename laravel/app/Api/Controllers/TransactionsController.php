@@ -42,7 +42,7 @@ class TransactionsController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $fileName = getenv('ENVIRONMENT') . '/transactions/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+        $fileName = getenv('ENVIRONMENT') . '/transactions/' .\Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
 
         $s3 = Aws::createClient('s3');
         $s3->putObject(array(
@@ -52,7 +52,7 @@ class TransactionsController extends BaseApiController
         ));
 
         //adding entry to sqs. it will be processed in background
-        $this->dispatch(new ProcessTransactionLog($fileName));
+        $this->dispatch(new ProcessTransactionLog($fileName, $request->get('execution_id')));
 
         return $this->respondCreated('File Uploaded');
     }
