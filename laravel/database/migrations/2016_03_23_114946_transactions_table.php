@@ -41,6 +41,7 @@ class TransactionsTable extends Migration
             $table->string('twain_session_id');
             $table->text('screen_captures');
             $table->text('scan_results');
+            $table->boolean('status');
             $table->timestamps();
 			$table->primary('id');
         });
