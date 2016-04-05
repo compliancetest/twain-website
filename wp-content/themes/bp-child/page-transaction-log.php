@@ -80,19 +80,14 @@ $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 $esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterTags);
 
-$log_results = $esb->getUserTransactionLog($page, $limit, $orderBy, $order);
-
-$results = $log_results['data'];
-$messages = $log_results['messages'];
-
-
-$tProducts = $esb->getFilterOptionsForProduct();
-$tSuites = $esb->getFilterOptionsForSuite();
-$tCases = $esb->getFilterOptionsForCase();
-$tServices = $esb->getFilterOptionsForService();
-$tActions = $esb->getFilterOptionsForAction();
-$tPartyIDs = $esb->getFilterOptionsForPartId();
-$tTagsIDs = $esb->getFilterOptionsForTags();
+$log_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions WHERE customer_id = %d", get_current_user_id()));
+//$tProducts = $esb->getFilterOptionsForProduct();
+//$tSuites = $esb->getFilterOptionsForSuite();
+//$tCases = $esb->getFilterOptionsForCase();
+//$tServices = $esb->getFilterOptionsForService();
+//$tActions = $esb->getFilterOptionsForAction();
+//$tPartyIDs = $esb->getFilterOptionsForPartId();
+//$tTagsIDs = $esb->getFilterOptionsForTags();
 
 $params = array();
 
@@ -152,15 +147,6 @@ get_header();
             <a href="/testingdetails/"
                id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"
                onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>
-<!--            --><?php //if (PricingPlan::isSupportBulk() && \User\User::isGatewayConfigured()): ?>
-<!--                <a href="--><?php //echo get_site_url() ?><!--?ct-message-action=--><?php //echo wp_create_nonce('trigger-schedule') ?><!--"-->
-<!--                   id="trigger-schedule-link" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1-->
-<!--                   class="action-btn icon-btn blue-btn expand-btn trigger-btn left10"-->
-<!--                   onclick="javascript: void(0)"><span class="p"></span><span class="t">Trigger Schedule</span></a>-->
-<!--            --><?php //endif; ?>
-<!--            <a href="--><?php //echo get_site_url() ?><!--?ct-message-action=--><?php //echo wp_create_nonce('show-execution') ?><!--"-->
-<!--               id="upload-message-link" class="action-btn upload-btn left left10" onclick="javascript: void(0)"><span-->
-<!--                    class="p"></span><span class="t">Select Test Case</span></a>-->
 
             <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span
                     class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
@@ -177,244 +163,179 @@ get_header();
                         <div class="td td-product td-sortable">
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=product&order=<?php echo $orderBy == 'product' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'product'){ ?>class="<?php echo $order ?>"<?php } ?>>Product Name
-                                <span class="sort"></span></a>
+                            </a>
                         </div>
                         <div class="td td-case td-sortable td-two-lines tocenter">
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=suite&order=<?php echo $orderBy == 'suite' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'suite'){ ?>class="<?php echo $order ?>"<?php } ?>>Test Suite <span
-                                    class="sort"></span></a>
+                            </a>
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=case&order=<?php echo $orderBy == 'case' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'case'){ ?>class="<?php echo $order ?>"<?php } ?>>Test Case <span
-                                    class="sort"></span></a>
+                            </a>
                         </div>
-                        <!--                       <div class="td td-suite td-sortable">-->
-                        <!--                       </div>-->
                         <div class="td td-outcome td-two-lines tocenter td-sortable">
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=test_outcome&order=<?php echo $orderBy == 'test_outcome' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'test_outcome'){ ?>class="<?php echo $order ?>"<?php } ?>>Test<br/>Outcome
-                                <span class="sort"></span></a>
+                                <!--                                <span class="sort"></span>-->
+                            </a>
                         </div>
                         <div class="td td-audit td-two-lines tocenter td-sortable">
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=audit&order=<?php echo $orderBy == 'audit' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'audit'){ ?>class="<?php echo $order ?>"<?php } ?>>Audit<br/>Record
-                                <span class="sort"></span></a>
+                                <!--                                <span class="sort"></span>-->
+                            </a>
                         </div>
                         <div
-                            class="td td-convsn td-sortable tocenter<?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?> td-two-lines<?php endif; ?>">
-                            <?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?>
-                                Organisation<br>
-                                Subscription Nickname<br>
-                            <?php endif; ?>
+                            class="td td-convsn td-sortable tocenter td-two-lines">
+                            Organisation<br>
+                            Subscription Nickname<br>
+                            Conversation ID<br>
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=message&order=<?php echo $orderBy == 'message' && $order == 'asc' ? 'desc' : 'asc' ?>"
-                               <?php if ($orderBy == 'message'){ ?>class="<?php echo $order ?>"<?php } ?>>Conversation
-                                ID<span class="sort"></span></a>
+                               <?php if ($orderBy == 'message'){ ?>class="<?php echo $order ?>"<?php } ?>>
+                            </a>
                         </div>
                         <div class="td td-date td-sortable tocenter">
                             <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=date&order=<?php echo $orderBy == 'date' && $order == 'asc' ? 'desc' : 'asc' ?>"
                                <?php if ($orderBy == 'date'){ ?>class="<?php echo $order ?>"<?php } ?>>Date/Time <span
                                     class="sort"></span></a>
                         </div>
-                        <!--                       <div class="td td-to tocenter">To</div>-->
                         <div class="clear"></div>
                     </div>
                     <div class="tbody">
-                        <?php if (!$results) { ?>
+                        <?php if (!$log_results) { ?>
                             <div class="tr">
                                 <div class="td td-full">No Transaction Found.</div>
                                 <div class="clear"></div>
                             </div>
                         <?php } else {
-                            foreach ($results as $row) {
+                            foreach ($log_results as $row) {
                                 ?>
                                 <div class="tr">
                                     <div class="td td-chk tocenter">
-                                        <?php if (\ClaimsConversations\ClaimsConversations::doesConversationExists($row->ID)): ?>
-                                            <span class="has-tooltip">
-                                            <input type="checkbox" disabled="disabled" class="field-tooltip" name="id[]"
-                                                   id="id<?php echo $row->ID ?>" value="<?php echo $row->ID ?>"/>
-                                            <span class="simple_tooltip radius6"
-                                                  style="top: -14px; left: -48px; width: 200px;">This transaction cannot be modified as it is included in a claim.<span></span></span>
-                                        </span>
-                                        <?php else: ?>
-                                            <input type="checkbox" name="id[]" id="id<?php echo $row->ID ?>"
-                                                   value="<?php echo $row->ID ?>"/>
-                                        <?php endif; ?>
+                                        <!--                                        --><?php //if (\ClaimsConversations\ClaimsConversations::doesConversationExists($row->ID)): ?>
+                                        <!--                                            <span class="has-tooltip">-->
+                                        <!--                                            <input type="checkbox" disabled="disabled" class="field-tooltip" name="id[]"-->
+                                        <!--                                                   id="id-->
+                                        <?php //echo $row->ID ?><!--" value="--><?php //echo $row->ID ?><!--"/>-->
+                                        <!--                                            <span class="simple_tooltip radius6"-->
+                                        <!--                                                  style="top: -14px; left: -48px; width: 200px;">This transaction cannot be modified as it is included in a claim.<span></span></span>-->
+                                        <!--                                        </span>-->
+                                        <!--                                        --><?php //else: ?>
+                                        <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>"
+                                               value="<?php echo $row->id ?>"/>
+                                        <!--                                        --><?php //endif; ?>
                                     </div>
                                     <div class="td td-product">
                                         <a href="#" class="view-messages-link has-tooltip">
                                             <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                         </a>
-                                        <?php if (!$row->PRODUCT_WP_ID) { ?>
-                                            Not Assigned
-                                        <?php } else { ?>
-                                            <a href="<?php echo get_permalink($row->PRODUCT_WP_ID) ?>"><?php echo get_post_meta($row->PRODUCT_WP_ID, 'product_name', true) ?></a>
-                                        <?php } ?>
+                                        <a href="<?php echo get_permalink($row->product_id) ?>"><?php echo get_post_meta($row->product_id, 'product_name', true) ?></a>
                                     </div>
                                     <div class="td td-case tocenter">
-                                        <?php if ($row->TEST_SUITE_WP_ID) { ?>
-                                            <a href="<?php echo get_permalink($row->TEST_SUITE_WP_ID) ?>"><?php echo cp_wrap($row->TEST_SUITE_TITLE, 25) ?></a>
-                                        <?php } else if (!$row->TEST_SUITE_WP_ID && $row->TEST_CASE_WP_ID) { ?>
-                                            <?php
-                                            $tSuiteId = get_post_meta($row->TEST_CASE_WP_ID, 'test_suite');
-                                            if ($tSuiteId && count($tSuiteId) == 1) {
-                                                $esb->updateTestSuiteID($row->ID, $tSuiteId[0]);
-                                                ?>
-                                                <a href="<?php echo get_permalink($tSuiteId[0]) ?>"><?php echo cp_wrap(get_the_title($tSuiteId[0]), 25) ?></a>
-                                                <?php
-                                            } else {
-                                                echo 'Not Assigned';
-                                            }
-                                        } else {
-                                            echo 'Not Assigned';
-                                        } ?>
+                                        <a href="<?php echo get_permalink($row->test_suite_id) ?>"><?php echo cp_wrap(get_the_title($row->test_suite_id), 25) ?></a>
                                         </br>
-                                        <?php if (!$row->TEST_CASE_WP_ID) { ?>
-                                            Not Assigned
-                                        <?php } else { ?>
-                                            <a href="<?php echo get_permalink($row->TEST_CASE_WP_ID) ?>"><?php echo cp_wrap($row->TEST_CASE_ID, 22) ?></a>
-                                        <?php } ?>
+                                        <a href="<?php echo get_permalink($row->test_case_id) ?>"><?php echo cp_wrap(get_the_title($row->test_case_id), 22) ?></a>
 
                                     </div>
-                                    <!--                               <div class="td td-suite">-->
-                                    <!---->
-                                    <!--                               </div>-->
                                     <div class="td td-outcome">
                                         <a href="#" class="view-messages-link has-tooltip">
                                             <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                         </a>
-                                        <?php if ($row->TEST_OUTCOME_CODE) { ?>
-                                            <span
-                                                class="status-<?php echo strtolower($row->TEST_OUTCOME_CODE) ?>"><?php echo $row->TEST_OUTCOME_LABEL ?></span>
-                                        <?php } else { ?>
-                                            <span class="status-unverified">Not Performed</span>
-                                        <?php } ?>
+                                        <?php $status = ($row->status == '1' ? 'success' : 'error'); ?>
+                                        <span
+                                            class="status-<?php echo $status; ?>"><?php echo strtoupper($status); ?></span>
                                         <br/>
                                     </div>
                                     <div
-                                        class="td td-audit tocenter"><?php echo !$row->AUDIT_RECORD ? "No" : "Yes" ?></div>
+                                        class="td td-audit tocenter"><?php echo !$row->audit_record ? "No" : "Yes" ?></div>
                                     <div
-                                        class="td td-convsn tocenter<?php if (is_super_admin() || ct_is_group_admin_or_support($user_id)): ?> td-two-lines<?php endif; ?>">
+                                        class="td td-convsn tocenter td-two-lines">
                                         <a href="javascript:void(0)">
                                             <?php
-                                            if (is_super_admin() || ct_is_group_admin_or_support($user_id)) {
-                                                $organisation = ct_get_organisation_by_subscription_id($row->ORGANISATION_SUBSCRIPTION_ID);
-                                                echo $organisation ? $organisation->organisation_name : ' - ';
-                                                echo '<br>';
-                                                $subscription = ct_get_organisation_subscription_by_id($row->ORGANISATION_SUBSCRIPTION_ID);
-                                                echo $subscription ? $subscription->nickname : ' - ';
-                                                echo '<br>';
-                                            }
-                                            if (strlen($row->CONVERSATION_ID) > 38) {
-                                                echo '<span title="' . $row->CONVERSATION_ID . '">' . substr($row->CONVERSATION_ID, 0, 15) . "....." . substr($row->CONVERSATION_ID, -15) . '</span>';
+                                            $organisation = ct_get_organisation_by_subscription_id($row->subscription_id);
+                                            echo $organisation ? $organisation->organisation_name : ' - ';
+                                            echo '<br>';
+                                            $subscription = ct_get_organisation_subscription_by_id($row->subscription_id);
+                                            echo $subscription ? $subscription->nickname : ' - ';
+                                            echo '<br>';
+                                            if (strlen($row->execution_id) > 38) {
+                                                echo '<span title="' . $row->execution_id . '">' . substr($row->execution_id, 0, 15) . "....." . substr($row->execution_id, -15) . '</span>';
                                             } else {
-                                                echo $row->CONVERSATION_ID;
+                                                echo $row->execution_id;
                                             }
                                             ?>
                                         </a>
-                                        <input type="text" value="<?php echo $row->CONVERSATION_ID; ?>"
+                                        <input type="text" value="<?php echo $row->execution_id; ?>"
                                                readonly="readonly">
                                     </div>
                                     <div class="td td-date tocenter">
-                                        <?php echo formatDate($row->CONVERSATION_TIMESTAMP, 'Y-m-d H:i:s') ?><br/>
+                                        <?php echo formatDate($row->date_updated, 'Y-m-d H:i:s') ?><br/>
                                     </div>
                                     <div class="clear"></div>
-                                    <?php if (isset($messages[$row->ID])) { ?>
+
+                                    <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s", $row->id)); ?>
+                                    <?php if ($logs) { ?>
                                         <div class="sub-table">
                                             <div class="table">
                                                 <div class="thead tr">
-                                                    <div class="td td-from td-two-lines tocenter">From</br>To</div>
-                                                    <!--                                               <div class="td td-to tocenter">To</div>-->
-                                                    <div class="td td-service td-two-lines tocenter">Service</br>
-                                                        Action
+                                                    <div class="td td-from td-two-lines tocenter" style="width: 9%;">
+                                                        From</br>To
                                                     </div>
-                                                    <!--                                               <div class="td td-action tocenter">Action</div>-->
-                                                    <div class="td td-message-outcome td-two-lines tocenter">Validation
-                                                        Status
+
+                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                        Test </br>
+                                                        Step
                                                     </div>
-                                                    <div class="td td-message-date">Date/Time</div>
-                                                    <div class="td td-message-part tocenter">Part ID</div>
-                                                    <div class="td td-message-view">View</div>
+
+                                                    <div class="td td-service td-two-lines tocenter"
+                                                         style="width: 17%;">Operation Triplet </br>
+                                                        Return Code
+                                                    </div>
+                                                    <div class="td td-message-date" style="width: 9%;">Session State
+                                                    </div>
+                                                    <div class="td td-message-part tocenter" style="width: 9%;">Message
+                                                        Data
+                                                    </div>
+                                                    <div class="td td-message-view" style="width: 9%;">Date/Time</div>
+                                                    <div class="td td-message-view" style="width: 9%;">TWAIN Session
+                                                        ID
+                                                    </div>
+                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                        Screen </br>
+                                                        Capture
+                                                    </div>
+                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                        Scan </br>
+                                                        Result
+                                                    </div>
                                                     <div class="clear"></div>
                                                 </div>
                                                 <div class="tbody">
-                                                    <?php if (isset($messages[$row->ID]) && is_iterable($messages[$row->ID])): ?>
-                                                        <?php foreach ($messages[$row->ID] as $message) { ?>
-                                                            <?php if ($message->FLAG === 'IS_EMPTY') continue; ?>
+                                                    <?php if ($logs): ?>
+                                                        <?php foreach ($logs as $message) { ?>
                                                             <div class="tr">
-                                                                <div
-                                                                    class="td td-from td-two-lines"><?php echo cp_wrap($message->FROM_PARTY_ID, 15) . '</br>' . cp_wrap($message->TO_PARTY_ID, 15) ?></div>
-                                                                <!--                                                   <div class="td td-to">-->
-                                                                <?php //echo cp_wrap($message->TO_PARTY_ID, 15)?><!--</div>-->
-                                                                <div
-                                                                    class="td td-two-lines td-service tocenter"><?php echo $message->SERVICE . '</br>' . $message->ACTION ?></div>
-                                                                <!--                                                   <div class="td td-action">-->
-                                                                <?php //echo $message->ACTION ?><!--</div>-->
-                                                                <div class="td td-message-outcome tocenter">
-                                                                    <?php if ($message->MESSAGE_OUTCOME_CODE) { ?>
-                                                                        <span
-                                                                            class="status-<?php echo strtolower($message->MESSAGE_OUTCOME_CODE) ?>"><?php echo $message->MESSAGE_OUTCOME_LABEL ?></span>
-                                                                    <?php } else { ?>
-                                                                        <span
-                                                                            class="status-unverified">Not Processed</span>
-                                                                    <?php } ?>
-                                                                    <br/>
-                                                                    <a href="#" data-id="<?php echo $message->ID ?>"
-                                                                       class="view-message-validation-log">View Log</a>
+                                                                <div class="td td-from td-two-lines tocenter" style="width: 9%;">
+                                                                    <?php echo $message->from;?>
+                                                                    </br>
+                                                                    <?php echo $message->to;?>
                                                                 </div>
-                                                                <div class="td td-message-date">
-                                                                    <?php echo formatDate($message->MESSAGE_TIMESTAMP, 'Y-m-d H:i:s') ?>
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                                    <?php echo implode('<br>', json_decode($message->test_step));?>
                                                                 </div>
-                                                                <div class="td td-message-part tocenter">
-                                                                    <a href="javascript:void(0)">
-                                                                        <?php
-                                                                        if (strlen($message->PART_ID) > 28) {
-                                                                            echo '<span title="' . $message->PART_ID . '">' . substr($message->PART_ID, 0, 10) . "....." . substr($message->PART_ID, -10) . '</span>';
-                                                                        } else {
-                                                                            echo $message->PART_ID;
-                                                                        }
-                                                                        if ($message->COPY_COUNT > 1) {
-                                                                            echo '<br>(' . $message->COPY_COUNT . ' copies)';
-                                                                        }
-                                                                        ?>
-                                                                    </a>
-                                                                    <input type="text"
-                                                                           value="<?php echo $message->PART_ID; ?>"
-                                                                           readonly="readonly">
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 17%;">
+                                                                    <?php echo $message->operation_triplet;?> </br>
+                                                                    <?php echo $message->return_code;?>
                                                                 </div>
-                                                                <div class="td td-message-view">
-                                                                    <?php
-                                                                    if ($message->FLAG == 'IS_EMPTY' && $message->PAYLOAD) {
-                                                                        echo '-';
-                                                                    } else {
-                                                                        ?>
-                                                                        <!--<a href="<?php echo "/message-envelope?id=" . $message->ID ?>" target="_blank">XML</a> -->
-                                                                        <a href="<?php echo ($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_LOCATION) ? $message->S3_PAYLOAD_LOCATION : "/message-envelope?id=" . $message->ID ?>"
-                                                                           target="_blank">XML</a>
-                                                                        |
-                                                                        <?php if ($message->FLAG != 'IS_EMPTY' && $message->S3_PAYLOAD_CONTENT_LENGTH > $html_render_limit) { ?>
-                                                                            <a href="<?php echo $message->S3_PAYLOAD_LOCATION ?>"
-                                                                               class="html-view-error">HTML</a>
-                                                                        <?php } else { ?>
-                                                                            <a href="/message-envelope?id=<?php echo $message->ID ?>&mode=html"
-                                                                               target="_blank">HTML</a>
-                                                                        <?php } ?>
-                                                                    <?php } ?>
-                                                                    <br>
-                                                                    <a class="show_transaction_receipts"
-                                                                       data-ctreceipt="<?php echo is_null($message->CT_RECEIPT_MESSAGE_ID) ? 'No value' : $message->CT_RECEIPT_MESSAGE_ID; ?>"
-                                                                       data-gateway="<?php echo is_null($message->GATEWAY_RECEIPT_MESSAGE_ID) ? 'No value' : $message->GATEWAY_RECEIPT_MESSAGE_ID; ?>"
-                                                                       data-responcestatus="<?php echo ManageESB::getReceiptMapping($message->RESPONSE_STATUS); ?>"
-                                                                       data-location="<?php echo $message->S3_RESPONSE_LOCATION; ?>"
-                                                                       href="#">Receipts</a>
-                                                                    <?php if ($message->UPLOAD_ID): ?>
-                                                                        <br>
-                                                                        <a href="<?php echo S3Wrapper::getUploadLink($esb->getFileName($message->UPLOAD_ID)); ?>">Envelope</a>
-                                                                        <!--                                                            <a href="/?cp-action=--><?php //echo wp_create_nonce('download_file');?><!--&id=--><?php //echo $esb->getFileName( $message->UPLOAD_ID );?><!--">Envelope</a>-->
-                                                                    <?php endif; ?>
-                                                                    <?php if ($message->S3_ENVELOPE): ?>
-                                                                        <br>
-                                                                        <a href="<?php echo $message->S3_ENVELOPE; ?>">Envelope</a>
-                                                                    <?php endif; ?>
+                                                                <div class="td td-message-date" style="width: 9%;"><?php echo $message->session_state;?></div>
+                                                                <div class="td td-message-part tocenter" style="width: 9%;"><?php echo $message->message_data;?>
+                                                                </div>
+                                                                <div class="td td-message-view" style="width: 9%;"><?php echo $message->updated_at;?></div>
+                                                                <div class="td td-message-view" style="width: 9%;"><?php echo $message->twain_session_id;?></div>
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                                    -
+                                                                </div>
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                                    -
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
@@ -434,7 +355,7 @@ get_header();
                     </div>
                 </div>
             </div>
-            <div class="space10"></div>
+            <div class="space9"></div>
             <?php if ($log_results['total'] > 0) { ?>
                 <div class="pagination-wrapper">
                     <div class="pagination-limit">
