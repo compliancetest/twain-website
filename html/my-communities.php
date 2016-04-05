@@ -23,7 +23,7 @@
             <div class="tabs-menu">
                 <ul>
                     <li class="organisation-tab"><a href="#" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
-                    <li class="communities-tab"><a class="active" data-tooltip="tooltip" href="#" title="My community memberships">Communities</a></li>
+                    <li class="communities-tab"><a class="active" data-tooltip="tooltip" href="my-communities.php" title="My community memberships">Communities</a></li>
                     <li class="test-suites-tab"><a href="#" data-tooltip="tooltip" title="My test suite subscriptions">Test Suites</a></li>
                     <li class="test-data-tab"><a href="#" data-tooltip="tooltip" title="My profile data">Test Data</a></li>
                     <li class="products-tab"><a href="#" data-tooltip="tooltip" title="My products under test">Products</a></li>
@@ -48,16 +48,16 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><a href="communities-detail.php">SuperStream</a></td>
+                                <td><a href="communities-test-suites.php">SuperStream</a></td>
                                 <td class="text-center">2013-06-29</td>
                                 <td>Admin</td>
-                                <td class="text-center"><a id="btn-remove" class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td class="text-center"><a id="btn-remove" class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                             <tr>
-                                <td><a href="communities-detail.php">SuperStream</a></td>
+                                <td><a href="communities-test-suites.php">SuperStream</a></td>
                                 <td class="text-center">2013-06-29</td>
                                 <td>Admin</td>
-                                <td class="text-center"><a class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-href="http://compliancetest.lc" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
+                                <td class="text-center"><a class="btn btn-icon btn-danger btn-delete" href="#confirmRemoveMembership" data-tooltip="tooltip" data-toggle="modal" title="Remove Membership">Remove</a></td>
                             </tr>
                         </tbody>
                     </table>

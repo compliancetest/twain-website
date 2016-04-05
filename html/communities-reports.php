@@ -63,7 +63,7 @@
                             <li class="test-suites-tab"><a href="communities-test-suites.php">Test Suites</a></li>
                             <li class="test-data-tab"><a href="communities-test-data.php">Test Data</a></li>
                             <li class="articles-tab"><a href="communities-articles.php">Articles</a></li>
-                            <li class="forum-tab"><a href="communities-forum.php">Forum</a></li>
+                            <li class="forum-tab"><a href="#">Forum</a></li>
                             <li class="downloads-tab"><a href="communities-downloads.php">Downloads</a></li>
                             <li class="reports-tab"><a href="communities-reports.php" class="active">Reports</a></li>
                             <li class="admin-tab"><a href="communities-admin.php">Admin</a></li>
