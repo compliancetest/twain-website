@@ -8915,7 +8915,7 @@ select.form-control {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1459594762') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1456756501') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9625,7 +9625,7 @@ select.form-control {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1459594762') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1458553303') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9652,7 +9652,7 @@ select.form-control {
 }
 /* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1459594762') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1458553303') repeat 0 0;
 }
 /* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -9679,7 +9679,7 @@ select.form-control {
 }
 /* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1459594762') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1458553303') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9832,7 +9832,7 @@ select.form-control {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1453146388') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1459776243') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10860,6 +10860,198 @@ body .redactor_toolbar li a.redactor_btn_pre {
   margin-bottom: 12px;
 }
 
+/* line 1, ../scss/blocks/_slimmenu.scss */
+.menu-collapser {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  padding: 0 8px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 48px;
+  background-color: #5699ec;
+}
+
+/* line 11, ../scss/blocks/_slimmenu.scss */
+.collapse-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  width: 40px;
+  padding: 7px 10px;
+  color: #FFFFFF;
+  font-size: 14px;
+  text-align: center;
+  background-color: #0E0E0E;
+  border-radius: 2px;
+  cursor: pointer;
+  transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+}
+/* line 30, ../scss/blocks/_slimmenu.scss */
+.collapse-button:hover, .collapse-button:focus {
+  color: #FFF;
+  background-color: #040404;
+}
+/* line 36, ../scss/blocks/_slimmenu.scss */
+.collapse-button .icon-bar {
+  display: block;
+  height: 2px;
+  width: 18px;
+  margin: 2px 0;
+  background-color: #F5F5F5;
+  border-radius: 1px;
+}
+
+/* line 46, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu {
+  width: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+/* line 53, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu:before, ul.slimmenu:after {
+  content: '';
+  display: table;
+}
+/* line 59, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu:after {
+  clear: both;
+}
+/* line 64, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu.collapsed li {
+  display: block;
+  width: 100%;
+}
+/* line 68, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu.collapsed li > ul {
+  position: static;
+  display: none;
+}
+/* line 73, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu.collapsed li a {
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+/* line 82, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu.collapsed li .sub-toggle {
+  height: 40px;
+  float: right;
+  color: #fff;
+}
+/* line 90, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu .dropdown-menu {
+  margin: 0;
+  padding: 0;
+}
+/* line 95, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li {
+  position: relative;
+  float: left;
+  display: inline-block;
+  background-color: #AAA;
+}
+/* line 101, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li ul {
+  margin: 0;
+  list-style-type: none;
+}
+/* line 105, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li ul li {
+  background: #bbbbbb;
+}
+/* line 110, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li > ul {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 999;
+  display: none;
+  width: 100%;
+}
+/* line 118, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li > ul > li ul {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  z-index: 999;
+  display: none;
+  width: 100%;
+}
+/* line 128, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li a {
+  display: block;
+  padding: 10px 64px 10px 16px;
+  background: #2d83cd;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  transition: background-color 0.5s ease-out;
+  -o-transition: background-color 0.5s ease-out;
+  -moz-transition: background-color 0.5s ease-out;
+  -webkit-transition: background-color 0.5s ease-out;
+}
+/* line 140, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li a:hover {
+  text-decoration: none;
+  background-color: #288ce2;
+}
+/* line 147, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li li a {
+  padding-left: 30px;
+}
+/* line 152, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li li li a {
+  padding-left: 40px;
+}
+/* line 157, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li li li li a {
+  padding-left: 60px;
+}
+/* line 165, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li .sub-toggle {
+  background: #fff;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 999;
+  width: 48px;
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 176, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li .sub-toggle:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  margin-right: -0.25em;
+  vertical-align: middle;
+}
+/* line 184, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu li .sub-toggle > i {
+  display: inline-block;
+  color: #333;
+  font-size: 18px;
+  vertical-align: middle;
+}
+/* line 193, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu > li {
+  border-left: 1px solid #999;
+}
+/* line 196, ../scss/blocks/_slimmenu.scss */
+ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
+  border-left: 0;
+}
+
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -11552,7 +11744,7 @@ body .redactor_toolbar li a.redactor_btn_pre {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after {
   content: "\0020";
   display: block;
@@ -11593,7 +11785,7 @@ body .redactor_toolbar li a.redactor_btn_pre {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -12203,9 +12395,15 @@ body .redactor_toolbar li a.redactor_btn_pre {
 
 @media only screen and (max-width: 640px) {
   /* line 540, ../scss/_header.scss */
-  .dropdown-menu {
+  .header-inner {
+    padding: 0 0 10px 0;
+  }
+
+  /* line 544, ../scss/_header.scss */
+  #header .dashboard-dropdown-menu {
     position: relative;
     float: none;
+    border: 0;
     width: 100%;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
@@ -12214,7 +12412,7 @@ body .redactor_toolbar li a.redactor_btn_pre {
 }
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1459594762') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1456756501') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

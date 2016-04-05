@@ -8,80 +8,81 @@
                         <img width="32" height="32" alt="Admin" class="avatar" src="https://secure.gravatar.com/avatar/0510c4f56be3635770ffbec748937368?d=https://www.compliancetest.net/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg&amp;s=32&amp;r=G">
                         <div class="header-welcome">Welcome <strong class="header-username">Steve</strong></div>
                     </div>
+
                     <ul class="account-menu">
-                        <li class="dashboard-menu">
+                        <li class="dashboard-menu hidden-desktop">
                             <a href="#" class="btn btn-primary btn-dropdown" data-toggle-block="#header-dashboard-menu">Dashboard</a>
                             <ul class="dropdown-menu dashboard-dropdown-menu" id="header-dashboard-menu">
                                 <li class="first">
-                                    <a data-title="Organisation" href="http://compliancetest.lc/my-organisation/" class="menu-organisation">Organisation</a>
+                                    <a data-title="Organisation" href="#" class="menu-organisation">Organisation</a>
                                     <ul class="dropdown-menu">
-                                        <li class="first"><a data-title="Organisation &gt; Users" href="http://compliancetest.lc/my-organisation/users" class="">Users</a></li>
-                                        <li class=""><a data-title="Organisation &gt; Subscriptions" href="http://compliancetest.lc/my-organisation/test-suites" class="">Subscriptions</a></li>
-                                        <li class="last"><a data-title="Organisation &gt; Profile" href="http://compliancetest.lc/my-organisation/" class="">Profile</a></li>
+                                        <li class="first"><a href="#">Users</a></li>
+                                        <li><a href="#">Subscriptions</a></li>
+                                        <li class="last"><a href="#">Profile</a></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a data-title="Communities" href="http://compliancetest.lc/my-communities/" class="menu-communities">Communities</a>
+                                    <a data-title="Communities" href="my-communities.php" class="menu-communities">Communities</a>
                                     <ul class="dropdown-menu">
-                                        <li class="first"><a data-title="Communities &gt; ebMS3" href="http://compliancetest.lc/communities/ebms3/" class="">ebMS3</a>
-                                            <ul class="dropdown-menu ">
-                                                <li class="first"><a data-title="Communities &gt; ebMS3 &gt; Test Suites" href="http://compliancetest.lc/communities/ebms3/">Test Suites</a>
-                                                    <ul class="dropdown-menu ">
-                                                        <li class="first"><a data-title="Communities &gt; ebMS3 &gt; Test Suites &gt; Superstream Profiles v0.0" href="http://compliancetest.lc/test-suite/superstream-profiles-v0-0/">Superstream Profiles v0.0</a></li>
-                                                        <li><a data-title="Communities &gt; ebMS3 &gt; Test Suites &gt; AS4 Profiles v0.0" href="http://compliancetest.lc/test-suite/as4-profiles-v0-0/" class="">AS4 Profiles v0.0</a></li>
-                                                        <li><a data-title="Communities &gt; ebMS3 &gt; Test Suites &gt; Advanced Features v0.0" href="http://compliancetest.lc/test-suite/advanced-features-v0-0/" class="">Advanced Features v0.0</a></li>
-                                                        <li class="last"><a data-title="Communities &gt; ebMS3 &gt; Test Suites &gt; Core Features v0.0" href="http://compliancetest.lc/test-suite/core-features-v0-0/" class="">Core Features v0.0</a></li>
+                                        <li class="first"><a href="#">ebMS3</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="first">
+                                                    <a href="#">Test Suites</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="first"><a href="#">Superstream Profiles v0.0</a></li>
+                                                        <li><a href="#">AS4 Profiles v0.0</a></li>
+                                                        <li><a href="#">Advanced Features v0.0</a></li>
+                                                        <li class="last"><a href="#">Core Features v0.0</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a data-title="Communities &gt; ebMS3 &gt; Test Data" href="http://compliancetest.lc/communities/ebms3/testdata" class="">Test Data</a></li>
-                                                <li><a data-title="Communities &gt; ebMS3 &gt; Articles" href="http://compliancetest.lc/communities/ebms3/wiki" class="">Articles</a></li>
-                                                <li><a data-title="Communities &gt; ebMS3 &gt; Forum" href="http://compliancetest.lc/communities/ebms3/forum" class="">Forum</a></li>
-                                                <li><a data-title="Communities &gt; ebMS3 &gt; Downloads" href="http://compliancetest.lc/communities/ebms3/downloads" class="">Downloads</a></li>
-                                                <li><a data-title="Communities &gt; ebMS3 &gt; Reports" href="http://compliancetest.lc/communities/ebms3/reports" class="">Reports</a></li>
-                                                <li class="last"><a data-title="Communities &gt; ebMS3 &gt; Admin" href="http://compliancetest.lc/communities/ebms3/admin" class="">Admin</a></li>
+                                                <li><a href="communities-test-data.php">Test Data</a></li>
+                                                <li><a href="communities-articles.php">Articles</a></li>
+                                                <li><a href="#">Forum</a></li>
+                                                <li><a href="communities-downloads.php">Downloads</a></li>
+                                                <li><a href="communities-reports.php">Reports</a></li>
+                                                <li class="last"><a href="communities-admin.php">Admin</a></li>
                                             </ul>
                                         </li>
                                         <li>
-                                            <a data-title="Communities &gt; SuperStream" href="http://compliancetest.lc/communities/superstream/" class="">SuperStream</a>
-                                            <ul class="dropdown-menu ">
-                                                <li class="first"><a data-title="Communities &gt; SuperStream &gt; Test Suites" href="http://compliancetest.lc/communities/superstream/" class="">Test Suites</a>
-                                                    <ul class="dropdown-menu ">
-                                                        <li class="first"><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Contributions v1.3" href="http://compliancetest.lc/test-suite/contributions-v1-3/" class="">Contributions v1.3</a></li>
-                                                        <li><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Contributions v1.2" href="http://compliancetest.lc/test-suite/contributions-v1-2/" class="">Contributions v1.2</a></li>
-                                                        <li><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Contributions v1.1" href="http://compliancetest.lc/test-suite/contributions-v1-1/" class="">Contributions v1.1</a></li>
-                                                        <li><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Contributions v1.0.1" href="http://compliancetest.lc/test-suite/contributions-v1-0-1/" class="">Contributions v1.0.1</a></li>
-                                                        <li><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Contributions v1.0" href="http://compliancetest.lc/test-suite/contributions-v1-0/" class="">Contributions v1.0</a></li>
-                                                        <li class="last"><a data-title="Communities &gt; SuperStream &gt; Test Suites &gt; Rollovers v1.0" href="http://compliancetest.lc/test-suite/rollovers-v1-0/" class="">Rollovers v1.0</a></li>
+                                            <a href="communities-test-suites.php">SuperStream</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="first"><a href="communities-test-suites.php">Test Suites</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="first"><a href="#">Contributions v1.3</a></li>
+                                                        <li><a href="#">Contributions v1.2</a></li>
+                                                        <li><a href="#">Contributions v1.1</a></li>
+                                                        <li><a href="#">Contributions v1.0.1</a></li>
+                                                        <li><a href="#">Contributions v1.0</a></li>
+                                                        <li class="last"><a href="#">Rollovers v1.0</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a data-title="Communities &gt; SuperStream &gt; Test Data" href="http://compliancetest.lc/communities/superstream/testdata" class="">Test Data</a></li>
-                                                <li><a data-title="Communities &gt; SuperStream &gt; Articles" href="http://compliancetest.lc/communities/superstream/wiki" class="">Articles</a></li>
-                                                <li><a data-title="Communities &gt; SuperStream &gt; Forum" href="http://compliancetest.lc/communities/superstream/forum" class="">Forum</a></li>
-                                                <li><a data-title="Communities &gt; SuperStream &gt; Downloads" href="http://compliancetest.lc/communities/superstream/downloads" class="">Downloads</a></li>
-                                                <li><a data-title="Communities &gt; SuperStream &gt; Reports" href="http://compliancetest.lc/communities/superstream/reports" class="">Reports</a></li>
-                                                <li class="last"><a data-title="Communities &gt; SuperStream &gt; Admin" href="http://compliancetest.lc/communities/superstream/admin" class="">Admin</a></li>
+                                                <li><a href="communities-test-data.php">Test Data</a></li>
+                                                <li><a href="communities-articles.php">Articles</a></li>
+                                                <li><a href="#">Forum</a></li>
+                                                <li><a href="communities-downloads.php">Downloads</a></li>
+                                                <li><a href="communities-reports.php">Reports</a></li>
+                                                <li class="last"><a href="communities-admin.php">Admin</a></li>
                                             </ul>
                                         </li>
-                                        <li class="action-link last"><a data-title="Communities &gt; + Add" href="http://compliancetest.lc/communities" class="">+ Add</a></li>
+                                        <li class="action-link last"><a href="#">+ Add</a></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a data-title="Test Suites" href="http://compliancetest.lc/my-test-suites/" class="menu-test-suites">Test Suites</a>
+                                    <a data-title="Test Suites" href="communities-test-suites.php" class="menu-test-suites">Test Suites</a>
                                     <ul class="dropdown-menu">
-                                        <li class="first"><a data-title="Test Suites &gt; Contributions v1.3" href="http://compliancetest.lc/test-suite/contributions-v1-3/" class="">Contributions v1.3</a></li>
-                                        <li class="action-link last"><a data-title="Test Suites &gt; + Add" href="http://compliancetest.lc/test-suites" class="">+ Add</a></li>
+                                        <li class="first"><a href="#">Contributions v1.3</a></li>
+                                        <li class="action-link last"><a href="#" >+ Add</a></li>
                                     </ul>
                                 </li>
-                                <li><a data-title="Test Data" href="http://compliancetest.lc/my-test-data/" class="menu-test-data">Test Data</a></li>
-                                <li><a data-title="Products" href="http://compliancetest.lc/my-products/" class="menu-products">Products</a></li>
-                                <li><a data-title="Coverage" href="http://compliancetest.lc/test-suite-coverage/" class="menu-coverage">Coverage</a></li>
-                                <li><a data-title="Transactions" href="http://compliancetest.lc/my-transaction-log/" class="menu-transactions">Transactions</a></li>
-                                <li><a data-title="Support" href="http://compliancetest.lc/my-support-tickets/" class="menu-support">Support</a></li>
-                                <li><a data-title="Profile" href="http://compliancetest.lc/my-profile/" class="menu-profile">Profile</a></li>
-                                <li class="last"><a data-title="Agreements" href="http://compliancetest.lc/agreements/" class="menu-agreements">Agreements</a></li>
+                                <li><a data-title="Test Data" href="communities-test-data.php" class="menu-test-data">Test Data</a></li>
+                                <li><a data-title="Products" href="#" class="menu-products">Products</a></li>
+                                <li><a data-title="Coverage" href="#" class="menu-coverage">Coverage</a></li>
+                                <li><a data-title="Transactions" href="#" class="menu-transactions">Transactions</a></li>
+                                <li><a data-title="Support" href="#" class="menu-support">Support</a></li>
+                                <li><a data-title="Profile" href="#" class="menu-profile">Profile</a></li>
+                                <li class="last"><a data-title="Agreements" href="#" class="menu-agreements">Agreements</a></li>
                             </ul>
                         </li>
-                        <li class="hidden-mobile"><span id="mobile-menu" data-toggle-block="#navbar" class="btn btn-default">Menu</span></li>
                         <li class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></li>
                         <li><a href="#" class="btn btn-danger btn-logout">Logout</a></li>
                     </ul>

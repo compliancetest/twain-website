@@ -38,9 +38,27 @@ var Page = {
             var windowWidth = $('#main-wrapper').width();
 
             if (windowWidth <= 640){
+                $('#header-dashboard-menu').find('.dropdown-menu').removeClass('dropdown-menu');
                 var dashboardMenu = $('#header-dashboard-menu').detach();
                 dashboardMenu.insertBefore('#navbar');
+
+                $('#navbar .menu').wrap('<li id="mainMenuMobile"></li>');
+                $('#mainMenuMobile').prepend('<a href="#" class="page-mobile-link">Pages</a>');
+                var mainMenu = $('#mainMenuMobile').detach();
+                dashboardMenu.append(mainMenu);
+
+                $('.page-mobile-link').click(function(e){
+                    e.preventDefault();
+                    $(this).siblings('.sub-toggle').click();
+                });
+
+                $('#header-dashboard-menu').addClass('slimmenu').slimmenu({
+                    collapserTitle: 'Menu'
+                });
+
             }
+
+
 
         }
     },

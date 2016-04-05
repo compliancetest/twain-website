@@ -537,9 +537,14 @@
 }
 
 @media only screen and (max-width: $mobile-size) {
-    .dropdown-menu{
+    .header-inner{
+        padding: 0 0 10px 0;
+    }
+
+    #header .dashboard-dropdown-menu{
         position: relative;
         float: none;
+        border: 0;
         width: 100%;
         @include border-radius(0);
     }
