@@ -575,3 +575,20 @@
   }
 
 }
+
+.create-community{
+  h3{
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .community-admin{
+    padding: 15px 10px;
+
+    @media only screen and (max-width: $mobile-size) {
+      padding: 15px 0;
+    }
+
+  }
+  
+}

@@ -2,6 +2,8 @@ jQuery(document).ready(function($) {
 
     $('[data-tooltip="tooltip"]').tooltip();
 
+    //$('[data-validate="validate"]').validate();
+
 
     $('#confirmRemoveMembership').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
@@ -91,7 +93,6 @@ var Page = {
         }
 
     },
-
 
     communityDownloads: {
 
@@ -186,8 +187,13 @@ var Page = {
                 $('#groupMembersForm').submit();
             })
         }
-    }
+    },
 
+    communityCreate: {
+        init: function () {
+            customizeFileTag();
+        }
+    }
 
 };
 

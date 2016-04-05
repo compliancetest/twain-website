@@ -8795,6 +8795,21 @@ body.modal-open,
   margin-left: -150px;
 }
 
+/* line 51, ../scss/_common.scss */
+.page-title {
+  -webkit-box-shadow: 0 0 50px #ededed inset;
+  box-shadow: 0 0 50px #ededed inset;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 20px 15px;
+  margin: -20px -15px 0 -15px;
+}
+/* line 57, ../scss/_common.scss */
+.page-title h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
 /* line 1, ../scss/blocks/_forms.scss */
 label {
   font-weight: 600;
@@ -8915,7 +8930,7 @@ select.form-control {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1456756501') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1459804610') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9625,7 +9640,7 @@ select.form-control {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1458553303') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1459804610') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9652,7 +9667,7 @@ select.form-control {
 }
 /* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1458553303') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1459804610') repeat 0 0;
 }
 /* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -9679,7 +9694,7 @@ select.form-control {
 }
 /* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1458553303') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1459804610') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9832,7 +9847,7 @@ select.form-control {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1459776243') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1459804610') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -11651,6 +11666,22 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   display: block;
 }
 
+/* line 580, ../scss/pages/_community.scss */
+.create-community h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+/* line 585, ../scss/pages/_community.scss */
+.create-community .community-admin {
+  padding: 15px 10px;
+}
+@media only screen and (max-width: 640px) {
+  /* line 585, ../scss/pages/_community.scss */
+  .create-community .community-admin {
+    padding: 15px 0;
+  }
+}
+
 /* line 1, ../scss/pages/_community-downalods.scss */
 .downloads-list-table {
   margin: 0;
@@ -11744,7 +11775,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after {
   content: "\0020";
   display: block;
@@ -11785,7 +11816,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -12412,7 +12443,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 }
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1456756501') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1459804610') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

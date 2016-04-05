@@ -47,3 +47,17 @@ body.modal-open,
         margin-left:-150px;
     }
 }
+
+.page-title{
+    @include box-shadow(0 0 50px #ededed inset);
+    border-bottom: 1px solid #e1e1e1;
+    padding: 20px 15px;
+    margin: -20px -15px 0 -15px;
+
+    h1{
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+}
