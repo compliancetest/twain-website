@@ -353,7 +353,7 @@ function cp_user_payment_save()
         return 'Please specify your card expiry date!';
     } else {
         $card_expiry_arr = explode('/', $card_expiry);
-        if ($card_expiry_arr[0] > 12) {
+        if ($card_expiry_arr[0] > 12 || strlen($card_expiry_arr[1]) > 2) {
             return 'Your expiry date is incorrect!';
         } else if (!check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])) {
             return 'Your card has expired or your expiry date is incorrect!';
