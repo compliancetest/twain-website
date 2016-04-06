@@ -498,6 +498,18 @@
                                                         </li>
                                                     </ul>
 
+                                                    <div class="pagination-wrapper">
+                                                        <div class="pagination">
+                                                            <a href="#" class="prev">prev</a>
+                                                            <a href="#">1</a>
+                                                            <span class="current">2</span>
+                                                            <a href="#">3</a>
+                                                            <span class="pager-dots">...</span>
+                                                            <a href="#">22</a>
+                                                            <a href="#" class="next">next</a>
+                                                        </div>
+                                                    </div>
+
                                                     <input type="hidden" id="action" name="action" value="" />
                                                 </form>
                                             </div>
