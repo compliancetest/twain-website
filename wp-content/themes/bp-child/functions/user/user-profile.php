@@ -304,8 +304,19 @@ function cp_user_payment_save()
         }
     }
 
+    if(empty($name_on_card)){
+        return 'Card holder name is empty!';
+    }
+
     if (!$nickname) {
         return 'Please enter a nickname of this card!';
+    }
+
+    $checkNicknameExist = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_payment_methods WHERE organisation_id = %d AND nickname = %s", $is_admin->organisation_id, $nickname));
+    if ($checkNicknameExist) {
+        if($id != $checkNicknameExist->id) {
+            return "You already using this card nickname!";
+        }
     }
 
     if ($invoice_me == 1) {
