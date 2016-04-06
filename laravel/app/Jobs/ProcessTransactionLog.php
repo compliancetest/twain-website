@@ -41,11 +41,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            $this->_process();
-        } catch (\Exception $e) {
-            error_log($e->getLine() . ': ' . $e->getMessage());
-        }
+        $this->_process();
     }
 
     private function getFolderName($path)
