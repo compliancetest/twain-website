@@ -196,8 +196,21 @@ var Page = {
 
     communityAdmin: {
         init: function(){
+            var self = this;
             this.groupMembersActions();
             customizeFileTag();
+            $('#addAddNewProfileType').click(function(e) {
+                self.showAddNewProfileType(e);
+            });
+            $('#cancelAddingProfile').click(function(e) {
+                self.hideAddNewProfileType(e);
+            });
+            $('#profileTypeForm').submit(function(e) {
+                self.submitAddNewProfileType(e);
+            });
+            $('.profile-type-list .btn-edit').click(function(e) {
+                self.editProfileType($(this), e);
+            });
 
             $('.redactor_editor').redactor({
                 minHeight: 80
@@ -212,7 +225,78 @@ var Page = {
                 $('input[name="action"]').val(action);
                 $('#groupMembersForm').submit();
             })
+        },
+
+        showAddNewProfileType: function(e){
+            this._clearProfileForm();
+            e.preventDefault();
+            $('#profileTypeList').hide();
+            $('#addNewProfile').show();
+        },
+
+        hideAddNewProfileType: function(e){
+            e.preventDefault();
+            $('#addNewProfile').hide();
+            $('#profileTypeList').show();
+        },
+
+        submitAddNewProfileType: function(e){
+            e.preventDefault();
+            $('#profileTypeForm .error-message').remove();
+            if($('#profile_type_file').val() == '' && $('#profile_type_text').val() == '')
+            {
+                $('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">Please enter schema or select a schema file.</p>');
+                return false;
+            }
+            return true;
+        },
+
+        editProfileType: function(element, event){
+            var self = this;
+            event.preventDefault();
+            self.hideAddNewProfileType(event);
+            self.showAddNewProfileType(event);
+
+            var link = element.attr('href');
+            $.ajax({
+                url: link,
+                dataType: 'json',
+                beforeSend: function() {
+                    self._showLoader();
+                },
+                complete: function(){
+                    self._hideLoader();
+                },
+                success: function(response)
+                {
+                    if (response.status == 'success'){
+                        $('#profile_type_text').val(response.schema);
+                        $('#type_id').val(response.schema);
+                    } else {
+                        jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">' + response.message + '</p>');
+                    }
+                },
+                error: function(error){
+                    jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">' + error.responseText + '</p>');
+                }
+            })
+
+        },
+
+        _clearProfileForm: function(){
+            $('#profile_type_file').val('');
+            $('#profile_type_text').val('');
+            $('#profileTypeForm .error-message').remove();
+        },
+
+        _showLoader: function(){
+            $('#profileTypesLoading').show();
+        },
+
+        _hideLoader: function(){
+            $('#profileTypesLoading').hide();
         }
+
     },
 
     communityCreate: {

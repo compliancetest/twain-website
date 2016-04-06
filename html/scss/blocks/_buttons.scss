@@ -301,6 +301,12 @@
     }
   }
 
+  .file-type-doc{
+    &:before{
+      @include iconsSprite(file-type-doc);
+    }
+  }
+
   .file-type-image{
     &:before{
       @include iconsSprite(file-type-image);
