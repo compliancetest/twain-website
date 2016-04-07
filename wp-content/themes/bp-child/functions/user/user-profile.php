@@ -314,7 +314,7 @@ function cp_user_payment_save()
     $checkNicknameExist = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_payment_methods WHERE organisation_id = %d AND nickname = %s", $is_admin->organisation_id, $nickname));
     if ($checkNicknameExist) {
         if($id != $checkNicknameExist->id) {
-            return "You already using this card nickname!";
+            return "You already using this payment method nickname!";
         }
     }
 
