@@ -46,7 +46,7 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Details</div>
                                         <div class="colored-box-body">
-                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="group-details-form" name="group-details-form" data-validate="validate">
+                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="group-details-form" name="group-details-form" data-save-method="ajax" data-validate="validate">
                                                 <div class="colored-box-content">
                                                     <div class="form-group">
                                                         <label for="communityName">Community Name</label>
@@ -94,6 +94,7 @@
                                                 <div class="colored-box-footer">
                                                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                                                 </div>
+                                                <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                                             </form>
                                         </div>
 
@@ -519,98 +520,107 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Privacy Options</div>
                                         <div class="colored-box-body">
-                                            <div class="colored-box-content">
-                                                <div class="form-group">
-                                                    <label>
-                                                        <input type="radio" value="public" name="group-status">
-                                                        <strong>This is a public community</strong>
-                                                    </label>
-                                                    <ul class="privacy-options-list">
-                                                        <li>Any site member can join this community.</li>
-                                                        <li>This community will be listed in the communities directory and in search results.</li>
-                                                        <li>Community content and activity will be visible to any site member.</li>
-                                                    </ul>
+                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="communityPrivacyForm" name="community-privacy-form" data-save-method="ajax">
+                                                <div class="colored-box-content">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" value="public" name="group-status">
+                                                            <strong>This is a public community</strong>
+                                                        </label>
+                                                        <ul class="privacy-options-list">
+                                                            <li>Any site member can join this community.</li>
+                                                            <li>This community will be listed in the communities directory and in search results.</li>
+                                                            <li>Community content and activity will be visible to any site member.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" checked="checked" value="private" name="group-status">
+                                                            <b>This is a private community</b>
+                                                        </label>
+                                                        <ul class="privacy-options-list">
+                                                            <li>Only users who request membership and are accepted can join the community.</li>
+                                                            <li>This community will be listed in the communities directory and in search results.</li>
+                                                            <li>Community content and activity will only be visible to members of the community.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="radio" value="hidden" name="group-status">
+                                                            <b>This is a hidden community</b>
+                                                        </label>
+                                                        <ul class="privacy-options-list">
+                                                            <li>Only users who are invited can join the community.</li>
+                                                            <li>This community will not be listed in the communities directory or search results.</li>
+                                                            <li>Community content and activity will only be visible to members of the community.</li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>
-                                                        <input type="radio" checked="checked" value="private" name="group-status">
-                                                        <b>This is a private community</b>
-                                                    </label>
-                                                    <ul class="privacy-options-list">
-                                                        <li>Only users who request membership and are accepted can join the community.</li>
-                                                        <li>This community will be listed in the communities directory and in search results.</li>
-                                                        <li>Community content and activity will only be visible to members of the community.</li>
-                                                    </ul>
+                                                <div class="colored-box-footer">
+                                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>
-                                                        <input type="radio" value="hidden" name="group-status">
-                                                        <b>This is a hidden community</b>
-                                                    </label>
-                                                    <ul class="privacy-options-list">
-                                                        <li>Only users who are invited can join the community.</li>
-                                                        <li>This community will not be listed in the communities directory or search results.</li>
-                                                        <li>Community content and activity will only be visible to members of the community.</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="colored-box-footer">
-                                                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
-                                            </div>
+                                                <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                                            </form>
                                         </div>
                                     </div>
 
                                     <div class="colored-box">
                                         <div class="colored-box-header">Community Invitations</div>
                                         <div class="colored-box-body">
-                                            <div class="colored-box-content">
-                                                <p>Which members of this community are allowed to invite others?</p>
-                                                <ul class="community-invitation-options">
-                                                    <li>
-                                                        <label>
-                                                            <input type="radio" name="group-invite-status" value="members">
-                                                            <strong>All community members</strong>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <label>
-                                                            <input type="radio" name="group-invite-status" value="mods">
-                                                            <strong>Community admins and supports only</strong>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <label>
-                                                            <input type="radio" name="group-invite-status" value="admins" checked="checked">
-                                                            <strong>Community admins only</strong>
-                                                        </label>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="colored-box-footer">
-                                            <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                            <form enctype="multipart/form-data" method="post" action="ajax.php" id="communityInvitationsForm" name="community-invitations-form" data-save-method="ajax">
+                                                <div class="colored-box-content">
+                                                    <p>Which members of this community are allowed to invite others?</p>
+                                                    <ul class="community-invitation-options">
+                                                        <li>
+                                                            <label>
+                                                                <input type="radio" name="group-invite-status" value="members">
+                                                                <strong>All community members</strong>
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <label>
+                                                                <input type="radio" name="group-invite-status" value="mods">
+                                                                <strong>Community admins and supports only</strong>
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <label>
+                                                                <input type="radio" name="group-invite-status" value="admins" checked="checked">
+                                                                <strong>Community admins only</strong>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="colored-box-footer">
+                                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                                                </div>
+                                                <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                                            </form>
                                         </div>
                                     </div>
 
                                     <div class="colored-box">
                                         <div class="colored-box-header">Community Articles</div>
                                         <div class="colored-box-body">
-                                            <div class="colored-box-content">
-                                                <div class="form-group">
-                                                    <label for="bp-docs[group-enable]"> <input type="checkbox" checked="checked" value="1" id="bp-docs-group-enable" name="bp-docs[group-enable]"> Enable Articles for this community</label>
+                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="communityArticlesForm" name="community-articles-form" data-save-method="ajax">
+                                                <div class="colored-box-content">
+                                                    <div class="form-group">
+                                                        <label for="bp-docs[group-enable]"> <input type="checkbox" checked="checked" value="1" id="bp-docs-group-enable" name="bp-docs[group-enable]"> Enable Articles for this community</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="bp-docs[can-create-admins]">Minimum role to associate Article with this community:</label>
+                                                        <select class="form-control" name="bp-docs[can-create]">
+                                                            <option selected="selected" value="admin">Community Admin</option>
+                                                            <option value="mod">Community Support</option>
+                                                            <option value="member">Community Member</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="bp-docs[can-create-admins]">Minimum role to associate Article with this community:</label>
-                                                    <select class="form-control" name="bp-docs[can-create]">
-                                                        <option selected="selected" value="admin">Community Admin</option>
-                                                        <option value="mod">Community Support</option>
-                                                        <option value="member">Community Member</option>
-                                                    </select>
+                                                <div class="colored-box-footer">
+                                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="colored-box-footer">
-                                            <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                                <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                                            </form>
                                         </div>
                                     </div>
 

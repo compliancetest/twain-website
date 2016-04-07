@@ -30,6 +30,11 @@ jQuery(document).ready(function($) {
 
     });
 
+    $('[data-save-method="ajax"]').submit(function (e) {
+        e.preventDefault();
+        Page.coloredBoxAjaxSaveForm($(this));
+    });
+
 
     $('#confirmRemoveMembership').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
@@ -43,8 +48,6 @@ jQuery(document).ready(function($) {
     Page.header.dashboardMenu();
 
 });
-
-var isTouchDevice = 'ontouchstart' in document.documentElement;
 
 var Page = {
     header: {
@@ -242,10 +245,10 @@ var Page = {
 
         submitAddNewProfileType: function(e){
             e.preventDefault();
-            $('#profileTypeForm .error-message').remove();
+            $('#profileTypeForm .message-error').remove();
             if($('#profile_type_file').val() == '' && $('#profile_type_text').val() == '')
             {
-                $('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">Please enter schema or select a schema file.</p>');
+                $('#profileTypeForm .colored-box-footer').prepend('<p class="message-error">Please enter schema or select a schema file.</p>');
                 return false;
             }
             return true;
@@ -273,11 +276,11 @@ var Page = {
                         $('#profile_type_text').val(response.schema);
                         $('#type_id').val(response.schema);
                     } else {
-                        jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">' + response.message + '</p>');
+                        jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="message-error">' + response.message + '</p>');
                     }
                 },
                 error: function(error){
-                    jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">' + error.responseText + '</p>');
+                    jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="message-error">' + error.responseText + '</p>');
                 }
             })
 
@@ -286,7 +289,7 @@ var Page = {
         _clearProfileForm: function(){
             $('#profile_type_file').val('');
             $('#profile_type_text').val('');
-            $('#profileTypeForm .error-message').remove();
+            $('#profileTypeForm .message-error').remove();
         },
 
         _showLoader: function(){
@@ -302,6 +305,36 @@ var Page = {
     communityCreate: {
         init: function () {
             customizeFileTag();
+        }
+    },
+    /**
+     * Saving submitted form
+     * @param {JQuery} form Submitted form element
+     */
+    coloredBoxAjaxSaveForm: function(form){
+
+        if (form.valid()){
+            form.find('.message-notice').remove();
+            form.find('.color-box-loading').show();
+            $.ajax({
+                url: form.attr('action'),
+                type: 'post',
+                data: form.serialize(),
+                dataType: 'json',
+                success: function(rsp){
+                    form.find('.colored-box-footer').prepend('<div class="message-notice message-' + rsp.status + '">' + rsp.message + '</div>');
+                },
+                complete: function(){
+                    form.find('.color-box-loading').hide();
+                    setTimeout(function() {
+                        form.find('.message-notice').fadeOut("slow", function() { $(this).remove(); });
+                    }, 1500);
+
+                }
+            })
+
+        } else {
+            console.error('Form is not valid');
         }
     }
 
@@ -336,13 +369,8 @@ function customizeFileTag()
                     }
                     jQuery(this).parent().parent().find('.file-value').html(fName + fExt);
                 }
-            })
+            });
             jQuery(this).data('file-customized', 1);
         }
     })
-}
-
-
-function getRedactorSettings(){
-
 }
