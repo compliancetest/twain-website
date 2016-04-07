@@ -235,7 +235,9 @@ input[type="search_button"], input[type="submit"], input[type="reset"], input[ty
 	-webkit-box-sizing:border-box;
 	-o-box-sizing:border-box;
 }
-
+a.pending{
+	cursor: default;
+}
 input[type="search_button"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, .button:hover {
 	
 	text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
@@ -2829,4 +2831,7 @@ table.result-table{
 
 .text-nowrap{
 	word-wrap: break-word;
+}
+.cursor-pointer {
+	cursor: pointer;
 }

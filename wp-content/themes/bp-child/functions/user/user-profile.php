@@ -304,8 +304,19 @@ function cp_user_payment_save()
         }
     }
 
+    if(empty($name_on_card)){
+        return 'Card holder name is empty!';
+    }
+
     if (!$nickname) {
         return 'Please enter a nickname of this card!';
+    }
+
+    $checkNicknameExist = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_payment_methods WHERE organisation_id = %d AND nickname = %s", $is_admin->organisation_id, $nickname));
+    if ($checkNicknameExist) {
+        if($id != $checkNicknameExist->id) {
+            return "You already using this payment method nickname!";
+        }
     }
 
     if ($invoice_me == 1) {
@@ -353,7 +364,7 @@ function cp_user_payment_save()
         return 'Please specify your card expiry date!';
     } else {
         $card_expiry_arr = explode('/', $card_expiry);
-        if ($card_expiry_arr[0] > 12) {
+        if ($card_expiry_arr[0] > 12 || strlen($card_expiry_arr[1]) > 2) {
             return 'Your expiry date is incorrect!';
         } else if (!check_exp_date($card_expiry_arr[0], $card_expiry_arr[1])) {
             return 'Your card has expired or your expiry date is incorrect!';
