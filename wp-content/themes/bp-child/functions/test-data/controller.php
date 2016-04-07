@@ -543,7 +543,7 @@ function viewProfileType()
     } else {
         $boxId = time();
         ?>
-        <div class="popup-box view-profile-type-box" style="display: none; width: 900px;"
+        <div class="popup-box view-profile-type-box" style="display: none; width: 1400px;"
              id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Type Detail</div>
             <div class="popup-box-content grid-box-body">
@@ -570,7 +570,6 @@ function viewProfileType()
             var t_data = Jsonary.create(<?php echo base64_decode($row->schema)?>).readOnlyCopy();
             var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);
-            setTimeout("jQuery('.popup-box').css('width', jQuery('.jsonary').width() + 100);", 500);
         </script>
     <?php
     }
