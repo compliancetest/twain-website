@@ -46,7 +46,7 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Details</div>
                                         <div class="colored-box-body">
-                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="group-details-form" name="group-details-form" data-save-method="ajax" data-validate="validate">
+                                            <form role="main" enctype="multipart/form-data" method="post" action="temp/ajax.php" id="group-details-form" name="group-details-form" data-save-method="ajax" data-validate="validate">
                                                 <div class="colored-box-content">
                                                     <div class="form-group">
                                                         <label for="communityName">Community Name</label>
@@ -157,7 +157,7 @@
                                                                 <td>16</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -166,7 +166,7 @@
                                                                 <td>2</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -175,7 +175,7 @@
                                                                 <td>6</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -184,7 +184,7 @@
                                                                 <td>164</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -193,7 +193,7 @@
                                                                 <td>1099</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -202,7 +202,7 @@
                                                                 <td>291</td>
                                                                 <td class="text-nowrap">
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -211,7 +211,7 @@
                                                                 <td>18</td>
                                                                 <td>
                                                                     <a href="#" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                                    <a href="ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                                    <a href="temp/ajax.php" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Profile Type"></a>
                                                                     <a href="#" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                                 </td>
                                                             </tr>
@@ -520,7 +520,7 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Privacy Options</div>
                                         <div class="colored-box-body">
-                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="communityPrivacyForm" name="community-privacy-form" data-save-method="ajax">
+                                            <form role="main" enctype="multipart/form-data" method="post" action="temp/ajax.php" id="communityPrivacyForm" name="community-privacy-form" data-save-method="ajax">
                                                 <div class="colored-box-content">
                                                     <div class="form-group">
                                                         <label>
@@ -567,7 +567,7 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Community Invitations</div>
                                         <div class="colored-box-body">
-                                            <form enctype="multipart/form-data" method="post" action="ajax.php" id="communityInvitationsForm" name="community-invitations-form" data-save-method="ajax">
+                                            <form enctype="multipart/form-data" method="post" action="temp/ajax.php" id="communityInvitationsForm" name="community-invitations-form" data-save-method="ajax">
                                                 <div class="colored-box-content">
                                                     <p>Which members of this community are allowed to invite others?</p>
                                                     <ul class="community-invitation-options">
@@ -602,7 +602,7 @@
                                     <div class="colored-box">
                                         <div class="colored-box-header">Community Articles</div>
                                         <div class="colored-box-body">
-                                            <form role="main" enctype="multipart/form-data" method="post" action="ajax.php" id="communityArticlesForm" name="community-articles-form" data-save-method="ajax">
+                                            <form role="main" enctype="multipart/form-data" method="post" action="temp/ajax.php" id="communityArticlesForm" name="community-articles-form" data-save-method="ajax">
                                                 <div class="colored-box-content">
                                                     <div class="form-group">
                                                         <label for="bp-docs[group-enable]"> <input type="checkbox" checked="checked" value="1" id="bp-docs-group-enable" name="bp-docs[group-enable]"> Enable Articles for this community</label>

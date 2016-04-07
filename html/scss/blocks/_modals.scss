@@ -33,6 +33,18 @@
 .modal-body{
     background: #fff;
     @include box-shadow(0 3px 5px -1px #d3d3d3 inset);
+
+    .block-loading{
+        display: block;
+        position: relative;
+        background: none;
+
+        .loading-content{
+            position: relative;
+            margin: 0;
+        }
+    }
+
 }
 
 .modal-footer{

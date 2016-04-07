@@ -8810,6 +8810,47 @@ body.modal-open,
   margin: 0;
 }
 
+/* line 65, ../scss/_common.scss */
+.block-loading {
+  display: none;
+  text-align: center;
+  position: absolute;
+  background: rgba(168, 194, 215, 0.6);
+  z-index: 100;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+/* line 77, ../scss/_common.scss */
+.block-loading .loading-content {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  padding: 0;
+  margin: -54px 0 0 0;
+}
+/* line 84, ../scss/_common.scss */
+.block-loading .loading-content .loader {
+  background: url('../images/loader.gif?1454338576') no-repeat 0 0;
+  height: 31px;
+  width: 31px;
+  display: block;
+  margin: 0 auto;
+}
+/* line 92, ../scss/_common.scss */
+.block-loading .loading-content .loading-text {
+  color: #e33f3f;
+  font-size: 18px;
+  font-weight: 700;
+}
+/* line 98, ../scss/_common.scss */
+.block-loading .loading-content .loading-wait {
+  color: #e33f3f;
+  font-size: 12px;
+}
+
 /* line 1, ../scss/blocks/_forms.scss */
 label {
   font-weight: 600;
@@ -8929,8 +8970,19 @@ select.form-control {
   -webkit-box-shadow: 0 3px 5px -1px #d3d3d3 inset;
   box-shadow: 0 3px 5px -1px #d3d3d3 inset;
 }
+/* line 37, ../scss/blocks/_modals.scss */
+.modal-body .block-loading {
+  display: block;
+  position: relative;
+  background: none;
+}
+/* line 42, ../scss/blocks/_modals.scss */
+.modal-body .block-loading .loading-content {
+  position: relative;
+  margin: 0;
+}
 
-/* line 38, ../scss/blocks/_modals.scss */
+/* line 50, ../scss/blocks/_modals.scss */
 .modal-footer {
   text-align: left;
   background: #f0f0f0;
@@ -8943,13 +8995,13 @@ select.form-control {
   border: 0;
 }
 
-/* line 47, ../scss/blocks/_modals.scss */
+/* line 59, ../scss/blocks/_modals.scss */
 .modal {
   text-align: center;
 }
 
 @media screen and (min-width: 768px) {
-  /* line 52, ../scss/blocks/_modals.scss */
+  /* line 64, ../scss/blocks/_modals.scss */
   .modal:before {
     display: inline-block;
     vertical-align: middle;
@@ -8957,7 +9009,7 @@ select.form-control {
     height: 100%;
   }
 }
-/* line 60, ../scss/blocks/_modals.scss */
+/* line 72, ../scss/blocks/_modals.scss */
 .modal-dialog {
   display: inline-block;
   text-align: left;

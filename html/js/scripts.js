@@ -35,6 +35,10 @@ jQuery(document).ready(function($) {
         Page.coloredBoxAjaxSaveForm($(this));
     });
 
+    $('[data-ajax-modal]').click(function(e){
+        e.preventDefault();
+        Page.loadModalContent($(this));
+    });
 
     $('#confirmRemoveMembership').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
@@ -307,6 +311,7 @@ var Page = {
             customizeFileTag();
         }
     },
+
     /**
      * Saving submitted form
      * @param {JQuery} form Submitted form element
@@ -336,13 +341,21 @@ var Page = {
         } else {
             console.error('Form is not valid');
         }
+    },
+
+    /**
+     * Load content to modal by ajax
+     * @param {JQuery} el Submitted form element
+     */
+    loadModalContent: function(el) {
+        var modalId = el.data('target');
+        $(modalId).on("show.bs.modal", function(e) {
+            var link = $(e.relatedTarget);
+            $(this).find(".modal-body").load(link.attr("href"));
+        });
     }
-
 };
-
-
-function customizeFileTag()
-{
+function customizeFileTag() {
     jQuery('input[type="file"]').each(function(){
         if(!jQuery(this).data('file-customized'))
         {
