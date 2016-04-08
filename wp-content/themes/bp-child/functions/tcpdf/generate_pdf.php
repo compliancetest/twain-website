@@ -13,9 +13,9 @@ function generateClaimPdf() {
 
     // Set document meta information
     $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('ComplianceTest');
-    $pdf->SetTitle('ComplianceTest Certificate');
-    $pdf->SetSubject('ComplianceTest Certificate');
+    $pdf->SetAuthor(get_site_title());
+    $pdf->SetTitle(get_site_title().' Certificate');
+    $pdf->SetSubject(get_site_title().' Certificate');
 
     // Set margins
     $pdf->SetMargins(12, 29, 12, true);
@@ -36,7 +36,7 @@ function generateClaimPdf() {
 //        'Name' => 'ComplianceTest',
 //        'Reason' => 'ComplianceTest Testing',
         'Location' => 'Australia',
-        'ContactInfo' => 'http://www.compliancetest.net',
+        'ContactInfo' => home_url(),
     );
 
     // set document signature
@@ -91,7 +91,7 @@ function generateClaimPdf() {
     </tr>
     <tr>
         <th>Test Suite</th>
-        <td>SuperStream Contributions</td>
+        <td>Contributions</td>
     </tr>
     <tr>
         <th>Test Suite Version</th>
@@ -156,9 +156,9 @@ function generateClaimPdf() {
     $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
 
     // QRCODE,H : QR-CODE Best error correction
-    $pdf->write2DBarcode('http://www.compliancetest.net/product/ebms3-messenger/', 'QRCODE,H', '', '', 40, 40, $style, 'N');
+    $pdf->write2DBarcode(home_url().'product/ebms3-messenger/', 'QRCODE,H', '', '', 40, 40, $style, 'N');
 
-    $link = '<div style="text-align:center;"><a href="http://www.compliancetest.net/product/ebms3-messenger/" target="_blank" style="font-size:13pt; text-decoration:none;">http://www.compliancetest.net/product/ebms3-messenger/</a></div>';
+    $link = '<div style="text-align:center;"><a href="'.home_url().'/product/ebms3-messenger/" target="_blank" style="font-size:13pt; text-decoration:none;">'.home_url().'/product/ebms3-messenger/</a></div>';
 
     $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
     // ---------------------------------------------------------
@@ -288,7 +288,7 @@ function generateClaimPdf() {
 
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.
-    $pdf->Output('ComplianceTest-certificate.pdf', 'I');
+    $pdf->Output(get_site_title().'-certificate.pdf', 'I');
 
     //============================================================+
     // END OF FILE

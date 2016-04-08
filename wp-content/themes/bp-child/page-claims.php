@@ -23,7 +23,7 @@ get_header();
             <div class="grid_head blue_head">
                 <div class="grid_row">
                     <div class="grid_cell grid_button grid_button_left expandable"><a href="#"><span class="simple_tooltip radius6">Expand<span></span></span></a></div>
-                    <div class="grid_cell width60P"><h5><span class="normal">Product:</span> SuperStream MCS v1.1</h5></div>
+                    <div class="grid_cell width60P"><h5><span class="normal">Product:</span> MCS v1.1</h5></div>
                     <div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_w.png" /><span class="simple_tooltip radius6">Edit Section<span></span></span></a></div>
                     <div class="clear"></div>
                 </div>
@@ -105,7 +105,7 @@ get_header();
             <div class="grid_head blue_head">
                 <div class="grid_row">
                     <div class="grid_cell grid_button grid_button_left expandable"><a href="#"><span class="simple_tooltip radius6">Expand<span></span></span></a></div>
-                    <div class="grid_cell width60P"><h5><span class="normal">Product:</span> SuperStream MCS v1.1</h5></div>
+                    <div class="grid_cell width60P"><h5><span class="normal">Product:</span> MCS v1.1</h5></div>
                     <div class="grid_cell grid_button grid_button_right"><a href="#"><img src="<?php echo get_bloginfo('stylesheet_directory');?>/images/grid_button_pencil_icon_w.png" /><span class="simple_tooltip radius6">Edit Section<span></span></span></a></div>
                     <div class="clear"></div>
                 </div>

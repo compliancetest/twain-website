@@ -112,7 +112,7 @@ $testsuites = get_posts( $args );
         
             <div class="grid-list-footer grid-list-row">                    
                 <div class="grid-list-cell width100P">                    
-                    <?php if($is_group_admin && $instances):  ?>
+                    <?php if($is_group_admin):  ?>
                         <a href="#edit-profile-box" id="add-new-test-data-link" class="action-btn add-new-btn"><span class="p"></span><span class="t">Add New Test Data</span></a>
                     <?php endif; ?>
                 </div>

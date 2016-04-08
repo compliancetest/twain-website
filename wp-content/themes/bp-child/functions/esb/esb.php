@@ -34,10 +34,10 @@ class ManageESB
     
     public function  loadDatabase()
     {
-        $esb_db_username = get_option('esb_username');
-        $esb_db_password = get_option('esb_password');
-        $esb_db_database = get_option('esb_database');
-        $esb_db_host = get_option('esb_host');
+        $esb_db_username = getenv('DB_MYSQL_USERNAME');
+        $esb_db_password = getenv('DB_MYSQL_PASSWORD');
+        $esb_db_database = 'twain_be';
+        $esb_db_host = getenv('DB_MYSQL_DNS');
         
         $db = new wpdb($esb_db_username, $esb_db_password, $esb_db_database, $esb_db_host);
         ManageESB::$esbdb = $db;

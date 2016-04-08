@@ -14,7 +14,7 @@ if(!defined('ABSPATH'))
         </div>
         <div class="grid-box-body">
             <div class="grid-row">
-              <form action="" method="post" id="avatar-upload-form" class="standard-form" enctype="multipart/form-data">                                        
+              <form action="" method="post" id="avatar-upload-form" class="standard-form" enctype="multipart/form-data">
                 <?php if ( 'crop-image' == bp_get_avatar_admin_step() ){ ?> <!-- Crop Image -->
                     <p><?php _e( 'Crop Your New Avatar', 'buddypress' ); ?></p>
 
@@ -38,8 +38,13 @@ if(!defined('ABSPATH'))
                     <?php wp_nonce_field( 'bp_avatar_cropstore' ); ?>
                 <?php }else{?> <!-- Upload Avatar -->
                     <div class="grid-cell width30P">
-                        <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                            <?php bp_loggedin_user_avatar( 'type=full' ); ?>
+                        <a href="<?php bp_loggedin_user_link(); ?>">
+                            <?php $userAvatar = get_avatar($current_user->user_email, 150);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150" height="150">
+                            <?php else:?>
+                                <?php echo get_avatar($current_user->user_email, 150);  ?>
+                            <?php endif;?>
                         </a>
                     </div>
                     <div class="grid-cell width70P">

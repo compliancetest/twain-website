@@ -222,7 +222,7 @@ function cp_activate_user()
         
         //Make User Login
         wp_set_auth_cookie($user->ID);
-        addMessage('You have successfully verified your email address with ComplianceTest.');
+        addMessage('You have successfully verified your email address with '.get_site_title().'.');
         //redirect
         wp_redirect(home_url().'/my-profile');              
         exit;
@@ -274,7 +274,7 @@ function cp_activate_email()
         
         //Make User Login
         wp_set_auth_cookie($user->ID);
-        addMessage('You have successfully verified your changed email address with ComplianceTest.');
+        addMessage('You have successfully verified your changed email address with '.get_site_title().'.');
         //redirect
         wp_redirect(home_url().'/my-profile');              
         exit;
@@ -516,7 +516,7 @@ if(!is_user_logged_in())
                                 <div class="field">
                                     <label for="organisation_id">Organisation Key</label>
                                     <div class="has-field-tooltip" style="width: 165px;">
-                                        <input type="text" class="field-tooltip" title=""  autocomplete="off" name="organisation_key" id="organisation_key" data-tooltip-content="If your organisation is already registered on ComplianceTest, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.">
+                                        <input type="text" class="field-tooltip" title=""  autocomplete="off" name="organisation_key" id="organisation_key" data-tooltip-content="If your organisation is already registered on <?php echo get_site_title();?>, ask your administrator for your organisation key to immediately become a member of your organisation. If not, just leave this field blank for now.">
                                     </div>
                                 </div>
                                 <div class="field">
@@ -548,7 +548,7 @@ if(!is_user_logged_in())
                                     <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
                                 </div>
                                 <div class="field width90P">        
-                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the compliancetest.net <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
+                                    <input type="checkbox" name="acc_tc" id="acc_tc_id"><label for="acc_tc">I accept the <a href="#site-terms-box" data-type="inline" id="agree_terms">Terms & Conditions.</a></label>
                                 </div>
                                 <div class="clear"></div>
 

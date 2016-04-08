@@ -1,4 +1,10 @@
 <?php
+
+if (stripos(get_option('siteurl'), 'https://') === 0) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
+define('DEFAULT_AVATAR', '/wp-content/themes/bp-child/images/default-group-avatar.png');
 //Session Start
 if(!session_id())
     session_start();
@@ -25,7 +31,7 @@ if(!defined('SEARCH_RESULTS_LIMIT'))
 if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', get_option('mailchimp_all_list_id'));
     
-define('MESSAGE_WARNING_ANONYMOUS', 'You must be a registered member of the site to view this content. Registration is free - just go to the ComplianceTest home page and click on the Signup button.');
+define('MESSAGE_WARNING_ANONYMOUS', 'You must be a registered member of the site to view this content. Registration is free - just go to the '.get_site_title().' home page and click on the Signup button.');
 define('MESSAGE_WARNING_REGISTERED', 'You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button.');
 define('MESSAGE_WARNING_COMMUNITY_MEMBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
 define('MESSAGE_WARNING_COMMUNITY_ADMIN', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
@@ -39,6 +45,23 @@ function cp_session_start()
         session_start();
 }
 
+/**
+ * Return site name from Website configs section
+ * @return string
+ */
+function get_site_title()
+{
+    return get_option('tw_site_title');
+}
+
+/**
+ * Return site organisation from Website configs section
+ * @return string
+ */
+function get_site_organisation()
+{
+    return get_option('tw_site_organisation');
+}
 /**
  * @param $path - path to view file, e.g. 'test-data/views/schedule-popup.phtml'
  * @param $view - object with variables needed in view
@@ -144,6 +167,8 @@ require_once(THE_FUNCTION . '/e2e-agreements/controller.php');
 //Processes
 require_once(THE_FUNCTION . '/processes/class.process.php');
 
+require_once(THE_FUNCTION . '/aws/BaseAWS.php');
+
 //CloudSearch
 require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
 require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
@@ -155,6 +180,7 @@ require_once(THE_FUNCTION . '/aws/s3/Client.php');
 require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
 require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+
 
 //Compliance Claim
 require_once(THE_FUNCTION . '/compliance-claim/class.claim.php');

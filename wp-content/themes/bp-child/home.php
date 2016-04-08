@@ -15,12 +15,13 @@
                 <?php echo $home_settings['top_banner_description']; ?>
             </div>
             <div class="home-collage-video">
-                <?php if($home_settings['top_banner_video']): ?>
+                <?php /* if($home_settings['top_banner_video']): ?>
                     <?php echo stripcslashes($home_settings['top_banner_video']); ?>
                 <?php else:  ?>
                     <img src="<?php echo get_stylesheet_directory_uri() ?>/images/temp/video.jpg" alt=""/>
-                <?php endif; ?>
+                <?php endif; */ ?>
             </div>
+            <img src="<?php echo get_stylesheet_directory_uri() ?>/images/video-twain.png" alt=""/>
         </div>
     </div>
     <div class="search-box">
@@ -37,7 +38,6 @@
         <ul class="tabs-header">
             <li><a href="#software-vendors-panel"><span class="tab-icon software-vendors-icon"></span><?php echo $home_settings['tab_1_title']; ?> <em><?php echo $home_settings['tab_1_subtitle']; ?></em></a></li>
             <li><a href="#organisations-panel"><span class="tab-icon organisations-icon"></span><?php echo $home_settings['tab_2_title']; ?> <em><?php echo $home_settings['tab_2_subtitle']; ?></em></a></li>
-            <li><a href="#standard-issuers-panel"><span class="tab-icon standard-issuers-icon"></span><?php echo $home_settings['tab_3_title']; ?> <em><?php echo $home_settings['tab_3_subtitle']; ?></em></a></li>
         </ul>
         <div class="tabs-content">
             <div class="wrapper">
@@ -59,16 +59,6 @@
                     </div>
                     <div class="tab-content-image">
                         <img src="<?php echo $home_settings['tab_2_image']; ?>" alt=""/>
-                    </div>
-                </div>
-                <div id="standard-issuers-panel">
-                    <div class="tab-content-text">
-                        <?php echo $home_settings['tab_3_content']; ?>
-                        <br>
-                        <a href="<?php echo $home_settings['tab_3_button_link']; ?>" class="view-sample-btn">View Sample</a>
-                    </div>
-                    <div class="tab-content-image">
-                        <img src="<?php echo $home_settings['tab_3_image']; ?>" alt=""/>
                     </div>
                 </div>
             </div>

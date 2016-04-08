@@ -2,7 +2,7 @@
 <html>
     <head profile="http://gmpg.org/xfn/11">
         <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />        
-        <link rel="icon" href="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/drummond_group_logo.png" type="image/x-icon">
         <?php if ( current_theme_supports( 'bp-default-responsive' ) ) : ?><meta name="viewport" content="width=device-width, initial-scale=1.0" /><?php endif; ?>
         <title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
         <?php do_action( 'bp_head' ) ?>
@@ -55,7 +55,12 @@
                         </div>
 
                         <div class="header-user-info">
-                            <?php echo get_avatar($current_user->user_email, 32);  ?>
+                            <?php $userAvatar = get_avatar($current_user->user_email, 32);?>
+                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                                <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
+                            <?php else:?>
+                                <?php echo get_avatar($current_user->user_email, 32);  ?>
+                            <?php endif;?>
                             <div class="header-welcome">
                                 Welcome
                                 <strong class="header-username"><?php echo cp_get_user_display_name($current_user) ;?></strong>
@@ -69,7 +74,7 @@
                     do_action('cp_header_login_form');
                 }
                 ?>
-                <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>"/></a>
+                <a href="<?php bloginfo('url'); ?>" class="header-logo"><img src="<?php echo of_get_option('logo'); ?>" style="height: 52px;"/></a>
                 <?php if (of_get_option('msg_of_day_title') || of_get_option('msg_of_day_content')): ?>
                 <div class="message-of-day-head">
                     <div class="message-of-day-head-inner">

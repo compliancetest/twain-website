@@ -16,7 +16,7 @@ else
     $isNew = false;
 
 if (($isNew || !is_super_admin()) && !can_maintain_product_and_service(null, $product->id)) {    
-    addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the ComplianceTest site.', 'error');
+    addMessage('You do not have the "' . ct_get_privilege_by_code('MAINTAIN_PRODUCTS', 'title') . '" privilege necessary for this action. Please contact your organisation administrator for the '.get_site_title().' site.', 'error');
         
     wp_redirect("/");
     exit;

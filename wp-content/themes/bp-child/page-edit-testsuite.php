@@ -190,7 +190,7 @@ $xeroItems = ct_get_xero_items();
        <div class="grid-box grid-box-expandable grid-box-opened">
            <div class="grid-box-header">
                <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-               <h5 class="left">Initiating Message</h5>
+               <h5 class="left">Operational Triplet</h5>
                <div class="clear"></div>
            </div>
            <div class="grid-box-body">
@@ -200,7 +200,7 @@ $xeroItems = ct_get_xero_items();
                            <textarea cols="" rows="" class="textarea" name="init_message" id="init_message"><?php echo $suite->initiatingMessage?></textarea>
                        </div>
                        <div class="grid-cell">
-                           <label class="light-desc"><i>Type Initiating Messages (comma separated)</i></label>
+                           <label class="light-desc"><i>Type Operational Triplet (comma separated)</i></label>
                        </div>
                        <div class="clear"></div>
                    </div>                   
@@ -395,7 +395,7 @@ $xeroItems = ct_get_xero_items();
                <div class="clear"></div>
            </div>
            <?php
-               $availableTemplates = $suite->getAvailableTemplates();
+               $availableTemplates = array();//$suite->getAvailableTemplates();
            ?>
            <select class="select medium-input availableTemplates" style="display: none;" id="availableTemplates">
                <option value="">Select a Template</option>

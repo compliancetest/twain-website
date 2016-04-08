@@ -6,7 +6,7 @@
 function ct_ticket_create_admin_menus()
 {
     //Create Menus
-    add_menu_page('ComplianceTest Support Tickets', 'Support Tickets', 'administrator', 'ct-tickets', 'ct_ticket_display_tickets');
+    add_menu_page(get_site_title() .' Support Tickets', 'Support Tickets', 'administrator', 'ct-tickets', 'ct_ticket_display_tickets');
     add_submenu_page('ct-tickets', 'Support Tickets', 'Tickets', 'administrator', 'ct-tickets', 'ct_ticket_display_tickets');
     add_submenu_page('ct-tickets', 'Support Tickets Categories', 'Categories', 'administrator', 'ct-tickets-categories', 'ct_ticket_display_categories');
     add_submenu_page('ct-tickets', 'Support Tickets Priorities', 'Priorities', 'administrator', 'ct-tickets-priorities', 'ct_ticket_priorities');

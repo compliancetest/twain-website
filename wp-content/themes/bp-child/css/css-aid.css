@@ -2828,3 +2828,7 @@ table.result-table{
 .width500 {
 	width: 500px;
 }
+
+.text-nowrap{
+	word-wrap: break-word;
+}

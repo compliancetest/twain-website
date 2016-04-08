@@ -572,9 +572,9 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         // Set document meta information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('ComplianceTest');
-        $pdf->SetTitle('ComplianceTest Certificate');
-        $pdf->SetSubject('ComplianceTest Certificate');
+        $pdf->SetAuthor(get_site_title());
+        $pdf->SetTitle(get_site_title().' Certificate');
+        $pdf->SetSubject(get_site_title().' Certificate');
 
         // Set margins
         $pdf->SetMargins(12, 29, 12, true);
@@ -594,7 +594,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
         // set additional information
         $info = array(
             'Location' => 'Australia',
-            'ContactInfo' => 'http://www.compliancetest.net',
+            'ContactInfo' => home_url(),
         );
 
         // set document signature
@@ -891,7 +891,7 @@ function create_agreement_pdf( $agreement_id, $for_another = false ){
 
         $pdf->writeHTMLCell(0, 0, '', '', $general_cases_table_html, 0, 1, 0, true, '', true);
 
-        $pdfString = $pdf->Output('ComplianceTest-certificate.pdf', 'S');
+        $pdfString = $pdf->Output(get_site_title().'-certificate.pdf', 'S');
 
         foreach( $req_files AS $req_file ){
             @unlink( $req_file['location'] );

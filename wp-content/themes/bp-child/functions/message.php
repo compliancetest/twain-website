@@ -863,7 +863,7 @@ function showUploadMessageBox()
                     <div class="popup-box-content grid-box-body">
                         <p>Manually load a test message to our system. It will be processed as if you had send it via a
                             messaging channel.<br/>
-                            <i>Please note that, at this time, this facility only supports the SuperStream Contributions
+                            <i>Please note that, at this time, this facility only supports the Contributions
                                 Alternative File Format</i>
                         </p>
 

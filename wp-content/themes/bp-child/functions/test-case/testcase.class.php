@@ -59,7 +59,13 @@ class TestCases
     var $scenario = '';
     
     var $familyMark = null;
-    
+
+    public $test_execution;
+
+    public $test_data_profile;
+
+    public $imagesData = array();
+
     
     public function __construct($id = null)
     {        
@@ -109,7 +115,10 @@ class TestCases
         $this->version_major = $this->loadSingleValue('version_major');
         $this->version_minor = $this->loadSingleValue('version_minor');
         $this->version_patch = $this->loadSingleValue('version_patch');
-        
+        $this->test_execution = $this->loadSingleValue('test_execution');
+        $this->test_data_profile = $this->loadSingleValue('test_data_profile');
+        $this->imagesData = json_decode($this->loadSingleValue('imagesData'), true);
+
         if(!$this->version_major)
             $this->version_major = 0;
         if(!$this->version_minor)
@@ -408,16 +417,16 @@ class TestCases
     public function getAvailableInitMessages()
     {
         $messages = array();
-        
-        foreach($this->testSuite as $sid)
-        {
-            $msgs = explode(',',  cp_get_post_meta($sid, 'init_message', true));
-            foreach($msgs as $m)
-            {
-                if(!trim($m) || in_array(trim($m), $messages))
-                    continue;
-                    
-                $messages[] = trim($m);
+
+        if(is_iterable($this->testSuite)) {
+            foreach ($this->testSuite as $sid) {
+                $msgs = explode(',', cp_get_post_meta($sid, 'init_message', true));
+                foreach ($msgs as $m) {
+                    if (!trim($m) || in_array(trim($m), $messages))
+                        continue;
+
+                    $messages[] = trim($m);
+                }
             }
         }
         

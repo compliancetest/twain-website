@@ -61,7 +61,7 @@ msgstr "No Docs found in Trash"
 #: bp-docs.php:272 includes/component.php:39
 #: includes/integration-groups.php:1063
 msgid "BuddyPress Docs"
-msgstr "ComplianceTest  Articles"
+msgstr "Drummond Group TWAIN Testing Platform  Articles"
 
 #: bp-docs.php:291
 msgid "Associated Items"
@@ -407,11 +407,11 @@ msgstr ""
 
 #: includes/integration-groups.php:795
 msgid "BuddyPress Docs group tab name:"
-msgstr "ComplianceTest Articles community tab name:"
+msgstr "Drummond Group TWAIN Testing Platform Articles community tab name:"
 
 #: includes/integration-groups.php:822
 msgid "BuddyPress Docs Settings"
-msgstr "ComplianceTest Articles Settings"
+msgstr "Drummond Group TWAIN Testing Platform Articles Settings"
 
 #: includes/integration-groups.php:825
 msgid "Group Tab Name"
@@ -436,8 +436,8 @@ msgid ""
 "to co-author and co-edit documents with your fellow group members, which you "
 "can then sort and tag in a way that helps your group to get work done."
 msgstr ""
-"ComplianceTest Articles is a powerful tool for collaboration with members of "
-"your group. A cross between document editor and articles, ComplianceTest "
+"Drummond Group TWAIN Testing Platform Articles is a powerful tool for collaboration with members of "
+"your group. A cross between document editor and articles, Drummond Group TWAIN Testing Platform "
 "Articles allows you to co-author and co-edit documents with your fellow "
 "community members, which you can then sort and tag in a way that helps your "
 "community to get work done."
@@ -890,7 +890,7 @@ msgid ""
 "Thanks for updating BuddyPress Docs. We need to run a few quick operations "
 "before your new Docs is ready to use."
 msgstr ""
-"Thanks for updating ComplianceTest Article. We need to run a few quick "
+"Thanks for updating Drummond Group TWAIN Testing Platform Article. We need to run a few quick "
 "operations before your new Article is ready to use."
 
 #: includes/upgrade.php:62
