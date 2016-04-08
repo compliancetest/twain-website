@@ -2,17 +2,21 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 class Community extends Model
 {
-    protected $table = 'communities';
+
+    use UuidTrait;
 
     public $incrementing = false;
 
-    protected $fillable = array('title', 'description', 'slug', 'creator_id', 'status');
+    protected $table = 'communities';
+
+    protected $fillable = array('title', 'description', 'slug', 'creator_id', 'visibility_status', 'articles_status');
 
 
     /**
@@ -178,5 +182,12 @@ class Community extends Model
     public function getMembershipRequests()
     {
         return $this->members()->where(['is_confirmed' => 1])->get();
+    }
+
+    public function getImageUrl(){
+        if(Storage::exists($this->image)){
+            return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/'.$this->image;
+        }
+        return '/laravel/resources/assets/images/gravatar.jpg';
     }
 }

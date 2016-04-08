@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class CommunitiesController extends Controller
 {
@@ -33,7 +35,6 @@ class CommunitiesController extends Controller
      */
     public function create()
     {
-        $submitButtonText = 'Create Community and Continue';
         return view('pages.communities.create', compact('submitButtonText'));
     }
 
@@ -47,19 +48,23 @@ class CommunitiesController extends Controller
     {
         $modelData = $request->all();
         $modelData['creator_id'] = get_current_user_id();
-        $modelData['status'] = 'public';
         $modelData['slug'] = Community::getUniqueSlug(new Community(), $modelData['title']);
         $model = Community::create($modelData);
+        if($request->file('image')){
+            $model->image = getenv('ENVIRONMENT') . '/communities/avatars/' . $model->id . '/' . $request->file('image')->getClientOriginalName();
+            Storage::put($model->image, file_get_contents($request->file('image')));
+            $model->save();
+        }
 
         $model->members()->create([
             'community_id' => $model->id,
-            'user_id' => get_current_user_id(),
+            'user_id' => Auth::user()->ID,
             'is_admin' => true,
             'is_confirmed' => true
         ]);
 
 
-        return Redirect::to('communities/edit/'.$model->slug.'/step/group-settings/');
+        return Redirect::to('communities');
     }
 
     /**

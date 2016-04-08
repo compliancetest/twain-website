@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "aws/aws-sdk-php-laravel": "~3.0",
         "laravelcollective/html": "^5.2",
-        "ramsey/uuid": "^3.2"
+        "ramsey/uuid": "^3.2",
+        "league/flysystem-aws-s3-v3": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

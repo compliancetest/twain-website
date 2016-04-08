@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class CommunityMembers extends Model
 {
 
-    protected $table = 'communities_members';
+    use UuidTrait;
 
     public $incrementing = false;
+
+    protected $table = 'communities_members';
 
     protected $fillable = ['user_id', 'is_admin', 'is_confirmed'];
 

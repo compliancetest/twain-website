@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\CommunityMeta;
 use App\Http\Requests\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommunityRequest extends Request
 {
@@ -14,7 +15,7 @@ class CommunityRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,23 +25,17 @@ class CommunityRequest extends Request
      */
     public function rules()
     {
-        $rules = [];
+        $rules = [
+            'title' => 'required',
+            'description' => 'required',
+            'visibility_status' => 'required|string|in:public,private,hidden',
+            'articles_status' => 'string|in:members,mods,admins',
+            'image' => 'image',
+        ];
+        if($this->has('articles_enabled')){
+            $rules['articles_status'] = 'string|in:member,mod,admin';
+        }
 
-        if($this->request->has('title')){
-            $rules['title'] = 'required';
-        }
-        if($this->request->has('description')){
-            $rules['description'] = 'required';
-        }
-        if($this->request->has('status')){
-            $rules['status'] = 'required|string|in:public,private,hidden';
-        }
-        if($this->request->has('group-invite-status')){
-            $rules['group-invite-status'] = 'required|string|in:members,mods,admins';
-        }
-        if($this->request->has('image')){
-            $rules['image'] = 'mimes:png:jpeg:jpg:gif';
-        }
         return $rules;
     }
 }

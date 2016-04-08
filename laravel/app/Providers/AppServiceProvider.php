@@ -17,19 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Community::creating(function ($entry) {
-            $entry->id = \Webpatser\Uuid\Uuid::generate(4);;
-        });
-        CommunityMembers::creating(function ($entry) {
-            $entry->id = \Webpatser\Uuid\Uuid::generate(4);;
-        });
-        CommunityMeta::creating(function ($entry) {
-            $entry->id = \Webpatser\Uuid\Uuid::generate(4);;
-        });
-
-        CommunityDownloads::creating(function ($entry) {
-            $entry->id = \Webpatser\Uuid\Uuid::generate(4);;
-        });
     }
 
     /**

@@ -14,12 +14,14 @@ class CreateCommunities extends Migration
     {
         Schema::create('communities', function (Blueprint $table) {
             $table->primary('id');
-            $table->string('id', 36);
+            $table->uuid('id');
             $table->integer('creator_id');
             $table->string('title');
-            $table->string('slug')->unique();
             $table->text('description');
-            $table->string('status');
+            $table->string('image');
+            $table->string('articles_status');
+            $table->string('visibility_status');
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
