@@ -20,14 +20,10 @@
                       @foreach($communities as $community)
                             <tr>
                                 <td class="community-image">
-                                    <a href="communities-test-suites.php"><img width="50" height="50"
-                                                                                                       title="{{ $community->title }}"
-                                                                                                       alt="Community logo of {{ $community->title }}"
-                                                                                                       src="{{ $community->getImageUrl() }}"></a>
+                                    <a href="/communities/{{ $community->slug }}"><img width="50" height="50" title="{{ $community->title }}" alt="Community logo of {{ $community->title }}" src="{{ $community->getImageUrl() }}"></a>
                                 </td>
                                 <td class="community-name">
                                     <a href="/communities/{{ $community->slug }}">{{ $community->title }}</a>
-
                                     <p>{{ $community->description }}</p>
                                 </td>
                                 <td class="text-center">4</td>
@@ -43,9 +39,8 @@
             </div>
         </div>
     </div>
+
     <!-- Modal -->
-
-
     <div class="modal modal-small fade" id="confirmJoinCommunity" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
