@@ -88,7 +88,7 @@
                                         <div class="form-group">
                                             <label for="minimum_role">Minimum role to associate
                                                 Article with this community:</label>
-                                            {!! Form::select('articles_enabled',
+                                            {!! Form::select('articles_status',
                                                [
                                                    'admin' => 'Community Admin',
                                                    'mod' => 'Community Support',

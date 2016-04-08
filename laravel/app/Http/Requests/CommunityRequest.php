@@ -29,7 +29,7 @@ class CommunityRequest extends Request
             'title' => 'required',
             'description' => 'required',
             'visibility_status' => 'required|string|in:public,private,hidden',
-            'articles_status' => 'string|in:members,mods,admins',
+            'articles_status' => 'string|in:member,mod,admin',
             'image' => 'image',
         ];
         if($this->has('articles_enabled')){
