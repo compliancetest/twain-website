@@ -2,11 +2,14 @@
 /*
  * Template Name: Login page
  */
-get_header();
+
 if (is_user_logged_in()) {
     wp_redirect('/');
     exit();
 }
+
+get_header();
+
 $userIP = \LoginAttempts\LoginAttempts::getUserIP();
 $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
 ?>
@@ -15,12 +18,12 @@ $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
 
         <p class="login-username" style="width: 270px;">
             <label for="user_login"></label>
-            <input type="text" size="20" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
+            <input type="text" size="20" style="width: 275px;" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
         </p>
 
         <p class="login-password" style="width: 270px;">
             <label for="user_pass"></label>
-            <input type="password" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
+            <input type="password" style="width: 275px;" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
         </p>
         <div class="login_recaptcha">
             <?php if($attempts > 2):?>

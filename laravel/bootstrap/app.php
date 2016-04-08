@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -13,8 +12,13 @@
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
+
+if (file_exists(__DIR__ . '/../.env.' . getenv('ENVIRONMENT'))) {
+    $dotenv = new Dotenv\Dotenv(__DIR__ . '/../', '.env.' . getenv('ENVIRONMENT'));
+    $dotenv->load();
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +56,5 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
-
-require __DIR__ . '/../../wp-load.php';
 
 return $app;

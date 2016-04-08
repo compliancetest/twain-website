@@ -451,7 +451,7 @@ get_header();
                                     $suiteObj->load();
                                     $profileInstances = $case->getAvailableProfileInstances();
                                     $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
-                                    $testSuitesRoles = array($case->testerRole);
+                                    $testSuitesRoles = array($case->harnessRole);
                                     foreach ($profileInstances as $instance) {
                                         $profileName = $instance->profile_name;
 

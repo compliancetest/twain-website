@@ -169,17 +169,22 @@ require_once(THE_FUNCTION . '/processes/class.process.php');
 
 require_once(THE_FUNCTION . '/aws/BaseAWS.php');
 
-//CloudSearch
-require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
-require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
-require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
+/**
+ * wordpress and laravel uses same API version, so we shouldn load wordpress 2.* sdk to laravel
+ **/
+if(!isset($GLOBALS['loadFromLaravel'])) {
+    //CloudSearch
+    require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
+    require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
+    require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
 
-//SQS
-require_once(THE_FUNCTION . '/aws/s3/Client.php');
+    //SQS
+    require_once(THE_FUNCTION . '/aws/s3/Client.php');
 
-require_once(THE_FUNCTION . '/aws/sqs/Client.php');
+    require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
-require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+    require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+}
 
 
 //Compliance Claim
@@ -1033,7 +1038,7 @@ function cp_get_user_display_name($user)
     }
 
     //Now only show user first name
-    return $user->display_name;
+    return get_user_meta($user->ID, 'first_name', true) . ' ' . get_user_meta($user->ID, 'last_name', true);
 }
 
 /**
@@ -1473,8 +1478,8 @@ function generate_and_download_site( $data ){
         foreach( $data['hits']['hit'] as $row ){
             $row_data = $row['fields'];
                 $tempArray = array(
-                    $row_data['post_title'][0],
-                    $row_data['post_content'][0],
+                    strip_tags($row_data['post_title'][0]),
+                    trim(strip_tags(html_entity_decode($row_data['post_content'][0]))),
                     $row_data['post_type'][0],
                     ! empty( $row_data['community'] ) && is_array( $row_data['community'] ) ? implode( ',', $row_data['community'] ) : '',
                     date( 'Y-m-d', strtotime( $row_data['last_updated_date'][0] ) )

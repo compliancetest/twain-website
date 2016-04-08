@@ -459,7 +459,7 @@ jQuery(document).ready(function($) {
     //Fix the footer Position
     if(jQuery('body').height() > jQuery('#wrapper').height())
     {
-        jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height());
+        jQuery('#content-pattern #content-wrapper').css('padding-bottom', jQuery('body').height() - jQuery('#wrapper').height() - 100);
     }        
     
     customizeFileTag();
@@ -559,6 +559,11 @@ jQuery(document).ready(function($) {
     
     //Fix table height
     fixTdHeight(jQuery('.fix-table-height'));
+
+    jQuery('.view-profile-type-link, .view-profile-instance-link').on('click', function(){
+        jQuery('html, body').animate({ scrollTop: 0 }, 'fast');
+    });
+
 });
 
 function customizeFileTag()

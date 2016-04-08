@@ -1,2 +1,6 @@
 *
+!public/
 !.gitignore
+!public/.gitignore
+!public/transactions/.gitignore
+!public/transactions/

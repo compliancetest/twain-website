@@ -543,7 +543,7 @@ function viewProfileType()
     } else {
         $boxId = time();
         ?>
-        <div class="popup-box view-profile-type-box" style="display: none; width: 900px;"
+        <div class="popup-box view-profile-type-box" style="display: none; width: 1400px;"
              id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Type Detail</div>
             <div class="popup-box-content grid-box-body">

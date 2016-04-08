@@ -3,10 +3,16 @@
     $(document).ready(function(){
         //Terms and Conditions
         $('#agree_terms').cplightbox({});
-        $('#site-terms-box .cancel-btn').cplightbox({});
+        $('#site-terms-box .cancel-btn').cplightbox({
+            onLoad: function(){
+                $('#acc_tc_id').prop('checked', false);
+                $(window).scrollTop(0);
+            }
+        });
         $('#site-terms-box .process-btn').cplightbox({
             onLoad: function(){
                 $('#acc_tc_id').prop('checked', true);
+                $(window).scrollTop(0);
             }
         });
         
@@ -243,10 +249,12 @@
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             var timezoneText = $(".timezone-text");
             jQuery(thisParentId).find('.message').remove();
+           $('#my_profile .gbh-btn-edit').hide();
             if( findInputs == 0){
 
                 $(thisParentId+' .btn-row').fadeIn();
                  $(thisParentId).addClass('grid-box-editing');
+                $('.current_password').show();
                 //transform all divs in inputs
                 $(thisParentId+' .grid-cell.in_input').each(function(){                    
                    var thisTextVal = $(this).attr('data-value'); 
@@ -322,7 +330,8 @@
             var findInputs = $(thisParentId+' .grid-row input:visible').size();            
             $(thisParentId).find('.message').remove();
             //if( findInputs == 0){
-
+            $('#my_profile .gbh-btn-edit').show();
+            $('.current_password').hide();
             $(thisParentId+' .btn-row').fadeIn();
              $(thisParentId).addClass('grid-box-editing');
             //transform all divs in inputs
@@ -365,9 +374,9 @@
                 success: function(rsp)
                 {
                     hideGridBoxLoadingWrapper(form);
-                    if(rsp == 'success')
-                    {
-                        showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
+                    if(rsp == 'success') {
+                        $('#my_details .btn-row a').hide();
+                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
                         document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp, 'error');
@@ -380,6 +389,8 @@
 
         //Add Payment Method
         $('#add-payment-method').click(function(){
+            jQuery('#cards-list .edit-payment-method').hide();
+            jQuery('#add-payment-method').hide();
             $('#cards-list').hide();
             $('#edit-card-form').fadeIn('fast');
             $('#edit-card-form #id').val('');
@@ -394,6 +405,8 @@
             return false;
         });
         $('#cards-list .edit-payment-method').click(function(){
+            jQuery('#cards-list .edit-payment-method').hide();
+            jQuery('#add-payment-method').hide();
             var link = $(this);
             var pRow = $(this).parents('.tr');
             $('#cards-list').find('.loading b').html('LOADING DATA');
@@ -486,6 +499,8 @@
         });
 
         $('#edit-card-form .cancel-btn').click(function(){
+            jQuery('#cards-list .edit-payment-method').show();
+            jQuery('#add-payment-method').show();
             $('#my_payment').removeClass('grid-box-editing');
             $('#edit-card-form').hide();
             $('#edit-card-form').find('.cnumber-desc').hide();
@@ -531,7 +546,8 @@
         });
 
         // Organisation - transform divs in inputs at click on edit button
-        $('#organisation-container').on('click', '.gbh-btn-edit', function(){           
+        $('#organisation-container').on('click', '.gbh-btn-edit', function(){
+            jQuery('.gbh-btn-edit').hide();
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             jQuery(thisParentId).find('.message').remove();
@@ -573,6 +589,7 @@
 
         //Edit Cancel
         $('#organisation-container').on('click', '.edit-cancel-btn', function(){
+            jQuery('.gbh-btn-edit').show();
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();            
             $(thisParentId).find('.message').remove();
@@ -611,7 +628,8 @@
                     hideGridBoxLoadingWrapper(form);
                     if(rsp == 'success')
                     {
-                        showGridBoxResultMessage(form, 'Successfuly saved!', 'success');
+                        jQuery('.btn-row a').hide();
+                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
                         document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp, 'error');
@@ -716,7 +734,8 @@ function saveVariableDefaults(obj)
             parentObj.find(".loading1").hide();
             if(rsp == 'success')
             {
-                parentObj.append('<p class="message success">Successully Saved!</p>');
+                jQuery('.btn-row a').hide();
+                parentObj.append('<p class="message success">Successfully Saved!</p>');
             }else{
                 parentObj.append('<p class="message error">' + rsp + '</p>');
             }
