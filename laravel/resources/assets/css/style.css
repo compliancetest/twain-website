@@ -8955,7 +8955,7 @@ select.form-control {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1456756501') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1460142528') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9673,7 +9673,7 @@ select.form-control {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1458553303') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1460142528') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9700,7 +9700,7 @@ select.form-control {
 }
 /* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1458553303') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1460142528') repeat 0 0;
 }
 /* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -9727,7 +9727,7 @@ select.form-control {
 }
 /* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1458553303') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1460142528') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9880,7 +9880,7 @@ select.form-control {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1459776243') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1460142528') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -9940,7 +9940,7 @@ select.form-control {
 }
 /* line 56, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1454338576') no-repeat 0 0;
+  background: url('../images/loader.gif?1460142528') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -11543,80 +11543,84 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-lists .community-name p {
   margin: 10px 0 0 0;
 }
-
 /* line 297, ../scss/pages/_community.scss */
+.community-lists .community-action .btn {
+  min-width: 200px;
+}
+
+/* line 303, ../scss/pages/_community.scss */
 .community-admin {
   padding: 10px 15px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 297, ../scss/pages/_community.scss */
+  /* line 303, ../scss/pages/_community.scss */
   .community-admin {
     padding: 10px 0;
   }
 }
-/* line 305, ../scss/pages/_community.scss */
+/* line 311, ../scss/pages/_community.scss */
 .community-admin .profile-type-list {
   width: 100%;
 }
-/* line 309, ../scss/pages/_community.scss */
+/* line 315, ../scss/pages/_community.scss */
 .community-admin .profile-type-list > thead > tr > th {
   text-align: center;
 }
-/* line 312, ../scss/pages/_community.scss */
+/* line 318, ../scss/pages/_community.scss */
 .community-admin .profile-type-list > thead > tr > th:first-child {
   text-align: left;
 }
-/* line 319, ../scss/pages/_community.scss */
+/* line 325, ../scss/pages/_community.scss */
 .community-admin .profile-type-list > tbody > tr > td {
   padding-top: 3px;
   padding-bottom: 3px;
   text-align: center;
 }
-/* line 324, ../scss/pages/_community.scss */
+/* line 330, ../scss/pages/_community.scss */
 .community-admin .profile-type-list > tbody > tr > td:first-child {
   text-align: left;
 }
-/* line 330, ../scss/pages/_community.scss */
+/* line 336, ../scss/pages/_community.scss */
 .community-admin .profile-type-list .btn {
   margin: 0 2px;
 }
-/* line 335, ../scss/pages/_community.scss */
+/* line 341, ../scss/pages/_community.scss */
 .community-admin .add-profile-title {
   font-size: 15px;
   font-weight: 600;
   margin: 0 0 10px 0;
 }
-/* line 341, ../scss/pages/_community.scss */
+/* line 347, ../scss/pages/_community.scss */
 .community-admin .upload-file-field {
   display: inline-block;
   margin: 0 10px 0 0;
 }
-/* line 346, ../scss/pages/_community.scss */
+/* line 352, ../scss/pages/_community.scss */
 .community-admin .privacy-options-list {
   margin: 0 0 0 17px;
 }
-/* line 351, ../scss/pages/_community.scss */
+/* line 357, ../scss/pages/_community.scss */
 .community-admin .community-invitation-options li {
   margin: 7px 0 0 0;
 }
-/* line 354, ../scss/pages/_community.scss */
+/* line 360, ../scss/pages/_community.scss */
 .community-admin .community-invitation-options li:first-child {
   margin-top: 0;
 }
-/* line 363, ../scss/pages/_community.scss */
+/* line 369, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action {
   border: 1px solid #a9a9a9;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 367, ../scss/pages/_community.scss */
+/* line 373, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action ul {
   display: table;
   width: 100%;
   margin: 0;
 }
-/* line 373, ../scss/pages/_community.scss */
+/* line 379, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li {
   display: table-cell;
   position: relative;
@@ -11624,12 +11628,12 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   text-align: center;
 }
 @media only screen and (max-width: 640px) {
-  /* line 373, ../scss/pages/_community.scss */
+  /* line 379, ../scss/pages/_community.scss */
   .community-admin .members-management .members-group-action li {
     display: block;
   }
 }
-/* line 383, ../scss/pages/_community.scss */
+/* line 389, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li:before {
   content: '';
   display: inline-block;
@@ -11642,16 +11646,16 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   top: 0;
 }
 @media only screen and (max-width: 640px) {
-  /* line 383, ../scss/pages/_community.scss */
+  /* line 389, ../scss/pages/_community.scss */
   .community-admin .members-management .members-group-action li:before {
     display: none;
   }
 }
-/* line 396, ../scss/pages/_community.scss */
+/* line 402, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li:first-child:before {
   display: none;
 }
-/* line 400, ../scss/pages/_community.scss */
+/* line 406, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li a {
   display: block;
   font-size: 11px;
@@ -11665,52 +11669,52 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   background-image: -webkit-linear-gradient(top, #e9ebed, #d8d8d8);
   background-image: linear-gradient(to bottom, #e9ebed, #d8d8d8);
 }
-/* line 408, ../scss/pages/_community.scss */
+/* line 414, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li a:hover, .community-admin .members-management .members-group-action li a.selected {
   background: #127dbb;
   color: #fff;
   text-shadow: 0 -1px 1px #0d5783;
   text-decoration: none;
 }
-/* line 422, ../scss/pages/_community.scss */
+/* line 428, ../scss/pages/_community.scss */
 .community-admin .members-management .member-type-header {
   margin: 10px 0;
   font-weight: 700;
   line-height: 16px;
 }
-/* line 429, ../scss/pages/_community.scss */
+/* line 435, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li {
   margin: 0 0 7px 0;
   overflow: hidden;
 }
-/* line 433, ../scss/pages/_community.scss */
+/* line 439, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li.clearfix {
   margin: 0;
   overflow: visible;
 }
-/* line 438, ../scss/pages/_community.scss */
+/* line 444, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li label {
   float: left;
 }
-/* line 442, ../scss/pages/_community.scss */
+/* line 448, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li input {
   float: left;
   margin: 8px 0 0 0;
 }
-/* line 447, ../scss/pages/_community.scss */
+/* line 453, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .avatar {
   width: 30px;
   height: 30px;
   margin: 0 0 0 5px;
   border: 1px solid #959595;
 }
-/* line 454, ../scss/pages/_community.scss */
+/* line 460, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info {
   overflow: hidden;
   margin: 0 0 0 55px;
   display: block;
 }
-/* line 459, ../scss/pages/_community.scss */
+/* line 465, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .member-name, .community-admin .members-management .member-list li .member-info .member-email {
   color: #127dbb;
   display: block;
@@ -11718,56 +11722,56 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   font-weight: 400;
   margin: 1px 0 0 0;
 }
-/* line 467, ../scss/pages/_community.scss */
+/* line 473, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .member-email {
   font-size: 10px;
   margin-top: -4px;
 }
-/* line 472, ../scss/pages/_community.scss */
+/* line 478, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .btn {
   margin-top: 4px;
 }
-/* line 482, ../scss/pages/_community.scss */
+/* line 488, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list {
   width: 100%;
 }
-/* line 485, ../scss/pages/_community.scss */
+/* line 491, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li {
   padding: 12px 0;
   margin: 0 0 12px 0;
   border-bottom: 1px solid #959595;
   overflow: hidden;
 }
-/* line 491, ../scss/pages/_community.scss */
+/* line 497, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .avatar {
   float: left;
   margin: 0;
 }
-/* line 496, ../scss/pages/_community.scss */
+/* line 502, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .member-info {
   overflow: hidden;
   margin: 0 0 0 40px;
 }
-/* line 500, ../scss/pages/_community.scss */
+/* line 506, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .member-info .member-activity {
   font-size: 10px;
   font-style: italic;
   margin-top: -1px;
 }
-/* line 507, ../scss/pages/_community.scss */
+/* line 513, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action {
   float: right;
   margin: 4px 0 0 0;
 }
-/* line 511, ../scss/pages/_community.scss */
+/* line 517, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action .btn {
   margin: 0 0 0 5px;
 }
-/* line 514, ../scss/pages/_community.scss */
+/* line 520, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action .btn:first-child {
   margin-left: 0;
 }
-/* line 524, ../scss/pages/_community.scss */
+/* line 530, ../scss/pages/_community.scss */
 .community-admin .loaded-files {
   margin: 10px -20px -20px -20px;
   border-top: 2px solid #b7b7b7;
@@ -11775,31 +11779,31 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   padding: 10px 20px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 524, ../scss/pages/_community.scss */
+  /* line 530, ../scss/pages/_community.scss */
   .community-admin .loaded-files {
     margin: 10px -10px -20px -10px;
     padding: 10px -5px;
   }
 }
-/* line 536, ../scss/pages/_community.scss */
+/* line 542, ../scss/pages/_community.scss */
 .community-admin .loaded-files li {
   color: #127dbb;
   font-weight: 700;
 }
-/* line 543, ../scss/pages/_community.scss */
+/* line 549, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-image {
   float: left;
   width: 100px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 543, ../scss/pages/_community.scss */
+  /* line 549, ../scss/pages/_community.scss */
   .community-admin .community-image-management .community-image {
     float: none;
     text-align: center;
     width: 100%;
   }
 }
-/* line 553, ../scss/pages/_community.scss */
+/* line 559, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-image img {
   width: 100px;
   height: 100px;
@@ -11807,17 +11811,17 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   -webkit-box-shadow: 0 0 10px 1px #999;
   box-shadow: 0 0 10px 1px #999;
 }
-/* line 561, ../scss/pages/_community.scss */
+/* line 567, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description {
   margin: 10px 0 0 0;
 }
 @media only screen and (min-width: 641px) {
-  /* line 561, ../scss/pages/_community.scss */
+  /* line 567, ../scss/pages/_community.scss */
   .community-admin .community-image-management .community-avatar-description {
     margin: 0 0 0 115px;
   }
 }
-/* line 568, ../scss/pages/_community.scss */
+/* line 574, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description p {
   font-weight: 600;
   line-height: 16px;
@@ -11825,23 +11829,23 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   font-size: 13px;
   margin: 0 0 12px 0;
 }
-/* line 576, ../scss/pages/_community.scss */
+/* line 582, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description .upload-file-field {
   margin: 0 0 10px 0;
   display: block;
 }
 
-/* line 586, ../scss/pages/_community.scss */
+/* line 592, ../scss/pages/_community.scss */
 .create-community h3 {
   font-size: 18px;
   font-weight: 600;
 }
-/* line 591, ../scss/pages/_community.scss */
+/* line 597, ../scss/pages/_community.scss */
 .create-community .community-admin {
   padding: 15px 10px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 591, ../scss/pages/_community.scss */
+  /* line 597, ../scss/pages/_community.scss */
   .create-community .community-admin {
     padding: 15px 0;
   }
@@ -11940,7 +11944,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after {
   content: "\0020";
   display: block;
@@ -11981,7 +11985,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -12608,7 +12612,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 }
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1456756501') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1460142528') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

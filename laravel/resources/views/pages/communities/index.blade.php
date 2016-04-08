@@ -33,7 +33,7 @@
                                 <td class="text-center">4</td>
                                 <td class="text-center">11</td>
                                 <td class="text-center">0</td>
-                                <td class="text-center">
+                                <td class="text-center community-action">
                                     @include('pages.communities.partials.button', ['community' => $community])
                                 </td>
                             </tr>
