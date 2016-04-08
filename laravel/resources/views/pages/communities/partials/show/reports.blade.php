@@ -1,15 +1,22 @@
-<div id="downloads-container" class="tab-content white_bcg padding10">
-    <div id="uploaded-files">
-        <div class="grid-list">
-            <div class="grid-list-row grid-list-header">
-                <div class="grid-list-cell width40P">Current Testing Status</div>
-                <div class="grid-list-cell width40P">
-                    <a class="left10 action-btn icon-btn download-btn has-tooltip" href="<?php echo S3Wrapper::getLink( 'reports/'.$community->title.'/'.get_option( 'reports_token_'.$community->id), $community->title.'TestProgress.xls' );?>"><span class="p"></span><span class="simple_tooltip radius6" style="top: -27px;">Report<span></span></span></a>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <?php
-            ?>
+<div class="community-tab-content">
+
+    <div class="community-reports row">
+        <div class="col-md-12">
+            <table class="table community-reports-list">
+                <tr>
+                    <td class="col-sm-3">Current Testing Status</td>
+                    <td class="col-sm-1"><a href="#" class="btn btn-success btn-icon btn-download"
+                                            data-tooltip="tooltip" title="Report"></a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Last 7 Days</td>
+                    <td class="col-sm-1"><a href="#" class="btn btn-success btn-icon btn-download"
+                                            data-tooltip="tooltip" title="Report"></a></td>
+                    <td></td>
+                </tr>
+            </table>
         </div>
     </div>
+
 </div>

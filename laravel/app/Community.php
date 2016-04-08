@@ -86,18 +86,19 @@ class Community extends Model
     public function hasAccess($userId = false)
     {
         //non-logged in user cant view community content
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return false;
         }
-        if(!$userId){
+        if (!$userId) {
             $userId = Auth::user()->ID;
         }
-        if($this->getActiveMember($userId)){
+        if ($this->getActiveMember($userId)) {
             return true;
         }
         return false;
 
     }
+
     /**
      * Get community admins
      * @return array|null
@@ -131,7 +132,7 @@ class Community extends Model
      */
     public function isAdmin($userId = false)
     {
-        if(!Auth::check()){
+        if (!Auth::check()) {
             return false;
         }
         if (!$userId) {
@@ -156,7 +157,7 @@ class Community extends Model
      */
     public function getMeta($key = false)
     {
-        if($key){
+        if ($key) {
             return $this->meta->keyBy('meta_key')->map(function ($item) {
                 return $item['meta_value'];
             })->get($key, null);
@@ -184,9 +185,10 @@ class Community extends Model
         return $this->members()->where(['is_confirmed' => 1])->get();
     }
 
-    public function getImageUrl(){
-        if(Storage::exists($this->image)){
-            return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/'.$this->image;
+    public function getImageUrl()
+    {
+        if (!empty($this->image) && Storage::exists($this->image)) {
+            return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/' . $this->image;
         }
         return '/laravel/resources/assets/images/gravatar.jpg';
     }

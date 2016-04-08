@@ -1,728 +1,789 @@
-<div id="group_admin_page" class="tab-content white_bcg column">
-    <p>{{ MESSAGE_WARNING_COMMUNITY_ADMIN }}</p>
-    <div class="half left">
-        <!-- Group Details Tab -->
-        <div class="grid-box" id="group_details_box">
+<div class="community-tab-content">
 
-            {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+    <div class="community-admin">
+        <p>You must subscribe to at least one test suite in the community to access this content. To subscribe once you
+            are a community member, just select the desired suite from the community home page, and click on the
+            "Access" bar.</p>
 
-                <div class="grid-box-header">
-                    <h5>Details</h5>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
+        <div class="row">
+            <div class="col-sm-6">
 
-                        <div class="field-row">
-                            <label>Community Name</label>
-                            <span class="input-holder">
-                                <input type="text" name="title" id="group-name" aria-required="true" class="input" />
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>Community Description</label>
-                            <span class="input-holder">
-                                <textarea name="description" id="group-desc" aria-required="true" class="textarea"></textarea>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>Terms and Conditions</label>
-                            <span class="input-holder">
-                                <textarea name="terms_and_conditions" id="terms_and_conditions"
-                                          aria-required="true" class="textarea">
-                                    {!! @$communityMeta['terms_and_conditions'] !!}
-                                </textarea>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>License Agreements</label>
-                            <span class="input-holder">
-                                <textarea name="license_agreements" id="license_agreements"
-                                          aria-required="true" class="textarea">
-                                    {!! @$communityMeta['terms_and_conditions'] !!}
-                                </textarea>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>Obligation to Claim</label>
-                            <span class="input-holder">
-                                <textarea name="obligation_for_claim" id="obligation_for_claim"
-                                          aria-required="true" class="textarea">
-                                    {!! @$communityMeta['license_agreements'] !!}
-                                </textarea>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>Notification Email Content</label>
-                            <span class="input-holder">
-                                <textarea name="notification_email_of_changes" id="notification_email_of_changes"
-                                          aria-required="true" class="textarea">
-                                    {!! @$communityMeta['notification_email_of_changes'] !!}
-                                </textarea>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="field-row">
-                            <label>Notify community members of changes via email</label>
-                            <span class="radio-holder">
-                                <label>
-                                    <input type="radio" name="group-notify-members" value="1" />YES
-                                </label>
-
-                                <label>
-                                    <input type="radio" name="group-notify-members" value="0" checked="checked" />NO
-                                </label>
-                            </span>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid-box-footer">
-                    <div class="btn-row">
-                        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-            {{ Form::close() }}
-
-        </div>
-        <div class="space20"></div>
-        <!-- Group Avatar -->
-        <div class="grid-box" id="group_avatar_box">
-            {!! Form::open(['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
-
-                <div class="grid-box-header">
-                    <h5>Display Image</h5>
-                </div>
-
-                <div class="grid-box-body">
-                    <div class="column grid-row">
-                        <div class="field-row">
-                            <div class="grid_cell current_avatar">
-                                @if(!empty($communityMeta['logo']))
-                                    <img src="{{ $communityMeta['logo'] }}" title="{{ $community->title }}">
-                                @else
-                                    <img src="<{!! CHILD_TEMPLATE_DIRECTORY !!}/images/default-group-avatar.png" title="Default Avatar" />
-                                @endif
-                            </div>
-                            <div class="grid_cell width300 left15">
-
-                                <p class="field-row">
-                                    Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.
-                                </p>
-                                <p class="field-row">
-                                    Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.
-                                </p>
-
-                                <input type="file" name="image" id="image" class="image"  file-type="image" file-extensions="(.jpg, .png, .gif or .jpeg file)" />
-
-                                <div class="clear space10"></div>
-
-                                <a href="#" class="action-btn process-btn no-submit" id="upload-image-btn">
-                                    <span class="p"></span><span class="t">Upload Image</span>
-                                </a>
-
-                                @if(!empty($communityMeta['logo']))
-                                    <a href="#" class="action-btn delete-btn left10"><span class="p"></span><span class="t">Delete Image</span></a>
-                                @endif
-
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-
-            {{ Form::close() }}
-        </div>
-
-        <div class="space20"></div>
-
-
-        <!-- Remove Group -->
-        <div class="grid-box" id="group_remove_box">
-
-            {!! Form::open(['id'=> 'delete-community-form', 'class' => 'standard-form', 'files' => true, 'method' => 'DELETE', 'action' => ['CommunitiesController@destroy', 'id' => $community->slug]]) !!}
-
-                <div class="grid-box-header">
-                    <h5>Details</h5>
-                </div>
-
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            <font color='#ce1515'>WARNING</font>: Deleting this community will completely remove ALL content associated with it. There is no way back, please be careful with this option.
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" />
-                                I understand the consequences of deleting this community.
-                            </label>
-                        </div>
-                        <div class="btn-row">
-                            <a href="#" class="action-btn delete-btn" onclick="jQuery('#delete-community-form').submit();"><span class="p"></span><span class="t">DELETE COMMUNITY</span></a>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-
-            {{ Form::close() }}
-
-        </div>
-
-    </div>
-
-    <div class="right">
-        <!-- Profile -->
-        <div class="grid-box" id="group_profile_types_box">
-            <div class="grid-box-header">
-                <h5>Profile Types</h5>
-            </div>
-            <?php
-            if(isset($_POST['td-action']) && wp_verify_nonce($_POST['td-action'], 'save-profile-type'))
-                $isEditType = true;
-            else
-                $isEditType = false;
-            ?>
-            <div class="grid-box-body" id="profile-type-list" @if($isEditType) style="display:none" @endif>
-                <?php $profileTypes = getCommunityProfileTypes($community->id); ?>
-                <div class="grid-box table-box">
-                    <div class="grid-box-body">
-
-                        <div class="thead tr">
-                            <div class="td td-profile-title">Name</div>
-                            <div class="td td-profile-instances">Instances</div>
-                            <div class="td td-profile-action">Action</div>
-                            <div class="clear"></div>
-                        </div>
-
-                        <div class="tbody">
-
-                            @if(!$profileTypes)
-
-                                <div class="tr">
-                                    <div class="td td-full">No data found</div>
-                                    <div class="clear"></div>
+                <div class="colored-box">
+                    <div class="colored-box-header">Details</div>
+                    <div class="colored-box-body">
+                        <form role="main" enctype="multipart/form-data" method="post" action="ajax.php"
+                              id="group-details-form" name="group-details-form" data-validate="validate">
+                            <div class="colored-box-content">
+                                <div class="form-group">
+                                    <label for="communityName">Community Name</label>
+                                    <input type="text" name="group-name" class="form-control" id="communityName"
+                                           value="SuperStream" required data-msg-required="Community Name is required">
                                 </div>
-
-                            @endif
-
-                            @foreach($profileTypes as $row)
-                                <div class="tr">
-                                    <div class="td td-profile-title">
-                                        {{ $row->title }}
-                                        <?php
-                                        $pJSON = json_decode(base64_decode($row->schema));
-                                        if($pJSON->Version)
-                                        {
-                                            $version = array();
-                                            foreach(get_object_vars($pJSON->Version) as $k=>$v)
-                                            {
-                                                $version[] = $v;
-                                            }
-                                            echo " v" . implode(".", $version);
-                                        }
-                                        ?>
-                                    </div>
-                                    <div class="td td-profile-instances">{{ $row->instances }}</div>
-                                    <div class="td td-profile-action">
-
-                                        <a href="/?td-action=<?php echo wp_create_nonce('download-profile-type')?>&type_id={!! $row->id !!}&community_id={!! $community->id !!}"
-                                           class="action-btn icon-btn download-btn">
-                                            <span class="p"></span>
-                                            <span class="simple_tooltip radius6 no-wrap">Download Profile Type<span></span></span>
-                                        </a>
-
-                                        <a href="/?td-action=<?php echo wp_create_nonce('edit-profile-type')?>&type_id={!! $row->id !!}&community_id={!! $community->id !!}"
-                                           class="action-btn blue-edit-btn icon-btn left5 profile-type-edit-btn">
-                                            <span class="p"></span><span class="simple_tooltip radius6">Edit Profile Type<span></span></span>
-                                        </a>
-
-                                        <a href="/?td-action=<?php echo wp_create_nonce('delete-profile-type')?>&type_id={!! $row->id !!}&community_id={!! $community->id !!}"
-                                           class="action-btn blue-delete-btn icon-btn left5 profile-type-delete-btn">
-                                            <span class="p"></span><span class="simple_tooltip radius6 no-wrap">Remove Profile Type<span></span></span>
-                                        </a>
-
-                                    </div>
-                                    <div class="clear"></div>
+                                <div class="form-group">
+                                    <label for="communityDescription">Community Description</label>
+                                    <textarea name="group-desc" rows="5" class="form-control" data-air="true"
+                                              id="communityDescription" required
+                                              data-msg-required="Community Description is required">SuperStream aims to improve efficiency in the Australian Superannuation industry through data standards. "Rollovers", where savings are transferred from one fund to another (mandatory for APRA regulated funds by July 1 2013 and all funds by July 1 2014). "Member Contributions", where regular payments are made by employers to funds of the employees choice (mandated for large employers by 1 July 2014 and all employers by 1 July 2015.</textarea>
                                 </div>
-                            @endforeach
+                                <div class="form-group">
+                                    <label for="communityTermsAndConditions">Terms and Conditions</label>
+                                                        <textarea name="terms_and_conditions" rows="5"
+                                                                  class="form-control redactor_editor" data-air="true"
+                                                                  id="communityTermsAndConditions">
+                                                            <p>These terms and conditions are specific to the
+                                                                SuperStream Community and supplement the general terms
+                                                                and conditions for registration on <a
+                                                                        href="http://www.compliancetest.net">www.compliancetest.net</a>
+                                                            </p>
+                                                            <ol>
+                                                                <li>In order to access the SuperStream Community
+                                                                    features, you must become a member of the community.
+                                                                </li>
+                                                                <li>Membership of the SuperStream Community is limited
+                                                                    to persons or organisations that have an active role
+                                                                    in implementation (or implementation support) of the
+                                                                    SuperStream standards (eg Funds, Administrators,
+                                                                    Employers, Gateways, Software providers).
+                                                                </li>
+                                                                <li>We reserve the right to terminate your membership at
+                                                                    any time if you breach these terms and conditions.
+                                                                </li>
+                                                                <li>You are responsible for all and any Content you
+                                                                    contribute via the community forum or wiki. When you
+                                                                    provide Content you retain ownership of the
+                                                                    intellectual property in that information however
+                                                                    you grant all current and future community members
+                                                                    unrestricted and royalty free rights to use your
+                                                                    content for any purpose that supports the
+                                                                    implementation of SuperStream stndards. This licence
+                                                                    ends when you cease your membership except for
+                                                                    Content which has already been released as part of
+                                                                    the Service.
+                                                                </li>
+                                                                <li>We reserve the right but will not have an obligation
+                                                                    to remove or refuse to distribute any Content. We
+                                                                    also reserve the right to adapt or modify your
+                                                                    Content for any reason including for distribution
+                                                                    purposes.
+                                                                </li>
+                                                                <li>By posting Content on this website, you provide us
+                                                                    with an undertaking that such Content does not
+                                                                    infringe the rights of someone else and that it does
+                                                                    not violate the law in any other way such as by
+                                                                    being defamatory, being of racist content or is
+                                                                    threatening.
+                                                                </li>
+                                                                <li>To the extent permitted by law, you release and
+                                                                    discharge us from any liability or claim arising out
+                                                                    of any loss or damage that may be suffered or
+                                                                    incurred as a result of your participation in the
+                                                                    SuperStream community.
+                                                                </li>
+                                                                <li>We respect your privacy. Our compliance with privacy
+                                                                    legislation is set out in our separate Privacy
+                                                                    Policy which may be accessed from our home page.
+                                                                </li>
+                                                            </ol>
+                                                        </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="licenseAgreements">License Agreements</label>
+                                                        <textarea name="license_agreements" rows="5"
+                                                                  class="form-control redactor_editor" data-air="true"
+                                                                  id="licenseAgreements">
+                                                            <p>The software tools provided via the "Downloads" Tab on
+                                                                this community dashboard are provided for use by
+                                                                SuperStream community members and ComplianceTest service
+                                                                subscribers. &nbsp;</p><ol>
+                                                                <li>The tools may be used by registered community
+                                                                    members only.
+                                                                </li>
+                                                                <li>There is no charge for use of the tools beyond the
+                                                                    normal subscription fee for test suites.
+                                                                </li>
+                                                                <li>The tools remain the copyright and intellectual
+                                                                    property of Compliance Test.
+                                                                </li>
+                                                            </ol>
+                                                        </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="communityObligationToClaim">Obligation to Claim</label>
+                                                        <textarea name="obligation_for_claim" rows="5"
+                                                                  class="form-control redactor_editor" data-air="true"
+                                                                  id="communityObligationToClaim">
+                                                            <p>By making this claim, I confirm that I have executed the
+                                                                SuperStream test cases using the product / version for
+                                                                which this compliance claim is made. I understand that
+                                                                this claim constitutes a "self-certification" to the
+                                                                effect that the product / version has completed testing
+                                                                and does not imply any warranty against any
+                                                                interoperability problems with the product. I understand
+                                                                that either the issuing authority or ComplianceTest may
+                                                                revoke the claim in the event that future problems
+                                                                indicate that tests may not have been properly
+                                                                completed. Once published, this claim entitles me to use
+                                                                the "ComplianceTested" Logo with the product for which
+                                                                this claim is made. The claim ID can be used as the
+                                                                certification reference on the ATO product register.</p>
+                                                        </textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="communityNotificationEmailContent">Notification Email Content</label>
+                                    <textarea name="notification_email_of_changes" rows="5"
+                                              class="form-control redactor_editor" data-air="true"
+                                              id="communityNotificationEmailContent">There have been some changes to the SuperStream community content!</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notify community members of changes via email</label><br>
+                                    <label>
+                                        <input type="radio" name="group-notify-members" value="1"> Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="group-notify-members" value="0"> No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="colored-box-footer">
+                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                            </div>
+                        </form>
+                    </div>
 
+                </div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Display Image</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content community-image-management">
+                            <div class="community-image">
+                                <img src="images/gravatar.jpg" alt="">
+                            </div>
+                            <div class="community-avatar-description">
+                                <p>Upload an image to use as an avatar for this community. The image will be shown on
+                                    the main community page, and in search results.</p>
+
+                                <p>Click below to select a JPG, GIF or PNG format photo from your computer and then
+                                    click 'Upload Image' to proceed.</p>
+
+                                <div class="upload-file-field">
+                                    <input type="file" name="file" class="input-file" data-file-type="image"
+                                           data-file-extensions="(.jpg, .png, .gif or .jpeg file)"/>
+                                </div>
+                                <a href="#" class="btn btn-success btn-with-icon btn-add">Upload Image</a>
+                                <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Image</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="column">
-                    <a href='/?td-action=<?php echo wp_create_nonce('edit-profile-type')?>&community_id={!! $community->id !!}'
-                       class="action-btn process-btn" id="add-profile-type-btn"><span class="p"></span><span class="t">Add New Profile Type</span>
-                    </a>
-                    <div class="clear"></div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Details</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <p><span style="color: #ce1515;">WARNING</span>: Deleting this community will completely
+                                remove ALL content associated with it. There is no way back, please be careful with this
+                                option.</p>
+
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" value="1" id="delete-group-understand"
+                                           name="delete-group-understand"> I understand the consequences of deleting
+                                    this community.
+                                </label>
+                            </div>
+                            <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete Community</a>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <div id="edit-profile-type" @if($isEditType) style="display: block" @endif >
-
-                <form name="profileTypeForm" id="profileTypeForm" action="" enctype="multipart/form-data" method="post">
-                    <div class="grid-box-body column">
-
-                        <h5><?php echo $isEditType && $_POST['type_id'] ? 'Edit' : 'Add New'?> Profile Type</h5>
-
-                        <div class="field-row">
-                            <label>Enter Schema:</label>
-                            <textarea name="profile_type_text" id="profile_type_text" class="textarea">
-                                <?php echo isset($_POST['profile_type_text']) ? stripslashes($_POST['profile_type_text']) : '' ?>
-                            </textarea>
+            <div class="col-sm-6">
+                <div class="colored-box">
+                    <div class="colored-box-header">Profile Types</div>
+                    <div class="colored-box-body">
+                        <div id="profileTypeList">
+                            <div class="table-responsive">
+                                <table class="colored-table profile-type-list">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Instances</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>TICK v1.1</td>
+                                        <td>16</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product v4.1</td>
+                                        <td>2</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Employer v2.5.1</td>
+                                        <td>6</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Clearing House v2.3.1</td>
+                                        <td>164</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Employer v2.11.1</td>
+                                        <td>1099</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product v5.6.1</td>
+                                        <td>291</td>
+                                        <td class="text-nowrap">
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Filter v1.1</td>
+                                        <td>18</td>
+                                        <td>
+                                            <a href="#" class="btn btn-success btn-icon btn-download"
+                                               data-tooltip="tooltip" title="Download Profile Type"></a>
+                                            <a href="ajax.php" class="btn btn-primary btn-icon btn-edit"
+                                               data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                            <a href="#" class="btn btn-danger btn-icon btn-delete"
+                                               data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="colored-box-content">
+                                <a href="#" class="btn btn-success btn-with-icon btn-add" id="addAddNewProfileType">Add
+                                    New Profile Type</a>
+                            </div>
                         </div>
 
-                        <div class="field-row">
-                            <label>Or Select File:</label>
-                            <div class="clear"></div>
-                            <input type="file" name="profile_type_file" id="profile_type_file" class="input_file" value="" file-type="doc" file-extensions="(.txt or .json file)" />
-                            <div class="clear"></div>
-                        </div>
-                        <div class="clear"></div>
+                        <div id="addNewProfile" style="display: none;">
+                            <form method="post" enctype="multipart/form-data" action="" id="profileTypeForm"
+                                  name="profileTypeForm">
+                                <div class="colored-box-content">
+                                    <div class="add-profile-title">Add New Profile Type</div>
+                                    <div class="form-group">
+                                        <label>Enter Schema:</label>
+                                        <textarea class="form-control" rows="20" id="profile_type_text"
+                                                  name="profile_type_text"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Or Select File:</label><br/>
 
-                        <input type="hidden" name="community_id" value="{{ $community->id }}" />
-                        <input type="hidden" name="type_id" id="type_id" @if($isEditType) value="{{ $_POST['type_id'] }}" @endif />
-                        <input type="hidden" name="td-action" value="<?php echo wp_create_nonce('save-profile-type')?>" />
+                                        <div class="upload-file-field">
+                                            <input type="file" name="profile_type_file" id="profile_type_file"
+                                                   class="input-file" data-file-type="doc"
+                                                   data-file-extensions="(.txt or .json file)"/>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" value="" name="community_id">
+                                    <input type="hidden" value="" id="type_id" name="type_id">
+                                    <input type="hidden" value="" name="td-action">
+                                </div>
+                                <div class="colored-box-footer">
+                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save
+                                    </button>
+                                    <a class="btn btn-default btn-with-icon btn-cancel" id="cancelAddingProfile"
+                                       href="#">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="profileTypesLoading" class="color-box-loading">
+                            <div class="loading-content"><span class="loader"></span>
+
+                                <div class="loading-text">READING PROFILE TYPE</div>
+                                <div class="loading-wait">Please wait...</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid-box-footer">
-                        <div class="btn-row">
-                            <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
-                            <a href="#" class="action-btn cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <script type="text/javascript">
-            jQuery(document).ready(function($){
-                jQuery('#add-profile-type-btn').click(function(){
-                    jQuery('#profileTypeForm h5').html('Add New Profile Type');
-                    jQuery('#profileTypeForm .message').remove();
-                    jQuery('#profileTypeForm #profile_type_text').val('');
-                    jQuery('#profileTypeForm #profile_type_file').val('');
-                    jQuery('#edit-profile-type').fadeIn();
-                    jQuery('#profile-type-list').hide();
-                    return false;
-                });
+                </div>
 
-                jQuery('#edit-profile-type .cancel-btn').click(function(){
-                    jQuery('#profile-type-list').fadeIn();
-                    jQuery('#edit-profile-type').hide();
-                    return false;
-                });
-
-                jQuery('#profileTypeForm').submit(function(){
-                    jQuery('#profileTypeForm .message').remove();
-                    if(jQuery('#profile_type_file').val() == '' && jQuery('#profile_type_text').val() == '')
-                    {
-                        jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">Please enter schema or select a schema file.</p>');
-                        return false;
-                    }
-                    jQuery('#save-profile-type-box .loading b').html('SAVING PROFILE TYPE');
-                    jQuery('#save-profile-type-box .loading').show();
-                    return true;
-                });
-
-                jQuery('.profile-type-edit-btn').click(function(){
-                    jQuery('#profileTypeForm h5').html('Edit Profile Type');
-                    jQuery('#profileTypeForm #profile_type_text').val('');
-                    jQuery('#profileTypeForm #profile_type_file').val('');
-                    jQuery('#edit-profile-type').fadeIn();
-                    jQuery('#profile-type-list').hide();
-                    jQuery('#edit-profile-type .loading b').html('READING PROFILE TYPE');
-                    jQuery('#edit-profile-type .loading').show();
-                    jQuery('#profileTypeForm .message').remove();
-                    var link = jQuery(this).attr('href');
-                    jQuery.ajax({
-                        url: link,
-                        dataType: 'xml',
-                        success: function(rsp)
-                        {
-                            if(jQuery(rsp).find('status').text() == 'success')
-                            {
-                                jQuery('#profileTypeForm #profile_type_text').val(jQuery(rsp).find('schema').text());
-                                jQuery('#profileTypeForm #type_id').val(jQuery(rsp).find('id').text());
-                            }else{
-                                jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
-                            }
-                            jQuery('#edit-profile-type .loading').hide();
-                        },
-                        error: function(err)
-                        {
-                            jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="message error">' + err.responseText + '</p>');
-                            jQuery('#edit-profile-type .loading').hide();
-                        }
-                    })
-                    return false;
-                })
-
-                $('#group_admin_page textarea:visible').redactor({
-                    air:true,
-                    minHeight: 120
-                })
-            })
-        </script>
-        <div class="space20"></div>
-
-
-        <!-- Memebers -->
-        <div class="grid-box" id="group_members_box">
-            <div class="grid-box-header">
-                <h5>Members</h5>
-            </div>
-
-            <div class="grid-box-body">
-                <div class="column nopaddingbottom">
-
-                    {{ Form::open(['class' => 'group-requests-form', 'url' => 'membership/'.$community->slug.'/request']) }}
-
-                        <?php $membershiRequests = $community->getMembershipRequests();?>
-
-                        @if($membershiRequests)
-
-                            <p class="nomarginbottom">The following persons wants to join the Community:</p>
-                            <div class="field-row">
-                                <ul id="request-list" class="member-list">
-                                    @foreach($community->getMembershipRequests() as $user)
+                <div class="colored-box">
+                    <div class="colored-box-header">Members</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content members-management">
+                            <form method="post" action="communities-admin.php" id="groupMembersForm"
+                                  name="group-members-form">
+                                <div class="pending-requests">
+                                    <p>There are no pending membership requests.</p>
+                                    <ul class="member-list" id="request-list">
                                         <li>
-                                            {!!get_avatar($user->user_id, 28) !!}
-                                            <span class="member-info">
-                                                <span class="m-name">{{ cp_get_user_fullname($user->user_id) }}</span><br />
-                                                <span class="m-email">{{ get_userdata($user->user_id)->data->user_email }}</span>
-                                                <span class="activity">{{ $community->updated_at->diffForHumans() }}</span>
-                                            </span>
-                                            <span class="action">
-                                                <a href="#" class="action-btn process-btn no-submit"><span class="p"></span><span class="t">ACCEPT</span></a>
-                                                <a href="#" class="action-btn cancel-btn"><span class="p"></span><span class="t">REJECT</span></a>
-                                            </span>
-                                            <div class="clear"></div>
+                                            <div class="pull-left">
+                                                <img width="50" height="50" alt="" class="avatar"
+                                                     src="images/gravatar.jpg">
+                                                                    <span class="member-info">
+                                                                        <span class="member-name">Ivan Solowjew</span>
+                                                                        <span class="member-email">ivansolowjew@gmail
+                                                                            .com</span>
+                                                                        <span class="member-activity">requested 17 seconds ago</span>
+                                                                    </span>
+                                            </div>
+                                            <div class="pull-right action">
+                                                <a class="btn btn-success btn-with-icon btn-confirm" href="#"
+                                                   data-tooltip="tooltip" title="Accept">Accept</a>
+                                                <a class="btn btn-default btn-with-icon btn-cancel" href="#"
+                                                   data-tooltip="tooltip" title="Reject">Reject</a>
+                                            </div>
                                         </li>
-                                    @endforeach
+                                    </ul>
+                                </div>
+                                <div class="members-group-action" id="membersGroupAction">
+                                    <ul>
+                                        <li><a data-action="ban" href="#">Kick &amp; Ban</a></li>
+                                        <li><a data-action="promote_to_mod" href="#">Promote to Support Staff</a></li>
+                                        <li><a data-action="promote_to_admin" href="#">Promote to Admin</a></li>
+                                        <li><a data-action="remove_from_group" href="#">Remove</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="member-type-header">Administrator</div>
+                                <ul class="row member-list" id="admins-list">
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Eric(Site Admin) So</span>
+                                                                <span class="member-email">haohaneric+001@gmail
+                                                                    .com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Kseniya Shychko</span>
+                                                                <span class="member-email">k.shychko@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Michael (Site Admin) a very long first name Leditschke</span>
+                                                                <span class="member-email">michael.leditschke+site.admin@compliancetest
+                                                                    .net</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">alena zaitsava</span>
+                                                                <span class="member-email">alena.zaitsava@compliancetest
+                                                                    .net</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Sergiu Vasilachi</span>
+                                                                <span class="member-email">Sergiu@mail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Eric(Site Admin) So</span>
+                                                                <span class="member-email">haohaneric+001@gmail
+                                                                    .com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Eric(Site Admin) So</span>
+                                                                <span class="member-email">haohaneric+001@gmail
+                                                                    .com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                </ul>
+
+                                <div class="member-type-header">Support Staff</div>
+                                <ul class="row member-list" id="mods-list">
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Support 1</span>
+                                                                <span class="member-email">support@gmail.com</span>
+                                                                <a href="#" class="btn btn-success btn-sm">Demote to
+                                                                    Member</a>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                </ul>
+
+                                <div class="member-type-header">Members</div>
+                                <ul class="row member-list" id="mods-list">
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Member 1</span>
+                                                                <span class="member-email">member@gmail.com</span>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Member 1</span>
+                                                                <span class="member-email">member@gmail.com</span>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Member 1</span>
+                                                                <span class="member-email">member@gmail.com</span>
+                                                            </span>
+                                    </li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Member 1</span>
+                                                                <span class="member-email">member@gmail.com</span>
+                                                            </span>
+                                    </li>
+                                    <li class="clearfix hidden-sm"></li>
+                                    <li class="col-sm-6">
+                                        <label>
+                                            <input type="checkbox" value="1" name="id[]">
+                                            <img width="28" height="28" alt="" class="avatar" src="images/gravatar.jpg">
+                                        </label>
+                                                            <span class="member-info">
+                                                                <span class="member-name">Member 1</span>
+                                                                <span class="member-email">member@gmail.com</span>
+                                                            </span>
+                                    </li>
+                                </ul>
+
+                                <div class="pagination-wrapper">
+                                    <div class="pagination">
+                                        <a href="#" class="prev">prev</a>
+                                        <a href="#">1</a>
+                                        <span class="current">2</span>
+                                        <a href="#">3</a>
+                                        <span class="pager-dots">...</span>
+                                        <a href="#">22</a>
+                                        <a href="#" class="next">next</a>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="action" name="action" value=""/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Privacy Options</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="form-group">
+                                <label>
+                                    <input type="radio" value="public" name="group-status">
+                                    <strong>This is a public community</strong>
+                                </label>
+                                <ul class="privacy-options-list">
+                                    <li>Any site member can join this community.</li>
+                                    <li>This community will be listed in the communities directory and in search
+                                        results.
+                                    </li>
+                                    <li>Community content and activity will be visible to any site member.</li>
                                 </ul>
                             </div>
-
-                        @else
-
-                            <p>
-                                There are no pending membership requests.
-                            </p>
-
-                        @endif
-
-                    {!! Form::close() !!}
-                </div>
-            </div>
-
-            <div class="grid-box-body" id="group_members_body">
-
-                {{ Form::open(['class' => 'group-requests-form', 'url' => 'membership/'.$community->slug.'/request']) }}
-
-                    <div class="space20"></div>
-                    <div class="nav left15">
-                        <ul>
-                            <li><a href="#" data-action="ban">Kick &amp; Ban</a></li>
-                            <li><a href="#" data-action="promote_to_mod">Promote to Support Staff</a></li>
-                            <li><a href="#" data-action="promote_to_admin">Promote to Admin</a></li>
-                            <li class="last-li"><a href="#" data-action="remove_from_group">Remove</a></li>
-                        </ul>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="clear"></div>
-
-                    <!-- Administrators -->
-                    <?php $admins = $community->getAdmins(); ?>
-
-                    @if($admins)
-                        <div class="field-row">
-                            <p><b>Administrator</b></p>
-                            <ul id="admins-list" class="member-list">
-                                @foreach($admins as $admin)
-                                    <li>
-                                        <input type="checkbox" name="id[]" value="{{ $admin->user_id }}" class="chk" />
-                                        {!!get_avatar($admin->user_id, 28) !!}
-                                        <span class="member-info">
-                                        <span class="m-name">{{ cp_get_user_fullname($admin->user_id) }}</span>
-                                        <span class="m-email">{{ get_userdata($admin->user_id)->data->user_email }}</span>
-                                        <span class="clear"></span>
-                                            @if(count( $admins ) > 1)
-                                                <a class="action-btn process-btn small-action-btn no-submit"
-                                                   href="/membership/{{ $community->id }}/admin/demote">
-                                                    Demote to Member
-                                                </a>
-                                            @endif
-                                    </span>
-                                        <div class="clear"></div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="radio" checked="checked" value="private" name="group-status">
+                                    <b>This is a private community</b>
+                                </label>
+                                <ul class="privacy-options-list">
+                                    <li>Only users who request membership and are accepted can join the community.</li>
+                                    <li>This community will be listed in the communities directory and in search
+                                        results.
                                     </li>
-                                @endforeach
-                            </ul>
-                            <div class="clear"></div>
-                        </div>
-
-                    @endif
-
-                    <!-- Moderators -->
-                    <?php $moderators = $community->getModerators(); ?>
-
-                    @if($moderators)
-                        <div class="field-row">
-                            <p><b>Support Staff</b></p>
-                            <ul id="mods-list" class="member-list">
-                                @foreach($moderators as $moderator)
-                                    <li>
-                                        <input type="checkbox" name="id[]" value="{{ $moderator->user_id }}" class="chk" />
-                                        {!!get_avatar($moderator->user_id, 28) !!}
-                                        <span class="member-info">
-                                        <span class="m-name">{{ cp_get_user_fullname($moderator->user_id) }}</span>
-                                        <span class="m-email">{{ get_userdata($moderator->user_id)->data->user_email }}</span>
-                                        <span class="clear"></span>
-                                         <a class="action-btn process-btn small-action-btn no-submit"
-                                            href="/membership/{{ $community->id }}/moderators/demote">
-                                             Demote to Member
-                                         </a>
-                                    </span>
-                                        <div class="clear"></div>
+                                    <li>Community content and activity will only be visible to members of the
+                                        community.
                                     </li>
-                                @endforeach
-                            </ul>
-                            <div class="clear"></div>
-                        </div>
-
-                    @endif
-
-                    <!-- Members -->
-                    <?php $users = $community->getMembers(); ?>
-
-                    @if($users)
-
-                        <div class="field-row">
-                            <p><b>Members</b></p>
-
-                            <ul id="members-list" class="member-list">
-                                @foreach($users as $user)
-                                    <li>
-                                        <input type="checkbox" name="id[]" value="{{ $user->user_id }}" class="chk" />
-                                        {!!get_avatar($user->user_id, 28) !!}
-                                        <span class="member-info">
-                                        <span class="m-name">{{ cp_get_user_fullname($user->user_id) }}</span>
-                                            @if($user->is_banned) <font color="#ce1515"><i>(banned)</i></font> @endif <br />
-                                        <span class="m-email">{{ get_userdata($user->user_id)->data->user_email }}</span>
-                                        <span class="clear"></span>
-                                            @if($user->is_banned)
-                                                <a class="action-btn process-btn small-action-btn no-submit"
-                                                   title="Unban this member"
-                                                   href="/membership/{{ $community->id }}/role/demote">
-                                                    Unban
-                                                </a>
-                                            @endif
-                                    </span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                            <div class="clear"></div>
-                        </div>
-
-                    @else
-
-                        <div class="field-row">
-                            <p><b>Members</b></p>
-                            This group has no members.
-                        </div>
-
-                    @endif
-
-                    <div class="space15"></div>
-                </form>
-            </div>
-
-        </div>
-        <div class="space20"></div>
-        <!-- Group Privacy -->
-
-        <div class="grid-box" id="group_privacy_box">
-
-            {!! Form::model($community, ['id'=> 'community-settings-form', 'class' => 'standard-form', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
-
-                <div class="grid-box-header">
-                    <h5>Privacy Options</h5>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="status" value="public" {!! isChecked('public', @$community->status) !!} />
-                                <b>This is a public community</b>
-                            </label>
-                            <ul>
-                                <li>Any site member can join this community.</li>
-                                <li>This community will be listed in the communities directory and in search results.</li>
-                                <li>Community content and activity will be visible to any site member.</li>
-                            </ul>
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="status" value="private" {!! isChecked('private', @$community->status) !!} />
-                                <b>This is a private community</b>
-                            </label>
-                            <ul>
-                                <li>Only users who request membership and are accepted can join the community.</li>
-                                <li>This community will be listed in the communities directory and in search results.</li>
-                                <li>Community content and activity will only be visible to members of the community.</li>
-                            </ul>
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="status" value="hidden" {!! isChecked('hidden', @$community->status) !!} />
-                                <b>This is a hidden community</b>
-                            </label>
-                            <ul>
-                                <li>Only users who are invited can join the community.</li>
-                                <li>This community will not be listed in the communities directory or search results.</li>
-                                <li>Community content and activity will only be visible to members of the community.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                {!! Form::hidden('redirect', $community->getUrl() . 'admin') !!}
-
-                <div class="grid-box-footer">
-                    <div class="btn-row">
-                        <a href="#" class="action-btn process-btn"><span class="p" onclick="jQuery('#community-settings-form').submit()"></span><span class="t">SAVE</span></a>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-
-            {{ Form::close() }}
-
-        </div>
-
-
-        <div class="space20"></div>
-        <!-- Group Invitations -->
-        <div class="grid-box" id="group_invitations_box">
-
-            {!! Form::model($community, ['id'=> 'community-settings-form', 'class' => 'standard-form', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
-
-                <div class="grid-box-header">
-                    <h5>Community Invitations</h5>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            Which members of this community are allowed to invite others?
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="group-invite-status" value="members" {!! isChecked('members', @$communityMeta['invite_status']) !!} />
-                                <b>All community members</b>
-                            </label>
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="group-invite-status" value="mods" {!! isChecked('mods', @$communityMeta['invite_status']) !!} />
-                                <b>Community admins and supports only</b>
-                            </label>
-                        </div>
-                        <div class="field-row">
-                            <label>
-                                <input type="radio" name="group-invite-status" value="admins" {!! isChecked('admins', @$communityMeta['invite_status']) !!} />
-                                <b>Community admins only</b>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                {!! Form::hidden('redirect', $community->getUrl() . 'admin') !!}
-
-                <div class="grid-box-footer">
-                    <div class="btn-row">
-                        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">SAVE</span></a>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-
-            {{ Form::close() }}
-
-        </div>
-
-        <div class="space20"></div>
-
-        <!-- Article Settings -->
-
-        <div class="grid-box" id="group_article_settings_box">
-
-            {!! Form::model($community, ['id'=> 'community-articles-form', 'class' => 'standard-form', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
-
-                <div class="grid-box-header">
-                    <h5>Community Articles</h5>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            <label for="wiki-enabled">
-                                <input name="wiki-enabled" id="wiki-enabled" value="{{ @$communityMeta['wiki-status'] }}" @if(@$communityMeta['wiki-status']) checked="checked" @endif type="checkbox">Enable BuddyPress Docs for this group
-                            </label>
-                        </div>
-                        <div id="community-doc-options">
-                            <div class="field-row">
-                                <label for="bp-docs[can-create-admins]"><?php _e( 'Minimum role to associate Article with this community:', 'bp-docs' ) ?></label>
+                                </ul>
                             </div>
-                            <div class="field-row">
-                                <select name="create-wiki-roles">
-                                    <option value="admin" @if(@$communityMeta['wiki-roles'] == 'admin') selected="selected" @endif>Community Admin</option>
-                                    <option value="mod" @if(@$communityMeta['wiki-roles'] == 'mod') selected="selected" @endif>Community Support</option>
-                                    <option value="member"  @if(@$communityMeta['wiki-roles'] == 'member') selected="selected" @endif>Community Member</option>
+                            <div class="form-group">
+                                <label>
+                                    <input type="radio" value="hidden" name="group-status">
+                                    <b>This is a hidden community</b>
+                                </label>
+                                <ul class="privacy-options-list">
+                                    <li>Only users who are invited can join the community.</li>
+                                    <li>This community will not be listed in the communities directory or search
+                                        results.
+                                    </li>
+                                    <li>Community content and activity will only be visible to members of the
+                                        community.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="colored-box-footer">
+                            <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Community Invitations</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <p>Which members of this community are allowed to invite others?</p>
+                            <ul class="community-invitation-options">
+                                <li>
+                                    <label>
+                                        <input type="radio" name="group-invite-status" value="members">
+                                        <strong>All community members</strong>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="group-invite-status" value="mods">
+                                        <strong>Community admins and supports only</strong>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="group-invite-status" value="admins" checked="checked">
+                                        <strong>Community admins only</strong>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="colored-box-footer">
+                        <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                    </div>
+                </div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Community Articles</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="form-group">
+                                <label for="bp-docs[group-enable]"> <input type="checkbox" checked="checked" value="1"
+                                                                           id="bp-docs-group-enable"
+                                                                           name="bp-docs[group-enable]"> Enable Articles
+                                    for this community</label>
+                            </div>
+                            <div class="form-group">
+                                <label for="bp-docs[can-create-admins]">Minimum role to associate Article with this
+                                    community:</label>
+                                <select class="form-control" name="bp-docs[can-create]">
+                                    <option selected="selected" value="admin">Community Admin</option>
+                                    <option value="mod">Community Support</option>
+                                    <option value="member">Community Member</option>
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="colored-box-footer">
+                        <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                    </div>
+                </div>
 
+                <div class="colored-box">
+                    <div class="colored-box-header">Generate JSON</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="upload-file-field">
+                                <input type="file" name="file[]" class="input-file" data-file-type="image"
+                                       data-file-extensions="(.xls, .xlsx file)"/>
+                            </div>
+                            <a href="#" class="btn btn-success btn-with-icon btn-confirm">Generate JSON</a>
+                        </div>
                     </div>
                 </div>
-                <div class="grid-box-footer">
-                    <div class="btn-row">
-                        <a href="#" class="action-btn process-btn" onclick="jQuery('#community-articles-form').submit()"><span class="p"></span><span class="t">SAVE</span></a>
-                        <div class="clear"></div>
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Generate FVS</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="upload-file-field">
+                                <input type="file" name="file[]" class="input-file" data-file-type="image"
+                                       data-file-extensions="(.xls, .xlsx file)"/>
+                            </div>
+                            <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload</a>
+                            <ul class="loaded-files">
+                                <li>SPR_28135_consolidated.xls</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="colored-box-footer">
+                        <a href="#" class="btn btn-success btn-with-icon btn-confirm">Generate FVS</a>
                     </div>
                 </div>
-            {{ Form::close() }}
+
+            </div>
+
         </div>
-        <div class="space20"></div>
-
-        <!-- Generate JSON -->
-        <div class="grid-box" id="group_generate_json_box">
-
-            {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'action' => ['CommunitiesController@generateJson', 'id' => $community->slug]]) !!}
-                <div class="grid-box-header">
-                    <h5>Generate JSON</h5>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <input type="file" name="profile_excel_file" id="profile_excel_file" class="input-file"  file-type="image" file-extensions="(.xls, .xlsx file)" />
-                        <a href="#" class="action-btn process-btn no-submit left10 top3" id="upload-profile-excel-btn"><span class="p"></span><span class="t">Generate JSON</span></a>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                @if(Session::has('zipLink'))
-                    <div class="grid-box-body" id="group-generated-json">
-                        <a href="{{ Session::get('zipLink') }}">json_profiles.zip</a>
-                    </div>
-                @endif
-            {{ Form::close() }}
-        </div>
-
-        <div class="space20"></div>
 
     </div>
-    <div class="clear"></div>
 </div>

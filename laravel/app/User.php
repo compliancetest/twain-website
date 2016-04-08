@@ -36,4 +36,22 @@ class User extends Authenticatable
     {
         return $this->user_pass;
     }
+
+    public function getFullName()
+    {
+        return cp_get_user_fullname($this->ID);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany('App\CommunityMembers', 'user_id');
+    }
+
+    public function confirmedSubscriptions()
+    {
+        return $this->subscriptions()->where(['is_confirmed' => 1])->get();
+    }
 }

@@ -16,3 +16,19 @@
 
     </div>
 </div>
+
+<div class="collapsible-panel">
+    <div class="filter-title collapsed" data-toggle="collapse"
+         data-target="#collapse{{ $filterName }}">{{ $filterName }}
+    </div>
+    <div id="collapse{{ $filterName }}" class="filter-body collapse">
+        <ul>
+            @foreach($filterData as $k => $v)
+                <li>
+                    <label><input type="checkbox" value="{{ $k }}" name="{{ $searchType }}[]" @if(in_array($k, $selecteFilters)) checked="checked" @endif>
+                        {{ $k }} ({{ $v }})</label>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+</div>

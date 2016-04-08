@@ -1,132 +1,142 @@
 <?php
-    $communityLicense = $community->getMeta('license_agreements');
+$communityLicense = $community->getMeta('license_agreements');
 ?>
-<div id="downloads-container" class="tab-content white_bcg padding10">
-    <div id="uploaded-files">
-        <div class="grid-list">
-            <div class="grid-list-row grid-list-header">
-                <div class="grid-list-cell width40P">File Name</div>
-                <div class="grid-list-cell width15P tocenter">Size</div>
-                <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">License<br/>Agreement</div>
-                <div class="grid-list-cell width20P tocenter">Last Updated</div>
-                <div class="clear"></div>
-            </div>
+<div class="community-tab-content">
 
-            @foreach($community->downloads as $file)
+    <div class="community-downloads row">
+        <div class="col-md-12 table-responsive">
+            <table class="table downloads-list-table">
+                <thead>
+                <tr>
+                    <th class="text-left">File name</th>
+                    <th>Size</th>
+                    <th>License Agreement</th>
+                    <th>Last Updated</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="#">Contributions_1.0_SoapUI_Reference_Client_V2.5.xml </a>
 
-                <div class="grid-list-row" id="fileRow{!! $file->id !!}">
-                    <div class="grid-list-cell width40P">
+                        <p>
+                            Version: <strong>2.5</strong><br/>
+                            SOAP UI Project file including Contributions 1.0 Conformance Level A test cases. Intended
+                            for use as a reference to support testing of customer products.
+                        </p>
 
-                        @if($file->license || $communityLicense)
-
-                            <a href="/downloads/{{ $community->slug }}/agreement/{{ $file->id }}/"
-                               class="download-link" rel="has-license">{{ $file->title }}</a>
-
-                        @else
-
-                            <a href="/downloads/{{ $community->slug }}/getfile/{{ $file->id }}"
-                               class="download-link">{{ $file->name }}</a>
-
-                        @endif
-
-                        <br/>
-
-                        @if($file->version)
-                            Version:
-                            <b>{{ $file->version }}</b>
-                            @if($file->version_description) ({{ $file->version_description }}) @endif
-                            <br/>
-
-                        @endif
-
-                        {!! $file->description !!}
-
-                    </div>
-
-                    <div class="grid-list-cell width15P tocenter">
-                        {{ formatBytes($file->size) }}
-                    </div>
-
-                    <div class="grid-list-cell grid-list-cell-line2 tocenter width15P">
-
-                        @if($file->license || $communityLicense)
-
-                            <a href="/downloads/{{ $community->slug }}/agreement/{{ $file->id }}/"
-                               class="license-link has-license download-link" rel="has-license">License<br/>Agreement<span
-                                        class="simple_tooltip"><span></span>To download this file<br/>you have to read &<br/>agree Licence Agreement</span></a>
-                        @else
-                            <a href="/downloads/{{ $community->slug }}/getfile/{{ $file->id }}"
-                               class="license-link download-link">License<br/>Agreement</a>
-
-                        @endif
-
-                    </div>
-                    <div class="grid-list-cell width20P tocenter">{!! formatDate($file->updated_at) !!}</div>
-
-                    <div class="grid-list-cell width10P">
-
-                        @if($community->isAdmin())
-                            <a href="/downloads/{{ $community->slug }}/edit/{{ $file->id }}/"
-                               class="action-btn blue-edit-btn icon-btn edit-file-link">
-                                <span class="p"></span><span class="simple_tooltip"><span></span>Edit</span>
-                            </a>
-
-                            <a href="/downloads/{{ $community->slug }}/confirmdelete/{{ $file->id }}"
-                               class="action-btn delete-btn icon-btn delete-file-link">
-                                <span class="p"></span><span class="simple_tooltip"><span></span>Delete</span>
-                            </a>
-
-                        @endif
-                    </div>
-                    <div class="clear"></div>
-                </div>
-
-            @endforeach
-            @if(! count($community->downloads))
-                <div class="grid-list-row">
-                    <div class="grid-list-cell tocenter width100P">
-                        No file uploaded yet
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            @endif
-
-            @if($community->isAdmin())
-
-                <div class="grid-list-footer grid-list-row">
-                    <div class="grid-list-cell width100P">
-                        <a href="#" id="add-new-download" class="large-plus-link">Upload New File(s)</a>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-
-            @endif
-
+                        <p>Pull requests now require the soap:role="ebms" attribute in line with the ebMS3
+                            specification. The security header also needs a soap:mustUnderstand attribute.</p>
+                    </td>
+                    <td class="text-nowrap text-center">475.79 RB</td>
+                    <td></td>
+                    <td class="text-nowrap text-center">2014-08-04</td>
+                    <td class="text-nowrap">
+                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip" title="Edit"></a>
+                        <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip"
+                           title="Delete"></a>
+                    </td>
+                </tr>
+                <tr style="display: none;">
+                    <td colspan="5" class="empty-row ">No file uploaded yet</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
     </div>
-
-    @if($community->isAdmin())
-        <div id="new-downloads">
-
+    <div class="add-new-download-section">
+        <div class="add-new-download-default">
+            <a href="#add-new-download-section" id="add-new-download" class="add-new-download-link">Upload New
+                File(s)</a>
         </div>
-    @endif
-</div>
+        <div id="add-new-download-section" style="display: none;">
+            <div id="file-description-template" style="display: none;">
+                <div class="file-description-section">
+                    <div class="upload-file-field">
+                        <input type="file" name="file[]" class="input-file"/>
+                    </div>
 
+                    <div class="file-description-fields">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">File Version:</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="file_version[]" value=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Description:</label>
+
+                                <div class="col-sm-9">
+                                    <textarea cols="20" rows="5" name="file_description[]"
+                                              class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">File License Agreement:</label>
+
+                                <div class="col-sm-9">
+                                    <textarea cols="20" rows="5" name="file_license[]" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-danger btn-with-icon btn-delete">Remove</a>
+                </div>
+            </div>
+            <form name="newfileform" id="newfileform" action="" enctype="multipart/form-data" method="post">
+                <h3>Upload New File(s)</h3>
+
+                <div class="file-description-section">
+                    <div class="upload-file-field">
+                        <input type="file" name="file[]" class="input-file"/>
+                    </div>
+
+                    <div class="file-description-fields">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">File Version:</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="file_version[]" value=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Description:</label>
+
+                                <div class="col-sm-9">
+                                    <textarea cols="20" rows="5" name="file_description[]"
+                                              class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">File License Agreement:</label>
+
+                                <div class="col-sm-9">
+                                    <textarea cols="20" rows="5" name="file_license[]" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-danger btn-with-icon btn-delete">Remove</a>
+                </div>
+                <div class="form-actions">
+                    <a href="#" id="add-more-file" class="add-new-download-link">Add New File</a>
+
+                    <div class="pull-right">
+                        <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload &amp; Save</a>
+                        <a href="#" class="btn btn-default btn-with-icon btn-cancel"
+                           id="cancel-add-new-files">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
-    jQuery(document).ready(function(){
-        jQuery('#add-new-download').on('click', function(){
-            jQuery("#new-downloads").load("/downloads/{{ $community->slug }}/create");
-        });
-        jQuery('.edit-file-link').on('click', function(e){
-            e.preventDefault();
-            if(jQuery('.grid-file-edit-row')){
-                jQuery('.grid-file-edit-row').remove();
-            }
-            var link = jQuery(this).attr('href');
-            jQuery(this).closest('div.grid-list-row').after('<div class="grid-list-row grid-file-edit-row"></div>');
-            jQuery('.grid-file-edit-row').load(link);
-            return false;
-        });
+    jQuery(document).ready(function($) {
+        Page.communityDownloads.init();
     });
 </script>

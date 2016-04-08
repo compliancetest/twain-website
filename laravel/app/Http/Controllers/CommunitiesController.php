@@ -35,7 +35,7 @@ class CommunitiesController extends Controller
      */
     public function create()
     {
-        return view('pages.communities.create', compact('submitButtonText'));
+        return view('pages.communities.create');
     }
 
     /**

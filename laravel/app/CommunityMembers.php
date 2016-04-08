@@ -32,4 +32,9 @@ class CommunityMembers extends Model
     {
         return CommunityMembers::where(['community_id' => $communityId, 'user_id' => $userId])->first();
     }
+
+     public function users()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

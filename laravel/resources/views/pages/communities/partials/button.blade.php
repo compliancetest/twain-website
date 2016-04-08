@@ -1,42 +1,52 @@
 @if(Auth::check())
-    <div class="generic-button group-button">
+    <div class="community-membership-action hidden-desktop">
         @if($userEntry = $community->getMember(Auth::user()->ID))
             @if($userEntry->is_confirmed)
 
                 @if($community->isAdmin() && count($community->getAdmins()) == 1)
-
                 @else
-                    <a href="/communities/popups/{{ $community->slug }}/leave"
-                       rel="leave-popup"
-                       cp-type="ajax"
-                       title="Cancel Membership"
-                       class="group-button button button_medium button_red white_txt radius6"
-                       style="position: inherit;">Cancel Membership</a>
+                    <div class="community-membership-action hidden-mobile">
+                        <a class="btn btn-danger btn-lg" href="#confirmCancelMembership"
+                           data-href="/communities/popups/{{ $community->slug }}/leave" data-toggle="modal">Cancel
+                            Membership</a>
+                    </div>
                 @endif
 
             @else
-
-                <a href="#"
-                   title="Request Sent"
-                   class="group-button pending membership-requested button button_medium status_deprecated white_txt radius6"
-                   style="position: inherit;">Request Sent</a>
+                <div class="community-membership-action hidden-mobile">
+                    <a class="btn btn-danger btn-lg" href="#confirmCancelMembership"
+                       data-href="/communities/popups/{{ $community->slug }}/leave" data-toggle="modal">Request Sent</a>
+                </div>
 
             @endif
         @else
-            <a href="/communities/popups/{{ $community->slug }}/join"
-               cp-type="ajax"
-               rel='join-popup'
-               title="Join Community"
-               class="group-button button button_medium button_red white_txt radius6"
-               style="position: inherit;">Join Community</a>
+            <a class="btn btn-danger btn-lg joinCommunity" href="#confirmJoinCommunity" data-community-id="1">Join
+                Community</a>
         @endif
     </div>
 
-    <script>
-        jQuery(document).ready(function ($) {
-            $("[rel='leave-popup']").off('click').cplightbox({});
-            $("[rel='join-popup']").off('click').cplightbox();
+    <!-- Confirm Membership Cancellation -->
+    <div class="modal fade" id="confirmCancelMembership" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup"
+                            data-placement="left" data-dismiss="modal" aria-label="Close">Close
+                    </button>
+                    Confirm Community Membership Cancellation
+                </div>
+                <div class="modal-body">
+                    This will cancel your membership of the SuperStream community. Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                    <button type="button" class="btn btn-default btn-with-icon btn-cancel"
+                            data-dismiss="modal">Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        });
-    </script>
+
 @endif

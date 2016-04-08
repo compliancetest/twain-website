@@ -33,8 +33,8 @@
                                 <td class="text-center">4</td>
                                 <td class="text-center">11</td>
                                 <td class="text-center">0</td>
-                                <td class="text-center"><a class="btn btn-danger btn-lg joinCommunity"
-                                                           href="#confirmJoinCommunity" data-community-id="1">Join Community</a>
+                                <td class="text-center">
+                                    @include('pages.communities.partials.button', ['community' => $community])
                                 </td>
                             </tr>
                         @endforeach
@@ -44,26 +44,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="confirmCancelMembership" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup"
-                            data-placement="left" data-dismiss="modal" aria-label="Close">Close
-                    </button>
-                    Confirm Community Membership Cancellation
-                </div>
-                <div class="modal-body">
-                    This will cancel your membership of the SuperStream community. Are you sure?
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
-                    <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="modal modal-small fade" id="confirmJoinCommunity" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
