@@ -45,23 +45,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup"
-                            data-placement="left" data-dismiss="modal" aria-label="Close">Close
-                    </button>
+                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
                     Community Registration
                 </div>
                 <div class="modal-body">
                     You need to join the community of interest in order to view Test Cases and Participate in the Forum
                     <div class="popup-terms-box">
-                        <input type="checkbox" id="agree_community_terms" value="agree" name="agree_terms"> I agree with
-                        <a href="#readTermsAndConditions" data-toggle="modal" data-dismiss="modal">Terms &amp;
-                            Conditions</a>
+                        <input type="checkbox" id="agree_community_terms" value="agree" name="agree_terms"> I agree with <a href="#readTermsAndConditions" data-toggle="modal" data-dismiss="modal">Terms &amp; Conditions</a>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-success btn-with-icon btn-confirm" id="registerInCommunity">Register</a>
-                    <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel
-                    </button>
+                    <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -116,9 +111,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-with-icon btn-cancel"
-                            data-target="#confirmJoinCommunity" data-toggle="modal" data-dismiss="modal">Cancel
-                    </button>
+                    <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-target="#confirmJoinCommunity" data-toggle="modal" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-success btn-with-icon btn-confirm"
                        onclick="document.getElementById('agree_community_terms').checked = true"
                        data-target="#confirmJoinCommunity" data-toggle="modal" data-dismiss="modal">Agree</a>
@@ -126,4 +119,7 @@
             </div>
         </div>
     </div>
+    <script>
+        Page.communities.init();
+    </script>
 @stop
