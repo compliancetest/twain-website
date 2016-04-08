@@ -369,7 +369,7 @@ if (!is_user_logged_in()) {
             <div id="top_acces_wrap">
                 <div id="top_loged_actions">
                     <ul>
-                        <li class="dropdown">
+                        <li class="dropdown leftmenu">
                             <a href="/login/" class="blue-btn action-btn icon-btn login-btn">
                                 <span class="p"></span>
                                 <span class="t">Login</span>
