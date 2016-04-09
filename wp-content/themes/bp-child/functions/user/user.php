@@ -296,18 +296,11 @@ function add_user_script()
 //Get Groups that the user is a admin of
 function getUserAdminGroups($user_id)
 {
-    $groups = groups_get_groups( array('user_id' => $user_id) );
-    
-    $result = array();
-    foreach($groups['groups'] as $g)
-    {
-        if(groups_is_user_admin($user_id, $g->id))
-        {            
-            $result[] = $g;
-        }
-    }
-    
-    return $result;
+    global $wpdb;
+
+    return $wpdb->get_results($wpdb->prepare("SELECT c.* FROM communities AS c
+                                              JOIN communities_members AS cm ON c.id = cm.community_id
+                                              WHERE cm.user_id = %d AND is_admin = 1", $user_id));
 }
 
 
