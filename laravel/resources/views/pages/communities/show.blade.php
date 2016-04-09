@@ -6,7 +6,8 @@
 
             <div class="community-header row">
 
-                    @include('pages.communities.partials.button', ['community' => $community])
+                @include('pages.communities.partials.button', ['community' => $community])
+
                 <div class="community-logo">
                     <img src="{{ $community->getImageUrl() }}" alt="{{ $community->title }}"/>
                 </div>
@@ -26,7 +27,11 @@
 
                 <div class="community-tab-content">
 
-                    @include('pages.communities.partials.show.'.$action)
+                    @if(Auth::check())
+                        @include('pages.communities.partials.show.'.$action)
+                    @else
+                        @include('pages.communities.partials.show.tab-content-notlogged')
+                    @endif
 
                 </div>
             </div>

@@ -1,23 +1,49 @@
 <div class="tabs-menu">
     <ul>
-        <li class="test-suites-tab"><a href="<?php echo $community->getUrl()?>"
-                                       class="<?php echo (empty($action) || $action == 'testsuites') ? 'active' : ''?>">Test Suites</a>
-        </li>
+        @if(Auth::check())
+            <li class="test-suites-tab"><a href="{{ $community->getUrl() }}"
+                                           @if(empty($action) || $action == 'testsuites') class="acive" @endif>Test
+                    Suites</a>
+            </li>
 
-        <li class="test-data-tab"><a href="<?php echo $community->getUrl()?>testdata"
-                                     class="<?php echo ($action == 'testdata') ? 'active' : ''?>">Test Data</a></li>
-        @if($community->articles_status)
-            <li class="articles-tab"><a href="<?php echo $community->getUrl()?>wiki"
-                                        class="<?php echo ($action == 'wiki') ? 'active' : ''?>">Articles</a></li>
-        @endif
-        <li class="downloads-tab"><a href="<?php echo $community->getUrl()?>downloads"
-                                     class="<?php echo ($action == 'downloads') ? 'active' : ''?>">Downloads</a></li>
-        <li class="reports-tab"><a href="<?php echo $community->getUrl()?>reports"
-                                   class="<?php echo ($action == 'reports') ? 'active' : ''?>">Reports</a></li>
+            <li class="test-data-tab"><a href="{{ $community->getUrl() }}testdata"
+                                         @if($action == 'testdata') class="acive" @endif>Test Data</a></li>
+            @if($community->articles_status)
+                <li class="articles-tab"><a href="{{ $community->getUrl() }}wiki"
+                                            @if($action == 'wiki') class="acive" @endif>Articles</a></li>
+            @endif
+            <li class="downloads-tab"><a href="{{ $community->getUrl() }}downloads"
+                                         @if($action == 'downloads') class="acive" @endif>Downloads</a></li>
+            <li class="reports-tab"><a href="{{ $community->getUrl() }}reports"
+                                       @if($action == 'reports') class="acive" @endif>Reports</a></li>
 
-        @if(Auth::check() && $community->isAdmin(Auth::user()->ID))
-            <li class="admin-tab"><a href="<?php echo $community->getUrl()?>admin"
-                                     class="<?php echo ($action == 'admin') ? 'active' : ''?>">Admin</a></li>
+            @if(Auth::check() && $community->isAdmin(Auth::user()->ID))
+                <li class="admin-tab"><a href="{{ $community->getUrl() }}admin"
+                                         @if($action == 'admin') class="acive" @endif>Admin</a></li>
+            @endif
+
+        @else
+            <li class="test-suites-tab">
+                <a href="#testsuites" class="nav-tabs active" data-toggle="tab">Test Suites</a>
+            </li>
+
+            <li class="test-data-tab"><a href="#testdata" class="nav-tabs" data-toggle="tab">Test Data</a></li>
+
+            @if($community->articles_status)
+                <li class="articles-tab"><a href="#wiki" class="nav-tabs" data-toggle="tab">Articles</a></li>
+            @endif
+
+            <li class="downloads-tab"><a href="#downloads" class="nav-tabs" data-toggle="tab">Downloads</a></li>
+
+            <li class="reports-tab"><a href="#reports" class="nav-tabs" data-toggle="tab">Reports</a></li>
+
+            <script>
+                $('.tabs-menu a').click(function (e) {
+                    $(this).tab('show');
+                    $('.tabs-menu a').removeClass('active');
+                    $(this).addClass('active');
+                })
+            </script>
         @endif
     </ul>
 </div>
