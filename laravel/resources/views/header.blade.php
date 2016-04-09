@@ -16,7 +16,7 @@
 
                                 @if(is_organisation_admin())
                                     <li class="first">
-                                        <a data-title="Organisation" href="#" class="menu-organisation">Organisation</a>
+                                        <a data-title="Organisation" href="/my-organisation/" class="menu-organisation">Organisation</a>
                                         <ul class="dropdown-menu">
                                             <li class="first"><a href="/my-organisation/users/">Users</a></li>
                                             <li><a href="/my-organisation/test-suites/">Subscriptions</a></li>
@@ -26,7 +26,7 @@
                                 @endif
 
                                 <li>
-                                    <a data-title="Communities" href="/communities/" class="menu-communities">Communities</a>
+                                    <a data-title="Communities" href="/my-communities/" class="menu-communities">Communities</a>
                                     <ul class="dropdown-menu">
 
                                         @foreach(Auth::user()->confirmedSubscriptions() as $sub)
@@ -34,12 +34,18 @@
                                             <ul class="dropdown-menu">
                                                 <li class="first">
                                                     <a href="{{ $sub->community->getUrl() }}testsuites/">Test Suites</a>
-                                                    <ul class="dropdown-menu">
-                                                        <li class="first"><a href="#">Superstream Profiles v0.0</a></li>
-                                                        <li><a href="#">AS4 Profiles v0.0</a></li>
-                                                        <li><a href="#">Advanced Features v0.0</a></li>
-                                                        <li class="last"><a href="#">Core Features v0.0</a></li>
-                                                    </ul>
+                                                    <?php $testsuites = getCommunityTestSuites($sub->community->id);?>
+                                                        @if(count($testsuites) > 0)
+                                                            <ul class="dropdown-menu">
+                                                                @foreach ($testsuites as $k => $row)
+                                                                    <li @if($k == 0) class="first" @endif>
+                                                                        <a href="{{ get_permalink($row->ID) }}">
+                                                                            {{ apply_filters('the_title', $row->post_title) }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
                                                 </li>
                                                 <li><a href="{{ $sub->community->getUrl() }}testdata/">Test Data</a></li>
                                                 <li><a href="{{ $sub->community->getUrl() }}wiki/">Articles</a></li>
@@ -51,16 +57,16 @@
                                             </ul>
                                         </li>
                                         @endforeach
-                                        <li class="action-link last"><a href="#">+ Add</a></li>
+                                        <li class="action-link last"><a href="/communities/">+ Add</a></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a data-title="Test Suites" href="communities-test-suites.php" class="menu-test-suites">Test Suites</a>
+                                    <a data-title="Test Suites" href="/me-test-suites/" class="menu-test-suites">Test Suites</a>
                                     <ul class="dropdown-menu">
                                         @foreach(getUserSubscriptions(null, true) as $subscription)
                                             <li class="first"><a href="{{ get_permalink($subscription->suite_id) }}">{{ $subscription->suite_title }}</a></li>
                                         @endforeach
-                                        <li class="action-link last"><a href="#" >+ Add</a></li>
+                                        <li class="action-link last"><a href="/test-suites/" >+ Add</a></li>
                                     </ul>
                                 </li>
                                 <li><a data-title="Test Data" href="/my-test-data/" class="menu-test-data">Test Data</a></li>

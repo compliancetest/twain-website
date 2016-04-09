@@ -582,17 +582,13 @@ function getDashboardPages($type = 'page')
             
             $item['subpages'] = array();
             
-            $groups = groups_get_user_groups($current_user->ID);
-            if($groups['total'] > 0)
+            $groups = getUserCommunities($current_user->ID);
+            if(count($groups) > 0)
             {
-                foreach($groups['groups'] as $gID)
+                foreach($groups as $community)
                 {
-                    $group = groups_get_group(array('group_id' => $gID));
-                    $member = getGroupMemberDetail($gID, $current_user->ID);
-                    
-                    $community_url = bp_get_group_permalink($group);
-                    
-                    $item1 = array('title' => bp_get_group_name($group), 'url' => $community_url);
+                    $community_url = '/communities/' . $community->slug;
+                    $item1 = array('title' => $community->title, 'url' => $community_url);
                     $item2 = array();
                     $item2[] = array('title' => 'Test Suites', 'url' => $community_url);
                     $item2[] = array('title' => 'Test Data', 'url' => $community_url.'testdata');
@@ -600,11 +596,11 @@ function getDashboardPages($type = 'page')
                     $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
                     $item2[] = array('title' => 'Downloads', 'url' => $community_url.'downloads');
                     $item2[] = array('title' => 'Reports', 'url' => $community_url.'reports');
-                    if(groups_is_user_admin(get_current_user_id(), $gID)) {
+                    if(doesUserCommunityAdmin(get_current_user_id(), $community->id)) {
                         $item2[] = array('title' => 'Admin', 'url' => $community_url.'admin');
                     }
                     
-                    $testsuites = getCommunityTestSuites($gID); 
+                    $testsuites = getCommunityTestSuites($community->id);
                     if (count($testsuites) > 0) {
                         $item2[0]['subpages'] = array();
                         foreach ($testsuites as $row) {
