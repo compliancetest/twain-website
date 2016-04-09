@@ -2,24 +2,24 @@
     <ul>
         @if(Auth::check())
             <li class="test-suites-tab"><a href="{{ $community->getUrl() }}"
-                                           @if(empty($action) || $action == 'testsuites') class="acive" @endif>Test
+                                           @if(empty($action) || $action == 'testsuites') class="active" @endif>Test
                     Suites</a>
             </li>
 
             <li class="test-data-tab"><a href="{{ $community->getUrl() }}testdata"
-                                         @if($action == 'testdata') class="acive" @endif>Test Data</a></li>
+                                         @if($action == 'testdata') class="active" @endif>Test Data</a></li>
             @if($community->articles_status)
                 <li class="articles-tab"><a href="{{ $community->getUrl() }}wiki"
-                                            @if($action == 'wiki') class="acive" @endif>Articles</a></li>
+                                            @if($action == 'wiki') class="active" @endif>Articles</a></li>
             @endif
             <li class="downloads-tab"><a href="{{ $community->getUrl() }}downloads"
-                                         @if($action == 'downloads') class="acive" @endif>Downloads</a></li>
+                                         @if($action == 'downloads') class="active" @endif>Downloads</a></li>
             <li class="reports-tab"><a href="{{ $community->getUrl() }}reports"
-                                       @if($action == 'reports') class="acive" @endif>Reports</a></li>
+                                       @if($action == 'reports') class="active" @endif>Reports</a></li>
 
             @if(Auth::check() && $community->isAdmin(Auth::user()->ID))
                 <li class="admin-tab"><a href="{{ $community->getUrl() }}admin"
-                                         @if($action == 'admin') class="acive" @endif>Admin</a></li>
+                                         @if($action == 'admin') class="active" @endif>Admin</a></li>
             @endif
 
         @else
