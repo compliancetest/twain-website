@@ -1,15 +1,14 @@
 <header id="header">
     <div class="header-inner">
         <div class="container">
-            @if(Auth::check())
-                <a href="#" class="logo"><img src="/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
+            <a href="#" class="logo"><img src="/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
                 <div class="header-account">
                     <div class="header-actions">
+                    @if(Auth::check())
                         <div class="header-user-info">
                             <img width="32" height="32" alt="Admin" class="avatar" src="https://secure.gravatar.com/avatar/0510c4f56be3635770ffbec748937368?d=https://www.compliancetest.net/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg&amp;s=32&amp;r=G">
                             <div class="header-welcome">Welcome <strong class="header-username">{{ Auth::user()->getFullName() }}</strong></div>
                         </div>
-
                         <ul class="account-menu">
                             <li class="dashboard-menu hidden-desktop">
                                 <a href="#" class="btn btn-primary btn-dropdown" data-toggle-block="#header-dashboard-menu">Dashboard</a>
@@ -58,7 +57,7 @@
                                                     </ul>
                                                 </li>
                                             @endforeach
-                                            <li class="action-link last"><a href="/communities/">+ Add</a></li>
+                                            <li class="action-link last"><a href="/communities/create">+ Add</a></li>
                                         </ul>
                                     </li>
                                     <li>
@@ -82,25 +81,51 @@
                             <li class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></li>
                             <li><a href="{{ wp_logout_url( get_bloginfo('siteurl')) }}" class="btn btn-danger btn-logout">Logout</a></li>
                         </ul>
-                    </div>
-                    <div id="header-search">
-                        <form action="#">
-                            <div class="header-search-box">
-                                <input type="text" placeholder="Search" value="" class="header-search-field" name="q">
-                                <div class="header-search-type">
-                                    <div class="header-search-type-inner">
-                                        <select class="header-search-type-field">
-                                            <option value="site">Site</option>
-                                            <option value="registry">Registry</option>
-                                        </select>
-                                    </div>
+                    @else
+                        <div class="header-authorise">
+                            <div class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></div>
+                            <div class="header-login-block">
+                                <a href="#" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
+                                <div class="header-login-from" id="headerLoginBlock">
+                                    <form method="post" action="http://twain.lc/wp-login.php" name="header_login_form" id="headerLoginForm">
+                                        <div class="form-group login-group">
+                                            <label for="user_login"></label>
+                                            <input type="text" autocomplete="off" size="20" value="" id="user_login" name="log" placeholder="E-mail or User">
+                                        </div>
+                                        <div class="form-group password-group">
+                                            <label for="user_pass"></label>
+                                            <input type="password" size="20" value="" autocomplete="off" id="user_pass" name="pwd" placeholder="********">
+                                        </div>
+                                        <div id="header_login_error_msg" class="header-login-error">Wrong username or password, please try again!</div>
+                                        <div class="header-login-form-actions">
+                                            <input type="submit" value="Login" class="btn btn-primary pull-right" id="wp-submit2" name="wp-submit">
+                                            <a class="pull-left" href="/reset-password/">Forgot Password?</a>
+                                        </div>
+                                        <div class="header-login-loading" id="headerLoginLoading"><div class="loader"></div></div>
+                                    </form>
                                 </div>
-                                <button class="header-search-submit" type="submit"><span class="header-search-submit-icon">Search</span></button>
                             </div>
-                        </form>
+                            <a href="#" class="btn btn-danger btn-signup">Sign Up</a>
+                        </div>
+                    @endif
                     </div>
+                <div id="header-search">
+                    <form action="#">
+                        <div class="header-search-box">
+                            <input type="text" placeholder="Search" value="" class="header-search-field" name="q">
+                            <div class="header-search-type">
+                                <div class="header-search-type-inner">
+                                    <select class="header-search-type-field">
+                                        <option value="site">Site</option>
+                                        <option value="registry">Registry</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="header-search-submit" type="submit"><span class="header-search-submit-icon">Search</span></button>
+                        </div>
+                    </form>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 

@@ -40,14 +40,17 @@ jQuery(document).ready(function($) {
         $($(this).data('toggle-block')).toggle();
     });
 
-    Page.header.dashboardMenu();
+    Page.header.init();
 
 });
 
-var isTouchDevice = 'ontouchstart' in document.documentElement;
-
 var Page = {
     header: {
+
+        init: function() {
+            this.dashboardMenu();
+            this.headerLoginForm();
+        },
 
         dashboardMenu:  function() {
 
@@ -88,6 +91,70 @@ var Page = {
 
 
 
+        },
+
+        headerLoginForm: function(){
+
+            //Show/hide login popup form
+            $('#headerLoginBtn').click(function(e){
+                e.preventDefault();
+                $('#headerLoginBlock').toggle();
+            });
+
+            //Hide login popup form if user click outside of the form
+            $('html').click(function() {
+                $('#headerLoginBlock').hide();
+            });
+            $('.header-login-block').click(function(e){
+                e.stopPropagation();
+            });
+
+            //Replace default submit with ajax
+            $('#headerLoginForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var errorContainer = $('#header_login_error_msg');
+                var loader = $('#headerLoginLoading');
+
+                if(form.find('#user_login').val() == '' || form.find('#user_pass').val() == '')
+                {
+                    errorContainer.html('Please fill in all fields.').fadeIn('fast');
+                    return false;
+                }
+                errorContainer.hide();
+                loader.show();
+                $.ajax({
+                    url: "/",
+                    type: 'post',
+                    data: form.serialize() + '&cp-action=login',
+                    dataType: 'json',
+                    success: function(rsp)
+                    {
+                        loader.hide();
+                        //Login Success
+                        if(rsp['status'] == 'success')
+                        {
+                            //Goto Profile Page
+                            document.location.href = rsp['redirect_to'];
+                        }else{ //Error
+                            //Show Error Message
+                            if(rsp['message'] == 'Attempts limit has been reached') {
+                                errorContainer.html('Attempts limit has been reached').fadeIn('fast');
+                                document.location.href = '/login';
+                            }
+                            else if(rsp['message'] == 'FAILED_CAPTCHA'){
+                                errorContainer.html('Captcha value is incorrect!').fadeIn('fast');
+                            } else {
+                                errorContainer.html('Wrong username or password, please try again!').fadeIn('fast');
+                            }
+                            if($('#recaptcha_reload')){
+                                $('#recaptcha_reload').click();
+                            }
+                        }
+                    }
+                })
+
+            });
         }
     },
 
