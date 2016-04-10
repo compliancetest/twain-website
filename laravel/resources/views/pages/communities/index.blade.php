@@ -4,7 +4,12 @@
     <div class="container main-container">
 
         <div class="main-content">
-
+            <div class="page-title">
+                <h1>Communities</h1>
+                <div class="page-title-actions">
+                    <a href="/communities/create" class="btn btn-success btn-with-icon btn-add">Add Community</a>
+                </div>
+            </div>
             <div class="table-responsive community-lists">
                 <table class="table">
                     <thead>

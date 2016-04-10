@@ -58,44 +58,36 @@ $tsStatuses = array();
             </div>
         </div>
 
-        <div class="result-content-panel">
-            <div class="table-responsive result-content-panel-inner">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-left">Name</th>
-                        <th>Published</th>
-                        <th>Status</th>
-                        <th>Products</th>
-                        <th>Notify Changes</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" class="test-suite-name">Contributions v1.0</a>
-
-                            <p class="test-suite-description">SuperStream Contributions Test
-                                Suite</p>
-                        </td>
-                        <td class="text-center">2014-01-13</td>
-                        <td class="text-center"><span class="status status-partial">Partial</span>
-                        </td>
-                        <td class="text-center"><a href="#" class="view-products-btn">view</a></td>
-                        <td class="text-center"><input type="checkbox" value=""
-                                                       name="notify_changes"></td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-icon btn-primary btn-edit"
-                               data-tooltip="tooltip" title="Edit Suite"></a>
-                            <a href="#" class="btn btn-icon btn-danger btn-delete"
-                               onclick="return confirm('Are you sure to delete this test suite?')"
-                               data-tooltip="tooltip" title="Delete Suite"></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive result-content-panel-inner">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th>Published</th>
+                    <th>Status</th>
+                    <th>Products</th>
+                    <th>Notify Changes</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="#" class="test-suite-name">Contributions v1.0</a>
+                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
+                    </td>
+                    <td class="text-center">2014-01-13</td>
+                    <td class="text-center"><span class="status status-partial">Partial</span>
+                    </td>
+                    <td class="text-center"><a href="#" class="view-products-btn">view</a></td>
+                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
+                    <td class="text-center td-actions">
+                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
+                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')" data-tooltip="tooltip" title="Delete Suite"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
     </div>

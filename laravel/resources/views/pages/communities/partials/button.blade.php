@@ -1,5 +1,5 @@
 @if(Auth::check())
-    <div class="community-membership-action hidden-desktop">
+    <div class="community-membership-action">
         @if($userEntry = $community->getMember(Auth::user()->ID))
             @if($userEntry->is_confirmed)
 

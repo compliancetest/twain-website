@@ -53,11 +53,17 @@ body.modal-open,
     border-bottom: 1px solid #e1e1e1;
     padding: 20px 15px;
     margin: -20px -15px 0 -15px;
+    @include legacy-pie-clearfix;
 
     h1{
         font-size: 20px;
         font-weight: 600;
         margin: 0;
+        float: left;
+    }
+
+    .page-title-actions{
+        float: right;
     }
 
 }

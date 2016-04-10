@@ -51,19 +51,7 @@
     @include box-shadow(0 0 3px #ddd);
   }
 
-  .result-content-panel{
-    width: 80%;
-    float: left;
-
-    @media only screen and (max-width: $mobile-size) {
-      width: 100%;
-    }
-
-    .result-content-panel-inner{
-      border-right: 1px solid #d8d8d8;
-      padding-right: 20px;
-      margin-right: 20px;
-    }
+  .community-test-suites{
 
     .test-suite-name{
       color: $app-blue;
@@ -80,6 +68,12 @@
       font-size: 12px;
       line-height: 16px;
       margin: 7px 0 0 0;
+    }
+
+    .td-actions{
+      .btn{
+        margin: 0 2px;
+      }
     }
 
   }
@@ -274,6 +268,9 @@
 }
 
 .community-lists{
+  .community-image{
+    width: 70px;
+  }
 
   .community-name{
     a{
