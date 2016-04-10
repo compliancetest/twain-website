@@ -83,6 +83,7 @@
                         </ul>
                     @else
                         <div class="header-authorise">
+                            <div id="header-dashboard-menu"></div>
                             <div class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></div>
                             <div class="header-login-block">
                                 <a href="#" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
