@@ -39,7 +39,9 @@ class TestCase
     var $testData = array();
     
     var $messageTemplates = array();
-    
+
+    var $capabilities = array();
+
     var $profileInstances = array();
     
     var $testEndpointURL = '';
@@ -118,6 +120,7 @@ class TestCase
         $this->test_execution = $this->loadSingleValue('test_execution');
         $this->test_data_profile = $this->loadSingleValue('test_data_profile');
         $this->imagesData = json_decode($this->loadSingleValue('imagesData'), true);
+        $this->capabilities = (array) json_decode($this->loadSingleValue('capabilities'), true);
 
         if(!$this->version_major)
             $this->version_major = 0;

@@ -36,7 +36,9 @@ class TestSuite
     var $description = '';
     
     var $initiatingMessage = '';
-    
+
+    var $capabilities = '';
+
     var $conformanceLevel = array();
     
     var $profileTypes = array();
@@ -134,13 +136,12 @@ class TestSuite
         $this->version = implode(".", $versions);
 
         $this->initiatingMessage = $this->loadSingleValue('init_message');
+        $this->capabilities = $this->loadSingleValue('capabilities');
         $pricing_plans = $this->loadSingleValue('test_suite_plans');
         if ($pricing_plans){
             $this->test_suite_plans = explode('|', $this->loadSingleValue('test_suite_plans'));
         }
         $this->test_suite_plans_order = $this->loadSingleValue('test_suite_plans_order');
-
-        $this->process = $this->loadSingleValue('ts_process');
 
         $this->loadConformanceLevel();
         $this->loadTestCases();
