@@ -671,38 +671,6 @@ get_header();
 
                     <div class="clear"></div>
                 </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <?php
-                        $capabilities = array_chunk(explode(',', $suiteObj->capabilities), 3);
-                        foreach ($capabilities AS $twoCapabilities) { ?>
-                            <div class="field-row">
-                                <div class="grid-cell checkbox-cell width30P">
-                                    <label><input type="checkbox" name="capabilities[]"
-                                                  value="<?php echo $twoCapabilities[0] ?>" <?php echo in_array($twoCapabilities[0], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[0] ?>
-                                    </label>
-                                </div>
-                                <?php if(!empty($twoCapabilities[1])):?>
-                                    <div class="grid-cell checkbox-cell width30P">
-                                        <label><input type="checkbox" name="capabilities[]"
-                                                      value="<?php echo $twoCapabilities[1] ?>" <?php echo in_array($twoCapabilities[1], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[1] ?>
-                                        </label>
-                                    </div>
-                                <?php endif;?>
-
-                                 <?php if(!empty($twoCapabilities[2])):?>
-                                    <div class="grid-cell checkbox-cell width30P">
-                                        <label><input type="checkbox" name="capabilities[]"
-                                                      value="<?php echo $twoCapabilities[2] ?>" <?php echo in_array($twoCapabilities[2], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[2] ?>
-                                        </label>
-                                    </div>
-                                <?php endif;?>
-                                <div class="clear"></div>
-                            </div>
-                        <?php } ?>
-
-                    </div>
-                </div>
             </div>
 
                 <div class="grid-box">
