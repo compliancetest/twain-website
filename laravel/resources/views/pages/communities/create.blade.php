@@ -2,8 +2,11 @@
 
 @section('content')
     <div class="container main-container">
-        <div class="main-content">
 
+        {{--<div class="error-message lg">Error message</div>--}}
+        {{--<div class="success-message lg">Success message</div>--}}
+
+        <div class="main-content">
 
             <div class="create-community">
                 <div class="page-title">

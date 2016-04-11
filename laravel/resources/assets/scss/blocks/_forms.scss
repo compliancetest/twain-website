@@ -12,21 +12,64 @@ select.form-control{
   padding-top: 3px;
 }
 
-.error-message{
+.error-message,
+.success-message{
   position: relative;
-  background: #e52727;
-  border: 1px solid #b61313;
   line-height: 16px;
   padding: 4px 5px 4px 20px;
   margin: 10px 0;
   @include box-shadow(0 0 10px 1px rgba(0, 0, 0, 0.5));
   color: #fff;
 
+  &.lg{
+    font-size: 13px;
+    line-height: 15px;
+    margin: 15px 0;
+    padding: 11px 20px 11px 45px;
+  }
+
   &:before{
-    @include iconsSprite(error-icon-small);
     content: '';
     position: absolute;
     left: 3px;
     top: 5px;
   }
+
+  &.lg:before{
+    left: 7px;
+    top: 7px;
+  }
+
+}
+
+.error-message{
+  background: #e52727;
+  border: 1px solid #b61313;
+
+  &:before{
+    @include iconsSprite(error-icon-small);
+  }
+
+  &.lg{
+    &:before{
+      @include iconsSprite(error-icon);
+    }
+  }
+
+}
+
+.success-message{
+  background: #3db118;
+  border: 1px solid #37a215;
+
+  &:before{
+    @include iconsSprite(success-icon-small);
+  }
+
+  &.lg{
+    &:before{
+      @include iconsSprite(success-icon);
+    }
+  }
+
 }

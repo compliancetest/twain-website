@@ -8804,7 +8804,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8843,10 +8843,9 @@ select.form-control {
 }
 
 /* line 15, ../scss/blocks/_forms.scss */
-.error-message {
+.error-message,
+.success-message {
   position: relative;
-  background: #e52727;
-  border: 1px solid #b61313;
   line-height: 16px;
   padding: 4px 5px 4px 20px;
   margin: 10px 0;
@@ -8854,17 +8853,71 @@ select.form-control {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 25, ../scss/blocks/_forms.scss */
-.error-message:before {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -105px;
-  height: 14px;
-  width: 14px;
+/* line 24, ../scss/blocks/_forms.scss */
+.error-message.lg,
+.success-message.lg {
+  font-size: 13px;
+  line-height: 15px;
+  margin: 15px 0;
+  padding: 11px 20px 11px 45px;
+}
+/* line 31, ../scss/blocks/_forms.scss */
+.error-message:before,
+.success-message:before {
   content: '';
   position: absolute;
   left: 3px;
   top: 5px;
+}
+/* line 38, ../scss/blocks/_forms.scss */
+.error-message.lg:before,
+.success-message.lg:before {
+  left: 7px;
+  top: 7px;
+}
+
+/* line 45, ../scss/blocks/_forms.scss */
+.error-message {
+  background: #e52727;
+  border: 1px solid #b61313;
+}
+/* line 49, ../scss/blocks/_forms.scss */
+.error-message:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: -12px -105px;
+  height: 14px;
+  width: 14px;
+}
+/* line 54, ../scss/blocks/_forms.scss */
+.error-message.lg:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -370px;
+  height: 24px;
+  width: 24px;
+}
+
+/* line 61, ../scss/blocks/_forms.scss */
+.success-message {
+  background: #3db118;
+  border: 1px solid #37a215;
+}
+/* line 65, ../scss/blocks/_forms.scss */
+.success-message:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: -12px -81px;
+  height: 12px;
+  width: 12px;
+}
+/* line 70, ../scss/blocks/_forms.scss */
+.success-message.lg:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -394px;
+  height: 24px;
+  width: 24px;
 }
 
 /* line 1, ../scss/blocks/_modals.scss */
@@ -8906,7 +8959,7 @@ select.form-control {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -232px;
+  background-position: 0 -254px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -8970,7 +9023,7 @@ select.form-control {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1460142528') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1460316299') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9102,7 +9155,7 @@ select.form-control {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -136px;
+  background-position: 0 -134px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9168,7 +9221,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -468px;
+  background-position: 0 -490px;
   height: 24px;
   width: 18px;
 }
@@ -9176,7 +9229,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -348px;
+  background-position: 0 -514px;
   height: 24px;
   width: 18px;
 }
@@ -9184,7 +9237,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -396px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9192,7 +9245,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -444px;
+  background-position: 0 -466px;
   height: 24px;
   width: 18px;
 }
@@ -9200,7 +9253,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -420px;
+  background-position: 0 -418px;
   height: 24px;
   width: 18px;
 }
@@ -9208,7 +9261,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -372px;
+  background-position: 0 -442px;
   height: 24px;
   width: 18px;
 }
@@ -9255,14 +9308,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -81px;
+  background-position: 0 -93px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -93px;
+  background-position: 0 -119px;
   height: 12px;
   width: 12px;
 }
@@ -9280,7 +9333,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -120px;
+  background-position: 0 -105px;
   height: 13px;
   width: 12px;
 }
@@ -9315,7 +9368,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -81px;
+  background-position: 0 -81px;
   height: 12px;
   width: 12px;
 }
@@ -9419,7 +9472,7 @@ select.form-control {
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -527px;
+  background-position: 0 -597px;
   height: 28px;
   width: 21px;
 }
@@ -9427,7 +9480,7 @@ select.form-control {
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -583px;
+  background-position: 0 -625px;
   height: 28px;
   width: 21px;
 }
@@ -9435,7 +9488,7 @@ select.form-control {
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -555px;
+  background-position: 0 -653px;
   height: 28px;
   width: 21px;
 }
@@ -9689,7 +9742,7 @@ select.form-control {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1460142528') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1460316299') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9716,7 +9769,7 @@ select.form-control {
 }
 /* line 73, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1460142528') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1460316299') repeat 0 0;
 }
 /* line 76, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -9743,7 +9796,7 @@ select.form-control {
 }
 /* line 101, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1460142528') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1460316299') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9867,7 +9920,7 @@ select.form-control {
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -170px;
+  background-position: 0 -192px;
   height: 20px;
   width: 20px;
 }
@@ -9876,7 +9929,7 @@ select.form-control {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -190px;
+  background-position: 0 -212px;
   height: 21px;
   width: 21px;
 }
@@ -9885,7 +9938,7 @@ select.form-control {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -211px;
+  background-position: 0 -233px;
   height: 21px;
   width: 21px;
 }
@@ -9896,7 +9949,7 @@ select.form-control {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1460142528') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1460316299') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -9956,7 +10009,7 @@ select.form-control {
 }
 /* line 56, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1460142528') no-repeat 0 0;
+  background: url('../images/loader.gif?1460316299') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -11201,7 +11254,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -254px;
+  background-position: 0 -276px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11210,7 +11263,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -277px;
+  background-position: 0 -299px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11428,7 +11481,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -120px;
+  background-position: 0 -562px;
   height: 16px;
   width: 16px;
 }
@@ -11436,7 +11489,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -136px;
+  background-position: -11px -134px;
   height: 16px;
   width: 16px;
 }
@@ -11454,7 +11507,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -492px;
+  background-position: -16px -562px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -11525,7 +11578,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -152px;
+  background-position: 0 -174px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -11885,7 +11938,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -611px;
+  background-position: 0 -681px;
   height: 29px;
   width: 29px;
   content: '';
@@ -11951,7 +12004,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after {
   content: "\0020";
   display: block;
@@ -11975,7 +12028,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -14px -105px;
+  background-position: -12px -119px;
   height: 15px;
   width: 15px;
   content: '';
@@ -11992,7 +12045,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../Ruby200/lib/ruby/gems/2.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -12638,7 +12691,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -640px;
+  background-position: -12px -150px;
   height: 24px;
   width: 12px;
 }
@@ -12650,7 +12703,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -640px;
+  background-position: 0 -150px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -12733,7 +12786,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -324px;
+  background-position: 0 -346px;
   height: 24px;
   width: 28px;
 }
@@ -12748,7 +12801,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -300px;
+  background-position: 0 -322px;
   height: 24px;
   width: 28px;
 }
@@ -12791,7 +12844,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1453146388') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1460316299') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12801,7 +12854,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1460142528') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1460316299') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
