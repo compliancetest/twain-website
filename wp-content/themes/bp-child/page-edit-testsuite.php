@@ -228,29 +228,7 @@ $xeroItems = ct_get_xero_items();
                     </div>
                 </div>
             </div>
-            <div class="space20"></div>
-            <div class="grid-box grid-box-expandable grid-box-opened">
-                <div class="grid-box-header">
-                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                    <h5 class="left">Capabilities</h5>
 
-                    <div class="clear"></div>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <textarea cols="" rows="" class="textarea" name="capabilities"
-                                          id="init_message"><?php echo $suite->capabilities ?></textarea>
-                            </div>
-                            <div class="grid-cell">
-                                <label class="light-desc"><i>Type Capabilities (comma separated)</i></label>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="space20"></div>
             <div class="grid-box grid-box-expandable grid-box-opened">
                 <div class="grid-box-header">

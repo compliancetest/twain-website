@@ -136,7 +136,6 @@ class TestSuite
         $this->version = implode(".", $versions);
 
         $this->initiatingMessage = $this->loadSingleValue('init_message');
-        $this->capabilities = $this->loadSingleValue('capabilities');
         $pricing_plans = $this->loadSingleValue('test_suite_plans');
         if ($pricing_plans){
             $this->test_suite_plans = explode('|', $this->loadSingleValue('test_suite_plans'));
