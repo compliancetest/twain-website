@@ -609,13 +609,12 @@ function saveCase()
 
     $caps = [];
     if(intval($_POST['test_execution'])) {
-        $profile = (array) S3Wrapper::getProfile(ProfileInstance::getProfileBy('id', $_POST['test_execution'])->token);
-        foreach ($profile['Meta']['Capabilities'] as $cap) {
-            $caps = $cap['Cap'];
+        $profile = (array) S3Wrapper::getProfile(ProfileInstance::getProfileBy('id', 21)->token);
+        foreach ($profile['Meta']->Capabilities as $cap) {
+            $caps[] = $cap->Cap;
         }
     }
     update_post_meta($id, 'capabilities', json_encode($caps));
-
     cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
     cp_update_post_meta($id, 'test_data_profile', $_POST['test_data_profile']);
 
