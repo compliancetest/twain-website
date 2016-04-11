@@ -29,8 +29,6 @@
                            title="Edit Article"></a>
                         <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                            title="Read Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-history" data-tooltip="tooltip"
-                           title="History of Article"></a>
                     </td>
                 </tr>
                 <tr>
@@ -50,8 +48,6 @@
                            title="Edit Article"></a>
                         <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                            title="Read Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-history" data-tooltip="tooltip"
-                           title="History of Article"></a>
                     </td>
                 </tr>
                 <tr>
@@ -71,8 +67,6 @@
                            title="Edit Article"></a>
                         <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                            title="Read Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-history" data-tooltip="tooltip"
-                           title="History of Article"></a>
                     </td>
                 </tr>
                 </tbody>

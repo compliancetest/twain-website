@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommunityDownloads extends Model
 {
-    protected $table = 'communities_downloads';
+
+    use UuidTrait;
 
     public $incrementing = false;
+
+    protected $table = 'communities_downloads';
 
     protected $fillable = ['version', 'description', 'license', 'token', 'size', 'location', 'title', 'version_description'];
 

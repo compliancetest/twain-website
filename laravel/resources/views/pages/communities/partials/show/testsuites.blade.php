@@ -1,54 +1,3 @@
-<?php
-$args = array(
-        'post_type' => 'test-suite',
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and'),
-        'meta_query' => array(
-                array(
-                        'key' => 'community_id',
-                        'value' => $community->id,
-                        'compare' => '='
-                )
-        ),
-        'orderby' => 'title',
-        'order' => 'ASC'
-);
-
-if (!$community->isAdmin()) {
-    $args['meta_query'][] = array(
-            'key' => 'hide_suite',
-            'value' => 0,
-            'compare' => '='
-    );
-}
-
-//Getting Filter Params
-$filterType = getFilterParam('type');
-$filterIssuer = getFilterParam('issuer');
-$filterYear = getFilterParam('year');
-$filterStatus = getFilterParam('status');
-
-foreach ($filterType as $f) {
-    $args['tax_query'][] = array('taxonomy' => 'test_suite_type', 'field' => 'slug', 'terms' => $f);
-}
-foreach ($filterIssuer as $v) {
-    $args['meta_query'][] = array('key' => 'ts_issuer', 'value' => $v, 'compare' => '=');
-}
-foreach ($filterYear as $v) {
-    $args['meta_query'][] = array('key' => 'ts_issue_date', 'value' => $v . "-", 'compare' => 'LIKE');
-}
-foreach ($filterStatus as $v) {
-    $args['meta_query'][] = array('key' => 'ts_status', 'value' => $v, 'compare' => '=');
-}
-$testsuites = get_posts($args);
-
-$roles = array();
-//For Right Panels
-$tsTypes = array();
-$tsIssuers = array();
-$tsIssueYears = array();
-$tsStatuses = array();
-?>
 <div class="community-test-suites row">
     <div class="col-md-12">
 
@@ -65,30 +14,73 @@ $tsStatuses = array();
                     <th class="text-left">Name</th>
                     <th>Published</th>
                     <th>Status</th>
-                    <th>Products</th>
                     <th>Notify Changes</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <a href="#" class="test-suite-name">Contributions v1.0</a>
-                        <p class="test-suite-description">SuperStream Contributions Test Suite</p>
-                    </td>
-                    <td class="text-center">2014-01-13</td>
-                    <td class="text-center"><span class="status status-partial">Partial</span>
-                    </td>
-                    <td class="text-center"><a href="#" class="view-products-btn">view</a></td>
-                    <td class="text-center"><input type="checkbox" value="" name="notify_changes"></td>
-                    <td class="text-center td-actions">
-                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip" title="Edit Suite"></a>
-                        <a href="#" class="btn btn-icon btn-danger btn-delete" onclick="return confirm('Are you sure to delete this test suite?')" data-tooltip="tooltip" title="Delete Suite"></a>
-                    </td>
-                </tr>
+
+                @foreach($testSuites as $testSuite)
+                    <?php $suiteMeta = \App\Post::find($testSuite->ID)->postmeta->keyBy('meta_key');?>
+                    @if(!is_admin() && $suiteMeta->hide_suite == 1) <?php continue;?> @endif
+                    <tr>
+                        <td>
+                            <a href="{!! get_permalink($testSuite->ID) !!}"
+                               class="test-suite-name">{{ $testSuite->post_title }}</a>
+
+                            <p class="test-suite-description">{{ $testSuite->post_excerpt }}</p>
+                        </td>
+                        <td class="text-center">{{ formatDate($postMeta->ts_issue_date) }}</td>
+                        <td class="text-center"><span
+                                    class="status status-{{ strtolower($suiteMeta->get('ts_status')->meta_value) }}">{{ $suiteMeta->get('ts_status')->meta_value }}</span>
+                        </td>
+                        <td class="text-center">
+                            <input class="notify-changes" type="checkbox" value="{{ $testSuite->ID }}"
+                                   name="notify_changes{{ $testSuite->ID }}"
+                                   @if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $testSuite->ID, true)) checked="checked" @endif
+                            >
+                            <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt=""
+                                 style="display: none;"/>
+                        </td>
+                        <td class="text-center td-actions">
+                            @if($community->isAdmin())
+                                <a href="/edit-test-suite?id={{ $testSuite->ID }}"
+                                   class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
+                                   title="Edit Suite"></a>
+                                <a href="/?suite_id={{ $testSuite->ID }}&_wpnonce={{ wp_create_nonce('delete-suite') }}&return=<?php echo base64_encode('/communities/' . $community->slug) ?>"
+                                   class="btn btn-icon btn-danger btn-delete"
+                                   onclick="return confirm('Are you sure to delete this test suite?')"
+                                   data-tooltip="tooltip" title="Delete Suite"></a>
+                            @endif
+                        </td>
+                    </tr>
+
+                @endforeach
+
                 </tbody>
             </table>
         </div>
 
     </div>
 </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.notify-changes').click(function () {
+            var chObj = jQuery(this);
+            chObj.next().show();
+            chObj.hide();
+            var isChecked = this.checked;
+            var sID = chObj.val();
+            jQuery.ajax({
+                url: '/?cp-action={{  wp_create_nonce('suite-notify-changes') }}',
+                type: 'post',
+                data: {id: sID, checked: isChecked ? 1 : 0},
+                complete: function (rsp) {
+                    chObj.next().hide();
+                    chObj.show();
+                }
+            });
+        })
+    })
+</script>

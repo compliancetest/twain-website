@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\Post;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -76,8 +77,21 @@ class CommunitiesController extends Controller
     public function show($slug, $action = 'testsuites')
     {
         $community = Community::findBySlug($slug);
-        $communityMeta = $community->getMeta();
-        return view('pages.communities.show', compact('community', 'communityMeta', 'action'));
+        $data = [
+            'community' => $community,
+            'action' => $action,
+            'isAdmin' => $community->isAdmin(),
+        ];
+        if($action == 'testsuites'){
+            $data['testSuites'] = Post::getCommunityTestSuites($community->id);
+        }
+        if($action == 'testdata'){
+            $data['instances'] = getCommunityProfileInstatnces($community->id);
+        }
+        if($action == 'downloads'){
+            $data['downloads'] = $community->downloads;
+        }
+        return view('pages.communities.show')->with($data);
     }
 
     /**

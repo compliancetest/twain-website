@@ -20,6 +20,7 @@
     <script src="/laravel/resources/assets/js/vendor/bootstrap.min.js"></script>
     <script src="/laravel/resources/assets/js/vendor/jquery.slimmenu.min.js"></script>
     <script src="/laravel/resources/assets/js/vendor/jquery.validate.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="/laravel/resources/assets/js/scripts.js"></script>
 </head>
 <body>

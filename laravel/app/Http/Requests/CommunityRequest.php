@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\CommunityMeta;
 use App\Http\Requests\Request;
 use Illuminate\Support\Facades\Auth;
 

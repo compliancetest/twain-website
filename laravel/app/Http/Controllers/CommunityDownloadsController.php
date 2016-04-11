@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class CommunityDownloadsController extends Controller
 {
@@ -57,8 +58,8 @@ class CommunityDownloadsController extends Controller
         $data['size'] = $request->file('file')->getSize();
         $community->downloads()->create($data);
 
-        //        $s3 = new S3Wrapper();
-//        $s3->putObject('/attachments/downloads/' . $data['token'] . '.'.$request->file('file')->getExtension(), file_get_contents($request->file('file')->getPath()), 'application/'.$ext );
+        $s3FilePath = getenv('ENVIRONMENT') . '/communities/downloads/' . $community->id . '/' . $data['token'] . '.'.$request->file('file')->getClientOriginalExtension();
+        Storage::put($s3FilePath, file_get_contents($request->file('file')));
 
         return ['redirect_to' => $community->getUrl() . 'downloads'];
 

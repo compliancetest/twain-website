@@ -12,4 +12,12 @@ class PostMeta extends Model
 
     protected $primaryKey = 'meta_id';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo('App\Post');
+    }
+
 }
