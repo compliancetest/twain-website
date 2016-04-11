@@ -401,27 +401,28 @@ get_header();
                                     </div>
                                     <div class="clear"></div>
                                 </div>
-
-                                <?php foreach ($case->imagesData as $image): ?>
-                                    <div class="field-row images_row">
-                                        <div class="grid-cell width35P">
-                                            <input type="hidden" name="saved_images[]"
-                                                   value="<?php echo $image['name']; ?>"/>
-                                            <img style="width: 30px; height: 30px;"
-                                                 src="<?php echo S3Wrapper::getCaseImageUrl($caseID, $image['name']); ?>">
+                                <?php if(is_iterable($case->imagesData)):?>
+                                    <?php foreach ($case->imagesData as $image): ?>
+                                        <div class="field-row images_row">
+                                            <div class="grid-cell width35P">
+                                                <input type="hidden" name="saved_images[]"
+                                                       value="<?php echo $image['name']; ?>"/>
+                                                <img style="width: 30px; height: 30px;"
+                                                     src="<?php echo S3Wrapper::getCaseImageUrl($caseID, $image['name']); ?>">
+                                            </div>
+                                            <div class="grid-cell width45P">
+                                                <input type="text" name="saved_images_description[]"
+                                                       value="<?php echo $image['description']; ?>"
+                                                       class="input medium-input" style="width: 450px;"/>
+                                            </div>
+                                            <div class="grid-cell width10P" style="float: right">
+                                                <a href="#" class="action-btn blue-delete-btn icon-btn"><span
+                                                        class="p"></span></a>
+                                            </div>
+                                            <div class="clear"></div>
                                         </div>
-                                        <div class="grid-cell width45P">
-                                            <input type="text" name="saved_images_description[]"
-                                                   value="<?php echo $image['description']; ?>"
-                                                   class="input medium-input" style="width: 450px;"/>
-                                        </div>
-                                        <div class="grid-cell width10P" style="float: right">
-                                            <a href="#" class="action-btn blue-delete-btn icon-btn"><span
-                                                    class="p"></span></a>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
 
                                 <div class="field-row">
                                     <div class="grid-cell">
@@ -660,6 +661,50 @@ get_header();
                         </div>
                     </div>
                 </div>
+
+                <div class="space25"></div>
+
+                <div class="grid-box grid-box-expandable grid-box-opened">
+                <div class="grid-box-header">
+                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                    <h5 class="left">Capabilities</h5>
+
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-box-body">
+                    <div class="column">
+                        <?php
+                        $capabilities = array_chunk(explode(',', $suiteObj->capabilities), 3);
+                        foreach ($capabilities AS $twoCapabilities) { ?>
+                            <div class="field-row">
+                                <div class="grid-cell checkbox-cell width30P">
+                                    <label><input type="checkbox" name="capabilities[]"
+                                                  value="<?php echo $twoCapabilities[0] ?>" <?php echo in_array($twoCapabilities[0], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[0] ?>
+                                    </label>
+                                </div>
+                                <?php if(!empty($twoCapabilities[1])):?>
+                                    <div class="grid-cell checkbox-cell width30P">
+                                        <label><input type="checkbox" name="capabilities[]"
+                                                      value="<?php echo $twoCapabilities[1] ?>" <?php echo in_array($twoCapabilities[1], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[1] ?>
+                                        </label>
+                                    </div>
+                                <?php endif;?>
+
+                                 <?php if(!empty($twoCapabilities[2])):?>
+                                    <div class="grid-cell checkbox-cell width30P">
+                                        <label><input type="checkbox" name="capabilities[]"
+                                                      value="<?php echo $twoCapabilities[2] ?>" <?php echo in_array($twoCapabilities[2], $case->capabilities) ? 'checked="checked"' : '' ?>> <?php echo $twoCapabilities[2] ?>
+                                        </label>
+                                    </div>
+                                <?php endif;?>
+                                <div class="clear"></div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+            </div>
+
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingright nopaddingleft">

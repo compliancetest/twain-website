@@ -631,6 +631,8 @@ function saveCase()
     }
     update_post_meta($id, 'imagesData', json_encode($imagesToSave));
 
+    update_post_meta($id, 'capabilities', json_encode((array) @$_POST['capabilities']));
+
     $_POST['test_intent_description'] = str_replace('&', '&amp;', str_replace('&amp;', '&', $_POST['test_intent_description']));
     $_POST['test_intent_description'] = str_replace('&nbsp;', '', $_POST['test_intent_description']);
     update_post_meta($id, 'test_intent_description', $_POST['test_intent_description']);
