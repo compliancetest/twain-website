@@ -182,7 +182,7 @@ class Community extends Model
      */
     public function getMembershipRequests()
     {
-        return $this->members()->where(['is_confirmed' => 1])->get();
+        return $this->members()->where(['is_confirmed' => 0])->get();
     }
 
     public function getImageUrl()

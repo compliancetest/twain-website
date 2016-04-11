@@ -28,7 +28,6 @@ class CommunitiesController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -51,11 +50,8 @@ class CommunitiesController extends Controller
         $modelData['creator_id'] = get_current_user_id();
         $modelData['slug'] = Community::getUniqueSlug(new Community(), $modelData['title']);
         $model = Community::create($modelData);
-        if($request->file('image')){
-            $model->image = getenv('ENVIRONMENT') . '/communities/avatars/' . $model->id . '/' . $request->file('image')->getClientOriginalName();
-            Storage::put($model->image, file_get_contents($request->file('image')));
-            $model->save();
-        }
+
+        $this->handleImage($request, $model);
 
         $model->members()->create([
             'community_id' => $model->id,
@@ -82,14 +78,19 @@ class CommunitiesController extends Controller
             'action' => $action,
             'isAdmin' => $community->isAdmin(),
         ];
-        if($action == 'testsuites'){
+        if ($action == 'testsuites') {
             $data['testSuites'] = Post::getCommunityTestSuites($community->id);
         }
-        if($action == 'testdata'){
+        if ($action == 'testdata') {
             $data['instances'] = getCommunityProfileInstatnces($community->id);
         }
-        if($action == 'downloads'){
+        if ($action == 'downloads') {
             $data['downloads'] = $community->downloads;
+        }
+        if ($action == 'admin') {
+            $data['communityMeta'] = $community->meta->keyBy('meta_key');
+            $data['profileTypes'] = getCommunityProfileTypes($community->id);
+            $data['membershipRequests'] = $community->getMembershipRequests();
         }
         return view('pages.communities.show')->with($data);
     }
@@ -97,7 +98,7 @@ class CommunitiesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($slug, $step)
@@ -106,7 +107,7 @@ class CommunitiesController extends Controller
         $communityMeta = $community->getMeta();
         $viewPath = 'pages.communities.edit.steps.' . $step;
         $submitButtonText = 'Edit Community and Continue';
-        if(view()->exists($viewPath)) {
+        if (view()->exists($viewPath)) {
             return view($viewPath, compact('community', 'step', 'submitButtonText', 'communityMeta'));
         }
     }
@@ -119,53 +120,49 @@ class CommunitiesController extends Controller
      * @return \Illuminate\Http\Response
      * @internal param int $id
      */
-    public function update($slug, Requests\CommunityRequest $request)
+    public function update($slug, Request $request)
     {
         $community = Community::findBySlug($slug);
 
-        if($request->has('title') && $request->has('description')){
+        if ($request->file('image')) {
+            $this->validate($request, ['image' => 'image']);
+            $this->handleImage($request, $community);
+        }
+        if ($request->has('title') && $request->has('description')) {
             $community->update(['title' => $request->get('title'), 'description' => $request->get('description')]);
         }
 
-        if($request->has('status')) {
+        if ($request->has('status')) {
             $community->update(['status' => $request->get('status')]);
         }
 
-        if($request->has('group-invite-status')) {
-            CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'invite_status'], ['meta_value' => $request->get('group-invite-status')]);
+        $textFields = ['terms_and_conditions', 'license_agreements', 'obligation_for_claim', 'notification_email_of_changes'];
+        foreach ($textFields as $textField) {
+            if ($request->has($textField)) {
+                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => $textField], ['meta_value' => $request->get($textField)]);
+            }
         }
-        if($request->get('community-forum')) {
-            CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'forum_id'], ['meta_value' => 'yes']);
+        if($request->has('visibility_status')){
+            $community->update(['visibility_status' => $request->get('visibility_status')]);
         }
-        if($request->has('wiki-enabled')) {
-            $wikiEnabled = $request->get('wiki-enabled');
-            if ($wikiEnabled) {
-                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'wiki-status'], ['meta_value' => $request->get('wiki-enabled')]);
-                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'wiki-roles'], ['meta_value' => $request->get('create-wiki-roles')]);
+        if ($request->has('change_article_status')) {
+            if($request->has('articles_enabled')){
+                $community->update(['articles_status' => $request->get('articles_status')]);
             } else {
-                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'wiki-status'], ['meta_value' => 0]);
+                $community->update(['articles_status' => '']);
             }
         }
 
-        if ($request->file('image')) {
-            $imageName = 'community_' . $community->id . '.' .
-                $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(
-                base_path() . '/resources/assets/images/', $imageName
-            );
-            CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => 'logo'], ['meta_value' => '/laravel/resources/assets/images/' . $imageName]);
+        if ($request->get('redirect')) {
+            $redirect = $request->get('redirect');
         }
-
-         if($request->get('redirect')){
-             $redirect = $request->get('redirect');
-         }
-        return Redirect::to($redirect);
+        return Redirect::to('/communities/' . $community->slug . '/admin');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -201,15 +198,28 @@ class CommunitiesController extends Controller
             }
         }
 
-        require_once( ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php' );
+        require_once(ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php');
 
         if ($request->file('upload')) {
-            $jg = new JsonGenerator( $request->file('upload') );
+            $jg = new JsonGenerator($request->file('upload'));
             $zipLink = $jg->checkSheets();
             if (!empty($zipLink)) {
                 $request->session()->set('zipLink', $zipLink);
             }
         }
         return Redirect::to('/communities/' . $slug . '/admin');
+    }
+
+    /**
+     * @param $request
+     * @param $model
+     */
+    private function handleImage($request, $model)
+    {
+        if ($request->file('image')) {
+            $model->image = getenv('ENVIRONMENT') . '/communities/avatars/' . $model->id . '/avatar.' . $request->file('image')->getClientOriginalExtension();
+            Storage::put($model->image, file_get_contents($request->file('image')));
+            $model->save();
+        }
     }
 }

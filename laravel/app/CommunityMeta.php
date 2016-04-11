@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommunityMeta extends Model
 {
-    protected $table = 'communities_meta';
+
+    use UuidTrait;
 
     public $incrementing = false;
+
+    protected $table = 'communities_meta';
 
     protected $fillable = array('community_id', 'meta_key', 'meta_value');
 
