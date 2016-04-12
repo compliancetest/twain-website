@@ -49,6 +49,13 @@ jQuery(document).ready(function($) {
         $($(this).data('toggle-block')).toggle();
     });
 
+    if ($.fn.redactor){
+        $('.redactor_editor').redactor({
+            minHeight: 80
+        });
+    }
+
+
     Page.header.init();
 
 });
@@ -97,8 +104,6 @@ var Page = {
                 });
 
             }
-
-
 
         },
 
@@ -288,10 +293,6 @@ var Page = {
                 self.editProfileType($(this), e);
             });
 
-            $('.redactor_editor').redactor({
-                minHeight: 80
-            });
-
         },
 
         groupMembersActions: function(){
@@ -378,6 +379,18 @@ var Page = {
     communityCreate: {
         init: function () {
             customizeFileTag();
+        }
+    },
+
+    communityArticleCreate: {
+        init: function () {
+            customizeFileTag();
+            $('#addNewArticleFile').click(function (e) {
+                e.preventDefault();
+                var fileTemaple = '<div class="upload-file-field"><input type="file" name="article[files][]" class="input-file"  /></div>';
+                $(this).before(fileTemaple);
+                customizeFileTag();
+            });
         }
     },
 

@@ -250,7 +250,6 @@
   }
 }
 
-
 .custom-file-tag{
   display: inline-block;
   margin: 0 0 10px 0;
@@ -312,5 +311,9 @@
     &:before{
       @include iconsSprite(file-type-image);
     }
+  }
+
+  .btn-browse{
+    top: 3px;
   }
 }

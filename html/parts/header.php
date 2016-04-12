@@ -1,7 +1,7 @@
 <header id="header">
     <div class="header-inner">
         <div class="container">
-            <a href="#" class="logo"><img src="images/logo.png" alt="Twain" /></a>
+            <a href="#" class="logo"><img src="/laravel/resources/assets/images/drummond_group_logo.png" alt="Twain" /></a>
             <div class="header-account">
                 <div class="header-actions">
                     <div class="header-user-info">

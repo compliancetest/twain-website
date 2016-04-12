@@ -22,13 +22,7 @@
         <div class="footer-block footer-copyright">
             <a class="twitter-logo" target="_blank" href="https://twitter.com/ComplianceTest2" title="Twitter">Twitter</a>
             <p class="copyright">&copy;2015 ComplianceTest. Website built by GoSource</p>
-            <img alt="Drummond Group Logo" src="https://www.compliancetest.net/wp-content/themes/bp-child/images/drummond_group_logo.png">
+            <img alt="Compliancetest Logo" src="/laravel/resources/assets/images/logo.png">
         </div>
     </div>
 </footer>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/vendor/jquery.slimmenu.min.js"></script>
-<script src="js/vendor/jquery.validate.js"></script>
-<script src="js/scripts.js"></script>
