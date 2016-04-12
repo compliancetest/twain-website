@@ -25,7 +25,7 @@
 
                 <div class="community-header row">
                     <div class="community-membership-action hidden-desktop">
-                        <a class="btn btn-danger btn-lg" href="#confirmCancelMembership" data-href="http://compliancetest.lc" data-toggle="modal">Cancel Membership</a>
+                        <a class="btn btn-danger btn-lg" href="#confirmCancelMembership" data-toggle="modal">Cancel Membership</a>
                     </div>
                     <div class="community-logo">
                         <img src="images/gravatar.jpg" alt="SuperStream" />
@@ -89,8 +89,35 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <a href="#">Test Clearing House v1.3.3 </a>
+                                                    <a href="#" data-toggle="modal" data-target="#profileModal-item1">Test Clearing House v1.3.3 </a>
                                                     <p>A Clearing House supporting multiple employers. Employer data included by reference</p>
+
+                                                    <!-- Modal-->
+                                                    <div class="modal fade" id="profileModal-item1" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                                                    Profile Instance Detail
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-sm-9">
+                                                                            <input type="text" class="form-control" readonly id="profile-link-1" value="http://compliancetest.lc/get-profile?id=1" />
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <button class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#profile-link-1">Copy URL</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+                                                                    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </td>
                                                 <td>For Tester</td>
                                                 <td class="text-center"><a href="#">Clearing House v2.3.1</a></td>
@@ -104,8 +131,35 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <a href="#">Test Employer v2.1.4 </a>
+                                                    <a href="#" data-toggle="modal" data-target="#profileModal-item2">Test Employer v2.1.4 </a>
                                                     <p>Test Employer is a template test data set that is designed to be replaced with tester specific ABN details</p>
+
+                                                    <!-- Modal-->
+                                                    <div class="modal fade" id="profileModal-item2" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                                                    Profile Instance Detail
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-sm-9">
+                                                                            <input type="text" class="form-control" readonly id="profile-link-2" value="http://compliancetest.lc/get-profile?id=2" />
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <button class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#profile-link-2">Copy URL</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+                                                                    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </td>
                                                 <td>For Tester - Bulk and Performance Testing</td>
                                                 <td class="text-center"><a href="#">Clearing House v2.3.1</a></td>
@@ -119,8 +173,35 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <a href="#">Test Product v2.1.2</a>
+                                                    <a href="#" data-toggle="modal" data-target="#profileModal-item3">Test Product v2.1.2</a>
                                                     <p>Test Product is a template test data set that is designed to be replaced with tester specific USI details</p>
+
+                                                    <!-- Modal-->
+                                                    <div class="modal fade" id="profileModal-item3" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                                                    Profile Instance Detail
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-sm-9">
+                                                                            <input type="text" class="form-control" readonly id="profile-link-3" value="http://compliancetest.lc/get-profile?id=3" />
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <button class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#profile-link-3">Copy URL</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+                                                                    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </td>
                                                 <td>Performance Testing</td>
                                                 <td class="text-center"><a href="#">Clearing House v2.3.1</a></td>
@@ -135,8 +216,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -150,6 +229,14 @@
     </div>
 
     <?php include_once('parts/footer.php'); ?>
+    <script src="js/vendor/clipboard.js"></script>
+    <script>
+        var clipboard = new Clipboard('.copyProfileLink');
+        clipboard.on('success', function(e) {
+            console.log(e);
+            console.log('The profile url has been copied to clipboard.');
+        });
 
+    </script>
     </body>
 </html>
