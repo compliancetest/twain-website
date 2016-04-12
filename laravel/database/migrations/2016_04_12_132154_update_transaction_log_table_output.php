@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTransactionLogTable extends Migration
+class UpdateTransactionLogTableOutput extends Migration
 {
     /**
      * Run the migrations.
