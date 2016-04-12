@@ -14,6 +14,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Auth;
+use Aws\Laravel\AwsFacade as AWS;
+
 
 class ProcessTransactionLog extends Job implements ShouldQueue
 {
@@ -41,7 +43,12 @@ class ProcessTransactionLog extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $this->_process();
+        try {
+            $this->_process();
+        } catch(\Exception $e){
+            error_log($e->getLine());
+            error_log($e->getMessage());
+        }
     }
 
     private function getFolderName($path)
@@ -93,7 +100,6 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     $organisationSubscription = OrganisationSubscription::where(
                         ['user_id' => $this->userId, 'organisation_id' => $organisationMember->organisation_id]
                     )->first();
-
                     $transaction = Transaction::firstOrCreate([
                         'execution_id' => $this->executionId,
                         'test_case_id' => $testCase->ID,
@@ -112,18 +118,40 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         $executionId = explode('_', $executionIdFolder, 2)[1];
 
                         //execution log
-                        $executionLogData = json_decode(file_get_contents($filePath . $rootFolder . '/' . $testSuiteFolder . '/' . $testCaseFolder . '/' . $executionIdFolder . '/execution_log/execution_log.json'), true);
+                        if(file_exists($filePath . $rootFolder . '/' . $testSuiteFolder . '/' . $testCaseFolder . '/' . $executionIdFolder . '/execution_log/execution_log.json')) {
+                            $executionLogData = json_decode(file_get_contents($filePath . $rootFolder . '/' . $testSuiteFolder . '/' . $testCaseFolder . '/' . $executionIdFolder . '/execution_log/execution_log.json'), true);
 
-                        foreach ($executionLogData as $log) {
-                            if (!empty($log['From'])) {
+                            $from = $to = '';
+                            foreach ($executionLogData as $k => $log) {
+                                $excId = md5($executionId . json_encode($log));
                                 $transactionLog = TransactionsLog::firstOrNew([
-                                    'execution_id' => $executionId,
+                                    'execution_id' => $excId,
                                     'transaction_id' => $transaction->id,
                                 ]);
                                 $transactionLog->test_step = json_encode($log['States']);
-                                $transactionLog->from = $log['From'];
-                                $transactionLog->to = $log['To'];
-                                $transactionLog->operation_triplet = $log['DataGroup'];
+                                if ($log['From']) {
+                                    $from = $log['From'];
+                                }
+                                if ($log['To']) {
+                                    $to = $log['To'];
+                                }
+
+                                if(!empty($log['Output'])){
+                                    $env = explode('/', $this->fileName)[0];
+                                    $fileName =  $env . '/transactions/' .$this->userId . '/' . $testCaseFolder . '/' . $this->executionId . '/' . $excId .'.json';
+                                    $s3 = AwsFacade::createClient('s3');
+                                    $s3->putObject(array(
+                                        'Bucket' => 'data.twain.gosource.com.au',
+                                        'Key' => $fileName,
+                                        'Body' => json_encode($log['Output'], JSON_PRETTY_PRINT),
+                                        'ContentType' => 'application/json',
+                                    ));
+                                    $transactionLog->log_output = $fileName;
+                                }
+                                $transactionLog->from = $from;
+                                $transactionLog->to = $to;
+
+                                $transactionLog->operation_triplet = json_encode(array($log['DataGroup'], $log['DataArgumentType'], $log['Messages']));
                                 $transactionLog->return_code = $log['ReturnCode'];
                                 $transactionLog->session_state = $log['State'];
                                 $transactionLog->status = $log['ExecutionResult'];

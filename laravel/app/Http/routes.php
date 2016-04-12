@@ -13,4 +13,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('communities', 'CommunitiesController');
     Route::resource('testingdetails', 'TestingDetailsController',
                 ['only' => ['store', 'update', 'index']]);
+    Route::get('testingdetails/{id}/output',  'TestingDetailsController@output');
 });

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\TestingDetail;
+use App\TransactionsLog;
+use Aws\Laravel\AwsFacade;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -57,4 +59,15 @@ class TestingDetailsController extends Controller
         return redirect()->secure('my-transaction-log');
     }
 
+    public function output($id)
+    {
+        $entry = TransactionsLog::find($id);
+        $s3 = AwsFacade::createClient('s3');
+        $data = (string) $s3->getObject(array(
+            'Bucket' => 'data.twain.gosource.com.au',
+            'Key' => $entry['log_output'],
+        ))['Body'];
+        $link = $s3->getObjectUrl('data.twain.gosource.com.au', $entry['log_output'], '1 hour');
+        return view('pages.testingdetails.output', compact('data', 'link'));
+    }
 }

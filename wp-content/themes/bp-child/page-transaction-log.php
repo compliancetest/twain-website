@@ -278,26 +278,26 @@ get_header();
                                         <div class="sub-table">
                                             <div class="table">
                                                 <div class="thead tr">
-                                                    <div class="td td-from td-two-lines tocenter" style="width: 9%;">
+                                                    <div class="td td-from td-two-lines tocenter" style="width: 4%;">
                                                         From</br>To
                                                     </div>
 
-                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                    <div class="td td-service td-two-lines tocenter" style="width: 4%;">
                                                         Test </br>
                                                         Step
                                                     </div>
 
                                                     <div class="td td-service td-two-lines tocenter"
-                                                         style="width: 17%;">Operation Triplet </br>
+                                                         style="width: 36%;">Operation Triplet </br>
                                                         Return Code
                                                     </div>
-                                                    <div class="td td-message-date" style="width: 9%;">Session State
+                                                    <div class="td td-message-date td-two-lines" style="width: 4%;">Session State
                                                     </div>
-                                                    <div class="td td-message-part tocenter" style="width: 9%;">Message
+                                                    <div class="td td-message-part tocenter td-two-lines" style="width: 4%;">Message
                                                         Data
                                                     </div>
                                                     <div class="td td-message-view" style="width: 9%;">Date/Time</div>
-                                                    <div class="td td-message-view" style="width: 9%;">TWAIN Session
+                                                    <div class="td td-message-view td-two-lines" style="width: 9%;">TWAIN Session
                                                         ID
                                                     </div>
                                                     <div class="td td-service td-two-lines tocenter" style="width: 9%;">
@@ -314,20 +314,27 @@ get_header();
                                                     <?php if ($logs): ?>
                                                         <?php foreach ($logs as $message) { ?>
                                                             <div class="tr">
-                                                                <div class="td td-from td-two-lines tocenter" style="width: 9%;">
+                                                                <div class="td td-from td-two-lines tocenter" style="width: 4%;">
                                                                     <?php echo $message->from;?>
                                                                     </br>
                                                                     <?php echo $message->to;?>
                                                                 </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 4%;">
                                                                     <?php echo implode('<br>', json_decode($message->test_step));?>
                                                                 </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 17%;">
-                                                                    <?php echo $message->operation_triplet;?> </br>
-                                                                    <?php echo $message->return_code;?>
+                                                                <div class="td td-service td-two-lines tocenter" style="width: 36%;">
+                                                                    <?php echo implode(' / ', json_decode($message->operation_triplet, true));?> </br>
+                                                                    <?php if($message->return_code == 'TWRC_SUCCESS'):?>
+                                                                        <span style="color: green;"><?php echo $message->return_code;?></span>
+                                                                    <?php else:?>
+                                                                        <span style="color: red;"><?php echo $message->return_code;?></span>
+                                                                    <?php endif;?>
                                                                 </div>
-                                                                <div class="td td-message-date" style="width: 9%;"><?php echo $message->session_state;?></div>
-                                                                <div class="td td-message-part tocenter" style="width: 9%;"><?php echo $message->message_data;?>
+                                                                <div class="td td-message-date" style="width: 4%;"><?php echo $message->session_state;?></div>
+                                                                <div class="td td-message-part tocenter" style="width: 4%;">
+                                                                    <?php if(!empty($message->log_output)):?>
+                                                                        <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output" onclick="javascript: void(0)">View</a>
+                                                                    <?php endif;?>
                                                                 </div>
                                                                 <div class="td td-message-view" style="width: 9%;"><?php echo $message->updated_at;?></div>
                                                                 <div class="td td-message-view" style="width: 9%;"><?php echo $message->twain_session_id;?></div>
