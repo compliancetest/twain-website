@@ -243,7 +243,7 @@ get_header();
                                         </a>
                                         <?php $status = ($row->status == '1' ? 'success' : 'error'); ?>
                                         <span
-                                            class="status-<?php echo $status; ?>"><?php echo strtoupper($status); ?></span>
+                                            class="status-success">Pass</span>
                                         <br/>
                                     </div>
                                     <div
