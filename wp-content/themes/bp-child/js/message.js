@@ -28,7 +28,13 @@ jQuery(document).ready(function(){
             jQuery('#trigger-message-box p.error').remove();
         }
     })
-    
+
+     jQuery('.s3output').cplightbox({
+        type: 'ajax',
+        closeWhenClickOveraly: false,
+        removeBoxAfterClose: true,
+    })
+
     var triggerMessageTimer = null;
     
     function showTriggerMessageResultMessage(msg, type)
