@@ -320,7 +320,7 @@ get_header();
                                                                     <?php echo $message->to;?>
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 4%;">
-                                                                    <?php echo implode('<br>', json_decode($message->test_step));?>
+                                                                    <?php echo $message->test_step;?>
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 36%;">
                                                                     <?php echo implode(' / ', json_decode($message->operation_triplet, true));?> </br>
