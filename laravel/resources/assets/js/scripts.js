@@ -30,6 +30,15 @@ jQuery(document).ready(function($) {
 
     });
 
+    $('[data-save-method="ajax"]').submit(function (e) {
+        e.preventDefault();
+        Page.coloredBoxAjaxSaveForm($(this));
+    });
+
+    $('[data-ajax-modal]').click(function(e){
+        e.preventDefault();
+        Page.loadModalContent($(this));
+    });
 
     $('#confirmRemoveMembership').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
@@ -370,7 +379,51 @@ var Page = {
         init: function () {
             customizeFileTag();
         }
+    },
+
+    /**
+     * Saving submitted form
+     * @param {JQuery} form Submitted form element
+     */
+    coloredBoxAjaxSaveForm: function(form){
+
+        if (form.valid()){
+            form.find('.message-notice').remove();
+            form.find('.color-box-loading').show();
+            $.ajax({
+                url: form.attr('action'),
+                type: 'post',
+                data: form.serialize(),
+                dataType: 'json',
+                success: function(rsp){
+                    form.find('.colored-box-footer').prepend('<div class="message-notice message-' + rsp.status + '">' + rsp.message + '</div>');
+                },
+                complete: function(){
+                    form.find('.color-box-loading').hide();
+                    setTimeout(function() {
+                        form.find('.message-notice').fadeOut("slow", function() { $(this).remove(); });
+                    }, 1500);
+
+                }
+            })
+
+        } else {
+            console.error('Form is not valid');
+        }
+    },
+
+    /**
+     * Load content to modal by ajax
+     * @param {JQuery} el Submitted form element
+     */
+    loadModalContent: function(el) {
+        var modalId = el.data('target');
+        $(modalId).on("show.bs.modal", function(e) {
+            var link = $(e.relatedTarget);
+            $(this).find(".modal-body").load(link.attr("href"));
+        });
     }
+
 
 };
 
@@ -407,9 +460,4 @@ function customizeFileTag()
             jQuery(this).data('file-customized', 1);
         }
     })
-}
-
-
-function getRedactorSettings(){
-
 }

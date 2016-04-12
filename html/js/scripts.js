@@ -355,6 +355,8 @@ var Page = {
         });
     }
 };
+
+
 function customizeFileTag() {
     jQuery('input[type="file"]').each(function(){
         if(!jQuery(this).data('file-customized'))

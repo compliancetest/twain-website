@@ -48,22 +48,61 @@ body.modal-open,
     }
 }
 
-.page-title{
+.page-title {
     @include box-shadow(0 0 50px #ededed inset);
     border-bottom: 1px solid #e1e1e1;
     padding: 20px 15px;
     margin: -20px -15px 0 -15px;
     @include legacy-pie-clearfix;
 
-    h1{
+    h1 {
         font-size: 20px;
         font-weight: 600;
         margin: 0;
         float: left;
     }
 
-    .page-title-actions{
+    .page-title-actions {
         float: right;
     }
+}
 
+.block-loading{
+    display: none;
+    text-align: center;
+    position: absolute;
+    background: rgba(168, 194, 215, 0.6);
+    z-index: 100;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    .loading-content{
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        padding: 0;
+        margin: -54px 0 0 0;
+
+        .loader{
+            background: image-url('loader.gif') no-repeat 0 0;
+            height: image-height('loader.gif');
+            width: image-width('loader.gif');
+            display: block;
+            margin: 0 auto;
+        }
+
+        .loading-text{
+            color: #e33f3f;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .loading-wait{
+            color: #e33f3f;
+            font-size: 12px;
+        }
+    }
 }

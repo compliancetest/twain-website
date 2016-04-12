@@ -7,7 +7,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Details</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
                         <div class="colored-box-content">
                             <div class="form-group">
                                 <label for="communityName">Community Name</label>
@@ -76,6 +76,7 @@
                         <div class="colored-box-footer">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                         </div>
+                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                         {{ Form::close() }}
                     </div>
 
@@ -353,7 +354,7 @@
                     </div>
                 </div>
 
-                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Privacy Options</div>
                     <div class="colored-box-body">
@@ -403,14 +404,15 @@
                             </div>
                         </div>
                         <div class="colored-box-footer">
-                            <a href="#" class="btn btn-success btn-with-icon btn-confirm"
-                               onclick="jQuery(this).closest('form').submit()">Save</a>
+                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                         </div>
+                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                     </div>
+
                 </div>
                 {!! Form::close() !!}
 
-                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
 
                 <div class="colored-box">
                     <div class="colored-box-header">Community Articles</div>
@@ -437,16 +439,16 @@
                             </div>
                             <input type="hidden" name="change_article_status" value="1">
                         </div>
-                    </div>
-                    <div class="colored-box-footer">
-                        <a href="#" class="btn btn-success btn-with-icon btn-confirm"
-                           onclick="jQuery(this).closest('form').submit()">Save</a>
+                        <div class="colored-box-footer">
+                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                        </div>
+                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                     </div>
                 </div>
 
                 {!! Form::close() !!}
 
-                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'action' => ['CommunitiesController@generateJson', 'id' => $community->slug]]) !!}
+                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'action' => ['CommunitiesController@generateJson', 'id' => $community->slug]]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Generate JSON</div>
                     <div class="colored-box-body">
@@ -458,9 +460,9 @@
                             @if(Session::has('zipLink'))
                                 <a href="{{ Session::get('zipLink') }}">json_profiles.zip</a>
                             @endif
-                            <a href="#" class="btn btn-success btn-with-icon btn-confirm"
-                               onclick="jQuery(this).closest('form').submit()">Generate JSON</a>
+                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Generate JSON</button>
                         </div>
+                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                     </div>
                 </div>
                 {{ Form::close() }}
