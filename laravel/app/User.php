@@ -6,14 +6,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
+    protected $table = 'wp_users';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'user_email', 'user_pass',
     ];
+
+    protected $username = 'user_email';
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -21,6 +25,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'user_pass',
     ];
+
+    public function getAuthPassword()
+    {
+        return $this->user_pass;
+    }
 }

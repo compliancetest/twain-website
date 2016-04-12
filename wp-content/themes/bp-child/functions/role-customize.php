@@ -125,9 +125,10 @@ function add_custom_capabilities()
     foreach($roles as $r)
     {
         $role = get_role($r);
-        foreach($customCapabilities[$r] as $c)   
-        {
-            $role->add_cap($c);
+        if(is_array($customCapabilities)) {
+            foreach ($customCapabilities[$r] as $c) {
+                $role->add_cap($c);
+            }
         }
     }
     

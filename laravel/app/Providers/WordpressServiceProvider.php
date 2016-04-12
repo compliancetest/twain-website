@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class WordpressServiceProvider extends ServiceProvider
@@ -14,11 +15,13 @@ class WordpressServiceProvider extends ServiceProvider
     }
 
     public function register() {
-        // Load wordpress bootstrap file
-        $wordpressBootFilePath = __DIR__ . '/../../../wp-load.php';
-        if(file_exists($wordpressBootFilePath)) {
-            require_once $wordpressBootFilePath;
-        } else throw new \RuntimeException('WordPress Bootstrap file not found!');
+        //loading wordpress files only for web requests
+        //we dont need wordpress for php artisan requests
+        if(!App::runningInConsole()) {
+            // Load wordpress bootstrap file
+            $GLOBALS['loadFromLaravel'] = 'yes';
+            require __DIR__ . '/../../../wp-load.php';
+        }
     }
 
 }

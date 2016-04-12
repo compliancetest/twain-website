@@ -169,17 +169,22 @@ require_once(THE_FUNCTION . '/processes/class.process.php');
 
 require_once(THE_FUNCTION . '/aws/BaseAWS.php');
 
-//CloudSearch
-require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
-require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
-require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
+/**
+ * wordpress and laravel uses same API version, so we shouldn load wordpress 2.* sdk to laravel
+ **/
+if(!isset($GLOBALS['loadFromLaravel'])) {
+    //CloudSearch
+    require_once(THE_FUNCTION . '/cloud-search/CloudSearch.php');
+    require_once(THE_FUNCTION . '/cloud-search/FulltextSearch.php');
+    require_once(THE_FUNCTION . '/cloud-search/cloudsearch-menu.php');
 
-//SQS
-require_once(THE_FUNCTION . '/aws/s3/Client.php');
+    //SQS
+    require_once(THE_FUNCTION . '/aws/s3/Client.php');
 
-require_once(THE_FUNCTION . '/aws/sqs/Client.php');
+    require_once(THE_FUNCTION . '/aws/sqs/Client.php');
 
-require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+    require_once(THE_FUNCTION . '/aws/ec2/Client.php');
+}
 
 
 //Compliance Claim

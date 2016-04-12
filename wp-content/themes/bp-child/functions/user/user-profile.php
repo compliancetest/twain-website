@@ -150,7 +150,6 @@ function cp_user_detail_edit()
     }
 
     echo 'success';
-
     exit();
 }
 

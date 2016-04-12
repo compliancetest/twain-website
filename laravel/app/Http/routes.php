@@ -1,17 +1,17 @@
 <?php
 
+Route::group(array('prefix' => 'api/v1'), function () {
+    Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => 'simpleauth']);
+    Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => 'simpleauth']);
+    Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => 'simpleauth']);
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
+    Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => 'simpleauth']);
+
+});
 
 Route::group(['middleware' => ['web']], function () {
     Route::resource('communities', 'CommunitiesController');
+    Route::resource('testingdetails', 'TestingDetailsController',
+                ['only' => ['store', 'update', 'index']]);
+    Route::get('testingdetails/{id}/output',  'TestingDetailsController@output');
 });

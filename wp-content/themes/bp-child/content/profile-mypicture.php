@@ -28,10 +28,12 @@ if (!defined('ABSPATH'))
                                  alt="<?php _e('Avatar preview', 'buddypress'); ?>"/>
                         </div>
 
-                    <a href="#" onclick="jQuery('#avatar-upload-form').submit();return false;" class="action-btn submit-btn process-btn right" style="margin-top: 120px; margin-right: 10px;"><span class="p"></span><span class="t">Crop Image</span></a>
-                    <div class="clear"></div>
-                    <div class="space10"></div>
-                    <input type="hidden" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php _e( 'Crop Image', 'buddypress' ); ?>" />
+                        <a href="#" onclick="jQuery('#avatar-upload-form').submit();return false;" class="action-btn submit-btn process-btn right"
+                           style="margin-top: 120px; margin-right: 10px;"><span class="p"></span><span class="t">Crop Image</span></a>
+                        <div class="clear"></div>
+                        <div class="space10"></div>
+                        <input type="hidden" name="avatar-crop-submit" id="avatar-crop-submit"
+                               value="<?php _e('Crop Image', 'buddypress'); ?>"/>
 
                         <input type="hidden" name="image_src" id="image_src" value="<?php bp_avatar_to_crop_src(); ?>"/>
                         <input type="hidden" id="x" name="x" value=""/>
@@ -107,6 +109,5 @@ if (!defined('ABSPATH'))
                 jQuery('.subm_send').addClass('greyed-out-btn');
             }
         });
-
     });
 </script>

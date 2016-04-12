@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__ . '/../../wp-load.php';
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -14,8 +12,13 @@ require __DIR__ . '/../../wp-load.php';
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
+
+if (file_exists(__DIR__ . '/../.env.' . getenv('ENVIRONMENT'))) {
+    $dotenv = new Dotenv\Dotenv(__DIR__ . '/../', '.env.' . getenv('ENVIRONMENT'));
+    $dotenv->load();
+}
 
 /*
 |--------------------------------------------------------------------------

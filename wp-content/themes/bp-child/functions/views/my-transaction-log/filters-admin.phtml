@@ -75,7 +75,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="service">eb:Service: <?php if($filterService){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="service">TWAIN Data Group: <?php if($filterService){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="serv" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tServices ) ):?>
@@ -86,7 +86,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="action">eb:Action: <?php if($filterAction){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="action">TWAIN Data Type: <?php if($filterAction){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="action" id="action" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tActions ) ):?>
@@ -97,7 +97,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="partyid">eb:PartyID: <?php if($filterPartyId){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="partyid">TWAIN Message: <?php if($filterPartyId){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="partyid" id="partyid" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tPartyIDs ) ):?>
