@@ -128,7 +128,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                                     'execution_id' => $order,
                                     'transaction_id' => $transaction->id,
                                 ]);
-                                $transactionLog->test_step = json_encode($log['States']);
+                                $transactionLog->test_step = $log['Step'];
                                 if ($log['From']) {
                                     $from = $log['From'];
                                 }

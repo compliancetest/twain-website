@@ -293,11 +293,11 @@ get_header();
                                                     </div>
                                                     <div class="td td-message-date td-two-lines" style="width: 4%;">Session State
                                                     </div>
-                                                    <div class="td td-message-part tocenter td-two-lines" style="width: 4%;">Message
+                                                    <div class="td td-message-part tocenter td-two-lines" style="width: 7%;">Message
                                                         Data
                                                     </div>
-                                                    <div class="td td-message-view" style="width: 9%;">Date/Time</div>
-                                                    <div class="td td-message-view td-two-lines" style="width: 9%;">TWAIN Session
+                                                    <div class="td td-message-view td-two-lines" style="width: 7%;">Date</br>Time</div>
+                                                    <div class="td td-message-view td-two-lines" style="width: 8%;">TWAIN Session
                                                         ID
                                                     </div>
                                                     <div class="td td-service td-two-lines tocenter" style="width: 9%;">
@@ -333,13 +333,13 @@ get_header();
                                                                     <?php endif;?>
                                                                 </div>
                                                                 <div class="td td-message-date" style="width: 4%;"><?php echo $message->session_state;?></div>
-                                                                <div class="td td-message-part tocenter" style="width: 4%;">
+                                                                <div class="td td-message-part tocenter" style="width: 7%;">
                                                                     <?php if(!empty($message->log_output)):?>
                                                                         <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output">View</a>
                                                                     <?php endif;?>
                                                                 </div>
-                                                                <div class="td td-message-view" style="width: 9%;"><?php echo $message->updated_at;?></div>
-                                                                <div class="td td-message-view" style="width: 9%;"><?php echo $message->twain_session_id;?></div>
+                                                                <div class="td td-message-view" style="width: 7%;"><?php echo $message->updated_at;?></div>
+                                                                <div class="td td-message-view" style="width: 8%;"><?php echo $message->twain_session_id;?></div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 9%;">
                                                                     -
                                                                 </div>
