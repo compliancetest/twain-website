@@ -80,7 +80,7 @@ $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 $esb->prepareTransactionWhereQuery(isset($filterOrganisation) ? $filterOrganisation : null, $filterSubscription, $filterProduct, $filterSuite, $filterCase, $filterService, $filterAction, $filterPartyId, $filterDate, $filterTags);
 
-$log_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions WHERE customer_id = %d", get_current_user_id()));
+$log_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions WHERE customer_id = %d ORDER BY updated_at DESC", get_current_user_id()));
 //$tProducts = $esb->getFilterOptionsForProduct();
 //$tSuites = $esb->getFilterOptionsForSuite();
 //$tCases = $esb->getFilterOptionsForCase();
