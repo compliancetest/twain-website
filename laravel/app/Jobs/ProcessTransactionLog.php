@@ -120,12 +120,12 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         //execution log
                         if(file_exists($filePath . $rootFolder . '/' . $testSuiteFolder . '/' . $testCaseFolder . '/' . $executionIdFolder . '/execution_log/execution_log.json')) {
                             $executionLogData = json_decode(file_get_contents($filePath . $rootFolder . '/' . $testSuiteFolder . '/' . $testCaseFolder . '/' . $executionIdFolder . '/execution_log/execution_log.json'), true);
-
                             $from = $to = '';
+                            $order = 1;
+                            TransactionsLog::where('transaction_id', $transaction->id)->delete();
                             foreach ($executionLogData as $k => $log) {
-                                $excId = md5($executionId . json_encode($log));
-                                $transactionLog = TransactionsLog::firstOrNew([
-                                    'execution_id' => $excId,
+                                $transactionLog = TransactionsLog::create([
+                                    'execution_id' => $order,
                                     'transaction_id' => $transaction->id,
                                 ]);
                                 $transactionLog->test_step = json_encode($log['States']);
@@ -138,7 +138,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
 
                                 if(!empty($log['Output'])){
                                     $env = explode('/', $this->fileName)[0];
-                                    $fileName =  $env . '/transactions/' .$this->userId . '/' . $testCaseFolder . '/' . $this->executionId . '/' . $excId .'.json';
+                                    $fileName =  $env . '/transactions/' .$this->userId . '/' . $testCaseFolder . '/' . $this->executionId . '/' . $order .'.json';
                                     $s3 = AwsFacade::createClient('s3');
                                     $s3->putObject(array(
                                         'Bucket' => 'data.twain.gosource.com.au',
@@ -150,6 +150,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                                 }
                                 $transactionLog->from = $from;
                                 $transactionLog->to = $to;
+                                $transactionLog->execution_order = $order++;
 
                                 $transactionLog->operation_triplet = json_encode(array($log['DataGroup'], $log['DataArgumentType'], $log['Messages']));
                                 $transactionLog->return_code = $log['ReturnCode'];

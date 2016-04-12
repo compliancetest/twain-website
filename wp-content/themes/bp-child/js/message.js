@@ -31,8 +31,7 @@ jQuery(document).ready(function(){
 
      jQuery('.s3output').cplightbox({
         type: 'ajax',
-        closeWhenClickOveraly: false,
-        removeBoxAfterClose: true,
+        closeWhenClickOveraly: false
     })
 
     var triggerMessageTimer = null;

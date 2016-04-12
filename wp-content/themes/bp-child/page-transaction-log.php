@@ -269,11 +269,11 @@ get_header();
                                                readonly="readonly">
                                     </div>
                                     <div class="td td-date tocenter">
-                                        <?php echo formatDate($row->date_updated, 'Y-m-d H:i:s') ?><br/>
+                                        <?php echo formatDate($row->updated_at, 'Y-m-d H:i:s') ?><br/>
                                     </div>
                                     <div class="clear"></div>
 
-                                    <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s", $row->id)); ?>
+                                    <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                     <?php if ($logs) { ?>
                                         <div class="sub-table">
                                             <div class="table">
@@ -324,7 +324,9 @@ get_header();
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 36%;">
                                                                     <?php echo implode(' / ', json_decode($message->operation_triplet, true));?> </br>
-                                                                    <?php if($message->return_code == 'TWRC_SUCCESS'):?>
+                                                                    <?php if($message->return_code == 'TWRC_ENDOFLIST'):?>
+                                                                        <span><?php echo $message->return_code;?></span>
+                                                                    <?php elseif($message->return_code == 'TWRC_SUCCESS'):?>
                                                                         <span style="color: green;"><?php echo $message->return_code;?></span>
                                                                     <?php else:?>
                                                                         <span style="color: red;"><?php echo $message->return_code;?></span>
@@ -333,7 +335,7 @@ get_header();
                                                                 <div class="td td-message-date" style="width: 4%;"><?php echo $message->session_state;?></div>
                                                                 <div class="td td-message-part tocenter" style="width: 4%;">
                                                                     <?php if(!empty($message->log_output)):?>
-                                                                        <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output" onclick="javascript: void(0)">View</a>
+                                                                        <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output">View</a>
                                                                     <?php endif;?>
                                                                 </div>
                                                                 <div class="td td-message-view" style="width: 9%;"><?php echo $message->updated_at;?></div>
@@ -474,7 +476,7 @@ get_header();
             fixTdHeight(jQuery('#my_transaction_log .table-box'));
 
             jQuery('.td-convsn a, .td-message-part a').click(function () {
-                jQuery(this).hide();
+//                jQuery(this).hide();
                 jQuery(this).next().show();
                 jQuery(this).next().click();
             });
@@ -484,13 +486,13 @@ get_header();
             });
 
             jQuery('.td-convsn input[type=text], .td-message-part input[type=text]').blur(function () {
-                jQuery(this).hide();
+//                jQuery(this).hide();
                 jQuery(this).prev().show();
             });
 
             jQuery('.td-convsn input[type=text], .td-message-part input[type=text]').keyup(function (e) {
                 if (e.keyCode == 27) {
-                    jQuery(this).hide();
+//                    jQuery(this).hide();
                     jQuery(this).prev().show();
                 } else {
                     jQuery(this).select();
