@@ -10,7 +10,8 @@ use Illuminate\Http\JsonResponse;
 /**
  * Class ApiController
  */
-class BaseApiController extends Controller{
+class BaseApiController extends Controller
+{
 
     /**
      * @var int Status Code.
@@ -102,7 +103,7 @@ class BaseApiController extends Controller{
      * @param $data
      * @return mixed
      */
-     public function respondWithData($data)
+    public function respondWithData($data)
     {
         return $this->respond(['data' => $data]);
     }
@@ -151,6 +152,18 @@ class BaseApiController extends Controller{
             ]);
     }
 
+    /**
+     * @param $message
+     * @return mixed
+     */
+    protected function respondSuccess($message)
+    {
+        return $this->setStatusCode(IlluminateResponse::HTTP_OK)
+            ->respond([
+                'message' => $message
+            ]);
+    }
+
 
     /**
      * @param $message
@@ -159,6 +172,18 @@ class BaseApiController extends Controller{
     protected function respondUnprocessableEntity($message)
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->respond([
+                'errors' => $message
+            ]);
+    }
+
+    /**
+     * @param $message
+     * @return mixed
+     */
+    protected function respondBadRequest($message)
+    {
+        return $this->setStatusCode(IlluminateResponse::HTTP_BAD_REQUEST)
             ->respond([
                 'errors' => $message
             ]);
