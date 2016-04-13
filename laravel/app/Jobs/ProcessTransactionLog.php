@@ -103,6 +103,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     $transaction = Transaction::firstOrCreate([
                         'execution_id' => $this->executionId,
                         'test_case_id' => $testCase->ID,
+                        'customer_id' => $this->userId,
                     ]);
                     $transaction->product_id = $product->ID;
                     $transaction->test_suite_id = $testSuite->ID;
@@ -152,7 +153,9 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                                 $transactionLog->to = $to;
                                 $transactionLog->execution_order = $order++;
 
-                                $transactionLog->operation_triplet = json_encode(array($log['DataGroup'], $log['DataArgumentType'], $log['Messages']));
+                                $transactionLog->data_group = $log['DataGroup'];
+                                $transactionLog->data_argument_type = $log['DataArgumentType'];
+                                $transactionLog->messages = $log['Messages'];
                                 $transactionLog->return_code = $log['ReturnCode'];
                                 $transactionLog->session_state = $log['State'];
                                 $transactionLog->status = $log['ExecutionResult'];

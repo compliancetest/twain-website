@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTransactionLogTable extends Migration
+class AddTripletLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,10 @@ class UpdateTransactionLogTable extends Migration
     public function up()
     {
         Schema::table('transactions_logs', function(Blueprint $table) {
-            $table->text('log_output');
+            $table->string('data_group');
+            $table->string('data_argument_type');
+            $table->string('messages');
+            $table->dropColumn('operation_triplet');
         });
     }
 

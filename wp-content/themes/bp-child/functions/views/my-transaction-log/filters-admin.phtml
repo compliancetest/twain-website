@@ -75,51 +75,39 @@
                     </select>
                 </li>
                 <li>
-                    <label for="service">TWAIN Data Group: <?php if($filterService){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="service">TWAIN Data Group: <?php if($filterType){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="serv" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tServices ) ):?>
                             <?php foreach($tServices as $s){ ?>
-                                <option value="<?php echo $s?>" <?php echo $s == $filterService ? "selected='selected'" : "" ?>><?php echo $s ?></option>
+                                <option value="<?php echo $s?>" <?php echo $s == $filterType ? "selected='selected'" : "" ?>><?php echo $s ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>
                 </li>
                 <li>
-                    <label for="action">TWAIN Data Type: <?php if($filterAction){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="action">TWAIN Data Type: <?php if($filterGroup){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="action" id="action" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tActions ) ):?>
                             <?php foreach($tActions as $a){ ?>
-                                <option value="<?php echo $a?>" <?php echo $a == $filterAction ? "selected='selected'" : "" ?>><?php echo $a ?></option>
+                                <option value="<?php echo $a?>" <?php echo $a == $filterGroup ? "selected='selected'" : "" ?>><?php echo $a ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>
                 </li>
                 <li>
-                    <label for="partyid">TWAIN Message: <?php if($filterPartyId){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="partyid">TWAIN Message: <?php if($filterMessage){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="partyid" id="partyid" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tPartyIDs ) ):?>
                             <?php foreach($tPartyIDs as $p){ ?>
-                                <option value="<?php echo $p?>" <?php echo $p == $filterPartyId ? "selected='selected'" : "" ?>><?php echo $p ?></option>
+                                <option value="<?php echo $p?>" <?php echo $p == $filterMessage ? "selected='selected'" : "" ?>><?php echo $p ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>
                 </li>
                 <li class="first">
-                    <label for="tag">Tag: <?php if ($filterTags != null) :?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php endif; ?></label>
-                    <select name="tag" id="tag" autocomplete="off" class="select">
-                        <option value="all">- All -</option>
-                        <?php if( is_iterable( $tTagsIDs ) ):?>
-                            <?php foreach($tTagsIDs as $tag){ ?>
-                                <?php if (is_null($tag->ID)) continue;?>
-                                <option value="<?php echo $tag->ID?>" <?php echo $filterTags != "" && $tag->ID == intval($filterTags) ? "selected='selected'" : "" ?>><?php echo $tag->NAME ?></option>
-                            <?php } ?>
-                        <?php endif;?>
-                    </select>
-                </li>
-                <li>
                     <label>Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : $filterDate; ?>" style="width: 170px;"/>
                 </li>

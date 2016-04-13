@@ -136,6 +136,8 @@ require_once(THE_FUNCTION . '/classes/LoginAttempts.php');
 
 require_once(THE_FUNCTION . '/classes/ClaimsConversations.php');
 
+require_once(THE_FUNCTION . '/classes/TransactionLogs.php');
+
 //Test Case Function
 require_once(THE_FUNCTION . '/test-case/testcase.class.php');
 require_once(THE_FUNCTION . '/test-case/controller.php');

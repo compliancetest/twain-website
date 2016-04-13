@@ -54,7 +54,7 @@ return [
             'key' => 'AKIAI5A2F2WZFQUDE77A',
             'secret' => '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',
             'prefix' => 'https://sqs.us-west-2.amazonaws.com/355178332009',
-            'queue' => env('SQS_QUEUE', 'sqs'),
+            'queue' => env('SQS_QUEUE', 'transactions_local'),
             'region' => 'us-west-2',
         ],
 
