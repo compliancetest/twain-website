@@ -1,111 +1,106 @@
-<form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink()?>">
+<form name="filterForm" id="filterForm" method="get" action="<?php echo get_permalink() ?>">
     <div class="search-results-filter">
         <h4 class="filter-head">Filter By:</h4>
+
         <div class="search-filters-box">
             <ul class="search-filters-list clearfix">
                 <li class="first">
-                    <label for="subscription">Subscription: <?php if($filterSubscription != "my" && $filterSubscription != "all"){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="subscription">Subscription: <?php if ($filterSubscription != null) { ?><a href="#" class="clear-filter"
+                                                                                                                                          title="Clear Filter">X</a><?php } ?>
+                    </label>
                     <select name="subscription" id="subscription" autocomplete="off" class="select">
-                        <option value="all">- All -</option>
-                        <option value="my"  <?php echo $filterSubscription != "" && $filterSubscription == 'my' ? "selected='selected'" : "" ?>>- My Subscriptions -</option>
-                        <?php if( is_iterable( $tSubscriptions ) ):?>
-                            <?php foreach($tSubscriptions as $s){ ?>
-                                <option value="<?php echo $s->id?>" data-org-id="<?php echo $s->organisation_id?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                        <option value="">- All -</option>
+                        <?php if (is_iterable($tSubscriptions)): ?>
+                            <?php foreach ($tSubscriptions as $s) { ?>
+                                <option value="<?php echo $s->id ?>"
+                                        data-org-id="<?php echo $s->organisation_id ?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="product">Product / Service: <?php if($filterProduct != "" && $filterProduct != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="product">Product: <?php if ($filterProduct != "" && $filterProduct != null) { ?><a href="#" class="clear-filter"
+                                                                                                                             title="Clear Filter">X</a><?php } ?></label>
                     <select name="product" id="product" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tProducts ) ):?>
-                            <?php foreach($tProducts as $t){ ?>
-                                <option value="<?php echo !$t->PRODUCT_WP_ID ? 0 : $t->PRODUCT_WP_ID?>" <?php echo $filterProduct != "" && $t->PRODUCT_WP_ID == intval($filterProduct) ? "selected='selected'" : "" ?>><?php echo !$t->PRODUCT_WP_ID ? "Not assigned" : $t->PRODUCT_TITLE ?></option>
+                        <?php if (is_iterable($filters['product'])): ?>
+                            <?php foreach ($filters['product'] as $t) { ?>
+                                <option
+                                    value="<?php echo !$t->product_id ? 0 : $t->product_id ?>" <?php echo $filterProduct != "" && $t->product_id == intval($filterProduct) ? "selected='selected'" : "" ?>><?php echo get_post_meta($t->product_id, 'product_name', true);?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="suite">Test Suite: <?php if($filterSuite != "" && $filterSuite != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="suite">Test Suite: <?php if ($filterSuite != "" && $filterSuite != null) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
+                    </label>
                     <select name="suite" id="suite" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tSuites ) ):?>
-                            <?php foreach($tSuites as $s){ ?>
-                                <option value="<?php echo !$s->ID ? 0 : $s->ID?>" <?php echo $filterSuite != "" && $s->ID == intval($filterSuite) ? "selected='selected'" : "" ?>>
-                                    <?php echo !$s->NAME ? 'Not assigned' : $s->NAME?></option>
+                        <?php if (is_iterable($filters['test_suite_id'])): ?>
+                            <?php foreach ($filters['test_suite_id'] as $s) { ?>
+                                <option
+                                    value="<?php echo !$s->test_suite_id ? 0 : $s->test_suite_id ?>" <?php echo $filterSuite != "" && $s->test_suite_id == intval($filterSuite) ? "selected='selected'" : "" ?>>
+                                    <?php echo !$s->test_suite_id ? 'Not assigned' : get_post_meta($s->test_suite_id, 'ts_name', true) ?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="case">Test Case: <?php if($filterCase != "" && $filterCase != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="case">Test Case: <?php if ($filterCase != "" && $filterCase != null) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?>
+                    </label>
                     <select name="case" id="case" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tCases ) ):?>
-                            <?php foreach($tCases as $c){ ?>
-                                <option value="<?php echo !$c->ID ? 0 : $c->ID?>" <?php echo $filterCase != "" && $c->ID == intval($filterCase) ? "selected='selected'" : "" ?>>
+                        <?php if (is_iterable($filters['test_case_id'])): ?>
+                            <?php foreach ($filters['test_case_id'] as $c) { ?>
+                                <option
+                                    value="<?php echo !$c->test_case_id ? 0 : $c->test_case_id ?>" <?php echo $filterCase != "" && $c->test_case_id == intval($filterCase) ? "selected='selected'" : "" ?>>
                                     <?php
-                                    if($c->NAME == 'DEFAULT')
-                                    {
-                                        echo 'Not Assigned';
-                                    }else{
-                                        echo str_replace("_V", " v", $c->NAME);
-                                    }
+                                    echo get_the_title($c->test_case_id);
                                     ?>
                                 </option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li class="first">
-                    <label for="service">TWAIN Data Group: <?php if($filterService){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="serv" id="service" autocomplete="off" class="select">
+                    <label for="service">TWAIN Data Group: <?php if ($filterGroup) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="group" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tServices ) ):?>
-                            <?php foreach($tServices as $s){ ?>
-                                <option value="<?php echo urlencode($s)?>" <?php echo $s == $filterService ? "selected='selected'" : "" ?>><?php echo $s ?></option>
+                        <?php if (is_iterable($filters['data_group'])): ?>
+                            <?php foreach ($filters['data_group'] as $s) { ?>
+                                <option
+                                    value="<?php echo $s->data_group ?>" <?php echo $s->data_group == $filterGroup ? "selected='selected'" : "" ?>><?php echo $s->data_group ?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="action">TWAIN Data Type: <?php if($filterAction){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="action" id="action" autocomplete="off" class="select">
+                    <label for="action">TWAIN Data Type: <?php if ($filterType) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="type" id="action" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tActions ) ):?>
-                            <?php foreach($tActions as $a){ ?>
-                                <option value="<?php echo urlencode($a)?>" <?php echo $a == $filterAction ? "selected='selected'" : "" ?>><?php echo $a ?></option>
+                        <?php if (is_iterable($filters['data_type'])): ?>
+                            <?php foreach ($filters['data_type'] as $a) { ?>
+                                <option
+                                    value="<?php echo $a->data_argument_type ?>" <?php echo $a->data_argument_type == $filterType ? "selected='selected'" : "" ?>><?php echo $a->data_argument_type ?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="partyid">TWAIN Message: <?php if($filterPartyId){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="partyid" id="partyid" autocomplete="off" class="select">
+                    <label for="partyid">TWAIN Message: <?php if ($filterMessage) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="message" id="partyid" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if( is_iterable( $tPartyIDs ) ):?>
-                            <?php foreach($tPartyIDs as $p){ ?>
-                                <option value="<?php echo $p?>" <?php echo $p == $filterPartyId ? "selected='selected'" : "" ?>><?php echo $p ?></option>
+                        <?php if (is_iterable($filters['data_message'])): ?>
+                            <?php foreach ($filters['data_message'] as $p) { ?>
+                                <option
+                                    value="<?php echo $p->messages ?>" <?php echo $p->messages == $filterMessage ? "selected='selected'" : "" ?>><?php echo $p->messages ?></option>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="date">Date: <?php if($filterDate){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate  ?  '' : $filterDate; ?>" style="width: 170px;"/>
-                </li>
-                <li class="first">
-                    <label for="tag">Tag: <?php if ($filterTags != null) :?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php endif; ?></label>
-                    <select name="tag" id="tag" autocomplete="off" class="select">
-                        <option value="all">- All -</option>
-                        <?php if( is_iterable( $tTagsIDs ) ):?>
-                            <?php foreach($tTagsIDs as $tag){ ?>
-                                <?php if (is_null($tag->ID)) continue;?>
-                                <option value="<?php echo $tag->ID?>" <?php echo $filterTags != "" && $tag->ID == intval($filterTags) ? "selected='selected'" : "" ?>><?php echo $tag->NAME ?></option>
-                            <?php } ?>
-                        <?php endif;?>
-                    </select>
+                    <label for="date">Date: <?php if ($filterDate) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate ? '' : $filterDate; ?>" style="width: 170px;"/>
                 </li>
             </ul>
             <div class="search-filter-actions">
