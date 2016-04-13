@@ -51,6 +51,58 @@ define({ "api": [
     "groupTitle": "Profiles"
   },
   {
+    "type": "delete",
+    "url": "/v1/testcases/stop",
+    "title": "Delete testing details",
+    "name": "deleteTestingDetails",
+    "group": "TestCases",
+    "description": "<p>Method used to configure reset testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>User didn't use start method yet</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Please use start method first:",
+          "content": "{\"errors\":{\"message\":\"Please use start method first\"},\"code\":400}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"message\":\"Ok\",\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestCasesController.php",
+    "groupTitle": "TestCases"
+  },
+  {
     "type": "get",
     "url": "/v1/testcase",
     "title": "Request Test Execution profile",
@@ -174,6 +226,230 @@ define({ "api": [
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
     "groupTitle": "TestCases"
+  },
+  {
+    "type": "get",
+    "url": "/v1/testcases/status",
+    "title": "Get testing details",
+    "name": "getTestingDetails",
+    "group": "TestCases",
+    "description": "<p>Method used to get testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>User didn't use start method yet</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "You are not running any test case now:",
+          "content": "{\"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"message\":\"Ok\",\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestCasesController.php",
+    "groupTitle": "TestCases"
+  },
+  {
+    "type": "post",
+    "url": "/v1/testcases/start",
+    "title": "Set testing details",
+    "name": "setTestingDetails",
+    "group": "TestCases",
+    "description": "<p>Method used to configure testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Required field missed</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>User already has running test case</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error:",
+          "content": "{\"errors\":{\"test_suite_id\":[\"The selected test suite id is invalid.\"],\"test_case_id\":[\"The selected test case id is invalid.\"],\"product_id\":[\"The selected product id is invalid.\"]},\"code\":422}",
+          "type": "json"
+        },
+        {
+          "title": "Please stop running case before start:",
+          "content": "{\"errors\":{\"message\":\"Please stop running case before start\"},\"code\":400}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestCasesController.php",
+    "groupTitle": "TestCases"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/testsuites/{SUITE_ID}/testcases",
+    "title": "Request Test Suite's Test Case",
+    "name": "getTestCases",
+    "group": "TestSuites",
+    "description": "<p>Method used to get test suite's active test cases</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Subscriptions not found:",
+          "content": "{\"error\":{\"message\":\"Subscriptions not found\"},\"code\":404}",
+          "type": "json"
+        },
+        {
+          "title": "Test Cases not found:",
+          "content": "{\"error\":{\"message\":\"Test Cases not found\"},\"code\":404}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"data\":[{\"id\":\"dsm-01-v1-0-1\",\"title\":\"DSM-01 v1.0.1\"},{\"id\":\"ixf-01-v1-0\",\"title\":\"IXF-01 v1.0\"},{\"id\":\"dsm-02-v1-0\",\"title\":\"DSM-02 v1.0\"},{\"id\":\"cap-01a-v1-0\",\"title\":\"CAP-01a v1.0\"},{\"id\":\"cap-01b-v1-0\",\"title\":\"CAP-01b v1.0\"},{\"id\":\"cap-03-v1-0\",\"title\":\"CAP-03 v1.0\"},{\"id\":\"cap-05-v1-0\",\"title\":\"CAP-05 v1.0\"},{\"id\":\"ixf-02-v1-0\",\"title\":\"IXF-02 v1.0\"},{\"id\":\"ixf-03a-v1-0\",\"title\":\"IXF-03a v1.0\"},{\"id\":\"ixf-03b-v1-0\",\"title\":\"IXF-03b v1.0\"},{\"id\":\"ixf-04a-v1-0\",\"title\":\"IXF-04a v1.0\"},{\"id\":\"ixf-04b-v1-0\",\"title\":\"IXF-04b v1.0\"},{\"id\":\"ixf-04c-v1-0\",\"title\":\"IXF-04c v1.0\"},{\"id\":\"ixf-04d-v1-0\",\"title\":\"IXF-04d v1.0\"},{\"id\":\"ixf-05a-v1-0\",\"title\":\"IXF-05a v1.0\"},{\"id\":\"ixf-05b-v1-0\",\"title\":\"IXF-05b v1.0\"},{\"id\":\"ixf-05c-v1-0\",\"title\":\"IXF-05c v1.0\"},{\"id\":\"ixf-05d-v1-0\",\"title\":\"IXF-05d v1.0\"},{\"id\":\"err-01-v1-0\",\"title\":\"ERR-01 v1.0\"},{\"id\":\"err-02-v1-0\",\"title\":\"ERR-02 v1.0\"},{\"id\":\"err-04-v1-0\",\"title\":\"ERR-04 v1.0\"},{\"id\":\"dsm-03-v1-0\",\"title\":\"DSM-03 v1.0\"},{\"id\":\"dsm-04-v1-0\",\"title\":\"DSM-04 v1.0\"},{\"id\":\"dsm-05-v1-0\",\"title\":\"DSM-05 v1.0\"},{\"id\":\"err-03-v1-0\",\"title\":\"ERR-03 v1.0\"},{\"id\":\"dsm-06-v1-0\",\"title\":\"DSM-06 v1.0\"}],\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestSuitesController.php",
+    "groupTitle": "TestSuites"
+  },
+  {
+    "type": "get",
+    "url": "/v1/testsuites",
+    "title": "Request Test Suites list",
+    "name": "getTestSuites",
+    "group": "TestSuites",
+    "description": "<p>Method used to get test suites list</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Subscriptions not found:",
+          "content": "{\"error\":{\"message\":\"Subscriptions not found\"},\"code\":404}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"data\":[{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},{\"id\":\"twain-compliance-technical-ds-v1-0\",\"title\":\"TWAIN Compliance Technical - DS v1.0\"}],\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestSuitesController.php",
+    "groupTitle": "TestSuites"
   },
   {
     "type": "post",
