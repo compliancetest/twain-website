@@ -17,6 +17,7 @@ class SimpleAuth
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        return Auth::onceBasic('user_email') ?: $next($request);
+        $field = filter_var($request->getUser(), FILTER_VALIDATE_EMAIL) ? 'user_email' : 'user_login';
+        return Auth::onceBasic($field) ?: $next($request);
     }
 }
