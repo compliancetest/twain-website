@@ -6,6 +6,8 @@ use App\Profile;
 use App\TestCase;
 use App\TestingDetail;
 use App\Post;
+use Carbon\Carbon;
+use Validator;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel;
 
@@ -104,4 +106,155 @@ class TestCasesController extends BaseApiController
         }
         return $this->respondWithData($responseData);
     }
+
+    /**
+     * @api {post} /v1/testcase/start Set testing details
+     *
+     * @apiName setTestingDetails
+     * @apiGroup TestCases
+     *
+     * @apiDescription Method used to configure testing details
+     *
+     * @apiError 422 Required field missed
+     * @apiErrorExample {json} Validation error:
+     * {"errors":{"test_suite_id":["The selected test suite id is invalid."],"test_case_id":["The selected test case id is invalid."],"product_id":["The selected product id is invalid."]},"code":422}
+     *
+     *
+     * @apiError 400 User already has running test case
+     * @apiErrorExample {json} Please stop running case before start:
+     * {"errors":{"message":"Please stop running case before start"},"code":400}
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {"data":{"ExecutionId":"026d9d68-eb09-41be-af73-ab3e0db971c9","TestSuite":{"id":"twain-compliance-technical-app-v1-0","title":"TWAIN Compliance Technical - App v1.0"},"TestCase":{"id":"vv-01-v1-0","title":"VV-01 v1.0"},"Product":{"id":"test","title":"Test"},"ExecutionProfile":{"Profile":{"Type":"TCEF","Purpose":"TCEF for DS test case","Title":"VV-01_v1.0 TEFC","Description":"Test Case Execution Flow for VV-01 test case","Version":{"Major":1,"Minor":0}},"Meta":{"SystemUnderTest":"DataSource","Capabilities":[{"Cap":"ACAP_XFERMECH"}],"InitialState":4},"TestSteps":[[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESETALL"},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":2}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_GETCURRENT","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":3},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":3,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":4,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":5},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":6}],"SkipConditions":[{"ItemType":"ReturnCode","Operator":"NOT_EQ","Value":"TWRC_SUCCESS"}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESET","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":7},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":7,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":8,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":9},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":10}]}]]}},"code":200}
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     * @apiVersion 1.0.0
+     */
+
+    public function start(\Illuminate\Http\Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'test_suite_id' => 'required|exists:wp_posts,post_name',
+            'test_case_id' => 'required|exists:wp_posts,post_name',
+            'product_id' => 'required|exists:wp_posts,post_name',
+        ]);
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+        $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
+        if ($model) {
+            return $this->respondBadRequest('Please stop running case before start');
+        }
+
+
+        $product = Post::where(['post_type' => 'product-service', 'post_name' => $request->get('product_id')])->first();
+        $testSuite = Post::where(['post_type' => 'test-suite', 'post_name' => $request->get('test_suite_id')])->first();
+        $testCase = Post::where(['post_type' => 'test-case', 'post_name' => $request->get('test_case_id')])->first();
+
+        $model = TestingDetail::firstOrNew(['user_id' => Auth::user()->ID]);
+        $model->product_id = $product->ID;
+        $model->test_case_id = $testCase->ID;
+        $model->test_suite_id = $testSuite->ID;
+        $model->start_time = Carbon::now();
+        $model->is_running = true;
+        $model->save();
+        $response = [
+            'ExecutionId' => $model->id,
+            'TestSuite' => [
+                'id' => $testSuite->post_name,
+                'title' => $testSuite->post_title,
+            ],
+            'TestCase' => [
+                'id' => $testCase->post_name,
+                'title' => $testCase->post_title,
+            ],
+            'Product' => [
+                'id' => $product->post_name,
+                'title' => $product->post_title,
+            ],
+            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3()
+        ];
+        return $this->respondWithData($response);
+    }
+
+    /**
+     * @api {delete} /v1/testcase/stop Delete testing details
+     *
+     * @apiName deleteTestingDetails
+     * @apiGroup TestCases
+     *
+     * @apiDescription Method used to configure reset testing details
+     *
+     * @apiError 400 User didn't use start method yet
+     * @apiErrorExample {json} Please use start method first:
+     * {"errors":{"message":"Please use start method first"},"code":400}
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {"message":"Ok","code":200}
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     * @apiVersion 1.0.0
+     */
+
+    public function stop()
+    {
+        if (!TestingDetail::where(['user_id' => Auth::user()->ID])->first()) {
+            return $this->respondBadRequest('Please use start method first');
+        }
+        TestingDetail::where(['user_id' => Auth::user()->ID])->delete();
+        return $this->respondSuccess('Ok');
+    }
+
+    /**
+     * @api {get} /v1/testcase/status Get testing details
+     *
+     * @apiName getTestingDetails
+     * @apiGroup TestCases
+     *
+     * @apiDescription Method used to get testing details
+     *
+     * @apiError 404 User didn't use start method yet
+     * @apiErrorExample {json} You are not running any test case now:
+     * {"data":{"ExecutionId":"026d9d68-eb09-41be-af73-ab3e0db971c9","TestSuite":{"id":"twain-compliance-technical-app-v1-0","title":"TWAIN Compliance Technical - App v1.0"},"TestCase":{"id":"vv-01-v1-0","title":"VV-01 v1.0"},"Product":{"id":"test","title":"Test"},"ExecutionProfile":{"Profile":{"Type":"TCEF","Purpose":"TCEF for DS test case","Title":"VV-01_v1.0 TEFC","Description":"Test Case Execution Flow for VV-01 test case","Version":{"Major":1,"Minor":0}},"Meta":{"SystemUnderTest":"DataSource","Capabilities":[{"Cap":"ACAP_XFERMECH"}],"InitialState":4},"TestSteps":[[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESETALL"},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":2}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_GETCURRENT","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":3},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":3,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":4,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":5},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":6}],"SkipConditions":[{"ItemType":"ReturnCode","Operator":"NOT_EQ","Value":"TWRC_SUCCESS"}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESET","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":7},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":7,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":8,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":9},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":10}]}]]}},"code":200}
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {"message":"Ok","code":200}
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     * @apiVersion 1.0.0
+     */
+
+    public function status()
+    {
+        $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
+        if (!$model) {
+            return $this->respondNotFound('You are not running any test case now');
+        }
+
+        $product = Post::find($model->product_id);
+        $testSuite = Post::find($model->test_suite_id);
+        $testCase = Post::find($model->test_case_id);
+
+        $response = [
+            'ExecutionId' => $model->id,
+            'TestSuite' => [
+                'id' => $testSuite->post_name,
+                'title' => $testSuite->post_title,
+            ],
+            'TestCase' => [
+                'id' => $testCase->post_name,
+                'title' => $testCase->post_title,
+            ],
+            'Product' => [
+                'id' => $product->post_name,
+                'title' => $product->post_title,
+            ],
+            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3()
+        ];
+        return $this->respondWithData($response);
+    }
+
 }
