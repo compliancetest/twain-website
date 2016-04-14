@@ -409,8 +409,8 @@ function saveSuite()
     //Save Initial Messages
     $init_message = $_POST['init_message'];
     cp_update_post_meta($id, 'init_message', $init_message);
-    
-    //Save Roles    
+
+    //Save Roles
     $roleNames = array();
     $roleDescs = array();
     $roleProfileTypes = array();

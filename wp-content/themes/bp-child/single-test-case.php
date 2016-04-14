@@ -143,6 +143,23 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                         </div>
                         <div class="clear"></div>
                     </div>
+
+                    <?php if(!empty($case->capabilities)):?>
+
+                        <div class="grey-border-bottom width98P"></div>
+
+                         <div class="grid_row white_bcg noborderbottom">
+                            <div class="grid_cell width10P left size13 bold dark_blue_txt">Capabilities:</div>
+                            <div class="grid_cell width90P left redactor_editor">
+                                <?php
+                                    echo implode(', ', $case->capabilities);
+                                ?>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                    <?php endif;?>
+
                 </div>
 
             </div> <!--end infos-->
