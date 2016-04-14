@@ -52,7 +52,7 @@
   },
   {
     "type": "delete",
-    "url": "/v1/testcases/stop",
+    "url": "/v1/testcase/stop",
     "title": "Delete testing details",
     "name": "deleteTestingDetails",
     "group": "TestCases",
@@ -229,7 +229,7 @@
   },
   {
     "type": "get",
-    "url": "/v1/testcases/status",
+    "url": "/v1/testcase/status",
     "title": "Get testing details",
     "name": "getTestingDetails",
     "group": "TestCases",
@@ -281,7 +281,7 @@
   },
   {
     "type": "post",
-    "url": "/v1/testcases/start",
+    "url": "/v1/testcase/start",
     "title": "Set testing details",
     "name": "setTestingDetails",
     "group": "TestCases",

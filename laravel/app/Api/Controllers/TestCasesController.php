@@ -108,7 +108,7 @@ class TestCasesController extends BaseApiController
     }
 
     /**
-     * @api {post} /v1/testcases/start Set testing details
+     * @api {post} /v1/testcase/start Set testing details
      *
      * @apiName setTestingDetails
      * @apiGroup TestCases
@@ -179,7 +179,7 @@ class TestCasesController extends BaseApiController
     }
 
     /**
-     * @api {delete} /v1/testcases/stop Delete testing details
+     * @api {delete} /v1/testcase/stop Delete testing details
      *
      * @apiName deleteTestingDetails
      * @apiGroup TestCases
@@ -208,7 +208,7 @@ class TestCasesController extends BaseApiController
     }
 
     /**
-     * @api {get} /v1/testcases/status Get testing details
+     * @api {get} /v1/testcase/status Get testing details
      *
      * @apiName getTestingDetails
      * @apiGroup TestCases
