@@ -70,7 +70,7 @@ class TestSuitesController extends BaseApiController
      * {"error":{"message":"Test Cases not found"},"code":404}
      *
      * @apiSuccessExample {json} Success-Response:
-     * {"data":[{"id":"dsm-01-v1-0-1","title":"DSM-01 v1.0.1"},{"id":"ixf-01-v1-0","title":"IXF-01 v1.0"},{"id":"dsm-02-v1-0","title":"DSM-02 v1.0"},{"id":"cap-01a-v1-0","title":"CAP-01a v1.0"},{"id":"cap-01b-v1-0","title":"CAP-01b v1.0"},{"id":"cap-03-v1-0","title":"CAP-03 v1.0"},{"id":"cap-05-v1-0","title":"CAP-05 v1.0"},{"id":"ixf-02-v1-0","title":"IXF-02 v1.0"},{"id":"ixf-03a-v1-0","title":"IXF-03a v1.0"},{"id":"ixf-03b-v1-0","title":"IXF-03b v1.0"},{"id":"ixf-04a-v1-0","title":"IXF-04a v1.0"},{"id":"ixf-04b-v1-0","title":"IXF-04b v1.0"},{"id":"ixf-04c-v1-0","title":"IXF-04c v1.0"},{"id":"ixf-04d-v1-0","title":"IXF-04d v1.0"},{"id":"ixf-05a-v1-0","title":"IXF-05a v1.0"},{"id":"ixf-05b-v1-0","title":"IXF-05b v1.0"},{"id":"ixf-05c-v1-0","title":"IXF-05c v1.0"},{"id":"ixf-05d-v1-0","title":"IXF-05d v1.0"},{"id":"err-01-v1-0","title":"ERR-01 v1.0"},{"id":"err-02-v1-0","title":"ERR-02 v1.0"},{"id":"err-04-v1-0","title":"ERR-04 v1.0"},{"id":"dsm-03-v1-0","title":"DSM-03 v1.0"},{"id":"dsm-04-v1-0","title":"DSM-04 v1.0"},{"id":"dsm-05-v1-0","title":"DSM-05 v1.0"},{"id":"err-03-v1-0","title":"ERR-03 v1.0"},{"id":"dsm-06-v1-0","title":"DSM-06 v1.0"}],"code":200}
+     * {"data":[{"id":"dsm-01-v1-0-1","title":"DSM-01 v1.0.1","description":"Test successful open the data source manager. Transition the session state from 1 to 2."},{"id":"ixf-01-v1-0","title":"IXF-01 v1.0","description":"Image transfer in the Native mode"},{"id":"dsm-02-v1-0","title":"DSM-02 v1.0","description":"Test successful select the data source. Transition the session state from 2 to 3."},{"id":"cap-01a-v1-0","title":"CAP-01a v1.0","description":"Test successful negotiation of TWAIN mandatory capability using the data source's user interface. MSG_ENABLEDS variant."},{"id":"cap-01b-v1-0","title":"CAP-01b v1.0","description":"Test successful negotiation of TWAIN mandatory capability using the data source's user interface. MSG_ENABLEDSUIONLY variant."},{"id":"cap-03-v1-0","title":"CAP-03 v1.0","description":"Test error handling for negotiation of TWAIN mandatory capabilities through TWAIN\u2019s programmatic interface."},{"id":"cap-05-v1-0","title":"CAP-05 v1.0","description":"Test successful negotiation of TWAIN mandatory capabilities through TWAIN\u2019s programmatic interface."},{"id":"ixf-02-v1-0","title":"IXF-02 v1.0","description":"Image transfer in the Memory mode."},{"id":"ixf-03a-v1-0","title":"IXF-03a v1.0","description":"Image transfer in the File mode."},{"id":"ixf-03b-v1-0","title":"IXF-03b v1.0","description":"Image transfer in the Memory-File mode."},{"id":"ixf-04a-v1-0","title":"IXF-04a v1.0","description":"Test error handling for all error conditions during image transfer in the Native mode."},{"id":"ixf-04b-v1-0","title":"IXF-04b v1.0","description":"Test error handling for all error conditions during image transfer in the Memory mode."},{"id":"ixf-04c-v1-0","title":"IXF-04c v1.0","description":"Test error handling for all error conditions during image transfer in File mode."},{"id":"ixf-04d-v1-0","title":"IXF-04d v1.0","description":"Test error handling for all error conditions during image transfer in the Memory-File mode."},{"id":"ixf-05a-v1-0","title":"IXF-05a v1.0","description":"Test transfer cancel during image transfer in the Native mode."},{"id":"ixf-05b-v1-0","title":"IXF-05b v1.0","description":"Test transfer cancel during image transfer in the Memory mode."},{"id":"ixf-05c-v1-0","title":"IXF-05c v1.0","description":"Test transfer cancel during image transfer in the File mode."},{"id":"ixf-05d-v1-0","title":"IXF-05d v1.0","description":"Test transfer cancel during image transfer in the Memory-File mode."},{"id":"err-01-v1-0","title":"ERR-01 v1.0","description":"Test correct transition state from 7 to 6 to 5."},{"id":"err-02-v1-0","title":"ERR-02 v1.0","description":"Test correct transition state from 5 to 4. Disable the data source."},{"id":"err-04-v1-0","title":"ERR-04 v1.0","description":"Test correct transition state from 3 to 2. Close the data source manager."},{"id":"dsm-03-v1-0","title":"DSM-03 v1.0","description":"Test successful open the data source. Transition the session state from 3 to 4."},{"id":"dsm-04-v1-0","title":"DSM-04 v1.0","description":"Test unsuccessful open the data source manager. Handle error conditions in the session state 1 including TWCC_LOWMEMORY and TWCC_SEQERROR."},{"id":"dsm-05-v1-0","title":"DSM-05 v1.0","description":"Test unsuccessful select the data source. Handle error an condition in the session state 2 TWCC_LOWMEMORY."},{"id":"err-03-v1-0","title":"ERR-03 v1.0","description":"Test correct transition state from 4 to 3. Close the data source."},{"id":"dsm-06-v1-0","title":"DSM-06 v1.0","description":"Test unsuccessful open the data source. Handle error conditions in the session state 3 including TWCC_LOWMEMORY, TWCC_MAXCONNECTIONS, TWCC_NODS and TWCC_OPERATIONERROR."}],"code":200}
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
@@ -98,9 +98,13 @@ class TestSuitesController extends BaseApiController
                     ->where('pm2.meta_value', '=', 'Active')
                     ->where('pm2.meta_key', '=', 'test_case_status');
             })
+            ->join('wp_postmeta AS pm3', function ($join) {
+                $join->on('pm3.post_id', '=', 'wp_posts.ID')
+                    ->where('pm3.meta_key', '=', 'test_intent_description');
+            })
             ->where('wp_posts.post_type', '=', 'test-case')
             ->groupBy('wp_posts.ID')
-            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm2.meta_value')->get();
+            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm3.meta_value')->get();
 
         if (empty($testCases)) {
             return $this->respondNotFound("Test Cases not found");
@@ -110,6 +114,7 @@ class TestSuitesController extends BaseApiController
             $cases[] = [
                 'id' => $testCase->post_name,
                 'title' => $testCase->post_title,
+                'description' => strip_tags($testCase->meta_value),
             ];
         }
 
