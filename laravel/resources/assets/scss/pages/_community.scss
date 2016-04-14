@@ -606,4 +606,47 @@
   .upload-file-field{
     margin: 0 0 10px 0;
   }
+
+  .attached-file-list{
+    border: 1px solid #cbcbcb;
+    margin: 5px 0 0 0;
+
+    li{
+      @include legacy-pie-clearfix;
+      background: #fff;
+      padding: 6px 14px;
+      position: relative;
+
+      &:before{
+        content: '';
+        @include commonSprite(footer-links-arrow);
+        position: absolute;
+        left: 8px;
+        top: 16px;
+        margin: -2px 0 0 0;
+      }
+
+      &:nth-child(2n+1){
+        background: #f3f3f3;
+      }
+
+      .doc-attachment-mime-icon{
+        float: left;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 3px 0 3px 29px;
+        vertical-align: middle;
+        line-height: 18px;
+        overflow: hidden;
+        max-width: 100%;
+      }
+
+      .btn-delete{
+        float: right;
+      }
+
+    }
+
+  }
+
 }

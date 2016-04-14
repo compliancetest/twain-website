@@ -8824,8 +8824,20 @@ body.modal-open,
 .page-title .page-title-actions {
   float: right;
 }
+@media only screen and (max-width: 640px) {
+  /* line 65, ../scss/_common.scss */
+  .page-title .page-title-actions {
+    clear: both;
+    padding: 10px 0 0 0;
+    float: none;
+  }
+}
+/* line 74, ../scss/_common.scss */
+.page-title .page-title-actions .btn {
+  margin-left: 5px;
+}
 
-/* line 70, ../scss/_common.scss */
+/* line 80, ../scss/_common.scss */
 .block-loading {
   display: none;
   text-align: center;
@@ -8838,7 +8850,7 @@ body.modal-open,
   top: 0;
   bottom: 0;
 }
-/* line 82, ../scss/_common.scss */
+/* line 92, ../scss/_common.scss */
 .block-loading .loading-content {
   position: absolute;
   width: 100%;
@@ -8846,7 +8858,7 @@ body.modal-open,
   padding: 0;
   margin: -54px 0 0 0;
 }
-/* line 89, ../scss/_common.scss */
+/* line 99, ../scss/_common.scss */
 .block-loading .loading-content .loader {
   background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
@@ -8854,13 +8866,13 @@ body.modal-open,
   display: block;
   margin: 0 auto;
 }
-/* line 97, ../scss/_common.scss */
+/* line 107, ../scss/_common.scss */
 .block-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 103, ../scss/_common.scss */
+/* line 113, ../scss/_common.scss */
 .block-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
@@ -9293,7 +9305,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -514px;
+  background-position: 0 -466px;
   height: 24px;
   width: 18px;
 }
@@ -9301,7 +9313,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -538px;
+  background-position: 0 -418px;
   height: 24px;
   width: 18px;
 }
@@ -9309,7 +9321,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -466px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9317,7 +9329,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -418px;
+  background-position: 0 -562px;
   height: 24px;
   width: 18px;
 }
@@ -9330,14 +9342,22 @@ select.form-control {
   width: 18px;
 }
 
-/* line 160, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-history:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -514px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 164, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 166, ../scss/blocks/_buttons.scss */
+/* line 170, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9372,14 +9392,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -93px;
+  background-position: 0 -119px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -119px;
+  background-position: -12px -93px;
   height: 12px;
   width: 12px;
 }
@@ -9390,7 +9410,7 @@ select.form-control {
   height: 9px;
   width: 12px;
 }
-/* line 194, ../scss/blocks/_buttons.scss */
+/* line 198, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
@@ -9404,7 +9424,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -46px;
+  background-position: -10px -24px;
   height: 11px;
   width: 13px;
 }
@@ -9425,7 +9445,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -24px;
+  background-position: 0 -46px;
   height: 11px;
   width: 13px;
 }
@@ -9444,7 +9464,7 @@ select.form-control {
   width: 14px;
 }
 
-/* line 222, ../scss/blocks/_buttons.scss */
+/* line 226, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9469,7 +9489,7 @@ select.form-control {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 239, ../scss/blocks/_buttons.scss */
+/* line 243, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9481,25 +9501,25 @@ select.form-control {
   left: 6px;
   top: 7px;
 }
-/* line 247, ../scss/blocks/_buttons.scss */
+/* line 251, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 253, ../scss/blocks/_buttons.scss */
+/* line 257, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 257, ../scss/blocks/_buttons.scss */
+/* line 261, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 264, ../scss/blocks/_buttons.scss */
+/* line 268, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9509,14 +9529,14 @@ select.form-control {
   top: 0;
   z-index: 100;
 }
-/* line 273, ../scss/blocks/_buttons.scss */
+/* line 277, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 279, ../scss/blocks/_buttons.scss */
+/* line 283, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9524,39 +9544,39 @@ select.form-control {
   top: 0;
   left: 0;
 }
-/* line 287, ../scss/blocks/_buttons.scss */
+/* line 291, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 293, ../scss/blocks/_buttons.scss */
+/* line 297, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 299, ../scss/blocks/_buttons.scss */
+/* line 303, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -597px;
+  background-position: 0 -649px;
   height: 28px;
   width: 21px;
 }
-/* line 305, ../scss/blocks/_buttons.scss */
+/* line 309, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -625px;
+  background-position: 0 -677px;
   height: 28px;
   width: 21px;
 }
-/* line 311, ../scss/blocks/_buttons.scss */
+/* line 315, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -653px;
+  background-position: 0 -621px;
   height: 28px;
   width: 21px;
 }
-/* line 316, ../scss/blocks/_buttons.scss */
+/* line 320, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
@@ -9997,7 +10017,7 @@ select.form-control {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -212px;
+  background-position: 0 -233px;
   height: 21px;
   width: 21px;
 }
@@ -10006,7 +10026,7 @@ select.form-control {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -233px;
+  background-position: 0 -212px;
   height: 21px;
   width: 21px;
 }
@@ -11322,7 +11342,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -276px;
+  background-position: 0 -299px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11331,7 +11351,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -299px;
+  background-position: 0 -276px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11361,6 +11381,137 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   background: #fff;
   -webkit-box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
   box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
+}
+
+/* line 1, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-icon {
+  float: left;
+  height: 24px;
+  padding-left: 29px;
+  background: transparent url("../images/mime-type-sprites.png") no-repeat 0 0;
+}
+
+/* Archive */
+/* line 8, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-tar,
+.doc-attachment-mime-zip,
+.doc-attachment-mime-gz,
+.doc-attachment-mime-gzip,
+.doc-attachment-mime-rar,
+.doc-attachment-mime-7z {
+  background-position: 0 0;
+}
+
+/* Audio */
+/* line 18, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-mp3,
+.doc-attachment-mime-m4a,
+.doc-attachment-mime-m4b,
+.doc-attachment-mime-ra,
+.doc-attachment-mime-ram,
+.doc-attachment-mime-wav,
+.doc-attachment-mime-ogg,
+.doc-attachment-mime-oga,
+.doc-attachment-mime-mid,
+.doc-attachment-mime-midi,
+.doc-attachment-mime-wma,
+.doc-attachment-mime-mka {
+  background-position: 0 -40px;
+}
+
+/* Calendar */
+/* line 34, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-ics {
+  background-position: 0 -80px;
+}
+
+/* Database */
+/* line 39, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-mdb,
+.doc-attachment-mime-odb {
+  background-position: 0 -120px;
+}
+
+/* Drawing */
+/* line 45, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-odg {
+  background-position: 0 -160px;
+}
+
+/* Image */
+/* line 50, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-jpg,
+.doc-attachment-mime-jpeg,
+.doc-attachment-mime-gif,
+.doc-attachment-mime-png,
+.doc-attachment-mime-bmp,
+.doc-attachment-mime-tif,
+.doc-attachment-mime-tiff,
+.doc-attachment-mime-ico {
+  background-position: 0 -200px;
+}
+
+/* Report */
+/* line 62, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-pdf {
+  background-position: 0 -240px;
+}
+
+/* Spreadsheet */
+/* line 67, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-xla,
+.doc-attachment-mime-xls,
+.doc-attachment-mime-xlt,
+.doc-attachment-mime-xlw,
+.doc-attachment-mime-xlsx,
+.doc-attachment-mime-xlsm,
+.doc-attachment-mime-xlsb,
+.doc-attachment-mime-xlsb,
+.doc-attachment-mime-xlsx,
+.doc-attachment-mime-xlsm,
+.doc-attachment-mime-xlam,
+.doc-attachment-mime-ods,
+.doc-attachment-mime-odc {
+  background-position: 0 -280px;
+}
+
+/* Text */
+/* line 84, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-txt,
+.doc-attachment-mime-asc,
+.doc-attachment-mime-c,
+.doc-attachment-mime-cc,
+.doc-attachment-mime-h,
+.doc-attachment-mime-csv,
+.doc-attachment-mime-tsv,
+.doc-attachment-mime-ics,
+.doc-attachment-mime-rtx,
+.doc-attachment-mime-css,
+.doc-attachment-mime-htm,
+.doc-attachment-mime-html {
+  background-position: 0 -320px;
+}
+
+/* Video */
+/* line 100, ../scss/blocks/_mime-types.scss */
+.doc-attachment-mime-asf,
+.doc-attachment-mime-asx,
+.doc-attachment-mime-wax,
+.doc-attachment-mime-wmv,
+.doc-attachment-mime-wmx,
+.doc-attachment-mime-avi,
+.doc-attachment-mime-divx,
+.doc-attachment-mime-flv,
+.doc-attachment-mime-mov,
+.doc-attachment-mime-qt,
+.doc-attachment-mime-mpeg,
+.doc-attachment-mime-mpg,
+.doc-attachment-mime-mpe,
+.doc-attachment-mime-mp4,
+.doc-attachment-mime-m4v,
+.doc-attachment-mime-ogv,
+.doc-attachment-mime-mkv {
+  background-position: 0 -360px;
 }
 
 /* line 1, ../scss/pages/_community.scss */
@@ -11549,7 +11700,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -562px;
+  background-position: -11px -134px;
   height: 16px;
   width: 16px;
 }
@@ -11557,7 +11708,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -134px;
+  background-position: 0 -586px;
   height: 16px;
   width: 16px;
 }
@@ -11575,7 +11726,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -562px;
+  background-position: -16px -586px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -11983,6 +12134,59 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .article-attachments-box .upload-file-field {
   margin: 0 0 10px 0;
 }
+/* line 610, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list {
+  border: 1px solid #cbcbcb;
+  margin: 5px 0 0 0;
+}
+/* line 614, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list li {
+  *zoom: 1;
+  background: #fff;
+  padding: 6px 14px;
+  position: relative;
+}
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+.article-attachments-box .attached-file-list li:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+/* line 620, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list li:before {
+  content: '';
+  display: inline-block;
+  background-image: url('../images/common.png');
+  background-position: 0 0;
+  height: 6px;
+  width: 3px;
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  margin: -2px 0 0 0;
+}
+/* line 629, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list li:nth-child(2n+1) {
+  background: #f3f3f3;
+}
+/* line 633, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list li .doc-attachment-mime-icon {
+  float: left;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 3px 0 3px 29px;
+  vertical-align: middle;
+  line-height: 18px;
+  overflow: hidden;
+  max-width: 100%;
+}
+/* line 644, ../scss/pages/_community.scss */
+.article-attachments-box .attached-file-list li .btn-delete {
+  float: right;
+}
 
 /* line 1, ../scss/pages/_community-downalods.scss */
 .downloads-list-table {
@@ -12011,7 +12215,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -681px;
+  background-position: 0 -705px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12764,7 +12968,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -150px;
+  background-position: 0 -150px;
   height: 24px;
   width: 12px;
 }
@@ -12776,7 +12980,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -150px;
+  background-position: -12px -150px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -12859,7 +13063,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -346px;
+  background-position: 0 -322px;
   height: 24px;
   width: 28px;
 }
@@ -12874,7 +13078,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -322px;
+  background-position: 0 -346px;
   height: 24px;
   width: 28px;
 }

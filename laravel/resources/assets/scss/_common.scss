@@ -64,6 +64,16 @@ body.modal-open,
 
     .page-title-actions {
         float: right;
+
+        @media only screen and (max-width: $mobile-size) {
+            clear: both;
+            padding: 10px 0 0 0;
+            float: none;
+        }
+
+        .btn{
+            margin-left: 5px;
+        }
     }
 }
 

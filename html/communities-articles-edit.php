@@ -32,7 +32,12 @@
             <div class="main-content">
 
                 <div class="page-title">
-                    <h1>Create New Article</h1>
+                    <h1>Edit Article</h1>
+                    <div class="page-title-actions">
+                        <a href="communities-articles-create.php" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+                        <a href="#" class="btn btn-primary btn-with-icon btn-history">History</a>
+                        <a href="#" class="btn btn-primary btn-icon btn-print">Print</a>
+                    </div>
                 </div>
 
                 <div class="community-tabs article-create">
@@ -60,10 +65,19 @@
                             <div class="colored-box-header">Attachments</div>
                             <div class="colored-box-body">
                                 <div class="colored-box-content article-attachments-box">
-                                    <div class="upload-file-field">
-                                        <input type="file" name="article[files][]" class="input-file"  />
-                                    </div>
                                     <a href="#" id="addNewArticleFile" class="btn btn-primary btn-with-icon btn-add">Add Files</a>
+                                    <ul class="attached-file-list">
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-zip" target="_blank">File1.zip</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-mp3" target="_blank">File2.mp3</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a> </li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-ics" target="_blank">File3.ics</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-odb" target="_blank">File4.odb</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a> </li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-odg" target="_blank">File5.odg</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-jpg" target="_blank">File6.jpg</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-pdf" target="_blank">File7.pdf</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-xls" target="_blank">File8.xls</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-txt" target="_blank">File9.txt</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                        <li><a href="#" class="doc-attachment-mime-icon doc-attachment-mime-mp4" target="_blank">File10.mp4</a> <a href="#" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-tooltip="tooltip" title="Remove file">Remove</a></li>
+                                    </ul>
 
                                     <script>
                                         jQuery(document).ready(function($) {
@@ -190,9 +204,12 @@
                             </div>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                            <button type="button" class="btn btn-default btn-with-icon btn-cancel">Cancel</button>
+                        <div class="form-actions clearfix">
+                            <a href="#" class="btn btn-danger btn-with-icon btn-delete pull-right">Delete</a>
+                            <div class="pull-left">
+                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                                <button type="button" class="btn btn-default btn-with-icon btn-cancel">Cancel</button>
+                            </div>
                         </div>
 
                     </form>

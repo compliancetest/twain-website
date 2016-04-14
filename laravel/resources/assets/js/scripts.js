@@ -382,7 +382,7 @@ var Page = {
         }
     },
 
-    communityArticleCreate: {
+    communityArticleManage: {
         init: function () {
             customizeFileTag();
             $('#addNewArticleFile').click(function (e) {
@@ -391,6 +391,22 @@ var Page = {
                 $(this).before(fileTemaple);
                 customizeFileTag();
             });
+
+            $('.removeFileLink').click(function (e) {
+                e.preventDefault();
+                if (confirm("Are you sure?")) {
+                    $(this).parents('li').slideUp('slow', function () {
+                       $(this).remove();
+                    });
+                    //@todo-twain: Add remove functionality
+                    alert('todo: Add remove functionality');
+                    return true;
+                } else {
+                    return false;
+                }
+
+            })
+
         }
     },
 

@@ -157,6 +157,10 @@
   @include btnIconsSprite(btn-browse);
 }
 
+.btn-history{
+  @include btnIconsSprite(btn-history);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
