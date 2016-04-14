@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Community - Create Article | Twain</title>
+        <title>Community - Edit Article | Twain</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700" rel="stylesheet" type="text/css">
@@ -35,8 +35,7 @@
                     <h1>Edit Article</h1>
                     <div class="page-title-actions">
                         <a href="communities-articles-create.php" class="btn btn-success btn-with-icon btn-add">Add new article</a>
-                        <a href="#" class="btn btn-primary btn-with-icon btn-history">History</a>
-                        <a href="#" class="btn btn-primary btn-icon btn-print">Print</a>
+                        <a href="communities-articles-history.php" class="btn btn-primary btn-with-icon btn-history">History</a>
                     </div>
                 </div>
 

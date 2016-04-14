@@ -9297,7 +9297,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -490px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9305,7 +9305,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -466px;
+  background-position: 0 -490px;
   height: 24px;
   width: 18px;
 }
@@ -9321,7 +9321,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -538px;
+  background-position: 0 -514px;
   height: 24px;
   width: 18px;
 }
@@ -9329,7 +9329,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -562px;
+  background-position: 0 -586px;
   height: 24px;
   width: 18px;
 }
@@ -9337,7 +9337,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -442px;
+  background-position: 0 -466px;
   height: 24px;
   width: 18px;
 }
@@ -9345,19 +9345,27 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -514px;
+  background-position: 0 -562px;
   height: 24px;
   width: 18px;
 }
 
-/* line 164, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-back:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -442px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 168, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 170, ../scss/blocks/_buttons.scss */
+/* line 174, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9371,14 +9379,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -35px;
+  background-position: 0 -35px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -35px;
+  background-position: -12px -35px;
   height: 11px;
   width: 12px;
 }
@@ -9392,14 +9400,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -119px;
+  background-position: -12px -93px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -93px;
+  background-position: 0 -93px;
   height: 12px;
   width: 12px;
 }
@@ -9410,7 +9418,7 @@ select.form-control {
   height: 9px;
   width: 12px;
 }
-/* line 198, ../scss/blocks/_buttons.scss */
+/* line 202, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
@@ -9452,7 +9460,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -81px;
+  background-position: 0 -119px;
   height: 12px;
   width: 12px;
 }
@@ -9464,7 +9472,7 @@ select.form-control {
   width: 14px;
 }
 
-/* line 226, ../scss/blocks/_buttons.scss */
+/* line 230, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9489,7 +9497,7 @@ select.form-control {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 243, ../scss/blocks/_buttons.scss */
+/* line 247, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9501,25 +9509,25 @@ select.form-control {
   left: 6px;
   top: 7px;
 }
-/* line 251, ../scss/blocks/_buttons.scss */
+/* line 255, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 257, ../scss/blocks/_buttons.scss */
+/* line 261, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 261, ../scss/blocks/_buttons.scss */
+/* line 265, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 268, ../scss/blocks/_buttons.scss */
+/* line 272, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9529,14 +9537,14 @@ select.form-control {
   top: 0;
   z-index: 100;
 }
-/* line 277, ../scss/blocks/_buttons.scss */
+/* line 281, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 283, ../scss/blocks/_buttons.scss */
+/* line 287, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9544,39 +9552,39 @@ select.form-control {
   top: 0;
   left: 0;
 }
-/* line 291, ../scss/blocks/_buttons.scss */
+/* line 295, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 297, ../scss/blocks/_buttons.scss */
+/* line 301, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 303, ../scss/blocks/_buttons.scss */
+/* line 307, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -649px;
+  background-position: 0 -673px;
   height: 28px;
   width: 21px;
 }
-/* line 309, ../scss/blocks/_buttons.scss */
+/* line 313, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -677px;
+  background-position: 0 -701px;
   height: 28px;
   width: 21px;
 }
-/* line 315, ../scss/blocks/_buttons.scss */
+/* line 319, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -621px;
+  background-position: 0 -645px;
   height: 28px;
   width: 21px;
 }
-/* line 320, ../scss/blocks/_buttons.scss */
+/* line 324, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
@@ -10017,7 +10025,7 @@ select.form-control {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -233px;
+  background-position: 0 -212px;
   height: 21px;
   width: 21px;
 }
@@ -10026,7 +10034,7 @@ select.form-control {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -212px;
+  background-position: 0 -233px;
   height: 21px;
   width: 21px;
 }
@@ -11342,7 +11350,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -299px;
+  background-position: 0 -276px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11351,7 +11359,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -276px;
+  background-position: 0 -299px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11512,6 +11520,77 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .doc-attachment-mime-ogv,
 .doc-attachment-mime-mkv {
   background-position: 0 -360px;
+}
+
+/** For Static Content Pages ***/
+/* line 3, ../scss/blocks/_static-content.scss */
+.static-content img {
+  max-width: 100%;
+  height: auto;
+}
+/* line 8, ../scss/blocks/_static-content.scss */
+.static-content h2 {
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0 0 8px 0;
+}
+/* line 14, ../scss/blocks/_static-content.scss */
+.static-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 60px;
+}
+/* line 20, ../scss/blocks/_static-content.scss */
+.static-content p {
+  margin: 0 0 12px 0;
+}
+/* line 24, ../scss/blocks/_static-content.scss */
+.static-content ol {
+  padding: 0 8px;
+  margin: 8px 20px;
+}
+/* line 28, ../scss/blocks/_static-content.scss */
+.static-content ol li {
+  margin-bottom: 8px;
+}
+/* line 34, ../scss/blocks/_static-content.scss */
+.static-content ul {
+  padding: 0 8px;
+  margin: 8px 0 8px 20px;
+}
+/* line 38, ../scss/blocks/_static-content.scss */
+.static-content ul li {
+  list-style: disc;
+}
+/* line 44, ../scss/blocks/_static-content.scss */
+.static-content table {
+  border: 1px solid #CCC;
+  font-size: 12px;
+  margin: 10px 0;
+}
+/* line 49, ../scss/blocks/_static-content.scss */
+.static-content table th {
+  border: solid 1px #1b66c3;
+  padding: 7px 5px;
+  font-weight: bold;
+  vertical-align: top;
+  background: #2c80e8;
+  color: #fff;
+}
+/* line 58, ../scss/blocks/_static-content.scss */
+.static-content table td {
+  padding: 4px;
+  margin: 3px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+  font-weight: normal;
+  background: #fefefe;
+  color: #2a2a2a;
+  font-size: 12px;
+}
+/* line 69, ../scss/blocks/_static-content.scss */
+.static-content table tr:nth-child(odd) td {
+  background: #f9f9f9;
 }
 
 /* line 1, ../scss/pages/_community.scss */
@@ -11708,7 +11787,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -586px;
+  background-position: 0 -610px;
   height: 16px;
   width: 16px;
 }
@@ -11726,7 +11805,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -586px;
+  background-position: -16px -610px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -12188,6 +12267,15 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   float: right;
 }
 
+/* line 654, ../scss/pages/_community.scss */
+.article-view {
+  padding: 20px 0 0 0;
+}
+/* line 657, ../scss/pages/_community.scss */
+.article-view .article-tags {
+  padding: 20px 0 0 0;
+}
+
 /* line 1, ../scss/pages/_community-downalods.scss */
 .downloads-list-table {
   margin: 0;
@@ -12215,7 +12303,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -705px;
+  background-position: 0 -729px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12968,7 +13056,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -150px;
+  background-position: -12px -150px;
   height: 24px;
   width: 12px;
 }
@@ -12980,7 +13068,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -150px;
+  background-position: 0 -150px;
   height: 24px;
   width: 12px;
   top: 2px;

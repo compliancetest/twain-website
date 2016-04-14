@@ -143,7 +143,9 @@
                                             </tr>
                                         </tbody>
                                     </table>
+
                                 </div>
+                                <a href="communities-articles-create.php" class="btn btn-success btn-with-icon btn-add">Add new article</a>
 
 
                             </div>
