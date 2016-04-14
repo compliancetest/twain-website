@@ -119,7 +119,7 @@ if ( class_exists( 'BP_Group_Extension' ) )
                    );
                    $s3 = new S3Wrapper();
                    $ext = pathinfo( $fileName, PATHINFO_EXTENSION );
-                   $s3->putObject('/attachments/downloads/' . $token . '.'.$ext, file_get_contents($file['tmp_name']), 'application/'.$ext );
+                   $s3->putObject('/attachments/downloads/' . $token . '/'.$fileName, file_get_contents($file['tmp_name']), 'application/'.$ext );
                    unlink($file['tmp_name']);
                }
             }
