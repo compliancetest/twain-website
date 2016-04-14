@@ -1,6 +1,9 @@
 <?php
 
 Route::group(array('prefix' => 'api/v1'), function () {
+
+    Route::post('echo', ['uses' => '\App\Api\Controllers\EchoController@index']);
+
     Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => 'simpleauth']);
     Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => 'simpleauth']);
 
