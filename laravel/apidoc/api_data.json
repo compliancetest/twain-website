@@ -1,5 +1,54 @@
 [
   {
+    "type": "post",
+    "url": "/v1/echo",
+    "title": "Validate credentials",
+    "name": "validateCredentials",
+    "group": "Helpers",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n      \"message\": \"Valid Credentails!\",\n      \"code\": 200\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Required field missed</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Required field missed:",
+          "content": "{\"errors\":{\"username\":[\"The username field is required.\"],\"password\":[\"The password field is required.\"]},\"code\":422}",
+          "type": "json"
+        },
+        {
+          "title": "Unauthorized:",
+          "content": "{\"error\":{\"message\":\"Unauthorized!\"},\"code\":401}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/EchoController.php",
+    "groupTitle": "Helpers"
+  },
+  {
     "type": "get",
     "url": "/v1/profiles/:profile_id",
     "title": "Request Profile Content",
