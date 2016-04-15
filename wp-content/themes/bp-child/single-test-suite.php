@@ -406,7 +406,7 @@ Template Name Posts: Test Suite
 		
 		<!-- Test Cases -->
 		<?php
-            $selectedRole = isset($_GET['tester_role']) ? $_GET['tester_role'] : '';
+            $selectedScenario = isset($_GET['scenario']) ? $_GET['scenario'] : '';
             $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
         ?>
 		<div class="clear"></div>
@@ -422,11 +422,11 @@ Template Name Posts: Test Suite
                         <span class="left padding5-10">Filter By: </span>
                         <div class="styled_select left right13">
                             <label>
-                            <select name="tester_role" class="change_ts">
-                              <option value="">- Tester Role -</option>
+                            <select name="scenario" class="change_ts">
+                              <option value="">- Scenario -</option>
                               <?php 
-                              foreach($suite->roles as $r){                                  
-                                  echo '<option ' . ($r['name'] == $selectedRole ? 'selected="selected"' : '') . ' value="'.$r['name'].'" >'.$r['name'].'</option>';
+                              foreach($suite->scenarios as $r){
+                                  echo '<option ' . ($r['id'] == $selectedScenario ? 'selected="selected"' : '') . ' value="'.$r['id'].'" >'.$r['code'].'</option>';
                               }
                               ?>
                             </select>
@@ -511,9 +511,9 @@ Template Name Posts: Test Suite
                     }
                                        
                     
-                    if($selectedRole){
-                        $args['meta_query'][] = array('key' => 'choose_tester_role', 'value' => $selectedRole, 'compare' => '=');
-                        $params[] = 'tester_role=' . urlencode($selectedRole);
+                    if($selectedScenario){
+                        $args['meta_query'][] = array('key' => 'scenario_'.$suiteID, 'value' => $selectedScenario, 'compare' => '=');
+                        $params[] = 'scenario=' . urlencode($selectedScenario);
                     }
                     
                     if($selectedConfLevel){
