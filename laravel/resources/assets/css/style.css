@@ -8838,6 +8838,11 @@ body.modal-open,
 }
 
 /* line 80, ../scss/_common.scss */
+.block-loading-wrapper {
+  position: relative;
+}
+
+/* line 84, ../scss/_common.scss */
 .block-loading {
   display: none;
   text-align: center;
@@ -8850,7 +8855,7 @@ body.modal-open,
   top: 0;
   bottom: 0;
 }
-/* line 92, ../scss/_common.scss */
+/* line 96, ../scss/_common.scss */
 .block-loading .loading-content {
   position: absolute;
   width: 100%;
@@ -8858,7 +8863,7 @@ body.modal-open,
   padding: 0;
   margin: -54px 0 0 0;
 }
-/* line 99, ../scss/_common.scss */
+/* line 103, ../scss/_common.scss */
 .block-loading .loading-content .loader {
   background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
@@ -8866,13 +8871,13 @@ body.modal-open,
   display: block;
   margin: 0 auto;
 }
-/* line 107, ../scss/_common.scss */
+/* line 111, ../scss/_common.scss */
 .block-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 113, ../scss/_common.scss */
+/* line 117, ../scss/_common.scss */
 .block-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
@@ -11538,7 +11543,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .static-content h3 {
   margin: 0 0 8px 0;
   font-size: 16px;
-  font-weight: 60px;
+  font-weight: 600;
 }
 /* line 20, ../scss/blocks/_static-content.scss */
 .static-content p {
@@ -12316,23 +12321,27 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .add-new-download-section {
   background: #f8f8f8;
 }
+/* line 34, ../scss/pages/_community-downalods.scss */
+.add-new-download-section h3 {
+  padding: 20px;
+}
 
-/* line 35, ../scss/pages/_community-downalods.scss */
+/* line 39, ../scss/pages/_community-downalods.scss */
 .file-description-section {
   padding: 10px 20px;
   position: relative;
 }
-/* line 39, ../scss/pages/_community-downalods.scss */
+/* line 43, ../scss/pages/_community-downalods.scss */
 .file-description-section .upload-file-field {
   float: left;
   width: 245px;
 }
-/* line 44, ../scss/pages/_community-downalods.scss */
+/* line 48, ../scss/pages/_community-downalods.scss */
 .file-description-section .file-description-fields {
   clear: both;
   padding-top: 15px;
 }
-/* line 49, ../scss/pages/_community-downalods.scss */
+/* line 53, ../scss/pages/_community-downalods.scss */
 .file-description-section .custom-file-tag .file-value {
   max-width: 160px;
   margin-right: 5px;
@@ -12341,13 +12350,13 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   vertical-align: middle;
 }
 @media only screen and (min-width: 640px) {
-  /* line 58, ../scss/pages/_community-downalods.scss */
+  /* line 62, ../scss/pages/_community-downalods.scss */
   .file-description-section .btn-delete {
     position: absolute;
     left: 20px;
     bottom: 20px;
   }
-  /* line 64, ../scss/pages/_community-downalods.scss */
+  /* line 68, ../scss/pages/_community-downalods.scss */
   .file-description-section .file-description-fields {
     clear: none;
     padding: 0;
@@ -12355,14 +12364,14 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
     overflow: hidden;
   }
 }
-/* line 72, ../scss/pages/_community-downalods.scss */
+/* line 76, ../scss/pages/_community-downalods.scss */
 .file-description-section + .file-description-section {
   border-top: 1px solid #e8e8e8;
   padding-top: 20px;
 }
 
-/* line 80, ../scss/pages/_community-downalods.scss */
-.add-new-download-section .form-actions {
+/* line 84, ../scss/pages/_community-downalods.scss */
+.community-downloads .form-actions {
   background: #e8e8e8;
   padding: 6px 12px;
   *zoom: 1;
@@ -12370,7 +12379,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-top: 1px solid #d8d8d8;
 }
 /* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
-.add-new-download-section .form-actions:after {
+.community-downloads .form-actions:after {
   content: "\0020";
   display: block;
   height: 0;
@@ -12378,8 +12387,8 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   overflow: hidden;
   visibility: hidden;
 }
-/* line 87, ../scss/pages/_community-downalods.scss */
-.add-new-download-section .form-actions .add-new-download-link {
+/* line 91, ../scss/pages/_community-downalods.scss */
+.community-downloads .form-actions .add-new-download-link {
   float: left;
   height: 16px;
   position: relative;
@@ -12389,8 +12398,8 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   padding: 0 0 0 22px;
   margin: 4px 0 0 0;
 }
-/* line 97, ../scss/pages/_community-downalods.scss */
-.add-new-download-section .form-actions .add-new-download-link:before {
+/* line 101, ../scss/pages/_community-downalods.scss */
+.community-downloads .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: -12px -119px;
@@ -12401,8 +12410,8 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   left: 0;
   top: 0;
 }
-/* line 107, ../scss/pages/_community-downalods.scss */
-.add-new-download-section .form-actions .btn {
+/* line 111, ../scss/pages/_community-downalods.scss */
+.community-downloads .form-actions .btn {
   margin-left: 7px;
 }
 

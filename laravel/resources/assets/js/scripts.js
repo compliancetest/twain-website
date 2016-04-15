@@ -14,15 +14,17 @@ jQuery(document).ready(function($) {
                 error.insertAfter( element );
             }
 
-        },
-        success: function ( label, element ) {
-            // Add the span element, if doesn't exists, and apply the icon classes to it.
-            if ( !$( element ).next( "span" )[ 0 ] ) {
-                $( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+            if ( element.prop( "type" ) === "file" && element.parents('.upload-file-field').length )  {
+                error.appendTo( element.parents('.upload-file-field') );
             }
+
         },
         highlight: function ( element, errorClass, validClass ) {
             $( element ).parents( ".form-group" ).addClass( "has-error" );
+
+            if ( $( element ).prop( "type" ) === "file" && $( element ).parents('.upload-file-field').length) {
+                $( element ).parents('.upload-file-field').addClass( "has-error" );
+            }
         },
         unhighlight: function ( element, errorClass, validClass ) {
             $( element ).parents( ".form-group" ).removeClass( "has-error" );

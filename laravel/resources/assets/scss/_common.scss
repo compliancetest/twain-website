@@ -77,6 +77,10 @@ body.modal-open,
     }
 }
 
+.block-loading-wrapper{
+    position: relative;
+}
+
 .block-loading{
     display: none;
     text-align: center;

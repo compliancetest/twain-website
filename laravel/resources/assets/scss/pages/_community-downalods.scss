@@ -30,6 +30,10 @@
 
 .add-new-download-section{
   background: #f8f8f8;
+
+  h3{
+    padding: 20px;
+  }
 }
 
 .file-description-section{
@@ -76,7 +80,7 @@
 
 }
 
-.add-new-download-section{
+.community-downloads{
   .form-actions{
     background: #e8e8e8;
     padding: 6px 12px;

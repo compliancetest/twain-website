@@ -51,10 +51,8 @@
     <div class="form-actions">
 
         <div class="pull-right">
-            <a href="#" class="btn btn-success btn-with-icon btn-upload" id="save_new_file"
-               onclick="submitDownload('.file-edit-form')">Upload &amp; Save</a>
-            <a href="#" class="btn btn-default btn-with-icon btn-cancel" onclick="jQuery('#edit-download-section').html('')"
-               id="cancel-add-new-files">Cancel</a>
+            <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_new_file">Upload &amp; Save</button>
+            <button type="button" class="btn btn-default btn-with-icon btn-cancel" onclick="jQuery('#edit-download-section').html('')" id="cancel-add-new-files">Cancel</button>
         </div>
     </div>
 {{ Form::close() }}
