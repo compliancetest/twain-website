@@ -49,6 +49,68 @@ define({ "api": [
     "groupTitle": "Helpers"
   },
   {
+    "type": "post",
+    "url": "/v1/products",
+    "title": "Create product",
+    "name": "createProduct",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Product created:",
+          "content": "{\"data\":{\"id\":\"cn-01a-ds\",\"title\":\"CN-01a DS\",\"link\":\"http:\\/\\/twain.my\\/cn-01a-ds\"},\"code\":201}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Permissions error</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error:",
+          "content": "{\"errors\":{\"identity\":[\"The identity must be a valid JSON string.\"]},\"code\":422}",
+          "type": "json"
+        },
+        {
+          "title": "Permissions error:",
+          "content": "{\"error\":{\"message\":\"This product was created by another user!\"},\"code\":403}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
     "type": "get",
     "url": "/v1/profiles/:profile_id",
     "title": "Request Profile Content",

@@ -8,6 +8,9 @@ class User extends Authenticatable
 {
 
     protected $table = 'wp_users';
+
+    protected $primaryKey = 'ID';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,5 +34,10 @@ class User extends Authenticatable
     public function getAuthPassword()
     {
         return $this->user_pass;
+    }
+
+    public function organisation()
+    {
+        return $this->belongsToMany('App\Organisation', 'wp_organisations_members');
     }
 }
