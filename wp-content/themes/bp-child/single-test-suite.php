@@ -426,6 +426,9 @@ Template Name Posts: Test Suite
                               <option value="">- Scenario -</option>
                               <?php 
                               foreach($suite->scenarios as $r){
+                                  if($r['code'] == 'Default' && !is_admin()){
+                                      continue;
+                                  }
                                   echo '<option ' . ($r['id'] == $selectedScenario ? 'selected="selected"' : '') . ' value="'.$r['id'].'" >'.$r['code'].'</option>';
                               }
                               ?>
