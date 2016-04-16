@@ -389,19 +389,25 @@ var Page = {
             customizeFileTag();
             $('#addNewArticleFile').click(function (e) {
                 e.preventDefault();
-                var fileTemaple = '<div class="upload-file-field"><input type="file" name="article[files][]" class="input-file"  /></div>';
+                var fileTemaple = '<div class="upload-file-field"><input type="file" name="attachments[]" class="input-file"  /></div>';
                 $(this).before(fileTemaple);
                 customizeFileTag();
             });
 
             $('.removeFileLink').click(function (e) {
                 e.preventDefault();
+                var elem = $(this);
                 if (confirm("Are you sure?")) {
-                    $(this).parents('li').slideUp('slow', function () {
-                       $(this).remove();
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        type: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        success: function(result) {
+                            $(elem).parents('li').slideUp('slow', function () {
+                               $(elem).remove();
+                            });
+                        }
                     });
-                    //@todo-twain: Add remove functionality
-                    alert('todo: Add remove functionality');
                     return true;
                 } else {
                     return false;

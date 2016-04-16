@@ -25,7 +25,7 @@ class CommunityRequest extends Request
     public function rules()
     {
         $rules = [
-            'title' => 'required',
+            'title' => 'required|unique:communities',
             'description' => 'required',
             'visibility_status' => 'required|string|in:public,private,hidden',
             'articles_status' => 'string|in:member,mod,admin',

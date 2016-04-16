@@ -81,6 +81,15 @@ class CommunitiesController extends Controller
         if ($action == 'testsuites') {
             $data['testSuites'] = Post::getCommunityTestSuites($community->id);
         }
+         if ($action == 'wiki') {
+            $where = $community->articles()->where('creator_id', Auth::user()->ID)
+            ->where('visibility', 'creator')
+            ->orWhere('visibility', 'members');
+             if($community->isAdmin()){
+                 $where ->orWhere('visibility', 'admins');
+             }
+            $data['articles'] = $where->with('attachments')->orderBy('updated_at')->get();
+        }
         if ($action == 'testdata') {
             $data['instances'] = getCommunityProfileInstatnces($community->id);
         }

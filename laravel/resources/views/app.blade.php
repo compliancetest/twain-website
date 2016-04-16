@@ -23,6 +23,7 @@
     <script src="/laravel/resources/assets/js/vendor/clipboard.js"></script>
     <script src="//malsup.github.com/jquery.form.js"></script>
     <script src="/laravel/resources/assets/js/scripts.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>
 <body>
 <!--[if lt IE 8]>

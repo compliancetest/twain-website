@@ -4,75 +4,49 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th class="text-left"><a href="#" class="current-orderby asc">Title</a></th>
-                    <th><a href="#" class="current-orderby desc">Author</a></th>
-                    <th class="text-nowrap"><a href="#">Created</a></th>
-                    <th class="text-nowrap"><a href="#">Last Edited</a></th>
+                    <th class="text-left">Title</th>
+                    <th>Author</th>
+                    <th class="text-nowrap">Created</th>
+                    <th class="text-nowrap">Last Edited</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <div class="attachment-cell has-attachment">
-                            <a href="#">SuperStream Contributions Test Data Context Model</a>
+                    @if(count($articles))
+                        @foreach($articles as $article)
+                        <tr>
+                            <td>
+                                <div class="attachment-cell @if(count($article->attachments)) has-attachment @endif">
+                                    <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}">{{ $article->title }}</a>
 
-                            <p>This article provides an overview of the test data entities that are used by the
-                                contributions test suite. Each Employer [...]</p>
-                        </div>
-                    </td>
-                    <td><a href="#">Steven</a></td>
-                    <td class="text-center">2014-01-24</td>
-                    <td class="text-center">2015-10-21</td>
-                    <td class="text-center text-nowrap">
-                        <a href="#" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
-                           title="Edit Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
-                           title="Read Article"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="attachment-cell">
-                            <a href="#">Gateway Conformance Testing</a>
-
-                            <p>An increasing number of Funds and Payroll providers are taking the decision to
-                                participate directly in the Superannuation Transaction Network [...]</p>
-                        </div>
-                    </td>
-                    <td><a href="#">Michael</a></td>
-                    <td class="text-center">2015-05-14</td>
-                    <td class="text-center">2015-05-14</td>
-                    <td class="text-center text-nowrap">
-                        <a href="#" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
-                           title="Edit Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
-                           title="Read Article"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="attachment-cell has-attachment">
-                            <a href="#">SuperStream Contributions Test Data Context Model</a>
-
-                            <p>This article provides an overview of the test data entities that are used by the
-                                contributions test suite. Each Employer [...]</p>
-                        </div>
-                    </td>
-                    <td><a href="#">Steven</a></td>
-                    <td class="text-center">2014-01-24</td>
-                    <td class="text-center">2015-10-21</td>
-                    <td class="text-center text-nowrap">
-                        <a href="#" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
-                           title="Edit Article"></a>
-                        <a href="#" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
-                           title="Read Article"></a>
-                    </td>
-                </tr>
+                                    @if(strlen($article->content) > 200)
+                                        <p>{{ substr($article->content, 0, 200).' [...]' }}</p>
+                                    @else
+                                        <p>{{ $article->content }}</p>
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="text-center"><a href="#">{{ \App\User::find($article->creator_id)->getFullName() }}</a></td>
+                            <td class="text-center">{{ $article->created_at }}</td>
+                            <td class="text-center">{{ $article->updated_at }}</td>
+                            <td class="text-center text-nowrap">
+                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
+                                   title="View Article"></a>
+                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
+                                   title="Edit Article"></a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
 
 
+    </div>
+    <div class="col-md-3">
+        <div class="page-title-actions">
+             <a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+        </div>
     </div>
 </div>

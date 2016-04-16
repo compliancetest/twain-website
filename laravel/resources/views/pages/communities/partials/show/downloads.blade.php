@@ -16,7 +16,7 @@
                     @foreach($downloads as $download)
                         <tr>
                             <td>
-                                <a href="#">{{ $download->title }}</a>
+                                <a data-toggle="modal" href="/downloads/{{ $community->id }}/agreement/{{ $download->id }}" data-target="#getDownload">{{ $download->title }}</a>
 
                                 <p>
                                     @if(!empty($download->version))
@@ -29,7 +29,7 @@
                                 <p>{{ $download->description }}</p>
                             </td>
                             <td class="text-nowrap text-center">{{ formatBytes($download->size) }}</td>
-                            <td>{{ $download->license }}</td>
+                            <td>{{ $download->getLicense() }}</td>
                             <td class="text-nowrap text-center">{{ formatDate($download->created_at) }}</td>
                             @if($isAdmin)
                                 <td class="text-nowrap text-center">

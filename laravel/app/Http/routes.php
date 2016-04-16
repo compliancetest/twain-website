@@ -31,6 +31,20 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('{community}', 'CommunityDownloadsController@store');
     });
 
+    Route::group(['prefix' => 'articles', 'middleware' => ['auth', 'community.admin']], function () {
+        Route::get('{community}/create', 'CommunityArticlesController@create');
+
+        Route::get('{community}/{article}/edit', 'CommunityArticlesController@edit');
+
+        Route::patch('{community}/{article}', 'CommunityArticlesController@update');
+
+        Route::delete('{community}/{article}/{attachmentId}', 'CommunityArticlesController@destroyattachment');
+    });
+    Route::group(['prefix' => 'articles', 'middleware' => ['auth', 'community.user']], function () {
+        Route::get('{community}/{article}', 'CommunityArticlesController@show');
+    });
+
+
     Route::group(['prefix' => 'downloads', 'middleware' => ['auth', 'community.user']], function () {
 
         Route::get('{community}/agreement/{download}', 'CommunityDownloadsController@agreement');

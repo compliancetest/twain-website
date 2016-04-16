@@ -23,4 +23,16 @@ class CommunityDownloads extends Model
         return $this->belongsTo('App\Community');
     }
 
+    public function getLicense()
+    {
+        if($this->license){
+            return $this->license;
+        }
+        $communityLicenseAgreement = $this->community->meta->keyBy('meta_key')->get('license_agreements')->meta_value;
+        if($communityLicenseAgreement){
+            return $communityLicenseAgreement;
+        }
+        return false;
+    }
+
 }

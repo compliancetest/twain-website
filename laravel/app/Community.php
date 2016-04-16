@@ -51,6 +51,14 @@ class Community extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function articles()
+    {
+        return $this->hasMany('App\CommunityArticle');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function downloads()
     {
         return $this->hasMany('App\CommunityDownloads');
