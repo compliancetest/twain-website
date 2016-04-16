@@ -1,6 +1,6 @@
 <div class="tabs-menu">
     <ul>
-        @if(Auth::check())
+        @if(Auth::check() && $community->hasAccess())
             <li class="test-suites-tab"><a href="{{ $community->getUrl() }}"
                                            @if(empty($action) || $action == 'testsuites') class="active" @endif>Test
                     Suites</a>

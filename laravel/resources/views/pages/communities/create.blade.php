@@ -143,21 +143,21 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="form-group">
-                                            <label>
-                                                {!! Form::radio('visibility_status', 'hidden') !!}
-                                                <b>This is a hidden community</b>
-                                            </label>
-                                            <ul class="privacy-options-list">
-                                                <li>Only users who are invited can join the community.</li>
-                                                <li>This community will not be listed in the communities directory
-                                                    or search results.
-                                                </li>
-                                                <li>Community content and activity will only be visible to members
-                                                    of the community.
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        {{--<div class="form-group">--}}
+                                            {{--<label>--}}
+                                                {{--{!! Form::radio('visibility_status', 'hidden') !!}--}}
+                                                {{--<b>This is a hidden community</b>--}}
+                                            {{--</label>--}}
+                                            {{--<ul class="privacy-options-list">--}}
+                                                {{--<li>Only users who are invited can join the community.</li>--}}
+                                                {{--<li>This community will not be listed in the communities directory--}}
+                                                    {{--or search results.--}}
+                                                {{--</li>--}}
+                                                {{--<li>Community content and activity will only be visible to members--}}
+                                                    {{--of the community.--}}
+                                                {{--</li>--}}
+                                            {{--</ul>--}}
+                                        {{--</div>--}}
                                     </div>
                                 </div>
                             </div>

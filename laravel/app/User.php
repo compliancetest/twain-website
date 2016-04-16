@@ -54,4 +54,18 @@ class User extends Authenticatable
     {
         return $this->subscriptions()->where(['is_confirmed' => 1])->get();
     }
+
+    /**
+     * Get User profile image
+     * @param string $type
+     * @return string
+     */
+    public function getAvatar($type = 'bpthumb')
+    {
+        $files = glob(__DIR__  . "/../../wp-content/uploads/avatars/".$this->ID."/*-".$type.".*");
+        if(count($files) > 0){
+            return explode('/../../', $files[0])[1];
+        }
+        return DEFAULT_AVATAR;
+    }
 }

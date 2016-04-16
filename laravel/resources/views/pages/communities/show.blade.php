@@ -27,7 +27,7 @@
 
                 <div class="community-tab-content">
 
-                    @if(Auth::check())
+                    @if(Auth::check() && $community->hasAccess())
                         @include('pages.communities.partials.show.'.$action)
                     @else
                         @include('pages.communities.partials.show.tab-content-notlogged')

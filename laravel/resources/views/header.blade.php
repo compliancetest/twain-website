@@ -6,7 +6,7 @@
                     <div class="header-actions">
                     @if(Auth::check())
                         <div class="header-user-info">
-                            <img width="32" height="32" alt="Admin" class="avatar" src="https://secure.gravatar.com/avatar/0510c4f56be3635770ffbec748937368?d=https://www.compliancetest.net/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg&amp;s=32&amp;r=G">
+                            <img width="32" height="32" alt="Admin" class="avatar" src="{{ Auth::user()->getAvatar() }}">
                             <div class="header-welcome">Welcome <strong class="header-username">{{ Auth::user()->getFullName() }}</strong></div>
                         </div>
                         <ul class="account-menu">
@@ -57,7 +57,7 @@
                                                     </ul>
                                                 </li>
                                             @endforeach
-                                            <li class="action-link last"><a href="/communities/create">+ Add</a></li>
+                                            <li class="action-link last"><a href="/communities">+ Add</a></li>
                                         </ul>
                                     </li>
                                     <li>
