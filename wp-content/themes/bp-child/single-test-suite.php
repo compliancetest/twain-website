@@ -425,8 +425,8 @@ Template Name Posts: Test Suite
                             <select name="scenario" class="change_ts">
                               <option value="">- Scenario -</option>
                               <?php 
-                              foreach($suite->scenarios as $r){
-                                  if($r['code'] == 'Default' && !is_admin()){
+                              foreach($suite->scenarios as $r) {
+                                  if (!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){
                                       continue;
                                   }
                                   echo '<option ' . ($r['id'] == $selectedScenario ? 'selected="selected"' : '') . ' value="'.$r['id'].'" >'.$r['code'].'</option>';
