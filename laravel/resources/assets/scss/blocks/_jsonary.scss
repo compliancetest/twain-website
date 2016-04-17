@@ -8,104 +8,96 @@
   font-weight: 600;
   display: none;
 }
-table.json-object table{
-  margin: 0;
-}
-table.json-object tbody{
-  border: none;
-}
-table.json-object{
+.json-object{
   font-weight: normal;
-}
-table.json-object tr{
-  background: transparent;
-  border: none;
-}
-table.json-object td{
-  background: transparent;
-  border: solid 1px #fff;
-  height: 26px;
-  vertical-align: top;
+
+  table{
+    margin: 0;
+  }
+
+  tbody{
+    border: none;
+  }
+
+  tr{
+    background: transparent;
+    border: none;
+
+    td{
+      background: transparent;
+      border: solid 1px #fff;
+      height: 26px;
+      vertical-align: top;
+      font-weight: 600;
+    }
+
+  }
+
 }
 
 .json-view-panel{
   overflow: auto;
   font-weight: 600;
   font-size: 13px;
+
+  table.json-object td{
+    height: auto;
+    padding: 7px 5px 6px 7px;
+    line-height: 15px;
+  }
 }
 
-.json-view-panel table.json-object td{
-  height: auto;
-  padding: 5px;
+table.json-object{
+  .json-object-key{
+    vertical-align: middle;
+    padding: 3px 5px;
+    background: #f9f9f9;
+    border-right: solid 1px #fff;
+  }
+
+  .json-object-value{
+    vertical-align: middle;
+    background: #f0f0f0;
+    padding: 10px 7px;
+  }
+
+  .json-object-key-title{
+    font-weight: 600;
+    color: #666;
+    border-right: none;
+  }
+
+  .json-string-content-editable{
+    display: inline-block;
+    border: 1px solid #cbcbcb;
+    border: 1px solid rgba(0, 0, 0, .2);
+    @include box-shadow(0 1px 1px rgba(255, 255, 255, .5) inset);
+    @include border-radius(3px);
+    padding: 4px 8px;
+    outline: none;
+    font-size: 12px;
+    width: auto;
+    min-width: 150px;
+    max-width: 100%;
+    min-height: 24px;
+  }
+
+  .json-array-table .json-string-content-editable{
+    min-width: 100px;
+    max-width: 100%;
+    width: auto;
+  }
+
 }
 
-table.json-object .json-object-key{
-  vertical-align: middle;
-  padding: 3px 5px;
-}
-
-table.json-object .json-object-value{
-  vertical-align: middle;
-}
-
-table.json-object .json-object-key-title{
-  font-weight: 600;
-  color: #666;
-  border-right: none;
-}
-
-table.json-object .json-object-key{
-  background: #f9f9f9;
-  border-right: solid 1px #fff;
-}
-table.json-object .json-object-value{
-  background: #f0f0f0;
-}
-
-table.json-object .json-string-content-editable{
-  display: inline-block;
-  border: 1px solid #cbcbcb;
-  border: 1px solid rgba(0, 0, 0, .2);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  -webkit-box-sizing:border-box;
-  -o-box-sizing:border-box;
-  padding: 4px 8px;
-  @include border-radius(3px);
-  outline: none;
-  font-size: 12px;
-  width: auto;
-  min-width: 150px;
-  max-width: 100%;
-  min-height: 24px;
-}
-table.json-object .json-array-table .json-string-content-editable{
-  min-width: 100px;
-  max-width: 100%;
-  width: auto;
-}
 .jsonary table.json-object input[type=text],
 table.json-object .json-number-input{
   display: inline-block;
   border: 1px solid #cbcbcb;
   border: 1px solid rgba(0, 0, 0, .2);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  -o-box-shadow: 0 1px 1px rgba(255, 255, 255, .5) inset;
-  box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  -webkit-box-sizing:border-box;
-  -o-box-sizing:border-box;
+  @include box-shadow(0 1px 1px rgba(255, 255, 255, .5) inset);
+  @include border-radius(3px);
   padding: 4px 8px;
-  border-radius: 3px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -o-border-radius: 3px;
   outline: none;
   font-size: 12px;
   width: 60px;
@@ -114,15 +106,8 @@ table.json-object .json-number-input{
 .jsonary table.json-object .button{
   border-color: #3577ad;
   background: #2d83cd;
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2690ea), to(#3577ad));
-  background: -webkit-linear-gradient(top, #2690ea, #3577ad);
-  background: -moz-linear-gradient(top, #2690ea, #3577ad);
-  background: -ms-linear-gradient(top, #2690ea, #3577ad);
-  background: -o-linear-gradient(top, #2690ea, #3577ad);
-  /*    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#9f9f9f',GradientType=0 );     */
-  box-shadow: 0 1px 0 0 #7cbcf4 inset;
-  -moz-box-shadow: 0 1px 0 0 #7cbcf4 inset;
-  -webkit-box-shadow: 0 1px 0 0 #7cbcf4 inset;
+  @include background-image(linear-gradient(top, #2690ea, #3577ad));
+  @include box-shadow(0 1px 0 0 #7cbcf4 inset);
   color: #fff;
   margin: 0 2px;
   padding: 2px 3px;
@@ -141,18 +126,14 @@ table.json-object .json-undefined-create > span{
   background: #288ce2;
   color: #fff;
   font-size: 14px;
-  border-radius: 8px;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
+  @include border-radius(8px);
   margin-right: 5px;
   text-align: center;
 }
 table.json-object select{
-  padding:3px 3px 3px 3px;
+  padding: 3px;
   margin: 0;
-  -webkit-border-radius:4px;
-  -moz-border-radius:4px;
-  border-radius:4px;
+  @include border-radius(4px);
   outline:none;
   display: inline-block;
   cursor:pointer;
@@ -170,10 +151,9 @@ table.json-array-table{
 
 table.json-array-table > thead > tr > th{
   font-size: 12px;
-  border-bottom: none;
   color: #999;
   padding: 5px;
-  border: solid 1px #fff;
+  border: 1px solid #fff;
   background: #f0f0f0 !important;
 }
 .json-array-table > tbody > tr > td{

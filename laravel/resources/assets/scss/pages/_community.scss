@@ -659,3 +659,25 @@
   }
 
 }
+
+.edit-profile-form-wrapper{
+  h4{
+    color: #2a2a2a;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 5px 0;
+  }
+
+  .or-delimiter{
+    position: relative;
+    text-align: center;
+
+    &:before{
+      display: block;
+      content: '';
+      border: 1px solid #bfbfbf;
+      width: 100%;
+    }
+  }
+
+}
