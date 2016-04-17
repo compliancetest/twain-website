@@ -178,34 +178,70 @@ var Page = {
         init: function(){
             var self = this;
 
-            $('.joinCommunity').click(function(){
-                self.showJoinCommunityModal($(this));
+            $('.joinCommunity').click(function(e){
+                self.showJoinCommunityModal($(this), e);
             });
-
-            $('#registerInCommunity').click(function(){
+            $('.registerInCommunity').click(function(){
                 self.submitCommunityRequest($(this));
+            });
+            $('.cancelMembershipInCommunity').click(function(){
+                self.submitCancelMembership($(this));
             });
         },
 
-        showJoinCommunityModal: function(el){
+        showJoinCommunityModal: function(el,e){
+            e.preventDefault();
             var elAttr = {
                 href: el.attr('href'),
                 communityId: el.data('community-id')
             };
-            $('#registerInCommunity').data('community-id', elAttr.communityId);
-            $(elAttr.href).modal();
+            $(elAttr.href).modal({
+                backdrop: 'static'
+            });
         },
         submitCommunityRequest: function(el){
             var communityId =  el.data('community-id');
+            $('.error-message_' + communityId).hide();
             //@todo-ilya: Add loader and actions after response
+            if($('#agree_community_terms_' + communityId).is(':checked')){
+                $.ajax({
+                    type: 'post',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    url : '/membership/'+communityId+'/request',
+                    beforeSend: function () {
+                        $('#confirmJoinCommunity' +  communityId + ' .block-loading').show();
+                    },
+                    success: function(){
+                        location.reload();
+                    }
+                });
+            } else {
+                $('.error-message_' + communityId).show();
+            }
+
+        },
+
+        submitCancelMembership: function (el) {
+            var communityId =  el.data('community-id');
             $.ajax({
                 type: 'post',
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                url : '/membership/'+communityId+'/request',
+                url : 'communities/'+communityId+'/leave',
+                beforeSend: function () {
+                    $('#confirmCancelMembership' +  communityId + ' .block-loading').show();
+                },
                 success: function(){
                     location.reload();
+                },
+                error: function (error, status, exception) {
+                    alert(formatErrorMessage(error, exception));
+                    console.error('submitCancelMembership error');
+                },
+                complete: function () {
+                    $('.modal').modal('hide');
                 }
             });
+
         }
 
     },
@@ -504,4 +540,25 @@ function customizeFileTag()
             jQuery(this).data('file-customized', 1);
         }
     })
+}
+
+function formatErrorMessage(jqXHR, exception) {
+
+    if (jqXHR.status === 0) {
+        return ('Not connected.\nPlease verify your network connection.');
+    } else if (jqXHR.status == 404) {
+        return ('The requested page not found. [404]');
+    } else if (jqXHR.status == 405) {
+        return ('Method Not Allowed. [405]');
+    } else if (jqXHR.status == 500) {
+        return ('Internal Server Error [500].');
+    } else if (exception === 'parsererror') {
+        return ('Requested JSON parse failed.');
+    } else if (exception === 'timeout') {
+        return ('Time out error.');
+    } else if (exception === 'abort') {
+        return ('Ajax request aborted.');
+    } else {
+        return ('Uncaught Error.\n' + jqXHR.responseText);
+    }
 }

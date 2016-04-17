@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-danger btn-with-icon btn-delete">Remove</button>
+                {{--<button type="button" class="btn btn-danger btn-with-icon btn-delete">Remove</button>--}}
             </div>
             <div class="form-actions clearfix">
 

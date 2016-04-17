@@ -12124,7 +12124,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   margin: 10px 0 0 0;
 }
 /* line 294, ../scss/pages/_community.scss */
-.community-lists .community-action .btn {
+.community-lists .community-action .btn-lg, .community-lists .community-action .btn-group-lg > .btn {
   min-width: 200px;
 }
 
@@ -12509,8 +12509,11 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .edit-profile-form-wrapper .or-delimiter {
   position: relative;
   text-align: center;
+  display: inline-block;
+  background: #fff;
+  padding: 0 10px;
 }
-/* line 675, ../scss/pages/_community.scss */
+/* line 678, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .or-delimiter:before {
   display: block;
   content: '';

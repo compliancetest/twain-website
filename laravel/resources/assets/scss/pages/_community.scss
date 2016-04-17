@@ -291,7 +291,7 @@
   }
 
   .community-action{
-    .btn{
+    .btn-lg{
       min-width: 200px;
     }
   }
@@ -671,6 +671,9 @@
   .or-delimiter{
     position: relative;
     text-align: center;
+    display: inline-block;
+    background: #fff;
+    padding: 0 10px;
 
     &:before{
       display: block;

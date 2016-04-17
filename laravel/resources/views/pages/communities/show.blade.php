@@ -39,4 +39,7 @@
 
         </div>
     </div>
+    <script>
+        Page.communities.init();
+    </script>
 @stop
