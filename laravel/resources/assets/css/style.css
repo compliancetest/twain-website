@@ -8963,7 +8963,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -370px;
+  background-position: 0 -391px;
   height: 24px;
   width: 24px;
 }
@@ -8985,7 +8985,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -394px;
+  background-position: 0 -415px;
   height: 24px;
   width: 24px;
 }
@@ -9029,7 +9029,7 @@ select.form-control {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -254px;
+  background-position: 0 -275px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9307,7 +9307,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -538px;
+  background-position: 0 -559px;
   height: 24px;
   width: 18px;
 }
@@ -9315,7 +9315,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -490px;
+  background-position: 0 -511px;
   height: 24px;
   width: 18px;
 }
@@ -9323,7 +9323,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -418px;
+  background-position: 0 -439px;
   height: 24px;
   width: 18px;
 }
@@ -9331,7 +9331,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -514px;
+  background-position: 0 -535px;
   height: 24px;
   width: 18px;
 }
@@ -9339,7 +9339,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -586px;
+  background-position: 0 -607px;
   height: 24px;
   width: 18px;
 }
@@ -9347,7 +9347,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -466px;
+  background-position: 0 -487px;
   height: 24px;
   width: 18px;
 }
@@ -9355,7 +9355,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -562px;
+  background-position: 0 -583px;
   height: 24px;
   width: 18px;
 }
@@ -9363,7 +9363,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -442px;
+  background-position: 0 -463px;
   height: 24px;
   width: 18px;
 }
@@ -9389,14 +9389,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -35px;
+  background-position: -12px -35px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -35px;
+  background-position: 0 -35px;
   height: 11px;
   width: 12px;
 }
@@ -9574,7 +9574,7 @@ select.form-control {
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -673px;
+  background-position: 0 -694px;
   height: 28px;
   width: 21px;
 }
@@ -9582,7 +9582,7 @@ select.form-control {
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -701px;
+  background-position: 0 -722px;
   height: 28px;
   width: 21px;
 }
@@ -9590,7 +9590,7 @@ select.form-control {
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -645px;
+  background-position: 0 -666px;
   height: 28px;
   width: 21px;
 }
@@ -11360,7 +11360,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -276px;
+  background-position: 0 -320px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11369,7 +11369,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -299px;
+  background-position: 0 -297px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -12001,7 +12001,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -134px;
+  background-position: 0 -631px;
   height: 16px;
   width: 16px;
 }
@@ -12009,7 +12009,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -610px;
+  background-position: -11px -134px;
   height: 16px;
   width: 16px;
 }
@@ -12027,7 +12027,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -610px;
+  background-position: -16px -631px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -12548,7 +12548,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -729px;
+  background-position: 0 -750px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12653,6 +12653,26 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 /* line 111, ../scss/pages/_community-downalods.scss */
 .community-downloads .form-actions .btn {
   margin-left: 7px;
+}
+/* line 116, ../scss/pages/_community-downalods.scss */
+.community-downloads .download-license {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  line-height: 12px;
+  padding-left: 20px;
+}
+/* line 123, ../scss/pages/_community-downalods.scss */
+.community-downloads .download-license:before {
+  content: '';
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -254px;
+  height: 21px;
+  width: 18px;
+  position: absolute;
+  left: 0;
+  top: 2px;
 }
 
 /* line 3, ../scss/_header.scss */
@@ -13400,7 +13420,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -322px;
+  background-position: 0 -343px;
   height: 24px;
   width: 28px;
 }
@@ -13415,7 +13435,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -346px;
+  background-position: 0 -367px;
   height: 24px;
   width: 28px;
 }

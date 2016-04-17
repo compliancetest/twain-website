@@ -112,4 +112,20 @@
       margin-left: 7px;
     }
   }
+
+  .download-license{
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    line-height: 12px;
+    padding-left: (image-width('icons/license-icon.png'))+2;
+
+    &:before{
+      content: '';
+      @include iconsSprite(license-icon);
+      position: absolute;
+      left: 0;
+      top: 2px;
+    }
+  }
 }

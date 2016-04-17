@@ -16,7 +16,7 @@
                     @foreach($downloads as $download)
                         <tr>
                             <td>
-                                <a data-toggle="modal" href="/downloads/{{ $community->id }}/agreement/{{ $download->id }}" data-target="#getDownload">{{ $download->title }}</a>
+                                <a data-toggle="modal" href="#downloadLicense{{ $download->id }}">{{ $download->title }}</a>
 
                                 <p>
                                     @if(!empty($download->version))
@@ -29,14 +29,31 @@
                                 <p>{{ $download->description }}</p>
                             </td>
                             <td class="text-nowrap text-center">{{ formatBytes($download->size) }}</td>
-                            <td>{{ $download->getLicense() }}</td>
+                            <td class="text-center">
+                                <a class="download-license" data-toggle="modal" href="#downloadLicense{{ $download->id }}">License <br/>Agreement</a>
+                                <div class="modal fade" id="downloadLicense{{ $download->id }}" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                                License Agreement
+                                            </div>
+                                            <div class="modal-body">
+                                                {{ $download->getLicense() }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="/downloads/{{ $community->id }}/agreement/{{ $download->id }}" class="btn btn-success btn-with-icon btn-confirm">DOWNLOAD</a>
+                                                <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="text-nowrap text-center">{{ formatDate($download->created_at) }}</td>
                             @if($isAdmin)
                                 <td class="text-nowrap text-center">
-                                    <a href="#" class="btn btn-icon btn-primary btn-edit editDownload"
-                                       data-tooltip="tooltip" title="Edit" data-id="{{ $download->id }}"></a>
-                                    <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip"
-                                       title="Delete"></a>
+                                    <a href="#" class="btn btn-icon btn-primary btn-edit editDownload" data-tooltip="tooltip" title="Edit" data-id="{{ $download->id }}"></a>
+                                    <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" title="Delete"></a>
                                 </td>
                             @endif
                         </tr>
