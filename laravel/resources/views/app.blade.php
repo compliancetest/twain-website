@@ -21,6 +21,7 @@
     <script src="/laravel/resources/assets/js/vendor/jquery.validate.js"></script>
     <script src="/laravel/resources/assets/js/vendor/jsonary-super-bundle.js"></script>
     <script src="/laravel/resources/assets/js/vendor/clipboard.js"></script>
+    <script src="/laravel/resources/assets/js/vendor/redactor.js"></script>
     <script src="//malsup.github.com/jquery.form.js"></script>
     <script src="/laravel/resources/assets/js/scripts.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
