@@ -64,7 +64,7 @@ class User extends Authenticatable
     {
         $files = glob(__DIR__  . "/../../wp-content/uploads/avatars/".$this->ID."/*-".$type.".*");
         if(count($files) > 0){
-            return explode('/../../', $files[0])[1];
+            return explode('/../..', $files[0])[1];
         }
         return DEFAULT_AVATAR;
     }

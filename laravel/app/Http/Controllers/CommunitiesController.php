@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,8 +48,11 @@ class CommunitiesController extends Controller
     public function store(Requests\CommunityRequest $request)
     {
         $modelData = $request->all();
-        $modelData['creator_id'] = get_current_user_id();
+        $modelData['creator_id'] = Auth::user()->ID;
         $modelData['slug'] = Community::getUniqueSlug(new Community(), $modelData['title']);
+        if(!$request->has('articles_enabled')){
+            $modelData['articles_status'] = false;
+        }
         $model = Community::create($modelData);
 
         $this->handleImage($request, $model);
@@ -82,11 +86,19 @@ class CommunitiesController extends Controller
             $data['testSuites'] = Post::getCommunityTestSuites($community->id);
         }
          if ($action == 'wiki') {
-            $where = $community->articles()->where('creator_id', Auth::user()->ID)
+            $where = $community->articles()
+            ->where('creator_id', Auth::user()->ID)
             ->where('visibility', 'creator')
-            ->orWhere('visibility', 'members');
+            ->orWhere(function($join) use ($community){
+                $join->where('community_id', $community->id);
+                $join->where('visibility', 'members');
+            });
+
              if($community->isAdmin()){
-                 $where ->orWhere('visibility', 'admins');
+                 $where->orWhere(function($join) use ($community){
+                    $join->where('community_id', $community->id);
+                    $join->where('visibility', 'admins');
+                });
              }
             $data['articles'] = $where->with('attachments')->orderBy('updated_at')->get();
         }
