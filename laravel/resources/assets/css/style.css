@@ -8888,31 +8888,35 @@ label {
   font-weight: 600;
 }
 
-/* line 6, ../scss/blocks/_forms.scss */
+/* line 5, ../scss/blocks/_forms.scss */
+.form-control {
+  padding: 6px 12px 5px 12px;
+}
+/* line 8, ../scss/blocks/_forms.scss */
 .form-control:focus {
   -webkit-box-shadow: 0 0 10px -2px rgba(52, 119, 175, 0.75);
   box-shadow: 0 0 10px -2px rgba(52, 119, 175, 0.75);
   border-color: #ddd;
 }
 
-/* line 11, ../scss/blocks/_forms.scss */
+/* line 13, ../scss/blocks/_forms.scss */
 select.form-control {
   padding-top: 3px;
 }
 
-/* line 15, ../scss/blocks/_forms.scss */
+/* line 17, ../scss/blocks/_forms.scss */
 .label-note {
   font-size: 11px;
   font-style: italic;
   margin: 3px 0 0 0;
 }
 
-/* line 23, ../scss/blocks/_forms.scss */
+/* line 25, ../scss/blocks/_forms.scss */
 .form-actions .btn {
   margin: 0 5px 0 0;
 }
 
-/* line 28, ../scss/blocks/_forms.scss */
+/* line 30, ../scss/blocks/_forms.scss */
 .error-message,
 .success-message {
   position: relative;
@@ -8923,7 +8927,7 @@ select.form-control {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 37, ../scss/blocks/_forms.scss */
+/* line 39, ../scss/blocks/_forms.scss */
 .error-message.lg,
 .success-message.lg {
   font-size: 13px;
@@ -8931,7 +8935,7 @@ select.form-control {
   margin: 15px 0;
   padding: 11px 20px 11px 45px;
 }
-/* line 44, ../scss/blocks/_forms.scss */
+/* line 46, ../scss/blocks/_forms.scss */
 .error-message:before,
 .success-message:before {
   content: '';
@@ -8939,19 +8943,19 @@ select.form-control {
   left: 3px;
   top: 5px;
 }
-/* line 51, ../scss/blocks/_forms.scss */
+/* line 53, ../scss/blocks/_forms.scss */
 .error-message.lg:before,
 .success-message.lg:before {
   left: 7px;
   top: 7px;
 }
 
-/* line 58, ../scss/blocks/_forms.scss */
+/* line 60, ../scss/blocks/_forms.scss */
 .error-message {
   background: #e52727;
   border: 1px solid #b61313;
 }
-/* line 62, ../scss/blocks/_forms.scss */
+/* line 64, ../scss/blocks/_forms.scss */
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -8959,7 +8963,7 @@ select.form-control {
   height: 14px;
   width: 14px;
 }
-/* line 67, ../scss/blocks/_forms.scss */
+/* line 69, ../scss/blocks/_forms.scss */
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -8968,12 +8972,12 @@ select.form-control {
   width: 24px;
 }
 
-/* line 74, ../scss/blocks/_forms.scss */
+/* line 76, ../scss/blocks/_forms.scss */
 .success-message {
   background: #3db118;
   border: 1px solid #37a215;
 }
-/* line 78, ../scss/blocks/_forms.scss */
+/* line 80, ../scss/blocks/_forms.scss */
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -8981,7 +8985,7 @@ select.form-control {
   height: 12px;
   width: 12px;
 }
-/* line 83, ../scss/blocks/_forms.scss */
+/* line 85, ../scss/blocks/_forms.scss */
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
