@@ -88,21 +88,6 @@
                                                ]) !!}
                                                 Enable Articles for this community</label>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="minimum_role">Minimum role to associate
-                                                Article with this community:</label>
-                                            {!! Form::select('articles_status',
-                                               [
-                                                   'admin' => 'Community Admin',
-                                                   'mod' => 'Community Support',
-                                                   'member' => 'Community Member'
-                                               ],
-                                               'mod',
-                                               [
-                                                   'class' => 'form-control',
-                                                   'id' => 'minimum_role',
-                                               ]) !!}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -143,21 +128,6 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        {{--<div class="form-group">--}}
-                                            {{--<label>--}}
-                                                {{--{!! Form::radio('visibility_status', 'hidden') !!}--}}
-                                                {{--<b>This is a hidden community</b>--}}
-                                            {{--</label>--}}
-                                            {{--<ul class="privacy-options-list">--}}
-                                                {{--<li>Only users who are invited can join the community.</li>--}}
-                                                {{--<li>This community will not be listed in the communities directory--}}
-                                                    {{--or search results.--}}
-                                                {{--</li>--}}
-                                                {{--<li>Community content and activity will only be visible to members--}}
-                                                    {{--of the community.--}}
-                                                {{--</li>--}}
-                                            {{--</ul>--}}
-                                        {{--</div>--}}
                                     </div>
                                 </div>
                             </div>

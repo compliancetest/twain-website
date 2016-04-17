@@ -31,9 +31,6 @@ class CommunityRequest extends Request
             'articles_status' => 'string|in:member,mod,admin',
             'image' => 'image',
         ];
-        if($this->has('articles_enabled')){
-            $rules['articles_status'] = 'string|in:member,mod,admin';
-        }
 
         return $rules;
     }

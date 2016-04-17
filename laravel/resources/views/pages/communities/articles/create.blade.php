@@ -50,33 +50,6 @@
                             </div>
                         </div>
 
-
-                        <div class="colored-box">
-                            <div class="colored-box-header">Access</div>
-                            <div class="colored-box-body">
-                                <div class="colored-box-content form-horizontal">
-                                    <div class="form-group">
-                                        {!! Form::label('visibility', 'Who can read this article?', ['class' => 'col-sm-4 control-label']) !!}
-                                        <div class="col-sm-8">
-                                            {!! Form::select('visibility',
-                                               [
-                                                   'members' => 'Community Members',
-                                                   'admins' => 'Community Admins',
-                                                   'creator' => 'The Article author only'
-                                               ],
-                                               null,
-                                               [
-                                                   'class' => 'form-control',
-                                                   'id' => 'articleReadAccess',
-                                           ]) !!}
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
                             <button type="button" class="btn btn-default btn-with-icon btn-cancel">Cancel</button>

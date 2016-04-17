@@ -198,7 +198,14 @@ var Page = {
         submitCommunityRequest: function(el){
             var communityId =  el.data('community-id');
             //@todo-ilya: Add loader and actions after response
-            alert('todo: Send ajax request');
+            $.ajax({
+                type: 'post',
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                url : '/membership/'+communityId+'/request',
+                success: function(){
+                    location.reload();
+                }
+            });
         }
 
     },

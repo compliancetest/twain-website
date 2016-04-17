@@ -18,13 +18,6 @@ class CommunityMembershipController extends Controller
         $this->userId = get_current_user_id();
     }
 
-    public function join($slug, $isChecked = false)
-    {
-        $community = Community::findBySlug($slug);
-        $communityMeta = $community->getMeta();
-        return view('pages.communities.popups.join', compact('community', 'communityMeta', 'isChecked'));
-    }
-
     /**
      * Show 'leave community' confirmation dialog
      * @param $slug
@@ -68,21 +61,25 @@ class CommunityMembershipController extends Controller
         $community = Community::findBySlug($slug);
         $membershipRecord = CommunityMembers::getUserRecord($community->id, $userId);
         if(!$membershipRecord){
-            $community->members()->create(['user_id' => get_current_user_id()]);
-            $user = get_userdata($userId);
-            $user_organisation = get_user_meta ($userId, 'user_organisation', true);
-            $emailData = array(
-                '[name]' => cp_get_user_fullname($this->userId),
-                '[community]' => $community->title,
-                '[organisation]' => $user_organisation,
-                '[username]' => $user->data->user_login,
-                '[email]' => $user->data->user_email,
-                '[community_url]' => $community->getUrl()
-            );
+            if($community->articles_status) {
+                $community->members()->create(['user_id' => $userId]);
+                $user = get_userdata($userId);
+                $user_organisation = get_user_meta($userId, 'user_organisation', true);
+                $emailData = array(
+                    '[name]' => cp_get_user_fullname($this->userId),
+                    '[community]' => $community->title,
+                    '[organisation]' => $user_organisation,
+                    '[username]' => $user->data->user_login,
+                    '[email]' => $user->data->user_email,
+                    '[community_url]' => $community->getUrl()
+                );
 
-            $admins = $community->getAdmins();
+                $admins = $community->getAdmins();
 
-            sendEmails($admins, 'membership_request_received_admin', $emailData);
+                sendEmails($admins, 'membership_request_received_admin', $emailData);
+            } else {
+                $community->members()->create(['user_id' => $userId, 'is_confirmed' => 1]);
+            }
         }
         return Redirect::to('/communities');
     }

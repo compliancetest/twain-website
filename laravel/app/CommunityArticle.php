@@ -14,7 +14,7 @@ class CommunityArticle extends Model
     protected $table = 'community_articles';
 
     protected $fillable = [
-        'creator_id', 'title', 'content', 'visibility', 'slug'
+        'creator_id', 'title', 'content', 'slug'
     ];
 
     /**

@@ -86,21 +86,7 @@ class CommunitiesController extends Controller
             $data['testSuites'] = Post::getCommunityTestSuites($community->id);
         }
          if ($action == 'wiki') {
-            $where = $community->articles()
-            ->where('creator_id', Auth::user()->ID)
-            ->where('visibility', 'creator')
-            ->orWhere(function($join) use ($community){
-                $join->where('community_id', $community->id);
-                $join->where('visibility', 'members');
-            });
-
-             if($community->isAdmin()){
-                 $where->orWhere(function($join) use ($community){
-                    $join->where('community_id', $community->id);
-                    $join->where('visibility', 'admins');
-                });
-             }
-            $data['articles'] = $where->with('attachments')->orderBy('updated_at')->get();
+            $data['articles'] = $community->articles()->with('attachments')->orderBy('updated_at')->get();
         }
         if ($action == 'testdata') {
             $data['instances'] = getCommunityProfileInstatnces($community->id);
@@ -168,9 +154,9 @@ class CommunitiesController extends Controller
         }
         if ($request->has('change_article_status')) {
             if($request->has('articles_enabled')){
-                $community->update(['articles_status' => $request->get('articles_status')]);
+                $community->update(['articles_status' => true]);
             } else {
-                $community->update(['articles_status' => '']);
+                $community->update(['articles_status' => false]);
             }
         }
 
@@ -190,14 +176,6 @@ class CommunitiesController extends Controller
     {
         //
     }
-
-    public function terms($slug)
-    {
-        $community = Community::findBySlug($slug);
-        $communityMeta = $community->getMeta();
-        return view('pages.communities.popups.terms', compact('community', 'communityMeta'));
-    }
-
 
     /**
      * Generate JSON file from uploaded Excel

@@ -57,8 +57,6 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('communities/popups/{community}/join/{acceptedterms?}', 'CommunityMembershipController@join');
-        Route::get('communities/popups/{community}/terms', 'CommunitiesController@terms');
         Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
 
         //user should be community member to leave it

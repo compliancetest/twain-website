@@ -387,21 +387,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            {{--<div class="form-group">--}}
-                                {{--<label>--}}
-                                    {{--{{ Form::radio('visibility_status', 'hidden') }}--}}
-                                    {{--<b>This is a hidden community</b>--}}
-                                {{--</label>--}}
-                                {{--<ul class="privacy-options-list">--}}
-                                    {{--<li>Only users who are invited can join the community.</li>--}}
-                                    {{--<li>This community will not be listed in the communities directory or search--}}
-                                        {{--results.--}}
-                                    {{--</li>--}}
-                                    {{--<li>Community content and activity will only be visible to members of the--}}
-                                        {{--community.--}}
-                                    {{--</li>--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
                         </div>
                         <div class="colored-box-footer">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
@@ -422,20 +407,6 @@
                                 <label for="articles_enabled">
                                     {!! Form::checkbox('articles_enabled', 1,  !empty($community->articles_status)) !!}
                                     Enable Articles for this community</label>
-                            </div>
-                            <div class="form-group">
-
-                                {!! Form::select('articles_status',
-                                       [
-                                           'admin' => 'Community Admin',
-                                           'mod' => 'Community Support',
-                                           'member' => 'Community Member'
-                                       ],
-                                       null,
-                                       [
-                                           'class' => 'form-control',
-                                           'id' => 'minimum_role',
-                                   ]) !!}
                             </div>
                             <input type="hidden" name="change_article_status" value="1">
                         </div>

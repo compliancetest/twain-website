@@ -64,29 +64,6 @@
                             </div>
                         </div>
 
-                    <div class="colored-box">
-                            <div class="colored-box-header">Access</div>
-                            <div class="colored-box-body">
-                                <div class="colored-box-content form-horizontal">
-                                    <div class="form-group">
-                                        {!! Form::label('visibility', 'Who can read this article?', ['class' => 'col-sm-4 control-label']) !!}
-                                        <div class="col-sm-8">
-                                           {!! Form::select('visibility',
-                                               [
-                                                   'members' => 'Community Members',
-                                                   'admins' => 'Community Admins',
-                                                   'creator' => 'The Article author only'
-                                               ],
-                                               null,
-                                               [
-                                                   'class' => 'form-control',
-                                                   'id' => 'articleReadAccess',
-                                           ]) !!}
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                        </div>
                         <div class="form-actions clearfix">
                             <a href="#" class="btn btn-danger btn-with-icon btn-delete pull-right">Delete</a>
                             <div class="pull-left">
