@@ -63,15 +63,6 @@
                                     'rows' => '5',
                                 ]) }}
                             </div>
-                            {{--<div class="form-group">--}}
-                            {{--<label>Notify community members of changes via email</label><br>--}}
-                            {{--<label>--}}
-                            {{--<input type="radio" name="group-notify-members" value="1"> Yes--}}
-                            {{--</label>--}}
-                            {{--<label>--}}
-                            {{--<input type="radio" name="group-notify-members" value="0"> No--}}
-                            {{--</label>--}}
-                            {{--</div>--}}
                         </div>
                         <div class="colored-box-footer">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
@@ -249,107 +240,7 @@
                     <div class="colored-box-header">Members</div>
                     <div class="colored-box-body">
                         <div class="colored-box-content members-management">
-                            <form method="post" action="communities-admin.php" id="groupMembersForm"
-                                  name="group-members-form">
-                                <div class="pending-requests">
-                                    @if(!count($membershipRequests))
-                                        <p>There are no pending membership requests.</p>
-                                    @else
-                                        <ul class="member-list" id="request-list">
-                                            @foreach($membershipRequests as $membershipRequest)
-                                                <li>
-                                                    <div class="pull-left">
-                                                        <img width="50" height="50" alt="" class="avatar"
-                                                             src="/laravel/resources/assets/images/gravatar.jpg">
-                                                                            <span class="member-info">
-                                                                                <?php $user = \App\User::find($membershipRequest->user_id);?>
-                                                                                <span class="member-name">{{ cp_get_user_fullname($membershipRequest->user_id) }}</span>
-                                                                                <span class="member-email">{{ $user->user_email }}</span>
-                                                                                <span class="member-activity">{{ $community->updated_at->diffForHumans() }}</span>
-                                                                            </span>
-                                                    </div>
-                                                    <div class="pull-right action">
-                                                        <a class="btn btn-success btn-with-icon btn-confirm" href="#"
-                                                           data-tooltip="tooltip" title="Accept">Accept</a>
-                                                        <a class="btn btn-default btn-with-icon btn-cancel" href="#"
-                                                           data-tooltip="tooltip" title="Reject">Reject</a>
-                                                    </div>
-                                                </li>
-                                                @endforeach
-                                        </ul>
-                                    @endif
-                                </div>
-                                <div class="members-group-action" id="membersGroupAction">
-                                    <ul>
-                                        <li><a data-action="ban" href="#">Kick &amp; Ban</a></li>
-                                        <li><a data-action="promote_to_mod" href="#">Promote to Support Staff</a></li>
-                                        <li><a data-action="promote_to_admin" href="#">Promote to Admin</a></li>
-                                        <li><a data-action="remove_from_group" href="#">Remove</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="member-type-header">Administrator</div>
-                                <ul class="row member-list" id="admins-list">
-
-                                    @foreach($community->getAdmins() as $admin)
-                                        <?php $user = \App\User::find($admin->user_id);?>
-                                        <li class="col-sm-6">
-                                            <label>
-                                                <input type="checkbox" value="{{ $admin->user_id }}" name="id[]">
-                                                <img width="28" height="28" alt="" class="avatar" src="/laravel/resources/assets/images/gravatar.jpg">
-                                            </label>
-                                                                <span class="member-info">
-                                                                    <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
-                                                                    <span class="member-email">{{ $user->user_email }}</span>
-                                                                    <a href="#" class="btn btn-success btn-sm">Demote to
-                                                                        Member</a>
-                                                                </span>
-                                        </li>
-                                    @endforeach
-
-                                </ul>
-
-                                <div class="member-type-header">Support Staff</div>
-                                <ul class="row member-list" id="mods-list">
-                                    @foreach($community->getModerators() as $mod)
-                                        <?php $user = \App\User::find($mod->user_id);?>
-                                        <li class="col-sm-6">
-                                            <label>
-                                                <input type="checkbox" value="1" name="id[]">
-                                                <img width="28" height="28" alt="" class="avatar" src="/laravel/resources/assets/images/gravatar.jpg">
-                                            </label>
-                                                                <span class="member-info">
-                                                                    <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
-                                                                    <span class="member-email">{{ $user->user_email }}</span>
-                                                                    <a href="#" class="btn btn-success btn-sm">Demote to
-                                                                        Member</a>
-                                                                </span>
-                                        </li>
-                                    @endforeach
-
-                                    <li class="clearfix hidden-sm"></li>
-                                </ul>
-
-                                <div class="member-type-header">Members</div>
-                                <ul class="row member-list" id="mods-list">
-                                    @foreach($community->getMembers() as $member)
-                                        <?php $user = \App\User::find($member->user_id);?>
-                                        <li class="col-sm-6">
-                                            <label>
-                                                <input type="checkbox" value="1" name="id[]">
-                                                <img width="28" height="28" alt="" class="avatar" src="/laravel/resources/assets/images/gravatar.jpg">
-                                            </label>
-                                                                <span class="member-info">
-                                                                    <span class="member-name">{{ $user->ID }}</span>
-                                                                    <span class="member-email">{{ $user->user_email }}</span>
-                                                                </span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-
-
-                                <input type="hidden" id="action" name="action" value=""/>
-                            </form>
+                            @include('pages.communities.partials.show.admin-members', ['communityRequests' => $communityRequests, 'community' => $community])
                         </div>
                     </div>
                 </div>

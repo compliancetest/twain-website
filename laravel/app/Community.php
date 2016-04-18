@@ -131,7 +131,7 @@ class Community extends Model
      */
     public function getMembers()
     {
-        return $this->members()->where(['is_mod' => true, 'is_admin' => 'false', 'is_confirmed' => 'true'])->get();
+        return $this->members()->where(['is_mod' => false, 'is_admin' => false, 'is_confirmed' => true])->get();
     }
 
     /**

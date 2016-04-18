@@ -224,14 +224,14 @@ var Page = {
         submitCancelMembership: function (el) {
             var communityId =  el.data('community-id');
             $.ajax({
-                type: 'post',
+                type: 'delete',
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                url : 'communities/'+communityId+'/leave',
+                url : '/membership/'+communityId+'/leave',
                 beforeSend: function () {
                     $('#confirmCancelMembership' +  communityId + ' .block-loading').show();
                 },
                 success: function(){
-                    location.reload();
+                    location.href == '/communities/';
                 },
                 error: function (error, status, exception) {
                     alert(formatErrorMessage(error, exception));

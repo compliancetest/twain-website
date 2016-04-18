@@ -22,7 +22,9 @@ function isChecked($checkboxValue, $valueToVerify)
 function sendEmails($sendTo, $template, $emailData)
 {
     foreach ($sendTo as $user) {
+        $user = json_decode(json_encode($user));
         $userData = get_userdata($user->user_id)->data;
+
         cp_send_email(array('name' => $userData->display_name, 'email' => $userData->user_email), $template, $emailData);
     }
 }

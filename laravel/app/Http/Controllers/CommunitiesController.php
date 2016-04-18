@@ -91,6 +91,9 @@ class CommunitiesController extends Controller
             $data['downloads'] = $community->downloads;
         }
         if ($action == 'admin') {
+            if(!$community->isAdmin()){
+                return Redirect::to('/communities');
+            }
             $data['communityMeta'] = $community->meta->keyBy('meta_key');
             $data['profileTypes'] = getCommunityProfileTypes($community->id);
             $data['membershipRequests'] = $community->getMembershipRequests();

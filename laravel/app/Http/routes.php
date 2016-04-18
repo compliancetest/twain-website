@@ -67,9 +67,9 @@ Route::group(['middleware' => ['web']], function () {
 
         //view community pages
         Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
+        Route::delete('membership/{community}/leave', 'CommunityMembershipController@leave');
 
-        //user should be community member to leave it
-        Route::delete('communities/popups/{community}/leave', 'CommunityMembershipController@leave');
+
 
     });
 
@@ -80,6 +80,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('communities/{community}', 'CommunitiesController@destroy');
 
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
+
+        Route::post('membership/{community}/reject', 'CommunityMembershipController@rejectUser');
+        Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
+        Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
 
     });
 });
