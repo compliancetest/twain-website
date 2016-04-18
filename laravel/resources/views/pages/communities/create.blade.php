@@ -83,7 +83,7 @@
                                     <div class="colored-box-content">
                                         <div class="form-group">
                                             <label for="articles_enabled">
-                                                {!! Form::checkbox('articles_enabled', false,  [
+                                                {!! Form::checkbox('articles_enabled', true,  [
                                                    'id' => 'bp-docs-group-enable',
                                                ]) !!}
                                                 Enable Articles for this community</label>

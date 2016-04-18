@@ -26,8 +26,7 @@ class ArticleRequest extends Request
     {
         return [
             'title' => 'required',
-            'content' => 'required',
-            'visibility' => 'required|string|in:members,admins,creator',
+            'content' => 'required'
         ];
     }
 }

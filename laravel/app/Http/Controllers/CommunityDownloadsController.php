@@ -22,43 +22,24 @@ class CommunityDownloadsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $community = $this->community;
-        return view('pages.communities.downloads.create', compact('community'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Requests\CommunityDownloadsRequest|Request $request
-     * @return \Illuminate\Http\Response
+     * Save new download
+     * @param Requests\CommunityDownloadsRequest $request
+     * @return array
      */
     public function store(Requests\CommunityDownloadsRequest $request)
     {
         $community = $this->community;
         $data = $request->all();
+
         $data['token'] = createClaimToken();
+
+        $s3FilePath = getenv('ENVIRONMENT') . '/communities/downloads/' . $community->id . '/' . $data['token'] . '.'.$request->file('file')->getClientOriginalExtension();
+
         $data['title'] = $request->file('file')->getClientOriginalName();
-        $data['location'] = $request->file('file')->getClientOriginalName();
+        $data['location'] = $s3FilePath;
         $data['size'] = $request->file('file')->getSize();
         $community->downloads()->create($data);
 
-        $s3FilePath = getenv('ENVIRONMENT') . '/communities/downloads/' . $community->id . '/' . $data['token'] . '.'.$request->file('file')->getClientOriginalExtension();
         Storage::put($s3FilePath, file_get_contents($request->file('file')));
 
         return ['redirect_to' => $community->getUrl() . 'downloads'];
@@ -66,39 +47,23 @@ class CommunityDownloadsController extends Controller
  }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function agreement($slug, $id)
-    {
-        $community = $this->community;
-        $download = CommunityDownloads::find($id);
-        $license = $download->license ? $download->license : $this->community;
-        return view('pages.communities.downloads.agreement', compact('license', 'download', 'community'));
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Redirect to download s3 url
+     * @param $slug - community slug
+     * @param $id - download id
+     * @param Request $request
+     * @return mixed
      */
     public function getfile($slug, $id, Request $request)
     {
         $download = CommunityDownloads::find($id);
-        return Redirect::to(\S3Wrapper::getAttachmentLink( $download->token, $download->location, 'downloads', true ));
+        return Redirect::to($download->getS3Link());
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $slug
-     * @param $downloadId
-     * @return \Illuminate\Http\Response
-     * @internal param int $id
+     * get edit download form view
+     * @param $slug - community slug
+     * @param $id - download id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($slug, $id)
     {
@@ -108,43 +73,42 @@ class CommunityDownloadsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update download
+     * @param Request $request
+     * @param $slug - community slug
+     * @param $id - download id
+     * @return array
      */
     public function update(Request $request, $slug, $id)
     {
         $community = $this->community;
         $data = $request->all();
+        $download = $community->downloads()->find($id);
         if($request->file('file')) {
-            $data['token'] = createClaimToken();
+            $s3FilePath = getenv('ENVIRONMENT') . '/communities/downloads/' . $community->id . '/' . $download->token . '.'.$request->file('file')->getClientOriginalExtension();
             $data['title'] = $request->file('file')->getClientOriginalName();
-            $data['location'] = $request->file('file')->getClientOriginalName();
+            $data['location'] = $s3FilePath;
             $data['size'] = $request->file('file')->getSize();
+            Storage::delete($download->location);
+            Storage::put($s3FilePath, file_get_contents($request->file('file')));
         }
-        $community->downloads()->find($id)->update($data);
 
-        //        $s3 = new S3Wrapper();
-//        $s3->putObject('/attachments/downloads/' . $data['token'] . '.'.$request->file('file')->getExtension(), file_get_contents($request->file('file')->getPath()), 'application/'.$ext );
+        $download->update($data);
 
         return ['redirect_to' => $community->getUrl() . 'downloads'];
     }
 
-    public function confirmDelete($slug, $downloadId)
-    {
-        return view('pages.communities.downloads.confirmDelete', ['downloadId' => $downloadId, 'community' => $this->community]);
-    }
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Remove Download
+     * @param $slug - Community Slug
+     * @param $id - download id
+     * @return array
      */
     public function destroy($slug, $id)
     {
-        CommunityDownloads::find($id)->delete();
-        return Redirect::to('communities/'.$this->community->slug.'/downloads/');
+        $download = CommunityDownloads::find($id);
+        Storage::delete($download->location);
+        $download->delete();
+        return ['status' => 'success'];
     }
 }

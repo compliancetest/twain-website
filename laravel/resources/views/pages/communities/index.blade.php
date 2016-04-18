@@ -39,7 +39,9 @@
                     </tbody>
                 </table>
             </div>
-            <a href="/communities/create" class="btn btn-success btn-with-icon btn-add">Add Community</a>
+            @if(Auth::check())
+                <a href="/communities/create" class="btn btn-success btn-with-icon btn-add">Add Community</a>
+            @endif
         </div>
     </div>
 

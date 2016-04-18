@@ -10,78 +10,76 @@ Route::group(array('prefix' => 'api/v1'), function () {
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::resource('communities', 'CommunitiesController');
+
     Route::resource('testingdetails', 'TestingDetailsController',
         ['only' => ['store', 'update', 'index']]);
-
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
 
     Route::get('communities', 'CommunitiesController@index');
 
-    Route::group(['prefix' => 'downloads', 'middleware' => ['auth', 'community.admin']], function () {
-        Route::get('{community}/create', 'CommunityDownloadsController@create');
 
-        Route::get('{community}/edit/{download}', 'CommunityDownloadsController@edit');
-
-        Route::delete('{community}/{download}', 'CommunityDownloadsController@destroy');
-
-        Route::patch('{community}/{download}', 'CommunityDownloadsController@update');
-
-        Route::post('{community}', 'CommunityDownloadsController@store');
-    });
-
+    /**
+     * Articles
+     */
+    //only community admin can create / edit / delete articles
     Route::group(['prefix' => 'articles', 'middleware' => ['auth', 'community.admin']], function () {
         Route::get('{community}/create', 'CommunityArticlesController@create');
-
         Route::get('{community}/{article}/edit', 'CommunityArticlesController@edit');
-
         Route::patch('{community}/{article}', 'CommunityArticlesController@update');
-
+        Route::post('{community}', 'CommunityArticlesController@store');
         Route::delete('{community}/{article}/{attachmentId}', 'CommunityArticlesController@destroyattachment');
     });
+
     Route::group(['prefix' => 'articles', 'middleware' => ['auth', 'community.user']], function () {
         Route::get('{community}/{article}', 'CommunityArticlesController@show');
     });
 
-
-    Route::group(['prefix' => 'downloads', 'middleware' => ['auth', 'community.user']], function () {
-
-        Route::get('{community}/agreement/{download}', 'CommunityDownloadsController@agreement');
-
+    /**
+     * Downloads
+     */
+    Route::group(['prefix' => 'downloads', 'middleware' => ['community.user']], function () {
         Route::get('{community}/getfile/{download}', 'CommunityDownloadsController@getfile');
-
-        Route::get('{community}/confirmdelete/{download}', 'CommunityDownloadsController@confirmDelete');
-
     });
 
+    //only admin can create / edit / delete attachments
+    Route::group(['prefix' => 'downloads', 'middleware' => ['community.admin']], function () {
+        Route::get('{community}/edit/{download}', 'CommunityDownloadsController@edit');
+        Route::delete('{community}/{download}', 'CommunityDownloadsController@destroy');
+        Route::patch('{community}/{download}', 'CommunityDownloadsController@update');
+        Route::post('{community}', 'CommunityDownloadsController@store');
+    });
 
+    /**
+     * Community
+     */
     Route::group(['middleware' => ['auth']], function () {
+
+        //any use can request community membership
         Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
-
-        //user should be community member to leave it
-        Route::group(['middleware' => ['community.user']], function () {
-            Route::get('communities/popups/{community}/leave', 'CommunityMembershipController@confirmLeave');
-            Route::delete('communities/popups/{community}/leave', 'CommunityMembershipController@leave');
-        });
-        Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
-    });
-
-    Route::group(['middleware' => ['auth']], function () {
 
         //any registered user can create community
         Route::get('communities/create/', 'CommunitiesController@create');
         Route::post('communities', 'CommunitiesController@store');
+    });
+    //community members routes
+    Route::group(['middleware' => ['community.user']], function () {
 
-        Route::group(['middleware' => ['community.admin']], function () {
+        //view community pages
+        Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
 
-            Route::get('communities/edit/{community}/step/{step}/', 'CommunitiesController@edit');
-            Route::patch('communities/{community}', 'CommunitiesController@update');
-            Route::delete('communities/{community}', 'CommunitiesController@destroy');
+        //user should be community member to leave it
+        Route::delete('communities/popups/{community}/leave', 'CommunityMembershipController@leave');
 
-        });
     });
 
-    Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
+    //only community admin can update / delete community
+    Route::group(['middleware' => ['community.admin']], function () {
 
+        Route::patch('communities/{community}', 'CommunitiesController@update');
+        Route::delete('communities/{community}', 'CommunitiesController@destroy');
+
+        Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
+
+    });
 });

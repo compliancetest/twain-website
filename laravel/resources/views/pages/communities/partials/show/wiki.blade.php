@@ -20,9 +20,9 @@
                                     <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}">{{ $article->title }}</a>
 
                                     @if(strlen($article->content) > 200)
-                                        <p>{{ substr($article->content, 0, 200).' [...]' }}</p>
+                                        <p>{{ substr(strip_tags($article->content), 0, 200).' [...]' }}</p>
                                     @else
-                                        <p>{{ $article->content }}</p>
+                                        <p>{!!  $article->content !!}</p>
                                     @endif
                                 </div>
                             </td>

@@ -18,9 +18,8 @@ use Illuminate\Support\Facades\Storage;
 class CommunitiesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show communities list
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -28,11 +27,9 @@ class CommunitiesController extends Controller
         return view('pages.communities.index', compact('communities'));
     }
 
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Create new community form
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -40,19 +37,20 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * Save new community handler
+     * @param Requests\CommunityRequest $request
+     * @return mixed
      */
     public function store(Requests\CommunityRequest $request)
     {
         $modelData = $request->all();
         $modelData['creator_id'] = Auth::user()->ID;
         $modelData['slug'] = Community::getUniqueSlug(new Community(), $modelData['title']);
+        $modelData['articles_status'] = true;
         if(!$request->has('articles_enabled')){
             $modelData['articles_status'] = false;
         }
+
         $model = Community::create($modelData);
 
         $this->handleImage($request, $model);
@@ -64,15 +62,13 @@ class CommunitiesController extends Controller
             'is_confirmed' => true
         ]);
 
-
         return Redirect::to('communities');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $slug community slug
+     * @param string $action - tab name
+     * @return $this
      */
     public function show($slug, $action = 'testsuites')
     {
@@ -100,23 +96,6 @@ class CommunitiesController extends Controller
             $data['membershipRequests'] = $community->getMembershipRequests();
         }
         return view('pages.communities.show')->with($data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($slug, $step)
-    {
-        $community = Community::findBySlug($slug);
-        $communityMeta = $community->getMeta();
-        $viewPath = 'pages.communities.edit.steps.' . $step;
-        $submitButtonText = 'Edit Community and Continue';
-        if (view()->exists($viewPath)) {
-            return view($viewPath, compact('community', 'step', 'submitButtonText', 'communityMeta'));
-        }
     }
 
     /**

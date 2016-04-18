@@ -16,7 +16,7 @@
 
                 <div class="article-view">
                     <div class="static-content">
-                        {{ $article->content }}
+                        {!! $article->content !!}
                     </div>
 
                     @if(count($article->attachments) > 0)
@@ -30,9 +30,6 @@
                         </div>
                     @endif
 
-                    {{--<div class="article-tags">--}}
-                        {{--Tags: <a href="#">rollover</a>, <a href="#">superstream</a>--}}
-                    {{--</div>--}}
                 </div>
 
             </div>

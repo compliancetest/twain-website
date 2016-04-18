@@ -21,12 +21,23 @@ class CommunityArticlesController extends Controller
         $this->community = Community::findBySlug($request->route('community'));
     }
 
-    public function create()
+    /**
+     * Create new article form
+     * @param $communitySlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create($communitySlug)
     {
         $community = $this->community;
         return view('pages.communities.articles.create', compact('community'));
     }
 
+    /**
+     * Edit article form
+     * @param $communitySlug
+     * @param $articleSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit($communitySlug, $articleSlug)
     {
         $article = CommunityArticle::findBySlug($articleSlug);
@@ -74,13 +85,15 @@ class CommunityArticlesController extends Controller
     {
         if($request->file('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $data = [
-                    'filename' => $file->getClientOriginalName(),
-                    'location' => getenv('ENVIRONMENT') . '/communities/articles/' . $article->id . '/'.$file->getClientOriginalName(),
+                if($file) {
+                    $data = [
+                        'filename' => $file->getClientOriginalName(),
+                        'location' => getenv('ENVIRONMENT') . '/communities/articles/' . $article->id . '/' . $file->getClientOriginalName(),
 
-                ];
-                Storage::put($data['location'], file_get_contents($file));
-                $article->attachments()->create($data);
+                    ];
+                    Storage::put($data['location'], file_get_contents($file));
+                    $article->attachments()->create($data);
+                }
             }
         }
     }
