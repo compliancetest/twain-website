@@ -51,6 +51,15 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     /**
+     * Profiles
+     */
+    Route::group(['middleware' => ['community.user']], function () {
+        //any use can request community membership
+        Route::delete('communityprofiles/{community}/{profileId}', 'ProfilesController@destroy');
+        Route::post('communityprofiles/{community}/copy/{profileId}', 'ProfilesController@copy');
+    });
+
+    /**
      * Community
      */
     Route::group(['middleware' => ['auth']], function () {
