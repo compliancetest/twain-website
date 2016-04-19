@@ -41,4 +41,22 @@ class Profile extends Model
         return Storage::put('profiles/user/' . $this->token . '.json', $data);
     }
 
+    /**
+     * Get S3 profile download link
+     * @return string
+     */
+    public function getS3Link()
+    {
+        $disk = Storage::disk('s3');
+        $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
+            'Bucket' => 'data.twain.gosource.com.au',
+            'Key' => 'profiles/user/' . $this->token . '.json',
+            'ResponseContentDisposition' => 'attachment;'
+        ]);
+
+        $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+20 minutes');
+
+        return (string)$request->getUri();
+    }
+
 }

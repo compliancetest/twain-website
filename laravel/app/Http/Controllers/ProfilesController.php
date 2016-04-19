@@ -12,10 +12,62 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Response;
 use Illuminate\Support\Facades\Auth;
 
 class ProfilesController extends Controller
 {
+
+
+    public function viewprofile($communitySlug, $profileId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $profile = Profile::find($profileId);
+        return view('pages.profiles.view')->with(['profile' => $profile, 'content' => json_encode($profile->getProfileFromS3()), 'community' => $community])->render();
+    }
+
+    public function viewprofiletype($communitySlug, $profileTypeId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $profileType = ProfileType::find($profileTypeId);
+        return view('pages.profiles.viewprofiletype')->with(['profileType' => $profileType, 'content' => base64_decode($profileType->schema), 'community' => $community])->render();
+    }
+
+    public function edit($communitySlug, $profileId, $profileTypeId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $profile = Profile::find($profileId);
+        $profileType = ProfileType::find($profileTypeId);
+        return view('pages.profiles.editprofile')->with(['profileType' => $profileType, 'profile' => $profile, 'community' => $community])->render();
+    }
+
+    public function update($communitySlug, $profileId, Request $request)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $profile = Profile::find($profileId);
+        if($community->isAdmin() || $profile->creator_id = Auth::user()->ID){
+
+            $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
+            $profile->type_id = $request->get('profile_type_id');
+            $profile->purpose = $profileData['Profile']['Purpose'];
+            $profile->profile_description = $profileData['Profile']['Description'];
+            $profile->profile_name = $profileData['Profile']['Title'];
+            $profile->putToS3(json_encode($profileData));
+            $profile->save();
+            return JsonResponse::create(['status' => 'success'], 200);
+        }
+        return JsonResponse::create(['status' => 'error'], 403);
+    }
+
+    public function downloadprofiletype($communitySlug, $profileTypeId)
+    {
+        $profile = ProfileType::find($profileTypeId);
+        $headers = [
+            'Content-type' => 'application/json',
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $profile->title)
+        ];
+        return Response::make(base64_decode($profile->schema), 200, $headers);
+    }
 
     /**
      * Copy profile
@@ -55,7 +107,6 @@ class ProfilesController extends Controller
         }
 
         return JsonResponse::create(['status' => 'success'], 200);
-
     }
 
     /**

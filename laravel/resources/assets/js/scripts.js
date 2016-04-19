@@ -447,7 +447,6 @@ var Page = {
                     $.ajax({
                         url: $(this).attr('href'),
                         type: 'DELETE',
-                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                         success: function(result) {
                             $(elem).parents('li').slideUp('slow', function () {
                                $(elem).remove();
@@ -503,7 +502,7 @@ var Page = {
         var modalId = el.data('target');
         $(modalId).on("show.bs.modal", function(e) {
             var link = $(e.relatedTarget);
-            $(this).find(".modal-body").load(link.attr("href"));
+            $(this).find(".modal-content").load(link.attr("href"));
         });
     }
 

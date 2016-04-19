@@ -57,6 +57,12 @@ Route::group(['middleware' => ['web']], function () {
         //any use can request community membership
         Route::delete('communityprofiles/{community}/{profileId}', 'ProfilesController@destroy');
         Route::post('communityprofiles/{community}/copy/{profileId}', 'ProfilesController@copy');
+        Route::get('communityprofiles/{community}/viewprofile/{profileId}', 'ProfilesController@viewprofile');
+        Route::get('communityprofiles/{community}/edit/{profileId}/{profileTypeId}', 'ProfilesController@edit');
+
+        Route::get('communityprofiles/{community}/viewprofiletype/{profileTypeId}', 'ProfilesController@viewprofiletype');
+        Route::get('communityprofiles/{community}/downloadprofiletype/{profileTypeId}', 'ProfilesController@downloadprofiletype');
+        Route::patch('communityprofiles/{community}/{profileId}', 'ProfilesController@update');
     });
 
     /**
