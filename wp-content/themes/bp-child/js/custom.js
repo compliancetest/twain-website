@@ -514,6 +514,7 @@ jQuery(document).ready(function($) {
     });
     
     // Dropdown Menus
+	/*
     jQuery(window).resize(function(){
         if (jQuery('#wrapper').width() - 1000 < 800) {
             jQuery('#top_loged_actions .dropdown').addClass('leftmenu');
@@ -524,6 +525,7 @@ jQuery(document).ready(function($) {
     if (jQuery('#wrapper').width() - 1000 < 800) {
         jQuery('#top_loged_actions .dropdown').addClass('leftmenu');
     }
+	 */
     jQuery('.dropdown-menu li').each(function(){
         if (jQuery(this).find('.dropdown-menu').length > 0) {
             jQuery(this).addClass('dropdown-submenu');

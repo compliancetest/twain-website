@@ -28,7 +28,7 @@ function do_test_case_admin_ajax_action()
         //Check _wpnounce
         if(wp_verify_nonce($_POST['_wpnonce'], 'get_suite_roles'))
         {   
-            $case = new TestCase($postID);            
+            $case = new TestCases($postID);
             $case->testSuite = $_POST['suite_id'];
             
             $allRoles = $case->getAvailableRoles();            
@@ -53,7 +53,7 @@ function do_test_case_admin_ajax_action()
             }
             exit;
         }else if(wp_verify_nonce($_POST['_wpnonce'], 'get_init_message')){   
-            $case = new TestCase($postID);            
+            $case = new TestCases($postID);
             $case->testSuite = $_POST['suite_id'];
             $initMessages = $case->getAvailableInitMessages();
             echo '<select name="choose_init_messages" id="checkinitmsg">';
@@ -173,7 +173,7 @@ function deleteCase()
         exit;
     }
     
-    $case = new TestCase($id);
+    $case = new TestCases($id);
     $familyMark = $case->loadfamilyMark();
     
     if(!wp_delete_post($id, true))
@@ -203,7 +203,7 @@ function getTestSuiteInfoForCase()
         if(!is_array($suiteID))
             $suiteID = array($suiteID);
         
-        $case = new TestCase($_POST['id']);
+        $case = new TestCases($_POST['id']);
         $case->load();
         
         $case->testSuite = $suiteID;
@@ -461,7 +461,7 @@ function saveCase()
        
     $id = $_POST['id'];
     
-    $case = new TestCase($id);
+    $case = new TestCases($id);
     $case->load();
 
     if(!$id)
@@ -885,7 +885,7 @@ function confirmDeletingCase()
     $id = $_REQUEST['id'];
     $return = $_REQUEST['return'];
     
-    $testCase = new TestCase($id);
+    $testCase = new TestCases($id);
     $suites = $testCase->loadValues('test_suite');
     ?>
     <div id="deleting-case-confirm-box<?php echo $id?>" class="popup-box deleting-case-confirm-box" style="display: none; width: 450px">                
@@ -931,7 +931,7 @@ function get_details_popup(){
     $case_id = intval( $_REQUEST['id'] );
     $search_case_id = intval( $_REQUEST['search_id'] );
     $plan_id = intval( $_REQUEST['plan_id'] );
-    $case = new TestCase( $case_id );
+    $case = new TestCases( $case_id );
     $case->load();
     $is_optional = get_post_meta( $case_id, 'testcase_status', true );
     if( ! $is_optional ) $is_optional = 'No';

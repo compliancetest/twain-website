@@ -159,6 +159,11 @@ return [
 
         App\Providers\WordpressServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
+
+        Collective\Html\HtmlServiceProvider::class,
+
+        Laracasts\Flash\FlashServiceProvider::class,
+
     ],
 
     /*
@@ -205,6 +210,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
+
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'Flash'     => Laracasts\Flash\Flash::class
     ],
 
 ];

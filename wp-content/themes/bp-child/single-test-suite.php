@@ -14,7 +14,7 @@ Template Name Posts: Test Suite
 
     $slug = get_post( $post )->post_name;
 
-	$group = groups_get_group( array( 'group_id' => $suite->community_id ) );
+	$group = getCommunity( $suite->community_id );
 
     //If this is the revision, only the community admin can see it.
     if($suite->isRevision && !groups_is_user_admin($user_id, $suite->community_id))
@@ -49,7 +49,7 @@ Template Name Posts: Test Suite
 						<div class="clear"></div>
 					</div>
 					<div class="width20P right">
-						<a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a>
+						<a href="/communities/<?php echo $group->slug; ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a>
 					</div>
 					<div class="clear"></div>
 					<div class="grids noradiusbottom">

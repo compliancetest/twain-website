@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Community;
+use App\CommunityDownloads;
+use App\CommunityMembers;
+use App\CommunityMeta;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
     }
 
     /**

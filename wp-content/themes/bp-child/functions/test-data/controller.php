@@ -15,7 +15,8 @@ function saveProfileType()
 
     if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         addMessage('Invalid Request!', 'error');
-        return false;
+        wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     if ($file['error'] == UPLOAD_ERR_OK && $file['size'] > 0) {
@@ -28,7 +29,8 @@ function saveProfileType()
     $schemaObj = json_decode($content);
     if (!$schemaObj || !isset($schemaObj->title) || !$schemaObj->title) {
         addMessage('The profile format does not follow the format expected.', 'error');
-        return false;
+        wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     if ($type_id) {
@@ -37,7 +39,8 @@ function saveProfileType()
         $id = $wpdb->get_var($query);
         if (!$id) {
             addMessage('Invaild Request!', 'error');
-            return;
+            wp_redirect($_SERVER['HTTP_REFERER']);
+            exit;
         }
         $result = $wpdb->update($wpdb->prefix . "community_profile_types",
             array('community_id' => $community_id, 'title' => $schemaObj->title, 'creator_id' => $user_id, 'created_date' => date('Y-m-d H:i:s'), 'schema' => base64_encode($content)),
@@ -48,9 +51,8 @@ function saveProfileType()
     }
     BlobsMigration::uploadProfileTypes();
     addMessage('Profile Type successfully saved!');
-    $group = groups_get_group(array('group_id' => $community_id));
 
-    wp_redirect(bp_get_group_admin_permalink($group));
+    wp_redirect($_SERVER['HTTP_REFERER']);
     exit;
 
 }
@@ -78,14 +80,13 @@ function deleteProfileType()
 
     if ($row->instances > 0) {
         addMessage("Sorry, you can't delete the profile type because it still includes some instances.", "error");
-        return;
+         wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     $wpdb->delete($wpdb->prefix . "community_profile_types", array('id' => $row->id));
     addMessage("The profile type was deleted.");
-    $group = groups_get_group(array('group_id' => $community_id));
-    wp_redirect(bp_get_group_admin_permalink($group));
-
+    wp_redirect($_SERVER['HTTP_REFERER']);
     exit;
 }
 
@@ -104,7 +105,7 @@ function readProfileType()
         exit;
     }
 
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d AND community_id=%d", $type_id, $community_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d AND community_id=%s", $type_id, $community_id);
     $row = $wpdb->get_row($query);
 
     if (!$row) {

@@ -162,7 +162,7 @@ function test_case_test_suites_metabox_html(){
 function test_case_choose_initiating_message_metabox_html(){
     global $post;
     
-    $testCase = new TestCase($post->ID);
+    $testCase = new TestCases($post->ID);
     $testCase->testSuite = _get_current_test_suite($post->ID);
     $allInitMessages = $testCase->getAvailableInitMessages();
     
@@ -205,7 +205,7 @@ function test_case_conformance_level_metabox_html(){
 function test_case_choose_roles_metabox_html(){
     global $post;
     
-    $case = new TestCase($post->ID);
+    $case = new TestCases($post->ID);
     
     $current_test_suite = _get_current_test_suite($post->ID);
     $case->testSuite = $current_test_suite;

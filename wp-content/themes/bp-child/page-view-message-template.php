@@ -5,7 +5,7 @@
 
 $caseID = $_GET['id'];
 
-$case = new TestCase($caseID);
+$case = new TestCases($caseID);
 $case->load();
 
 if (!$case->id) {

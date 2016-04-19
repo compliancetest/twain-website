@@ -253,15 +253,15 @@ class CT_Organisation
         if(isset($this->subscriptions))
             return $this->subscriptions;
         
-        $query = $wpdb->prepare("SELECT DISTINCT(os.id), os.*, u.user_email, CONCAT(um1.meta_value, ' ', um2.meta_value) AS full_name, t.suite_title, bg.name as community_name FROM {$wpdb->prefix}organisations_subscriptions AS os 
+        $query = $wpdb->prepare("SELECT DISTINCT(os.id), os.*, u.user_email, CONCAT(um1.meta_value, ' ', um2.meta_value) AS full_name, t.suite_title, bg.title as community_name FROM {$wpdb->prefix}organisations_subscriptions AS os
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
                             LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=u.ID AND um1.meta_key='first_name'
                             LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='last_name'
                             LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
                             LEFT JOIN {$wpdb->prefix}postmeta AS pm ON pm.meta_key='community_id' AND pm.post_id=os.suite_family_mark
-                            LEFT JOIN {$wpdb->prefix}bp_groups AS bg ON bg.id=pm.meta_value
+                            LEFT JOIN communities AS bg ON bg.id=pm.meta_value
                             WHERE os.organisation_id=%d
-                            ORDER BY bg.name, t.suite_title, os.nickname", $this->id);
+                            ORDER BY bg.title, t.suite_title, os.nickname", $this->id);
     
         $this->subscriptions = $wpdb->get_results($query);
         

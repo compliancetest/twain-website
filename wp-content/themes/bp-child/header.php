@@ -38,7 +38,7 @@
                         ?>
                         <div id="top_loged_actions">
                             <ul>
-                                <li class="dropdown">
+                                <li class="dropdown leftmenu">
                                     <a href="javascript:void(0)" class="blue-btn action-btn icon-btn dashboard-btn">
                                         <span class="p"></span>
                                         <span class="t">Dashboard</span>

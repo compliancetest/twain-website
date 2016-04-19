@@ -1,0 +1,122 @@
+*{
+    @include box-sizing(border-box);
+    margin: 0;
+    padding: 0;
+}
+
+ul{
+    list-style: none;
+}
+
+.main-container{
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.main-content{
+    @include box-shadow(0 0 5px #999);
+    background: #fff;
+    padding: 20px 15px;
+}
+
+body.modal-open,
+.modal-open .navbar-fixed-top,
+.modal-open .navbar-fixed-bottom {
+    margin-right: 0;
+}
+
+.modal-dialog {
+    z-index: 1050;
+}
+
+@media only screen and (min-width: $mobile-size) {
+    .hidden-mobile {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: $mobile-size) {
+    .hidden-desktop {
+        display: none !important;
+    }
+}
+
+.modal.modal-small {
+    .modal-dialog{
+        width: 300px;
+        margin-left:-150px;
+    }
+}
+
+.page-title {
+    @include box-shadow(0 0 50px #ededed inset);
+    border-bottom: 1px solid #e1e1e1;
+    padding: 20px 15px;
+    margin: -20px -15px 0 -15px;
+    @include legacy-pie-clearfix;
+
+    h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        float: left;
+    }
+
+    .page-title-actions {
+        float: right;
+
+        @media only screen and (max-width: $mobile-size) {
+            clear: both;
+            padding: 10px 0 0 0;
+            float: none;
+        }
+
+        .btn{
+            margin-left: 5px;
+        }
+    }
+}
+
+.block-loading-wrapper{
+    position: relative;
+}
+
+.block-loading{
+    display: none;
+    text-align: center;
+    position: absolute;
+    background: rgba(168, 194, 215, 0.6);
+    z-index: 100;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    .loading-content{
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        padding: 0;
+        margin: -54px 0 0 0;
+
+        .loader{
+            background: image-url('loader.gif') no-repeat 0 0;
+            height: image-height('loader.gif');
+            width: image-width('loader.gif');
+            display: block;
+            margin: 0 auto;
+        }
+
+        .loading-text{
+            color: #e33f3f;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .loading-wait{
+            color: #e33f3f;
+            font-size: 12px;
+        }
+    }
+}

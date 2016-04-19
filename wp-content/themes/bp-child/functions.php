@@ -1557,6 +1557,16 @@ function validateDate($date)
     return $d && $d->format('Y-m-d') == $date;
 }
 
+function getCommunity($communityId){
+    global $wpdb;
+    return $wpdb->get_row($wpdb->prepare("SELECT * FROM communities WHERE id = '%s'", $communityId));
+}
+
+function getCommunities(){
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM communities");
+}
+
 /**
  * his hook used to allow non-wp-admins to attach files to articles
  */
