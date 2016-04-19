@@ -8,7 +8,7 @@
                 <div class="page-title">
                     <h1>Edit Article</h1>
                     <div class="page-title-actions">
-                        <a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+                        {{--<a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>--}}
                     </div>
                 </div>
 
@@ -65,10 +65,10 @@
                         </div>
 
                         <div class="form-actions clearfix">
-                            <a href="#" class="btn btn-danger btn-with-icon btn-delete pull-right">Delete</a>
+                            {{--<a href="#" class="btn btn-danger btn-with-icon btn-delete pull-right">Delete</a>--}}
                             <div class="pull-left">
                                 <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                                <button type="button" class="btn btn-default btn-with-icon btn-cancel">Cancel</button>
+                                <a href="/communities/{{ $community->slug }}/wiki" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                             </div>
                         </div>
 
