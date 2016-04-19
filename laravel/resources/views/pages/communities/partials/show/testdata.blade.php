@@ -96,7 +96,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                     <td class="text-center text-nowrap">
                         @if($community->isAdmin())
                             <a href="/html/temp/test-data-edit-profile-ajax.php" class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile-{{ $instance->id }}" data-tooltip="tooltip" title="Edit Profile"></a>
-                            <a href="/profiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" title="Delete Profile"></a>
+                            <a href="/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" title="Delete Profile"></a>
 
                             {{-- Edit Profile Modal--}}
                             <div class="modal fade profile-modal" id="modalEditProfile-{{ $instance->id }}" tabindex="-1" role="dialog">
@@ -118,7 +118,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                             </div>
 
                         @endif
-                        <a href="/?td-action={{  wp_create_nonce('copy-harness-instance') }}&id={{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
+                        <a href="/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
                     </td>
                 </tr>
                 @endforeach
@@ -141,6 +141,23 @@ $instances = getCommunityProfileInstatnces($community->id);
         if(confirm('Are you sure?')){
             jQuery.ajax({
                 type: 'delete',
+                url: elem.attr('href'),
+                success: function(data){
+                    if(data.status == 'success'){
+                        elem.closest('tr').remove();
+                    }
+                }
+            });
+
+        }
+    });
+
+    jQuery('.btn-copy').on('click', function(e){
+        e.preventDefault();
+        var elem = jQuery(this);
+        if(confirm('Are you sure?')){
+            jQuery.ajax({
+                type: 'post',
                 url: elem.attr('href'),
                 success: function(data){
                     if(data.status == 'success'){
