@@ -38,9 +38,9 @@
                             <td class="text-nowrap text-center">{{ formatBytes($download->size) }}</td>
                             <td class="text-center">
                                 @if(empty($download->license))
-                                    <a class="download-license-green" href="{{ $download->getS3Link() }}">License <br/>Agreement</a>
+                                    <a class="download-license download-license-green" href="{{ $download->getS3Link() }}">License <br/>Agreement</a>
                                 @else
-                                    <a class="download-license" data-toggle="modal" href="#downloadLicense{{ $download->id }}">License <br/>Agreement</a>
+                                    <a class="download-license download-license-red" data-toggle="modal" href="#downloadLicense{{ $download->id }}">License <br/>Agreement</a>
                                     <div class="modal fade downloadLicenseModal" id="downloadLicense{{ $download->id }}" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">

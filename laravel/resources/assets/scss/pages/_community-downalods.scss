@@ -118,11 +118,25 @@
     position: relative;
     text-align: left;
     line-height: 12px;
-    padding-left: (image-width('icons/license-icon.png'))+2;
+
+    &-red{
+      padding-left: (image-width('icons/license-red-icon.png'))+2;
+
+      &:before{
+        @include iconsSprite(license-red-icon);
+      }
+    }
+
+    &-green{
+      padding-left: (image-width('icons/license-green-icon.png'))+2;
+
+      &:before{
+        @include iconsSprite(license-green-icon);
+      }
+    }
 
     &:before{
       content: '';
-      @include iconsSprite(license-icon);
       position: absolute;
       left: 0;
       top: 2px;
