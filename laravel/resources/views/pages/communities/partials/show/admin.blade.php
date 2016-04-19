@@ -162,15 +162,18 @@
                                                 </td>
                                                 <td>{{ $profileType->instances }}</td>
                                                 <td class="text-nowrap">
-                                                    <a href="/?td-action={{ wp_create_nonce('download-profile-type') }}&type_id={{ $profileType->id }}&community_id={{ $community->id }}"
+
+                                                    <a href="/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}"
                                                        class="btn btn-success btn-icon btn-download"
                                                        data-tooltip="tooltip" title="Download Profile Type"></a>
-                                                    <a href="/?td-action={{ wp_create_nonce('edit-profile-type') }}&type_id={{ $profileType->id }}&community_id={{ $community->id }}"
+
+                                                    <a href="/profiletypes/{{ $community->slug }}/edit/{{ $profileType->id }}"
                                                        class="btn btn-primary btn-icon btn-edit editProfileType"
                                                        data-id="{{ $profileType->id }}"
                                                        data-tooltip="tooltip" title="Edit Profile Type"></a>
+
                                                     @if($profileType->instances == 0)
-                                                        <a href="/?td-action={{ wp_create_nonce('delete-profile-type') }}&type_id={{ $profileType->id }}&community_id={{ $community->id }}"
+                                                        <a href="/profiletypes/{{ $community->slug }}/{{ $profileType->id }}"
                                                            class="btn btn-danger btn-icon btn-delete"
                                                            data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                     @endif
@@ -193,8 +196,7 @@
                         </div>
 
                         <div id="addNewProfile" style="display: none;">
-                            <form method="post" enctype="multipart/form-data" action="/" id="profileTypeForm"
-                                  name="profileTypeForm">
+                            <form method="post" enctype="multipart/form-data" action="/profiletypes/{{ $community->slug }}" id="profileTypeForm" name="profileTypeForm">
                                 <div class="colored-box-content">
                                     <div class="add-profile-title">Add New Profile Type</div>
                                     <div class="form-group">
@@ -212,10 +214,7 @@
                                         </div>
                                     </div>
 
-                                    <input type="hidden" name="community_id" value="{{ $community->id }}"/>
-                                    <input type="hidden" name="type_id" id="type_id" value=""/>
-                                    <input type="hidden" name="td-action"
-                                           value="{!! wp_create_nonce('save-profile-type') !!}"/>
+                                        <input type="hidden" name="type_id" id="type_id" value=""/>
                                 </div>
                                 <div class="colored-box-footer">
                                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save
@@ -344,15 +343,42 @@
             jQuery('#profileTypeForm #type_id').val('');
         });
 
-        jQuery('#profileTypeForm').submit(function () {
+        jQuery('#profileTypeForm').submit(function (e) {
+            e.preventDefault();
             jQuery('#profileTypeForm .error_message').remove();
             if (jQuery('#profile_type_file').val() == '' && jQuery('#profile_type_text').val() == '') {
                 jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="error_message">Please enter schema or select a schema file.</p>');
                 return false;
             }
             jQuery('#profileTypesLoading').show();
-            return true;
+
+            jQuery('#profileTypeForm').ajaxSubmit({
+                type: 'post',
+                success: function (rsp) {
+                    jQuery('#profileTypesLoading').hide();
+                    jQuery('#addNewProfile').hide();
+                    location.reload();
+                }
+            })
         });
+
+        jQuery('.btn-delete').on('click', function (e) {
+            if(confirm('Are you sure?')) {
+                jQuery('#profileTypesLoading').show();
+                e.preventDefault();
+                var link = jQuery(this).attr('href');
+                jQuery.ajax({
+                    type: 'delete',
+                    url: link,
+                    success: function (rsp) {
+                        if (rsp.status == 'success') {
+                            location.reload();
+                        }
+                    }
+                })
+            }
+        })
+
 
         jQuery('#cancelAddingProfile').on('click', function (e) {
             e.preventDefault();
@@ -365,12 +391,10 @@
             var link = jQuery(this).attr('href');
             jQuery.ajax({
                 url: link,
-                dataType: 'xml',
                 success: function (rsp) {
-                    if (jQuery(rsp).find('status').text() == 'success') {
+                    if (rsp.status == 'success') {
                         jQuery('#addNewProfile').show();
-                        jQuery('#profileTypeForm #profile_type_text').val(jQuery(rsp).find('schema').text());
-                        jQuery('#profileTypeForm #type_id').val(jQuery(rsp).find('id').text());
+                        jQuery('#profileTypeForm #profile_type_text').val(rsp.schema);
                     }
                     jQuery('#profileTypesLoading').hide();
                 }

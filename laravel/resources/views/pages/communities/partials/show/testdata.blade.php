@@ -41,7 +41,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                     </td>
                     <td>{{ $instance->purpose }}</td>
                     <td class="text-center">
-                        <a href="/communityprofiles/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
+                        <a href="/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
                     </td>
                     <td class="text-center">{{ formatDate($instance->created_date) }}</td>
                     <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>

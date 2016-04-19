@@ -26,12 +26,6 @@ class ProfilesController extends Controller
         return view('pages.profiles.view')->with(['profile' => $profile, 'content' => json_encode($profile->getProfileFromS3()), 'community' => $community])->render();
     }
 
-    public function viewprofiletype($communitySlug, $profileTypeId)
-    {
-        $community = Community::findBySlug($communitySlug);
-        $profileType = ProfileType::find($profileTypeId);
-        return view('pages.profiles.viewprofiletype')->with(['profileType' => $profileType, 'content' => base64_decode($profileType->schema), 'community' => $community])->render();
-    }
 
     public function edit($communitySlug, $profileId, $profileTypeId)
     {
@@ -57,16 +51,6 @@ class ProfilesController extends Controller
             return JsonResponse::create(['status' => 'success'], 200);
         }
         return JsonResponse::create(['status' => 'error'], 403);
-    }
-
-    public function downloadprofiletype($communitySlug, $profileTypeId)
-    {
-        $profile = ProfileType::find($profileTypeId);
-        $headers = [
-            'Content-type' => 'application/json',
-            'Content-Disposition' => sprintf('attachment; filename="%s"', $profile->title)
-        ];
-        return Response::make(base64_decode($profile->schema), 200, $headers);
     }
 
     /**

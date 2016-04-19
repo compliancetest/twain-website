@@ -10,6 +10,10 @@ class ProfileType extends Model
 
     public $timestamps = [];
 
+    protected $fillable = [
+        'creator_id', 'title', 'community_id', 'created_date'
+    ];
+
     public function getTitle()
     {
         $array = json_decode(base64_decode($this->schema), true);
