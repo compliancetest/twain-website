@@ -87,49 +87,68 @@ $instances = getCommunityProfileInstatnces($community->id);
             $('.success-message').slideUp();
         }, 2000);
     });
-    jQuery('.removingProfile').on('click', function(e){
-        e.preventDefault();
-        var elem = jQuery(this);
-        var profile = {
-          id: elem.data('profile-id'),
-          name: elem.data('profile-name')
-        };
 
-        jQuery.ajax({
-            type: 'delete',
-            url: elem.attr('href'),
-            success: function(data){
-                if(data.status == 'success'){
-                    $('#test-data-row-' + profile.id).addClass('removing').fadeTo("slow",0.3, function () {
-                        $(this).remove();
-                        $('.community-test-data > .col-md-12').prepend('<div class="success-message">' + profile.name +' has been removed</div>');
-                        setTimeout(function() {
-                            $('.community-test-data > .col-md-12 > .success-message').slideUp(function () {
-                                $(this).remove();
-                            });
-                        }, 2000);
-                    });
-                }
-            }
-        });
+    jQuery(document).ready(function($) {
+        jQuery('.removingProfile').on('click', function (e) {
+            e.preventDefault();
+            var elem = jQuery(this);
+            var profile = {
+                id: elem.data('profile-id'),
+                name: elem.data('profile-name')
+            };
 
-    });
-
-    jQuery('.btn-copy').on('click', function(e){
-        e.preventDefault();
-        var elem = jQuery(this);
-        if(confirm('Are you sure?')){
             jQuery.ajax({
-                type: 'post',
+                type: 'delete',
                 url: elem.attr('href'),
-                success: function(data){
-                    if(data.status == 'success'){
-                        elem.closest('tr').remove();
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $('#test-data-row-' + profile.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                            $(this).remove();
+                            $('.community-test-data > .col-md-12').prepend('<div class="success-message">' + profile.name + ' has been removed</div>');
+                            setTimeout(function () {
+                                $('.community-test-data > .col-md-12 > .success-message').slideUp(function () {
+                                    $(this).remove();
+                                });
+                            }, 2000);
+                        });
                     }
+                },
+                error: function (error, status, exception) {
+                    $('.community-test-data > .col-md-12').prepend('<div class="error-message">' + error + '</div>');
+                    setTimeout(function () {
+                        $('.community-test-data > .col-md-12 > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
+                },
+                complete: function () {
+                    $('.modal').modal('hide');
                 }
             });
 
-        }
+        });
+
+        jQuery('.btn-copy').on('click', function (e) {
+            e.preventDefault();
+            var elem = jQuery(this);
+            if (confirm('Are you sure?')) {
+                jQuery.ajax({
+                    type: 'post',
+                    url: elem.attr('href'),
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            elem.closest('tr').remove();
+                        }
+                    }
+                });
+
+            }
+        });
+
+        $('#modalCopyProfileUrl, #modalViewProfile').on('hidden.bs.modal', function (e) {
+            $(this).find('.modal-body').html('<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>');
+        });
+
     });
 </script>
 
