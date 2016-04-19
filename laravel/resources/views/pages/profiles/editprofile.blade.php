@@ -2,29 +2,32 @@
     <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
     Edit Profile Instance
 </div>
-<div class="modal-body">
+<div class="modal-body block-loading-wrapper">
     <div class="edit-profile-form-wrapper" id="editProfileBox">
         <h3>Please Select Profile Type</h3>
 
         <form name="editProfileForm" id="editProfileForm" action="">
-            <fieldset>
-                <select class="select left" name="profile-type-id" id="profile-type-id">
+            <fieldset class="edit-profile-fieldset">
+                <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
                     @foreach(\App\ProfileType::all() as $type)
                         <option value="{{ $type->id }}" @if($type->id == $profileType->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
                     @endforeach
                 </select>
 
-                <div>
+                <div class="upload-json-file-box">
                     <h4>Upload Json file</h4>
 
                     <div class="upload-file-field">
                         <input type="file" name="profile_instance_file" class="input-file" id="profile_instance_file" data-file-type="doc"
                                data-file-extensions="(.txt or .json file)"/>
                     </div>
+                    <div class="upload-file-field-additional-btn">
+                        <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload</a>
+                    </div>
                 </div>
 
                 <div class="or-delimiter-wrap">
-                    <div class="or-delimiter"><span>or</span></div>
+                    <div class="or-delimiter"><span class="or-text">or</span></div>
                 </div>
                 <div class="edit-profile-form">
                     <h4>Enter Values</h4>
@@ -52,7 +55,7 @@
             if (this.value == '') {
                 initEditProfileBox();
             } else {
-                jQuery('#editProfileBox .loading').show();
+                jQuery('#{{ $profile->id }}Loading').show();
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/edit/{{ $profile->id }}/' + jQuery('#editProfileBox #profile-type-id').val(),
                     success: function (rsp) {
@@ -62,9 +65,10 @@
                     },
                     error: function (rsp) {
                         jQuery('#editProfileBox .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                        jQuery('#{{ $profile->id }}Loading').hide();
                     },
                     complete: function (rsp) {
-                        jQuery('#editProfileBox .loading').hide();
+                        jQuery('#{{ $profile->id }}Loading').hide();
                     }
                 })
             }
@@ -138,8 +142,11 @@
                     jQuery('#edit-profile-box .loading').hide();
                 }
             })
-        })
+        });
 
+        $('#modalEditProfile').on('hidden.bs.modal', function (e) {
+            $('#modalEditProfile .modal-body').html('<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>');
+        })
 
 
     </script>
@@ -148,3 +155,4 @@
     <a href="#" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
     <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
 </div>
+<div class="block-loading" id="{{ $profile->id }}Loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING</div><div class="loading-wait">Please wait...</div></div></div>

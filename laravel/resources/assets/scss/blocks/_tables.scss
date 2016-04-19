@@ -23,6 +23,10 @@
                 text-align: center;
                 border-bottom: 1px solid $table-border-color;
             }
+
+            &.removing{
+                background: #fb6c6c;
+            }
         }
     }
 }

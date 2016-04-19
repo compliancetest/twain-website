@@ -34,7 +34,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                 </thead>
                 <tbody>
                 @foreach( $instances AS $instance )
-                <tr>
+                <tr id="test-data-row-{{ $instance->id }}">
                     <td>
                         <a href="/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>{{ $instance->profile_name }}</a>
                         <p>{{ $instance->profile_description }}</p>
@@ -42,16 +42,33 @@ $instances = getCommunityProfileInstatnces($community->id);
                     <td>{{ $instance->purpose }}</td>
                     <td class="text-center">
                         <a href="/communityprofiles/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
-
-
-
                     </td>
                     <td class="text-center">{{ formatDate($instance->created_date) }}</td>
                     <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>
                     <td class="text-center text-nowrap">
                         @if($community->isAdmin())
                             <a href="/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}" class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Edit Profile"></a>
-                            <a href="/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" title="Delete Profile"></a>
+                            <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip" title="Delete Profile"></a>
+
+                            {{-- Remove profile Confirmation Modal--}}
+                            <div class="modal fade profile-modal" id="modalRemoveProfile_{{ $instance->id }}" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                            Confirm Profile Deletion
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure that you want to delete {{ $instance->profile_name }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal" href="/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
+                                            <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         @endif
                         <a href="/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
                     </td>
@@ -70,21 +87,32 @@ $instances = getCommunityProfileInstatnces($community->id);
             $('.success-message').slideUp();
         }, 2000);
     });
-    jQuery('.btn-delete').on('click', function(e){
+    jQuery('.removingProfile').on('click', function(e){
         e.preventDefault();
         var elem = jQuery(this);
-        if(confirm('Are you sure?')){
-            jQuery.ajax({
-                type: 'delete',
-                url: elem.attr('href'),
-                success: function(data){
-                    if(data.status == 'success'){
-                        elem.closest('tr').remove();
-                    }
-                }
-            });
+        var profile = {
+          id: elem.data('profile-id'),
+          name: elem.data('profile-name')
+        };
 
-        }
+        jQuery.ajax({
+            type: 'delete',
+            url: elem.attr('href'),
+            success: function(data){
+                if(data.status == 'success'){
+                    $('#test-data-row-' + profile.id).addClass('removing').fadeTo("slow",0.3, function () {
+                        $(this).remove();
+                        $('.community-test-data > .col-md-12').prepend('<div class="success-message">' + profile.name +' has been removed</div>');
+                        setTimeout(function() {
+                            $('.community-test-data > .col-md-12 > .success-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 2000);
+                    });
+                }
+            }
+        });
+
     });
 
     jQuery('.btn-copy').on('click', function(e){
@@ -106,7 +134,7 @@ $instances = getCommunityProfileInstatnces($community->id);
 </script>
 
 {{-- View Profile Modal--}}
-<div class="modal fade profile-modal" id="modalViewProfile-{{ $instance->type_id }}" tabindex="-1" role="dialog">
+<div class="modal fade profile-modal" id="modalViewProfile" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

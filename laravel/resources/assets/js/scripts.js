@@ -503,6 +503,7 @@ var Page = {
         $(modalId).on("show.bs.modal", function(e) {
             var link = $(e.relatedTarget);
             $(this).find(".modal-content").load(link.attr("href"));
+            $(modalId).off("show.bs.modal");
         });
     }
 
