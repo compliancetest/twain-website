@@ -62,15 +62,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('communities/create/', 'CommunitiesController@create');
         Route::post('communities', 'CommunitiesController@store');
     });
+
+    Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
     //community members routes
     Route::group(['middleware' => ['community.user']], function () {
-
         //view community pages
-        Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
+//        Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
         Route::delete('membership/{community}/leave', 'CommunityMembershipController@leave');
-
-
-
     });
 
     //only community admin can update / delete community

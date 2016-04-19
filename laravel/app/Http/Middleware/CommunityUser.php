@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Community;
 use Closure;
+use Illuminate\Support\Facades\Redirect;
 
 class CommunityUser
 {
@@ -20,6 +21,6 @@ class CommunityUser
         if($community->hasAccess()) {
             return $next($request);
         }
-        return response('Unauthorized.', 401);
+        return Redirect::to('/communities');
     }
 }

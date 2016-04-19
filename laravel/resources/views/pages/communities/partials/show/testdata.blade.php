@@ -1,6 +1,4 @@
 <?php
-$isAdmin = $community->isAdmin();
-
 //Getting Test Suites
 $args = array(
         'post_type' => 'test-suite',

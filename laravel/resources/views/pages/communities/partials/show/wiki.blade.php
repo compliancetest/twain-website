@@ -30,10 +30,10 @@
                             <td class="text-center">{{ $article->created_at }}</td>
                             <td class="text-center">{{ $article->updated_at }}</td>
                             <td class="text-center text-nowrap">
-                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
-                                   title="View Article"></a>
-                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
-                                   title="Edit Article"></a>
+                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip" title="View Article"></a>
+                                @if($isAdmin)
+                                    <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip" title="Edit Article"></a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -44,9 +44,12 @@
 
 
     </div>
-    <div class="col-md-3">
-        <div class="page-title-actions">
-             <a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+
+    @if($isAdmin)
+        <div class="col-md-3">
+            <div class="page-title-actions">
+                 <a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+            </div>
         </div>
-    </div>
+    @endif
 </div>

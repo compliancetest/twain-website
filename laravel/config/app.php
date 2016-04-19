@@ -162,6 +162,8 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
+        Laracasts\Flash\FlashServiceProvider::class,
+
     ],
 
     /*
@@ -211,6 +213,7 @@ return [
 
         'Html'      => Collective\Html\HtmlFacade::class,
         'Form'      => Collective\Html\FormFacade::class,
+        'Flash'     => Laracasts\Flash\Flash::class
     ],
 
 ];

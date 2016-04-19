@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Laracasts\Flash\Flash;
 
 class CommunityMembershipController extends Controller
 {
@@ -22,8 +23,6 @@ class CommunityMembershipController extends Controller
     {
 
         $community = Community::findBySlug($slug);
-        $community->getMember(get_current_user_id())->delete();
-
         $user = get_userdata($this->userId);
         $emailData = array(
             '[community]' => $community->title,
@@ -36,7 +35,11 @@ class CommunityMembershipController extends Controller
         $admins = $community->getAdmins();
 
         sendEmails($admins, 'member_leave_community_admin', $emailData);
-        return Redirect::to('/communities');
+        $community->getMember(get_current_user_id())->delete();
+
+        Flash::success('You successfully left the community. ');
+
+        return response()->json(array('success' => true));
     }
 
     public function requestMembership($slug)
@@ -60,6 +63,7 @@ class CommunityMembershipController extends Controller
 
                 $admins = $community->getAdmins();
                 sendEmails($admins, 'membership_request_received_admin', $emailData);
+                Flash::success('Your membership request sent successfully. ');
             } else {
                 $emailData = array(
                     '[community]' => $community->title,
@@ -72,6 +76,7 @@ class CommunityMembershipController extends Controller
                 );
                 sendEmails([['user_id' => $userId]], 'membership_request_approved', $emailData);
                 $community->members()->create(['user_id' => $userId, 'is_confirmed' => 1]);
+                Flash::success('Your membership request sent successfully. ');
             }
         }
         return Redirect::to('/communities');

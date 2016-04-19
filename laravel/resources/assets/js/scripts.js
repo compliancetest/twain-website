@@ -231,11 +231,10 @@ var Page = {
                     $('#confirmCancelMembership' +  communityId + ' .block-loading').show();
                 },
                 success: function(){
-                    location.href == '/communities/';
+                    location.reload();
                 },
                 error: function (error, status, exception) {
-                    alert(formatErrorMessage(error, exception));
-                    console.error('submitCancelMembership error');
+                    location.href == '/communities/';
                 },
                 complete: function () {
                     $('.modal').modal('hide');
