@@ -30,7 +30,7 @@
                                         <ul class="dropdown-menu">
 
                                             @foreach(Auth::user()->confirmedSubscriptions() as $sub)
-                                                <li class="first"><a href="#">{{ $sub->community->title }}</a>
+                                                <li class="first"><a href="/communities/{{ $sub->community->slug }}">{{ $sub->community->title }}</a>
                                                     <ul class="dropdown-menu">
                                                         <li class="first">
                                                             <a href="{{ $sub->community->getUrl() }}testsuites/">Test Suites</a>
@@ -61,7 +61,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a data-title="Test Suites" href="/me-test-suites/" class="menu-test-suites">Test Suites</a>
+                                        <a data-title="Test Suites" href="/my-test-suites/" class="menu-test-suites">Test Suites</a>
                                         <ul class="dropdown-menu">
                                             @foreach(getUserSubscriptions(null, true) as $subscription)
                                                 <li class="first"><a href="{{ get_permalink($subscription->suite_id) }}">{{ $subscription->suite_title }}</a></li>
