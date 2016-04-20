@@ -146,7 +146,7 @@
 
                                     @if($profileTypes)
                                         @foreach($profileTypes as $profileType)
-                                            <tr>
+                                            <tr id="profile-type-row-{{ $profileType->id }}">
                                                 <td>
                                                     {{ $profileType->title }}
                                                     <?php
@@ -156,33 +156,45 @@
                                                         foreach (get_object_vars($pJSON->Version) as $k => $v) {
                                                             $version[] = $v;
                                                         }
-                                                        echo " v" . implode(".", $version);
+                                                        echo $profileTypeVersion = " v" . implode(".", $version);
                                                     }
                                                     ?>
                                                 </td>
                                                 <td>{{ $profileType->instances }}</td>
                                                 <td class="text-nowrap">
 
-                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}"
-                                                       class="btn btn-success btn-icon btn-download"
-                                                       data-tooltip="tooltip" title="Download Profile Type"></a>
-
-                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/edit/{{ $profileType->id }}"
-                                                       class="btn btn-primary btn-icon btn-edit editProfileType"
-                                                       data-id="{{ $profileType->id }}"
-                                                       data-tooltip="tooltip" title="Edit Profile Type"></a>
+                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}" class="btn btn-success btn-icon btn-download" data-tooltip="tooltip" title="Download Profile Type"></a>
+                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/edit/{{ $profileType->id }}" class="btn btn-primary btn-icon btn-edit editProfileType" data-id="{{ $profileType->id }}" data-tooltip="tooltip" title="Edit Profile Type"></a>
 
                                                     @if($profileType->instances == 0)
-                                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/{{ $profileType->id }}"
-                                                           class="btn btn-danger btn-icon btn-delete"
-                                                           data-tooltip="tooltip" title="Remove Profile Type"></a>
+                                                        <a href="#modalRemoveProfileType_{{ $profileType->id }}" data-toggle="modal" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Remove Profile Type"></a>
+
+                                                        {{-- Remove profile Confirmation Modal--}}
+                                                        <div class="modal fade profile-modal" id="modalRemoveProfileType_{{ $profileType->id }}" tabindex="-1" role="dialog">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                                                                        Confirm Profile Deletion
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <p class="default-text">Are you sure that you want to delete {{ $profileType->title }} <?php echo $profileTypeVersion; ?>?</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/{{ $profileType->id }}" data-profile-id="{{ $profileType->id }}" data-profile-name="{{ $profileType->title }} <?php echo $profileTypeVersion; ?>" data-dismiss="modal" class="btn btn-success btn-with-icon btn-confirm deleteProfileType">Confirm</a>
+                                                                        <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="3">No Data</td>
+                                            <td>No Data</td>
                                         </tr>
                                     @endif
 
@@ -190,8 +202,7 @@
                                 </table>
                             </div>
                             <div class="colored-box-content">
-                                <a href="#" class="btn btn-success btn-with-icon btn-add" id="addAddNewProfileType">Add
-                                    New Profile Type</a>
+                                <a href="#" class="btn btn-success btn-with-icon btn-add" id="addAddNewProfileType">Add New Profile Type</a>
                             </div>
                         </div>
 
@@ -213,24 +224,23 @@
                                                    data-file-extensions="(.txt or .json file)"/>
                                         </div>
                                     </div>
-
-                                        <input type="hidden" name="type_id" id="type_id" value=""/>
+                                    <input type="hidden" name="type_id" id="type_id" value=""/>
                                 </div>
                                 <div class="colored-box-footer">
-                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save
-                                    </button>
-                                    <a class="btn btn-default btn-with-icon btn-cancel" id="cancelAddingProfile"
-                                       href="#">Cancel</a>
+                                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                                    <a class="btn btn-default btn-with-icon btn-cancel" id="cancelAddingProfile" href="#">Cancel</a>
                                 </div>
                             </form>
                         </div>
 
                         <div id="profileTypesLoading" class="color-box-loading">
-                            <div class="loading-content"><span class="loader"></span>
-
-                                <div class="loading-text">READING PROFILE TYPE</div>
-                                <div class="loading-wait">Please wait...</div>
-                            </div>
+                            <div class="loading-content"><span class="loader"></span><div class="loading-text">READING PROFILE TYPE</div><div class="loading-wait">Please wait...</div></div>
+                        </div>
+                        <div id="profileTypesSaving" class="color-box-loading">
+                            <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING PROFILE TYPE</div><div class="loading-wait">Please wait...</div></div>
+                        </div>
+                        <div id="profileTypesRemoving" class="color-box-loading">
+                            <div class="loading-content"><span class="loader"></span><div class="loading-text">REMOVING PROFILE TYPE</div><div class="loading-wait">Please wait...</div></div>
                         </div>
                     </div>
                 </div>
@@ -315,8 +325,7 @@
                     <div class="colored-box-body">
                         <div class="colored-box-content">
                             <div class="upload-file-field">
-                                <input type="file" name="profile_excel_file" class="input-file" data-file-type="image"
-                                       data-file-extensions="(.xls, .xlsx file)"/>
+                                <input type="file" name="profile_excel_file" class="input-file" data-file-type="image" data-file-extensions="(.xls, .xlsx file)"/>
                             </div>
                             @if(Session::has('zipLink'))
                                 <a href="{{ Session::get('zipLink') }}">json_profiles.zip</a>
@@ -336,69 +345,6 @@
 </div>
 <script>
     jQuery(document).ready(function () {
-        jQuery('#addAddNewProfileType').on('click', function (e) {
-            e.preventDefault();
-            jQuery('#addNewProfile').show();
-            jQuery('#profileTypeForm #profile_type_text').val('');
-            jQuery('#profileTypeForm #type_id').val('');
-        });
-
-        jQuery('#profileTypeForm').submit(function (e) {
-            e.preventDefault();
-            jQuery('#profileTypeForm .error_message').remove();
-            if (jQuery('#profile_type_file').val() == '' && jQuery('#profile_type_text').val() == '') {
-                jQuery('#profileTypeForm .grid-box-footer .btn-row').prepend('<p class="error_message">Please enter schema or select a schema file.</p>');
-                return false;
-            }
-            jQuery('#profileTypesLoading').show();
-
-            jQuery('#profileTypeForm').ajaxSubmit({
-                type: 'post',
-                success: function (rsp) {
-                    jQuery('#profileTypesLoading').hide();
-                    jQuery('#addNewProfile').hide();
-                    location.reload();
-                }
-            })
-        });
-
-        jQuery('.btn-delete').on('click', function (e) {
-            if(confirm('Are you sure?')) {
-                jQuery('#profileTypesLoading').show();
-                e.preventDefault();
-                var link = jQuery(this).attr('href');
-                jQuery.ajax({
-                    type: 'delete',
-                    url: link,
-                    success: function (rsp) {
-                        if (rsp.status == 'success') {
-                            location.reload();
-                        }
-                    }
-                })
-            }
-        })
-
-
-        jQuery('#cancelAddingProfile').on('click', function (e) {
-            e.preventDefault();
-            jQuery('#addNewProfile').hide();
-        })
-        jQuery('.editProfileType').on('click', function (e) {
-            jQuery('#profileTypesLoading').show();
-            e.preventDefault();
-            jQuery('#type_id').val(jQuery(this).attr('data-id'));
-            var link = jQuery(this).attr('href');
-            jQuery.ajax({
-                url: link,
-                success: function (rsp) {
-                    if (rsp.status == 'success') {
-                        jQuery('#addNewProfile').show();
-                        jQuery('#profileTypeForm #profile_type_text').val(rsp.schema);
-                    }
-                    jQuery('#profileTypesLoading').hide();
-                }
-            })
-        })
+        Page.communityAdmin.init();
     });
 </script>

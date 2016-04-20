@@ -328,17 +328,22 @@ var Page = {
             var self = this;
             this.groupMembersActions();
             customizeFileTag();
+
             $('#addAddNewProfileType').click(function(e) {
                 self.showAddNewProfileType(e);
             });
+
             $('#cancelAddingProfile').click(function(e) {
                 self.hideAddNewProfileType(e);
             });
             $('#profileTypeForm').submit(function(e) {
                 self.submitAddNewProfileType(e);
             });
-            $('.profile-type-list .btn-edit').click(function(e) {
+            $('.profile-type-list .editProfileType').click(function(e) {
                 self.editProfileType($(this), e);
+            });
+            $('.profile-type-list .deleteProfileType').click(function(e) {
+                self.deleteProfileType($(this), e);
             });
 
         },
@@ -367,13 +372,25 @@ var Page = {
 
         submitAddNewProfileType: function(e){
             e.preventDefault();
+            var self = this;
+
             $('#profileTypeForm .error-message').remove();
             if($('#profile_type_file').val() == '' && $('#profile_type_text').val() == '')
             {
                 $('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">Please enter schema or select a schema file.</p>');
                 return false;
             }
-            return true;
+
+            $('#profileTypesSaving').show();
+
+            jQuery('#profileTypeForm').ajaxSubmit({
+                type: 'post',
+                success: function (rsp) {
+                    self.hideAddNewProfileType(e);
+                    location.reload();
+                }
+            });
+
         },
 
         editProfileType: function(element, event){
@@ -383,9 +400,9 @@ var Page = {
             self.showAddNewProfileType(event);
 
             var link = element.attr('href');
+            jQuery('#type_id').val(element.attr('data-id'));
             $.ajax({
                 url: link,
-                dataType: 'json',
                 beforeSend: function() {
                     self._showLoader();
                 },
@@ -396,7 +413,6 @@ var Page = {
                 {
                     if (response.status == 'success'){
                         $('#profile_type_text').val(response.schema);
-                        $('#type_id').val(response.schema);
                     } else {
                         jQuery('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">' + response.message + '</p>');
                     }
@@ -408,9 +424,53 @@ var Page = {
 
         },
 
+        deleteProfileType: function(element, event){
+            var self = this;
+            event.preventDefault();
+
+            var profile = {
+                id: element.data('profile-id'),
+                name: element.data('profile-name'),
+                link: element.attr('href')
+            };
+
+            jQuery('#profileTypesRemoving').show();
+            jQuery.ajax({
+                type: 'delete',
+                url: profile.link,
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $('#profile-type-row-' + profile.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                            $(this).remove();
+                            $('#profileTypeList').prepend('<div class="success-message">' + profile.name + ' has been removed</div>');
+                            setTimeout(function () {
+                                $('#profileTypeList > .success-message').slideUp(function () {
+                                    $(this).remove();
+                                });
+                            }, 2000);
+                        });
+                    }
+                },
+                error: function (error, status, exception) {
+                    $('#profileTypeList').prepend('<div class="error-message">' + error + '</div>');
+                    setTimeout(function () {
+                        $('#profileTypeList > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
+                },
+                complete: function () {
+                    $('.modal').modal('hide');
+                    jQuery('#profileTypesRemoving').hide();
+                }
+            })
+
+        },
+
         _clearProfileForm: function(){
             $('#profile_type_file').val('');
             $('#profile_type_text').val('');
+            $('#type_id').val('');
             $('#profileTypeForm .error-message').remove();
         },
 

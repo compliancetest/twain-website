@@ -29,6 +29,13 @@ body.modal-open,
     z-index: 1050;
 }
 
+.default-text{
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 400;
+    color: $text-color;
+}
+
 @media only screen and (min-width: $mobile-size) {
     .hidden-mobile {
         display: none !important;
