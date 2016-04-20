@@ -16,7 +16,7 @@
 
                      @include('pages.communities.partials.errors')
 
-                    {{ Form::model($article, ['name' => 'article-create-form', 'file' => true, 'method' => 'PATCH', 'enctype' => 'multipart/form-data', 'url' => '/articles/' . $community->slug .'/' . $article->slug, 'data-validate' => 'validate']) }}
+                    {{ Form::model($article, ['name' => 'article-create-form', 'file' => true, 'method' => 'PATCH', 'enctype' => 'multipart/form-data', 'url' => url()->to('/articles/' . $community->slug .'/' . $article->slug, array(), true), 'data-validate' => 'validate']) }}
 
 
                         <div class="colored-box">
