@@ -61,7 +61,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a href="/downloads/{{ $community->slug }}/getfile/{{ $download->id }}" class="btn btn-success btn-with-icon btn-confirm">DOWNLOAD</a>
+                                                    <a href="{{ getSiteUrl() }}/downloads/{{ $community->slug }}/getfile/{{ $download->id }}" class="btn btn-success btn-with-icon btn-confirm">DOWNLOAD</a>
                                                     <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>

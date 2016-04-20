@@ -16,6 +16,6 @@
         </div>
     </div>
 <div class="modal-footer">
-    <a href="/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}" class="btn btn-success btn-with-icon btn-confirm">Download</a>
     <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
 </div>

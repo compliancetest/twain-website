@@ -36,18 +36,18 @@ $instances = getCommunityProfileInstatnces($community->id);
                 @foreach( $instances AS $instance )
                 <tr id="test-data-row-{{ $instance->id }}">
                     <td>
-                        <a href="/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>{{ $instance->profile_name }}</a>
+                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>{{ $instance->profile_name }}</a>
                         <p>{{ $instance->profile_description }}</p>
                     </td>
                     <td>{{ $instance->purpose }}</td>
                     <td class="text-center">
-                        <a href="/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
+                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
                     </td>
                     <td class="text-center">{{ formatDate($instance->created_date) }}</td>
                     <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>
                     <td class="text-center text-nowrap">
                         @if($community->isAdmin())
-                            <a href="/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}" class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Edit Profile"></a>
+                            <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}" class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Edit Profile"></a>
                             <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip" title="Delete Profile"></a>
 
                             {{-- Remove profile Confirmation Modal--}}
@@ -62,7 +62,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                                             Are you sure that you want to delete {{ $instance->profile_name }}?
                                         </div>
                                         <div class="modal-footer">
-                                            <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal" href="/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
+                                            <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal" href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
                                             <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@ $instances = getCommunityProfileInstatnces($community->id);
                             </div>
 
                         @endif
-                        <a href="/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
+                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
                     </td>
                 </tr>
                 @endforeach

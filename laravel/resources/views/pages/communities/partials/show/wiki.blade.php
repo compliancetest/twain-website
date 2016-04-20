@@ -48,7 +48,7 @@
     @if($isAdmin)
         <div class="col-md-3">
             <div class="page-title-actions">
-                 <a href="/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+                 <a href="{{ getSiteUrl() }}/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
             </div>
         </div>
     @endif

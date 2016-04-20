@@ -9,9 +9,9 @@
                     <h1>{{ $article->title }}</h1>
                     <div class="page-title-actions">
                         @if($isAdmin)
-                            <a href="/articles/{{ $community->slug }}/{{ $article->slug }}/edit" class="btn btn-success btn-with-icon btn-edit">Edit</a>
+                            <a href="{{ getSiteUrl() }}/articles/{{ $community->slug }}/{{ $article->slug }}/edit" class="btn btn-success btn-with-icon btn-edit">Edit</a>
                         @endif
-                        <a href="{{ '/communities/' . $community->slug .'/wiki' }}" class="btn btn-default btn-with-icon btn-back">Back</a>
+                        <a href="{{ getSiteUrl() }}{{ '/communities/' . $community->slug .'/wiki' }}" class="btn btn-default btn-with-icon btn-back">Back</a>
                         {{--<a href="#" class="btn btn-primary btn-icon btn-print">Print</a>--}}
                     </div>
                 </div>

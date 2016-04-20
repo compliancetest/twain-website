@@ -163,17 +163,17 @@
                                                 <td>{{ $profileType->instances }}</td>
                                                 <td class="text-nowrap">
 
-                                                    <a href="/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}"
+                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/downloadprofiletype/{{ $profileType->id }}"
                                                        class="btn btn-success btn-icon btn-download"
                                                        data-tooltip="tooltip" title="Download Profile Type"></a>
 
-                                                    <a href="/profiletypes/{{ $community->slug }}/edit/{{ $profileType->id }}"
+                                                    <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/edit/{{ $profileType->id }}"
                                                        class="btn btn-primary btn-icon btn-edit editProfileType"
                                                        data-id="{{ $profileType->id }}"
                                                        data-tooltip="tooltip" title="Edit Profile Type"></a>
 
                                                     @if($profileType->instances == 0)
-                                                        <a href="/profiletypes/{{ $community->slug }}/{{ $profileType->id }}"
+                                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/{{ $profileType->id }}"
                                                            class="btn btn-danger btn-icon btn-delete"
                                                            data-tooltip="tooltip" title="Remove Profile Type"></a>
                                                     @endif
