@@ -54,7 +54,7 @@
                                 <div class="colored-box-body">
                                     <div class="colored-box-content community-image-management">
                                         <div class="community-image">
-                                            <img src="/laravel/resources/assets/images/gravatar.jpg" alt="">
+                                            <img src="{{ getSiteUrl() }}/laravel/resources/assets/images/gravatar.jpg" alt="">
                                         </div>
                                         <div class="community-avatar-description">
                                             <p>Upload an image to use as an avatar for this community. The image
