@@ -1,4 +1,4 @@
-{{ Form::model($download, ['enctype' => 'multipart/form-data', 'method' => 'PATCH', 'class' => 'file-edit-form','id' => 'file-edit-form', 'url' => '/downloads/' . $community->slug . '/'. $download->id]) }}
+{{ Form::model($download, ['enctype' => 'multipart/form-data', 'method' => 'PATCH', 'class' => 'file-edit-form','id' => 'file-edit-form', 'url' => url()->to('/downloads/' . $community->slug . '/'. $download->id, array(), true)]) }}
 
 <h3>Edit File</h3>
 

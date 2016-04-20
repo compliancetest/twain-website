@@ -7,7 +7,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Details</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug, [], true)] !!}
                         <div class="colored-box-content">
                             <div class="form-group">
                                 <label for="communityName">Community Name</label>
@@ -76,7 +76,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Display Image</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug,[], true)]) !!}
                         <div class="colored-box-content community-image-management">
                             <div class="community-image">
                                 <img src="{{ $community->getImageUrl() }}" alt="">
@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                {!! Form::open(['id'=> 'delete-community-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'method' => 'DELETE', 'action' => ['CommunitiesController@destroy', 'id' => $community->slug]]) !!}
+                {!! Form::open(['id'=> 'delete-community-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'method' => 'DELETE', 'url' => url()->to('/communities/'.$community->slug,[], true)]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Details</div>
                     <div class="colored-box-body">
@@ -244,7 +244,7 @@
                     </div>
                 </div>
 
-                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug,[], true)]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Privacy Options</div>
                     <div class="colored-box-body">
@@ -287,7 +287,7 @@
                 </div>
                 {!! Form::close() !!}
 
-                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'action' => ['CommunitiesController@update', 'id' => $community->slug]]) !!}
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug,[], true)]) !!}
 
                 <div class="colored-box">
                     <div class="colored-box-header">Community Articles</div>
@@ -309,7 +309,7 @@
 
                 {!! Form::close() !!}
 
-                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'action' => ['CommunitiesController@generateJson', 'id' => $community->slug]]) !!}
+                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'action' => url()->to('/communities/'.$community->slug .'/generatejson',[], true)]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Generate JSON</div>
                     <div class="colored-box-body">

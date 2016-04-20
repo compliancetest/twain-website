@@ -17,7 +17,7 @@
 
                     @include('pages.communities.partials.errors')
 
-                    {{ Form::open(['file' => true, 'enctype' => 'multipart/form-data', 'class' => 'form', 'url' => '/communities', 'data-validate' => 'validate' ]) }}
+                    {{ Form::open(['file' => true, 'enctype' => 'multipart/form-data', 'class' => 'form', 'url' => url()->to('/communities', [], true), 'data-validate' => 'validate' ]) }}
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="colored-box">
