@@ -1,5 +1,10 @@
 <?php
 
+ini_set('xdebug.max_nesting_level', 600);
+ini_set('xdebug.remote_autostart', 0);
+ini_set('xdebug.remote_enable', 0);
+ini_set('xdebug.profiler_enable', 0);
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
