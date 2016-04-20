@@ -7,7 +7,7 @@ function getCommunityProfileTypes($community_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id=%d", $community_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id = %s", $community_id);
     
     $rows = $wpdb->get_results($query);
     
