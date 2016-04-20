@@ -158,29 +158,46 @@ get_header();
                         <?php } else {
                             foreach ($log_results as $row) {
                                 ?>
+                                <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                 <div class="tr">
                                     <div class="td td-chk tocenter">
                                         <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>"/>
                                     </div>
                                     <div class="td td-product">
-                                        <a href="#" class="view-messages-link has-tooltip">
-                                            <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
-                                        </a>
-                                        <a href="<?php echo get_permalink($row->product_id) ?>"><?php echo get_post_meta($row->product_id, 'product_name', true) ?></a>
+                                        <?php if($logs):?>
+                                            <a href="#" class="view-messages-link has-tooltip">
+                                                <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
+                                            </a>
+                                        <?php endif;?>
+                                        <?php if($row->product_id):?>
+                                            <a href="<?php echo get_permalink($row->product_id) ?>"><?php echo get_post_meta($row->product_id, 'product_name', true) ?></a>
+                                        <?php else:?>
+                                            Not Assigned
+                                        <?php endif;?>
                                     </div>
                                     <div class="td td-case tocenter">
-                                        <a href="<?php echo get_permalink($row->test_suite_id) ?>"><?php echo cp_wrap(get_the_title($row->test_suite_id), 25) ?></a>
+                                        <?php if($row->product_id):?>
+                                            <a href="<?php echo get_permalink($row->test_suite_id) ?>"><?php echo cp_wrap(get_the_title($row->test_suite_id), 25) ?></a>
+                                        <?php else:?>
+                                            Not Assigned
+                                        <?php endif;?>
                                         </br>
-                                        <a href="<?php echo get_permalink($row->test_case_id) ?>"><?php echo cp_wrap(get_the_title($row->test_case_id), 22) ?></a>
-
+                                        <?php if($row->product_id):?>
+                                            <a href="<?php echo get_permalink($row->test_case_id) ?>"><?php echo cp_wrap(get_the_title($row->test_case_id), 22) ?></a>
+                                        <?php else:?>
+                                            Not Assigned
+                                        <?php endif;?>
                                     </div>
                                     <div class="td td-outcome">
-                                        <a href="#" class="view-messages-link has-tooltip">
-                                            <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
-                                        </a>
-                                        <?php $status = ($row->status == '1' ? 'success' : 'error'); ?>
+                                         <?php if($logs):?>
+                                            <a href="#" class="view-messages-link has-tooltip">
+                                                <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
+                                            </a>
+                                        <?php endif;?>
+                                        <?php $outcomeStatus = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_outcome_statuses WHERE id = %s", $row->test_outcome_status_id));?>
+                                        <?php $status = ($outcomeStatus ? ($outcomeStatus->code == 'PASS' ? 'success' : 'fail') : 'fail'); ?>
                                         <span
-                                            class="status-success">Pass</span>
+                                            class="status-<?php echo $status;?>"><?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?></span>
                                         <br/>
                                     </div>
                                     <div
@@ -210,7 +227,6 @@ get_header();
                                     </div>
                                     <div class="clear"></div>
 
-                                    <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                     <?php if ($logs) { ?>
                                         <div class="sub-table">
                                             <div class="table">

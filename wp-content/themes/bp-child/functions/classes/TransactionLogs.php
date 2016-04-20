@@ -37,17 +37,17 @@ class TransactionLogs
         return $this;
     }
 
-    public function getUserTransactionLog($page = 1, $limit = 10, $orderby = 'updated_at', $order = 'asc')
+    public function getUserTransactionLog($page = 1, $limit = 10, $orderby = 'updated_at', $order = 'desc')
     {
         global $wpdb;
 
         $limit = ($page-1) * $limit . ', '.$limit;
         return [
             'results' => $wpdb->get_results("SELECT t.* FROM transactions AS t
-                                     JOIN transactions_logs AS tl ON tl.transaction_id = t.id
+                                     LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
                                      WHERE ".implode(' AND ', $this->where)." GROUP BY t.id ORDER BY $orderby $order LIMIT $limit"),
             'total' => $wpdb->get_var("SELECT count(*) FROM transactions AS t
-                                     JOIN transactions_logs AS tl ON tl.transaction_id = t.id
+                                     LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
                                      WHERE ".implode(' AND ', $this->where)." GROUP BY t.id "),
         ];
     }
