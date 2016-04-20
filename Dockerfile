@@ -10,6 +10,7 @@ RUN apt-get update && \
     rm -rf /var/www/html
 
 ADD apache2.conf /etc/apache2/apache2.conf
+ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 ADD . /var/www/html
 
 EXPOSE 80
