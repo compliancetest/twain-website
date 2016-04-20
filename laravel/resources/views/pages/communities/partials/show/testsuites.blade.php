@@ -48,10 +48,10 @@
                         @if($isAdmin)
                             <td class="text-center td-actions">
 
-                                    <a href="/edit-test-suite?id={{ $testSuite->ID }}"
+                                    <a href="{{ getSiteUrl() }}/edit-test-suite?id={{ $testSuite->ID }}"
                                        class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                                        title="Edit Suite"></a>
-                                    <a href="/?suite_id={{ $testSuite->ID }}&_wpnonce={{ wp_create_nonce('delete-suite') }}&return=<?php echo base64_encode('/communities/' . $community->slug) ?>"
+                                    <a href="{{ getSiteUrl() }}/?suite_id={{ $testSuite->ID }}&_wpnonce={{ wp_create_nonce('delete-suite') }}&return=<?php echo base64_encode('/communities/' . $community->slug) ?>"
                                        class="btn btn-icon btn-danger btn-delete"
                                        onclick="return confirm('Are you sure to delete this test suite?')"
                                        data-tooltip="tooltip" title="Delete Suite"></a>

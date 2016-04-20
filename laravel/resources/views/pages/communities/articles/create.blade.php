@@ -52,7 +52,7 @@
 
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                            <a href="/communities/{{ $community->slug }}/wiki" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
+                            <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}/wiki" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                         </div>
 
                     {!! Form::close() !!}

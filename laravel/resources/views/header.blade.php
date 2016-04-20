@@ -1,7 +1,7 @@
 <header id="header">
     <div class="header-inner">
         <div class="container">
-            <a href="#" class="logo"><img src="/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
+            <a href="#" class="logo"><img src="{{ getSiteUrl() }}/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
                 <div class="header-account">
                     <div class="header-actions">
                     @if(Auth::check())
@@ -16,21 +16,21 @@
 
                                     @if(is_organisation_admin())
                                         <li class="first">
-                                            <a data-title="Organisation" href="/my-organisation/" class="menu-organisation">Organisation</a>
+                                            <a data-title="Organisation" href="{{ getSiteUrl() }}/my-organisation/" class="menu-organisation">Organisation</a>
                                             <ul class="dropdown-menu">
-                                                <li class="first"><a href="/my-organisation/users/">Users</a></li>
-                                                <li><a href="/my-organisation/test-suites/">Subscriptions</a></li>
-                                                <li class="last"><a href="/my-organisation/">Profile</a></li>
+                                                <li class="first"><a href="{{ getSiteUrl() }}/my-organisation/users/">Users</a></li>
+                                                <li><a href="{{ getSiteUrl() }}/my-organisation/test-suites/">Subscriptions</a></li>
+                                                <li class="last"><a href="{{ getSiteUrl() }}/my-organisation/">Profile</a></li>
                                             </ul>
                                         </li>
                                     @endif
 
                                     <li>
-                                        <a data-title="Communities" href="/my-communities/" class="menu-communities">Communities</a>
+                                        <a data-title="Communities" href="{{ getSiteUrl() }}/my-communities/" class="menu-communities">Communities</a>
                                         <ul class="dropdown-menu">
 
                                             @foreach(Auth::user()->confirmedSubscriptions() as $sub)
-                                                <li class="first"><a href="/communities/{{ $sub->community->slug }}">{{ $sub->community->title }}</a>
+                                                <li class="first"><a href="{{ getSiteUrl() }}/communities/{{ $sub->community->slug }}">{{ $sub->community->title }}</a>
                                                     <ul class="dropdown-menu">
                                                         <li class="first">
                                                             <a href="{{ $sub->community->getUrl() }}testsuites/">Test Suites</a>
@@ -57,25 +57,25 @@
                                                     </ul>
                                                 </li>
                                             @endforeach
-                                            <li class="action-link last"><a href="/communities">+ Add</a></li>
+                                            <li class="action-link last"><a href="{{ getSiteUrl() }}/communities">+ Add</a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a data-title="Test Suites" href="/my-test-suites/" class="menu-test-suites">Test Suites</a>
+                                        <a data-title="Test Suites" href="{{ getSiteUrl() }}/my-test-suites/" class="menu-test-suites">Test Suites</a>
                                         <ul class="dropdown-menu">
                                             @foreach(getUserSubscriptions(null, true) as $subscription)
                                                 <li class="first"><a href="{{ get_permalink($subscription->suite_id) }}">{{ $subscription->suite_title }}</a></li>
                                             @endforeach
-                                            <li class="action-link last"><a href="/test-suites/" >+ Add</a></li>
+                                            <li class="action-link last"><a href="{{ getSiteUrl() }}/test-suites/" >+ Add</a></li>
                                         </ul>
                                     </li>
-                                    <li><a data-title="Test Data" href="/my-test-data/" class="menu-test-data">Test Data</a></li>
-                                    <li><a data-title="Products" href="/my-products/" class="menu-products">Products</a></li>
-                                    <li><a data-title="Coverage" href="/test-suite-coverage/" class="menu-coverage">Coverage</a></li>
-                                    <li><a data-title="Transactions" href="/my-transaction-log/" class="menu-transactions">Transactions</a></li>
-                                    <li><a data-title="Support" href="/my-support-tickets/" class="menu-support">Support</a></li>
-                                    <li><a data-title="Profile" href="/my-profile/" class="menu-profile">Profile</a></li>
-                                    <li class="last"><a data-title="Agreements" href="/agreements/" class="menu-agreements">Agreements</a></li>
+                                    <li><a data-title="Test Data" href="{{ getSiteUrl() }}/my-test-data/" class="menu-test-data">Test Data</a></li>
+                                    <li><a data-title="Products" href="{{ getSiteUrl() }}/my-products/" class="menu-products">Products</a></li>
+                                    <li><a data-title="Coverage" href="{{ getSiteUrl() }}/test-suite-coverage/" class="menu-coverage">Coverage</a></li>
+                                    <li><a data-title="Transactions" href="{{ getSiteUrl() }}/my-transaction-log/" class="menu-transactions">Transactions</a></li>
+                                    <li><a data-title="Support" href="{{ getSiteUrl() }}/my-support-tickets/" class="menu-support">Support</a></li>
+                                    <li><a data-title="Profile" href="{{ getSiteUrl() }}/my-profile/" class="menu-profile">Profile</a></li>
+                                    <li class="last"><a data-title="Agreements" href="{{ getSiteUrl() }}/agreements/" class="menu-agreements">Agreements</a></li>
                                 </ul>
                             </li>
                             <li class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></li>
@@ -100,7 +100,7 @@
                                         <div id="header_login_error_msg" class="header-login-error">Wrong username or password, please try again!</div>
                                         <div class="header-login-form-actions">
                                             <input type="submit" value="Login" class="btn btn-primary pull-right" id="wp-submit2" name="wp-submit">
-                                            <a class="pull-left" href="/reset-password/">Forgot Password?</a>
+                                            <a class="pull-left" href="{{ getSiteUrl() }}/reset-password/">Forgot Password?</a>
                                         </div>
                                         <div class="header-login-loading" id="headerLoginLoading"><div class="loader"></div></div>
                                     </form>
@@ -134,11 +134,11 @@
         <div class="navbar-wrapper">
             <div class="container">
                 <ul class="menu">
-                    <li><a href="/service-overview/">Service Overview</a></li>
-                    <li><a href="/pricing">Pricing</a></li>
-                    <li><a href="/documentation">Documentation</a></li>
-                    <li><a href="/news-events/">News &amp; Events</a></li>
-                    <li><a href="/contact-us/">Contact Us</a></li>
+                    <li><a href="{{ getSiteUrl() }}/service-overview/">Service Overview</a></li>
+                    <li><a href="{{ getSiteUrl() }}/pricing">Pricing</a></li>
+                    <li><a href="{{ getSiteUrl() }}/documentation">Documentation</a></li>
+                    <li><a href="{{ getSiteUrl() }}/news-events/">News &amp; Events</a></li>
+                    <li><a href="{{ getSiteUrl() }}/contact-us/">Contact Us</a></li>
                 </ul>
             </div>
         </div>

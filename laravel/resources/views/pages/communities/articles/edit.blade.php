@@ -48,7 +48,7 @@
                                             @foreach($article->attachments as $attachment)
                                                 <li>
                                                     <a href="{{ $attachment->getUrl() }}" class="doc-attachment-mime-icon doc-attachment-mime-zip" target="_blank">{{ $attachment->filename }}</a>
-                                                    <a href="/articles/{{ $community->slug }}/{{ $article->slug }}/{{ $attachment->id }}" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-target="#modalDeleteAttachment-{{ $attachment->id }}">Remove</a>
+                                                    <a href="{{ getSiteUrl() }}/articles/{{ $community->slug }}/{{ $article->slug }}/{{ $attachment->id }}" class="btn btn-danger btn-with-icon btn-delete removeFileLink" data-target="#modalDeleteAttachment-{{ $attachment->id }}">Remove</a>
                                                 </li>
 
                                             @endforeach
@@ -68,7 +68,7 @@
                             {{--<a href="#" class="btn btn-danger btn-with-icon btn-delete pull-right">Delete</a>--}}
                             <div class="pull-left">
                                 <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                                <a href="/communities/{{ $community->slug }}/wiki" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
+                                <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}/wiki" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                             </div>
                         </div>
 

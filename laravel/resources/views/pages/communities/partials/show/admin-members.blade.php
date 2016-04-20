@@ -45,8 +45,7 @@
                 <span class="member-info">
                     <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
                     <span class="member-email">{{ $user->user_email }}</span>
-                    <a href="#" class="btn btn-success btn-sm">Demote to
-                        Member</a>
+                    <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $admin->user_id }}">Demote to Member</button>
                 </span>
             </li>
         @endforeach
@@ -63,12 +62,13 @@
                     <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
                 </label>
                 <span class="member-info">
-                    <span class="member-name">{{ $user->ID }}</span>
+                    <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
                     <span class="member-email">{{ $user->user_email }}</span>
                 </span>
             </li>
         @endforeach
     </ul>
+    <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div></div>
 </form>
 
 <script>
@@ -78,8 +78,11 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         });
 
+        var membersLoadingContainer = jQuery('#groupMembersForm .block-loading');
+
          jQuery('.acceptRequest').on('click', function(e){
             e.preventDefault();
+            membersLoadingContainer.show();
             var elem = jQuery(this);
             jQuery.ajax({
                 url: '/membership/' + elem.attr('data-community') + '/accept',
@@ -89,12 +92,16 @@
                 },
                 success: function(data){
                     jQuery('.members-management').html(data.html)
+                },
+                complete: function () {
+                    membersLoadingContainer.hide();
                 }
             });
         });
 
         jQuery('.rejectRequest').on('click', function(e){
             e.preventDefault();
+            membersLoadingContainer.show();
             var elem = jQuery(this);
             jQuery.ajax({
                 url: '/membership/' + elem.attr('data-community') + '/reject',
@@ -104,12 +111,17 @@
                 },
                 success: function(data){
                     jQuery('.members-management').html(data.html)
+                },
+                complete: function () {
+                    membersLoadingContainer.hide();
                 }
             });
         });
 
         jQuery('.changeRole').on('click', function(e){
             e.preventDefault();
+            membersLoadingContainer.show();
+
             var elem = jQuery(this);
             if(jQuery('#groupMembersForm input:checked').length){
                 var checkUsers = [];
@@ -125,9 +137,35 @@
                     },
                     success: function(data){
                         jQuery('.members-management').html(data.html)
+                    },
+                    complete: function () {
+                        membersLoadingContainer.hide();
                     }
                 });
             }
+        });
+
+        jQuery('.demoteToMember').on('click', function(e){
+            e.preventDefault();
+            membersLoadingContainer.show();
+
+            var elem = jQuery(this);
+            var checkUsers = [];
+            checkUsers.push(elem.data('user-id'));
+            jQuery.ajax({
+                url: '/membership/{{ $community->slug }}/changerole',
+                type: 'post',
+                data: {
+                    'users': checkUsers,
+                    'role': 'member'
+                },
+                success: function(data){
+                    jQuery('.members-management').html(data.html)
+                },
+                complete: function () {
+                    membersLoadingContainer.hide();
+                }
+            });
         });
     });
 </script>

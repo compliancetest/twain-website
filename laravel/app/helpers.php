@@ -41,3 +41,8 @@ function sendEmails($sendTo, $template, $emailData)
 //        return $param;
 //    }
 //}
+
+function getSiteUrl()
+{
+    return env('APP_URL');
+}
