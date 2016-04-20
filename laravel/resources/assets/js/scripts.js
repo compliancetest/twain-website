@@ -2,34 +2,36 @@ jQuery(document).ready(function($) {
 
     $('[data-tooltip="tooltip"]').tooltip();
 
-    $('[data-validate="validate"]').validate({
-        errorElement: "span",
-        errorPlacement: function ( error, element ) {
-            // Add the `help-block` class to the error element
-            error.addClass( "help-block" );
+    $('[data-validate="validate"]').each(function () {
+        $(this).validate({
+            errorElement: "span",
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( "help-block" );
 
-            if ( element.prop( "type" ) === "checkbox" ) {
-                error.insertAfter( element.parent( "label" ) );
-            } else {
-                error.insertAfter( element );
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.parent( "label" ) );
+                } else {
+                    error.insertAfter( element );
+                }
+
+                if ( element.prop( "type" ) === "file" && element.parents('.upload-file-field').length )  {
+                    error.appendTo( element.parents('.upload-file-field') );
+                }
+
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".form-group" ).addClass( "has-error" );
+
+                if ( $( element ).prop( "type" ) === "file" && $( element ).parents('.upload-file-field').length) {
+                    $( element ).parents('.upload-file-field').addClass( "has-error" );
+                }
+            },
+            unhighlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".form-group" ).removeClass( "has-error" );
             }
 
-            if ( element.prop( "type" ) === "file" && element.parents('.upload-file-field').length )  {
-                error.appendTo( element.parents('.upload-file-field') );
-            }
-
-        },
-        highlight: function ( element, errorClass, validClass ) {
-            $( element ).parents( ".form-group" ).addClass( "has-error" );
-
-            if ( $( element ).prop( "type" ) === "file" && $( element ).parents('.upload-file-field').length) {
-                $( element ).parents('.upload-file-field').addClass( "has-error" );
-            }
-        },
-        unhighlight: function ( element, errorClass, validClass ) {
-            $( element ).parents( ".form-group" ).removeClass( "has-error" );
-        }
-
+        });
     });
 
     $.ajaxSetup({

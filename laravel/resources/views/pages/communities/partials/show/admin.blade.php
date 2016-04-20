@@ -119,7 +119,7 @@
                                     this community.
                                 </label>
                             </div>
-                            <a href="#" class="btn btn-danger btn-with-icon btn-delete" onclick="">Delete Community</a>
+                            <button type="submit" class="btn btn-danger btn-with-icon btn-delete">Delete Community</button>
                         </div>
                     </div>
                 </div>
@@ -194,7 +194,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td>No Data</td>
+                                            <td colspan="3"><div class="text-center">No Data</div></td>
                                         </tr>
                                     @endif
 

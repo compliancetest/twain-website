@@ -21,7 +21,7 @@
                                 <div class="colored-box-content">
                                     <div class="form-group">
                                          {!! Form::label('title', 'Title:') !!}
-                                         {!! Form::text('title', null, ['class' => 'form-control', 'data-msg-required' => 'Title is required']) !!}
+                                         {!! Form::text('title', null, ['class' => 'form-control', 'required', 'data-msg-required' => 'Title is required']) !!}
                                     </div>
 
                                     <div class="form-group">
