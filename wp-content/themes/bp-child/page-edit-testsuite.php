@@ -59,7 +59,7 @@ $xeroItems = ct_get_xero_items();
                                     <!--<option></option>-->
                                     <?php foreach ($groups as $row) { ?>
                                         <option
-                                            value="<?php echo $row->id ?>" <?php echo cp_selected($row->id, $suite->community_id) ?>><?php echo apply_filters('the_title', $row->name) ?></option>
+                                            value="<?php echo $row->id ?>" <?php echo cp_selected($row->id, $suite->community_id) ?>><?php echo $row->title; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
