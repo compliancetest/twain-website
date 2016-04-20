@@ -7,7 +7,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Details</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug, [], true)] !!}
+                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => url()->to('/communities/'.$community->slug, [], true)]) !!}
                         <div class="colored-box-content">
                             <div class="form-group">
                                 <label for="communityName">Community Name</label>
@@ -309,7 +309,7 @@
 
                 {!! Form::close() !!}
 
-                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'action' => url()->to('/communities/'.$community->slug .'/generatejson',[], true)]) !!}
+                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'method' => 'post', 'url' => url()->to('/communities/'.$community->slug .'/getjson',[], true)]) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Generate JSON</div>
                     <div class="colored-box-body">
