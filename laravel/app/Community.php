@@ -155,7 +155,7 @@ class Community extends Model
      */
     public function getUrl()
     {
-        return URL::to('/') . '/communities/' . $this->slug . '/';
+        return getSiteUrl()  . '/communities/' . $this->slug . '/';
     }
 
 
