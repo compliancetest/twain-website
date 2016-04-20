@@ -198,6 +198,6 @@ class Community extends Model
         if (!empty($this->image) && Storage::exists($this->image)) {
             return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/' . $this->image;
         }
-        return '/laravel/resources/assets/images/gravatar.jpg';
+        return getSiteUrl() . '/laravel/resources/assets/images/gravatar.jpg';
     }
 }

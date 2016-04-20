@@ -22,7 +22,7 @@
         <div class="footer-block footer-copyright">
             <a class="twitter-logo" target="_blank" href="https://twitter.com/ComplianceTest2" title="Twitter">Twitter</a>
             <p class="copyright">Powered By:</p>
-            <img alt="ComplianceTest Logo" src="/laravel/resources/assets/images/logo.png">
+            <img alt="ComplianceTest Logo" src="{{ getSiteUrl() }}/laravel/resources/assets/images/logo.png">
         </div>
     </div>
 </footer>
