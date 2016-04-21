@@ -7,7 +7,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Details</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                         <div class="colored-box-content">
                             <div class="form-group">
                                 <label for="communityName">Community Name</label>
