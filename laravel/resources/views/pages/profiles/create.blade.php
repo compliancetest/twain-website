@@ -3,11 +3,11 @@
     Create Profile Instance
 </div>
 <div class="modal-body block-loading-wrapper">
-    <div class="create-profile-form-wrapper" id="createProfileBox">
+    <div class="edit-profile-form-wrapper" id="createProfileBox">
         <h3>Please Select Profile Type</h3>
 
         <form name="createProfileForm" id="createProfileForm" action="">
-            <fieldset class="create-profile-fieldset">
+            <fieldset class="edit-profile-fieldset">
                 <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
                     @foreach($community->profileTypes as $kk => $type)
 
