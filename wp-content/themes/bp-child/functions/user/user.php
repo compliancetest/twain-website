@@ -306,7 +306,7 @@ function getUserAdminGroups($user_id)
 function getUserCommunities($user_id)
 {
     global $wpdb;
-    return $wpdb->get_results($wpdb->prepare("SELECT c.* FROM communities AS c
+    return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin FROM communities AS c
                                               JOIN communities_members AS cm ON c.id = cm.community_id
                                               WHERE cm.user_id = %d", $user_id));
 }

@@ -28,8 +28,8 @@ get_header();
                    </div>
                    <div class="tbody">
                    <?php
-                       $groups =  groups_get_user_groups($current_user->ID);
-                       if($groups['total'] < 1)
+                       $groups = getUserCommunities($current_user->ID);
+                       if(count($groups) < 1)
                        {
                    ?>
                        <div class="tr">
@@ -38,24 +38,19 @@ get_header();
                        </div> 
                    <?php
                        }else{
-                           foreach($groups['groups'] as $gID)
+                           foreach($groups as $group)
                            {
-                               $group = groups_get_group(array('group_id'=>$gID));
-                               $member = getGroupMemberDetail($gID, $current_user->ID);
-                               
                    ?>
                         <div class="tr">
                             <div class="td td-name">
-                                <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                                <a href="/communities/<?php echo $group->slug?>"><?php echo $group->title ?></a>
                             </div>
-                            <div class="td td-since"><?php echo formatDate($member->date_modified); ?></div>
+                            <div class="td td-since"><?php echo formatDate($group->membership_date); ?></div>
                             <div class="td td-role">
                                 <?php
-                                    if($member->is_admin)
+                                    if($group->is_admin)
                                         echo '<span class="group-admin">Admin</span>';
-                                    else if($member->is_mod)
-                                        echo '<span class="group-support">Support</span>';
-                                    else 
+                                    else
                                         echo '<span class="group-member">Member</span>';
                                 ?>
                             </div>
@@ -121,8 +116,6 @@ jQuery(document).ready(function($){
             type: 'inline',
             href: '#delete-community-box',
             onStart: function(){
-                console.log( $(this).parent().html())
-
                 jQuery('#delete-community-box .process-btn').attr('href', link);
             }
         })
