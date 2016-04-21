@@ -55,10 +55,20 @@ get_header();
                                 ?>
                             </div>
                             <div class="td td-action">
-                                <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
-                                    <span class="p"></span>
-                                    <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
-                                </a>
+                                <?php
+                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
+                                ?>
+                                <?php if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == get_current_user_id() ):?>
+                                    <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $community->id ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
+                                        <span class="p"></span>
+                                        <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
+                                    </a>
+                                <?php else:?>
+                                    <a href="#" class="action-btn delete-btn icon-btn has-tooltip greyed-out-btn" onclick="return false;">
+                                        <span class="p"></span>
+                                        <span class="simple_tooltip radius6">This community must have at least one admin<span></span></span>
+                                    </a>
+                               <?php endif;?>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -91,7 +101,7 @@ get_header();
     </div>
     <div class="popup-box-footer radius6 noradiustop">                   
         <div class="loading loading-with-text radius6"><div><b>DELETING COMMUNITY</b><span>Please wait...</span></div></div> 
-        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+        <a href="#" class="action-btn process-btn remove_community"><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
         <div class="clear"></div>
     </div>
