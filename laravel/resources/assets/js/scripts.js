@@ -219,6 +219,10 @@ var Page = {
                     },
                     success: function(){
                         location.reload();
+                    },
+                    complete: function () {
+                        $('#confirmJoinCommunity' +  communityId + ' .block-loading').hide();
+                        $('.modal').modal('hide');
                     }
                 });
             } else {

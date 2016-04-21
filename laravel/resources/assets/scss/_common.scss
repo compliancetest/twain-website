@@ -127,3 +127,44 @@ body.modal-open,
         }
     }
 }
+
+
+.notification-container{
+
+    .alert{
+        position: relative;
+        font-size: 13px;
+        margin: 15px 0 0 0;
+        padding: 11px 20px 11px 45px;
+        @include box-shadow(0 0 10px 1px rgba(0, 0, 0, 0.5));
+        color: #fff;
+
+        &:before{
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 7px;
+        }
+
+        &-error{
+            background: #e52727;
+            border: 1px solid #b61313;
+
+            &:before{
+                @include iconsSprite(error-icon);
+            }
+
+        }
+
+        &-success{
+            background: #3db118;
+            border: 1px solid #37a215;
+
+            &:before{
+                @include iconsSprite(success-icon);
+            }
+
+        }
+
+    }
+}
