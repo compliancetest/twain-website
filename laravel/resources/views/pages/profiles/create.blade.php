@@ -120,8 +120,10 @@
 
         jQuery('#createProfileUpload').on('click', function(e){
             e.preventDefault();
+            jQuery('#createProfileForm .error-message').remove();
             if(!jQuery('#create_profile_instance_file').val()){
                 jQuery('#profile-type-id').after('<p class="message error-message">Please select file first!</p>');
+                return false;
             }
             jQuery('#createProfileForm').ajaxSubmit({
                 url: "/communityprofiles/{{ $community->slug }}/",

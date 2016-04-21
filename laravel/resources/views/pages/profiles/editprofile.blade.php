@@ -118,6 +118,7 @@
 
         jQuery('#editProfileUpload').on('click', function(e){
             e.preventDefault();
+            jQuery('#editProfileForm .error-message').remove();
             if(!jQuery('#profile_instance_file').val()){
                 jQuery('#profile-type-id').after('<p class="message error-message">Please select file first!</p>');
                 return false;
