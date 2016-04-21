@@ -11,7 +11,7 @@
                 <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
                     @foreach($community->profileTypes as $kk => $type)
 
-                        @if($kk == 0) <?php $profileType = $type;?> @endif
+                        @if($kk == 0 && !$profileType) <?php $profileType = $type;?> @endif
 
                         <option value="{{ $type->id }}" @if($type->id == $profileType->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
                     @endforeach
@@ -61,8 +61,11 @@
                 jQuery('#CreateProfileLoading').show();
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/create/',
+                    data: {
+                        'profile_type_id': jQuery('#modalCreateProfile #profile-type-id').val()
+                    },
                     success: function (rsp) {
-                        jQuery("#modalCreateProfile .modal-body").html(rsp);
+                        jQuery("#modalCreateProfile .modal-content").html(rsp);
                         renderJsonUI();
                         jQuery(window).resize();
                     },
@@ -148,7 +151,7 @@
                 url: "/communityprofiles/{{ $community->slug }}/",
                 data: {
                     'data': encodeURIComponent(JSON.stringify(profileData.value())),
-                    'profile_type_id': '{{ $profileType->id }}'
+                    'profile_type_id': jQuery('#modalCreateProfile #profile-type-id').val()
                 },
                 type: 'POST',
                 success: function(rsp)
