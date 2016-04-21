@@ -59,12 +59,12 @@
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/edit/{{ $profile->id }}/' + jQuery('#editProfileBox #profile-type-id').val(),
                     success: function (rsp) {
-                        jQuery("#modalEditProfile-<?php echo $profile->id;?> .modal-content").html(rsp);
+                        jQuery("#modalEditProfile-<?php echo $profile->id;?> .modal-body ").html(rsp);
                         renderJsonUI();
                         jQuery(window).resize();
                     },
                     error: function (rsp) {
-                        jQuery('#editProfileBox .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                        jQuery('#editProfileForm').prepend('<p class="message error">' + rsp.reponseText + '</p>');
                         jQuery('#<?php echo $profile->id;?>Loading').hide();
                     },
                     complete: function (rsp) {
@@ -119,7 +119,7 @@
         jQuery('#editProfileUpload').on('click', function(e){
             e.preventDefault();
             if(!jQuery('#profile_instance_file').val()){
-                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select file first!</p>');
+                jQuery('#profile-type-id').after('<p class="message error-message">Please select file first!</p>');
                 return false;
             }
             jQuery('#editProfileForm').ajaxSubmit({
@@ -129,14 +129,15 @@
                 {
                     if(rsp.status == 'success')
                     {
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
+                        jQuery('#profile-type-id').after('<p class="message success-message">Successfully saved!</p>');
                         location.reload();
                     }else{
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
+                        jQuery('#profile-type-id').after('<p class="message error-message">' + jQuery(rsp).find('msg').text() + '</p>');
                     }
                 },
                 error: function(rsp){
-                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                    console.log(rsp);
+                    jQuery('#profile-type-id').after('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
                 },
                 complete: function(rsp){
                     jQuery('#edit-profile-box .loading').hide();
@@ -157,14 +158,14 @@
                 {
                     if(rsp.status == 'success')
                     {
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
+                        jQuery('#modalEditProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
                         location.reload();
                     }else{
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.message + '</p>');
+                        jQuery('#modalEditProfile .modal-footer').prepend('<p class="message error-message">' + rsp.message + '</p>');
                     }
                 },
                 error: function(rsp){
-                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                    jQuery('#modalEditProfile .modal-footer').prepend('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
                 },
                 complete: function(rsp){
                     jQuery('#edit-profile-box .loading').hide();

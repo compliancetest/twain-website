@@ -28,10 +28,14 @@ class ProfilesController extends Controller
         return view('pages.profiles.view')->with(['profile' => $profile, 'content' => json_encode($profile->getProfileFromS3()), 'community' => $community])->render();
     }
 
-    public function create($communitySlug)
+    public function create($communitySlug, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
-        return view('pages.profiles.create')->with(['community' => $community])->render();
+        $profileType = false;
+        if($request->has('profile_type_id')){
+            $profileType = ProfileType::find($request->get('profile_type_id'));
+        }
+        return view('pages.profiles.create')->with(['community' => $community, 'profileType' => $profileType])->render();
     }
 
     public function edit($communitySlug, $profileId, $profileTypeId)

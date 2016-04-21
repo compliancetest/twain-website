@@ -82,7 +82,7 @@ $instances = getCommunityProfileInstatnces($community->id);
      @if($isAdmin)
         <div class="col-md-3">
             <div class="page-title-actions">
-                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
+                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalCreateProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
             </div>
         </div>
     @endif
