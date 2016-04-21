@@ -94,7 +94,7 @@
             @endif
             <div id="edit-download-section"></div>
             <div id="add-new-download-section" style="display: none;">
-                {{ Form::open(['file' => true, 'id' => 'newfileform', 'url' => url()->to('/downloads/' . $community->slug, [], true), 'data-validate' => 'validate'] ) }}
+                {{ Form::open(['file' => true, 'id' => 'newfileform', 'url' => getSiteUrl() . '/downloads/' . $community->slug, 'data-validate' => 'validate'] ) }}
                 <h3>Upload New File(s)</h3>
 
                 <div class="error-message" style="display: none;"></div>

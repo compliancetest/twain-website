@@ -14,10 +14,18 @@ class Profile extends Model
 
     public $timestamps = [];
 
+    protected $fillable = ['profile_name'];
+
     public function meta()
     {
         return $this->hasMany('App\ProfileMeta');
     }
+
+    public function community()
+    {
+        return $this->belongsTo('\App\Community');
+    }
+
     /**
      * Get Profile content from s3
      * @return array|mixed

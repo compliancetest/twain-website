@@ -68,7 +68,7 @@
                     Confirm Community Membership Cancellation
                 </div>
                 <div class="modal-body">
-                    This will cancel your membership of the SuperStream community. Are you sure?
+                    This will cancel your membership of the {{ $community->title }} community. Are you sure?
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-success btn-with-icon btn-confirm cancelMembershipInCommunity" data-community-id="{{ $community->slug }}">Confirm</a>

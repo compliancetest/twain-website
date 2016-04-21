@@ -28,8 +28,8 @@ get_header();
                    </div>
                    <div class="tbody">
                    <?php
-                       $groups =  groups_get_user_groups($current_user->ID);
-                       if($groups['total'] < 1)
+                       $groups = getUserCommunities($current_user->ID);
+                       if(count($groups) < 1)
                        {
                    ?>
                        <div class="tr">
@@ -38,32 +38,37 @@ get_header();
                        </div> 
                    <?php
                        }else{
-                           foreach($groups['groups'] as $gID)
+                           foreach($groups as $group)
                            {
-                               $group = groups_get_group(array('group_id'=>$gID));
-                               $member = getGroupMemberDetail($gID, $current_user->ID);
-                               
                    ?>
                         <div class="tr">
                             <div class="td td-name">
-                                <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                                <a href="/communities/<?php echo $group->slug?>"><?php echo $group->title ?></a>
                             </div>
-                            <div class="td td-since"><?php echo formatDate($member->date_modified); ?></div>
+                            <div class="td td-since"><?php echo formatDate($group->membership_date); ?></div>
                             <div class="td td-role">
                                 <?php
-                                    if($member->is_admin)
+                                    if($group->is_admin)
                                         echo '<span class="group-admin">Admin</span>';
-                                    else if($member->is_mod)
-                                        echo '<span class="group-support">Support</span>';
-                                    else 
+                                    else
                                         echo '<span class="group-member">Member</span>';
                                 ?>
                             </div>
                             <div class="td td-action">
-                                <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $gID ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
-                                    <span class="p"></span>
-                                    <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
-                                </a>
+                                <?php
+                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
+                                ?>
+                                <?php if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == get_current_user_id() ):?>
+                                    <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $community->id ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
+                                        <span class="p"></span>
+                                        <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
+                                    </a>
+                                <?php else:?>
+                                    <a href="#" class="action-btn delete-btn icon-btn has-tooltip greyed-out-btn" onclick="return false;">
+                                        <span class="p"></span>
+                                        <span class="simple_tooltip radius6">This community must have at least one admin<span></span></span>
+                                    </a>
+                               <?php endif;?>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -96,7 +101,7 @@ get_header();
     </div>
     <div class="popup-box-footer radius6 noradiustop">                   
         <div class="loading loading-with-text radius6"><div><b>DELETING COMMUNITY</b><span>Please wait...</span></div></div> 
-        <a href="#" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>            
+        <a href="#" class="action-btn process-btn remove_community"><span class="p"></span><span class="t">Confirm</span></a>
         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
         <div class="clear"></div>
     </div>
@@ -121,8 +126,6 @@ jQuery(document).ready(function($){
             type: 'inline',
             href: '#delete-community-box',
             onStart: function(){
-                console.log( $(this).parent().html())
-
                 jQuery('#delete-community-box .process-btn').attr('href', link);
             }
         })

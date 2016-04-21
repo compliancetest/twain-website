@@ -78,6 +78,15 @@ $instances = getCommunityProfileInstatnces($community->id);
             </table>
         </div>
     </div>
+
+     @if($isAdmin)
+        <div class="col-md-3">
+            <div class="page-title-actions">
+                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
+            </div>
+        </div>
+    @endif
+
 </div>
 <script>
     var clipboard = new Clipboard('.copyProfileLink');
@@ -197,6 +206,25 @@ $instances = getCommunityProfileInstatnces($community->id);
             <div class="modal-header">
                 <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
                 Edit Profile Instance
+            </div>
+            <div class="modal-body">
+                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Create Profile Modal--}}
+<div class="modal fade profile-modal edit-profile-modal" id="modalCreateProfile" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                Create Profile Instance
             </div>
             <div class="modal-body">
                 <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>

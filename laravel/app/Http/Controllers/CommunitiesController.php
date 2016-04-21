@@ -62,7 +62,7 @@ class CommunitiesController extends Controller
             'is_confirmed' => true
         ]);
 
-        return Redirect::to('communities');
+        return Redirect::to(getSiteUrl() . '/communities');
     }
 
     /**
@@ -92,7 +92,7 @@ class CommunitiesController extends Controller
         }
         if ($action == 'admin') {
             if(!$community->isAdmin()){
-                return Redirect::to('/communities');
+                return Redirect::to(getSiteUrl() . '/communities');
             }
             $data['communityMeta'] = $community->meta->keyBy('meta_key');
             $data['profileTypes'] = getCommunityProfileTypes($community->id);
@@ -145,7 +145,7 @@ class CommunitiesController extends Controller
         if ($request->get('redirect')) {
             $redirect = $request->get('redirect');
         }
-        return Redirect::to('/communities/' . $community->slug . '/admin');
+        return Redirect::to(getSiteUrl() . '/communities/' . $community->slug . '/admin');
     }
 
     /**
@@ -188,7 +188,7 @@ class CommunitiesController extends Controller
                 $request->session()->set('zipLink', $zipLink);
             }
         }
-        return Redirect::to('/communities/' . $slug . '/admin');
+        return Redirect::to(getSiteUrl() . '/communities/' . $slug . '/admin');
     }
 
     /**

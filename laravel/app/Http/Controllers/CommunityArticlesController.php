@@ -62,7 +62,7 @@ class CommunityArticlesController extends Controller
 
         $this->_handleAttachments($request, $article);
 
-        return Redirect::to('/communities/'.$this->community->slug.'/wiki');
+        return Redirect::to(getSiteUrl() . '/communities/'.$this->community->slug.'/wiki');
     }
 
      public function update($communitySlug, $articleSlug, Requests\ArticleRequest $request)
@@ -72,7 +72,7 @@ class CommunityArticlesController extends Controller
         $article->save();
 
         $this->_handleAttachments($request, $article);
-        return Redirect::to('/articles/' . $communitySlug .'/'.$articleSlug);
+        return Redirect::to(getSiteUrl() . '/articles/' . $communitySlug .'/'.$articleSlug);
     }
 
     public function destroyattachment($communitySlug, $articleSlug, $attachmentId)

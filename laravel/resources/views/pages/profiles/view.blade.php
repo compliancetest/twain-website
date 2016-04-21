@@ -5,7 +5,7 @@
     <div class="modal-body">
         <div class="form-group row">
             <div class="col-sm-9">
-                <input type="text" class="form-control" readonly id="profile-link-{{ $profile->id }}" value="{{ url()->to('/', [], true) }}/get-profile?id={{ $profile->token }}" />
+                <input type="text" class="form-control" readonly id="profile-link-{{ $profile->id }}" value="{{ getSiteUrl() }}/get-profile?id={{ $profile->token }}" />
             </div>
             <div class="col-sm-3">
                 <button class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#profile-link-{{ $profile->id }}">Copy URL</button>

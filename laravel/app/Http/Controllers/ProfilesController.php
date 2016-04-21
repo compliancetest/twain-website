@@ -8,10 +8,12 @@ use App\Profile;
 use App\ProfileMeta;
 use App\ProfileType;
 use App\Tag2Item;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Ramsey\Uuid\Uuid;
 use Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +28,11 @@ class ProfilesController extends Controller
         return view('pages.profiles.view')->with(['profile' => $profile, 'content' => json_encode($profile->getProfileFromS3()), 'community' => $community])->render();
     }
 
+    public function create($communitySlug)
+    {
+        $community = Community::findBySlug($communitySlug);
+        return view('pages.profiles.create')->with(['community' => $community])->render();
+    }
 
     public function edit($communitySlug, $profileId, $profileTypeId)
     {
@@ -35,17 +42,65 @@ class ProfilesController extends Controller
         return view('pages.profiles.editprofile')->with(['profileType' => $profileType, 'profile' => $profile, 'community' => $community])->render();
     }
 
+    public function save($communitySlug, Request $request)
+    {
+        $community = Community::findBySlug($communitySlug);
+        if($community->isAdmin()){
+            if($request->file('create_profile_instance_file')){
+                $profileData = json_decode(file_get_contents($request->file('create_profile_instance_file')),1);
+            } else {
+                $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
+            }
+
+             if(!$profileData){
+                return JsonResponse::create(['status' => 'error', 'message' => 'Invalid JSON!'], 422);
+            }
+
+            $profiletype = ProfileType::find($request->get('profile-type-id'));
+            $profile = $community->profiles()->create(['profile_name' => $profileData['Profile']['Title']]);
+            $profile->type = 'harness';
+            $profile->type_id = $profiletype->id;
+            $profile->type_name = $profiletype->getTitle();
+            $profile->purpose = $profileData['Profile']['Purpose'];
+            $profile->profile_description = $profileData['Profile']['Description'];
+            $profile->profile_name = $profileData['Profile']['Title'];
+            $profile->created_date = Carbon::now();
+            $profile->creator_id = Auth::user()->ID;
+            $profile->token = Uuid::uuid4();
+            $profile->validation_status = 'valid';
+            $profile->content_length = strlen(json_encode($profileData));
+            $profile->profile_role = $profiletype->title;
+
+            $profile->putToS3(json_encode($profileData));
+            $profile->save();
+            return JsonResponse::create(['status' => 'success'], 200);
+        }
+        return JsonResponse::create(['status' => 'error'], 403);
+    }
+
     public function update($communitySlug, $profileId, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
         $profile = Profile::find($profileId);
         if($community->isAdmin() || $profile->creator_id = Auth::user()->ID){
 
-            $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
-            $profile->type_id = $request->get('profile_type_id');
+            if($request->file('profile_instance_file')){
+                $profileData = json_decode(file_get_contents($request->file('profile_instance_file')),1);
+            } else {
+                $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
+            }
+
+            if(!$profileData){
+                return JsonResponse::create(['status' => 'error', 'message' => 'Invalid JSON!'], 422);
+            }
+            $profiletype = ProfileType::find($request->get('profile-type-id'));
+            $profile->type_id = $profiletype->id;
+            $profile->type_name = $profiletype->getTitle();
+            $profile->profile_role = $profiletype->title;
             $profile->purpose = $profileData['Profile']['Purpose'];
             $profile->profile_description = $profileData['Profile']['Description'];
             $profile->profile_name = $profileData['Profile']['Title'];
+            $profile->content_length = strlen(json_encode($profileData));
             $profile->putToS3(json_encode($profileData));
             $profile->save();
             return JsonResponse::create(['status' => 'success'], 200);

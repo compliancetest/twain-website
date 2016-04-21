@@ -9,7 +9,7 @@
         <form name="editProfileForm" id="editProfileForm" action="">
             <fieldset class="edit-profile-fieldset">
                 <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
-                    @foreach(\App\ProfileType::all() as $type)
+                    @foreach($community->profileTypes as $type)
                         <option value="{{ $type->id }}" @if($type->id == $profileType->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
                     @endforeach
                 </select>
@@ -22,7 +22,7 @@
                                data-file-extensions="(.txt or .json file)"/>
                     </div>
                     <div class="upload-file-field-additional-btn">
-                        <a href="#" class="btn btn-success btn-with-icon btn-upload">Upload</a>
+                        <a href="#" class="btn btn-success btn-with-icon btn-upload" id="editProfileUpload">Upload</a>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
             if (this.value == '') {
                 initEditProfileBox();
             } else {
-                jQuery('#{{ $profile->id }}Loading').show();
+                jQuery('#<?php echo $profile->id;?>Loading').show();
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/edit/{{ $profile->id }}/' + jQuery('#editProfileBox #profile-type-id').val(),
                     success: function (rsp) {
@@ -65,10 +65,10 @@
                     },
                     error: function (rsp) {
                         jQuery('#editProfileBox .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
-                        jQuery('#{{ $profile->id }}Loading').hide();
+                        jQuery('#<?php echo $profile->id;?>Loading').hide();
                     },
                     complete: function (rsp) {
-                        jQuery('#{{ $profile->id }}Loading').hide();
+                        jQuery('#<?php echo $profile->id;?>Loading').hide();
                     }
                 })
             }
@@ -116,23 +116,51 @@
             }
         }
 
+        jQuery('#editProfileUpload').on('click', function(e){
+            e.preventDefault();
+            if(!jQuery('#profile_instance_file').val()){
+                jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">Please select file first!</p>');
+                return false;
+            }
+            jQuery('#editProfileForm').ajaxSubmit({
+                url: "/communityprofiles/{{ $community->slug }}/{{ $profile->id }}",
+                type: 'POST',
+                success: function(rsp)
+                {
+                    if(rsp.status == 'success')
+                    {
+                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
+                        location.reload();
+                    }else{
+                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
+                    }
+                },
+                error: function(rsp){
+                    jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.reponseText + '</p>');
+                },
+                complete: function(rsp){
+                    jQuery('#edit-profile-box .loading').hide();
+                }
+            })
+        });
+
         jQuery('.btn-confirm').on('click', function(e){
             e.preventDefault();
             jQuery.ajax({
                 url: "/communityprofiles/{{ $community->slug }}/{{ $profile->id }}",
                 data: {
                     'data': encodeURIComponent(JSON.stringify(profileData.value())),
-                    'profile_type_id': '{{ $profileType->id }}'
+                    'profile-type-id': '{{ $profileType->id }}'
                 },
-                type: 'PATCH',
+                type: 'POST',
                 success: function(rsp)
                 {
-                    if(jQuery(rsp).find('status').text() == 'success')
+                    if(rsp.status == 'success')
                     {
                         jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message success">Successfully saved!</p>');
                         location.reload();
                     }else{
-                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + jQuery(rsp).find('msg').text() + '</p>');
+                        jQuery('#edit-profile-box .popup-box-content').prepend('<p class="message error">' + rsp.message + '</p>');
                     }
                 },
                 error: function(rsp){

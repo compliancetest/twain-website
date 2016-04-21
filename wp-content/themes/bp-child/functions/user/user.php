@@ -69,13 +69,13 @@ function compliancetest_user_actions()
         cp_delete_payment_method();
     }else if(wp_verify_nonce($cpAction ,'leave-group')){
         $gID = $_REQUEST['group_id'];
-        if ( groups_is_user_member( bp_loggedin_user_id(), $gID ) ) {
+        if ( $sub = $wpdb->get_row($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s', get_current_user_id(), $gID) )) {
 
             // Stop sole admins from abandoning their group
-            $group_admins = groups_get_group_admins( $gID );
+            $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
              if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() )
                 echo  __( 'This community must have at least one admin', 'buddypress' );
-            elseif ( !groups_leave_group( $gID ) )
+            elseif ( !$wpdb->get_row($wpdb->prepare('DELETE FROM communities_members WHERE user_id = %d AND community_id = %s', get_current_user_id(), $gID) ))
                 echo __( 'There was an error leaving the community.', 'buddypress' );
             else
                 echo 'success';
@@ -306,7 +306,7 @@ function getUserAdminGroups($user_id)
 function getUserCommunities($user_id)
 {
     global $wpdb;
-    return $wpdb->get_results($wpdb->prepare("SELECT c.* FROM communities AS c
+    return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin FROM communities AS c
                                               JOIN communities_members AS cm ON c.id = cm.community_id
                                               WHERE cm.user_id = %d", $user_id));
 }
