@@ -2,7 +2,7 @@
     <div class="popup-box-header radius6 noradiusbottom">Community Registration</div>
     <div class="popup-box-content">
 
-        {{ Form::open(['class' => 'join-community-form', 'url' => url()->to('membership/'.$community->slug.'/request', [], true)]) }}
+        {{ Form::open(['class' => 'join-community-form', 'url' => getSiteUrl() . 'membership/'.$community->slug.'/request']) }}
 
             <div class="grey-border-bottom">
                 <p>You need to join the community of interest in order to view Test Cases and Participate in the Forum</p>

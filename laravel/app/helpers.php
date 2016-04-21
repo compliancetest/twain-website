@@ -44,5 +44,6 @@ function sendEmails($sendTo, $template, $emailData)
 
 function getSiteUrl()
 {
-    return env('APP_URL');
+    $useHttps = getenv('ENVIRONMENT') == 'local' ? false : true;
+    return url()->to('/', [], $useHttps);
 }

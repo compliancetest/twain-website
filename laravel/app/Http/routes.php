@@ -55,17 +55,22 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::group(['middleware' => ['community.user']], function () {
 
-        Route::delete('communityprofiles/{community}/{profileId}', 'ProfilesController@destroy');
         Route::post('communityprofiles/{community}/copy/{profileId}', 'ProfilesController@copy');
         Route::get('communityprofiles/{community}/viewprofile/{profileId}', 'ProfilesController@viewprofile');
-        Route::get('communityprofiles/{community}/edit/{profileId}/{profileTypeId}', 'ProfilesController@edit');
-        Route::patch('communityprofiles/{community}/{profileId}', 'ProfilesController@update');
-
 
         Route::get('profiletypes/{community}/downloadprofiletype/{profileTypeId}', 'ProfileTypeController@downloadprofiletype');
         Route::get('profiletypes/{community}/viewprofiletype/{profileTypeId}', 'ProfileTypeController@viewprofiletype');
 
     });
+
+    Route::group(['middleware' => ['community.admin']], function () {
+        Route::delete('communityprofiles/{community}/{profileId}', 'ProfilesController@destroy');
+        Route::get('communityprofiles/{community}/edit/{profileId}/{profileTypeId}', 'ProfilesController@edit');
+        Route::get('communityprofiles/{community}/create', 'ProfilesController@create');
+        Route::post('communityprofiles/{community}/{profileId}', 'ProfilesController@update');
+        Route::post('communityprofiles/{community}/', 'ProfilesController@save');
+     });
+
     Route::group(['prefix' => 'profiletypes', 'middleware' => ['community.admin']], function () {
         Route::get('{community}/edit/{profileTypeId}', 'ProfileTypeController@edit');
         Route::post('{community}/', 'ProfileTypeController@store');

@@ -59,6 +59,22 @@ class Community extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function profileTypes()
+    {
+        return $this->hasMany('App\ProfileType');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function profiles()
+    {
+        return $this->hasMany('App\Profile');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function downloads()
     {
         return $this->hasMany('App\CommunityDownloads');

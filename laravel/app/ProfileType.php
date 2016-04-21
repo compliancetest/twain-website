@@ -14,6 +14,11 @@ class ProfileType extends Model
         'creator_id', 'title', 'community_id', 'created_date'
     ];
 
+    public function community()
+    {
+        return $this->belongsTo('\App\Community');
+    }
+
     public function getTitle()
     {
         $array = json_decode(base64_decode($this->schema), true);

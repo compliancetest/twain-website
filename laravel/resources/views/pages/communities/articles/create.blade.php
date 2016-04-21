@@ -13,7 +13,7 @@
 
                     @include('pages.communities.partials.errors')
 
-                    {{ Form::open(['name' => 'article-create-form', 'file' => true, 'method' => 'post', 'enctype' => 'multipart/form-data', 'url' => url()->to('/articles/' . $community->slug, array(), true), 'data-validate' => 'validate']) }}
+                    {{ Form::open(['name' => 'article-create-form', 'file' => true, 'method' => 'post', 'enctype' => 'multipart/form-data', 'url' => getSiteUrl() . '/articles/' . $community->slug, 'data-validate' => 'validate']) }}
 
                         <div class="colored-box">
                             <div class="colored-box-header">Information</div>
