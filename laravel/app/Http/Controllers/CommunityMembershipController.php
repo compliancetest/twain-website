@@ -79,7 +79,7 @@ class CommunityMembershipController extends Controller
                 Flash::success('Your membership request sent successfully. ');
             }
         }
-        return Redirect::to('/communities');
+        return Redirect::to(getSiteUrl() . '/communities');
     }
 
     public function acceptUser($communitySlug, Request $request)
