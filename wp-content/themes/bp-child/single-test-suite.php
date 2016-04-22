@@ -17,7 +17,7 @@ Template Name Posts: Test Suite
 	$group = getCommunity( $suite->community_id );
 
     //If this is the revision, only the community admin can see it.
-    if($suite->isRevision && !groups_is_user_admin($user_id, $suite->community_id))
+    if($suite->isRevision && !doesUserCommunityAdmin($user_id, $suite->community_id))
     {
         addMessage("Sorry, you are not allowed to see the test suite", "error");
         wp_redirect(bp_get_group_permalink($group));
@@ -115,7 +115,7 @@ Template Name Posts: Test Suite
 
                         <?php
                         foreach($suite->conformanceLevel as $i => $row){
-                            if(!groups_is_user_admin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                            if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                 continue;
                             ?>
                             <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
@@ -426,7 +426,7 @@ Template Name Posts: Test Suite
                               <option value="">- Scenario -</option>
                               <?php 
                               foreach($suite->scenarios as $r) {
-                                  if (!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){
+                                  if (!doesUserCommunityAdmin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){
                                       continue;
                                   }
                                   echo '<option ' . ($r['id'] == $selectedScenario ? 'selected="selected"' : '') . ' value="'.$r['id'].'" >'.$r['code'].'</option>';
@@ -441,7 +441,7 @@ Template Name Posts: Test Suite
                               <option value="">- Conformance Level -</option>
                               <?php 
                               foreach($suite->conformanceLevel as $r){                                  
-                                  if(!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                  if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                       continue;
                                   echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
                               }
@@ -499,7 +499,7 @@ Template Name Posts: Test Suite
                     //Add Test Suite ID
                     $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
                     
-                    if(!groups_is_user_admin(get_current_user_id(), $suite->community_id)){
+                    if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id)){
                         $args['meta_query'][] = array(
                                                     'key' => 'hide_case',
                                                     'value' => 0,
@@ -598,7 +598,7 @@ Template Name Posts: Test Suite
                                         
                                         foreach($levels as $level)
                                         {
-                                            if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                            if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                                 continue;
                                             $lArr[] = $level;
                                         }
