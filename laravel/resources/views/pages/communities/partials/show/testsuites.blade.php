@@ -65,6 +65,14 @@
             </table>
         </div>
 
+        @if($isAdmin)
+             <div class="col-md-3">
+                <div class="page-title-actions">
+                     <a href="{{ getSiteUrl() }}/edit-test-suite/" class="btn btn-success btn-with-icon btn-add">Add new Test Suite</a>
+                </div>
+            </div>
+        @endif
+
     </div>
 </div>
 
