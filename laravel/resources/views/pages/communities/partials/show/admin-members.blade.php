@@ -32,6 +32,10 @@
         </ul>
     </div>
 
+    <div class="message error-message" data-role="admin" style="display: none;">Please select at least one administrator</div>
+    <div class="message error-message" data-role="member" style="display: none;">Please select at least one member</div>
+    <div class="message error-message" data-role="remove" style="display: none;">Please select at least one person to remove</div>
+
     <div class="member-type-header">Administrator</div>
     <ul class="row member-list" id="admins-list">
 
@@ -119,9 +123,12 @@
         });
 
         jQuery('.changeRole').click(function(e){
+            jQuery('.error-message[data-role]').hide();
             e.preventDefault();
 
             var elem = jQuery(this);
+            var userRole = elem.attr('data-role');
+
             if(jQuery('#groupMembersForm input:checked').length){
 
                 membersLoadingContainer.show();
@@ -134,7 +141,7 @@
                     type: 'post',
                     data: {
                         'users': checkUsers,
-                        'role': elem.attr('data-role')
+                        'role': userRole
                     },
                     success: function(data){
                         jQuery('.members-management').html(data.html)
@@ -143,6 +150,8 @@
                         membersLoadingContainer.hide();
                     }
                 });
+            } else {
+                jQuery('.error-message[data-role="' + userRole + '"]').show();
             }
         });
 

@@ -82,18 +82,12 @@
                                 <img src="{{ $community->getImageUrl() }}" alt="">
                             </div>
                             <div class="community-avatar-description">
-                                <p>Upload an image to use as an avatar for this community. The image will be shown on
-                                    the main community page, and in search results.</p>
-
-                                <p>Click below to select a JPG, GIF or PNG format photo from your computer and then
-                                    click 'Upload Image' to proceed.</p>
-
+                                <p>Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.</p>
+                                <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
                                 <div class="upload-file-field">
-                                    <input type="file" name="image" class="input-file" data-file-type="image"
-                                           data-file-extensions="(.jpg, .png, .gif or .jpeg file)"/>
+                                    <input type="file" name="image" class="input-file" data-file-type="image" data-file-extensions="(.jpg, .png, .gif or .jpeg file)" required data-msg-required="Please choose file" />
                                 </div>
-                                <a href="#" class="btn btn-success btn-with-icon btn-add"
-                                   onclick="jQuery(this).closest('form').submit()">Upload Image</a>
+                                <button type="submit" class="btn btn-success btn-with-icon btn-add">Upload Image</button>
                             </div>
                         </div>
                         {!! Form::close() !!}

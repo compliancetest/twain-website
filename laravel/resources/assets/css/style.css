@@ -9611,15 +9611,17 @@ select.form-control {
   right: 0;
   top: 0;
   z-index: 100;
+  cursor: pointer;
+  width: 76px;
 }
-/* line 281, ../scss/blocks/_buttons.scss */
+/* line 283, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 287, ../scss/blocks/_buttons.scss */
+/* line 289, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9627,15 +9629,15 @@ select.form-control {
   top: 0;
   left: 0;
 }
-/* line 295, ../scss/blocks/_buttons.scss */
+/* line 297, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 301, ../scss/blocks/_buttons.scss */
+/* line 303, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 307, ../scss/blocks/_buttons.scss */
+/* line 309, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -9643,7 +9645,7 @@ select.form-control {
   height: 28px;
   width: 21px;
 }
-/* line 313, ../scss/blocks/_buttons.scss */
+/* line 315, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -9651,7 +9653,7 @@ select.form-control {
   height: 28px;
   width: 21px;
 }
-/* line 319, ../scss/blocks/_buttons.scss */
+/* line 321, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -9659,12 +9661,12 @@ select.form-control {
   height: 28px;
   width: 21px;
 }
-/* line 324, ../scss/blocks/_buttons.scss */
+/* line 326, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 330, ../scss/blocks/_buttons.scss */
+/* line 332, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
