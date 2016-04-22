@@ -73,12 +73,22 @@ function compliancetest_user_actions()
 
             // Stop sole admins from abandoning their group
             $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
-             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() )
-                echo  __( 'This community must have at least one admin', 'buddypress' );
-            elseif ( !$wpdb->get_row($wpdb->prepare('DELETE FROM communities_members WHERE user_id = %d AND community_id = %s', get_current_user_id(), $gID) ))
-                echo __( 'There was an error leaving the community.', 'buddypress' );
-            else
-                echo 'success';
+             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() ) {
+                 echo __('This community must have at least one admin', 'buddypress');
+             } else {
+                $result = $wpdb->delete( 'communities_members',
+                    array(
+                        'user_id' => get_current_user_id(),
+                        'community_id' => $gID
+                    ),
+                    array( '%d', '%s' )
+                );
+                if($result){
+                    echo 'success';
+                } else {
+                    echo __( 'There was an error leaving the community.', 'buddypress' );
+                }
+            }
         }else{
             echo 'Invalid Request!';
         }

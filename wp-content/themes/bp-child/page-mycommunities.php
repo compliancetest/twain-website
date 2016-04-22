@@ -64,7 +64,7 @@ get_header();
                                         <span class="simple_tooltip radius6">This community must have at least one admin<span></span></span>
                                     </a>
                                 <?php else:?>
-                                    <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $community->id ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
+                                    <a href="<?php echo get_site_url(); ?>/?cp-action=<?php echo wp_create_nonce('leave-group') ?>&group_id=<?php echo $group->id ?>" class="action-btn delete-btn icon-btn has-tooltip leave-community-link delete-community-btn">
                                         <span class="p"></span>
                                         <span class="simple_tooltip radius6 no-wrap">Remove Membership<span></span></span>
                                     </a>
