@@ -10,6 +10,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Laracasts\Flash\Flash;
 
 class CommunityArticlesController extends Controller
 {
@@ -61,7 +62,7 @@ class CommunityArticlesController extends Controller
         $article = $this->community->articles()->create($modelData);
 
         $this->_handleAttachments($request, $article);
-
+        Flash::success('You successfully added new article. ');
         return Redirect::to(getSiteUrl() . '/communities/'.$this->community->slug.'/wiki');
     }
 
@@ -72,6 +73,7 @@ class CommunityArticlesController extends Controller
         $article->save();
 
         $this->_handleAttachments($request, $article);
+        Flash::success('You successfully updated article. ');
         return Redirect::to(getSiteUrl() . '/articles/' . $communitySlug .'/'.$articleSlug);
     }
 

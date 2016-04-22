@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Laracasts\Flash\Flash;
 
 class CommunitiesController extends Controller
 {
@@ -154,9 +155,11 @@ class CommunitiesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($communitySlug)
     {
-        //
+        Community::findBySlug($communitySlug)->delete();
+        Flash::success('You successfully deleted the community. ');
+        return redirect()->to(getSiteUrl() . '/communities');
     }
 
     /**
