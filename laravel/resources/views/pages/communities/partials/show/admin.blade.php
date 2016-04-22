@@ -12,7 +12,6 @@
                             <div class="form-group">
                                 <label for="communityName">Community Name</label>
                                 {{ Form::text('title', null, ['required' => 'required',
-                                    'data-msg-required' => 'Community Name is required',
                                     'class' => 'form-control',
                                     'id' => 'communityName',
                                 ]) }}
@@ -20,7 +19,6 @@
                             <div class="form-group">
                                 <label for="communityDescription">Community Description</label>
                                 {{ Form::textarea('description', null, ['required' => 'required',
-                                    'data-msg-required' => 'Community Description is required',
                                     'class' => 'form-control',
                                     'data-air' => 'true',
                                     'id' => 'communityDescription',
@@ -76,7 +74,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Display Image</div>
                     <div class="colored-box-body">
-                        {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                        {!! Form::model($community, ['id'=> 'group-details-image-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                         <div class="colored-box-content community-image-management">
                             <div class="community-image">
                                 <img src="{{ $community->getImageUrl() }}" alt="">

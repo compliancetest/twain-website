@@ -526,21 +526,24 @@ var Page = {
     coloredBoxAjaxSaveForm: function(form){
 
         if (form.valid()){
-            form.find('.message-notice').remove();
+            form.find('.message').remove();
             form.find('.color-box-loading').show();
             $.ajax({
                 url: form.attr('action'),
                 type: 'post',
                 data: form.serialize(),
-                dataType: 'json',
+                error: function(jqXHR, status){
+                    form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                },
                 success: function(rsp){
-                    form.find('.colored-box-footer').prepend('<div class="message-notice message-' + rsp.status + '">' + rsp.message + '</div>');
+                    console.log(rsp);
+                    form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();
                     setTimeout(function() {
-                        form.find('.message-notice').fadeOut("slow", function() { $(this).remove(); });
-                    }, 1500);
+                        form.find('.message').fadeOut("slow", function() { $(this).remove(); });
+                    }, 3000);
 
                 }
             })
