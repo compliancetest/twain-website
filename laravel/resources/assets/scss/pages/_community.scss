@@ -409,6 +409,7 @@
           padding: 5px 10px;
           text-shadow: 0 -1px 1px #fff;
           @include background-image(linear-gradient(top, #e9ebed, #d8d8d8));
+          outline: none;
 
           &:hover,
           &.selected{

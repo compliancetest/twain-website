@@ -118,12 +118,13 @@
             });
         });
 
-        jQuery('.changeRole').on('click', function(e){
+        jQuery('.changeRole').click(function(e){
             e.preventDefault();
-            membersLoadingContainer.show();
 
             var elem = jQuery(this);
             if(jQuery('#groupMembersForm input:checked').length){
+
+                membersLoadingContainer.show();
                 var checkUsers = [];
                 jQuery("#groupMembersForm input:checkbox:checked").each(function(){
                     checkUsers.push(jQuery(this).val());

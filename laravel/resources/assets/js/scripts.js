@@ -332,7 +332,6 @@ var Page = {
     communityAdmin: {
         init: function(){
             var self = this;
-            this.groupMembersActions();
             customizeFileTag();
 
             $('#addAddNewProfileType').click(function(e) {
@@ -352,15 +351,6 @@ var Page = {
                 self.deleteProfileType($(this), e);
             });
 
-        },
-
-        groupMembersActions: function(){
-            $('#membersGroupAction a').click(function(e){
-                e.preventDefault();
-                var action = $(this).data('action');
-                $('input[name="action"]').val(action);
-                $('#groupMembersForm').submit();
-            })
         },
 
         showAddNewProfileType: function(e){

@@ -12333,53 +12333,54 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   background-image: -moz-linear-gradient(top, #e9ebed, #d8d8d8);
   background-image: -webkit-linear-gradient(top, #e9ebed, #d8d8d8);
   background-image: linear-gradient(to bottom, #e9ebed, #d8d8d8);
+  outline: none;
 }
-/* line 413, ../scss/pages/_community.scss */
+/* line 414, ../scss/pages/_community.scss */
 .community-admin .members-management .members-group-action li a:hover, .community-admin .members-management .members-group-action li a.selected {
   background: #127dbb;
   color: #fff;
   text-shadow: 0 -1px 1px #0d5783;
   text-decoration: none;
 }
-/* line 427, ../scss/pages/_community.scss */
+/* line 428, ../scss/pages/_community.scss */
 .community-admin .members-management .member-type-header {
   margin: 10px 0;
   font-weight: 700;
   line-height: 16px;
 }
-/* line 434, ../scss/pages/_community.scss */
+/* line 435, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li {
   margin: 0 0 7px 0;
   overflow: hidden;
 }
-/* line 438, ../scss/pages/_community.scss */
+/* line 439, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li.clearfix {
   margin: 0;
   overflow: visible;
 }
-/* line 443, ../scss/pages/_community.scss */
+/* line 444, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li label {
   float: left;
 }
-/* line 447, ../scss/pages/_community.scss */
+/* line 448, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li input {
   float: left;
   margin: 8px 0 0 0;
 }
-/* line 452, ../scss/pages/_community.scss */
+/* line 453, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .avatar {
   width: 30px;
   height: 30px;
   margin: 0 0 0 5px;
   border: 1px solid #959595;
 }
-/* line 459, ../scss/pages/_community.scss */
+/* line 460, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info {
   overflow: hidden;
   margin: 0 0 0 55px;
   display: block;
 }
-/* line 464, ../scss/pages/_community.scss */
+/* line 465, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .member-name, .community-admin .members-management .member-list li .member-info .member-email {
   color: #127dbb;
   display: block;
@@ -12387,56 +12388,56 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   font-weight: 400;
   margin: 1px 0 0 0;
 }
-/* line 472, ../scss/pages/_community.scss */
+/* line 473, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .member-email {
   font-size: 10px;
   margin-top: -4px;
 }
-/* line 477, ../scss/pages/_community.scss */
+/* line 478, ../scss/pages/_community.scss */
 .community-admin .members-management .member-list li .member-info .btn {
   margin-top: 4px;
 }
-/* line 487, ../scss/pages/_community.scss */
+/* line 488, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list {
   width: 100%;
 }
-/* line 490, ../scss/pages/_community.scss */
+/* line 491, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li {
   padding: 12px 0;
   margin: 0 0 12px 0;
   border-bottom: 1px solid #959595;
   overflow: hidden;
 }
-/* line 496, ../scss/pages/_community.scss */
+/* line 497, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .avatar {
   float: left;
   margin: 0;
 }
-/* line 501, ../scss/pages/_community.scss */
+/* line 502, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .member-info {
   overflow: hidden;
   margin: 0 0 0 40px;
 }
-/* line 505, ../scss/pages/_community.scss */
+/* line 506, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .member-info .member-activity {
   font-size: 10px;
   font-style: italic;
   margin-top: -1px;
 }
-/* line 512, ../scss/pages/_community.scss */
+/* line 513, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action {
   float: right;
   margin: 4px 0 0 0;
 }
-/* line 516, ../scss/pages/_community.scss */
+/* line 517, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action .btn {
   margin: 0 0 0 5px;
 }
-/* line 519, ../scss/pages/_community.scss */
+/* line 520, ../scss/pages/_community.scss */
 .community-admin .pending-requests .member-list li .action .btn:first-child {
   margin-left: 0;
 }
-/* line 529, ../scss/pages/_community.scss */
+/* line 530, ../scss/pages/_community.scss */
 .community-admin .loaded-files {
   margin: 10px -20px -20px -20px;
   border-top: 2px solid #b7b7b7;
@@ -12444,31 +12445,31 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 10px 20px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 529, ../scss/pages/_community.scss */
+  /* line 530, ../scss/pages/_community.scss */
   .community-admin .loaded-files {
     margin: 10px -10px -20px -10px;
     padding: 10px -5px;
   }
 }
-/* line 541, ../scss/pages/_community.scss */
+/* line 542, ../scss/pages/_community.scss */
 .community-admin .loaded-files li {
   color: #127dbb;
   font-weight: 700;
 }
-/* line 548, ../scss/pages/_community.scss */
+/* line 549, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-image {
   float: left;
   width: 100px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 548, ../scss/pages/_community.scss */
+  /* line 549, ../scss/pages/_community.scss */
   .community-admin .community-image-management .community-image {
     float: none;
     text-align: center;
     width: 100%;
   }
 }
-/* line 558, ../scss/pages/_community.scss */
+/* line 559, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-image img {
   width: 100px;
   height: 100px;
@@ -12476,17 +12477,17 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   -webkit-box-shadow: 0 0 10px 1px #999;
   box-shadow: 0 0 10px 1px #999;
 }
-/* line 566, ../scss/pages/_community.scss */
+/* line 567, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description {
   margin: 10px 0 0 0;
 }
 @media only screen and (min-width: 641px) {
-  /* line 566, ../scss/pages/_community.scss */
+  /* line 567, ../scss/pages/_community.scss */
   .community-admin .community-image-management .community-avatar-description {
     margin: 0 0 0 115px;
   }
 }
-/* line 573, ../scss/pages/_community.scss */
+/* line 574, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description p {
   font-weight: 600;
   line-height: 16px;
@@ -12494,38 +12495,38 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   font-size: 13px;
   margin: 0 0 12px 0;
 }
-/* line 581, ../scss/pages/_community.scss */
+/* line 582, ../scss/pages/_community.scss */
 .community-admin .community-image-management .community-avatar-description .upload-file-field {
   margin: 0 0 10px 0;
   display: block;
 }
 
-/* line 591, ../scss/pages/_community.scss */
+/* line 592, ../scss/pages/_community.scss */
 .create-community h3 {
   font-size: 18px;
   font-weight: 600;
 }
-/* line 596, ../scss/pages/_community.scss */
+/* line 597, ../scss/pages/_community.scss */
 .create-community .community-admin {
   padding: 15px 10px;
 }
 @media only screen and (max-width: 640px) {
-  /* line 596, ../scss/pages/_community.scss */
+  /* line 597, ../scss/pages/_community.scss */
   .create-community .community-admin {
     padding: 15px 0;
   }
 }
 
-/* line 608, ../scss/pages/_community.scss */
+/* line 609, ../scss/pages/_community.scss */
 .article-attachments-box .upload-file-field {
   margin: 0 0 10px 0;
 }
-/* line 612, ../scss/pages/_community.scss */
+/* line 613, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list {
   border: 1px solid #cbcbcb;
   margin: 5px 0 0 0;
 }
-/* line 616, ../scss/pages/_community.scss */
+/* line 617, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list li {
   *zoom: 1;
   background: #fff;
@@ -12541,7 +12542,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   overflow: hidden;
   visibility: hidden;
 }
-/* line 622, ../scss/pages/_community.scss */
+/* line 623, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list li:before {
   content: '';
   display: inline-block;
@@ -12554,11 +12555,11 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 16px;
   margin: -2px 0 0 0;
 }
-/* line 631, ../scss/pages/_community.scss */
+/* line 632, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list li:nth-child(2n+1) {
   background: #f3f3f3;
 }
-/* line 635, ../scss/pages/_community.scss */
+/* line 636, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list li .doc-attachment-mime-icon {
   float: left;
   font-weight: 600;
@@ -12569,30 +12570,30 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   overflow: hidden;
   max-width: 100%;
 }
-/* line 646, ../scss/pages/_community.scss */
+/* line 647, ../scss/pages/_community.scss */
 .article-attachments-box .attached-file-list li .btn-delete {
   float: right;
 }
 
-/* line 656, ../scss/pages/_community.scss */
+/* line 657, ../scss/pages/_community.scss */
 .article-view {
   padding: 20px 0 0 0;
 }
-/* line 659, ../scss/pages/_community.scss */
+/* line 660, ../scss/pages/_community.scss */
 .article-view .article-tags {
   padding: 20px 0 0 0;
 }
 
-/* line 666, ../scss/pages/_community.scss */
+/* line 667, ../scss/pages/_community.scss */
 .edit-profile-modal .modal-body {
   padding: 0 0 20px 0;
 }
 
-/* line 671, ../scss/pages/_community.scss */
+/* line 672, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper {
   overflow: auto;
 }
-/* line 674, ../scss/pages/_community.scss */
+/* line 675, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper h3 {
   font-size: 15px;
   font-weight: 600;
@@ -12602,7 +12603,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   -webkit-box-shadow: 0 -13px 7px -12px #CBCBCB inset;
   box-shadow: 0 -13px 7px -12px #CBCBCB inset;
 }
-/* line 683, ../scss/pages/_community.scss */
+/* line 684, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper h4 {
   color: #2a2a2a;
   font-size: 13px;
@@ -12610,14 +12611,14 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 5px 0;
   margin: 0;
 }
-/* line 691, ../scss/pages/_community.scss */
+/* line 692, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .or-delimiter {
   position: relative;
   text-align: center;
   width: 100%;
   margin: 10px 0;
 }
-/* line 697, ../scss/pages/_community.scss */
+/* line 698, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .or-delimiter:before {
   display: block;
   content: '';
@@ -12625,7 +12626,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   border-bottom: 1px solid #f8f8f8;
   width: 100%;
 }
-/* line 705, ../scss/pages/_community.scss */
+/* line 706, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .or-delimiter .or-text {
   position: absolute;
   display: inline-block;
@@ -12634,14 +12635,14 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   font-size: 12px;
   top: -7px;
 }
-/* line 716, ../scss/pages/_community.scss */
+/* line 717, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .edit-profile-fieldset {
   border: 1px solid #bfbfbf;
   padding: 15px 10px;
   position: relative;
   margin: 15px 10px 0 10px;
 }
-/* line 722, ../scss/pages/_community.scss */
+/* line 723, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .edit-profile-fieldset .profile-type-drowdown {
   left: 10px;
   min-width: 200px;
@@ -12661,11 +12662,11 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   outline: medium none;
   padding: 3px;
 }
-/* line 741, ../scss/pages/_community.scss */
+/* line 742, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .edit-profile-fieldset .upload-json-file-box h4 {
   margin: 2px 0;
 }
-/* line 748, ../scss/pages/_community.scss */
+/* line 749, ../scss/pages/_community.scss */
 .edit-profile-form-wrapper .upload-file-field {
   display: inline-block;
 }
