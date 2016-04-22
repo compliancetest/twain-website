@@ -32,8 +32,8 @@
         </ul>
     </div>
 
-    <div class="message error-message" data-role="admin" style="display: none;">Please select at least one administrator</div>
-    <div class="message error-message" data-role="member" style="display: none;">Please select at least one member</div>
+    <div class="message error-message" data-role="admin" style="display: none;">Please select at least one member</div>
+    <div class="message error-message" data-role="member" style="display: none;">Please select at least one administrator</div>
     <div class="message error-message" data-role="remove" style="display: none;">Please select at least one person to remove</div>
 
     <div class="member-type-header">Administrator</div>
