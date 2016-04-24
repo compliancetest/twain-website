@@ -61,13 +61,11 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             $transaction->product_id = 0;
             $transaction->test_suite_id = 0;
             $transaction->audit_record = false;
-            $transaction->test_outcome_status_id = TestOutcomeStatus::getFailId();
+            $transaction->test_outcome_status_id = TestOutcomeStatus::getInvalidZipId();
             $transaction->customer_id = $this->userId;
             $transaction->subscription_id = $organisationSubscription->id;
             $transaction->organisation_id = $organisationMember->organisation_id;
             $transaction->save();
-            error_log($e->getLine());
-            error_log($e->getMessage());
         }
     }
 
@@ -195,13 +193,22 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $this->_delTree($filePath . $rootFolder);
     }
 
+    /**
+     * Remove provided folder / file
+     * @param $dir
+     * @return bool
+     */
     private function _delTree($dir)
     {
-        $files = array_diff(scandir($dir), array('.', '..'));
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->_delTree("$dir/$file") : unlink("$dir/$file");
+        if(is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.', '..'));
+            foreach ($files as $file) {
+                (is_dir("$dir/$file")) ? $this->_delTree("$dir/$file") : unlink("$dir/$file");
+            }
+            return rmdir($dir);
+        } elseif(is_file($dir)){
+            unlink($dir);
         }
-        return rmdir($dir);
     }
 
 }

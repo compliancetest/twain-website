@@ -23,4 +23,9 @@ class TestOutcomeStatus extends Model
     {
         return self::where(['code' => 'FAIL'])->first()->id;
     }
+
+    public static function getInvalidZipId()
+    {
+        return self::where(['code' => 'INVALID_ZIP'])->first()->id;
+    }
 }
