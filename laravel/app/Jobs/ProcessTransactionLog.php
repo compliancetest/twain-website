@@ -7,6 +7,7 @@ use App\OrganisationMember;
 use App\OrganisationSubscription;
 use App\Post;
 use App\PostMeta;
+use App\TestOutcomeStatus;
 use App\Transaction;
 use App\TransactionsLog;
 use Aws\Laravel\AwsFacade;
@@ -34,6 +35,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $this->fileName = $fileName;
         $this->executionId = $executionId;
         $this->userId = Auth::user()->ID;
+        $this->rootFoler = '';
     }
 
     /**
@@ -46,8 +48,24 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         try {
             $this->_process();
         } catch(\Exception $e){
-            error_log($e->getLine());
-            error_log($e->getMessage());
+            $this->_delTree(base_path() . '/storage/app/public/transactions/' . $this->rootFoler);
+            $organisationMember = OrganisationMember::where(['user_id' => $this->userId])->first();
+            $organisationSubscription = OrganisationSubscription::where(
+                ['user_id' => $this->userId, 'organisation_id' => $organisationMember->organisation_id]
+            )->first();
+            $transaction = Transaction::create([
+                'execution_id' => $this->executionId,
+                'test_case_id' => 0,
+                'customer_id' => $this->userId,
+            ]);
+            $transaction->product_id = 0;
+            $transaction->test_suite_id = 0;
+            $transaction->audit_record = false;
+            $transaction->test_outcome_status_id = TestOutcomeStatus::getInvalidZipId();
+            $transaction->customer_id = $this->userId;
+            $transaction->subscription_id = $organisationSubscription->id;
+            $transaction->organisation_id = $organisationMember->organisation_id;
+            $transaction->save();
         }
     }
 
@@ -84,6 +102,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $rootFolders = $this->getFolderName($filePath);
 
         foreach ($rootFolders as $rootFolder) {
+            $this->rootFoler = $rootFolder;
             $productIdentifier = explode('_', $rootFolder, 2)[1];
 
             $product = Post::where(['post_name' => $productIdentifier, 'post_type' => 'product-service'])->first();
@@ -108,7 +127,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     $transaction->product_id = $product->ID;
                     $transaction->test_suite_id = $testSuite->ID;
                     $transaction->audit_record = false;
-                    $transaction->test_outcome_status_id = 1;
+                    $transaction->test_outcome_status_id = TestOutcomeStatus::getSuccessId();
                     $transaction->customer_id = $this->userId;
                     $transaction->subscription_id = $organisationSubscription->id;
                     $transaction->organisation_id = $organisationMember->organisation_id;
@@ -174,13 +193,22 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $this->_delTree($filePath . $rootFolder);
     }
 
+    /**
+     * Remove provided folder / file
+     * @param $dir
+     * @return bool
+     */
     private function _delTree($dir)
     {
-        $files = array_diff(scandir($dir), array('.', '..'));
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->_delTree("$dir/$file") : unlink("$dir/$file");
+        if(is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.', '..'));
+            foreach ($files as $file) {
+                (is_dir("$dir/$file")) ? $this->_delTree("$dir/$file") : unlink("$dir/$file");
+            }
+            return rmdir($dir);
+        } elseif(is_file($dir)){
+            unlink($dir);
         }
-        return rmdir($dir);
     }
 
 }
