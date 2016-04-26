@@ -1,23 +1,3 @@
-<?php
-//Getting Test Suites
-$args = array(
-        'post_type' => 'test-suite',
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and'),
-        'meta_query' => array(
-                array(
-                        'key' => 'community_id',
-                        'value' => $community->id,
-                        'compare' => '='
-                )
-        ),
-        'orderby' => 'title',
-        'order' => 'ASC'
-);
-$testsuites = get_posts($args);
-$instances = getCommunityProfileInstatnces($community->id);
-
-?>
 <div class="community-test-data row">
     <div class="col-md-12">
         <div class="table-responsive">
@@ -36,7 +16,9 @@ $instances = getCommunityProfileInstatnces($community->id);
                 @foreach( $instances AS $instance )
                 <tr id="test-data-row-{{ $instance->id }}">
                     <td>
-                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>{{ $instance->profile_name }}</a>
+                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>
+                            {{ $instance->profile_name }}
+                        </a>
                         <p>{{ $instance->profile_description }}</p>
                     </td>
                     <td>{{ $instance->purpose }}</td>
