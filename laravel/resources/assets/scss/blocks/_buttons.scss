@@ -224,6 +224,9 @@
   &.btn-logout{
     @include btnIconsSprite(btn-icon-logout);
   }
+  &.btn-confirm{
+    @include btnIconsSprite(btn-icon-confirm);
+  }
 
 }
 
@@ -303,7 +306,6 @@
   .file-extensions{
     display: block;
   }
-
 
   .file-type-default{
     &:before{

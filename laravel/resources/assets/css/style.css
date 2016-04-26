@@ -8864,6 +8864,10 @@ body.modal-open,
   bottom: 0;
 }
 /* line 103, ../scss/_common.scss */
+.block-loading.loading-shown {
+  display: block;
+}
+/* line 107, ../scss/_common.scss */
 .block-loading .loading-content {
   position: absolute;
   width: 100%;
@@ -8871,7 +8875,7 @@ body.modal-open,
   padding: 0;
   margin: -54px 0 0 0;
 }
-/* line 110, ../scss/_common.scss */
+/* line 114, ../scss/_common.scss */
 .block-loading .loading-content .loader {
   background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
@@ -8879,19 +8883,19 @@ body.modal-open,
   display: block;
   margin: 0 auto;
 }
-/* line 118, ../scss/_common.scss */
+/* line 122, ../scss/_common.scss */
 .block-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 124, ../scss/_common.scss */
+/* line 128, ../scss/_common.scss */
 .block-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
 }
 
-/* line 134, ../scss/_common.scss */
+/* line 138, ../scss/_common.scss */
 .notification-container .alert {
   position: relative;
   font-size: 13px;
@@ -8901,36 +8905,36 @@ body.modal-open,
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 142, ../scss/_common.scss */
+/* line 146, ../scss/_common.scss */
 .notification-container .alert:before {
   content: '';
   position: absolute;
   left: 7px;
   top: 7px;
 }
-/* line 149, ../scss/_common.scss */
+/* line 153, ../scss/_common.scss */
 .notification-container .alert-error {
   background: #e52727;
   border: 1px solid #b61313;
 }
-/* line 153, ../scss/_common.scss */
+/* line 157, ../scss/_common.scss */
 .notification-container .alert-error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -412px;
+  background-position: 0 -513px;
   height: 24px;
   width: 24px;
 }
-/* line 159, ../scss/_common.scss */
+/* line 163, ../scss/_common.scss */
 .notification-container .alert-success {
   background: #3db118;
   border: 1px solid #37a215;
 }
-/* line 163, ../scss/_common.scss */
+/* line 167, ../scss/_common.scss */
 .notification-container .alert-success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -436px;
+  background-position: 0 -489px;
   height: 24px;
   width: 24px;
 }
@@ -9015,7 +9019,7 @@ select.form-control {
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -105px;
+  background-position: -12px -162px;
   height: 14px;
   width: 14px;
 }
@@ -9023,7 +9027,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -412px;
+  background-position: 0 -513px;
   height: 24px;
   width: 24px;
 }
@@ -9037,7 +9041,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -119px;
+  background-position: 0 -125px;
   height: 12px;
   width: 12px;
 }
@@ -9045,7 +9049,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -436px;
+  background-position: 0 -489px;
   height: 24px;
   width: 24px;
 }
@@ -9089,7 +9093,7 @@ select.form-control {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -296px;
+  background-position: 0 -373px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9292,7 +9296,7 @@ select.form-control {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -10px -69px;
+  background-position: 0 -137px;
   height: 12px;
   width: 13px;
   content: '';
@@ -9310,7 +9314,7 @@ select.form-control {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -134px;
+  background-position: 0 -200px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9376,7 +9380,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -556px;
+  background-position: 0 -657px;
   height: 24px;
   width: 18px;
 }
@@ -9384,7 +9388,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -532px;
+  background-position: 0 -705px;
   height: 24px;
   width: 18px;
 }
@@ -9392,7 +9396,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -604px;
+  background-position: 0 -585px;
   height: 24px;
   width: 18px;
 }
@@ -9400,7 +9404,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -628px;
+  background-position: 0 -537px;
   height: 24px;
   width: 18px;
 }
@@ -9408,7 +9412,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -460px;
+  background-position: 0 -681px;
   height: 24px;
   width: 18px;
 }
@@ -9416,7 +9420,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -508px;
+  background-position: 0 -633px;
   height: 24px;
   width: 18px;
 }
@@ -9424,7 +9428,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -580px;
+  background-position: 0 -561px;
   height: 24px;
   width: 18px;
 }
@@ -9432,7 +9436,7 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -484px;
+  background-position: 0 -609px;
   height: 24px;
   width: 18px;
 }
@@ -9458,35 +9462,35 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -35px;
+  background-position: -12px -80px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -35px;
+  background-position: 0 -80px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-copy:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -69px;
+  background-position: 0 -102px;
   height: 11px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -93px;
+  background-position: -13px -137px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -93px;
+  background-position: -12px -125px;
   height: 12px;
   width: 12px;
 }
@@ -9504,14 +9508,14 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -105px;
+  background-position: -12px -149px;
   height: 13px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -24px;
+  background-position: -10px -69px;
   height: 11px;
   width: 13px;
 }
@@ -9525,33 +9529,40 @@ select.form-control {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: -13px -46px;
+  background-position: -13px -91px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -46px;
+  background-position: 0 -91px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -81px;
+  background-position: 0 -149px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-logout:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -57px;
+  background-position: -11px -113px;
   height: 12px;
   width: 14px;
 }
+/* line 29, ../scss/_mixins.scss */
+.btn-icon.btn-confirm:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -113px;
+  height: 11px;
+  width: 11px;
+}
 
-/* line 230, ../scss/blocks/_buttons.scss */
+/* line 233, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9576,37 +9587,37 @@ select.form-control {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 247, ../scss/blocks/_buttons.scss */
+/* line 250, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -24px;
+  background-position: 0 -69px;
   height: 7px;
   width: 10px;
   position: absolute;
   left: 6px;
   top: 7px;
 }
-/* line 255, ../scss/blocks/_buttons.scss */
+/* line 258, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 261, ../scss/blocks/_buttons.scss */
+/* line 264, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 265, ../scss/blocks/_buttons.scss */
+/* line 268, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 272, ../scss/blocks/_buttons.scss */
+/* line 275, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9618,14 +9629,14 @@ select.form-control {
   cursor: pointer;
   width: 76px;
 }
-/* line 283, ../scss/blocks/_buttons.scss */
+/* line 286, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 289, ../scss/blocks/_buttons.scss */
+/* line 292, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9633,44 +9644,44 @@ select.form-control {
   top: 0;
   left: 0;
 }
-/* line 297, ../scss/blocks/_buttons.scss */
+/* line 300, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 303, ../scss/blocks/_buttons.scss */
+/* line 306, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 309, ../scss/blocks/_buttons.scss */
+/* line 311, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -715px;
+  background-position: 0 -757px;
   height: 28px;
   width: 21px;
 }
-/* line 315, ../scss/blocks/_buttons.scss */
+/* line 317, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -687px;
+  background-position: 0 -785px;
   height: 28px;
   width: 21px;
 }
-/* line 321, ../scss/blocks/_buttons.scss */
+/* line 323, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -743px;
+  background-position: 0 -729px;
   height: 28px;
   width: 21px;
 }
-/* line 326, ../scss/blocks/_buttons.scss */
+/* line 328, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 332, ../scss/blocks/_buttons.scss */
+/* line 334, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -10113,7 +10124,7 @@ select.form-control {
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -192px;
+  background-position: 0 -269px;
   height: 20px;
   width: 20px;
 }
@@ -10122,7 +10133,7 @@ select.form-control {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -233px;
+  background-position: 0 -289px;
   height: 21px;
   width: 21px;
 }
@@ -10131,7 +10142,7 @@ select.form-control {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -212px;
+  background-position: 0 -310px;
   height: 21px;
   width: 21px;
 }
@@ -10155,23 +10166,32 @@ select.form-control {
   border-radius: 3px 3px 0 0;
   border: 1px solid #1d76c0;
 }
-/* line 16, ../scss/blocks/_colored-box.scss */
+/* line 15, ../scss/blocks/_colored-box.scss */
+.colored-box .colored-box-header a {
+  font-size: 14px;
+  color: #fff;
+}
+/* line 19, ../scss/blocks/_colored-box.scss */
+.colored-box .colored-box-header a:hover {
+  text-decoration: none;
+}
+/* line 25, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-body {
   position: relative;
 }
-/* line 20, ../scss/blocks/_colored-box.scss */
+/* line 29, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-content {
   padding: 20px;
   background: #fff;
   border: 1px solid #b7b7b7;
 }
 @media only screen and (max-width: 640px) {
-  /* line 20, ../scss/blocks/_colored-box.scss */
+  /* line 29, ../scss/blocks/_colored-box.scss */
   .colored-box .colored-box-content {
     padding: 20px 10px;
   }
 }
-/* line 30, ../scss/blocks/_colored-box.scss */
+/* line 39, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-footer {
   margin-top: -1px;
   background: #f0f0f0;
@@ -10179,7 +10199,7 @@ select.form-control {
   box-shadow: 0 12px 10px -10px rgba(0, 0, 0, 0.2) inset;
   padding: 15px;
 }
-/* line 37, ../scss/blocks/_colored-box.scss */
+/* line 46, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading {
   display: none;
   text-align: center;
@@ -10192,7 +10212,7 @@ select.form-control {
   top: 0;
   bottom: 0;
 }
-/* line 49, ../scss/blocks/_colored-box.scss */
+/* line 58, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content {
   position: absolute;
   width: 100%;
@@ -10200,7 +10220,7 @@ select.form-control {
   padding: 0;
   margin: -54px 0 0 0;
 }
-/* line 56, ../scss/blocks/_colored-box.scss */
+/* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
   background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
@@ -10208,13 +10228,13 @@ select.form-control {
   display: block;
   margin: 0 auto;
 }
-/* line 64, ../scss/blocks/_colored-box.scss */
+/* line 73, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 70, ../scss/blocks/_colored-box.scss */
+/* line 79, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
@@ -11447,7 +11467,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -318px;
+  background-position: 0 -418px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11456,7 +11476,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -341px;
+  background-position: 0 -395px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -12088,7 +12108,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -652px;
+  background-position: -12px -176px;
   height: 16px;
   width: 16px;
 }
@@ -12096,7 +12116,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -134px;
+  background-position: -11px -200px;
   height: 16px;
   width: 16px;
 }
@@ -12114,7 +12134,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -652px;
+  background-position: -12px -216px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -12185,7 +12205,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -174px;
+  background-position: 0 -251px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -12704,7 +12724,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .add-new-download-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -771px;
+  background-position: 0 -813px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12798,7 +12818,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-downloads .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -119px;
+  background-position: 0 -842px;
   height: 15px;
   width: 15px;
   content: '';
@@ -12825,7 +12845,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-downloads .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -254px;
+  background-position: 0 -331px;
   height: 21px;
   width: 18px;
 }
@@ -12837,7 +12857,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-downloads .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -275px;
+  background-position: 0 -352px;
   height: 21px;
   width: 18px;
 }
@@ -12847,6 +12867,105 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   position: absolute;
   left: 0;
   top: 2px;
+}
+
+/* line 3, ../scss/pages/_test-coverage.scss */
+.test-coverage .colored-box-body {
+  border: 1px solid #1767ab;
+  border-top: 0;
+}
+/* line 7, ../scss/pages/_test-coverage.scss */
+.test-coverage .colored-box-body table {
+  margin: 0;
+}
+
+/* line 15, ../scss/pages/_test-coverage.scss */
+.coverage-progress {
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  padding: 2px;
+  background: #f6f6f6;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 10px 0px #ccc;
+  box-shadow: inset 0 0 10px 0px #ccc;
+}
+
+/* line 26, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -42px;
+  height: 9px;
+  width: 22px;
+  float: left;
+  margin: 1px;
+  cursor: pointer;
+  outline: none;
+}
+/* line 33, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item.test-excluded {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -51px;
+  height: 9px;
+  width: 22px;
+}
+/* line 36, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item.test-failed {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -24px;
+  height: 9px;
+  width: 22px;
+}
+/* line 39, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item.test-optional {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -33px;
+  height: 9px;
+  width: 22px;
+}
+/* line 42, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item.test-passed {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -60px;
+  height: 9px;
+  width: 22px;
+}
+/* line 46, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item:focus {
+  outline: none;
+}
+/* line 50, ../scss/pages/_test-coverage.scss */
+.coverage-test-case-item .tooltip {
+  white-space: nowrap;
+}
+
+/* line 57, ../scss/pages/_test-coverage.scss */
+.coverage-test-details li {
+  padding: 0 0 10px 0;
+}
+/* line 60, ../scss/pages/_test-coverage.scss */
+.coverage-test-details li label {
+  font-weight: 400;
+  padding: 0 5px 0 0;
+  display: inline-block;
+}
+/* line 66, ../scss/pages/_test-coverage.scss */
+.coverage-test-details li input {
+  vertical-align: middle;
+}
+/* line 70, ../scss/pages/_test-coverage.scss */
+.coverage-test-details li .form-control {
+  display: inline-block;
+}
+/* line 75, ../scss/pages/_test-coverage.scss */
+.coverage-test-details textarea {
+  resize: vertical;
 }
 
 /* line 3, ../scss/_header.scss */
@@ -13499,7 +13618,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -150px;
+  background-position: 0 -176px;
   height: 24px;
   width: 12px;
 }
@@ -13511,7 +13630,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -150px;
+  background-position: 0 -216px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -13594,7 +13713,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -388px;
+  background-position: 0 -465px;
   height: 24px;
   width: 28px;
 }
@@ -13609,7 +13728,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -364px;
+  background-position: 0 -441px;
   height: 24px;
   width: 28px;
 }

@@ -536,7 +536,6 @@ var Page = {
                     form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                 },
                 success: function(rsp){
-                    console.log(rsp);
                     form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
                 },
                 complete: function(){
@@ -560,10 +559,37 @@ var Page = {
     loadModalContent: function(el) {
         var modalId = el.data('target');
         $(modalId).on("show.bs.modal", function(e) {
+            $(modalId).data('bs.modal').options.keyboard = false;
+            $(modalId).data('bs.modal').options.backdrop = 'static';
             var link = $(e.relatedTarget);
-            $(this).find(".modal-content").load(link.attr("href"));
+            $(this).find(".modal-content").load(link.attr("href"), function () {
+                $(modalId).data('bs.modal').options.keyboard = true;
+                $(modalId).data('bs.modal').options.backdrop = true;
+                $(modalId).trigger("modalContentLoaded");
+            });
             $(modalId).off("show.bs.modal");
         });
+    },
+
+
+    testCoverage: {
+        loadTestCaseDetails: function () {
+            Page.testCoverage.toggleExcludedFields($('#caseExclude'));
+
+            $('#caseExclude').change(function () {
+                Page.testCoverage.toggleExcludedFields($(this));
+            });
+
+        },
+
+        toggleExcludedFields: function (el) {
+            if(el.is(':checked')){
+                $('.isExcluded').show();
+            } else {
+                $('.isExcluded').hide();
+            }
+        }
+
     }
 
 
