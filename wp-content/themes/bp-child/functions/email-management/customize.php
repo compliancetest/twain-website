@@ -185,7 +185,7 @@ function cp_send_leave_community_notification($group_id, $user_id)
 //Member Promoted Email Customize
 function cp_groups_notification_promoted_member( $user_id, $group_id ) {
 
-    if ( groups_is_user_admin( $user_id, $group_id ) ) {
+    if ( doesUserCommunityAdmin( $user_id, $group_id ) ) {
         $promoted_to = __( 'administrator', 'buddypress' );
     } else {
         $promoted_to = __( 'support', 'buddypress' );

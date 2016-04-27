@@ -14,10 +14,10 @@ Template Name Posts: Test Suite
 
     $slug = get_post( $post )->post_name;
 
-	$group = groups_get_group( array( 'group_id' => $suite->community_id ) );
+	$group = getCommunity( $suite->community_id );
 
     //If this is the revision, only the community admin can see it.
-    if($suite->isRevision && !groups_is_user_admin($user_id, $suite->community_id))
+    if($suite->isRevision && !doesUserCommunityAdmin($user_id, $suite->community_id))
     {
         addMessage("Sorry, you are not allowed to see the test suite", "error");
         wp_redirect(bp_get_group_permalink($group));
@@ -49,7 +49,7 @@ Template Name Posts: Test Suite
 						<div class="clear"></div>
 					</div>
 					<div class="width20P right">
-						<a href="<?php echo bp_get_group_permalink($group); ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a>
+						<a href="/communities/<?php echo $group->slug; ?>" class="action-btn blue-edit-btn" style="float: right;"><span class="t">Community Home Page</span></a>
 					</div>
 					<div class="clear"></div>
 					<div class="grids noradiusbottom">
@@ -115,7 +115,7 @@ Template Name Posts: Test Suite
 
                         <?php
                         foreach($suite->conformanceLevel as $i => $row){
-                            if(!groups_is_user_admin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                            if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                 continue;
                             ?>
                             <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
@@ -426,7 +426,7 @@ Template Name Posts: Test Suite
                               <option value="">- Scenario -</option>
                               <?php 
                               foreach($suite->scenarios as $r) {
-                                  if (!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){
+                                  if (!doesUserCommunityAdmin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_SCENARIO_CODE){
                                       continue;
                                   }
                                   echo '<option ' . ($r['id'] == $selectedScenario ? 'selected="selected"' : '') . ' value="'.$r['id'].'" >'.$r['code'].'</option>';
@@ -441,7 +441,7 @@ Template Name Posts: Test Suite
                               <option value="">- Conformance Level -</option>
                               <?php 
                               foreach($suite->conformanceLevel as $r){                                  
-                                  if(!groups_is_user_admin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                  if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                       continue;
                                   echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
                               }
@@ -499,7 +499,7 @@ Template Name Posts: Test Suite
                     //Add Test Suite ID
                     $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
                     
-                    if(!groups_is_user_admin(get_current_user_id(), $suite->community_id)){
+                    if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id)){
                         $args['meta_query'][] = array(
                                                     'key' => 'hide_case',
                                                     'value' => 0,
@@ -598,7 +598,7 @@ Template Name Posts: Test Suite
                                         
                                         foreach($levels as $level)
                                         {
-                                            if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                            if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                                 continue;
                                             $lArr[] = $level;
                                         }
@@ -624,16 +624,6 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width24P' : 'width30P' ?> toleft">
                                     <div class="right10">
                                         <?php 
-//                                            $tDesc = get_post_meta($row->ID ,'test_intent_description', true);
-//                                            if(!$tDesc){
-//                                                $rString = '';
-//                                            }else{
-//                                                $htmlCut = new HtmlCutString($tDesc, 100);
-//                                                $rtString = $htmlCut->cut();
-//                                            }
-//
-//
-//                                            echo $rtString;
 
                                             $intentDesc = strip_tags( get_post_meta($row->ID ,'test_intent_description', true) );
                                             if(strlen($intentDesc) > 100)

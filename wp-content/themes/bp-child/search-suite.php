@@ -111,16 +111,7 @@ $get_posts = new WP_Query($args);
 
 //Add Order by Community
 $all_posts->set('suppress_filters', false);
-add_filter('posts_join_paged', 'add_community_join_query', 100, 2);
-add_filter('posts_orderby', 'add_community_orderby_query', 100, 2);
-add_filter('posts_fields_request', 'add_community_fields_query', 100, 2);
-
 $testsuites = $get_posts->get_posts();
-
-//Remove Filters
-remove_filter('posts_join_paged', 'add_community_join_query');
-remove_filter('posts_orderby', 'add_community_orderby_query');
-remove_filter('posts_fields_request', 'add_community_fields_query');
 
 ?>
     <div class="content container" id="search">
@@ -163,12 +154,12 @@ remove_filter('posts_fields_request', 'add_community_fields_query');
                                     $issueDate = get_post_meta($row->ID, 'ts_issue_date', true);
                                     $issueStatus = get_post_meta($row->ID, 'ts_status', true);
                                     $groupID = get_post_meta($row->ID, 'community_id', true);
-                                    $group = groups_get_group(array('group_id' => $groupID))
+                                    $group = getCommunity($groupID);
                                     ?>
                                     <div class="grid_row grid_row_border">
                                         <div class="grid_cell width25P">
-                                            <h5><a href="<?php echo bp_get_group_permalink($group); ?>"
-                                                   class="blue_txt"><?php echo apply_filters('the_title', $group->name) ?></a>
+                                            <h5><a href="/communities/<?php echo $group->slug;?>"
+                                                   class="blue_txt"><?php echo $group->title ?></a>
                                             </h5>
                                         </div>
                                         <div class="grid_cell width25P">

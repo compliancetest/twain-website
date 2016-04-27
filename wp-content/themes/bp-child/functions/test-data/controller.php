@@ -13,9 +13,10 @@ function saveProfileType()
     $type_id = isset($_POST['type_id']) ? $_POST['type_id'] : null;
     $user_id = get_current_user_id();
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         addMessage('Invalid Request!', 'error');
-        return false;
+        wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     if ($file['error'] == UPLOAD_ERR_OK && $file['size'] > 0) {
@@ -28,7 +29,8 @@ function saveProfileType()
     $schemaObj = json_decode($content);
     if (!$schemaObj || !isset($schemaObj->title) || !$schemaObj->title) {
         addMessage('The profile format does not follow the format expected.', 'error');
-        return false;
+        wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     if ($type_id) {
@@ -37,7 +39,8 @@ function saveProfileType()
         $id = $wpdb->get_var($query);
         if (!$id) {
             addMessage('Invaild Request!', 'error');
-            return;
+            wp_redirect($_SERVER['HTTP_REFERER']);
+            exit;
         }
         $result = $wpdb->update($wpdb->prefix . "community_profile_types",
             array('community_id' => $community_id, 'title' => $schemaObj->title, 'creator_id' => $user_id, 'created_date' => date('Y-m-d H:i:s'), 'schema' => base64_encode($content)),
@@ -48,9 +51,8 @@ function saveProfileType()
     }
     BlobsMigration::uploadProfileTypes();
     addMessage('Profile Type successfully saved!');
-    $group = groups_get_group(array('group_id' => $community_id));
 
-    wp_redirect(bp_get_group_admin_permalink($group));
+    wp_redirect($_SERVER['HTTP_REFERER']);
     exit;
 
 }
@@ -63,7 +65,7 @@ function deleteProfileType()
     $community_id = $_REQUEST['community_id'];
     $user_id = get_current_user_id();
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         addMessage('Invalid Request!', 'error');
         return false;
     }
@@ -78,14 +80,13 @@ function deleteProfileType()
 
     if ($row->instances > 0) {
         addMessage("Sorry, you can't delete the profile type because it still includes some instances.", "error");
-        return;
+         wp_redirect($_SERVER['HTTP_REFERER']);
+        exit;
     }
 
     $wpdb->delete($wpdb->prefix . "community_profile_types", array('id' => $row->id));
     addMessage("The profile type was deleted.");
-    $group = groups_get_group(array('group_id' => $community_id));
-    wp_redirect(bp_get_group_admin_permalink($group));
-
+    wp_redirect($_SERVER['HTTP_REFERER']);
     exit;
 }
 
@@ -99,12 +100,12 @@ function readProfileType()
 
     header('Content-type: application/xml');
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
         exit;
     }
 
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d AND community_id=%d", $type_id, $community_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE id=%d AND community_id=%s", $type_id, $community_id);
     $row = $wpdb->get_row($query);
 
     if (!$row) {
@@ -144,7 +145,7 @@ function createUIFromProfileType($action)
     if (wp_verify_nonce($action, 'get-harness-profile-ui')) {
         $instance_type = 'harness';
 
-        if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+        if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;
         }
@@ -209,7 +210,7 @@ function saveProfileInstance($action)
     if (wp_verify_nonce($action, 'save-harness-instance')) {
         $instance_type = 'harness';
 
-        if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+        if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
             echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
             exit;
         }
@@ -301,7 +302,7 @@ function deleteProfileTypeInstance($action, $id, $forceDelete = false)
             $response = array('status' => 'error', 'message' => 'Invalid Request!');
             continue;
         }
-        if ((wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id)) {
+        if ((wp_verify_nonce($action, 'delete-harness-instance') && !doesUserCommunityAdmin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id)) {
             $response = array('status' => 'error', 'message' => 'Permission Denied!');
             continue;
         }
@@ -543,7 +544,7 @@ function viewProfileType()
     } else {
         $boxId = time();
         ?>
-        <div class="popup-box view-profile-type-box" style="display: none; width: 900px;"
+        <div class="popup-box view-profile-type-box" style="display: none; width: 1400px;"
              id="view-profile-type-box<?php echo $boxId?>">
             <div class="popup-box-header radius6 noradiusbottom">Profile Type Detail</div>
             <div class="popup-box-content grid-box-body">
@@ -570,7 +571,6 @@ function viewProfileType()
             var t_data = Jsonary.create(<?php echo base64_decode($row->schema)?>).readOnlyCopy();
             var t_element = document.getElementById('json-view-panel<?php echo $boxId?>');
             Jsonary.render(t_element, t_data);
-            setTimeout("jQuery('.popup-box').css('width', jQuery('.jsonary').width() + 100);", 500);
         </script>
     <?php
     }

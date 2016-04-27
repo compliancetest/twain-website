@@ -69,16 +69,26 @@ function compliancetest_user_actions()
         cp_delete_payment_method();
     }else if(wp_verify_nonce($cpAction ,'leave-group')){
         $gID = $_REQUEST['group_id'];
-        if ( groups_is_user_member( bp_loggedin_user_id(), $gID ) ) {
+        if ( $sub = $wpdb->get_row($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s', get_current_user_id(), $gID) )) {
 
             // Stop sole admins from abandoning their group
-            $group_admins = groups_get_group_admins( $gID );
-             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() )
-                echo  __( 'This community must have at least one admin', 'buddypress' );
-            elseif ( !groups_leave_group( $gID ) )
-                echo __( 'There was an error leaving the community.', 'buddypress' );
-            else
-                echo 'success';
+            $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
+             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() ) {
+                 echo __('This community must have at least one admin', 'buddypress');
+             } else {
+                $result = $wpdb->delete( 'communities_members',
+                    array(
+                        'user_id' => get_current_user_id(),
+                        'community_id' => $gID
+                    ),
+                    array( '%d', '%s' )
+                );
+                if($result){
+                    echo 'success';
+                } else {
+                    echo __( 'There was an error leaving the community.', 'buddypress' );
+                }
+            }
         }else{
             echo 'Invalid Request!';
         }
@@ -296,21 +306,36 @@ function add_user_script()
 //Get Groups that the user is a admin of
 function getUserAdminGroups($user_id)
 {
-    $groups = groups_get_groups( array('user_id' => $user_id) );
-    
-    $result = array();
-    foreach($groups['groups'] as $g)
-    {
-        if(groups_is_user_admin($user_id, $g->id))
-        {            
-            $result[] = $g;
-        }
-    }
-    
-    return $result;
+    global $wpdb;
+
+    return $wpdb->get_results($wpdb->prepare("SELECT c.* FROM communities AS c
+                                              JOIN communities_members AS cm ON c.id = cm.community_id
+                                              WHERE cm.user_id = %d AND is_admin = 1", $user_id));
 }
 
+function getUserCommunities($user_id)
+{
+    global $wpdb;
+    return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin FROM communities AS c
+                                              JOIN communities_members AS cm ON c.id = cm.community_id
+                                              WHERE cm.user_id = %d", $user_id));
+}
 
+function doesUserCommunityAdmin($user_id, $communityId)
+{
+    global $wpdb;
+    return $wpdb->get_row($wpdb->prepare("SELECT c.* FROM communities AS c
+                                          JOIN communities_members AS cm ON c.id = cm.community_id
+                                          WHERE cm.user_id = %d AND is_admin = 1 AND c.id = %s", $user_id, $communityId));
+}
+
+function doesUserCommunityMember($user_id, $communityId)
+{
+    global $wpdb;
+    return $wpdb->get_row($wpdb->prepare("SELECT c.* FROM communities AS c
+                                          JOIN communities_members AS cm ON c.id = cm.community_id
+                                          WHERE cm.user_id = %d  AND c.id = %s", $user_id, $communityId));
+}
 
 function getUserPurchase($suite_id = null, $user_id = null)
 {
@@ -417,11 +442,11 @@ function getAssignedSuiteIds($user_id = null)
         $user_id = get_current_user_id();
     
     $suite_ids = array();    
-    $communities = groups_get_groups(array('user_id' => $user_id));
+    $communities = getUserCommunities($user_id);
     
-    foreach($communities['groups'] as $community)
+    foreach($communities as $community)
     {
-        if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
+        if(doesUserCommunityAdmin($user_id, $community->id))
         {
             //Get Group Suites
             $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";            

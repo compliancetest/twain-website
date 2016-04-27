@@ -7,7 +7,7 @@ function getCommunityProfileTypes($community_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id=%d", $community_id);
+    $query = $wpdb->prepare("SELECT * FROM " . $wpdb->prefix . "community_profile_types WHERE community_id = %s", $community_id);
     
     $rows = $wpdb->get_results($query);
     
@@ -33,7 +33,7 @@ function getCommunityProfileInstatnces($community_id)
 {
     global $wpdb;
     
-    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.community_id=%d AND pi.type='harness' ORDER BY pi.purpose, pi.profile_name ASC", $community_id);
+    $query = $wpdb->prepare("SELECT pi.*, pt.title AS profile_type_title, pt.schema FROM " . $wpdb->prefix . "community_profile_instances AS pi LEFT JOIN " . $wpdb->prefix . "community_profile_types AS pt ON pt.id=pi.type_id WHERE pi.community_id=%s AND pi.type='harness' ORDER BY pi.purpose, pi.profile_name ASC", $community_id);
     $rows = $wpdb->get_results($query);
     
     return $rows;

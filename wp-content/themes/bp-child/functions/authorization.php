@@ -122,14 +122,14 @@ function can_edit_suite($suiteID, $user_id = null)
         $user_id = get_current_user_id();
         
     //Check if the user is a system admin
-    if(user_can($user_id, 'edit_other_suite'))
+    if(is_super_admin())
     {
         return true;
     }
     
     //Check if the user is the admin of the Community
     $comunity_id = get_post_meta($suiteID, 'community_id', true);
-    if(groups_is_user_admin($user_id, $comunity_id))
+    if(doesUserCommunityAdmin($user_id, $comunity_id))
     {
         return true;
     }
@@ -143,14 +143,14 @@ function can_delete_suite($suiteID, $user_id = null)
         $user_id = get_current_user_id();
         
     //Check if the user is a system admin
-    if(user_can($user_id, 'delete_other_suite'))
+    if(is_super_admin())
     {
         return true;
     }
     
     //Check if the user is the admin of the Community
     $comunity_id = get_post_meta($suiteID, 'community_id', true);
-    if(groups_is_user_admin($user_id, $comunity_id))
+    if(doesUserCommunityAdmin($user_id, $comunity_id))
     {
         return true;
     }
@@ -187,7 +187,7 @@ function can_edit_test_case($caseID, $user_id = null)
         $user_id = get_current_user_id();
         
     //Check if the user is a system admin
-    if(user_can($user_id, 'edit_other_case'))
+    if(is_super_admin())
     {
         return true;
     }
@@ -199,8 +199,7 @@ function can_edit_test_case($caseID, $user_id = null)
     foreach($suiteID as $sID)
     {
         $comunity_id = get_post_meta($sID, 'community_id', true);
-        if(groups_is_user_admin($user_id, $comunity_id))
-        {
+        if(doesUserCommunityAdmin($user_id, $comunity_id)){
             return true;
         }    
     }
@@ -215,7 +214,7 @@ function can_delete_test_case($caseID, $user_id = null)
         $user_id = get_current_user_id();
         
     //Check if the user is a system admin
-    if(user_can($user_id, 'delete_other_case'))
+    if(is_super_admin())
     {
         return true;
     }
@@ -227,7 +226,7 @@ function can_delete_test_case($caseID, $user_id = null)
     {
         //Check if the user is the admin of the Community
         $comunity_id = get_post_meta($sID, 'community_id', true);
-        if(groups_is_user_admin($user_id, $comunity_id))
+        if(doesUserCommunityAdmin($user_id, $comunity_id))
         {
             return true;
         }
@@ -465,13 +464,14 @@ function can_view_profile($profileID)
         return true;
         
     //Getting Groups
-    $groups = groups_get_user_groups($profileID);
-    if(!$groups || !$groups['groups'])
+    $groups = getUserCommunities($profileID);
+    if(!$groups)
         return false;
     
-    foreach($groups['groups'] as $group_id)
+    foreach($groups as $group_id)
     {
-        if(groups_is_user_admin($user_id, $group_id) || groups_is_user_member($user_id, $group_id) || groups_is_user_mod($user_id, $group_id))
+        $group_id = $group_id->id;
+        if(doesUserCommunityAdmin($user_id, $group_id) || doesUserCommunityMember($user_id, $group_id))
         {
             return true;
         }

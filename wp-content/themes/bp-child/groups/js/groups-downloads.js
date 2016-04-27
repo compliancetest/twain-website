@@ -99,10 +99,10 @@
                   $('#agree-file-license .close_btn').click();
                   return false;
               });
-              $('#agree-file-license .download-btn').click(function(){
-                  $('#agree-file-license form').submit();
-                  return false;
-              });
+              //$('#agree-file-license .download-btn').click(function(){
+              //    $('#agree-file-license form').submit();
+              //    return false;
+              //});
               $('#agree-file-license form').submit(function(){
                   form = $(this);
                   $('#agree-file-license .message').hide();
@@ -132,47 +132,7 @@
           }
       })
 
-      
-      //Show Edit File Form
-      $('#uploaded-files .blue-edit-btn').click(function(){
-          var link = $(this);
-          var fID = link.attr('data-id');
-          var rowObj = $('#fileRow' + fID);
-          rowObj.find('.message').remove();
-          if($('#fileEditRow' + fID).length < 1)
-          {
-              rowObj.append('<div class="loading"></div>');
-              rowObj.find('.loading').show();              
-              $.ajax({
-                  url: link.attr('href'),
-                  type: 'get',
-                  dataType: 'html',
-                  success: function(rsp){
-                      rowObj.find('.loading').remove();
-                      if($(rsp).find('form').length > 0){
-                          rowObj.after(rsp);
-                          $('#fileRow' + fID).hide();
-                          $('#fileEditRow' + fID).fadeIn('fast');                          
-                          $('#fileEditRow' + fID).find('textarea').redactor({
-                              air: true,
-                              minHeight: 80
-                          })
-                      }else{
-                          rowObj.append(rsp);
-                          rowObj.find('.message').fadeIn('fast');
-                          
-                      }
-                      customizeFileTag();
-                  }
-              })
 
-          }else{
-              $('#fileRow' + fID).hide();
-              $('#fileEditRow' + fID).fadeIn('fast');
-          }
-          return false;
-      })
-      
       $('#uploaded-files').on('click', '.cancel-btn', function(){
           var fID = $(this).attr('data-id');
           $('#fileEditRow' + fID).hide();
@@ -183,14 +143,11 @@
           $('#delete-file-box form .loading').show();
       })
       $('#uploaded-files .delete-file-link').each(function(){
-          var fid = $(this).attr('data-id');
+          var link = $(this).attr('href');
           jQuery(this).cplightbox({
-              type: 'inline',
-              href: '#delete-file-box',
-              onStart: function(){
-                  jQuery('#delete-file-box #fid').val(fid);
-              }
-          }) 
+              type: 'ajax',
+              href: link
+          })
       });
   })
 })(jQuery)

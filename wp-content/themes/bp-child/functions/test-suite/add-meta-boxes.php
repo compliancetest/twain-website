@@ -412,7 +412,7 @@ function save_test_suite_on_admin($post_id)
     }
     
     //Check Post Type
-    if($post->post_type != 'test-suite')
+    if(@    $post->post_type != 'test-suite')
     {
         return $post_id;
     }
@@ -460,7 +460,7 @@ function save_test_suite_on_admin($post_id)
     }
     
     //Save Initial Messages
-    $init_message = $_POST['init_message'];
+    $init_message = @$_POST['init_message'];
     cp_update_post_meta($post_id, 'init_message', $init_message);
     
     //Save Roles

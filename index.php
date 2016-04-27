@@ -2,13 +2,12 @@
 
 $segments = ( isset($_SERVER['REQUEST_URI']) ? explode('/', trim($_SERVER['REQUEST_URI'],'/')) : array('/') );
 
-$urls = ['api', 'testingdetails'];
+$urls = ['communities', 'membership', 'downloads', 'sso', 'api', 'testingdetails', 'articles', 'communityprofiles', 'profiletypes'];
 
-if ( in_array($segments[0], $urls) !== false ) {
+if ( in_array($segments[0], $urls) || strpos($segments[0], 'communities?') === 0) {
     require_once __DIR__ . '/laravel/public/index.php';
     exit;
 }
-
 /**
  * Front to the WordPress application. This file doesn't do anything, but loads
  * wp-blog-header.php which does and tells WordPress to load the theme.

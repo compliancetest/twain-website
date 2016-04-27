@@ -142,10 +142,10 @@ get_header();
                     <div class="grid-cell">
                         <label>Community</label>
                         <select name="community_id" id="community_id" class="select">
-                            <?php $communities = groups_get_groups(); ?>
-                            <?php foreach ($communities['groups'] as $group) { ?>
+                            <?php $communities = getCommunities(); ?>
+                            <?php foreach ($communities as $group) { ?>
                                 <option value="<?php echo $group->id ?>">
-                                    <?php echo bp_get_group_name($group) ?>
+                                    <?php echo $group->title ?>
                                 </option>
                             <?php } ?>
                         </select>

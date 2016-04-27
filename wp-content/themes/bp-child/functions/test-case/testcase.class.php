@@ -1,6 +1,6 @@
 <?php
 
-class TestCase
+class TestCases
 {
     var $id = null;
     

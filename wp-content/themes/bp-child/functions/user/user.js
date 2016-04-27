@@ -531,9 +531,11 @@
                                                '<div class="clear"></div>' +
                                            '</div>');
                         })
+                        $('#my_community_memberships').append('<div class="message success">You successfully left community</div>');
                     }else{
                         $('#my_community_memberships').append('<div class="message error">' + rsp + '</div>');
                     }
+                    $('#my_community_memberships .message').delay(5000).fadeOut()
                 },
                 error: function(err){
                     $('#my_community_memberships .loading1').hide();

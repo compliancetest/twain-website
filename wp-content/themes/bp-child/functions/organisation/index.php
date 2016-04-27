@@ -116,7 +116,7 @@ function ct_process_organisation_action()
                 <?php
                 exit;
             } else {
-                if (!groups_is_user_member($user_id, $community_id)) { //First, users should be a member of the community                
+                if (!doesUserCommunityMember($user_id, $community_id)) { //First, users should be a member of the community
                     ?>
                     <div class="popup-box" style="display: none; width: 500px">                        
                         <?php if(groups_check_for_membership_request($user_id, $community_id)) : ?>
@@ -370,7 +370,7 @@ function ct_process_organisation_action()
             
             $organisation = ct_get_user_organisation($user_id);
             
-            if (!$organisation || !groups_is_user_member($user_id, $community_id)) {
+            if (!$organisation || !doesUserCommunityMember($user_id, $community_id)) {
                 addMessage("Invalid Request!", "error");
             } else {
                 if ($sid = $controller->allocate_subscription_to_user($user_id, $organisation->id, $family_mark)) {

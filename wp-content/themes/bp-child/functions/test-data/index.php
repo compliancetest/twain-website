@@ -38,12 +38,13 @@ function cp_process_test_data_actions()
             wp_redirect($redirect);
             exit();
         }else if(wp_verify_nonce($action, 'copy-harness-instance')){
-            $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : $_SERVER['REDIRECT_URL'];
+            $redirect = isset( $_REQUEST['return'] ) ? base64_decode( $_REQUEST['return'] ) : $_SERVER['HTTP_REFERER'];
             $profileId = intval( $_REQUEST['id'] );
             $result = copyProfileInstance( $profileId );
             if( $result['status'] == 'error' ){
                 addMessage( $result['message'], 'error' );
-                return;
+                wp_redirect( $redirect );
+                exit();
             }
             addMessage( 'Profile instance was copied.' );
             wp_redirect( $redirect );

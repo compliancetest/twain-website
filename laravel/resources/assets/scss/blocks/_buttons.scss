@@ -1,0 +1,336 @@
+.btn {
+  position: relative;
+  border: 1px solid;
+  cursor: pointer;
+  font-family: $font-family-sans-serif;
+  font-size: 11px;
+  padding: 5px 12px;
+  height: 24px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+
+  &:hover, &:focus{
+    color: #fff;
+    outline: none;
+  }
+}
+
+.btn-default {
+  border-color: #9f9f9f;
+  background: #8a8a8a;
+  color: #fff;
+  @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
+  @include box-shadow(0 1px 0 0 #b8b8b8 inset);
+
+  &:hover, &:active, &:focus {
+    background: #a0a0a0;
+  }
+}
+
+.btn-primary {
+  border-color: #3577ad;
+  background: #2d83cd;
+  @include background-image(linear-gradient(top, #2690ea, #3577ad));
+  @include box-shadow(0 1px 0 0 #7cbcf4 inset);
+  color: #fff;
+  text-shadow: 0 -1px 0 #777778;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+
+  &:hover, &:active, &:focus {
+    background: #288ce2;
+    border-color: #3577ad;
+  }
+}
+
+.btn-success {
+  border-color: #369817;
+  background: #39a517;
+  @include background-image(linear-gradient(top, #3eb618, #369817));
+  @include box-shadow(0 1px 0 0 #95d780 inset);
+
+  &:hover, &:active, &:focus {
+    background: #3eb518;
+    border-color: #369817;
+  }
+}
+
+.btn-danger {
+  border-color: #c33a3a;
+  background: #f47273;
+  @include background-image(linear-gradient(top, #db5353, #c33a3a));
+  @include box-shadow(0 1px 0 0 #e68080 inset);
+
+  &:hover, &:active, &:focus {
+    background: #d84f4f;
+    border-color: #c33a3a;
+  }
+}
+
+.btn-logout {
+  padding-left: 22px;
+  padding-right: 5px;
+
+  &:before {
+    position: absolute;
+    @include iconsSprite(logout);
+    content: '';
+    left: 5px;
+    top: 7px;
+  }
+}
+
+.btn-dropdown {
+  padding-left: 22px;
+  padding-right: 5px;
+
+  &:before {
+    position: absolute;
+    @include iconsSprite(arrow-bottom);
+    content: '';
+    left: 5px;
+    top: 11px;
+  }
+}
+
+.btn-lg{
+  font-size: 16px;
+  font-weight: 700;
+  padding: 11px 18px;
+  height: 40px;
+  line-height: 1;
+
+  &.btn-danger{
+    color: #fff;
+    background-color: #aa221e;
+    @include background-image(linear-gradient(top, #cc2e27, #981716));
+    @include box-shadow(0 1px 1px rgba(255, 255, 255, 0.5) inset);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover{
+      @include background-image(linear-gradient(top, #981716, #cc2e27));
+    }
+  }
+}
+
+.btn-sm{
+  font-size: 10px;
+  height: 18px;
+  padding: 0 6px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+// Images for buttons with text and icons
+.btn-with-icon{
+  padding-left: 30px;
+  padding-right: 6px;
+
+  &:before{
+    display: block;
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+  }
+}
+
+.btn-confirm{
+  @include btnIconsSprite(btn-confirm);
+}
+
+.btn-cancel{
+  @include btnIconsSprite(btn-cancel);
+}
+
+.btn-add{
+  @include btnIconsSprite(btn-add);
+}
+
+.btn-delete{
+  @include btnIconsSprite(btn-delete);
+}
+
+.btn-upload{
+  @include btnIconsSprite(btn-upload);
+}
+
+.btn-browse{
+  @include btnIconsSprite(btn-browse);
+}
+
+.btn-history{
+  @include btnIconsSprite(btn-history);
+}
+
+.btn-back{
+  @include btnIconsSprite(btn-back);
+}
+
+.btn-icon {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  text-indent: -999999px;
+
+  &:before{
+    content: '';
+    display: block;
+    position: absolute;
+    top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+  }
+
+  &.btn-delete{
+    @include btnIconsSprite(btn-icon-delete);
+  }
+  &.btn-edit{
+    @include btnIconsSprite(btn-icon-edit);
+  }
+  &.btn-copy{
+    @include btnIconsSprite(btn-icon-copy);
+  }
+  &.btn-download{
+    @include btnIconsSprite(btn-icon-download);
+  }
+  &.btn-upload{
+    @include btnIconsSprite(btn-icon-upload);
+  }
+  &.btn-details, &.btn-view{
+    @include btnIconsSprite(btn-icon-view);
+    &:before{
+      top: 6px;
+    }
+  }
+  &.btn-print{
+    @include btnIconsSprite(btn-icon-print);
+  }
+  &.btn-history{
+    @include btnIconsSprite(btn-icon-history);
+  }
+  &.btn-filter{
+    @include btnIconsSprite(btn-icon-filter);
+  }
+  &.btn-trigger{
+    @include btnIconsSprite(btn-icon-trigger);
+  }
+  &.btn-back{
+    @include btnIconsSprite(btn-icon-back);
+  }
+  &.btn-settings{
+    @include btnIconsSprite(btn-icon-settings);
+  }
+  &.btn-logout{
+    @include btnIconsSprite(btn-icon-logout);
+  }
+
+}
+
+.view-products-btn{
+  position: relative;
+  padding: 0 5px 0 20px;
+  color: #959595;
+  text-transform: uppercase;
+  font-size: 10px;
+  border: 1px solid #e1e1e1;
+  height: 20px;
+  text-align: center;
+  line-height: 19px;
+  display: inline-block;
+  margin: 0 auto;
+  @include border-radius(3px);
+  box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.23) inset;
+  background: #f6f7f6;
+  @include background-image(linear-gradient(top, #fefefe, #f3f3f3));
+
+  &:before{
+    content: '';
+    @include iconsSprite(btn-icon-view-grey);
+    position: absolute;
+    left: 6px;
+    top: 7px;
+  }
+
+  &:hover{
+    text-decoration: none;
+    color: #959595;
+  }
+}
+
+.custom-file-tag{
+  display: inline-block;
+  margin: 0 0 10px 0;
+
+  .btn-file{
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  input{
+    height: 100%;
+    @include opacity(0);
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+    cursor: pointer;
+    width: 76px;
+  }
+
+  .file-label-wrap{
+    position: relative;
+    padding: 7px 10px 0 30px;
+    display: inline-block;
+    vertical-align: middle;
+
+    &:before{
+      display: block;
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+    }
+
+    &.file-ext-restriction{
+      padding-top: 0;
+    }
+
+  }
+
+  .file-extensions{
+    display: block;
+  }
+
+
+  .file-type-default{
+    &:before{
+      @include iconsSprite(file-type-simple);
+    }
+  }
+
+  .file-type-doc{
+    &:before{
+      @include iconsSprite(file-type-doc);
+    }
+  }
+
+  .file-type-image{
+    &:before{
+      @include iconsSprite(file-type-image);
+    }
+  }
+
+  .btn-browse{
+    top: 3px;
+  }
+
+}
+
+.upload-file-field-additional-btn{
+  display: inline-block;
+  vertical-align: middle;
+  padding: 5px 0 0 10px;
+}

@@ -84,4 +84,19 @@
     </div> 
 
 </body>
+        <?php if(is_user_logged_in()):?>
+                <?php if($kk = get_user_meta(get_current_user_id(), 'sso_key', true)):?>
+                <script>
+                    jQuery(document).ready(function(){
+                        jQuery.ajax({
+                           'url' :  '/sso/<?php echo $kk;?>',
+                            success: function(){
+
+                            }
+                        });
+                    });
+                </script>
+                <?php delete_user_meta(get_current_user_id(), 'sso_key' );?>
+            <?php endif;?>
+        <?php endif;?>
 </html>

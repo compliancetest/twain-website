@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -68,5 +69,13 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function sso($key){
+        $user = User::where(['user_activation_key' => $key])->firstOrFail();
+        if($user){
+            Auth::loginUsingId($user->ID);
+            $user->update(['user_activation_key' => '']);
+        }
     }
 }

@@ -12,4 +12,18 @@ class PostMeta extends Model
 
     protected $primaryKey = 'meta_id';
 
+    protected $fillable = [
+        'meta_key', 'meta_value'
+    ];
+
+    public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo('App\Post');
+    }
+
 }

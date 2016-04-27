@@ -206,7 +206,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 //Add Test Suite ID
                 $args['meta_query'][] = array('key' => 'test_suite', 'value' => $suiteID, 'compare' => '=');
 
-                if(!groups_is_user_admin(get_current_user_id(), $suite->community_id)){
+                if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id)){
                     $args['meta_query'][] = array(
                         'key' => 'hide_case',
                         'value' => 0,
@@ -267,7 +267,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
 
                             foreach($levels as $level)
                             {
-                                if(!groups_is_user_admin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
+                                if(!doesUserCommunityAdmin(get_current_user_id(), $suite->community_id) && $level == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                     continue;
                                 $lArr[] = $level;
                             }

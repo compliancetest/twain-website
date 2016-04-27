@@ -1,0 +1,74 @@
+/** For Static Content Pages ***/
+.static-content{
+  img{
+    max-width: 100%;
+    height: auto;
+  }
+
+  h2{
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 8px 0;
+  }
+
+  h3{
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  p{
+    margin: 0 0 12px 0;
+  }
+
+  ol{
+    padding: 0 8px;
+    margin: 8px 20px;
+
+    li{
+      margin-bottom: 8px;
+    }
+
+  }
+
+  ul{
+    padding: 0 8px;
+    margin: 8px 0 8px 20px;
+
+    li{
+      list-style: disc;
+    }
+
+  }
+
+  table {
+    border: 1px solid #CCC;
+    font-size: 12px;
+    margin: 10px 0;
+
+    th{
+      border: solid 1px #1b66c3;
+      padding: 7px 5px;
+      font-weight: bold;
+      vertical-align: top;
+      background: #2c80e8;
+      color: #fff;
+    }
+
+    td{
+      padding: 4px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      vertical-align: top;
+      font-weight: normal;
+      background: #fefefe;
+      color: #2a2a2a;
+      font-size: 12px;
+    }
+
+    tr:nth-child(odd) td{
+      background: #f9f9f9;
+    }
+  }
+
+}

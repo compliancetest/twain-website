@@ -41,9 +41,11 @@ class scbOptions {
 	 * @return mixed Whatever is in those fields
 	 */
 	public function get( $field = null, $default = null ) {
-		$data = @array_merge( $this->defaults, get_option( $this->key, array() ) );
+		if(is_array(get_option( $this->key, array() ))) {
+			$data = array_merge($this->defaults, get_option($this->key, array()));
+		}
 
-		return scbForms::get_value( $field, $data, $default );
+		return scbForms::get_value( $field, @$data, $default );
 	}
 
 	/**
