@@ -35,9 +35,8 @@ function checkCurrentUserCapability()
                     $redirect = get_permalink($sid);
                     
                     $groupID = get_post_meta($sid, 'community_id', true);
-                    $group = groups_get_group(array('group_id' => $groupID));        
-                    
-                    if(groups_is_user_member(get_current_user_id(), $groupID))            
+
+                    if(doesUserCommunityMember(get_current_user_id(), $groupID))
                     {
                         return true;
                     }                
@@ -48,7 +47,6 @@ function checkCurrentUserCapability()
             wp_redirect(home_url());
             exit;
         }
-        addMessage('You must join the community to view Test Case details. Go to the <a href="' . bp_get_group_permalink($group) . '">Community Home Page</a> to join', 'notice');
         wp_redirect($redirect);
         
         exit;
@@ -247,7 +245,7 @@ function can_create_test_case($user_id = null)
     
     //Check if the user is an admin of a Community    
     
-    if(bp_is_group_admin($user_id))
+    if(doesUserAdminInAnyCommunity($user_id))
     {
         return true;
     }
