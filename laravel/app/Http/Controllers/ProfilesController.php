@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfilesController extends Controller
 {
-
-
     public function viewprofile($communitySlug, $profileId)
     {
         $community = Community::findBySlug($communitySlug);
@@ -32,7 +30,7 @@ class ProfilesController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $profileType = false;
-        if($request->has('profile_type_id')){
+        if ($request->has('profile_type_id')) {
             $profileType = ProfileType::find($request->get('profile_type_id'));
         }
         return view('pages.profiles.create')->with(['community' => $community, 'profileType' => $profileType])->render();
@@ -49,14 +47,14 @@ class ProfilesController extends Controller
     public function save($communitySlug, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
-        if($community->isAdmin()){
-            if($request->file('create_profile_instance_file')){
-                $profileData = json_decode(file_get_contents($request->file('create_profile_instance_file')),1);
+        if ($community->isAdmin()) {
+            if ($request->file('create_profile_instance_file')) {
+                $profileData = json_decode(file_get_contents($request->file('create_profile_instance_file')), 1);
             } else {
-                $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
+                $profileData = json_decode(stripslashes(urldecode($request->get('data'))), 1);
             }
 
-             if(!$profileData){
+            if (!$profileData) {
                 return JsonResponse::create(['status' => 'error', 'message' => 'Invalid JSON!'], 422);
             }
 
@@ -67,7 +65,7 @@ class ProfilesController extends Controller
             $profile->type_name = $profiletype->getTitle();
             $profile->purpose = $profileData['Profile']['Purpose'];
             $profile->profile_description = $profileData['Profile']['Description'];
-            $profile->profile_name = $profileData['Profile']['Title'];
+            $profile->profile_name = $profileData['Profile']['Title'] . $profile->getVersion($profileData);
             $profile->created_date = Carbon::now();
             $profile->creator_id = Auth::user()->ID;
             $profile->token = Uuid::uuid4();
@@ -86,15 +84,15 @@ class ProfilesController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $profile = Profile::find($profileId);
-        if($community->isAdmin() || $profile->creator_id = Auth::user()->ID){
+        if ($community->isAdmin() || $profile->creator_id = Auth::user()->ID) {
 
-            if($request->file('profile_instance_file')){
-                $profileData = json_decode(file_get_contents($request->file('profile_instance_file')),1);
+            if ($request->file('profile_instance_file')) {
+                $profileData = json_decode(file_get_contents($request->file('profile_instance_file')), 1);
             } else {
-                $profileData = json_decode(stripslashes(urldecode($request->get('data'))),1);
+                $profileData = json_decode(stripslashes(urldecode($request->get('data'))), 1);
             }
 
-            if(!$profileData){
+            if (!$profileData) {
                 return JsonResponse::create(['status' => 'error', 'message' => 'Invalid JSON!'], 422);
             }
             $profiletype = ProfileType::find($request->get('profile-type-id'));
@@ -103,7 +101,7 @@ class ProfilesController extends Controller
             $profile->profile_role = $profiletype->title;
             $profile->purpose = $profileData['Profile']['Purpose'];
             $profile->profile_description = $profileData['Profile']['Description'];
-            $profile->profile_name = $profileData['Profile']['Title'];
+            $profile->profile_name = $profileData['Profile']['Title'] . $profile->getVersion($profileData);
             $profile->content_length = strlen(json_encode($profileData));
             $profile->putToS3(json_encode($profileData));
             $profile->save();
@@ -136,7 +134,6 @@ class ProfilesController extends Controller
         $profileType->instances++;
         $profileType->save();
 
-
         $profile_meta = getProfileMetaData($s3Content);
         foreach ($profile_meta as $meta_key => $meta_value) {
             if (is_array($meta_key) || is_array($meta_value)) {
@@ -144,8 +141,8 @@ class ProfilesController extends Controller
             }
 
             $newProfile->meta()->create([
-                    'meta_key'   => $meta_key,
-                    'meta_value' => $meta_value
+                'meta_key' => $meta_key,
+                'meta_value' => $meta_value
             ]);
         }
 
@@ -163,7 +160,7 @@ class ProfilesController extends Controller
         $community = Community::findBySlug($communitySlug);
         $profile = Profile::find($profileId);
 
-        if($community->isAdmin() || $profile->creator_id == Auth::user()->ID) {
+        if ($community->isAdmin() || $profile->creator_id == Auth::user()->ID) {
 
             $profileType = ProfileType::find($profile->type_id);
             $profileType->instances--;

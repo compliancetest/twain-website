@@ -442,11 +442,11 @@ function getAssignedSuiteIds($user_id = null)
         $user_id = get_current_user_id();
     
     $suite_ids = array();    
-    $communities = groups_get_groups(array('user_id' => $user_id));
+    $communities = getUserCommunities($user_id);
     
-    foreach($communities['groups'] as $community)
+    foreach($communities as $community)
     {
-        if(groups_is_user_admin($user_id, $community->id) || groups_is_user_mod($user_id, $community->id))
+        if(doesUserCommunityAdmin($user_id, $community->id))
         {
             //Get Group Suites
             $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";            

@@ -385,7 +385,7 @@ class TestSuite
         if(!$this->community_id)
             $this->community_id = $this->loadSingleValue('community_id');
 
-        if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
+        if(!doesUserCommunityAdmin(get_current_user_id(), $this->community_id)){
             $args['meta_query'][] = array(
                                         'key' => 'hide_case',
                                         'value' => 0,
@@ -463,7 +463,7 @@ class TestSuite
         if(!$this->community_id)
             $this->community_id = $this->loadSingleValue('community_id');
         
-        if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
+        if(!doesUserCommunityAdmin(get_current_user_id(), $this->community_id)){
             $args['meta_query'][] = array(
                                         'key' => 'hide_case',
                                         'value' => 0,
@@ -507,7 +507,7 @@ class TestSuite
         if(!$this->community_id)
             $this->community_id = $this->loadSingleValue('community_id');
         
-        if(!groups_is_user_admin(get_current_user_id(), $this->community_id)){
+        if(!doesUserCommunityAdmin(get_current_user_id(), $this->community_id)){
             $args['meta_query'][] = array(
                                         'key' => 'hide_case',
                                         'value' => 0,

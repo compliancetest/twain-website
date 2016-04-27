@@ -86,7 +86,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             if( is_iterable( $case->conformanceLevel[$test_suite_id] ) ) {
                                 foreach ($case->conformanceLevel[$test_suite_id] as $level) {
 
-                                    if (groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
+                                    if (doesUserCommunityAdmin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
                                         $lArr[] = $level;
                                     }
                                 }

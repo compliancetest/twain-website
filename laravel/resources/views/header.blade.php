@@ -1,7 +1,7 @@
 <header id="header">
     <div class="header-inner">
         <div class="container">
-            <a href="#" class="logo"><img src="{{ getSiteUrl() }}/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
+            <a href="{{ getSiteUrl() }}" class="logo"><img src="{{ getSiteUrl() }}/laravel/resources/assets/images/drummond_group_logo.png" alt="" /></a>
                 <div class="header-account">
                     <div class="header-actions">
                     @if(Auth::check())

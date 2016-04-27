@@ -24,7 +24,7 @@ if($ticket_id)
 
     $is_support = ct_is_support($ticket_id);
     $userGroups = groups_get_user_groups( $ticket->customer_id);
-    if(!is_admin() && !is_super_admin() && !groups_is_user_admin_in_any_community( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+    if(!is_admin() && !is_super_admin() && !doesUserAdminInAnyCommunity( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
     {
         addMessage("Invalid Request!", 'error');
         wp_redirect('/my-support-tickets');

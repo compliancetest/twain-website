@@ -231,7 +231,7 @@ function getBrotherSuitesAndProfileTypes()
 {
     $groupID = $_POST['community_id'];
     $user_id = get_current_user_id();
-    if(!groups_is_user_admin($user_id, $groupID))
+    if(!doesUserCommunityAdmin($user_id, $groupID))
     {
         exit;
     }
@@ -290,7 +290,7 @@ function saveSuite()
     
     $group_id = $_POST['community_id'];
     
-    if(!groups_is_user_admin($user_id, $group_id) && !is_super_admin() && is_admin())
+    if(!doesUserCommunityAdmin($user_id, $group_id) && !is_super_admin() && is_admin())
     {
         addMessage('Permission Denied!', 'error');
         wp_redirect(get_site_url());

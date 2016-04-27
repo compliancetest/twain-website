@@ -33,10 +33,10 @@ class Profile extends Model
     public function getProfileFromS3()
     {
         $s3 = AwsFacade::createClient('s3');
-        return json_decode((string) $s3->getObject(array(
+        return json_decode((string)$s3->getObject(array(
             'Bucket' => 'data.twain.gosource.com.au',
             'Key' => 'profiles/user/' . $this->token . '.json',
-            'ResponseContentType'        => 'application/json',
+            'ResponseContentType' => 'application/json',
         ))['Body']);
     }
 
@@ -59,12 +59,26 @@ class Profile extends Model
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
             'Bucket' => 'data.twain.gosource.com.au',
             'Key' => 'profiles/user/' . $this->token . '.json',
-            'ResponseContentDisposition' => 'attachment;'
+            'ResponseContentDisposition' => 'attachment;filename="'.$this->profile_name.'.json"'
         ]);
 
         $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+20 minutes');
 
         return (string)$request->getUri();
+    }
+
+    /**
+     * Generate profile name from json data
+     * @param $profileData
+     * @return string
+     */
+    public function getVersion($profileData)
+    {
+        $version = ' v' . $profileData['Profile']['Version']['Major'] . '.' . $profileData['Profile']['Version']['Minor'];
+        if (!empty($profileData['Profile']['Version']['Patch'])) {
+            $version .= '.' . $profileData['Profile']['Version']['Patch'];
+        }
+        return $version;
     }
 
 }

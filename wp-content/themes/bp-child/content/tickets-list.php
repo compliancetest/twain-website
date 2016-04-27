@@ -115,7 +115,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                    foreach($tickets as $ticket)
                    {                       
                        $userGroups = groups_get_user_groups( $ticket->customer_id);
-                       if(!is_admin() && !is_super_admin() && !groups_is_user_admin_in_any_community( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+                       if(!is_admin() && !is_super_admin() && !doesUserAdminInAnyCommunity( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
                        {
                            continue;
                        }

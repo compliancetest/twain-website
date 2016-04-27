@@ -65,7 +65,7 @@ foreach($filterTestSuite as $v)
         $tempPostIds = getProductsByTestSuiteName( $v );
         foreach( explode( ',', $tempPostIds ) AS $post__id ){
             $t = get_post_meta( $post__id, 'product_visibility', true );
-            if( ( $t == 'Public' && ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) || ( ( $t == 'Private' || $t == 'Public' ) && ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) ){
+            if( ( $t == 'Public' && ! ( is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() ) ) ) || ( ( $t == 'Private' || $t == 'Public' ) && ( is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() ) ) ) ){
                 array_push( $postsIds, $post__id );
             }
         }
@@ -178,7 +178,7 @@ if( isset( $_GET['download']) ){
                 <div class="column padding20-10">
                     <div class="grid dark_gray_txt">
                         <div class="grid_head grid_head_border">
-                            <?php if(is_admin() || is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ): ?>
+                            <?php if(is_admin() || is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() ) ): ?>
                                 <div class="grid_cell nopaddingtop width25P">Name</div>
                                 <div class="grid_cell nopaddingtop width10P">Visibility</div>
                             <?php else: ?>
@@ -206,7 +206,7 @@ if( isset( $_GET['download']) ){
                                 $group = groups_get_group( array( 'group_id' => $groupID ) )
                                 ?>
                                 <div class="grid_row grid_row_border">
-                                    <?php if(is_admin() || is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() )): ?>
+                                    <?php if(is_admin() || is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() )): ?>
                                         <div class="grid_cell width25P">
                                             <h5><a href="<?php echo get_permalink($row->ID)?>" class="blue_txt"><?php echo apply_filters('the_title', $row->post_title)?></a></h5>
                                             <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
