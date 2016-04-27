@@ -59,7 +59,7 @@ class Profile extends Model
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
             'Bucket' => 'data.twain.gosource.com.au',
             'Key' => 'profiles/user/' . $this->token . '.json',
-            'ResponseContentDisposition' => 'attachment;'
+            'ResponseContentDisposition' => 'attachment;filename="'.$this->profile_name.'"'
         ]);
 
         $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+20 minutes');
