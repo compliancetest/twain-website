@@ -588,6 +588,66 @@ var Page = {
             } else {
                 $('.isExcluded').hide();
             }
+        },
+
+        validateTestCaseDetailsForm: function () {
+            $('#testCaseDetailsForm').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                if (form.find('#caseExclude').is(':checked')){
+                    if (form.find('#caseExcludeReason').val().length > 0){
+                        form.find('.modal-body .message').remove();
+                        form.find('.block-loading').show();
+                        $.ajax({
+                            url: form.attr('action'),
+                            type: 'post',
+                            data: form.serialize(),
+                            error: function(jqXHR, status){
+                                form.find('.block-loading').hide();
+                                form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                            },
+                            success: function(rsp){
+                                form.find('.block-loading').hide();
+                                form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                                location.reload();
+                            },
+                            complete: function(){
+                            }
+                        })
+                    } else {
+                        form.find('#caseExcludeReason').after('<div class="message error-message">Reason is required</div>');
+                    }
+                }
+            });
+        },
+
+        validateEditPlanForm: function () {
+            $('#coverageEditPlanForm').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                if (form.find('#availableProducts').val() || form.find('.level:checked').length == 0 || form.find('.level:checked').length == 0){
+                    form.find('.modal-body .message').remove();
+                    form.find('.block-loading').show();
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'post',
+                        data: form.serialize(),
+                        error: function(jqXHR, status){
+                            form.find('.block-loading').hide();
+                            form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        },
+                        success: function(rsp){
+                            form.find('.block-loading').hide();
+                            form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                            location.reload();
+                        },
+                        complete: function(){
+                        }
+                    })
+                } else {
+                    form.find('.modal-body').append('<div class="message error-message">Please complete all fields in the form.</div>');
+                }
+            });
         }
 
     }

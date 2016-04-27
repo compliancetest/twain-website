@@ -1,0 +1,81 @@
+.test-coverage{
+
+  .colored-box-body{
+    border: 1px solid #1767ab;
+    border-top: 0;
+
+    table{
+      margin: 0;
+    }
+  }
+
+}
+
+.coverage-progress{
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  padding: 2px;
+  background: #f6f6f6;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  @include box-shadow(inset 0 0 10px 0px #ccc);
+}
+
+.coverage-test-case-item{
+  @include iconsSprite(test-case-default);
+  float: left;
+  margin: 1px;
+  cursor: pointer;
+  outline: none;
+
+  &.test-excluded{
+    @include iconsSprite(test-case-excluded);
+  }
+  &.test-failed{
+    @include iconsSprite(test-case-failed);
+  }
+  &.test-optional{
+    @include iconsSprite(test-case-optional);
+  }
+  &.test-passed{
+    @include iconsSprite(test-case-passed);
+  }
+
+  &:focus{
+    outline: none;
+  }
+
+  .tooltip{
+    white-space: nowrap;
+  }
+}
+
+.coverage-test-details{
+
+  li{
+    padding: 0 0 10px 0;
+
+    label{
+      font-weight: 400;
+      padding: 0 5px 0 0;
+      display: inline-block;
+    }
+
+    .form-control{
+      display: inline-block;
+    }
+  }
+
+  textarea{
+    resize: vertical;
+  }
+
+}
+
+.edit-plan-subheader{
+  border-bottom: 1px solid #cbcbcb;
+  font-weight: 600;
+  line-height: 18px;
+  font-size: 12px;
+}

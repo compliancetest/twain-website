@@ -8,8 +8,8 @@ sleep(2);
     <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
     Test Case Details
 </div>
-<div class="modal-body">
-    <form action="#" method="post">
+<form action="http://twain.lc/html/temp/test-case-details-submit.php" method="post" id="testCaseDetailsForm">
+    <div class="modal-body">
         <ul class="coverage-test-details">
             <li>
                 <label>Identifier:</label>
@@ -32,10 +32,10 @@ sleep(2);
                 <textarea cols="40" rows="2" class="form-control" id="caseExcludeReason" name="case_exclude_reason"></textarea>
             </li>
         </ul>
-    </form>
-</div>
-<div class="modal-footer">
-    <a href="#" class="btn btn-success btn-with-icon btn-confirm isExcluded">Submit</a>
-    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
-</div>
-
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-with-icon btn-confirm isExcluded">Submit</button>
+        <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+    </div>
+    <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">PROCESSING THE EXCLUSION</div><div class="loading-wait">Please wait...</div></div></div>
+</form>
