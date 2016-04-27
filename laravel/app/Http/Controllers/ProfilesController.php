@@ -82,6 +82,7 @@ class ProfilesController extends Controller
 
     public function update($communitySlug, $profileId, Request $request)
     {
+        dd($request->all());
         $community = Community::findBySlug($communitySlug);
         $profile = Profile::find($profileId);
         if ($community->isAdmin() || $profile->creator_id = Auth::user()->ID) {

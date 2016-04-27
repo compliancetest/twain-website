@@ -10,7 +10,8 @@
             <fieldset class="edit-profile-fieldset">
                 <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
                     @foreach($community->profileTypes as $type)
-                        <option value="{{ $type->id }}" @if($type->id == $profileType->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
+                        <?php error_log($profileType->id === $type->id);?>
+                        <option value="{{ $type->id }}" @if($profileType->id === $type->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
                     @endforeach
                 </select>
 
@@ -59,7 +60,7 @@
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/edit/{{ $profile->id }}/' + jQuery('#editProfileBox #profile-type-id').val(),
                     success: function (rsp) {
-                        jQuery("#modalEditProfile-<?php echo $profile->id;?> .modal-body ").html(rsp);
+                        jQuery("#modalEditProfile .modal-content ").html(rsp);
                         renderJsonUI();
                         jQuery(window).resize();
                     },
