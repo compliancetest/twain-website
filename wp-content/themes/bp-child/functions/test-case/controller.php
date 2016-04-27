@@ -490,7 +490,7 @@ function saveCase()
         
     $community_id = get_post_meta($suiteID[0], 'community_id', true);
     $user_id = get_current_user_id();
-    if(!$community_id || (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()))
+    if(!$community_id || (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()))
     {
         echo json_encode(array('status' => 'error', 'message' => 'Permission Denied!'));
         exit;

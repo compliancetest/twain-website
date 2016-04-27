@@ -1122,7 +1122,7 @@ function get_valid_full_url($url)
 function get_products_args(){
     $post_type = 'product-service';
 
-    if ( is_user_logged_in() && ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) ) ) {
+    if ( is_user_logged_in() && ! ( is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() ) ) ) {
 
         $all_public_posts = get_posts(array(
             'post_type' => $post_type,
@@ -1158,7 +1158,7 @@ function get_products_args(){
             'posts_per_page' => -1,
             'tax_query' => array('relation' => 'and'),
         );
-        if ( ! ( is_super_admin() || groups_is_user_admin_in_any_community( get_current_user_id() ) )) {
+        if ( ! ( is_super_admin() || doesUserAdminInAnyCommunity( get_current_user_id() ) )) {
             $args['meta_key'] = 'product_visibility';
             $args['meta_value'] = 'Public';
         }
@@ -1493,16 +1493,16 @@ function generate_and_download_site( $data ){
     exit();
 }
 
-function groups_is_user_admin_in_any_community( $user_id, $communitiesList = false  ){
+function doesUserAdminInAnyCommunity( $user_id, $communitiesList = false  ){
     global $wpdb;
-    $communities_ids = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}bp_groups");
+    $communities_ids = $wpdb->get_results("SELECT id FROM communities");
     foreach( $communities_ids AS $communities_id ){
         if( ! $communitiesList ){
-            if( groups_is_user_admin( $user_id, $communities_id->id ) ){
+            if( doesUserCommunityAdmin( $user_id, $communities_id->id ) ){
                 return true;
             }
         } else {
-            if( groups_is_user_admin( $user_id, $communities_id->id ) && in_array( $communities_id->id, $communitiesList ) ){
+            if( doesUserCommunityAdmin( $user_id, $communities_id->id ) && in_array( $communities_id->id, $communitiesList ) ){
                 return true;
             }
         }

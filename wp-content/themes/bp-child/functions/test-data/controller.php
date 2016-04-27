@@ -13,7 +13,7 @@ function saveProfileType()
     $type_id = isset($_POST['type_id']) ? $_POST['type_id'] : null;
     $user_id = get_current_user_id();
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         addMessage('Invalid Request!', 'error');
         wp_redirect($_SERVER['HTTP_REFERER']);
         exit;
@@ -65,7 +65,7 @@ function deleteProfileType()
     $community_id = $_REQUEST['community_id'];
     $user_id = get_current_user_id();
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         addMessage('Invalid Request!', 'error');
         return false;
     }
@@ -100,7 +100,7 @@ function readProfileType()
 
     header('Content-type: application/xml');
 
-    if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+    if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
         echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
         exit;
     }
@@ -145,7 +145,7 @@ function createUIFromProfileType($action)
     if (wp_verify_nonce($action, 'get-harness-profile-ui')) {
         $instance_type = 'harness';
 
-        if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+        if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
             echo '<result><status>error</status><message>Invalid Request!</message></result>';
             exit;
         }
@@ -210,7 +210,7 @@ function saveProfileInstance($action)
     if (wp_verify_nonce($action, 'save-harness-instance')) {
         $instance_type = 'harness';
 
-        if (!groups_is_user_admin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
+        if (!doesUserCommunityAdmin($user_id, $community_id) && !is_super_admin() && !is_admin()) {
             echo '<result><status>error</status><msg>Invalid Request!</msg></result>';
             exit;
         }
@@ -302,7 +302,7 @@ function deleteProfileTypeInstance($action, $id, $forceDelete = false)
             $response = array('status' => 'error', 'message' => 'Invalid Request!');
             continue;
         }
-        if ((wp_verify_nonce($action, 'delete-harness-instance') && !groups_is_user_admin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id)) {
+        if ((wp_verify_nonce($action, 'delete-harness-instance') && !doesUserCommunityAdmin($user_id, $row->community_id)) || (wp_verify_nonce($action, 'delete-profile-instance') && $row->creator_id != $user_id)) {
             $response = array('status' => 'error', 'message' => 'Permission Denied!');
             continue;
         }
