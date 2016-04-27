@@ -245,7 +245,7 @@ function can_create_test_case($user_id = null)
     
     //Check if the user is an admin of a Community    
     
-    if(bp_is_group_admin($user_id))
+    if(doesUserAdminInAnyCommunity($user_id))
     {
         return true;
     }
