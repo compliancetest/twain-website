@@ -26,7 +26,7 @@ class ProfileTypeController extends Controller
         $profile = ProfileType::find($profileTypeId);
         $headers = [
             'Content-type' => 'application/json',
-            'Content-Disposition' => sprintf('attachment; filename="%s"', $profile->getTitle())
+            'Content-Disposition' => sprintf('attachment; filename="%s.json"', $profile->getTitle())
         ];
         return Response::make(base64_decode($profile->schema), 200, $headers);
     }
