@@ -10,7 +10,6 @@
             <fieldset class="edit-profile-fieldset">
                 <select class="form-control profile-type-drowdown" name="profile-type-id" id="profile-type-id">
                     @foreach($community->profileTypes as $type)
-                        <?php error_log($profileType->id === $type->id);?>
                         <option value="{{ $type->id }}" @if($profileType->id === $type->id) selected="selected" @endif>{{ $type->getTitle() }}</option>
                     @endforeach
                 </select>
