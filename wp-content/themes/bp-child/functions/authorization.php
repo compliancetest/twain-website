@@ -164,14 +164,14 @@ function can_create_suite($user_id = null)
         $user_id = get_current_user_id();
         
     //Check if the user is a system admin
-    if(user_can($user_id, 'create_suite'))
+    if(is_super_admin())
     {
         return true;
     }
     
     //Check if the user is an admin of a Community    
     
-    if(bp_is_group_admin($user_id))
+    if(doesUserAdminInAnyCommunity($user_id))
     {
         return true;
     }
