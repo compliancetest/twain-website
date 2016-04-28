@@ -62,7 +62,7 @@ function compliancetest_user_actions()
             $org_controller = new CT_Organisation_Controller();
             $org_controller->delete_membership( get_current_user_id(), $org_membership->organisation_id);
         }
-        addMessage( 'Success!' );
+        addMessage( 'You have leaved organisation successfully!' );
         wp_redirect( '/my-profile/' );
         exit;
     }else if(wp_verify_nonce($cpAction ,'delete_payment_method')){
