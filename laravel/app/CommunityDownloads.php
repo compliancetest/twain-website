@@ -51,7 +51,7 @@ class CommunityDownloads extends Model
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
             'Bucket' => 'data.twain.gosource.com.au',
             'Key' => $this->location,
-            'ResponseContentDisposition' => 'attachment;'
+            'ResponseContentDisposition' => 'attachment;filename="'.$this->title.'"'
         ]);
 
         $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+20 minutes');
