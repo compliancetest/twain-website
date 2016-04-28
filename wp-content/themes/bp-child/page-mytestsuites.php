@@ -45,11 +45,11 @@ get_header();
                            foreach($subscriptions as $row)
                            {
                            $community_id = get_post_meta($row->suite_id, 'community_id', true);
-                           $group = groups_get_group(array('group_id' => $community_id));
+                           $community = getCommunity($community_id);
                    ?>
                         <div class="tr">
                             <div class="td td-community">
-                                <a href="<?php echo bp_get_group_permalink($group)?>"><?php echo bp_get_group_name($group) ?></a>
+                                <a href="/communities/<?php echo $community->slug ?>"><?php echo $community->title ?></a>
                             </div>
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
