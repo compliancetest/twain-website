@@ -283,6 +283,8 @@
     width: 76px;
   }
 
+  ::-webkit-file-upload-button { cursor:pointer; }
+
   .file-label-wrap{
     position: relative;
     padding: 7px 10px 0 30px;
