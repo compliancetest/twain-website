@@ -429,8 +429,15 @@ var Page = {
             var profile = {
                 id: element.data('profile-id'),
                 name: element.data('profile-name'),
+                version: element.data('profile-version'),
                 link: element.attr('href')
             };
+
+            if(!profile.name.length){
+                profile.fullName = 'Profile type';
+            } else {
+                profile.fullName = profile.name + ' ' + profile.version;
+            }
 
             jQuery('#profileTypesRemoving').show();
             jQuery.ajax({
@@ -440,7 +447,7 @@ var Page = {
                     if (data.status == 'success') {
                         $('#profile-type-row-' + profile.id).addClass('removing').fadeTo("slow", 0.3, function () {
                             $(this).remove();
-                            $('#profileTypeList').prepend('<div class="success-message">' + profile.name + ' has been removed</div>');
+                            $('#profileTypeList').prepend('<div class="success-message">' + profile.fullName + ' has been removed</div>');
                             setTimeout(function () {
                                 $('#profileTypeList > .success-message').slideUp(function () {
                                     $(this).remove();
@@ -449,8 +456,8 @@ var Page = {
                         });
                     }
                 },
-                error: function (error, status, exception) {
-                    $('#profileTypeList').prepend('<div class="error-message">' + error + '</div>');
+                error: function (jqXHR, status) {
+                    $('#profileTypeList').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     setTimeout(function () {
                         $('#profileTypeList > .error-message').slideUp(function () {
                             $(this).remove();

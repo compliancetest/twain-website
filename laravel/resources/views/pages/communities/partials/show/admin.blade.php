@@ -213,10 +213,15 @@
                                                                         Confirm Profile Deletion
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <p class="default-text">Are you sure that you want to delete {{ $profileType->title }} <?php echo $profileTypeVersion; ?>?</p>
+                                                                        <p class="default-text">Are you sure that you want to delete
+                                                                            @if ($profileType->title != '')
+                                                                                {{ $profileType->title }} <?php echo $profileTypeVersion; ?>?</p>
+                                                                            @else
+                                                                                profile type
+                                                                            @endif
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/{{ $profileType->id }}" data-profile-id="{{ $profileType->id }}" data-profile-name="{{ $profileType->title }} <?php echo $profileTypeVersion; ?>" data-dismiss="modal" class="btn btn-success btn-with-icon btn-confirm deleteProfileType">Confirm</a>
+                                                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/{{ $profileType->id }}" data-profile-id="{{ $profileType->id }}" data-profile-name="{{ $profileType->title }}" data-profile-version="<?php echo $profileTypeVersion; ?>" data-dismiss="modal" class="btn btn-success btn-with-icon btn-confirm deleteProfileType">Confirm</a>
                                                                         <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                                                                     </div>
                                                                 </div>
