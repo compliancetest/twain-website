@@ -122,6 +122,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('membership/{community}/reject', 'CommunityMembershipController@rejectUser');
         Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
+        Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
 
     });
 });

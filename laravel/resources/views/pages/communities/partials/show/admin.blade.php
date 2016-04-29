@@ -71,6 +71,49 @@
 
                 </div>
 
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                <div class="colored-box">
+                    <div class="colored-box-header">Privacy Options</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="form-group">
+                                <label>
+                                    {{ Form::radio('visibility_status', 'public') }}
+                                    <strong>This is a public community</strong>
+                                </label>
+                                <ul class="privacy-options-list">
+                                    <li>Any site member can join this community.</li>
+                                    <li>This community will be listed in the communities directory and in search
+                                        results.
+                                    </li>
+                                    <li>Community content and activity will be visible to any site member.</li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    {{ Form::radio('visibility_status', 'private') }}
+                                    <b>This is a private community</b>
+                                </label>
+                                <ul class="privacy-options-list">
+                                    <li>Only users who request membership and are accepted can join the community.</li>
+                                    <li>This community will be listed in the communities directory and in search
+                                        results.
+                                    </li>
+                                    <li>Community content and activity will only be visible to members of the
+                                        community.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="colored-box-footer">
+                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                        </div>
+                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                    </div>
+
+                </div>
+                {!! Form::close() !!}
+
                 <div class="colored-box">
                     <div class="colored-box-header">Display Image</div>
                     <div class="colored-box-body">
@@ -246,47 +289,27 @@
                     </div>
                 </div>
 
-                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
-                <div class="colored-box">
-                    <div class="colored-box-header">Privacy Options</div>
-                    <div class="colored-box-body">
-                        <div class="colored-box-content">
-                            <div class="form-group">
-                                <label>
-                                    {{ Form::radio('visibility_status', 'public') }}
-                                    <strong>This is a public community</strong>
-                                </label>
-                                <ul class="privacy-options-list">
-                                    <li>Any site member can join this community.</li>
-                                    <li>This community will be listed in the communities directory and in search
-                                        results.
-                                    </li>
-                                    <li>Community content and activity will be visible to any site member.</li>
-                                </ul>
+
+                {!! Form::open(['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
+
+                    <div class="colored-box">
+                        <div class="colored-box-header">Invite User</div>
+                        <div class="colored-box-body">
+                            <div class="colored-box-content">
+                                <div class="form-group">
+                                    <label for="user_email">User Email</label>
+                                    {{ Form::text('user_email', null, ['required' => 'required',
+                                    'class' => 'form-control'
+                                ]) }}
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>
-                                    {{ Form::radio('visibility_status', 'private') }}
-                                    <b>This is a private community</b>
-                                </label>
-                                <ul class="privacy-options-list">
-                                    <li>Only users who request membership and are accepted can join the community.</li>
-                                    <li>This community will be listed in the communities directory and in search
-                                        results.
-                                    </li>
-                                    <li>Community content and activity will only be visible to members of the
-                                        community.
-                                    </li>
-                                </ul>
+                            <div class="colored-box-footer">
+                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Invite</button>
                             </div>
+                            <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                         </div>
-                        <div class="colored-box-footer">
-                            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                        </div>
-                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                     </div>
 
-                </div>
                 {!! Form::close() !!}
 
                 {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
