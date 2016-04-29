@@ -235,6 +235,12 @@ class CommunityMembershipController extends Controller
         return response()->json(array('success' => true, 'html' => $returnHTML));
     }
 
+    /**
+     * Invite user to community feature handler
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function inviteUser($communitySlug, Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -245,21 +251,20 @@ class CommunityMembershipController extends Controller
         }
 
         $community = Community::findBySlug($communitySlug);
-         $admins = $community->getAdmins();
+        $admins = $community->getAdmins();
 
         $userEmail = $request->get('user_email');
         $user = \App\User::where(['user_email' => $userEmail])->first();
 
-        $emailData = array(
+        $emailData = [
+            '[email]' => $userEmail,
+            '[website_url]' => get_site_url(),
+            '[env]' => get_option('env'),
+            '[community]' => $community->title,
+            '[community_url]' => $community->getUrl(),
+        ];
 
-                        '[email]' => $userEmail,
-                        '[website_url]' => get_site_url(),
-                        '[env]' => get_option('env'),
-                        '[community]' => $community->title,
-                        '[community_url]' => $community->getUrl(),
-                    );
-
-        if(!$user){
+        if (!$user) {
             $password = Str::quickRandom(12);
             $userId = wp_create_user(explode('@', $userEmail)[0], $password, $userEmail);
             $community->members()->create(['user_id' => $userId, 'is_confirmed' => true]);
@@ -273,7 +278,7 @@ class CommunityMembershipController extends Controller
 
         } else {
             $membershipRecord = CommunityMembers::getUserRecord($community->id, $user->ID);
-            if($membershipRecord){
+            if ($membershipRecord) {
                 return response()->json(array('User already member'), 422);
             } else {
                 $community->members()->create(['user_id' => $user->ID, 'is_confirmed' => true]);
