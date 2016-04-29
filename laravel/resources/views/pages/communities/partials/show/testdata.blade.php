@@ -1,5 +1,5 @@
 <div class="community-test-data row">
-    <div class="col-md-12">
+    <div class="col-md-12" id="communityTestDataList">
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -52,7 +52,7 @@
                             </div>
 
                         @endif
-                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
+                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
                     </td>
                 </tr>
                 @endforeach
@@ -68,8 +68,8 @@
             </div>
         </div>
     @endif
-
 </div>
+<div class="block-loading page-loader" id="communityTestDataListLoading"><div class="loading-content"><span class="loader"></span><div class="loading-text">COPYING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
 <script>
     var clipboard = new Clipboard('.copyProfileLink');
     clipboard.on('success', function(e) {
@@ -88,6 +88,10 @@
                 name: elem.data('profile-name')
             };
 
+            if (!profile.name.length){
+                profile.name = 'Profile';
+            }
+
             jQuery.ajax({
                 type: 'delete',
                 url: elem.attr('href'),
@@ -104,8 +108,8 @@
                         });
                     }
                 },
-                error: function (error, status, exception) {
-                    $('.community-test-data > .col-md-12').prepend('<div class="error-message">' + error + '</div>');
+                error: function (jqXHR, status) {
+                    $('.community-test-data > .col-md-12').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     setTimeout(function () {
                         $('.community-test-data > .col-md-12 > .error-message').slideUp(function () {
                             $(this).remove();
@@ -122,15 +126,40 @@
         jQuery('.btn-copy').on('click', function (e) {
             e.preventDefault();
             var elem = jQuery(this);
+
             if (confirm('Are you sure?')) {
+                var profileName = elem.data('profile-name');
+
+                if (!profileName.length){
+                    profileName = 'Profile'
+                }
+
+                $('#communityTestDataListLoading').show();
                 jQuery.ajax({
                     type: 'post',
                     url: elem.attr('href'),
                     success: function (data) {
                         if (data.status == 'success') {
-                            elem.closest('tr').remove();
+                            $('#communityTestDataList').prepend('<div class="success-message">' + profileName + ' has been copied</div>');
+                            setTimeout(function () {
+                                $('#communityTestDataList > .success-message').slideUp(function () {
+                                    $(this).remove();
+                                });
+                            }, 2000);
                         }
+                    },
+                    error: function (jqXHR, status) {
+                        $('#communityTestDataList').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('#communityTestDataList > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 2000);
+                    },
+                    complete: function () {
+                        $('#communityTestDataListLoading').hide();
                     }
+
                 });
 
             }

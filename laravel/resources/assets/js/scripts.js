@@ -1,6 +1,8 @@
 jQuery(document).ready(function($) {
 
-    $('[data-tooltip="tooltip"]').tooltip();
+    $('[data-tooltip]').tooltip({
+        trigger: 'hover'
+    });
 
     $('[data-validate="validate"]').each(function () {
         $(this).validate({
@@ -456,7 +458,6 @@ var Page = {
                     }, 2000);
                 },
                 complete: function () {
-                    $('.modal').modal('hide');
                     jQuery('#profileTypesRemoving').hide();
                 }
             })
