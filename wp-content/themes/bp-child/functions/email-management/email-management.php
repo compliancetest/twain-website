@@ -238,6 +238,38 @@ $ct_email_templates = array(
             )
         ),
         array(
+            'menu' => 'Existing Member Invited',
+            'title' => 'Existing Member Invited',
+            'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [settings_link], [site_title], [site_org]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'membership_existing_member_invited',
+                ),
+                array(
+                    'title' => 'For Admin',
+                    'id' => 'membership_existing_member_invited_admin',
+                )
+
+            )
+        ),
+        array(
+            'menu' => 'User Registered and Invited',
+            'title' => 'User Registered and Invited',
+            'shortcodes' => '[email], [password], [website_url], [env], [username], [community], [community_url], [settings_link], [site_title], [site_org]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'membership_member_invited',
+                ),
+                array(
+                    'title' => 'For Admin',
+                    'id' => 'membership_member_invited_admin',
+                )
+
+            )
+        ),
+        array(
             'menu' => 'Membership Request Rejected',
             'title' => 'Membership Request Rejected',
             'shortcodes' => '[name], [email], [website_url], [env], [username], [community], [community_url], [site_title], [site_org]',

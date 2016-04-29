@@ -535,8 +535,12 @@ var Page = {
                 error: function(jqXHR, status){
                     form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                 },
-                success: function(rsp){
-                    form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
+                success: function(rsp, status, jqXHR){
+                    if(jqXHR.status == 201){
+                        form.find('.colored-box-footer').prepend('<div class="message success-message">'+rsp+'</div>');
+                    } else {
+                        form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
+                    }
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();
@@ -698,6 +702,16 @@ function formatErrorMessage(jqXHR, exception) {
         return ('The requested page not found. [404]');
     } else if (jqXHR.status == 405) {
         return ('Method Not Allowed. [405]');
+    } else if (jqXHR.status == 422) {
+        var error = jQuery.map(jqXHR.responseJSON, function(v){
+            return v;
+        }).join('<br>');
+        return error;
+    } else if (jqXHR.status == 201) {
+        var message = jQuery.map(jqXHR.responseJSON, function(v){
+            return v;
+        }).join('<br>');
+        return message;
     } else if (jqXHR.status == 500) {
         return ('Internal Server Error [500].');
     } else if (exception === 'parsererror') {

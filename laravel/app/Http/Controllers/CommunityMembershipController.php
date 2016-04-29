@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Laracasts\Flash\Flash;
+use User\User;
 
 class CommunityMembershipController extends Controller
 {
@@ -49,8 +52,8 @@ class CommunityMembershipController extends Controller
         $membershipRecord = CommunityMembers::getUserRecord($community->id, $userId);
         $user = get_userdata($userId);
         $user_organisation = get_user_meta($userId, 'user_organisation', true);
-        if(!$membershipRecord){
-            if($community->visibility_status == 'private') {
+        if (!$membershipRecord) {
+            if ($community->visibility_status == 'private') {
                 $community->members()->create(['user_id' => $userId]);
                 $emailData = array(
                     '[name]' => cp_get_user_fullname($this->userId),
@@ -82,6 +85,12 @@ class CommunityMembershipController extends Controller
         return Redirect::to(getSiteUrl() . '/communities');
     }
 
+    /**
+     * Accept user's membership request
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function acceptUser($communitySlug, Request $request)
     {
         $userId = $request->get('user_id');
@@ -111,6 +120,12 @@ class CommunityMembershipController extends Controller
         return response()->json(array('success' => true, 'html' => $returnHTML));
     }
 
+    /**
+     * Reject user's membersip request
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function rejectUser($communitySlug, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
@@ -139,11 +154,17 @@ class CommunityMembershipController extends Controller
         return response()->json(array('success' => true, 'html' => $returnHTML));
     }
 
+    /**
+     * Update user's role
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function changeRole($communitySlug, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
-        if($request->get('role') == 'remove'){
-            foreach($request->get('users') as $user_id) {
+        if ($request->get('role') == 'remove') {
+            foreach ($request->get('users') as $user_id) {
                 $user = get_userdata($user_id);
                 $emailData = array(
                     '[name]' => cp_get_user_fullname($user_id),
@@ -160,11 +181,11 @@ class CommunityMembershipController extends Controller
                 sendEmails([['user_id' => $user_id]], 'remove_member', $emailData);
                 sendEmails($admins, 'remove_member_admin', $emailData);
             }
-            $community->members()->whereIn('user_id',  $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->delete();
+            $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->delete();
         } else {
 
-            if($request->get('role') == 'admin'){
-                 foreach($request->get('users') as $user_id) {
+            if ($request->get('role') == 'admin') {
+                foreach ($request->get('users') as $user_id) {
                     $user = get_userdata($user_id);
                     $emailData = array(
                         '[name]' => cp_get_user_fullname($user_id),
@@ -183,7 +204,7 @@ class CommunityMembershipController extends Controller
                 }
                 $updateData = ['is_admin' => true];
             } else {
-                foreach($request->get('users') as $user_id) {
+                foreach ($request->get('users') as $user_id) {
                     $user = get_userdata($user_id);
                     $emailData = array(
                         '[name]' => cp_get_user_fullname($user_id),
@@ -202,7 +223,7 @@ class CommunityMembershipController extends Controller
                 }
                 $updateData = ['is_admin' => false];
             }
-            $community->members()->whereIn('user_id',  $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->update($updateData);
+            $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->update($updateData);
         }
 
         $data = [
@@ -212,5 +233,57 @@ class CommunityMembershipController extends Controller
 
         $returnHTML = view('pages.communities.partials.show.admin-members')->with($data)->render();
         return response()->json(array('success' => true, 'html' => $returnHTML));
+    }
+
+    public function inviteUser($communitySlug, Request $request)
+    {
+        $validator = Validator::make($request->all(),
+            ['user_email' => 'required|email']
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        $community = Community::findBySlug($communitySlug);
+         $admins = $community->getAdmins();
+
+        $userEmail = $request->get('user_email');
+        $user = \App\User::where(['user_email' => $userEmail])->first();
+
+        $emailData = array(
+
+                        '[email]' => $userEmail,
+                        '[website_url]' => get_site_url(),
+                        '[env]' => get_option('env'),
+                        '[community]' => $community->title,
+                        '[community_url]' => $community->getUrl(),
+                    );
+
+        if(!$user){
+            $password = Str::quickRandom(12);
+            $userId = wp_create_user($userEmail, $password, $userEmail);
+            $community->members()->create(['user_id' => $userId, 'is_confirmed' => true]);
+
+            $emailData['[password]'] = $password;
+
+            sendEmails([['user_id' => $userId]], 'membership_member_invited', $emailData);
+            sendEmails($admins, 'membership_member_invited_admin', $emailData);
+
+            return response()->json(array('User invited successfully!'), 201);
+
+        } else {
+            $membershipRecord = CommunityMembers::getUserRecord($community->id, $user->ID);
+            if($membershipRecord){
+                return response()->json(array('User already member'), 422);
+            } else {
+                $community->members()->create(['user_id' => $user->ID, 'is_confirmed' => true]);
+
+                $emailData['[name]'] = cp_get_user_fullname($user->ID);
+                sendEmails([['user_id' => $user->ID]], 'membership_existing_member_invited', $emailData);
+                sendEmails($admins, 'membership_existing_member_invited_admin', $emailData);
+
+                return response()->json(array('User was added to community successfully!'), 201);
+            }
+        }
     }
 }
