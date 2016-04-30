@@ -34,6 +34,7 @@ function cp_user_detail_edit()
     $first_name = trim(remove_special_chars($_POST['first_name']));
     $last_name = trim(remove_special_chars($_POST['last_name']));
     $email = trim($_POST['email']);
+    $phoneNumber = trim($_POST['phone_number']);
 
     if (!$first_name && !$last_name && !$email) {
         echo 'First Name, Last Name and Email should not be empty';
@@ -49,6 +50,10 @@ function cp_user_detail_edit()
     }
     if (!$email) {
         echo 'Please enter your email address.';
+        exit;
+    }
+    if (!$phoneNumber) {
+        echo 'Please enter your phone number.';
         exit;
     }
 
@@ -68,6 +73,8 @@ function cp_user_detail_edit()
     //Default Dashboard Tab Url
     update_user_meta($user_id, 'dashboard_page_url', htmlentities($_POST['dashboard_page_url']));
     update_user_meta($user_id, 'dashboard_page_title', htmlentities($_POST['dashboard_page_title']));
+
+    delete_user_meta($user_id, 'fill_profile_notification');
 
     //Update User Name
     //$uname = explode(' ', $uname);
