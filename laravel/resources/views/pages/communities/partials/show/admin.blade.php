@@ -336,7 +336,7 @@
 
                 {!! Form::open(['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
                     <div class="colored-box">
-                        <div class="colored-box-header">Invited Users</div>
+                        <div class="colored-box-header">Invite User</div>
                         <div class="colored-box-body">
                             <div class="colored-box-content">
                                 <div class="form-group">
