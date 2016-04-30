@@ -14,6 +14,9 @@
             @endif
             <li class="downloads-tab"><a href="{{ $community->getUrl() }}downloads"
                                          @if($action == 'downloads') class="active" @endif>Downloads</a></li>
+            <li class="reports-tab"><a href="{{ $community->getUrl() }}surveys"
+                                       @if($action == 'surveys') class="active" @endif>Surveys</a></li>
+
             <li class="reports-tab"><a href="{{ $community->getUrl() }}reports"
                                        @if($action == 'reports') class="active" @endif>Reports</a></li>
 

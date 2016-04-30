@@ -143,6 +143,10 @@ function create_compliancetest_settings_page()
     } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-cloudsearch-settings')){
         update_option('cloudsearch_domain_name', $_POST['cloudsearch_domain_name']);
         update_option('cloudsearch_fulltext_domain_name', $_POST['cloudsearch_fulltext_domain_name']);
+    } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-surveys-settings')){
+        update_option('surveymonkey_key', $_POST['surveymonkey_key']);
+        update_option('surveymonkey_secret', $_POST['surveymonkey_secret']);
+        update_option('surveymonkey_token', $_POST['surveymonkey_token']);
     }
     
 ?>
@@ -245,6 +249,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-pdf-certificate-settings">PDF Certificate Settings</a></li>
                 <li><a href="#ct-xero-settings">Xero Settings</a></li>
                 <li><a href="#ct-s3-xml-max-size">AWS</a></li>
+                <li><a href="#ct-surveys">SurveyMonkey Settings</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
             </ul>
         </div>
@@ -477,14 +482,6 @@ function create_compliancetest_settings_page()
                             <th><label><b>Registry Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_domain_name" id="cloudsearch_domain_name" value="<?php echo get_option('cloudsearch_domain_name')?>" size="50" autocomplete="off" /></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th><label><b>Registry Document EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_document_endpoint" id="cloudsearch_document_endpoint" value="--><?php //echo get_option('cloudsearch_document_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th><label><b>Site Search EndPoint:</b></label></th>-->
-<!--                            <td><input type="text" name="cloudsearch_fulltext_search_endpoint" id="cloudsearch_fulltext_search_endpoint" value="--><?php //echo get_option('cloudsearch_fulltext_search_endpoint')?><!--" size="50" autocomplete="off" /></td>-->
-<!--                        </tr>-->
                         <tr>
                             <th><label><b>Site Search Domain Name:</b></label></th>
                             <td><input type="text" name="cloudsearch_fulltext_domain_name" id="cloudsearch_fulltext_domain_name" value="<?php echo get_option('cloudsearch_fulltext_domain_name')?>" size="50" autocomplete="off" /></td>
@@ -614,6 +611,30 @@ function create_compliancetest_settings_page()
                     <input type="hidden" name="tab_index" value="8">
                 </form>
             </div>
+
+            <div id="ct-surveys">
+                <h3>SurveyMonkey Settings</h3>
+                <form method="post" action="" enctype="multipart/form-data">
+                    <table class="widefat">
+                        <tr>
+                            <th><label><b>API Key:</b></label></th>
+                            <td><input type="text" name="surveymonkey_key" id="surveymonkey_key" value="<?php echo get_option('surveymonkey_key')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>API Secret:</b></label></th>
+                            <td><input type="text" name="surveymonkey_secret" id="surveymonkey_secret" value="<?php echo get_option('surveymonkey_secret')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <th><label><b>Access Token:</b></label></th>
+                            <td><input type="text" name="surveymonkey_token" id="surveymonkey_token" value="<?php echo get_option('surveymonkey_token')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                    </table>
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-surveys-settings'); ?>
+                    <input type="hidden" name="tab_index" value="9">
+                </form>
+            </div>
+
         </div>
     </div>
     
