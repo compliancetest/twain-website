@@ -84,19 +84,11 @@
     </div> 
 
 </body>
-        <?php if(is_user_logged_in()):?>
-                <?php if($kk = get_user_meta(get_current_user_id(), 'sso_key', true)):?>
+        <?php if(!is_user_logged_in() && isset($_GET['GUID']) && $wpdb->get_row($wpdb->prepare("SELECT * FROM community_invitations WHERE id = %s AND status = 1", $_GET['GUID']))):?>
                 <script>
                     jQuery(document).ready(function(){
-                        jQuery.ajax({
-                           'url' :  '/sso/<?php echo $kk;?>',
-                            success: function(){
-
-                            }
-                        });
+                        jQuery('.signup-btn').click();
                     });
                 </script>
-                <?php delete_user_meta(get_current_user_id(), 'sso_key' );?>
-            <?php endif;?>
         <?php endif;?>
 </html>

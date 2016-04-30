@@ -69,14 +69,16 @@ function compliancetest_create_new_user()
     global $wpdb;
 
     //Check Captcha
-    $resp = recaptcha_check_answer(RECAPTCHA_PRIVATE_KEY,
-        $_SERVER["REMOTE_ADDR"],
-        $_POST["recaptcha_challenge_field"],
-        $_POST["recaptcha_response_field"]);
+    if(!(isset($_POST['invitation_id']) && $invitationData = $wpdb->get_row($wpdb->prepare("SELECT * FROM community_invitations WHERE id = %s AND status = 1", $_POST['invitation_id'])))) {
+        $resp = recaptcha_check_answer(RECAPTCHA_PRIVATE_KEY,
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["recaptcha_challenge_field"],
+            $_POST["recaptcha_response_field"]);
 
-    if (!$resp->is_valid) {
-        echo 'captcha_error';
-        exit;
+        if (!$resp->is_valid) {
+            echo 'captcha_error';
+            exit;
+        }
     }
 
     $user_id = wp_create_user($_POST['user_login'], $_POST['user_pass'], $_POST['user_email']);
@@ -106,6 +108,19 @@ function compliancetest_create_new_user()
         //Default Value
         update_user_meta($user_id, 'timezone', 'Australia/Sydney');
 
+        if ($invitationData) {
+            $wpdb->update('community_invitations',
+                [
+                    'registered_email' => $_POST['user_email'],
+                    'registered_user_id' => $user_id,
+                    'status' => 0,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ],
+                ['id' => $invitationData->id],
+                ['%s', '%d', '%d', '%s'],
+                ['%s']
+            );
+        }
         $data = array(
             '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
             '[username]' => $_POST['user_login'],
@@ -404,6 +419,8 @@ if (!is_user_logged_in()) {
     add_action('cp_login_register_box', 'cp_login_register_box');
     function cp_login_register_box()
     {
+        global $wpdb;
+        $invitationData = $wpdb->get_row($wpdb->prepare("SELECT * FROM community_invitations WHERE id = %s AND status = 1", @$_GET['GUID']));
         ob_start();
         ?>
         <div id="registration-popup" class="popup-box" style="display: none;">
@@ -447,24 +464,24 @@ if (!is_user_logged_in()) {
                                 <div class="field">
                                     <label for="first_name_id">First Name</label>
                                     <input type="text" class="required" title="" name="first_name" id="first_name_id"
-                                           autocomplete="off">
+                                           autocomplete="off" <?php if($invitationData):?> value="<?php echo $invitationData->first_name;?>" <?php endif;?>>
                                 </div>
                                 <div class="field">
                                     <label for="last_name_id">Last Name</label>
                                     <input type="text" class="required" title="" name="last_name" id="last_name_id"
-                                           autocomplete="off">
+                                           autocomplete="off" <?php if($invitationData):?> value="<?php echo $invitationData->last_name;?>" <?php endif;?>>
                                 </div>
                                 <div class="clear"></div>
 
                                 <div class="field">
                                     <label for="email_id">Email</label>
                                     <input type="email" class="required" title="" name="user_email" id="email_id"
-                                           autocomplete="off">
+                                           autocomplete="off" <?php if($invitationData):?> value="<?php echo $invitationData->invitation_email;?>" <?php endif;?>>
                                 </div>
                                 <div class="field">
                                     <label for="confirm_email_id">Confirm Email</label>
                                     <input type="text" class="required" title="" name="user_email_confirm"
-                                           id="confirm_email_id" autocomplete="off">
+                                           id="confirm_email_id" autocomplete="off" <?php if($invitationData):?> value="<?php echo $invitationData->invitation_email;?>" <?php endif;?>>
                                 </div>
                                 <div class="clear"></div>
 
@@ -510,9 +527,15 @@ if (!is_user_logged_in()) {
                                     </div>
                                 </div>
                                 <div class="clear"></div>
-                                <div class="field captcha-field">
-                                    <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
-                                </div>
+
+                                <?php if($invitationData):?>
+                                    <input type="hidden" name="invitation_id" value="<?php echo $invitationData->id;?>">
+                                    <input type="hidden" id="recaptcha_response_field" name="recaptcha_response_field" value="<?php echo $invitationData->id;?>">
+                                <?php else:?>
+                                    <div class="field captcha-field">
+                                        <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
+                                    </div>
+                                <?php endif;?>
                                 <div class="field width90P">
                                     <input type="checkbox" name="acc_tc" id="acc_tc_id" class="cursor-pointer"><label for="acc_tc">I accept the
                                         <a href="#site-terms-box" data-type="inline" id="agree_terms" cp-closeWhenClickOveraly="0">Terms &

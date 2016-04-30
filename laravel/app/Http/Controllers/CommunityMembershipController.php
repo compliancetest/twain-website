@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\CommunityInvitation;
 use App\CommunityMembers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -258,23 +260,55 @@ class CommunityMembershipController extends Controller
 
         $emailData = [
             '[email]' => $userEmail,
-            '[website_url]' => get_site_url(),
+            '[website_url]' => getSiteUrl(),
             '[env]' => get_option('env'),
             '[community]' => $community->title,
             '[community_url]' => $community->getUrl(),
         ];
 
         if (!$user) {
-            $password = Str::quickRandom(12);
-            $userId = wp_create_user(explode('@', $userEmail)[0], $password, $userEmail);
-            add_user_meta($userId, 'fill_profile_notification', 'yes');
-            $community->members()->create(['user_id' => $userId, 'is_confirmed' => true]);
 
-            $emailData['[password]'] = $password;
+            $checkAlreadyInvited = $community->invitations()->where(['invitation_email' => $userEmail])->first();
+            if ($checkAlreadyInvited) {
+                return response()->json(array('User already invited, but not registered yet'), 422);
+            }
 
-            sendEmails([['user_id' => $userId]], 'membership_member_invited', $emailData);
-            sendEmails($admins, 'membership_member_invited_admin', $emailData);
+            $data = $request->all();
+            $data['invited_by_user_id'] = Auth::user()->ID;
+            $data['invitation_email'] = $userEmail;
+            $data['status'] = 1;
+            $invitation = $community->invitations()->create($data);
 
+            //feature for wordpress superadmin - he can invite and register user automatically
+
+            if ($request->get('register_automatically') == 1) {
+                $password = Str::quickRandom(12);
+                $userId = wp_create_user(explode('@', $userEmail)[0], $password, $userEmail);
+                add_user_meta($userId, 'fill_profile_notification', 'yes');
+                $community->members()->create(['user_id' => $userId, 'is_confirmed' => true]);
+
+                $emailData['[password]'] = $password;
+
+                $invitation->status = 0;
+                $invitation->save();
+
+                sendEmails([['user_id' => $userId]], 'membership_member_invited_registered', $emailData);
+                sendEmails($admins, 'membership_member_invited_admin_registered', $emailData);
+            } else {
+                $userName = $userEmail;
+                $emailData['[name]'] = '';
+                if (!empty($request->get('first_name')) && !empty($request->get('last_name'))) {
+                    $userName = $request->get('first_name') . ' ' . $request->get('last_name');
+                    //this used to process 'Hi[name],' if first/last name not provided
+                    $emailData['[name]'] = ' ' . $userName;
+                }
+
+                $emailData['[registration_link]'] = getSiteUrl() . '?GUID=' . $invitation->id;
+
+                cp_send_email(array('name' => $userName, 'email' => $userEmail), 'membership_member_invited', $emailData);
+                sendEmails($admins, 'membership_member_invited_admin', $emailData);
+
+            }
             return response()->json(array('User invited successfully!'), 201);
 
         } else {

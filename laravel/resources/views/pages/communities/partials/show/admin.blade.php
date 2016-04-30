@@ -289,19 +289,76 @@
                     </div>
                 </div>
 
+                <div class="colored-box">
+                    <div class="colored-box-header">Invited Users</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <table class="table">
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th class="text-center">Invitation Date</th>
+                                    <th class="text-center">Registration Date</th>
+                                </tr>
+                                @if($invitedUsers)
+                                    @foreach($invitedUsers as $invitedUser)
+                                        <tr>
+                                            <td>
+                                                {{ $invitedUser->invitation_email }}
+                                                @if($invitedUser->invitation_email != $invitedUser->registered_email)
+                                                    <br> (Registered with {{ $invitedUser->registered_email }})
+                                                @endif
+                                            </td>
+                                            <td>{{ $invitedUser->first_name . ' ' . $invitedUser->last_name }}</td>
+                                            <td>{{ $invitedUser->created_at }}</td>
+                                            <td>
+                                                @if($invitedUser->status == 0)
+                                                    {{ $invitedUser->updated_at }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+
+                                @endif
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
 
                 {!! Form::open(['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
-
                     <div class="colored-box">
-                        <div class="colored-box-header">Invite User</div>
+                        <div class="colored-box-header">Invited Users</div>
                         <div class="colored-box-body">
                             <div class="colored-box-content">
                                 <div class="form-group">
-                                    <label for="user_email">User Email</label>
+                                    <label for="user_email">User Email (required)</label>
                                     {{ Form::text('user_email', null, ['required' => 'required',
-                                    'class' => 'form-control'
-                                ]) }}
+                                        'class' => 'form-control'
+                                    ]) }}
                                 </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                         <label for="first_name">First Name</label>
+                                        {{ Form::text('first_name', null, ['class' => 'form-control']) }}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="last_name">Last Name</label>
+                                        {{ Form::text('last_name', null, ['class' => 'form-control']) }}
+                                    </div>
+                                </div>
+
+                                @if(is_super_admin())
+                                    <div class="form-group">
+                                    <label for="register_automatically">
+                                        {{ Form::checkbox('register_automatically', 1) }}Register automatically
+                                    </label>
+
+                                </div>
+                                @endif
+
                             </div>
                             <div class="colored-box-footer">
                                 <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Invite</button>
@@ -309,7 +366,6 @@
                             <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
                         </div>
                     </div>
-
                 {!! Form::close() !!}
 
                 {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
