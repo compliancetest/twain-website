@@ -45,6 +45,12 @@ function cp_session_start()
         session_start();
 }
 
+if(is_user_logged_in()){
+    global $current_user;
+    if(get_user_meta($current_user->data->ID, 'fill_profile_notification', true) == 'yes'){
+        addMessage('Please fill your profile details information', 'error');
+    }
+}
 /**
  * Return site name from Website configs section
  * @return string

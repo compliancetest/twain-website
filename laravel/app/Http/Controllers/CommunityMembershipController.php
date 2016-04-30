@@ -267,6 +267,7 @@ class CommunityMembershipController extends Controller
         if (!$user) {
             $password = Str::quickRandom(12);
             $userId = wp_create_user(explode('@', $userEmail)[0], $password, $userEmail);
+            add_user_meta($userId, 'fill_profile_notification', 'yes');
             $community->members()->create(['user_id' => $userId, 'is_confirmed' => true]);
 
             $emailData['[password]'] = $password;
