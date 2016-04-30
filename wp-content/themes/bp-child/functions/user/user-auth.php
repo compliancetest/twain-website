@@ -120,6 +120,17 @@ function compliancetest_create_new_user()
                 ['%s', '%d', '%d', '%s'],
                 ['%s']
             );
+            $wpdb->insert('communities_members',
+                [
+                    'user_id' => $user_id,
+                    'community_id' => $invitationData->community_id,
+                    'id' => $invitationData->id,
+                    'is_confirmed' => 1,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ],
+                ['%d', '%s', '%s', '%d', '%s', '%s']
+            );
         }
         $data = array(
             '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
