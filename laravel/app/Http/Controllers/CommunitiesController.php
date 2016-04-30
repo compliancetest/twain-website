@@ -91,6 +91,28 @@ class CommunitiesController extends Controller
         if ($action == 'downloads') {
             $data['downloads'] = $community->downloads;
         }
+        if ($action == 'surveys') {
+            $surveys = [];
+            $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
+            foreach($surveyMonkey->getSurveyList()['data'] as $survey){
+                $collectors = $surveyMonkey->getCollectorList($survey['id']);
+                if($collectors['data']){
+                    foreach($collectors['data'] as $col) {
+                        $collector = $surveyMonkey->getCollector($col['id']);
+                        if($collector['data']['type'] == 'weblink' && $collector['data']['status'] == 'open') {
+                            $surveys[] = [
+                                'title' => $survey['title'],
+                                'id' => $survey['id'],
+                                'url' => $collector['data']['url'],
+                                'date_created' => date('Y-m-d', strtotime($collector['data']['date_created'])),
+                            ];
+                            break;
+                        }
+                    }
+                }
+            }
+            $data['surveys'] = $surveys;
+        }
         if ($action == 'admin') {
             if(!$community->isAdmin()){
                 return Redirect::to(getSiteUrl() . '/communities');
