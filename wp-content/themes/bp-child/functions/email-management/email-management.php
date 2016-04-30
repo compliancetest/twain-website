@@ -254,9 +254,9 @@ $ct_email_templates = array(
             )
         ),
         array(
-            'menu' => 'User Registered and Invited',
-            'title' => 'User Registered and Invited',
-            'shortcodes' => '[email], [password], [website_url], [env], [username], [community], [community_url], [settings_link], [site_title], [site_org]',
+            'menu' => 'User Invited',
+            'title' => 'User Invited',
+            'shortcodes' => '[email], [website_url], [env], [name], [community], [community_url]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -265,6 +265,22 @@ $ct_email_templates = array(
                 array(
                     'title' => 'For Admin',
                     'id' => 'membership_member_invited_admin',
+                )
+
+            )
+        ),
+        array(
+            'menu' => 'User Registered and Invited',
+            'title' => 'User Registered and Invited',
+            'shortcodes' => '[email], [password], [website_url], [env], [username], [community], [community_url], [settings_link], [site_title], [site_org]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'membership_member_invited_registered',
+                ),
+                array(
+                    'title' => 'For Admin',
+                    'id' => 'membership_member_invited_admin_registered',
                 )
 
             )

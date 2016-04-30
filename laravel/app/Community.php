@@ -81,6 +81,15 @@ class Community extends Model
     }
 
     /**
+     * Relation with Community invitations
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invitations()
+    {
+        return $this->hasMany('\App\CommunityInvitation');
+    }
+
+    /**
      * Get all approved community members
      * @return array|null
      */

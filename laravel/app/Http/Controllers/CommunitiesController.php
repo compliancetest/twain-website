@@ -119,6 +119,7 @@ class CommunitiesController extends Controller
             }
             $data['communityMeta'] = $community->meta->keyBy('meta_key');
             $data['profileTypes'] = getCommunityProfileTypes($community->id);
+            $data['invitedUsers'] = $community->invitations;
             $data['membershipRequests'] = $community->getMembershipRequests();
         }
         return view('pages.communities.show')->with($data);
