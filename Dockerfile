@@ -1,13 +1,4 @@
-FROM debian:jessie
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get -y install apache2 libapache2-mod-php5 php5 php5-common php5-gd php5-mcrypt php5-xsl php5-xmlrpc php5-xdebug php5-tidy php5-sqlite php5-apcu php5-mysqlnd php5-imagick php5-curl curl git && \
-    a2enmod rewrite && \
-    curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer && \
-    apt-get purge -y --auto-remove curl && \
-    apt-get clean && \
-    rm -rf /var/www/html
+FROM cloudontap/laravel:1.0.2-1
 
 ADD apache2.conf /etc/apache2/apache2.conf
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
