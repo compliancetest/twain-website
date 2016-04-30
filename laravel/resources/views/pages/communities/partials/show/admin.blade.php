@@ -300,7 +300,7 @@
                                     <th class="text-center">Invitation Date</th>
                                     <th class="text-center">Registration Date</th>
                                 </tr>
-                                @if($invitedUsers)
+                                @if(count($invitedUsers) > 0)
                                     @foreach($invitedUsers as $invitedUser)
                                         <tr>
                                             <td>
@@ -319,7 +319,9 @@
                                         </tr>
                                     @endforeach
                                 @else
-
+                                    <tr>
+                                        <td colspan="4" class="text-center">No data yet</td>
+                                    </tr>
                                 @endif
                             </table>
                         </div>
