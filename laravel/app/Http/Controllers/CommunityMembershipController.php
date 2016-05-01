@@ -270,7 +270,11 @@ class CommunityMembershipController extends Controller
 
             $checkAlreadyInvited = $community->invitations()->where(['invitation_email' => $userEmail])->first();
             if ($checkAlreadyInvited) {
-                return response()->json(array('User already invited, but not registered yet'), 422);
+                if($checkAlreadyInvited->status == 1) {
+                    return response()->json(array('User already invited, but not registered yet'), 422);
+                } else {
+                    return response()->json(array('User already invited, but registered with another email'), 422);
+                }
             }
 
             $data = $request->all();

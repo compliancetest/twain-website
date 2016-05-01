@@ -21,6 +21,21 @@ $ct_email_templates = array(
             )
         ),
         array(
+            'menu' => 'User Registered after invitation',
+            'title' => 'User Registered after invitation',
+            'shortcodes' => '[name], [username], [email], [website_url], [env], [link], [organisation], [site_title], [site_org]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'new_user_after_invitation'
+                ),
+                array(
+                    'title' => 'For Admin',
+                    'id' => 'new_user_after_invitation_admin',
+                )
+            )
+        ),
+        array(
             'menu' => 'User Verification Success',
             'title' => 'User Verification Success',
             'shortcodes' => '[name], [email], [website_url], [env], [username], [site_title], [site_org]',
