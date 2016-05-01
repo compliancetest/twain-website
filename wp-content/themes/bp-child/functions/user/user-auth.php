@@ -147,6 +147,9 @@ function compliancetest_create_new_user()
 
             cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user_after_invitation', $data);
             cp_send_email_to_admin('new_user_after_invitation_admin', $data);
+            wp_set_auth_cookie($user_id);
+            addMessage('Thanks for your registration.');
+            exit('success1');
         }
         if(!$invitationData || ($invitationData->invitation_email != trim($_POST['user_email']))){
 
