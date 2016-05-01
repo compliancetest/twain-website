@@ -117,9 +117,15 @@ class SurveyMonkey
      * @param string $endpoint API endpoint to call in the form: resource/method
      * @return string Constructed URI
      */
-    protected function buildUri($endpoint)
+    protected function buildUri($endpoint, $params = array())
     {
-        return $this->_protocol . '://' . $this->_hostname . '/' . $this->_version . '/' . $endpoint . '?api_key=' . $this->_apiKey;
+        $url = $this->_protocol . '://' . $this->_hostname . '/' . $this->_version . '/' . $endpoint . '?api_key=' . $this->_apiKey;
+        if($params){
+            error_log(json_encode($params));
+            $url .= '&' . http_build_query($params);
+        }
+        error_log($url);
+        return $url;
     }
 
     /**
@@ -151,7 +157,7 @@ class SurveyMonkey
         if (!is_resource($this->conn)) {
             if (!$this->getConnection()) return $this->failure('Can not initialize connection');
         }
-        $request_url = $this->buildUri($endpoint);
+        $request_url = $this->buildUri($endpoint, $params);
         curl_setopt($this->conn, CURLOPT_URL, $request_url);  // URL to post to
         curl_setopt($this->conn, CURLOPT_RETURNTRANSFER, 1);   // return into a variable
         $headers = array('Content-type: application/json', 'Authorization: Bearer ' . $this->_accessToken);
@@ -178,8 +184,12 @@ class SurveyMonkey
             return $this->success($parsedResult);
         }
         $status = $parsedResult['status'];
-        if ($status != self::SM_STATUS_SUCCESS) return $this->failure("API Error: Status [$status:" . self::explainStatusCode($status) . '].  Message [' . $parsedResult["errmsg"] . ']');
-        else return $this->success($parsedResult["data"]);
+        if ($status != self::SM_STATUS_SUCCESS) {
+            return $this->failure("API Error: Status [$status:" . self::explainStatusCode($status) . '].  Message [' . $parsedResult["errmsg"] . ']');
+        }
+        else {
+            return $parsedResult;
+        }
     }
 
 
@@ -234,19 +244,29 @@ class SurveyMonkey
      */
     public function getCollectorList($surveyId, $params = array())
     {
-        $params['survey_id'] = $surveyId;
-        return $this->run('surveys/' . $surveyId . '/collectors', $params);
+        return $this->run('surveys/' . $surveyId . '/collectors');
     }
 
     /**
      * Retrieve collector data
      * @param $collectorId
-     * @param array $params
      * @return array
      */
     public function getCollector($collectorId, $params = array())
     {
-        return $this->run('collectors/' . $collectorId, $params);
+        return $this->run('collectors/' . $collectorId);
+    }
+
+    /**
+     * Retrieve responses for a given collector
+     * @param $collectorId
+     * @param array $params
+     * @return array
+     */
+    public function getCollectorResponses($collectorId, $params = array())
+    {
+        return $this->run('collectors/'.$collectorId.'/responses/bulk', $params);
+
     }
 }
 
