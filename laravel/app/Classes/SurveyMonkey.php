@@ -121,10 +121,8 @@ class SurveyMonkey
     {
         $url = $this->_protocol . '://' . $this->_hostname . '/' . $this->_version . '/' . $endpoint . '?api_key=' . $this->_apiKey;
         if($params){
-            error_log(json_encode($params));
             $url .= '&' . http_build_query($params);
         }
-        error_log($url);
         return $url;
     }
 

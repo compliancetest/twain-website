@@ -25,8 +25,10 @@
                             <td class="text-center">{{ $survey['responses_number'] }}</td>
 
                             <td class="text-center">
-                                @if($survey['date_close'] || $survey['user_responded'])
-                                    View Results
+                                @if($survey['date_close'])
+                                    This survey is closed
+                                @elseif($survey['user_responded'])
+                                    You have already taken this survey
                                 @else
                                     <a data-toggle="modal" href="#downloadLicense{{ $survey['id'] }}">Complete Survey</a>
 

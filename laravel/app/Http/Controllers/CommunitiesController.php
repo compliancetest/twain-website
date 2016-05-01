@@ -101,7 +101,7 @@ class CommunitiesController extends Controller
                         $collector = $surveyMonkey->getCollector($col['id']);
                         if($collector['data']['type'] == 'weblink') {
                             $collectorCounter = $surveyMonkey->getCollectorResponses($col['id']);
-                            $userResponse = $surveyMonkey->getCollectorResponses($col['id'], ['ip' => $_SERVER['REMOTE_ADDR']]);
+                            $userResponse = $surveyMonkey->getCollectorResponses($col['id'], ['ip' => getClientIP()]);
                             $surveys[] = [
                                 'title' => $survey['title'],
                                 'id' => $survey['id'],
