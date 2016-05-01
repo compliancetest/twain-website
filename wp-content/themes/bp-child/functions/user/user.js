@@ -184,11 +184,16 @@
                         data: form.serialize(),
                         success: function(data) {
                             $('.loading').hide();
-                            if (data == 'success') {                                
+                            if (data == 'success') {
                                 msgObj.removeClass('error').addClass('success').html('Thanks for your registration. A confirmation email has been sent to your email account. Please verify your email address using the link it contains.').fadeIn('fast');
-                                setTimeout(function(){
+                                setTimeout(function () {
                                     location.reload();
-                                },4000);                                
+                                }, 4000);
+                            } else if (data == 'success1') {
+                                msgObj.removeClass('error').addClass('success').html('Thanks for your registration.').fadeIn('fast');
+                                setTimeout(function(){
+                                    location.href = '/';
+                                },3000);
                             } else if(data == 'captcha_error') {
                                 jQuery('#recaptcha_reload').click();
                                 msgObj.removeClass('success').addClass('error').html('Captcha not correct!').fadeIn('fast');
