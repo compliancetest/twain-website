@@ -92,7 +92,11 @@ function compliancetest_create_new_user()
         $wpdb->insert($wpdb->prefix . "users_extra", array('userID' => $user_id));
 
         $activation_key = md5($_POST['user_email']);
-        $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
+
+        //we skipping activation via email if user registred using invitation link
+        if(!$invitationData || ($invitationData->invitation_email != trim($_POST['user_email']))) {
+            $wpdb->query("UPDATE $wpdb->users SET user_activation_key = '$activation_key', user_status=3 WHERE ID ='$user_id' ");
+        }
 
         if (isset($_POST['organisation_key'])) {
             $organisation_key = htmlspecialchars($_POST['organisation_key']);
