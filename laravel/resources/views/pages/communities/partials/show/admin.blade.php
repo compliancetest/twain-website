@@ -305,7 +305,7 @@
                                         <tr>
                                             <td>
                                                 {{ $invitedUser->invitation_email }}
-                                                @if($invitedUser->invitation_email != $invitedUser->registered_email)
+                                                @if(!empty($invitedUser->registered_email) && $invitedUser->invitation_email != $invitedUser->registered_email)
                                                     <br> (Registered with {{ $invitedUser->registered_email }})
                                                 @endif
                                             </td>

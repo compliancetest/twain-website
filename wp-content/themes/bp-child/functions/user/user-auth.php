@@ -108,6 +108,15 @@ function compliancetest_create_new_user()
         //Default Value
         update_user_meta($user_id, 'timezone', 'Australia/Sydney');
 
+        $data = array(
+            '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
+            '[username]' => $_POST['user_login'],
+            '[email]' => $_POST['user_email'],
+            '[password]' => $_POST['user_pass'],
+            '[organisation]' => $_POST['organisation'],
+            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
+        );
+
         if ($invitationData) {
             $wpdb->update('community_invitations',
                 [
@@ -131,21 +140,18 @@ function compliancetest_create_new_user()
                 ],
                 ['%d', '%s', '%s', '%d', '%s', '%s']
             );
+
+            cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user_after_invitation', $data);
+            cp_send_email_to_admin('new_user_after_invitation_admin', $data);
         }
-        $data = array(
-            '[name]' => $_POST['first_name'] . " " . $_POST['last_name'],
-            '[username]' => $_POST['user_login'],
-            '[email]' => $_POST['user_email'],
-            '[password]' => $_POST['user_pass'],
-            '[organisation]' => $_POST['organisation'],
-            '[link]' => get_site_url() . '?cp-action=' . wp_create_nonce('user_activation') . '&token=' . $activation_key
-        );
+        if(!$invitationData || ($invitationData->invitation_email != trim($_POST['user_email']))){
 
-        cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user', $data);
-        cp_send_email_to_admin('new_user_admin', $data);
+            cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user', $data);
+            cp_send_email_to_admin('new_user_admin', $data);
 
-        //Send Email To Admin        
-        addMessage('Please verify your email address to use your account.', 'notice');
+            //Send Email To Admin
+            addMessage('Please verify your email address to use your account.', 'notice');
+        }
         echo 'success';
     }
     exit;
