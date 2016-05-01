@@ -313,7 +313,7 @@ class CommunityMembershipController extends Controller
                 sendEmails($admins, 'membership_member_invited_admin', $emailData);
 
             }
-            return response()->json(array('User invited successfully!'), 201);
+            return response()->json(array('message' => 'User invited successfully!', 'data' => $invitation), 201);
 
         } else {
             $membershipRecord = CommunityMembers::getUserRecord($community->id, $user->ID);
@@ -326,7 +326,7 @@ class CommunityMembershipController extends Controller
                 sendEmails([['user_id' => $user->ID]], 'membership_existing_member_invited', $emailData);
                 sendEmails($admins, 'membership_existing_member_invited_admin', $emailData);
 
-                return response()->json(array('User was added to community successfully!'), 201);
+                return response()->json(array(['message' => 'User was added to community successfully!', 'data' => []]), 201);
             }
         }
     }

@@ -544,8 +544,15 @@ var Page = {
                     form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                 },
                 success: function(rsp, status, jqXHR){
+                    if(form.attr('id') == 'invite-user-form'){
+                        $('.invitations_table').append('<tr><td>' + rsp.data.invitation_email+ '</td>' +
+                                            '<td>' +rsp.data.first_name+ ' ' +rsp.data.last_name+'</td>' +
+                                            '<td>' + rsp.data.created_at +'</td>' +
+                                            '<td></td>' +
+                                        '</tr>');
+                    }
                     if(jqXHR.status == 201){
-                        form.find('.colored-box-footer').prepend('<div class="message success-message">'+rsp+'</div>');
+                        form.find('.colored-box-footer').prepend('<div class="message success-message">'+rsp.message+'</div>');
                     } else {
                         form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
                     }

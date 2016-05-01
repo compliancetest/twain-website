@@ -298,7 +298,7 @@
                     <div class="colored-box-header">Invited Users</div>
                     <div class="colored-box-body">
                         <div class="colored-box-content">
-                            <table class="table">
+                                <table class="table invitations_table">
                                 <tr>
                                     <th>Email</th>
                                     <th>Name</th>
@@ -334,7 +334,7 @@
                 </div>
 
 
-                {!! Form::open(['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
+                {!! Form::open(['id'=> 'invite-user-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
                     <div class="colored-box">
                         <div class="colored-box-header">Invite User</div>
                         <div class="colored-box-body">
