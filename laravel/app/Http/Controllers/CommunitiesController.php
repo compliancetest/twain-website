@@ -91,6 +91,33 @@ class CommunitiesController extends Controller
         if ($action == 'downloads') {
             $data['downloads'] = $community->downloads;
         }
+        if ($action == 'surveys') {
+            $surveys = [];
+            $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
+            foreach($surveyMonkey->getSurveyList()['data'] as $survey){
+                $collectors = $surveyMonkey->getCollectorList($survey['id']);
+                if($collectors['data']){
+                    foreach($collectors['data'] as $col) {
+                        $collector = $surveyMonkey->getCollector($col['id']);
+                        if($collector['data']['type'] == 'weblink') {
+                            $collectorCounter = $surveyMonkey->getCollectorResponses($col['id']);
+                            $userResponse = $surveyMonkey->getCollectorResponses($col['id'], ['ip' => getClientIP()]);
+                            $surveys[] = [
+                                'title' => $survey['title'],
+                                'id' => $survey['id'],
+                                'url' => $collector['data']['url'],
+                                'date_created' => date('Y-m-d', strtotime($collector['data']['date_created'])),
+                                'date_close' => isset($collector['data']['status']) && $collector['data']['status'] == 'closed' ? date('Y-m-d', strtotime($collector['data']['date_modified'])) : false,
+                                'is_active' => strtotime($collector['data']['close_date']) < mktime(),
+                                'responses_number' => $collectorCounter['total'],
+                                'user_responded' => $userResponse['total'] > 0 ? true : false,
+                            ];
+                        }
+                    }
+                }
+            }
+            $data['surveys'] = $surveys;
+        }
         if ($action == 'admin') {
             if(!$community->isAdmin()){
                 return Redirect::to(getSiteUrl() . '/communities');
