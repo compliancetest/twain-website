@@ -35,11 +35,7 @@
 
     @include('header')
 
-    @if (session()->has('flash_notification.message'))
-        <div class="container notification-container">
-            @include('flash::message')
-        </div>
-    @endif
+    <?php flushMessages();?>
 
     @yield('content')
 

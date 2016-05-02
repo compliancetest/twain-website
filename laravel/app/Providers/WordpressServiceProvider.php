@@ -24,7 +24,7 @@ class WordpressServiceProvider extends ServiceProvider
         if(!App::runningInConsole()) {
             // Load wordpress bootstrap file
             $GLOBALS['loadFromLaravel'] = 'yes';
-            require __DIR__ . '/../../../wp-load.php';
+            require_once __DIR__ . '/../../../wp-load.php';
         }
     }
 
