@@ -122,6 +122,8 @@ function compliancetest_create_new_user()
         );
 
         if ($invitationData) {
+            $communityAdmins = (array) $wpdb->get_results($wpdb->prepare("SELECT * FROM communities_members WHERE community_id = %s and is_admin = 1", $invitationData->community_id));
+
             $wpdb->update('community_invitations',
                 [
                     'registered_email' => $_POST['user_email'],
@@ -146,7 +148,7 @@ function compliancetest_create_new_user()
             );
 
             cp_send_email(array('name' => $_POST['first_name'] . " " . $_POST['last_name'], 'email' => $_POST['user_email']), 'new_user_after_invitation', $data);
-            cp_send_email_to_admin('new_user_after_invitation_admin', $data);
+            cp_send_email($communityAdmins, 'new_user_after_invitation_admin', $data);
             wp_set_auth_cookie($user_id);
             addMessage('Thanks for your registration.');
             exit('success1');
