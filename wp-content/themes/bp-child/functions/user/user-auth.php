@@ -122,7 +122,7 @@ function compliancetest_create_new_user()
         );
 
         if ($invitationData) {
-            $communityAdmins = $wpdb->get_results($wpdb->prepare("SELECT * FROM communities_members WHERE community_id = %s and is_admin = 1", $invitationData->community_id), ARRAY_A);
+            $communityAdmins = getCommunityAdmins($invitationData->community_id);
 
             $wpdb->update('community_invitations',
                 [

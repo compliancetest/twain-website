@@ -1573,6 +1573,17 @@ function getCommunities(){
     return $wpdb->get_results("SELECT * FROM communities");
 }
 
+function getCommunityAdmins($communityId){
+    global $wpdb;
+    $result = [];
+    $communityAdmins = $wpdb->get_results($wpdb->prepare("SELECT * FROM communities_members WHERE community_id = %s and is_admin = 1", $communityId));
+    foreach($communityAdmins as $communityAdmin){
+        $user = get_userdata($communityAdmin->user_id);
+        $result[] = ['name' => cp_get_user_fullname($communityAdmin->user_id), 'email' => $user->data->user_email, 'userdata' => $user];
+    }
+    return $result;
+}
+
 /**
  * his hook used to allow non-wp-admins to attach files to articles
  */
