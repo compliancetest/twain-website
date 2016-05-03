@@ -2347,36 +2347,36 @@ pre code {
 }
 
 /* line 10, ../scss/bootstrap/_grid.scss */
-.container {
+.container, #messages-wrapper {
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
 }
 /* line 14, ../scss/bootstrap/mixins/_clearfix.scss */
-.container:before, .container:after {
+.container:before, #messages-wrapper:before, .container:after, #messages-wrapper:after {
   content: " ";
   display: table;
 }
 /* line 19, ../scss/bootstrap/mixins/_clearfix.scss */
-.container:after {
+.container:after, #messages-wrapper:after {
   clear: both;
 }
 @media (min-width: 768px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 750px;
   }
 }
 @media (min-width: 992px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 970px;
   }
 }
 @media (min-width: 1200px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 1170px;
   }
 }
@@ -5656,8 +5656,9 @@ tbody.collapse.in {
 }
 
 /* line 108, ../scss/bootstrap/_navbar.scss */
-.container > .navbar-header,
+.container > .navbar-header, #messages-wrapper > .navbar-header,
 .container > .navbar-collapse,
+#messages-wrapper > .navbar-collapse,
 .container-fluid > .navbar-header,
 .container-fluid > .navbar-collapse {
   margin-right: -15px;
@@ -5665,8 +5666,9 @@ tbody.collapse.in {
 }
 @media (min-width: 768px) {
   /* line 108, ../scss/bootstrap/_navbar.scss */
-  .container > .navbar-header,
+  .container > .navbar-header, #messages-wrapper > .navbar-header,
   .container > .navbar-collapse,
+  #messages-wrapper > .navbar-collapse,
   .container-fluid > .navbar-header,
   .container-fluid > .navbar-collapse {
     margin-right: 0;
@@ -5733,7 +5735,7 @@ tbody.collapse.in {
 }
 @media (min-width: 768px) {
   /* line 180, ../scss/bootstrap/_navbar.scss */
-  .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+  .navbar > .container .navbar-brand, .navbar > #messages-wrapper .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: -15px;
   }
 }
@@ -6544,13 +6546,13 @@ a.badge:hover, a.badge:focus {
   border-top-color: #d5d5d5;
 }
 /* line 28, ../scss/bootstrap/_jumbotron.scss */
-.container .jumbotron, .container-fluid .jumbotron {
+.container .jumbotron, #messages-wrapper .jumbotron, .container-fluid .jumbotron {
   border-radius: 6px;
   padding-left: 15px;
   padding-right: 15px;
 }
 /* line 35, ../scss/bootstrap/_jumbotron.scss */
-.jumbotron .container {
+.jumbotron .container, .jumbotron #messages-wrapper {
   max-width: 100%;
 }
 @media screen and (min-width: 768px) {
@@ -6560,7 +6562,7 @@ a.badge:hover, a.badge:focus {
     padding-bottom: 48px;
   }
   /* line 43, ../scss/bootstrap/_jumbotron.scss */
-  .container .jumbotron, .container-fluid .jumbotron {
+  .container .jumbotron, #messages-wrapper .jumbotron, .container-fluid .jumbotron {
     padding-left: 60px;
     padding-right: 60px;
   }
@@ -8858,21 +8860,16 @@ body.modal-open,
   background: rgba(168, 194, 215, 0.6);
   z-index: 100;
   width: 100%;
-  height: 100%;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
 }
-/* line 104, ../scss/_common.scss */
+/* line 103, ../scss/_common.scss */
 .block-loading.loading-shown {
   display: block;
 }
-/* line 108, ../scss/_common.scss */
-.block-loading.page-loader {
-  position: fixed;
-}
-/* line 112, ../scss/_common.scss */
+/* line 107, ../scss/_common.scss */
 .block-loading .loading-content {
   position: absolute;
   width: 100%;
@@ -8880,7 +8877,7 @@ body.modal-open,
   padding: 0;
   margin: -54px 0 0 0;
 }
-/* line 119, ../scss/_common.scss */
+/* line 114, ../scss/_common.scss */
 .block-loading .loading-content .loader {
   background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
@@ -8888,20 +8885,20 @@ body.modal-open,
   display: block;
   margin: 0 auto;
 }
-/* line 127, ../scss/_common.scss */
+/* line 122, ../scss/_common.scss */
 .block-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 133, ../scss/_common.scss */
+/* line 128, ../scss/_common.scss */
 .block-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
 }
 
-/* line 143, ../scss/_common.scss */
-.notification-container .alert {
+/* line 139, ../scss/_common.scss */
+#messages-wrapper .message {
   position: relative;
   font-size: 13px;
   margin: 15px 0 0 0;
@@ -8910,33 +8907,33 @@ body.modal-open,
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 151, ../scss/_common.scss */
-.notification-container .alert:before {
+/* line 147, ../scss/_common.scss */
+#messages-wrapper .message:before {
   content: '';
   position: absolute;
   left: 7px;
   top: 7px;
 }
-/* line 158, ../scss/_common.scss */
-.notification-container .alert-error {
+/* line 154, ../scss/_common.scss */
+#messages-wrapper .message.error {
   background: #e52727;
   border: 1px solid #b61313;
 }
-/* line 162, ../scss/_common.scss */
-.notification-container .alert-error:before {
+/* line 158, ../scss/_common.scss */
+#messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -513px;
   height: 24px;
   width: 24px;
 }
-/* line 168, ../scss/_common.scss */
-.notification-container .alert-success {
+/* line 164, ../scss/_common.scss */
+#messages-wrapper .message.success {
   background: #3db118;
   border: 1px solid #37a215;
 }
-/* line 172, ../scss/_common.scss */
-.notification-container .alert-success:before {
+/* line 168, ../scss/_common.scss */
+#messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -489px;
@@ -13266,7 +13263,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
     display: none;
   }
   /* line 229, ../scss/_header.scss */
-  #navbar .container {
+  #navbar .container, #navbar #messages-wrapper {
     padding: 0;
   }
   /* line 234, ../scss/_header.scss */

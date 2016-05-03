@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Laracasts\Flash\Flash;
 use User\User;
 
 class CommunityMembershipController extends Controller
@@ -42,7 +41,7 @@ class CommunityMembershipController extends Controller
         sendEmails($admins, 'member_leave_community_admin', $emailData);
         $community->getMember(get_current_user_id())->delete();
 
-        Flash::success('You successfully left the community. ');
+        addMessage('You successfully left the community. ');
 
         return response()->json(array('success' => true));
     }
@@ -68,7 +67,7 @@ class CommunityMembershipController extends Controller
 
                 $admins = $community->getAdmins();
                 sendEmails($admins, 'membership_request_received_admin', $emailData);
-                Flash::success('Your membership request sent successfully. ');
+                addMessage('Your membership request sent successfully. ');
             } else {
                 $emailData = array(
                     '[community]' => $community->title,
@@ -81,7 +80,7 @@ class CommunityMembershipController extends Controller
                 );
                 sendEmails([['user_id' => $userId]], 'membership_request_approved', $emailData);
                 $community->members()->create(['user_id' => $userId, 'is_confirmed' => 1]);
-                Flash::success('Your membership request sent successfully. ');
+                addMessage('Your membership request sent successfully. ');
             }
         }
         return Redirect::to(getSiteUrl() . '/communities');

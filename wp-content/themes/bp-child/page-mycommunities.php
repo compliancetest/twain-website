@@ -56,7 +56,7 @@ get_header();
                             </div>
                             <div class="td td-action">
                                 <?php
-                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
+                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $group->id));
                                 ?>
                                 <?php if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == get_current_user_id() ):?>
                                     <a href="#" class="action-btn delete-btn icon-btn has-tooltip greyed-out-btn" onclick="return false;">

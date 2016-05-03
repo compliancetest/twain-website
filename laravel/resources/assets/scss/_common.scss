@@ -138,9 +138,10 @@ body.modal-open,
 }
 
 
-.notification-container{
+#messages-wrapper{
+    @extend .container;
 
-    .alert{
+    .message{
         position: relative;
         font-size: 13px;
         margin: 15px 0 0 0;
@@ -155,7 +156,7 @@ body.modal-open,
             top: 7px;
         }
 
-        &-error{
+        &.error{
             background: #e52727;
             border: 1px solid #b61313;
 
@@ -165,7 +166,7 @@ body.modal-open,
 
         }
 
-        &-success{
+        &.success{
             background: #3db118;
             border: 1px solid #37a215;
 

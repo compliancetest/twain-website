@@ -48,7 +48,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-terms-content">
-                        {!! $community->meta->keyBy('meta_key')->get('terms_and_conditions')->meta_value !!}
+                        {!! @$community->meta->keyBy('meta_key')->get('terms_and_conditions')->meta_value !!}
                     </div>
                 </div>
                 <div class="modal-footer">
