@@ -103,7 +103,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('communities', 'CommunitiesController@store');
     });
 
-    Route::get('communities/{community}/{action?}', 'CommunitiesController@show');
+    Route::get('communities/{community}/{action?}/{forumSlug?}', 'CommunitiesController@show');
     //community members routes
     Route::group(['middleware' => ['community.user']], function () {
         //view community pages
@@ -125,4 +125,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
 
     });
+
+    /**
+     * Forums
+     */
+     Route::group(['middleware' => ['community.user']], function () {
+         Route::post('forums/{community}', 'CommunityForumController@addThread');
+         Route::get('forums/{community}/forum/{threadSlug}', 'CommunityForumController@showThread');
+         Route::post('forums/{community}/{threadSlug}', 'CommunityForumController@addThreadPost');
+     });
 });

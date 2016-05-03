@@ -12,6 +12,8 @@
                 <li class="articles-tab"><a href="{{ $community->getUrl() }}wiki"
                                             @if($action == 'wiki') class="active" @endif>Articles</a></li>
             @endif
+            <li class="articles-tab"><a href="{{ $community->getUrl() }}forum"
+                                        @if($action == 'forum') class="active" @endif>Forum</a></li>
             <li class="downloads-tab"><a href="{{ $community->getUrl() }}downloads"
                                          @if($action == 'downloads') class="active" @endif>Downloads</a></li>
             <li class="reports-tab"><a href="{{ $community->getUrl() }}surveys"

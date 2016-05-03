@@ -90,6 +90,15 @@ class Community extends Model
     }
 
     /**
+     * Relation with Community threads
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany('\App\ForumThread')->orderBy('updated_at');
+    }
+
+    /**
      * Get all approved community members
      * @return array|null
      */

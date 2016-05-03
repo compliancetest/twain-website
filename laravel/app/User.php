@@ -42,6 +42,16 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Organisation', 'wp_organisations_members');
     }
 
+    public function threads()
+    {
+        return $this->hasMany('\App\ForumThread', 'ID');
+    }
+
+    public function forumPosts()
+    {
+        return $this->hasMany('\App\ForumThreadPost', 'ID');
+    }
+
     public function getFullName()
     {
         return cp_get_user_fullname($this->ID);
