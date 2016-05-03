@@ -11,4 +11,8 @@ class ForumThreadRead extends Model
     public $incrementing = false;
 
     protected $table = 'community_forum_threads_read';
+
+    protected $fillable = [
+        'user_id', 'thread_id'
+    ];
 }
