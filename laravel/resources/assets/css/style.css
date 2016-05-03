@@ -2347,36 +2347,36 @@ pre code {
 }
 
 /* line 10, ../scss/bootstrap/_grid.scss */
-.container {
+.container, #messages-wrapper {
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
 }
 /* line 14, ../scss/bootstrap/mixins/_clearfix.scss */
-.container:before, .container:after {
+.container:before, #messages-wrapper:before, .container:after, #messages-wrapper:after {
   content: " ";
   display: table;
 }
 /* line 19, ../scss/bootstrap/mixins/_clearfix.scss */
-.container:after {
+.container:after, #messages-wrapper:after {
   clear: both;
 }
 @media (min-width: 768px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 750px;
   }
 }
 @media (min-width: 992px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 970px;
   }
 }
 @media (min-width: 1200px) {
   /* line 10, ../scss/bootstrap/_grid.scss */
-  .container {
+  .container, #messages-wrapper {
     width: 1170px;
   }
 }
@@ -5656,8 +5656,9 @@ tbody.collapse.in {
 }
 
 /* line 108, ../scss/bootstrap/_navbar.scss */
-.container > .navbar-header,
+.container > .navbar-header, #messages-wrapper > .navbar-header,
 .container > .navbar-collapse,
+#messages-wrapper > .navbar-collapse,
 .container-fluid > .navbar-header,
 .container-fluid > .navbar-collapse {
   margin-right: -15px;
@@ -5665,8 +5666,9 @@ tbody.collapse.in {
 }
 @media (min-width: 768px) {
   /* line 108, ../scss/bootstrap/_navbar.scss */
-  .container > .navbar-header,
+  .container > .navbar-header, #messages-wrapper > .navbar-header,
   .container > .navbar-collapse,
+  #messages-wrapper > .navbar-collapse,
   .container-fluid > .navbar-header,
   .container-fluid > .navbar-collapse {
     margin-right: 0;
@@ -5733,7 +5735,7 @@ tbody.collapse.in {
 }
 @media (min-width: 768px) {
   /* line 180, ../scss/bootstrap/_navbar.scss */
-  .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+  .navbar > .container .navbar-brand, .navbar > #messages-wrapper .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: -15px;
   }
 }
@@ -6544,13 +6546,13 @@ a.badge:hover, a.badge:focus {
   border-top-color: #d5d5d5;
 }
 /* line 28, ../scss/bootstrap/_jumbotron.scss */
-.container .jumbotron, .container-fluid .jumbotron {
+.container .jumbotron, #messages-wrapper .jumbotron, .container-fluid .jumbotron {
   border-radius: 6px;
   padding-left: 15px;
   padding-right: 15px;
 }
 /* line 35, ../scss/bootstrap/_jumbotron.scss */
-.jumbotron .container {
+.jumbotron .container, .jumbotron #messages-wrapper {
   max-width: 100%;
 }
 @media screen and (min-width: 768px) {
@@ -6560,7 +6562,7 @@ a.badge:hover, a.badge:focus {
     padding-bottom: 48px;
   }
   /* line 43, ../scss/bootstrap/_jumbotron.scss */
-  .container .jumbotron, .container-fluid .jumbotron {
+  .container .jumbotron, #messages-wrapper .jumbotron, .container-fluid .jumbotron {
     padding-left: 60px;
     padding-right: 60px;
   }
@@ -8812,7 +8814,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8877,7 +8879,7 @@ body.modal-open,
 }
 /* line 114, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -8895,8 +8897,8 @@ body.modal-open,
   font-size: 12px;
 }
 
-/* line 138, ../scss/_common.scss */
-.notification-container .alert {
+/* line 139, ../scss/_common.scss */
+#messages-wrapper .message {
   position: relative;
   font-size: 13px;
   margin: 15px 0 0 0;
@@ -8905,33 +8907,33 @@ body.modal-open,
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 146, ../scss/_common.scss */
-.notification-container .alert:before {
+/* line 147, ../scss/_common.scss */
+#messages-wrapper .message:before {
   content: '';
   position: absolute;
   left: 7px;
   top: 7px;
 }
-/* line 153, ../scss/_common.scss */
-.notification-container .alert-error {
+/* line 154, ../scss/_common.scss */
+#messages-wrapper .message.error {
   background: #e52727;
   border: 1px solid #b61313;
 }
-/* line 157, ../scss/_common.scss */
-.notification-container .alert-error:before {
+/* line 158, ../scss/_common.scss */
+#messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -513px;
   height: 24px;
   width: 24px;
 }
-/* line 163, ../scss/_common.scss */
-.notification-container .alert-success {
+/* line 164, ../scss/_common.scss */
+#messages-wrapper .message.success {
   background: #3db118;
   border: 1px solid #37a215;
 }
-/* line 167, ../scss/_common.scss */
-.notification-container .alert-success:before {
+/* line 168, ../scss/_common.scss */
+#messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -489px;
@@ -9194,7 +9196,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1461683209') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1460486260') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9958,7 +9960,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1461683209') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1460486260') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -9985,7 +9987,7 @@ input[type="checkbox"] {
 }
 /* line 77, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1461683209') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1460486260') repeat 0 0;
 }
 /* line 80, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10016,7 +10018,7 @@ input[type="checkbox"] {
 }
 /* line 109, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1461683209') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1460486260') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10169,7 +10171,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1461683209') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1460486260') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10238,7 +10240,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12575,7 +12577,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -12810,7 +12812,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after {
   content: "\0020";
   display: block;
@@ -12992,7 +12994,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -13261,7 +13263,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
     display: none;
   }
   /* line 229, ../scss/_header.scss */
-  #navbar .container {
+  #navbar .container, #navbar #messages-wrapper {
     padding: 0;
   }
   /* line 234, ../scss/_header.scss */
@@ -13791,7 +13793,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1460486260') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13801,7 +13803,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1461683209') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1460486260') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
