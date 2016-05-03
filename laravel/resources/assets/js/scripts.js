@@ -277,8 +277,8 @@ var Page = {
         hideUploadForms: function(){
             $('#cancel-add-new-files').click(function(e){
                 e.preventDefault();
-                $('#add-new-download-section').hide();
-                $('.add-new-download-default').show();
+                $('#add-new-item-section').hide();
+                $('.add-new-item-default').show();
             });
         },
 

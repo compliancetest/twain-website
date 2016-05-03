@@ -4,15 +4,15 @@
             <div class="success-message hide">Download was deleted successfully!</div>
             <table class="table downloads-list-table">
                 <thead>
-                <tr>
-                    <th class="text-left">Topic name</th>
-                    <th>Author</th>
-                    <th>Posts number</th>
-                    <th>Last Updated</th>
-                    @if($isAdmin)
-                        <th>Actions</th>
-                    @endif
-                </tr>
+                    <tr>
+                        <th class="text-left">Topic name</th>
+                        <th>Author</th>
+                        <th>Posts</th>
+                        <th>Last Updated</th>
+                        @if($isAdmin)
+                            <th>Actions</th>
+                        @endif
+                    </tr>
                 </thead>
                 <tbody>
                 @if(count($threads))
@@ -20,7 +20,6 @@
                         <tr>
                             <td>
                                 <a href="/communities/{{ $community->slug }}/forum/{{ $thread->slug }}">{{ $thread->title }}</a>
-
                                 <p>{{ $thread->content }}</p>
                             </td>
                             <td class="text-nowrap text-center">{{ $thread->user->getFullName() }}</td>
@@ -43,8 +42,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="add-new-download-section">
-            <div class="add-new-download-default">
+        <div class="add-new-item-section">
+            <div class="add-new-item-default">
                 <a href="#add-new-thread-section" id="add-new-thread" class="add-new-download-link">Add new thread</a>
             </div>
             <div id="edit-download-section"></div>
@@ -95,9 +94,11 @@
 
         $('#add-new-thread').on('click', function(){
             $('#add-new-thread-section').show();
+            $('.add-new-item-default').hide();
         });
-         $('#cancel-add-new-thread').on('click', function(){
+        $('#cancel-add-new-thread').on('click', function(){
             $('#add-new-thread-section').hide();
+            $('.add-new-item-default').show();
         });
 
         $('#newthreadform').submit(function (e) {

@@ -2,7 +2,7 @@
   margin: 0;
 }
 
-.add-new-download-default{
+.add-new-item-default{
   border-bottom: 1px solid $table-border-color;
   background: #f8f8f8;
   text-align: center;
@@ -28,7 +28,7 @@
   }
 }
 
-.add-new-download-section{
+.add-new-item-section{
   background: #f8f8f8;
 
   h3{
@@ -80,7 +80,7 @@
 
 }
 
-.community-downloads{
+.community-downloads, .community-forums{
   .form-actions{
     background: #e8e8e8;
     padding: 6px 12px;

@@ -1,54 +1,39 @@
 <div class="block-loading-wrapper">
-    <div class="community-downloads">
-        <div class="table-responsive">
-            <div class="success-message hide">Download was deleted successfully!</div>
-
+    <div class="community-forums">
+        <div class="success-message hide">Topic was deleted successfully!</div>
+        <div class="topic-header clearfix">
+            <a href="/communities/{{ $community->slug }}/forum" class="btn btn-default btn-with-icon btn-back pull-right">Back to forums</a>
             <h1>{{ $thread->title }}</h1>
-
-            <a href="/communities/{{ $community->slug }}/forum" class="btn btn-default btn-with-icon btn-back">Back to forums</a>
-
-            {{ $thread->content }}
-
-            Replies:
-
-            <table class="table downloads-list-table">
-                <thead>
-                <tr>
-                    <th class="text-left">Author</th>
-                    <th>Message</th>
-                    <th>Date</th>
-                    @if($isAdmin)
-                        <th>Actions</th>
-                    @endif
-                </tr>
-                </thead>
-                <tbody>
-                @if(count($threadPosts))
-                    @foreach($threadPosts as $threadPost)
-                        <tr>
-                            <td class="text-nowrap text-left">{{ $threadPost->user->getFullName() }}</td>
-                            <td class="text-center">
-                                {{ $threadPost->content }}
-                            </td>
-                            <td class="text-nowrap text-center">{{ formatDate($threadPost->updated_at) }}</td>
-                            @if($isAdmin)
-                                <td class="text-nowrap text-center">
-                                    <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $threadPost->id }}" title="Delete"></a>
-                                </td>
-                            @endif
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="5" class="empty-row ">No replies yet</td>
-                    </tr>
-                @endif
-                </tbody>
-            </table>
+            <div class="topic-description">{{ $thread->content }}</div>
+            {{--<h4>Replies:</h4>--}}
         </div>
+        @if(count($threadPosts))
+            @foreach($threadPosts as $index => $threadPost)
+                <div class="forum-post" id="post_{{ $index+1 }}">
+                    <div class="forum-post-header">
+                        <div class="pull-left">
+                            <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
+                            Posted at {{ formatDate($threadPost->updated_at) }}, by {{ $threadPost->user->getFullName() }}
+                        </div>
+                        @if($isAdmin)
+                            <div class="pull-right post-actions">
+                                <a href="#" class="deleteForumPost" data-id="{{ $threadPost->id }}">Delete</a>
+                            </div>
+                        @endif
+
+                    </div>
+                    <div class="forum-post-content">
+                        {{ $threadPost->content }}
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <p class="empty-row ">No replies yet</p>
+        @endif
+
         <div class="add-new-post-section">
-            <div class="add-new-download-default">
-                <a href="#add-new-post-section" id="add-new-post" class="add-new-download-link">Reply</a>
+            <div class="add-new-item-default">
+                <a href="#add-new-post-section" id="add-new-post" class="add-new-download-link">Add Reply</a>
             </div>
             <div id="edit-download-section"></div>
             <div id="add-new-post-section" style="display: none;">
@@ -91,9 +76,11 @@
 
         $('#add-new-post').on('click', function(){
             $('#add-new-post-section').show();
+            $('.add-new-item-default').hide();
         });
          $('#cancel-add-new-post').on('click', function(){
             $('#add-new-post-section').hide();
+            $('.add-new-item-default').show();
         });
 
         $('#newpostform').submit(function (e) {
@@ -123,9 +110,9 @@
                 });
 
             }
-        })
+        });
 
-        jQuery('.btn-delete').on('click', function (e) {
+        jQuery('.deleteForumPost').on('click', function (e) {
             e.preventDefault();
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
@@ -138,7 +125,7 @@
                         setTimeout(function () {
                             jQuery('.success-message').addClass('hide');
                         }, 3000);
-                        $(elem).closest('tr').slideUp('slow', function () {
+                        $(elem).parents('.forum-post').slideUp('slow', function () {
                             $(elem).remove();
                         });
                     }
