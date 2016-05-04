@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\ForumThread;
 use App\ForumThreadPost;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -78,6 +79,9 @@ class CommunityForumController extends Controller
             'author_id' => Auth::user()->ID,
             'content' => $request->get('content')
         ]);
+
+        $thread->updated_at = Carbon::now();
+        $thread->save();
 
         $this->_uploadToCloudSearch($thread, $community);
 
