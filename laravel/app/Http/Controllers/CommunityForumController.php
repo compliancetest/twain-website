@@ -89,7 +89,6 @@ class CommunityForumController extends Controller
 
         $this->_deleteFromCloudSearch($thread->id);
         $thread->delete();
-        addMessage('Thread was deleted successfully');
         return response()->json(array('success' => true));
     }
 
@@ -172,8 +171,6 @@ class CommunityForumController extends Controller
         $threadId = $post->thread->id;
         $post->delete();
         $this->_uploadToCloudSearch(ForumThread::find($threadId), $community);
-
-        addMessage('Post was deleted successfully');
 
         return response()->json(array('success' => true));
     }
