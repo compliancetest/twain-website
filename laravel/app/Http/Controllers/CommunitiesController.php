@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\ForumThread;
+use App\ForumThreadRead;
 use App\Post;
 use Illuminate\Http\Request;
 
@@ -70,7 +72,7 @@ class CommunitiesController extends Controller
      * @param string $action - tab name
      * @return $this
      */
-    public function show($slug, $action = 'testsuites')
+    public function show($slug, $action = 'testsuites', $threadSlug = false)
     {
         $community = Community::findBySlug($slug);
         $data = [
@@ -80,6 +82,16 @@ class CommunitiesController extends Controller
         ];
         if ($action == 'testsuites') {
             $data['testSuites'] = Post::getCommunityTestSuites($community->id);
+        }
+        if ($action == 'forum') {
+            $data['threads'] = $community->threads()->with('user')->get();
+            if($threadSlug){
+                $thread = ForumThread::findBySlug($threadSlug);
+                $data['thread'] = ForumThread::findBySlug($threadSlug);
+                $data['threadPosts'] = $thread->replies()->with('user')->get();
+
+                ForumThreadRead::firstOrNew(['user_id' => Auth::user()->ID, 'thread_id' => $thread->id]);
+            }
         }
          if ($action == 'wiki') {
             $data['articles'] = $community->articles()->with('attachments')->orderBy('updated_at')->get();

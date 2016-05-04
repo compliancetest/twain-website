@@ -86,14 +86,14 @@
                 </tbody>
             </table>
         </div>
-        <div class="add-new-download-section">
+        <div class="add-new-item-section">
             @if($isAdmin)
-                <div class="add-new-download-default">
-                    <a href="#add-new-download-section" id="add-new-download" class="add-new-download-link">Upload New File(s)</a>
+                <div class="add-new-item-default">
+                    <a href="#add-new-item-section" id="add-new-download" class="add-new-download-link">Upload New File(s)</a>
                 </div>
             @endif
             <div id="edit-download-section"></div>
-            <div id="add-new-download-section" style="display: none;">
+            <div id="add-new-item-section" style="display: none;">
                 {{ Form::open(['file' => true, 'id' => 'newfileform', 'url' => getSiteUrl() . '/downloads/' . $community->slug, 'data-validate' => 'validate'] ) }}
                 <h3>Upload New File(s)</h3>
 
@@ -167,7 +167,7 @@
 
             jQuery('.editDownload').on('click', function (e) {
             e.preventDefault();
-            jQuery('#add-new-download-section').hide();
+            jQuery('#add-new-item-section').hide();
             jQuery.get('/downloads/{{ $community->slug }}/edit/' + jQuery(this).attr('data-id'), function (data) {
                 jQuery('#edit-download-section').show().html(data);
                 customizeFileTag();
