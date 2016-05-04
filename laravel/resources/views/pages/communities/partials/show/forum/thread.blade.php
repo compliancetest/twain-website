@@ -31,7 +31,7 @@
             <p class="empty-row ">No replies yet</p>
         @endif
 
-        <div class="add-new-post-section">
+        <div class="add-new-item-section">
             <div class="add-new-item-default">
                 <a href="#add-new-post-section" id="add-new-post" class="add-new-download-link">Add Reply</a>
             </div>
@@ -55,7 +55,7 @@
                 <div class="form-actions clearfix">
 
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_new_post">Save</button>
+                        <button type="submit" class="btn btn-success btn-with-icon btn-add" id="save_new_post">Add post</button>
                         <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-post">Cancel</button>
                     </div>
                 </div>
