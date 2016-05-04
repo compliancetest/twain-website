@@ -24,7 +24,7 @@ class ForumThread extends Model
 
     public function replies()
     {
-        return $this->hasMany('\App\ForumThreadPost', 'thread_id');
+        return $this->hasMany('\App\ForumThreadPost', 'thread_id')->orderBy('created_at');
     }
 
     public function user()
