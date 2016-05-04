@@ -13,7 +13,7 @@
                     <div class="forum-post-header">
                         <div class="pull-left">
                             <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
-                            Posted at {{ formatDate($threadPost->updated_at) }}, by {{ $threadPost->user->getFullName() }}
+                            Posted at {{ formatDate($threadPost->updated_at, 'Y-m-d H:i') }}, by {{ $threadPost->user->getFullName() }}
                         </div>
                         @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                             <div class="pull-right post-actions">
