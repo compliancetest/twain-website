@@ -126,6 +126,7 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
+
     /**
      * Forums
      */
