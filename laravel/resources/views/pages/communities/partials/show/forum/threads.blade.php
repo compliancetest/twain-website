@@ -29,6 +29,7 @@
                             <td class="text-nowrap text-center">{{ dateDiffForHumans($thread->updated_at, 'Y-m-d H:i') }}</td>
                             @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                                 <td class="text-nowrap text-center">
+                                    <a href="#" class="btn btn-icon btn-primary btn-edit editThread" data-tooltip="tooltip" title="Edit" data-id="{{ $thread->id }}"></a>
                                     <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $thread->id }}" title="Delete"></a>
                                 </td>
                             @endif
@@ -46,37 +47,37 @@
             <div class="add-new-item-default">
                 <a href="#add-new-thread-section" id="add-new-thread" class="add-new-download-link">Add new thread</a>
             </div>
-            <div id="edit-download-section"></div>
+            <div id="edit-thread-section"></div>
             <div id="add-new-thread-section" style="display: none;">
                 {{ Form::open(['file' => true, 'id' => 'newthreadform', 'url' => getSiteUrl() . '/forums/' . $community->slug, 'data-validate' => 'validate'] ) }}
-                <h3>Add new thread</h3>
+                    <h3>Add new thread</h3>
 
-                <div class="error-message" style="display: none;"></div>
-                <div class="file-description-section">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="threadTitle">Title:</label>
+                    <div class="error-message" style="display: none;"></div>
+                    <div class="file-description-section">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="threadTitle">Title:</label>
 
-                            <div class="col-sm-9">
-                                <input type="text" id="threadTitle" class="form-control" name="title" value=""/>
+                                <div class="col-sm-9">
+                                    <input type="text" id="threadTitle" class="form-control" name="title" value=""/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="threadDescription">Description:</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="threadDescription">Description:</label>
 
-                            <div class="col-sm-9">
-                                <textarea cols="20" rows="5" id="threadDescription" name="content" class="form-control"></textarea>
+                                <div class="col-sm-9">
+                                    <textarea cols="20" rows="5" id="threadDescription" name="content" class="form-control"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-actions clearfix">
+                    <div class="form-actions clearfix">
 
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_new_thread">Save</button>
-                        <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-thread">Cancel</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_new_thread">Save</button>
+                            <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-thread">Cancel</button>
+                        </div>
                     </div>
-                </div>
                 {{ Form::close() }}
             </div>
             <div class="block-loading" id="addThreadSpinner">
@@ -97,6 +98,7 @@
             $('.add-new-item-default').hide();
         });
         $('#cancel-add-new-thread').on('click', function(){
+            $('#edit-thread-section').hide();
             $('#add-new-thread-section').hide();
             $('.add-new-item-default').show();
         });
@@ -130,8 +132,24 @@
             }
         })
 
+        jQuery('.editThread').on('click', function (e) {
+            e.preventDefault();
+            jQuery('#addThreadSpinner').show();
+            jQuery('#add-new-thread-section').hide();
+            $('.add-new-item-default').hide();
+            jQuery.get('/forums/{{ $community->slug }}/edit/' + jQuery(this).attr('data-id'), function (data) {
+                jQuery('#edit-thread-section').show().html(data);
+                jQuery('#addThreadSpinner').hide();
+            });
+            jQuery('html, body').animate({
+                scrollTop: jQuery("#edit-thread-section").offset().top
+            }, 1000);
+        });
+
         jQuery('.btn-delete').on('click', function (e) {
             e.preventDefault();
+            $('#edit-thread-section').hide();
+            $('#add-new-thread-section').hide();
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
                 $.ajax({
