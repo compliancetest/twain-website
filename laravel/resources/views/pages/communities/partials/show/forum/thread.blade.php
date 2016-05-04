@@ -15,7 +15,7 @@
                             <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
                             Posted at {{ formatDate($threadPost->updated_at) }}, by {{ $threadPost->user->getFullName() }}
                         </div>
-                        @if($isAdmin)
+                        @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                             <div class="pull-right post-actions">
                                 <a href="#" class="deleteForumPost" data-id="{{ $threadPost->id }}">Delete</a>
                             </div>
@@ -117,7 +117,7 @@
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
                 $.ajax({
-                    url: '/downloads/{{ $community->slug }}/' + elem.attr('data-id'),
+                    url: '/forums/{{ $community->slug }}/post/' + elem.attr('data-id'),
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {

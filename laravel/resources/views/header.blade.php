@@ -49,6 +49,7 @@
                                                         </li>
                                                         <li><a href="{{ $sub->community->getUrl() }}testdata/">Test Data</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}wiki/">Articles</a></li>
+                                                        <li><a href="{{ $sub->community->getUrl() }}forum/">Forum</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}downloads/">Downloads</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}reports/">Reports</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}surveys/">Surveys</a></li>
@@ -89,7 +90,7 @@
                             <div class="header-login-block">
                                 <a href="#" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
                                 <div class="header-login-from" id="headerLoginBlock">
-                                    <form method="post" action="http://twain.lc/wp-login.php" name="header_login_form" id="headerLoginForm">
+                                    <form method="post" action="/wp-login.php" name="header_login_form" id="headerLoginForm">
                                         <div class="form-group login-group">
                                             <label for="user_login"></label>
                                             <input type="text" autocomplete="off" size="20" value="" id="user_login" name="log" placeholder="E-mail or User">
@@ -146,3 +147,17 @@
     </nav>
 
 </header>
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('.header-search-type-field').change(function () {
+            var form = $(this).parents('form');
+            if ($(this).val() == 'site') {
+                form.attr('action', '/search-results/')
+            } else {
+                form.attr('action', '/products-and-services/')
+            }
+        });
+        $('.header-search-type-field').change();
+    });
+</script>

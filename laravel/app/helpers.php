@@ -32,7 +32,6 @@ function sendEmails($sendTo, $template, $emailData)
 function getClientIP()
 {
 
-    error_log(json_encode($_SERVER));
     if (isset($_SERVER)) {
 
         if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
@@ -53,6 +52,10 @@ function getClientIP()
     return getenv('REMOTE_ADDR');
 }
 
+function dateDiffForHumans($date)
+{
+    return \Carbon\Carbon::createFromFormat('Y-m-d H:i', formatDate($date, 'Y-m-d H:i'))->diffForHumans();
+}
 //if(!function_exists('getFilterParam')) {
 //    function getFilterParam($name)
 //    {

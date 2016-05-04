@@ -95,7 +95,7 @@ class Community extends Model
      */
     public function threads()
     {
-        return $this->hasMany('\App\ForumThread')->orderBy('updated_at');
+        return $this->hasMany('\App\ForumThread')->orderBy('updated_at', 'desc');
     }
 
     /**

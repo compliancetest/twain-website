@@ -28,18 +28,16 @@
             @endif
 
         @else
-            <li class="test-suites-tab">
-                <a href="#testsuites" class="nav-tabs active" data-toggle="tab">Test Suites</a>
-            </li>
-
+            <li class="test-suites-tab"><a href="#testsuites" class="nav-tabs active" data-toggle="tab">Test Suites</a></li>
             <li class="test-data-tab"><a href="#testdata" class="nav-tabs" data-toggle="tab">Test Data</a></li>
 
             @if($community->articles_status)
                 <li class="articles-tab"><a href="#wiki" class="nav-tabs" data-toggle="tab">Articles</a></li>
             @endif
 
+            <li class="forum-tab"><a href="#forum" class="nav-tabs" data-toggle="tab">Forum</a></li>
             <li class="downloads-tab"><a href="#downloads" class="nav-tabs" data-toggle="tab">Downloads</a></li>
-
+            <li class="surveys-tab"><a href="#survey" class="nav-tabs" data-toggle="tab">Surveys</a></li>
             <li class="reports-tab"><a href="#reports" class="nav-tabs" data-toggle="tab">Reports</a></li>
 
             <script>

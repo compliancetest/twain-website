@@ -1,7 +1,7 @@
 <div class="block-loading-wrapper">
     <div class="community-downloads">
         <div class="table-responsive">
-            <div class="success-message hide">Download was deleted successfully!</div>
+            <div class="success-message hide">Thread was deleted successfully!</div>
             <table class="table downloads-list-table">
                 <thead>
                     <tr>
@@ -26,8 +26,8 @@
                             <td class="text-center">
                                 {{ count($thread->replies) }}
                             </td>
-                            <td class="text-nowrap text-center">{{ formatDate($thread->updated_at) }}</td>
-                            @if($isAdmin)
+                            <td class="text-nowrap text-center">{{ dateDiffForHumans($thread->updated_at, 'Y-m-d H:i') }}</td>
+                            @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                                 <td class="text-nowrap text-center">
                                     <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $thread->id }}" title="Delete"></a>
                                 </td>
@@ -135,7 +135,7 @@
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
                 $.ajax({
-                    url: '/downloads/{{ $community->slug }}/' + elem.attr('data-id'),
+                    url: '/forums/{{ $community->slug }}/' + elem.attr('data-id'),
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
