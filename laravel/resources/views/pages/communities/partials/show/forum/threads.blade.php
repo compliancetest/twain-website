@@ -73,7 +73,7 @@
                 <div class="form-actions clearfix">
 
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_new_thread">Save</button>
+                        <button type="submit" class="btn btn-success btn-with-icon btn-add" id="save_new_thread">Add thread</button>
                         <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-thread">Cancel</button>
                     </div>
                 </div>
