@@ -593,7 +593,7 @@ function getDashboardPages($type = 'page')
                     $item2[] = array('title' => 'Test Suites', 'url' => $community_url);
                     $item2[] = array('title' => 'Test Data', 'url' => $community_url.'testdata');
                     $item2[] = array('title' => 'Articles', 'url' => $community_url.'wiki');
-//                    $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
+                    $item2[] = array('title' => 'Forum', 'url' => $community_url.'forum');
                     $item2[] = array('title' => 'Downloads', 'url' => $community_url.'downloads');
                     $item2[] = array('title' => 'Reports', 'url' => $community_url.'reports');
                     $item2[] = array('title' => 'Surveys', 'url' => $community_url.'surveys');

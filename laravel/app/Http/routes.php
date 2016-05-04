@@ -132,6 +132,8 @@ Route::group(['middleware' => ['web']], function () {
      */
      Route::group(['middleware' => ['community.user']], function () {
          Route::post('forums/{community}', 'CommunityForumController@addThread');
+         Route::delete('forums/{community}/{threadId}', 'CommunityForumController@deleteThread');
+         Route::delete('forums/{community}/post/{postId}', 'CommunityForumController@deletePost');
          Route::get('forums/{community}/forum/{threadSlug}', 'CommunityForumController@showThread');
          Route::post('forums/{community}/{threadSlug}', 'CommunityForumController@addThreadPost');
      });
