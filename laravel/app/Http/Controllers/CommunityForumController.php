@@ -35,7 +35,40 @@ class CommunityForumController extends Controller
             'content' => $request->get('content')
         ]);
 
+        addMessage('Thread was added successfully');
+
         $this->_uploadToCloudSearch($thread, $community);
+
+        return ['redirect_to' => $community->getUrl() . 'forum'];
+    }
+
+    public function editThread($communitySlug, $threadId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $thread = ForumThread::find($threadId);
+        return view('pages.communities.forum.edit_thread', compact('community', 'thread'));
+    }
+
+    public function updateThread($communitySlug, $threadId, Request $request)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $this->validate($request, [
+            'title' => 'required|min:5'
+        ]);
+
+        $thread = $community->threads()->find($threadId);
+        if($thread){
+            if ($thread->author_id != Auth::user()->ID && !$community->isAdmin()) {
+                return response()->json(array('success' => false), 403);
+            }
+            $thread->update([
+                'title' => $request->get('title'),
+                'content' => $request->get('content')
+            ]);
+
+            $this->_uploadToCloudSearch($thread, $community);
+            addMessage('Thread was updated successfully');
+        }
 
         return ['redirect_to' => $community->getUrl() . 'forum'];
     }
@@ -56,6 +89,7 @@ class CommunityForumController extends Controller
 
         $this->_deleteFromCloudSearch($thread->id);
         $thread->delete();
+        addMessage('Thread was deleted successfully');
         return response()->json(array('success' => true));
     }
 
@@ -85,7 +119,40 @@ class CommunityForumController extends Controller
 
         $this->_uploadToCloudSearch($thread, $community);
 
+        addMessage('Post was added successfully');
+
         return ['redirect_to' => $community->getUrl() . 'forum/' . $threadSlug];
+    }
+
+    public function editThreadPost($communitySlug, $postId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $post = ForumThreadPost::find($postId);
+        return view('pages.communities.forum.edit_post', compact('community', 'post'));
+    }
+
+    public function updateThreadPost($communitySlug, $postId, Request $request)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $this->validate($request, [
+            'content' => 'required|min:5'
+        ]);
+
+        $post = ForumThreadPost::find($postId);
+        if($post){
+            if ($post->author_id != Auth::user()->ID && !$community->isAdmin()) {
+                return response()->json(array('success' => false), 403);
+            }
+            $post->update([
+                'content' => $request->get('content')
+            ]);
+
+            addMessage('Post was updated successfully');
+        }
+        $thread = $post->thread;
+        $this->_uploadToCloudSearch($thread, $community);
+
+        return ['redirect_to' => $community->getUrl() . 'forum/' . $thread->slug];
     }
 
     /**
@@ -105,6 +172,8 @@ class CommunityForumController extends Controller
         $threadId = $post->thread->id;
         $post->delete();
         $this->_uploadToCloudSearch(ForumThread::find($threadId), $community);
+
+        addMessage('Post was deleted successfully');
 
         return response()->json(array('success' => true));
     }

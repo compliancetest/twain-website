@@ -166,16 +166,16 @@
         @if($isAdmin)
 
             jQuery('.editDownload').on('click', function (e) {
-            e.preventDefault();
-            jQuery('#add-new-item-section').hide();
-            jQuery.get('/downloads/{{ $community->slug }}/edit/' + jQuery(this).attr('data-id'), function (data) {
-                jQuery('#edit-download-section').show().html(data);
-                customizeFileTag();
+                e.preventDefault();
+                jQuery('#add-new-item-section').hide();
+                jQuery.get('/downloads/{{ $community->slug }}/edit/' + jQuery(this).attr('data-id'), function (data) {
+                    jQuery('#edit-download-section').show().html(data);
+                    customizeFileTag();
+                });
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#edit-download-section").offset().top
+                }, 1000);
             });
-            jQuery('html, body').animate({
-                scrollTop: jQuery("#edit-download-section").offset().top
-            }, 1000);
-        });
 
         @endif
 
