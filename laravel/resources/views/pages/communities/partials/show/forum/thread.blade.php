@@ -14,7 +14,7 @@
                             <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
                             Posted at {{ formatDate($threadPost->updated_at, 'Y-m-d H:i') }}, by {{ $threadPost->user->getFullName() }}
                         </div>
-                        @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
+                        @if($isAdmin || (Auth::check() && $threadPost->author_id == Auth::user()->ID))
                             <div class="pull-right post-actions">
                                 <a href="#" class="editPost" data-id="{{ $threadPost->id }}">Edit</a>
                                 <a href="#" class="deleteForumPost" data-id="{{ $threadPost->id }}">Delete</a>
