@@ -28,6 +28,8 @@
                                 <td class="text-nowrap text-center">
                                     @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                                         <a href="#" class="btn btn-icon btn-primary btn-edit editThread" data-tooltip="tooltip" title="Edit" data-id="{{ $thread->id }}"></a>
+                                    @endif
+                                    @if($isAdmin)
                                         <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $thread->id }}" title="Delete"></a>
                                     @endif
                                 </td>
