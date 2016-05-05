@@ -83,7 +83,7 @@ class CommunityForumController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $thread = ForumThread::find($threadID);
-        if ($thread->author_id != Auth::user()->ID && !$community->isAdmin()) {
+        if (!$community->isAdmin()) {
             return response()->json(array('success' => false), 403);
         }
 

@@ -53,7 +53,8 @@ function getClientIP()
 
 function dateDiffForHumans($date)
 {
-    return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', formatDate($date, 'Y-m-d H:i:s'))->diffForHumans();
+    $now = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', formatDate(date('Y-m-d H:i:s'), 'Y-m-d H:i:s'));
+    return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', formatDate($date, 'Y-m-d H:i:s'))->diffForHumans($now);
 }
 
 function getSiteUrl()

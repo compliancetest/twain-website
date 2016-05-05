@@ -9,9 +9,7 @@
                         <th>Author</th>
                         <th>Posts</th>
                         <th>Last Updated</th>
-                        @if($isAdmin)
-                            <th>Actions</th>
-                        @endif
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,12 +25,12 @@
                                 {{ count($thread->replies) }}
                             </td>
                             <td class="text-nowrap text-center">{{ dateDiffForHumans($thread->updated_at, 'Y-m-d H:i') }}</td>
-                            @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
                                 <td class="text-nowrap text-center">
-                                    <a href="#" class="btn btn-icon btn-primary btn-edit editThread" data-tooltip="tooltip" title="Edit" data-id="{{ $thread->id }}"></a>
-                                    <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $thread->id }}" title="Delete"></a>
+                                    @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
+                                        <a href="#" class="btn btn-icon btn-primary btn-edit editThread" data-tooltip="tooltip" title="Edit" data-id="{{ $thread->id }}"></a>
+                                        <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $thread->id }}" title="Delete"></a>
+                                    @endif
                                 </td>
-                            @endif
                         </tr>
                     @endforeach
                 @else
