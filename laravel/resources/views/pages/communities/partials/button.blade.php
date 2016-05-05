@@ -20,13 +20,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content block-loading-wrapper">
                 <div class="modal-header">
-                    <button type="button" class="close-modal"  data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                    <button type="button" class="close-modal" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
                     Community Registration
                 </div>
                 <div class="modal-body">
                     You need to join the community of interest in order to view Test Cases
                     <div class="popup-terms-box">
-                        <input type="checkbox" id="agree_community_terms_{{ $community->slug }}" value="agree" name="agree_terms"> I agree with <a href="#readTermsAndConditions{{ $community->slug }}" data-toggle="modal" data-dismiss="modal">Terms &amp; Conditions</a>
+                        <input type="checkbox" id="agree_community_terms_{{ $community->slug }}" value="agree" name="agree_terms"> I agree with <a href="#readTermsAndConditions{{ $community->slug }}" data-toggle="modal" data-dismiss="modal" data-backdrop="static" data-keyboard="false">Terms &amp; Conditions</a>
                     </div>
                     <div class="error-message error-message_{{ $community->slug }}" style="display: none;">You must agree the community Terms &amp; Conditions.</div>
                 </div>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-     <div class="modal fade" id="readTermsAndConditions{{ $community->slug }}" tabindex="-1" role="dialog">
+    <div class="modal fade" id="readTermsAndConditions{{ $community->slug }}" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
