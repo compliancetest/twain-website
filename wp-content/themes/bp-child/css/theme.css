@@ -5323,12 +5323,12 @@ span.button_sign {
     width: 180px;
     
 }
-#my_transaction_log .has-tooltip .simple_tooltip{
+#my_transaction_log .container .has-tooltip .simple_tooltip{
     width: 125px;
-    text-align: center;    
+    text-align: center;
 }
 
-#my_transaction_log .has-tooltip:hover .simple_tooltip{
+#my_transaction_log .container .has-tooltip:hover .simple_tooltip{
     top: -40px;
     left: -6px;
 }
