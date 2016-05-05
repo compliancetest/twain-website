@@ -5349,6 +5349,7 @@ span.button_sign {
     position: relative; 
     top: 2px;
     left: 5px;
+    cursor: pointer;
 }
 #tickets_list .table-box .thead,
 #template-variables-box .table-box .thead,
@@ -8853,10 +8854,6 @@ input.inactive_s{
 
 .search-filters-list{
     padding: 6px 20px 15px 20px;
-}
-
-.search-filters-list .ui-datepicker-trigger{
-    cursor: pointer;
 }
 
 .search-filters-list li{
