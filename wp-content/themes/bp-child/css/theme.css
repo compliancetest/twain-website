@@ -8853,8 +8853,12 @@ input.inactive_s{
 
 .search-filters-list{
     padding: 6px 20px 15px 20px;
-
 }
+
+.search-filters-list .ui-datepicker-trigger{
+    cursor: pointer;
+}
+
 .search-filters-list li{
     width: 194px;
     margin: 0 0 0 46px;
