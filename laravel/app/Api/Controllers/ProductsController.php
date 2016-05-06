@@ -67,7 +67,7 @@ class ProductsController extends BaseApiController
 
         $product = Post::create([
             'post_title' => $productName,
-            'post_name' => sanitize_title($productName),
+            'post_name' => sanitize_title($entity['Version']),
             'post_type' => 'product-service',
             'post_status' => 'publish',
             'post_author' => \Auth::user()->ID,
