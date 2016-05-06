@@ -16,7 +16,7 @@
     <div class="form-actions clearfix">
 
         <div class="pull-right">
-            <button type="submit" class="btn btn-success btn-with-icon btn-upload" id="save_edit_post">Confirm</button>
+            <button type="submit" class="btn btn-success btn-with-icon btn-confirm" id="save_edit_post">Confirm</button>
             <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-edit-new-post">Cancel</button>
         </div>
     </div>
