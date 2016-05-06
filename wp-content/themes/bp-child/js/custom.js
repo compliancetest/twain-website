@@ -423,6 +423,7 @@ jQuery(document).ready(function($) {
             showOn: "both",
             buttonImage: "/wp-content/themes/bp-child/images/calendar-icon.png",
             buttonImageOnly: true,
+			buttonText: "Select date",
             dateFormat: 'yy-mm-dd',
             option: "disabled"
         })

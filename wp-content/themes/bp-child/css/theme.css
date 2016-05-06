@@ -5323,12 +5323,12 @@ span.button_sign {
     width: 180px;
     
 }
-#my_transaction_log .has-tooltip .simple_tooltip{
+#my_transaction_log .container .has-tooltip .simple_tooltip{
     width: 125px;
-    text-align: center;    
+    text-align: center;
 }
 
-#my_transaction_log .has-tooltip:hover .simple_tooltip{
+#my_transaction_log .container .has-tooltip:hover .simple_tooltip{
     top: -40px;
     left: -6px;
 }
@@ -5349,6 +5349,7 @@ span.button_sign {
     position: relative; 
     top: 2px;
     left: 5px;
+    cursor: pointer;
 }
 #tickets_list .table-box .thead,
 #template-variables-box .table-box .thead,
@@ -8853,8 +8854,8 @@ input.inactive_s{
 
 .search-filters-list{
     padding: 6px 20px 15px 20px;
-
 }
+
 .search-filters-list li{
     width: 194px;
     margin: 0 0 0 46px;

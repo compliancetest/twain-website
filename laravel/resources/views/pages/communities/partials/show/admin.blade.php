@@ -217,7 +217,7 @@
                                                                             @if ($profileType->title != '')
                                                                                 {{ $profileType->title }} <?php echo $profileTypeVersion; ?>?</p>
                                                                             @else
-                                                                                profile type
+                                                                                profile type?
                                                                             @endif
                                                                     </div>
                                                                     <div class="modal-footer">

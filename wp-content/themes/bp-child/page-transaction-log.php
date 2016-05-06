@@ -204,7 +204,6 @@ get_header();
                                         class="td td-audit tocenter"><?php echo !$row->audit_record ? "No" : "Yes" ?></div>
                                     <div
                                         class="td td-convsn tocenter td-two-lines">
-                                        <a href="javascript:void(0)">
                                             <?php
                                             $organisation = ct_get_organisation_by_subscription_id($row->subscription_id);
                                             echo $organisation ? $organisation->organisation_name : ' - ';
@@ -218,7 +217,6 @@ get_header();
                                                 echo $row->execution_id;
                                             }
                                             ?>
-                                        </a>
                                         <input type="text" value="<?php echo $row->execution_id; ?>"
                                                readonly="readonly">
                                     </div>
