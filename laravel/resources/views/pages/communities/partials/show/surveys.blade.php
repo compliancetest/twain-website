@@ -28,7 +28,33 @@
                                 @if($survey['date_close'])
                                     This survey is closed
                                 @elseif($survey['user_responded'])
-                                    You have already taken this survey
+
+                                    <a data-toggle="modal" href="#viewResults{{ $survey['id'] }}">View results</a>
+
+                                    <div class="modal fade profile-modal" id="viewResults{{ $survey['id'] }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    {{ $survey['title'] }} Results
+                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal"
+                                                            aria-label="Close">Close
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="surveyMonkeyInfo">
+                                                        <div>
+                                                            <iframe src="https://www.surveymonkey.net/results/SM-7KWQ5JLR/"
+                                                                    style="width: 100%; min-width: 1100px; min-height: 500px; border: 0 solid white;"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @else
                                     <a data-toggle="modal" href="#downloadLicense{{ $survey['id'] }}">Complete Survey</a>
 
