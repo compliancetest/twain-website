@@ -58,7 +58,7 @@
                                 @else
                                     <a data-toggle="modal" href="#downloadLicense{{ $survey['id'] }}">Complete Survey</a>
 
-                                    <div class="modal fade profile-modal" id="downloadLicense{{ $survey['id'] }}" tabindex="-1" role="dialog">
+                                    <div class="modal fade profile-modal survey_modal" id="downloadLicense{{ $survey['id'] }}" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -95,3 +95,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('.survey_modal').on('hidden.bs.modal', function () {
+        location.reload();
+    });
+</script>
