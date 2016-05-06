@@ -115,7 +115,7 @@ class ProductsController extends BaseApiController
                 $response = [
                     'id' => $product->post_name,
                     'title' => $product->post_title,
-                    'link' => URL::to('/') . '/product/' . $product->post_name,
+                    'link' => getSiteUrl() . '/product/' . $product->post_name,
                 ];
                 return $this->respondWithData($response);
             } else {
@@ -133,6 +133,8 @@ class ProductsController extends BaseApiController
             'comment_status' => 'closed',
             'ping_status' => 'closed',
         ]);
+        $product->post_name = Post::getUniquePostName($product, $product->post_name);
+        $product->save();
 
         $userOrganisation = \Auth::user()->organisation[0];
 
@@ -145,7 +147,7 @@ class ProductsController extends BaseApiController
         $response = [
             'id' => $product->post_name,
             'title' => $product->post_title,
-            'link' => URL::to('/') . '/product/' . $product->post_name,
+            'link' => getSiteUrl() . '/product/' . $product->post_name,
         ];
         return $this->setStatusCode(201)->respondWithData($response);
     }
