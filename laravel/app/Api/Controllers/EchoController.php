@@ -13,22 +13,39 @@ class EchoController extends BaseApiController
 
     /**
      * @api {post} /v1/echo Validate credentials
+     * @apiParam {string} username  Mandatory - username / email.
+     * @apiParam {string} password  Mandatory - password.
      *
      * @apiName validateCredentials
      * @apiGroup Helpers
      *
      * @apiSuccessExample {json} Success-Response:
-     * {
+     *  {
      *       "message": "Valid Credentails!",
      *       "code": 200
-     *   }
-     * @apiError 422 Required field missed
-     * @apiErrorExample {json} Required field missed:
-     * {"errors":{"username":["The username field is required."],"password":["The password field is required."]},"code":422}
+     *  }
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error:
+     *  {
+     *     "errors": {
+     *       "username": [
+     *         "The username field is required."
+     *       ],
+     *       "password": [
+     *         "The password field is required."
+     *       ]
+     *     },
+     *     "code": 422
+     *  }
      *
      * @apiError 401 Unauthorized
      * @apiErrorExample {json} Unauthorized:
-     * {"error":{"message":"Unauthorized!"},"code":401}
+     *  {
+     *     "error": {
+     *       "message": "Unauthorized!"
+     *     },
+     *     "code": 401
+     *  }
      *
      * @apiVersion 1.0.0
      */

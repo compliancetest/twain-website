@@ -19,6 +19,7 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => 'simpleauth']);
 
     Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => 'simpleauth']);
+    Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => 'simpleauth']);
 
 });
 

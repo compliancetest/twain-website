@@ -3,13 +3,33 @@ define({ "api": [
     "type": "post",
     "url": "/v1/echo",
     "title": "Validate credentials",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Mandatory - username / email.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mandatory - password.</p>"
+          }
+        ]
+      }
+    },
     "name": "validateCredentials",
     "group": "Helpers",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n      \"message\": \"Valid Credentails!\",\n      \"code\": 200\n  }",
+          "content": "{\n     \"message\": \"Valid Credentails!\",\n     \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -21,7 +41,7 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "422",
-            "description": "<p>Required field missed</p>"
+            "description": "<p>Validation error</p>"
           },
           {
             "group": "Error 4xx",
@@ -33,13 +53,13 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Required field missed:",
-          "content": "{\"errors\":{\"username\":[\"The username field is required.\"],\"password\":[\"The password field is required.\"]},\"code\":422}",
+          "title": "Validation error:",
+          "content": "{\n   \"errors\": {\n     \"username\": [\n       \"The username field is required.\"\n     ],\n     \"password\": [\n       \"The password field is required.\"\n     ]\n   },\n   \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "Unauthorized:",
-          "content": "{\"error\":{\"message\":\"Unauthorized!\"},\"code\":401}",
+          "content": "{\n   \"error\": {\n     \"message\": \"Unauthorized!\"\n   },\n   \"code\": 401\n}",
           "type": "json"
         }
       ]
@@ -52,13 +72,33 @@ define({ "api": [
     "type": "post",
     "url": "/v1/products",
     "title": "Create product",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "identity",
+            "description": "<p>Mandatory - product identity json.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Example",
+          "content": "\n{\n  \"identity\": {\n    \"Identity\": {\n      \"Version\": \"CN-02a_v1.0\",\n      \"Protocol\": {\n        \"Major\": 2,\n        \"Minor\": 3\n      },\n      \"Manufacturer\": \"Drummond Group\",\n      \"Product\": {\n        \"Name\": \"CN-02a DS\",\n        \"Family\": \"Virtual Data Source\"\n      },\n      \"SupportedGroups\": \"DF_DSM2\"\n    },\n    \"Capabilities\": [\n      \"CAP_DEVICEONLINE\",\n      \"CAP_SUPPORTEDCAPS\",\n      \"CAP_UICONTROLLABLE\",\n      \"CAP_XFERCOUNT\",\n      \"ICAP_BITDEPTH\",\n      \"ICAP_BITORDER\",\n      \"ICAP_COMPRESSION\",\n      \"ICAP_PHYSICALHEIGHT\",\n      \"ICAP_PHYSICALWIDTH\",\n      \"ICAP_PIXELFLAVOR\",\n      \"ICAP_PIXELTYPE\",\n      \"ICAP_PLANARCHUNKY\",\n      \"ICAP_UNITS\",\n      \"ICAP_XFERMECH\",\n      \"ICAP_XNATIVERESOLUTION\",\n      \"ICAP_XRESOLUTION\",\n      \"ICAP_YNATIVERESOLUTION\",\n      \"ICAP_YRESOLUTION\"\n    ]\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
     "name": "createProduct",
     "group": "Products",
     "success": {
       "examples": [
         {
           "title": "Product created:",
-          "content": "{\"data\":{\"id\":\"cn-01a-ds\",\"title\":\"CN-01a DS\",\"link\":\"http:\\/\\/twain.my\\/cn-01a-ds\"},\"code\":201}",
+          "content": "{\n   \"data\": {\n     \"id\": \"cn-01a-ds\",\n     \"title\": \"CN-01a DS\",\n     \"link\": \"http:\\/\\/twain.my\\/cn-01a-ds\"\n   },\n   \"code\": 201\n }",
           "type": "json"
         }
       ]
@@ -83,12 +123,63 @@ define({ "api": [
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\"errors\":{\"identity\":[\"The identity must be a valid JSON string.\"]},\"code\":422}",
+          "content": "{\n   \"errors\": {\n     \"identity\": [\n       \"The identity must be a valid JSON string.\"\n     ]\n   },\n   \"code\": 422\n }",
           "type": "json"
         },
         {
           "title": "Permissions error:",
-          "content": "{\"error\":{\"message\":\"This product was created by another user!\"},\"code\":403}",
+          "content": "{\n   \"error\": {\n     \"message\": \"This product was created by another user!\"\n   },\n   \"code\": 403\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "get",
+    "url": "/v1/products",
+    "title": "Get user's products",
+    "name": "getProducts",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Products list:",
+          "content": "{\n   \"data\": [\n     {\n       \"id\": \"cn-01a-ds\",\n       \"title\": \"CN-01a DS\",\n       \"link\": \"http://twain.my/product/cn-01a-ds\"\n     },\n     {\n       \"id\": \"cn-01a-ds\",\n       \"title\": \"CN-01a DS\",\n       \"link\": \"http://twain.my/product/cn-01a-ds\"\n     },\n     {\n       \"id\": \"cn-02a-ds\",\n       \"title\": \"CN-02a DS\",\n       \"link\": \"http://twain.my/product/cn-02a-ds\"\n     }\n   ],\n   \"code\": 200\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Products not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Products not found error:",
+          "content": "{\n   \"error\": {\n     \"message\": \"No products were found for this user!\"\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -120,7 +211,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\"data\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for Application test case\",\"Title\":\"CAP-01a_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for CAP-01a test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"Application\",\"Capabilities\":[{\"Cap\":\"CAP_SUPPORTEDCAPS\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_USERINTERFACE\",\"Messages\":\"MSG_ENABLEDS\",\"pUserinterface\":{\"ShowUI\":true}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":1}]}]]},\"code\":200}",
+          "content": "{\n  \"data\": {\n    \"Profile\": {\n      \"Type\": \"TCEF\",\n      \"Purpose\": \"TCEF for Application test case\",\n      \"Title\": \"CAP-01a_v1.0 TEFC\",\n      \"Description\": \"Test Case Execution Flow for CAP-01a test case\",\n      \"Version\": {\n        \"Major\": 1,\n        \"Minor\": 0\n      }\n    },\n    \"Meta\": {\n      \"SystemUnderTest\": \"Application\",\n      \"Capabilities\": [\n        {\n          \"Cap\": \"CAP_SUPPORTEDCAPS\"\n        }\n      ],\n      \"InitialState\": 4\n    },\n    \"TestSteps\": [\n      [\n        {\n          \"Optional\": false,\n          \"Triplet\": {\n            \"From\": \"APP\",\n            \"To\": \"DS\",\n            \"DataGroup\": \"DG_CONTROL\",\n            \"DataArgumentType\": \"DAT_USERINTERFACE\",\n            \"Messages\": \"MSG_ENABLEDS\",\n            \"pUserinterface\": {\n              \"ShowUI\": true\n            }\n          },\n          \"PassConditions\": [\n            {\n              \"ItemType\": \"ReturnCode\",\n              \"Operator\": \"EQ\",\n              \"Value\": \"TWRC_SUCCESS\",\n              \"Step\": 1\n            }\n          ]\n        }\n      ]\n    ]\n  },\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -139,7 +230,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Not Found error:",
-          "content": "{\"message\":\"Profile not found\",\"status_code\":404}",
+          "content": "{\n  \"message\": \"Profile not found\",\n  \"status_code\": 404\n}",
           "type": "json"
         }
       ]
@@ -182,7 +273,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Please use start method first:",
-          "content": "{\"errors\":{\"message\":\"Please use start method first\"},\"code\":400}",
+          "content": "{\n  \"errors\": {\n    \"message\": \"Please use start method first\"\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -191,7 +282,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\"message\":\"Ok\",\"code\":200}",
+          "content": "{\n  \"message\": \"Ok\",\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -240,17 +331,17 @@ define({ "api": [
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\"error\":{\"message\":\"Test Case not found\"},\"code\":404}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "TetsCase not configured:",
-          "content": "{\"error\":{\"message\":\"Please set testing details\"},\"code\":422}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Please set testing details\"\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "No profile error response:",
-          "content": "{\"error\":{\"message\":\"Test Case doesn't have any profiles\"},\"code\":404}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -302,12 +393,12 @@ define({ "api": [
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\"errors\":{\"message\":\"Test Case not found\"},\"code\":404}",
+          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "No profiles error response:",
-          "content": "{\"errors\":{\"message\":\"Test Case doesn't have any profiles\"},\"code\":404}",
+          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -368,7 +459,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\"message\":\"Ok\",\"code\":200}",
+          "content": "{\n  \"message\": \"Ok\",\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -394,6 +485,33 @@ define({ "api": [
     "type": "post",
     "url": "/v1/testcase/start",
     "title": "Set testing details",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_suite_id",
+            "description": "<p>Mandatory - test suite string ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_case_id",
+            "description": "<p>Mandatory - test case string ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Mandatory - product string ID.</p>"
+          }
+        ]
+      }
+    },
     "name": "setTestingDetails",
     "group": "TestCases",
     "description": "<p>Method used to configure testing details</p>",
@@ -417,12 +535,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\"errors\":{\"test_suite_id\":[\"The selected test suite id is invalid.\"],\"test_case_id\":[\"The selected test case id is invalid.\"],\"product_id\":[\"The selected product id is invalid.\"]},\"code\":422}",
+          "content": "{\n  \"errors\": {\n    \"test_suite_id\": [\n      \"The selected test suite id is invalid.\"\n    ],\n    \"test_case_id\": [\n      \"The selected test case id is invalid.\"\n    ],\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "Please stop running case before start:",
-          "content": "{\"errors\":{\"message\":\"Please stop running case before start\"},\"code\":400}",
+          "content": "{\n  \"errors\": {\n    \"message\": \"Please stop running case before start\"\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -430,7 +548,7 @@ define({ "api": [
     "success": {
       "examples": [
         {
-          "title": "Success-Response:",
+          "title": "Success Response:",
           "content": "{\"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
           "type": "json"
         }
@@ -474,12 +592,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Subscriptions not found:",
-          "content": "{\"error\":{\"message\":\"Subscriptions not found\"},\"code\":404}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "Test Cases not found:",
-          "content": "{\"error\":{\"message\":\"Test Cases not found\"},\"code\":404}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Test Cases not found\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -488,7 +606,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\"data\":[{\"id\":\"dsm-01-v1-0-1\",\"title\":\"DSM-01 v1.0.1\",\"description\":\"Test successful open the data source manager. Transition the session state from 1 to 2.\"},{\"id\":\"ixf-01-v1-0\",\"title\":\"IXF-01 v1.0\",\"description\":\"Image transfer in the Native mode\"},{\"id\":\"dsm-02-v1-0\",\"title\":\"DSM-02 v1.0\",\"description\":\"Test successful select the data source. Transition the session state from 2 to 3.\"},{\"id\":\"cap-01a-v1-0\",\"title\":\"CAP-01a v1.0\",\"description\":\"Test successful negotiation of TWAIN mandatory capability using the data source's user interface. MSG_ENABLEDS variant.\"},{\"id\":\"cap-01b-v1-0\",\"title\":\"CAP-01b v1.0\",\"description\":\"Test successful negotiation of TWAIN mandatory capability using the data source's user interface. MSG_ENABLEDSUIONLY variant.\"},{\"id\":\"cap-03-v1-0\",\"title\":\"CAP-03 v1.0\",\"description\":\"Test error handling for negotiation of TWAIN mandatory capabilities through TWAIN\\u2019s programmatic interface.\"},{\"id\":\"cap-05-v1-0\",\"title\":\"CAP-05 v1.0\",\"description\":\"Test successful negotiation of TWAIN mandatory capabilities through TWAIN\\u2019s programmatic interface.\"},{\"id\":\"ixf-02-v1-0\",\"title\":\"IXF-02 v1.0\",\"description\":\"Image transfer in the Memory mode.\"},{\"id\":\"ixf-03a-v1-0\",\"title\":\"IXF-03a v1.0\",\"description\":\"Image transfer in the File mode.\"},{\"id\":\"ixf-03b-v1-0\",\"title\":\"IXF-03b v1.0\",\"description\":\"Image transfer in the Memory-File mode.\"},{\"id\":\"ixf-04a-v1-0\",\"title\":\"IXF-04a v1.0\",\"description\":\"Test error handling for all error conditions during image transfer in the Native mode.\"},{\"id\":\"ixf-04b-v1-0\",\"title\":\"IXF-04b v1.0\",\"description\":\"Test error handling for all error conditions during image transfer in the Memory mode.\"},{\"id\":\"ixf-04c-v1-0\",\"title\":\"IXF-04c v1.0\",\"description\":\"Test error handling for all error conditions during image transfer in File mode.\"},{\"id\":\"ixf-04d-v1-0\",\"title\":\"IXF-04d v1.0\",\"description\":\"Test error handling for all error conditions during image transfer in the Memory-File mode.\"},{\"id\":\"ixf-05a-v1-0\",\"title\":\"IXF-05a v1.0\",\"description\":\"Test transfer cancel during image transfer in the Native mode.\"},{\"id\":\"ixf-05b-v1-0\",\"title\":\"IXF-05b v1.0\",\"description\":\"Test transfer cancel during image transfer in the Memory mode.\"},{\"id\":\"ixf-05c-v1-0\",\"title\":\"IXF-05c v1.0\",\"description\":\"Test transfer cancel during image transfer in the File mode.\"},{\"id\":\"ixf-05d-v1-0\",\"title\":\"IXF-05d v1.0\",\"description\":\"Test transfer cancel during image transfer in the Memory-File mode.\"},{\"id\":\"err-01-v1-0\",\"title\":\"ERR-01 v1.0\",\"description\":\"Test correct transition state from 7 to 6 to 5.\"},{\"id\":\"err-02-v1-0\",\"title\":\"ERR-02 v1.0\",\"description\":\"Test correct transition state from 5 to 4. Disable the data source.\"},{\"id\":\"err-04-v1-0\",\"title\":\"ERR-04 v1.0\",\"description\":\"Test correct transition state from 3 to 2. Close the data source manager.\"},{\"id\":\"dsm-03-v1-0\",\"title\":\"DSM-03 v1.0\",\"description\":\"Test successful open the data source. Transition the session state from 3 to 4.\"},{\"id\":\"dsm-04-v1-0\",\"title\":\"DSM-04 v1.0\",\"description\":\"Test unsuccessful open the data source manager. Handle error conditions in the session state 1 including TWCC_LOWMEMORY and TWCC_SEQERROR.\"},{\"id\":\"dsm-05-v1-0\",\"title\":\"DSM-05 v1.0\",\"description\":\"Test unsuccessful select the data source. Handle error an condition in the session state 2 TWCC_LOWMEMORY.\"},{\"id\":\"err-03-v1-0\",\"title\":\"ERR-03 v1.0\",\"description\":\"Test correct transition state from 4 to 3. Close the data source.\"},{\"id\":\"dsm-06-v1-0\",\"title\":\"DSM-06 v1.0\",\"description\":\"Test unsuccessful open the data source. Handle error conditions in the session state 3 including TWCC_LOWMEMORY, TWCC_MAXCONNECTIONS, TWCC_NODS and TWCC_OPERATIONERROR.\"}],\"code\":200}",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"dsm-01-v1-0-1\",\n      \"title\": \"DSM-01 v1.0.1\",\n      \"description\": \"Test successful open the data source manager. Transition the session state from 1 to 2.\"\n    },\n    {\n      \"id\": \"ixf-01-v1-0\",\n      \"title\": \"IXF-01 v1.0\",\n      \"description\": \"Image transfer in the Native mode\"\n    }\n  ],\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -531,7 +649,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Subscriptions not found:",
-          "content": "{\"error\":{\"message\":\"Subscriptions not found\"},\"code\":404}",
+          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -539,8 +657,8 @@ define({ "api": [
     "success": {
       "examples": [
         {
-          "title": "Success-Response:",
-          "content": "{\"data\":[{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},{\"id\":\"twain-compliance-technical-ds-v1-0\",\"title\":\"TWAIN Compliance Technical - DS v1.0\"}],\"code\":200}",
+          "title": "Success Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"twain-compliance-technical-app-v1-0\",\n      \"title\": \"TWAIN Compliance Technical - App v1.0\"\n    },\n    {\n      \"id\": \"twain-compliance-technical-ds-v1-0\",\n      \"title\": \"TWAIN Compliance Technical - DS v1.0\"\n    }\n  ],\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -566,13 +684,40 @@ define({ "api": [
     "type": "post",
     "url": "/v1/transactions",
     "title": "Create transaction",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "file",
+            "optional": false,
+            "field": "file",
+            "description": "<p>Mandatory - zip file.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_case_id",
+            "description": "<p>Mandatory - test case id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "execution_id",
+            "description": "<p>Mandatory - execution id string.</p>"
+          }
+        ]
+      }
+    },
     "name": "createTansaction",
     "group": "Transactions",
     "success": {
       "examples": [
         {
-          "title": "Success-Response:",
-          "content": "{\n      \"message\": \"File Uploaded\",\n      \"code\": 201\n  }",
+          "title": "Success Response:",
+          "content": "{\n    \"message\": \"File Uploaded\",\n    \"code\": 201\n}",
           "type": "json"
         }
       ]
@@ -591,7 +736,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\"errors\":{\"file\":[\"The file field is required.\"],\"test_case_id\":[\"The test case id field is required.\"],\"execution_id\":[\"The execution id field is required.\"]},\"code\":422}",
+          "content": "{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]

@@ -12,18 +12,34 @@ class TransactionsController extends BaseApiController
 
     /**
      * @api {post} /v1/transactions Create transaction
+     * @apiParam {file} file  Mandatory - zip file.
+     * @apiParam {string} test_case_id  Mandatory - test case id string.
+     * @apiParam {string} execution_id  Mandatory - execution id string.
      *
      * @apiName createTansaction
      * @apiGroup Transactions
      *
-     * @apiSuccessExample {json} Success-Response:
-     * {
+     * @apiSuccessExample {json} Success Response:
+     *   {
      *       "message": "File Uploaded",
      *       "code": 201
      *   }
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
-     * {"errors":{"file":["The file field is required."],"test_case_id":["The test case id field is required."],"execution_id":["The execution id field is required."]},"code":422}
+     *   {
+     *     "errors": {
+     *       "file": [
+     *         "The file field is required."
+     *       ],
+     *       "test_case_id": [
+     *         "The test case id field is required."
+     *       ],
+     *       "execution_id": [
+     *         "The execution id field is required."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
