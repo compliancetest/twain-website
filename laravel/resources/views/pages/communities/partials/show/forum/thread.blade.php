@@ -5,7 +5,6 @@
             <a href="/communities/{{ $community->slug }}/forum" class="btn btn-default btn-with-icon btn-back pull-right">Back to forums</a>
             <h1>{{ $thread->title }}</h1>
             <div class="topic-description">{{ $thread->content }}</div>
-            {{--<h4>Replies:</h4>--}}
         </div>
         @if(count($threadPosts))
             @foreach($threadPosts as $index => $threadPost)
@@ -15,8 +14,9 @@
                             <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
                             Posted at {{ formatDate($threadPost->updated_at, 'Y-m-d H:i') }}, by {{ $threadPost->user->getFullName() }}
                         </div>
-                        @if($isAdmin || (Auth::check() && $thread->author_id == Auth::user()->ID))
+                        @if($isAdmin || (Auth::check() && $threadPost->author_id == Auth::user()->ID))
                             <div class="pull-right post-actions">
+                                <a href="#" class="editPost" data-id="{{ $threadPost->id }}">Edit</a>
                                 <a href="#" class="deleteForumPost" data-id="{{ $threadPost->id }}">Delete</a>
                             </div>
                         @endif
@@ -35,30 +35,30 @@
             <div class="add-new-item-default">
                 <a href="#add-new-post-section" id="add-new-post" class="add-new-download-link">Add Reply</a>
             </div>
-            <div id="edit-download-section"></div>
+            <div id="edit-post-section"></div>
             <div id="add-new-post-section" style="display: none;">
                 {{ Form::open(['file' => true, 'id' => 'newpostform', 'url' => getSiteUrl() . '/forums/' . $community->slug .'/'.$thread->slug, 'data-validate' => 'validate'] ) }}
-                <h3>Add new post</h3>
+                    <h3>Add new post</h3>
 
-                <div class="error-message" style="display: none;"></div>
-                <div class="file-description-section">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="postTitle">Message:</label>
+                    <div class="error-message" style="display: none;"></div>
+                    <div class="file-description-section">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="postTitle">Message:</label>
 
-                            <div class="col-sm-9">
-                                <textarea id="postTitle" class="form-control" name="content"></textarea>
+                                <div class="col-sm-9">
+                                    <textarea id="postTitle" class="form-control" name="content"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-actions clearfix">
+                    <div class="form-actions clearfix">
 
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-success btn-with-icon btn-add" id="save_new_post">Add post</button>
-                        <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-post">Cancel</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-success btn-with-icon btn-add" id="save_new_post">Add post</button>
+                            <button type="button" class="btn btn-default btn-with-icon btn-cancel" id="cancel-add-new-post">Cancel</button>
+                        </div>
                     </div>
-                </div>
                 {{ Form::close() }}
             </div>
             <div class="block-loading" id="addpostSpinner">
@@ -79,6 +79,7 @@
             $('.add-new-item-default').hide();
         });
          $('#cancel-add-new-post').on('click', function(){
+            $('#edit-post-section').hide();
             $('#add-new-post-section').hide();
             $('.add-new-item-default').show();
         });
@@ -112,8 +113,24 @@
             }
         });
 
+        jQuery('.editPost').on('click', function (e) {
+            e.preventDefault();
+            jQuery('#addpostSpinner').show();
+            jQuery('#add-new-post-section').hide();
+            $('.add-new-item-default').hide();
+            jQuery.get('/forums/{{ $community->slug }}/editpost/' + jQuery(this).attr('data-id'), function (data) {
+                jQuery('#addpostSpinner').hide();
+                jQuery('#edit-post-section').show().html(data);
+            });
+            jQuery('html, body').animate({
+                scrollTop: jQuery("#edit-post-section").offset().top
+            }, 1000);
+        });
+
         jQuery('.deleteForumPost').on('click', function (e) {
             e.preventDefault();
+            $('#edit-post-section').hide();
+            $('#add-new-post-section').hide();
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
                 $.ajax({

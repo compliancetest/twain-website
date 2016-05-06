@@ -31,7 +31,6 @@ function sendEmails($sendTo, $template, $emailData)
 
 function getClientIP()
 {
-
     if (isset($_SERVER)) {
 
         if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
@@ -54,20 +53,9 @@ function getClientIP()
 
 function dateDiffForHumans($date)
 {
-    return \Carbon\Carbon::createFromFormat('Y-m-d H:i', formatDate($date, 'Y-m-d H:i'))->diffForHumans();
+    $now = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', formatDate(date('Y-m-d H:i:s'), 'Y-m-d H:i:s'));
+    return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', formatDate($date, 'Y-m-d H:i:s'))->diffForHumans($now);
 }
-//if(!function_exists('getFilterParam')) {
-//    function getFilterParam($name)
-//    {
-//        $param = array();
-//        if (isset($_GET[$name]))
-//            $param = $_GET[$name];
-//        if (!is_array($param))
-//            $param = array($param);
-//
-//        return $param;
-//    }
-//}
 
 function getSiteUrl()
 {

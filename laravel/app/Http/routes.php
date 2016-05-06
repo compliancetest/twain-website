@@ -132,9 +132,14 @@ Route::group(['middleware' => ['web']], function () {
      */
      Route::group(['middleware' => ['community.user']], function () {
          Route::post('forums/{community}', 'CommunityForumController@addThread');
+         Route::patch('forums/{community}/{threadId}', 'CommunityForumController@updateThread');
+         Route::get('/forums/{community}/edit/{threadId}', 'CommunityForumController@editThread');
          Route::delete('forums/{community}/{threadId}', 'CommunityForumController@deleteThread');
+
+
          Route::delete('forums/{community}/post/{postId}', 'CommunityForumController@deletePost');
-         Route::get('forums/{community}/forum/{threadSlug}', 'CommunityForumController@showThread');
+         Route::get('/forums/{community}/editpost/{postId}', 'CommunityForumController@editThreadPost');
+         Route::patch('/forums/{community}/post/{postId}', 'CommunityForumController@updateThreadPost');
          Route::post('forums/{community}/{threadSlug}', 'CommunityForumController@addThreadPost');
      });
 });
