@@ -19,10 +19,9 @@ class ProductsController extends BaseApiController
      * @api {post} /v1/products Create product
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
-     * @apiParamExample {json} Request Example
+     * @apiParamExample {json} Example 'identity' value
      *
      *   {
-     *     "identity": {
      *       "Identity": {
      *         "Version": "CN-02a_v1.0",
      *         "Protocol": {
@@ -56,7 +55,6 @@ class ProductsController extends BaseApiController
      *         "ICAP_YNATIVERESOLUTION",
      *         "ICAP_YRESOLUTION"
      *       ]
-     *     }
      *   }
      *
      * @apiName createProduct
