@@ -103,9 +103,11 @@ class ProductsController extends BaseApiController
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
-        $entity = json_decode($request->get('identity'), true)['Identity'];
-        $productName = htmlspecialchars($entity['Product']['Name']);
-        $productId = sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . $entity['Version'];
+        $jsonEntry = json_decode($request->get('identity'), true);
+        $entity = $jsonEntry['Identity'];
+        $productName = htmlspecialchars($entity['ProductName']);
+        $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
+        $productId = sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_V" . $productVersion;
 
         $databaseEntry = PostMeta::where(['meta_key' => 'product_id', 'meta_value' => $productId])->first();
 
@@ -125,7 +127,7 @@ class ProductsController extends BaseApiController
 
         $product = Post::create([
             'post_title' => $productName,
-            'post_name' => sanitize_title($entity['Version']),
+            'post_name' => sanitize_title($entity['ProductName'] .'_v_' . $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum']),
             'post_type' => 'product-service',
             'post_status' => 'publish',
             'post_author' => \Auth::user()->ID,
@@ -133,6 +135,9 @@ class ProductsController extends BaseApiController
             'comment_status' => 'closed',
             'ping_status' => 'closed',
         ]);
+        if (isset($jsonEntry['Capabilities'])) {
+            $product->meta()->create(['meta_key' => 'capabilities', 'meta_value' => json_encode($jsonEntry['Capabilities'])]);
+        }
         $product->post_name = Post::getUniquePostName($product, $product->post_name);
         $product->save();
 
@@ -140,7 +145,7 @@ class ProductsController extends BaseApiController
 
         $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
         $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => sanitize_title($productName)]);
-        $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => htmlspecialchars($entity['Version'])]);
+        $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
         $product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $userOrganisation->id]);
 
