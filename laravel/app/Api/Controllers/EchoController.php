@@ -41,8 +41,10 @@ class EchoController extends BaseApiController
      * @apiError 401 Unauthorized
      * @apiErrorExample {json} Unauthorized:
      *  {
-     *     "error": {
-     *       "message": "Unauthorized!"
+     *     "errors": {
+     *       "message": [
+     *          "Unauthorized!"
+     *       ]
      *     },
      *     "code": 401
      *  }

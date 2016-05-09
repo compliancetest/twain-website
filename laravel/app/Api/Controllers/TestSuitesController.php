@@ -25,8 +25,10 @@ class TestSuitesController extends BaseApiController
      * @apiError 404 Not Found
      * @apiErrorExample {json} Subscriptions not found:
      *   {
-     *     "error": {
-     *       "message": "Subscriptions not found"
+     *     "errors": {
+     *       "message": [
+     *          "Subscriptions not found"
+     *       ]
      *     },
      *     "code": 404
      *   }
@@ -81,8 +83,10 @@ class TestSuitesController extends BaseApiController
      * @apiError 404 Not Found
      * @apiErrorExample {json} Subscriptions not found:
      *   {
-     *     "error": {
-     *       "message": "Subscriptions not found"
+     *     "errors": {
+     *       "message": [
+     *          "Subscriptions not found"
+     *       ]
      *     },
      *     "code": 404
      *   }
@@ -90,8 +94,10 @@ class TestSuitesController extends BaseApiController
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test Cases not found:
      *   {
-     *     "error": {
-     *       "message": "Test Cases not found"
+     *     "errors": {
+     *       "message":  [
+     *          "Test Cases not found"
+ *           ]
      *     },
      *     "code": 404
      *   }

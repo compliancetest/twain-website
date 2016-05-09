@@ -122,8 +122,10 @@ class ProductsController extends BaseApiController
      * @apiError 403 Permissions error
      * @apiErrorExample {json} Permissions error:
      * {
-     *    "error": {
-     *      "message": "This product was created by another user!"
+     *    "errors": {
+     *      "message": [
+     *          "This product was created by another user!"
+     *      ]
      *    },
      *    "code": 403
      *  }
@@ -227,8 +229,10 @@ class ProductsController extends BaseApiController
      * @apiError 404 Products not found
      * @apiErrorExample {json} Products not found error:
      *  {
-     *     "error": {
-     *       "message": "No products were found for this user!"
+     *     "errors": {
+     *       "message": [
+     *          "No products were found for this user!"
+*             ]
      *     },
      *     "code": 404
      *   }

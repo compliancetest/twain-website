@@ -59,7 +59,7 @@ define({ "api": [
         },
         {
           "title": "Unauthorized:",
-          "content": "{\n   \"error\": {\n     \"message\": \"Unauthorized!\"\n   },\n   \"code\": 401\n}",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Unauthorized!\"\n     ]\n   },\n   \"code\": 401\n}",
           "type": "json"
         }
       ]
@@ -138,7 +138,7 @@ define({ "api": [
         },
         {
           "title": "Permissions error:",
-          "content": "{\n   \"error\": {\n     \"message\": \"This product was created by another user!\"\n   },\n   \"code\": 403\n }",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n         \"This product was created by another user!\"\n     ]\n   },\n   \"code\": 403\n }",
           "type": "json"
         }
       ]
@@ -189,7 +189,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Products not found error:",
-          "content": "{\n   \"error\": {\n     \"message\": \"No products were found for this user!\"\n   },\n   \"code\": 404\n }",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -240,7 +240,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Not Found error:",
-          "content": "{\n  \"message\": \"Profile not found\",\n  \"status_code\": 404\n}",
+          "content": "\n{\n    \"errors\": [\n      \"message\": [\n         \"Profile not found\"\n      ]\n    ],\n    \"code\": 404\n  }",
           "type": "json"
         }
       ]
@@ -283,7 +283,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Please use start method first:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Please use start method first\"\n  },\n  \"code\": 400\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please use start method first\"\n    ]\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -341,17 +341,17 @@ define({ "api": [
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "TetsCase not configured:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Please set testing details\"\n  },\n  \"code\": 422\n}",
+          "content": "{\n  \"error\": {\n    \"message\": [\n       \"Please set testing details\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "No profile error response:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case doesn't have any profiles\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -403,12 +403,12 @@ define({ "api": [
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "No profiles error response:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case doesn't have any profiles\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -460,7 +460,7 @@ define({ "api": [
       "examples": [
         {
           "title": "You are not running any test case now:",
-          "content": "{\"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -550,7 +550,7 @@ define({ "api": [
         },
         {
           "title": "Please stop running case before start:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Please stop running case before start\"\n  },\n  \"code\": 400\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please stop running case before start\"\n    ]\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -602,12 +602,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Subscriptions not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Subscriptions not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "Test Cases not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Cases not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -659,7 +659,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Subscriptions not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Subscriptions not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
