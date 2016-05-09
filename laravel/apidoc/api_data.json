@@ -86,8 +86,13 @@
       },
       "examples": [
         {
-          "title": "Request Example",
-          "content": "\n{\n  \"identity\": {\n    \"Identity\": {\n      \"Version\": \"CN-02a_v1.0\",\n      \"Protocol\": {\n        \"Major\": 2,\n        \"Minor\": 3\n      },\n      \"Manufacturer\": \"Drummond Group\",\n      \"Product\": {\n        \"Name\": \"CN-02a DS\",\n        \"Family\": \"Virtual Data Source\"\n      },\n      \"SupportedGroups\": \"DF_DSM2\"\n    },\n    \"Capabilities\": [\n      \"CAP_DEVICEONLINE\",\n      \"CAP_SUPPORTEDCAPS\",\n      \"CAP_UICONTROLLABLE\",\n      \"CAP_XFERCOUNT\",\n      \"ICAP_BITDEPTH\",\n      \"ICAP_BITORDER\",\n      \"ICAP_COMPRESSION\",\n      \"ICAP_PHYSICALHEIGHT\",\n      \"ICAP_PHYSICALWIDTH\",\n      \"ICAP_PIXELFLAVOR\",\n      \"ICAP_PIXELTYPE\",\n      \"ICAP_PLANARCHUNKY\",\n      \"ICAP_UNITS\",\n      \"ICAP_XFERMECH\",\n      \"ICAP_XNATIVERESOLUTION\",\n      \"ICAP_XRESOLUTION\",\n      \"ICAP_YNATIVERESOLUTION\",\n      \"ICAP_YRESOLUTION\"\n    ]\n  }\n}",
+          "title": "App example",
+          "content": "\n{\n  \"Identity\": {\n    \"ProtocolMajor\": 2,\n    \"ProtocolMinor\": 1,\n    \"Manufacturer\": \"TWAIN Working Group\",\n    \"ProductName\": \"TWAIN2 FreeImage Software Scanner\",\n    \"ProductFamily\": \"Software Scan\",\n    \"Version\": {\n      \"MajorNum\": 2,\n      \"MinorNum\": 1,\n      \"Language\": \"TWLG_ENGLISH\",\n      \"Country\": \"TWCY_USA\",\n      \"Info\": \"2.1.3 sample debug 32bit\"\n    },\n    \"SupportedGroups\": [\n      \"DG_CONTROL\",\n      \"DG_IMAGE\",\n      \"DF_DS2\"\n    ]\n  },\n  \"ProductType\": \"DataSource\",\n  \"Capabilities\": [\n    \"CAP_DEVICEONLINE\",\n    \"CAP_SUPPORTEDCAPS\",\n    \"CAP_UICONTROLLABLE\",\n    \"CAP_XFERCOUNT\",\n    \"ICAP_BITDEPTH\",\n    \"ICAP_BITORDER\",\n    \"ICAP_COMPRESSION\",\n    \"ICAP_PHYSICALHEIGHT\",\n    \"ICAP_PHYSICALWIDTH\",\n    \"ICAP_PIXELFLAVOR\",\n    \"ICAP_PIXELTYPE\",\n    \"ICAP_PLANARCHUNKY\",\n    \"ICAP_UNITS\",\n    \"ICAP_XFERMECH\",\n    \"ICAP_XNATIVERESOLUTION\",\n    \"ICAP_XRESOLUTION\",\n    \"ICAP_YNATIVERESOLUTION\",\n    \"ICAP_YRESOLUTION\"\n  ]\n}",
+          "type": "json"
+        },
+        {
+          "title": "DS example",
+          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n        \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    },\n    \"ProductType\": \"Application\"\n}",
           "type": "json"
         }
       ]
@@ -98,7 +103,12 @@
       "examples": [
         {
           "title": "Product created:",
-          "content": "{\n   \"data\": {\n     \"id\": \"cn-01a-ds\",\n     \"title\": \"CN-01a DS\",\n     \"link\": \"http:\\/\\/twain.my\\/cn-01a-ds\"\n   },\n   \"code\": 201\n }",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 201\n }",
+          "type": "json"
+        },
+        {
+          "title": "Product exist:",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 200\n }",
           "type": "json"
         }
       ]

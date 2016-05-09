@@ -19,55 +19,93 @@ class ProductsController extends BaseApiController
      * @api {post} /v1/products Create product
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
-     * @apiParamExample {json} Example 'identity' value
+     * @apiParamExample {json} App example
      *
      *   {
-     *       "Identity": {
-     *         "Version": "CN-02a_v1.0",
-     *         "Protocol": {
-     *           "Major": 2,
-     *           "Minor": 3
-     *         },
-     *         "Manufacturer": "Drummond Group",
-     *         "Product": {
-     *           "Name": "CN-02a DS",
-     *           "Family": "Virtual Data Source"
-     *         },
-     *         "SupportedGroups": "DF_DSM2"
+     *     "Identity": {
+     *       "ProtocolMajor": 2,
+     *       "ProtocolMinor": 1,
+     *       "Manufacturer": "TWAIN Working Group",
+     *       "ProductName": "TWAIN2 FreeImage Software Scanner",
+     *       "ProductFamily": "Software Scan",
+     *       "Version": {
+     *         "MajorNum": 2,
+     *         "MinorNum": 1,
+     *         "Language": "TWLG_ENGLISH",
+     *         "Country": "TWCY_USA",
+     *         "Info": "2.1.3 sample debug 32bit"
      *       },
-     *       "Capabilities": [
-     *         "CAP_DEVICEONLINE",
-     *         "CAP_SUPPORTEDCAPS",
-     *         "CAP_UICONTROLLABLE",
-     *         "CAP_XFERCOUNT",
-     *         "ICAP_BITDEPTH",
-     *         "ICAP_BITORDER",
-     *         "ICAP_COMPRESSION",
-     *         "ICAP_PHYSICALHEIGHT",
-     *         "ICAP_PHYSICALWIDTH",
-     *         "ICAP_PIXELFLAVOR",
-     *         "ICAP_PIXELTYPE",
-     *         "ICAP_PLANARCHUNKY",
-     *         "ICAP_UNITS",
-     *         "ICAP_XFERMECH",
-     *         "ICAP_XNATIVERESOLUTION",
-     *         "ICAP_XRESOLUTION",
-     *         "ICAP_YNATIVERESOLUTION",
-     *         "ICAP_YRESOLUTION"
+     *       "SupportedGroups": [
+     *         "DG_CONTROL",
+     *         "DG_IMAGE",
+     *         "DF_DS2"
      *       ]
+     *     },
+     *     "ProductType": "DataSource",
+     *     "Capabilities": [
+     *       "CAP_DEVICEONLINE",
+     *       "CAP_SUPPORTEDCAPS",
+     *       "CAP_UICONTROLLABLE",
+     *       "CAP_XFERCOUNT",
+     *       "ICAP_BITDEPTH",
+     *       "ICAP_BITORDER",
+     *       "ICAP_COMPRESSION",
+     *       "ICAP_PHYSICALHEIGHT",
+     *       "ICAP_PHYSICALWIDTH",
+     *       "ICAP_PIXELFLAVOR",
+     *       "ICAP_PIXELTYPE",
+     *       "ICAP_PLANARCHUNKY",
+     *       "ICAP_UNITS",
+     *       "ICAP_XFERMECH",
+     *       "ICAP_XNATIVERESOLUTION",
+     *       "ICAP_XRESOLUTION",
+     *       "ICAP_YNATIVERESOLUTION",
+     *       "ICAP_YRESOLUTION"
+     *     ]
      *   }
      *
+     * @apiParamExample {json} DS example
+     *   {
+     *       "Identity": {
+     *           "ProtocolMajor": 2,
+     *           "ProtocolMinor": 1,
+     *           "Manufacturer": "TWAIN Working Group",
+     *           "ProductName": "TWAIN2 FreeImage EHR Software",
+     *           "ProductFamily": "EHR Software",
+     *           "Version": {
+     *               "MajorNum": 2,
+     *               "MinorNum": 1,
+     *               "Language": "TWLG_ENGLISH",
+     *               "Country": "TWCY_USA",
+     *               "Info": "2.1.3 sample debug 32bit"
+     *           },
+     *           "SupportedGroups": ["DG_CONTROL",
+     *           "DG_IMAGE",
+     *           "DF_DS2"]
+     *       },
+     *       "ProductType": "Application"
+     *   }
      * @apiName createProduct
      * @apiGroup Products
      *
      * @apiSuccessExample {json} Product created:
      *  {
      *     "data": {
-     *       "id": "cn-01a-ds",
-     *       "title": "CN-01a DS",
-     *       "link": "http:\/\/twain.my\/cn-01a-ds"
+     *       "id": "twain2-freeimage-software-scanner-v-2-1",
+     *       "title": "TWAIN2 FreeImage Software Scanner",
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
      *     },
      *     "code": 201
+     *   }
+     *
+     *  @apiSuccessExample {json} Product exist:
+     *  {
+     *     "data": {
+     *       "id": "twain2-freeimage-software-scanner-v-2-1",
+     *       "title": "TWAIN2 FreeImage Software Scanner",
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
+     *     },
+     *     "code": 200
      *   }
      *
      * @apiError 422 Validation error
@@ -144,6 +182,7 @@ class ProductsController extends BaseApiController
         $userOrganisation = \Auth::user()->organisation[0];
 
         $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
+        $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $jsonEntry['ProductType']]);
         $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => sanitize_title($productName)]);
         $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
