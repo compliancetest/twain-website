@@ -164,6 +164,19 @@ define({ "api": [
     "type": "get",
     "url": "/v1/products",
     "title": "Get user's products",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - product type (either 'Application' or 'DataSource').</p>"
+          }
+        ]
+      }
+    },
     "name": "getProducts",
     "group": "Products",
     "success": {
@@ -183,6 +196,12 @@ define({ "api": [
             "optional": false,
             "field": "404",
             "description": "<p>Products not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Invalid product_type value</p>"
           }
         ]
       },
@@ -190,6 +209,11 @@ define({ "api": [
         {
           "title": "Products not found error:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product_type value:",
+          "content": "{\n  \"errors\": {\n    \"product_type\": [\n      \"The selected product type is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]

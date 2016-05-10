@@ -210,6 +210,11 @@
           "title": "Products not found error:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
           "type": "json"
+        },
+        {
+          "title": "Invalid product_type value:",
+          "content": "{\n  \"errors\": {\n    \"product_type\": [\n      \"The selected product type is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "type": "json"
         }
       ]
     },
