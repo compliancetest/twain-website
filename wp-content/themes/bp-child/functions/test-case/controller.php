@@ -605,6 +605,8 @@ function saveCase()
     cp_update_post_meta($id, 'version_minor', $_POST['version_minor']);
     cp_update_post_meta($id, 'version_patch', $_POST['version_patch']);
 
+    cp_update_post_meta($id, 'featuresList', json_encode($_POST['feature']));
+
     cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
 
     $caps = [];

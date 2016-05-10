@@ -175,10 +175,62 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
+                            </div>
+                            <div class="field-row">
                                 <div class="grid-cell">
+                                   <label>Product Type:</label>
 
+                                    <div class="has-field-tooltip">
+                                        <select name="product_type" class="select field-tooltip" data-tooltip-content="Product Type" id="productType">
+                                            <option <?php if ($product->product_type == 'DataSource'): ?> selected="selected" <?php endif; ?> value="DataSource">DataSource</option>
+                                            <option <?php if ($product->product_type == 'Application'): ?> selected="selected" <?php endif; ?> value="Application">Application</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid-cell width60P div_type_ds">
+                                    <label>Capabilities(comma separated):</label>
+
+                                    <div class="has-defined-tooltip">
+                                        <textarea cols="" rows="" class="textarea field-tooltip" id="product_caps" name="capabilities"><?php echo implode(',', $product->capabilities) ?></textarea>
+                                        <span class="simple_tooltip" style="width:540px; margin-left: -270px; bottom: 115px;"><span></span>Product capabilities list</span>
+                                    </div>
+                                </div>
+                                <div class="grid-cell width60P div_type_app">
+                                   <label>Product Test Suites</label>
+                                    <?php foreach(getUserSubscribedSuites() as $suite):?>
+                                        <?php
+                                            $suite = new TestSuite($suite->suite_id);
+                                            $suite->load();
+                                            if($suite->ts_tester_role !== 'Application') {
+                                                continue;
+                                            }
+                                        ?>
+                                        <label>
+                                            <input type="checkbox" name="product_suites[]" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
+                                                <?php echo $suite->title;?>
+                                        </label>
+                                    <?php endforeach;?>
                                 </div>
                                 <div class="clear"></div>
+                            </div>
+                            <div class="field-row div_type_app" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
+                                 <label>Product Features</label>
+                                    <?php foreach(getUserSubscribedSuites() as $suite):?>
+                                        <?php
+                                            $suite = new TestSuite($suite->suite_id);
+                                            $suite->load();
+                                            if($suite->ts_tester_role !== 'Application') {
+                                                continue;
+                                            }
+                                            foreach($suite->featuresList as $feature):
+                                        ?>
+                                                <label class="field-tooltip">
+                                                    <input type="checkbox" name="product_features[]" class="product_features" data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?> value="<?php echo $feature['name'];?>"/>
+                                                        <?php echo $feature['name'];?>
+                                                </label>
+                                            <?php endforeach;?>
+                                    <?php endforeach;?>
+
                             </div>
                         </div>
                     </div>
@@ -234,7 +286,7 @@ if (isset($_SESSION['product_data'])) {
                                             </select>
                                         </div>
                                         <div class="grid-cell width30P">
-                                            <label>Relation Ship: </label>
+                                            <label>Relationship: </label>
                                             <select class="select" name="related-product-relation[]">
                                                 <option value="Depends On">Depends On</option>
                                                 <option value="Newer Version Of">Newer Version Of</option>
@@ -378,6 +430,27 @@ if (isset($_SESSION['product_data'])) {
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
+
+            $('#productType').on('change', function(){
+                if($(this).val() == 'Application'){
+                    $('.div_type_app').show();
+                    $('.div_type_ds').hide();
+                } else {
+                    $('.div_type_app').hide();
+                    $('.div_type_ds').show();
+                }
+            });
+
+            $('#productType').change();
+
+            $('.product_suites').on('change', function(){
+                $('.product_features').attr('checked', false);
+                $('.product_features').closest('label').hide();
+                $.each($('.product_suites:checked'), function(index, el){
+                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").attr('checked', 'checked').closest('label').show();
+                })
+            });
+
             $('#product_description').redactor({
                 air: true,
                 minHeight: 80
@@ -471,6 +544,18 @@ if (isset($_SESSION['product_data'])) {
                         jQuery(this).addClass('input-error');
                     }
                 });
+
+                if($('#productType').val() == 'Application' && ( !$('.product_suites:checked').length || !$('.product_features:checked').length)){
+                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please select supported features / test suites.</div>');
+                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+                    return false;
+                }
+
+                 if($('#productType').val() == 'DataSource' && ! $('#product_caps').val()){
+                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please list supported capabilities.</div>');
+                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+                    return false;
+                }
 
                 if (!isValid) {
                     $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please complete fields in red.</div>');

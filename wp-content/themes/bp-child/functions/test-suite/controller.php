@@ -453,6 +453,20 @@ function saveSuite()
     update_post_meta($id, 'lvl_code', $lvl_code);
     update_post_meta($id, 'lvl_desc', $lvl_desc);
 
+    update_post_meta($id, 'ts_tester_role', $_POST['ts_tester_role']);
+
+
+
+    $features = [];
+    //Save Conformance Level
+    foreach ($_POST['feature_name'] as $i => $feature) {
+        if (!trim($feature)) {
+            continue;
+        }
+        $features[] = ['name' => $feature, 'description' => $_POST['feature_description'][$i]];
+    }
+    update_post_meta($id, 'featuresList', json_encode($features));
+
     //Subscription Price
 //    cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
 //    cp_update_post_meta($id, 'signup_price', $_POST['signup_price']);

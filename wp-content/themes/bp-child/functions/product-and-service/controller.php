@@ -218,6 +218,20 @@ function saveProductService()
         update_post_meta($id, 'product_owner', $user_organisation->organisation_admin);
     }
 
+    update_post_meta($id, 'product_type', $_POST['product_type']);
+
+    if($_POST['product_type'] == 'DataSource'){
+        $caps = [];
+        $capsRaw = explode(',', $_POST['capabilities']);
+        foreach($capsRaw as $cap){
+            $caps[] = trim($cap);
+        }
+        update_post_meta($id, 'capabilities', json_encode($caps));
+    } else {
+        update_post_meta($id, 'product_suites', json_encode($_POST['product_suites']));
+        update_post_meta($id, 'product_features', json_encode($_POST['product_features']));
+    }
+
 
     update_post_meta($id, 'product_name', htmlspecialchars($_POST['product_name']));
     update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));

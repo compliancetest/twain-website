@@ -30,6 +30,11 @@ class ProductAndService
 
     var $relatedProducts = array();
 
+    var $capabilities = [];
+    var $product_suites = [];
+    var $product_features = [];
+    var $product_type = '';
+
     public $service_related_services = '';
 
     public function loadSingleValue($key)
@@ -76,6 +81,11 @@ class ProductAndService
         $this->descrition = $this->loadSingleValue('product_description');        
         $this->visibility = $this->loadSingleValue('product_visibility');
         $this->services_not_permitted = $this->loadSingleValue('services_not_permitted');
+
+        $this->capabilities = json_decode($this->loadSingleValue('capabilities'), 1);
+        $this->product_suites = json_decode($this->loadSingleValue('product_suites'), 1);
+        $this->product_features = json_decode($this->loadSingleValue('product_features'), 1);
+        $this->product_type = $this->loadSingleValue('product_type');
 
 
         $this->loadRelatedProducts();
