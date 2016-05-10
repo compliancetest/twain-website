@@ -20,6 +20,7 @@ class ProductsController extends BaseApiController
      * @api {post} /v1/products Create product
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
+     * @apiParam {string} product_type  Mandatory - product type (either 'DataSource' or 'Application')
      * @apiParamExample {json} App example
      *
      *   {
@@ -42,7 +43,6 @@ class ProductsController extends BaseApiController
      *         "DF_DS2"
      *       ]
      *     },
-     *     "ProductType": "DataSource",
      *     "Capabilities": [
      *       "CAP_DEVICEONLINE",
      *       "CAP_SUPPORTEDCAPS",
@@ -84,7 +84,6 @@ class ProductsController extends BaseApiController
      *           "DG_IMAGE",
      *           "DF_DS2"]
      *       },
-     *       "ProductType": "Application"
      *   }
      * @apiName createProduct
      * @apiGroup Products
@@ -111,10 +110,13 @@ class ProductsController extends BaseApiController
      *
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
-     *  {
+     *   {
      *     "errors": {
      *       "identity": [
-     *         "The identity must be a valid JSON string."
+     *         "The identity field is required."
+     *       ],
+     *       "product_type": [
+     *         "The product type field is required."
      *       ]
      *     },
      *     "code": 422
@@ -138,7 +140,8 @@ class ProductsController extends BaseApiController
     public function create(\Illuminate\Http\Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'identity' => 'required|json'
+            'identity' => 'required|json',
+            'product_type' => 'required|in:DataSource,Application'
         ]);
 
         if ($validator->fails()) {
@@ -185,7 +188,7 @@ class ProductsController extends BaseApiController
         $userOrganisation = \Auth::user()->organisation[0];
 
         $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
-        $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $jsonEntry['ProductType']]);
+        $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
         $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => sanitize_title($productName)]);
         $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
