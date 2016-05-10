@@ -196,42 +196,35 @@ if (isset($_SESSION['product_data'])) {
                                     </div>
                                 </div>
                                 <div class="grid-cell width60P div_type_app">
-                                   <label>Product Test Suites</label>
-                                    <?php foreach(getUserSubscribedSuites() as $suite):?>
-                                        <?php
-                                            $suite = new TestSuite($suite->suite_id);
-                                            $suite->load();
-                                            if($suite->ts_tester_role !== 'Application') {
-                                                continue;
-                                            }
-                                        ?>
-                                        <label>
-                                            <input type="checkbox" name="product_suites[]" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
-                                                <?php echo $suite->title;?>
-                                        </label>
-                                    <?php endforeach;?>
+                                   <div class="field-row div_type_app" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
+                                     <label>Product Features:</label>
+                                        <?php foreach(getUserSubscribedSuites() as $suite):?>
+                                            <?php
+                                                $suite = new TestSuite($suite->suite_id);
+                                                $suite->load();
+                                                if($suite->ts_tester_role !== 'Application') {
+                                                    continue;
+                                                }?>
+                                                <label style="margin-left: 10px;">
+                                                    <input type="checkbox" name="product_suites[]" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
+                                                        <?php echo $suite->title;?>
+                                                </label>
+                                                <?php
+
+                                                foreach($suite->featuresList as $feature):
+                                            ?>
+                                                    <label class="field-tooltip" style="margin-left: 20px;">
+                                                        <input type="checkbox" name="product_features[]" class="product_features" data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?> value="<?php echo $feature['name'];?>"/>
+                                                            <?php echo $feature['name'];?>
+                                                    </label>
+                                                <?php endforeach;?>
+                                        <?php endforeach;?>
+
+                                </div>
                                 </div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="field-row div_type_app" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
-                                 <label>Product Features</label>
-                                    <?php foreach(getUserSubscribedSuites() as $suite):?>
-                                        <?php
-                                            $suite = new TestSuite($suite->suite_id);
-                                            $suite->load();
-                                            if($suite->ts_tester_role !== 'Application') {
-                                                continue;
-                                            }
-                                            foreach($suite->featuresList as $feature):
-                                        ?>
-                                                <label class="field-tooltip">
-                                                    <input type="checkbox" name="product_features[]" class="product_features" data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?> value="<?php echo $feature['name'];?>"/>
-                                                        <?php echo $feature['name'];?>
-                                                </label>
-                                            <?php endforeach;?>
-                                    <?php endforeach;?>
 
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -445,9 +438,9 @@ if (isset($_SESSION['product_data'])) {
 
             $('.product_suites').on('change', function(){
                 $('.product_features').attr('checked', false);
-                $('.product_features').closest('label').hide();
+                $('.product_features').attr('disabled', 'disabled');
                 $.each($('.product_suites:checked'), function(index, el){
-                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").attr('checked', 'checked').closest('label').show();
+                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").attr('checked', 'checked').removeAttr('disabled');
                 })
             });
 
