@@ -7,6 +7,7 @@ use App\Post;
 use App\PostMeta;
 use Aws\Laravel\AwsFacade as AWS;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel;
@@ -200,6 +201,7 @@ class ProductsController extends BaseApiController
 
     /**
      * @api {get} /v1/products Get user's products
+     ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
      *
      * @apiName getProducts
      * @apiGroup Products
@@ -236,19 +238,53 @@ class ProductsController extends BaseApiController
      *     },
      *     "code": 404
      *   }
+     * @apiError 422 Invalid product_type value
+     * @apiErrorExample {json} Invalid product_type value:
+     *   {
+     *     "errors": {
+     *       "product_type": [
+     *         "The selected product type is invalid."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
      * @apiVersion 1.0.0
      */
 
-    public function get()
+    public function get(Request $request)
     {
-        $products = Post::where(['post_author' => \Auth::user()->ID, 'post_type' => 'product-service'])->get();
+        $validator = Validator::make($request->all(), [
+            'product_type' => 'in:DataSource,Application'
+        ]);
 
-        if($products->isEmpty()){
-             return $this->respondNotFound('No products were found for this user!');
+         if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
         }
+
+        if($request->has('product_type')){
+            $type = $request->get('product_type');
+            $products = DB::table('wp_posts')
+            ->join('wp_postmeta AS pm1', function ($join) use ($type) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $type)
+                        ->where('pm1.meta_key', '=', 'product_type');
+                })
+            ->where('wp_posts.post_type', '=', 'product-service')
+            ->where('wp_posts.post_author', '=', \Auth::user()->ID)
+            ->get();
+            if(empty($products)){
+                 return $this->respondNotFound('No products were found with '.$type.' type for this user!');
+            }
+        } else {
+            $products = Post::where(['post_author' => \Auth::user()->ID, 'post_type' => 'product-service'])->get();
+            if($products->isEmpty()){
+                 return $this->respondNotFound('No products were found for this user!');
+            }
+        }
+
         $response = [];
         foreach($products as $product){
             $response[] = [
