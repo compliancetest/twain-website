@@ -86,8 +86,8 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Request Example",
-          "content": "\n{\n  \"identity\": {\n    \"Identity\": {\n      \"Version\": \"CN-02a_v1.0\",\n      \"Protocol\": {\n        \"Major\": 2,\n        \"Minor\": 3\n      },\n      \"Manufacturer\": \"Drummond Group\",\n      \"Product\": {\n        \"Name\": \"CN-02a DS\",\n        \"Family\": \"Virtual Data Source\"\n      },\n      \"SupportedGroups\": \"DF_DSM2\"\n    },\n    \"Capabilities\": [\n      \"CAP_DEVICEONLINE\",\n      \"CAP_SUPPORTEDCAPS\",\n      \"CAP_UICONTROLLABLE\",\n      \"CAP_XFERCOUNT\",\n      \"ICAP_BITDEPTH\",\n      \"ICAP_BITORDER\",\n      \"ICAP_COMPRESSION\",\n      \"ICAP_PHYSICALHEIGHT\",\n      \"ICAP_PHYSICALWIDTH\",\n      \"ICAP_PIXELFLAVOR\",\n      \"ICAP_PIXELTYPE\",\n      \"ICAP_PLANARCHUNKY\",\n      \"ICAP_UNITS\",\n      \"ICAP_XFERMECH\",\n      \"ICAP_XNATIVERESOLUTION\",\n      \"ICAP_XRESOLUTION\",\n      \"ICAP_YNATIVERESOLUTION\",\n      \"ICAP_YRESOLUTION\"\n    ]\n  }\n}",
+          "title": "Example 'identity' value",
+          "content": "\n{\n    \"Identity\": {\n      \"Version\": \"CN-02a_v1.0\",\n      \"Protocol\": {\n        \"Major\": 2,\n        \"Minor\": 3\n      },\n      \"Manufacturer\": \"Drummond Group\",\n      \"Product\": {\n        \"Name\": \"CN-02a DS\",\n        \"Family\": \"Virtual Data Source\"\n      },\n      \"SupportedGroups\": \"DF_DSM2\"\n    },\n    \"Capabilities\": [\n      \"CAP_DEVICEONLINE\",\n      \"CAP_SUPPORTEDCAPS\",\n      \"CAP_UICONTROLLABLE\",\n      \"CAP_XFERCOUNT\",\n      \"ICAP_BITDEPTH\",\n      \"ICAP_BITORDER\",\n      \"ICAP_COMPRESSION\",\n      \"ICAP_PHYSICALHEIGHT\",\n      \"ICAP_PHYSICALWIDTH\",\n      \"ICAP_PIXELFLAVOR\",\n      \"ICAP_PIXELTYPE\",\n      \"ICAP_PLANARCHUNKY\",\n      \"ICAP_UNITS\",\n      \"ICAP_XFERMECH\",\n      \"ICAP_XNATIVERESOLUTION\",\n      \"ICAP_XRESOLUTION\",\n      \"ICAP_YNATIVERESOLUTION\",\n      \"ICAP_YRESOLUTION\"\n    ]\n}",
           "type": "json"
         }
       ]
@@ -154,6 +154,19 @@ define({ "api": [
     "type": "get",
     "url": "/v1/products",
     "title": "Get user's products",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - product type (either 'Application' or 'DataSource').</p>"
+          }
+        ]
+      }
+    },
     "name": "getProducts",
     "group": "Products",
     "success": {
@@ -173,6 +186,12 @@ define({ "api": [
             "optional": false,
             "field": "404",
             "description": "<p>Products not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Invalid product_type value</p>"
           }
         ]
       },
@@ -180,6 +199,11 @@ define({ "api": [
         {
           "title": "Products not found error:",
           "content": "{\n   \"error\": {\n     \"message\": \"No products were found for this user!\"\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product_type value:",
+          "content": "{\n  \"errors\": {\n    \"product_type\": [\n      \"The selected product type is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
