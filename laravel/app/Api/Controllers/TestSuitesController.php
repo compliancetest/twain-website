@@ -2,35 +2,61 @@
 
 namespace App\Api\Controllers;
 
-use App\Profile;
-use App\TestCase;
-use App\TestingDetail;
 use App\Post;
+use Validator;
 use App\UserSubscription;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TestSuitesController extends BaseApiController
 {
 
     /**
      * @api {get} /v1/testsuites Request Test Suites list
+     * @apiParam {string} [tester_role]  Optional - test suite's tester role (either 'DataSource' or 'Application')
+     * @apiParam {string} [product_id]  Optional - product id
      *
      * @apiName getTestSuites
      * @apiGroup TestSuites
      *
      * @apiDescription Method used to get test suites list
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} No subscription:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "You do not have any active subscription"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Subscriptions not found:
      *   {
      *     "errors": {
      *       "message": [
-     *          "Subscriptions not found"
+     *          "Suites not found"
      *       ]
      *     },
      *     "code": 404
+     *   }
+     *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} Validation error:
+     *   {
+     *     "errors": {
+     *       "tester_role": [
+     *         "The selected tester role is invalid."
+     *       ],
+     *       "product_id": [
+     *         "The selected product id is invalid."
+     *       ]
+     *     },
+     *     "code": 422
      *   }
      *
      * @apiSuccessExample {json} Success Response:
@@ -52,21 +78,77 @@ class TestSuitesController extends BaseApiController
      *
      * @apiVersion 1.0.0
      */
-    public function index()
+    public function index(Request $request)
     {
-        $subscriptions = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active'])->get();
-        if ($subscriptions->isEmpty()) {
-            return $this->respondNotFound("Subscriptions not found");
+        $validator = Validator::make($request->all(), [
+            'tester_role' => 'in:Application,DataSource',
+            'product_id' => 'exists:wp_posts,post_name,post_type,product-service',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
         }
 
         $suites = [];
 
-        foreach ($subscriptions as $subscription) {
-            $suite = Post::find($subscription->suite_id);
-            $suites[] = [
-                'id' => $suite->post_name,
-                'title' => $suite->post_title,
-            ];
+        /**
+         * Return product's test suites if product_id parameter exists
+         */
+        if ($request->has('product_id')) {
+
+            $product = Post::where(['post_name' => $request->get('product_id')])->first();
+            $productSuiteMeta = $product->meta()->where(['meta_key' => 'product_suites'])->first();
+
+            if (!empty($productSuiteMeta)) {
+                foreach (json_decode($productSuiteMeta->meta_value, true) as $suiteId) {
+                    $suite = Post::find($suiteId);
+                    /**
+                     * We filter test suites by tester role if tester_role parameter exists
+                     */
+                    if ($request->has('tester_role')) {
+                        $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
+                        if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('tester_role')) {
+                            continue;
+                        }
+                    }
+                    $suites[] = [
+                        'id' => $suite->post_name,
+                        'title' => $suite->post_title,
+                    ];
+                }
+            }
+
+        /**
+         * Return subscribed test suites
+         */
+        } else {
+
+            $subscriptions = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active'])->get();
+
+            if ($subscriptions->isEmpty()) {
+                return $this->respondForbiddenError("You do not have any active subscription");
+            }
+
+            foreach ($subscriptions as $subscription) {
+                $suite = Post::find($subscription->suite_id);
+                /**
+                 * We filter test suites by tester role if tester_role parameter exists
+                 */
+                if ($request->has('tester_role')) {
+                    $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
+                    if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('tester_role')) {
+                        continue;
+                    }
+                }
+                $suites[] = [
+                    'id' => $suite->post_name,
+                    'title' => $suite->post_title,
+                ];
+            }
+        }
+
+        if (empty($suites)) {
+            return $this->respondNotFound("Suites not found");
         }
 
         return $this->respondWithData($suites);

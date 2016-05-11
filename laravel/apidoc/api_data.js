@@ -673,6 +673,26 @@ define({ "api": [
     "type": "get",
     "url": "/v1/testsuites",
     "title": "Request Test Suites list",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "tester_role",
+            "description": "<p>Optional - test suite's tester role (either 'DataSource' or 'Application')</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_id",
+            "description": "<p>Optional - product id</p>"
+          }
+        ]
+      }
+    },
     "name": "getTestSuites",
     "group": "TestSuites",
     "description": "<p>Method used to get test suites list</p>",
@@ -682,15 +702,37 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
           }
         ]
       },
       "examples": [
         {
+          "title": "No subscription:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"You do not have any active subscription\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Subscriptions not found:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Subscriptions not found\"\n    ]\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Suites not found\"\n    ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"errors\": {\n    \"tester_role\": [\n      \"The selected tester role is invalid.\"\n    ],\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
