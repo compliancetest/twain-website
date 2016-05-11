@@ -179,14 +179,14 @@ class ProductsController extends BaseApiController
             'comment_status' => 'closed',
             'ping_status' => 'closed',
         ]);
-        if (isset($jsonEntry['Capabilities'])) {
+        if ($request->get('product_type') == 'Application') {
             $product->meta()->create(['meta_key' => 'capabilities', 'meta_value' => json_encode($jsonEntry['Capabilities'])]);
         } else {
             $productSuites = [];
-            foreach(getUserSubscribedSuites(\Auth::user()->ID) as $suite){
+            foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+                $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
 
-                $productType = $product->meta()->where(['post_id' => $suite->suite_id, 'meta_key' => 'productSuites']);
-                 if(!$productType || $productType !== 'DataSource') {
+                if (!$productType || $productType->meta_value !== 'DataSource') {
                     continue;
                 }
                 $productSuites[] = $suite->suite_id;
