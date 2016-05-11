@@ -15,8 +15,8 @@ class TestSuitesController extends BaseApiController
 
     /**
      * @api {get} /v1/testsuites Request Test Suites list
-     * @apiParam {string} [tester_role]  Optional - test suite's tester role (either 'DataSource' or 'Application')
-     * @apiParam {string} [product_id]  Optional - product id
+     * @apiParam {string} [product_type]  Optional - get test suites by product type (either 'DataSource' or 'Application')
+     * @apiParam {string} [product_id]  Optional - get test suites, associated with a product
      *
      * @apiName getTestSuites
      * @apiGroup TestSuites
@@ -81,7 +81,7 @@ class TestSuitesController extends BaseApiController
     public function index(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'tester_role' => 'in:Application,DataSource',
+            'product_type' => 'in:Application,DataSource',
             'product_id' => 'exists:wp_posts,post_name,post_type,product-service',
         ]);
 
@@ -105,9 +105,9 @@ class TestSuitesController extends BaseApiController
                     /**
                      * We filter test suites by tester role if tester_role parameter exists
                      */
-                    if ($request->has('tester_role')) {
+                    if ($request->has('product_type')) {
                         $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
-                        if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('tester_role')) {
+                        if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
                             continue;
                         }
                     }
@@ -134,9 +134,9 @@ class TestSuitesController extends BaseApiController
                 /**
                  * We filter test suites by tester role if tester_role parameter exists
                  */
-                if ($request->has('tester_role')) {
+                if ($request->has('product_type')) {
                     $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
-                    if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('tester_role')) {
+                    if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
                         continue;
                     }
                 }
