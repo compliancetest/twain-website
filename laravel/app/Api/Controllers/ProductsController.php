@@ -200,7 +200,7 @@ class ProductsController extends BaseApiController
 
         $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
         $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
-        $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => sanitize_title($productName)]);
+        $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
         $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
         $product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $userOrganisation->id]);
