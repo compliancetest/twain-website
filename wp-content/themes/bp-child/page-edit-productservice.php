@@ -448,6 +448,10 @@ if (isset($_SESSION['product_data'])) {
                 })
             });
 
+            <?php if(!$product->id):?>
+                $('.product_suites').change();
+            <?php endif;?>
+
             $('#product_description').redactor({
                 air: true,
                 minHeight: 80
