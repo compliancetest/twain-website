@@ -227,6 +227,16 @@ function saveProductService()
             $caps[] = trim($cap);
         }
         update_post_meta($id, 'capabilities', json_encode($caps));
+        $dataSourcesSuites = [];
+        foreach(getUserSubscribedSuites() as $suite){
+             $suite = new TestSuite($suite->suite_id);
+             $suite->load();
+             if($suite->ts_tester_role !== 'DataSource') {
+                continue;
+            }
+            $dataSourcesSuites[] = $suite->id;
+        }
+        update_post_meta($id, 'product_suites', json_encode($dataSourcesSuites));
     } else {
         update_post_meta($id, 'product_suites', json_encode($_POST['product_suites']));
         update_post_meta($id, 'product_features', json_encode($_POST['product_features']));

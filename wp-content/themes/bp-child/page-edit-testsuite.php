@@ -195,7 +195,7 @@ $xeroItems = ct_get_xero_items();
                         </div>
                         <div class="field-row">
                             <div class="grid-cell width95P">
-                                <label for="ts_tester_role">Tester Role: </label>
+                                <label for="ts_tester_role">Product Type: </label>
                                 <input type="radio" name="ts_tester_role"  value="DataSource" <?php echo $suite->ts_tester_role == 'DataSource' ? 'checked="checked"' : '' ?> />
                                 <span class="label">DataSource</span>
 
