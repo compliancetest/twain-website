@@ -566,7 +566,7 @@ get_header();
                                 <div class="featuresl-box">
 
                                     <?php foreach ($features as $row) { ?>
-                                        <div class="field-row">
+                                        <div class="field-row" <?php if(!in_array($crow->ID, $case->testSuite)):?> style="display: none;" <?php endif;?> >
                                             <div class="grid-cell radio-cell">
                                                 <label><input type="checkbox" data-suiteid="<?php echo $crow->ID;?>" class="feature"
                                                               name="feature[]"
@@ -744,7 +744,7 @@ get_header();
                 $('.feature').attr('checked', false);
                 $('.feature').closest('.field-row').hide();
                 $.each($('#suites-cell input:checked'), function(index, el){
-                    $(".feature[data-suiteid='" + jQuery(el).val() + "']").attr('checked', 'checked').closest('.field-row').show();
+                    $(".feature[data-suiteid='" + jQuery(el).val() + "']").closest('.field-row').show();
                 })
             });
 
