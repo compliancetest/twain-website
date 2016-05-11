@@ -181,6 +181,17 @@ class ProductsController extends BaseApiController
         ]);
         if (isset($jsonEntry['Capabilities'])) {
             $product->meta()->create(['meta_key' => 'capabilities', 'meta_value' => json_encode($jsonEntry['Capabilities'])]);
+        } else {
+            $productSuites = [];
+            foreach(getUserSubscribedSuites(\Auth::user()->ID) as $suite){
+
+                $productType = $product->meta()->where(['post_id' => $suite->suite_id, 'meta_key' => 'productSuites']);
+                 if(!$productType || $productType !== 'DataSource') {
+                    continue;
+                }
+                $productSuites[] = $suite->suite_id;
+            }
+            $product->meta()->create(['meta_key' => 'product_suites', 'meta_value' => json_encode($productSuites)]);
         }
         $product->post_name = Post::getUniquePostName($product, $product->post_name);
         $product->save();
