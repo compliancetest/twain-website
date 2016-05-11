@@ -680,15 +680,15 @@
             "group": "Parameter",
             "type": "string",
             "optional": true,
-            "field": "tester_role",
-            "description": "<p>Optional - test suite's tester role (either 'DataSource' or 'Application')</p>"
+            "field": "product_type",
+            "description": "<p>Optional - get test suites by product type (either 'DataSource' or 'Application')</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": true,
             "field": "product_id",
-            "description": "<p>Optional - product id</p>"
+            "description": "<p>Optional - get test suites, associated with a product</p>"
           }
         ]
       }
