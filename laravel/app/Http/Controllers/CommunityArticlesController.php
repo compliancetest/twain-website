@@ -89,7 +89,7 @@ class CommunityArticlesController extends Controller
                 if($file) {
                     $data = [
                         'filename' => $file->getClientOriginalName(),
-                        'location' => getenv('ENVIRONMENT') . '/communities/articles/' . $article->id . '/' . $file->getClientOriginalName(),
+                        'location' => config('env.env') . '/communities/articles/' . $article->id . '/' . $file->getClientOriginalName(),
 
                     ];
                     Storage::put($data['location'], file_get_contents($file));

@@ -64,10 +64,10 @@ class TestingDetailsController extends Controller
         $entry = TransactionsLog::find($id);
         $s3 = AwsFacade::createClient('s3');
         $data = (string) $s3->getObject(array(
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.bucket.transactions'),
             'Key' => $entry['log_output'],
         ))['Body'];
-        $link = $s3->getObjectUrl('data.twain.gosource.com.au', $entry['log_output'], '1 hour');
+        $link = $s3->getObjectUrl(config('env.bucket.transactions'), $entry['log_output'], '1 hour');
         return view('pages.testingdetails.output', compact('data', 'link'));
     }
 }

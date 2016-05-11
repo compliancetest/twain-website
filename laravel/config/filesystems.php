@@ -58,8 +58,8 @@ return [
             'driver' => 's3',
             'key' => 'AKIAI5A2F2WZFQUDE77A',
             'secret' => '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',
-            'region' => 'us-west-2',
-            'bucket' => 'data.twain.gosource.com.au',
+            'region' => config('env.bucket.region'),
+            'bucket' => config('env.bucket.website'),
         ],
 
     ],

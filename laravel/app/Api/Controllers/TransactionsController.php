@@ -58,11 +58,11 @@ class TransactionsController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $fileName = getenv('ENVIRONMENT') . '/transactions/' .\Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+        $fileName = config('env.env') . '/transactions/' .\Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
 
         $s3 = Aws::createClient('s3');
         $s3->putObject(array(
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.buckets.transactions'),
             'Key' => $fileName,
             'Body' => file_get_contents($request->file('file')->getPath().'/'.$request->file('file')->getFilename()),
         ));

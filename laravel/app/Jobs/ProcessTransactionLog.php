@@ -89,7 +89,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $filePath = base_path() . '/storage/app/public/transactions/';
         $s3 = AwsFacade::createClient('s3');
         $s3->getObject(array(
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.bucket.transactions'),
             'Key' => $this->fileName,
             'SaveAs' => $filePath . $fileName
         ))['Body'];
@@ -161,7 +161,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                                     $fileName =  $env . '/transactions/' .$this->userId . '/' . $testCaseFolder . '/' . $this->executionId . '/' . $order .'.json';
                                     $s3 = AwsFacade::createClient('s3');
                                     $s3->putObject(array(
-                                        'Bucket' => 'data.twain.gosource.com.au',
+                                        'Bucket' => config('env.bucket.transactions'),
                                         'Key' => $fileName,
                                         'Body' => json_encode($log['Output'], JSON_PRETTY_PRINT),
                                         'ContentType' => 'application/json',
