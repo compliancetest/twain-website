@@ -62,7 +62,7 @@ class TransactionsController extends BaseApiController
 
         $s3 = Aws::createClient('s3');
         $s3->putObject(array(
-            'Bucket' => config('env.buckets.transactions'),
+            'Bucket' => config('env.bucket.transactions'),
             'Key' => $fileName,
             'Body' => file_get_contents($request->file('file')->getPath().'/'.$request->file('file')->getFilename()),
         ));
