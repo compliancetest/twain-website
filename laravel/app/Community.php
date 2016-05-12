@@ -99,6 +99,15 @@ class Community extends Model
     }
 
     /**
+     * Relation with Community surveys
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function surveysResults()
+    {
+        return $this->hasMany('\App\CommunitySurveyResult');
+    }
+
+    /**
      * Get all approved community members
      * @return array|null
      */

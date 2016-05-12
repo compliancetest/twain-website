@@ -125,6 +125,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
 
+        Route::get('communitysurveys/{community}/surveyresults', 'CommunitiesController@surveysList');
+        Route::post('communitysurveys/{community}/surveyresults', 'CommunitiesController@saveSurveysLinks');
+
     });
 
 

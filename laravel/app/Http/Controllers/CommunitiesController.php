@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\CommunitySurveyResult;
 use App\ForumThread;
 use App\ForumThreadRead;
 use App\Post;
 use Illuminate\Http\Request;
-
+use Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -105,6 +106,7 @@ class CommunitiesController extends Controller
         if ($action == 'surveys') {
             $surveys = [];
             $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
+            $data['links'] = CommunitySurveyResult::all()->keyBy('survey_id');
             foreach($surveyMonkey->getSurveyList()['data'] as $survey){
                 $collectors = $surveyMonkey->getCollectorList($survey['id']);
                 if($collectors['data']){
@@ -236,6 +238,62 @@ class CommunitiesController extends Controller
         return Redirect::to(getSiteUrl() . '/communities/' . $slug . '/admin');
     }
 
+    /**
+     * Render list of surveys
+     * @param $communitySlug
+     * @return string
+     */
+    public function surveysList($communitySlug)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
+        foreach($surveyMonkey->getSurveyList()['data'] as $survey){
+            $collectors = $surveyMonkey->getCollectorList($survey['id']);
+            if($collectors['data']){
+                foreach($collectors['data'] as $col) {
+                    if($col['name'] != $community->title){
+                        continue;
+                    }
+                    $collector = $surveyMonkey->getCollector($col['id']);
+                    if($collector['data']['type'] == 'weblink') {
+                        $surveys[] = [
+                            'title' => $survey['title'],
+                            'id' => $survey['id'],
+                            'url' => $collector['data']['url'],
+                            'date_created' => date('Y-m-d', strtotime($collector['data']['date_created'])),
+                            'date_close' => isset($collector['data']['status']) && $collector['data']['status'] == 'closed' ? date('Y-m-d', strtotime($collector['data']['date_modified'])) : false,
+                            'is_active' => strtotime($collector['data']['close_date']) < mktime(),
+                        ];
+                    }
+                }
+            }
+        }
+        $links = CommunitySurveyResult::all()->keyBy('survey_id');
+        return view('pages.communities.partials.show.admin.surveys_list', compact('surveys', 'links', 'community'))->render();
+    }
+
+    /**
+     * Save surveys links
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveSurveysLinks($communitySlug, Request $request)
+    {
+         $validator = Validator::make($request->all(), [
+            'links.*' => 'url'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid url'], 422);
+        }
+
+        $community = Community::findBySlug($communitySlug);
+        foreach($request->get('links') as $surveyId => $link){
+            CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
+        }
+        return response()->json(['status' => 'success']);
+    }
     /**
      * @param $request
      * @param $model
