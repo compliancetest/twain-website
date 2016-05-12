@@ -245,6 +245,7 @@ class CommunitiesController extends Controller
      */
     public function surveysList($communitySlug)
     {
+        $surveys = [];
         $community = Community::findBySlug($communitySlug);
         $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
         foreach($surveyMonkey->getSurveyList()['data'] as $survey){

@@ -400,11 +400,11 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Surveys Results Links</div>
                     <div class="colored-box-body">
-                        <div class="colored-box-footer">
+                        <div class="colored-box-content">
                             <a href="{{ getSiteUrl() }}/communitysurveys/{{ $community->slug }}/surveyresults"
                                class="btn btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal
                                data-target="#modalEditSurveys" data-tooltip="tooltip" title="Edit Surveys Results Links"
-                                onclick="jQuery('#editSurveysList').show();">Configure</a>
+                               onclick="jQuery('#editSurveysList').show();">Configure</a>
                             <div class="modal fade" id="modalEditSurveys" tabindex="-1" role="dialog">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">

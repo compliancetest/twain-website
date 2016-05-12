@@ -6,20 +6,23 @@
     <div class="edit-profile-form-wrapper" id="createProfileBox">
 
         {!! Form::open(['id' => 'linksForm', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/communitysurveys/'.$community->slug.'/surveyresults']) !!}
-            <table class="table table-bordered">
-                <tr>
-                    <th>Title</th>
-                    <th>Link</th>
-                </tr>
+            <table class="table colored-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Title</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
                 @foreach($surveys as $survey)
                     <tr>
-                        <td>{{ $survey['title'] }}</td>
-                        <td>
-                            <input type="text" name="links[{{ $survey['id'] }}]"
-                                   @if(isset($links[$survey['id']])) value="{{ $links[$survey['id']]->link }}" @endif >
+                        <td class="v-middle col-sm-6">{{ $survey['title'] }}</td>
+                        <td class="col-sm-6">
+                            <input class="form-control" type="text" name="links[{{ $survey['id'] }}]" @if(isset($links[$survey['id']])) value="{{ $links[$survey['id']]->link }}" @endif >
                         </td>
                     </tr>
                 @endforeach
+                </tbody>
             </table>
         </form>
     </div>
