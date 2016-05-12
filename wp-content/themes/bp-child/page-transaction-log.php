@@ -283,7 +283,7 @@ get_header();
                                                                         <span style="color: red;"><?php echo $message->return_code;?></span>
                                                                     <?php endif;?>
                                                                 </div>
-                                                                <div class="td td-message-date" style="width: 4%;"><?php echo $message->session_state;?></div>
+                                                                <div class="td td-message-date" style="width: 4%;"><?php if($message->session_state) echo $message->session_state;?></div>
                                                                 <div class="td td-message-part tocenter" style="width: 7%;">
                                                                     <?php if(!empty($message->log_output)):?>
                                                                         <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output">View</a>
