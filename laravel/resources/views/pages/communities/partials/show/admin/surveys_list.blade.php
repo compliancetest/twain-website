@@ -16,8 +16,8 @@
                 <tbody>
                 @foreach($surveys as $survey)
                     <tr>
-                        <td class="v-middle col-sm-6">{{ $survey['title'] }}</td>
-                        <td class="col-sm-6">
+                        <td class="v-middle col-sm-5">{{ $survey['title'] }}</td>
+                        <td class="col-sm-7">
                             <input class="form-control" type="text" name="links[{{ $survey['id'] }}]" @if(isset($links[$survey['id']])) value="{{ $links[$survey['id']]->link }}" @endif >
                         </td>
                     </tr>
@@ -45,7 +45,6 @@
                 if(rsp.status == 'success')
                 {
                     jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
-                    jQuery('.close-modal').delay('2000').click();
                 }else{
                     jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message error-message">' + rsp.message + '</p>');
                 }

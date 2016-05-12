@@ -9186,6 +9186,11 @@ input[type="checkbox"] {
   }
 }
 
+/* line 98, ../scss/blocks/_modals.scss */
+#modalEditSurveys .modal-dialog {
+  width: 700px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 @media (min-width: 767px) {
