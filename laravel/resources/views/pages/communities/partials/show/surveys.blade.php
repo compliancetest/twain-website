@@ -43,7 +43,8 @@
                                                 <div class="modal-body">
                                                     <div id="surveyMonkeyInfo">
                                                         <div>
-                                                            <iframe src="https://www.surveymonkey.net/results/SM-7KWQ5JLR/"
+                                                            <?php $src = isset($links[$survey['id']]) ? $links[$survey['id']]->link : '';?>
+                                                            <iframe src="{!! $src !!}"
                                                                     style="width: 100%; min-width: 1100px; min-height: 500px; border: 0 solid white;"></iframe>
                                                         </div>
                                                     </div>

@@ -24,6 +24,10 @@
                 border-bottom: 1px solid $table-border-color;
             }
 
+            td.v-middle{
+                vertical-align: middle;
+            }
+
             &.removing{
                 background: #fb6c6c;
             }

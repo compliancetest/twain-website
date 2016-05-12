@@ -397,6 +397,35 @@
 
                 {!! Form::close() !!}
 
+                <div class="colored-box">
+                    <div class="colored-box-header">Surveys Results Links</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <a href="{{ getSiteUrl() }}/communitysurveys/{{ $community->slug }}/surveyresults"
+                               class="btn btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal
+                               data-target="#modalEditSurveys" data-tooltip="tooltip" title="Edit Surveys Results Links"
+                               onclick="jQuery('#editSurveysList').show();">Configure</a>
+                            <div class="modal fade" id="modalEditSurveys" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            Edit Surveys Results Links
+                                        </div>
+                                        <div class="modal-body block-loading-wrapper">
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+                                            <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                        </div>
+                                        <div class="block-loading" id="editSurveysList"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING</div><div class="loading-wait">Please wait...</div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'method' => 'post', 'url' => getSiteUrl() . '/communities/'.$community->slug .'/getjson']) !!}
                 <div class="colored-box">
                     <div class="colored-box-header">Generate JSON</div>
