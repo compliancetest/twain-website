@@ -29,7 +29,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n     \"message\": \"Valid Credentails!\",\n     \"code\": 200\n}",
+          "content": "{\n  \"data\": {\n    \"organisation_id\": 4\n  },\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
