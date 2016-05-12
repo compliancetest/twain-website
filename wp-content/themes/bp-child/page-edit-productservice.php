@@ -441,16 +441,16 @@ if (isset($_SESSION['product_data'])) {
             $('#productType').change();
 
             $('.product_suites').on('change', function(){
-                $('.product_features').attr('checked', false);
+                if(!$('.product_suites').is(':checked')){
+                     $(".product_features[data-suiteid='" + jQuery(this).val() + "']").attr('checked', false);
+                }
                 $('.product_features').attr('disabled', 'disabled');
                 $.each($('.product_suites:checked'), function(index, el){
                     $(".product_features[data-suiteid='" + jQuery(el).val() + "']").removeAttr('disabled');
                 })
             });
 
-            <?php if(!$product->id):?>
-                $('.product_suites').change();
-            <?php endif;?>
+            $('.product_suites').change();
 
             $('#product_description').redactor({
                 air: true,
