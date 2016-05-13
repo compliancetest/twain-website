@@ -121,7 +121,7 @@ function saveProductService()
 
     //Generate Product ID
     $product_slug = sanitize_title(htmlspecialchars($_POST['product_name']));
-    $product_id = sanitize_title($_POST['product_owner']) . "_" . $product_slug . "_v" . $_POST['product_version'];
+    $product_id = $user_organisation->id .'_'. sanitize_title($_POST['product_owner']) . "_" . $product_slug . "_v" . $_POST['product_version'];
 
     //Check Product ID duplication
     $query = $wpdb->prepare("SELECT count(distinct(post_id)) FROM $wpdb->postmeta WHERE post_id != %d AND meta_key = 'product_id' AND meta_value = %s ", $id, $product_id);
@@ -250,6 +250,25 @@ function saveProductService()
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
     update_post_meta($id, 'product_description', stripslashes_deep($_POST['product_description']));
 
+    $productOrganisations = json_decode($user_organisation->products_organisations);
+    if(empty($productOrganisations)){
+        $productOrganisations = [$user_organisation->organisation_name];
+    }
+    /**
+     * We should add product owner field to products organisations list if user
+     * confirmed this action via popup on edit page
+     */
+    if(get_post_meta($id, 'product_visibility', true) == 'Private'
+        && $product_visibility == 'Public'
+        && !in_array($_POST['product_owner'], $productOrganisations)){
+        $productOrganisations[] = $_POST['product_owner'];
+        $wpdb->update("wp_organisations",
+            ['products_organisations' => json_encode($productOrganisations)],
+            ['id' => $user_organisation->id],
+            ['%s'],
+            ['%d']
+        );
+    }
     update_post_meta($id, 'product_visibility', $product_visibility);
 
     //Save Related Products

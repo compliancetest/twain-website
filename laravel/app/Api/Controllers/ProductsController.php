@@ -3,6 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Jobs\ProcessTransactionLog;
+use App\Organisation;
 use App\Post;
 use App\PostMeta;
 use Aws\Laravel\AwsFacade as AWS;
@@ -21,7 +22,8 @@ class ProductsController extends BaseApiController
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
      * @apiParam {string} product_type  Mandatory - product type (either 'DataSource' or 'Application')
-     * @apiParamExample {json} App example
+     * @apiParam {integre} organisation_id  Mandatory - User's organisation ID
+     * @apiParamExample {json} DataSource example
      *
      *   {
      *     "Identity": {
@@ -65,7 +67,7 @@ class ProductsController extends BaseApiController
      *     ]
      *   }
      *
-     * @apiParamExample {json} DS example
+     * @apiParamExample {json} Application example
      *   {
      *       "Identity": {
      *           "ProtocolMajor": 2,
@@ -141,7 +143,8 @@ class ProductsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'identity' => 'required|json',
-            'product_type' => 'required|in:DataSource,Application'
+            'product_type' => 'required|in:DataSource,Application',
+            'organisation_id' => 'required|exists:wp_organisations,id',
         ]);
 
         if ($validator->fails()) {
@@ -151,7 +154,7 @@ class ProductsController extends BaseApiController
         $entity = $jsonEntry['Identity'];
         $productName = htmlspecialchars($entity['ProductName']);
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
-        $productId = sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_V" . $productVersion;
+        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_V" . $productVersion;
 
         $databaseEntry = PostMeta::where(['meta_key' => 'product_id', 'meta_value' => $productId])->first();
 
@@ -198,11 +201,21 @@ class ProductsController extends BaseApiController
 
         $userOrganisation = \Auth::user()->organisation[0];
 
+        $organisation = Organisation::find($request->get('organisation_id'));
+        $productsOrganisations = json_decode($organisation->products_organisations);
+        if(!$productsOrganisations){
+            $productsOrganisations = [$organisation->organisation_name];
+        }
+
         $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
         $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
         $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
         $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
-        $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
+        if(in_array($entity['Manufacturer'], $productsOrganisations)){
+            $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
+        } else {
+            $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Private']);
+        }
         $product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $userOrganisation->id]);
 
         $response = [
