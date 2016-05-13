@@ -788,6 +788,20 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "product_id",
+            "description": "<p>Mandatory - product id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_suite_id",
+            "description": "<p>Mandatory - test suite id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "execution_id",
             "description": "<p>Mandatory - execution id string.</p>"
           }
@@ -819,7 +833,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "content": "\n{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"test_suite_id\": [\n      \"The test suite id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ],\n    \"product_id\": [\n      \"The product id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
