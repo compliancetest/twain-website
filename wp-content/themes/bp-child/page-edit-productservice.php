@@ -149,7 +149,7 @@ if (isset($_SESSION['product_data'])) {
                                     <label>Visibility:</label>
 
                                     <div class="has-field-tooltip">
-                                        <select name="product_visibility" class="select field-tooltip"
+                                        <select id="product_visibility" name="product_visibility" class="select field-tooltip"
                                                 data-tooltip-content="'Public' means anyone can see this product, 'Community' means visibility is limited to community members, 'Private' means that the product is only visible to your own organisation">
                                             <option <?php if ($product->visibility == 'Public'): ?> selected="selected" <?php endif; ?> value="Public">Public</option>
                                             <option <?php if ($product->visibility == 'Community'): ?> selected="selected" <?php endif; ?> value="Community">Community</option>
@@ -545,6 +545,15 @@ if (isset($_SESSION['product_data'])) {
                         jQuery(this).addClass('input-error');
                     }
                 });
+
+                <?php if($product->id && $product->visibility == 'Private'):?>
+                    var organisations = <?php echo $user_organisation->products_organisations;?>;
+                    if(jQuery('#product_visibility').val() == 'Public' && jQuery.inArray(jQuery('#product_owner').val(), organisations) == -1){
+                        if(!confirm('Manufacturer is not from the organisation list. Are you sure?')){
+                            return false;
+                        }
+                    }
+                <?php endif;?>
 
                 if($('#productType').val() == 'Application' && ( !$('.product_suites:checked').length || !$('.product_features:checked').length)){
                     $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please select supported features / test suites.</div>');

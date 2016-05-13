@@ -40,8 +40,24 @@ function compliancetest_user_actions()
         cp_user_detail_edit();
     }else if(wp_verify_nonce($cpAction,'organisation_detail_edit')){
         cp_user_organisation_detail_edit();
-    }else if(wp_verify_nonce($cpAction,'edit_payment_method')){
+    }else if(wp_verify_nonce($cpAction,'edit_payment_method')) {
         cp_user_payment_edit();
+
+    } else if(wp_verify_nonce($cpAction ,'save_products_organisations')){
+        $organisationsList = [];
+        foreach(explode(',', $_POST['product_organisations'] ) as $productOrganisation){
+            $organisationsList[] = trim($productOrganisation);
+        }
+        if(empty($organisationsList)){
+            exit('Products organisation list can not be empty');
+        }
+        $result = saveProductsOrganisations(intval($_POST['organisation_id']),json_encode($organisationsList));
+        if($result === true || is_int($result)) {
+            echo "success";
+            addMessage('Organisations list was saved successfully!');
+        } else
+            echo $result;
+        exit;
     }else if(wp_verify_nonce($cpAction ,'save_payment_method')){
         $result = cp_user_payment_save();
         if($result === true || is_int($result))

@@ -162,3 +162,58 @@ if(!defined('ABSPATH'))
     </div>
 </div>
 <?php endif; ?>
+
+<?php
+    $productOrganisations = json_decode($organisation->products_organisations, true);
+    if(!$productOrganisations){
+        $productOrganisations = [$organisation->organisation_name];
+    }
+?>
+
+<div class="clear"></div>
+<div class="space25"></div>
+
+<div class="column left four_sixths nopadding">
+    <div class="grid-box table-box" id="my_payment">
+        <div class="grid-box-header">
+            <h5 class="left">Products organisations  list</h5>
+            <div class="clear"></div>
+        </div>
+        <div class="grid-box-body">
+            <div id="edit-produts-form">
+                <form action="#" method="post" id="org_products_form">
+                    <div class="grid-row">
+                        <div class="grid-cell width30P"><label>Nickname</label></div>
+                        <input type="text" name="product_organisations" id="nickname" value="<?php echo implode(',', $productOrganisations);?>" class="input" autocomplete="off" style="width: 55%; float: left;margin-right: 10px;">
+                        <a href="#" class="action-btn process-btn submit_org_products"><span class="p"></span><span class="t">Save</span></a>
+                        <div class="clear"></div>
+                    </div>
+                    <input type="hidden" name="organisation_id" id="organisation_id" value="<?=$organisation_id?>"/>
+                    <?php wp_nonce_field('save_products_organisations', 'cp-action'); ?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $my_payment_method_desc = get_post_meta($post->ID, 'my_payment_method_desc', true);?>
+<?php if ($my_payment_method_desc): ?>
+<div class="right two_sixths">
+    <div class="gray_message_box radius9 light_gray_txt">
+        <div class="indicator"></div>
+        List of allowed organisations for products(comma separated)
+    </div>
+</div>
+<?php endif; ?>
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery('.submit_org_products').on('click', function(e){
+            e.preventDefault();
+            jQuery('#org_products_form').ajaxSubmit({
+                success: function(data){
+                    console.log(data)
+                }
+            });
+        });
+    });
+</script>

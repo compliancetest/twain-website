@@ -268,6 +268,26 @@ function cp_user_payment_edit()
     exit;
 }
 
+/**
+ * @param $organisationId
+ * @param $organisationsList
+ * @return bool
+ */
+function saveProductsOrganisations($organisationId, $organisationsList){
+    global $wpdb;
+
+    if (!$wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_members WHERE user_id = %d AND is_admin = 1 ", get_current_user_id()))) {
+        exit("Permission Denied! Only organisation admin can edit organisations list!");
+    }
+
+    $wpdb->update("wp_organisations",
+        ['products_organisations' => $organisationsList],
+        ['id' => $organisationId],
+        ['%s'],
+        ['%d']
+    );
+    return true;
+}
 //Save User Payment Information
 function cp_user_payment_save()
 {
