@@ -187,9 +187,6 @@ class ProductsController extends BaseApiController
             'ping_status' => 'closed',
         ]);
 
-        $this->product->post_name = Post::getUniquePostName($this->product, $this->product->post_name);
-        $this->product->save();
-
         $this->_setProductVisibility($request, $entity);
         $this->_setProductTypeFields($request, $jsonEntry);
 
