@@ -57,7 +57,8 @@
                     </div>
                     <?php if( $can_view ):?>
                         <ul class="product-attributes">
-                            <li>Owner: <strong><?php echo $product->owner; ?></strong>
+                            <li>Organisation: <strong><?php echo $product->owner; ?></strong>
+                            <li>Manufacturer: <strong><?php echo $product->manufacturer; ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                             <li>Version: <strong><?php echo $product->version; ?></strong></li>
                             <!--<li>Type: <strong><?php echo $product->type; ?></strong></li>-->

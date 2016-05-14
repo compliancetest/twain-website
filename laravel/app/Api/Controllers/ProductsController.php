@@ -17,6 +17,8 @@ use Validator;
 class ProductsController extends BaseApiController
 {
 
+    private $product;
+
     /**
      * @api {post} /v1/products Create product
      *
@@ -153,18 +155,20 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = htmlspecialchars($entity['ProductName']);
-        $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
-        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_V" . $productVersion;
+        $productVersion = $entity['Version']['MajorNum'] . '-' . $entity['Version']['MinorNum'];
+        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . $productVersion;
+        $this->product = Post::where(['post_name' => $productId])->first();
+        if ($this->product) {
+            if ($this->product->post_author == \Auth::user()->ID) {
 
-        $databaseEntry = PostMeta::where(['meta_key' => 'product_id', 'meta_value' => $productId])->first();
+                $this->_setProductVisibility($request, $entity);
+                $this->_setProductTypeFields($request, $jsonEntry);
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
-        if ($databaseEntry) {
-            $product = Post::where(['ID' => $databaseEntry->post_id])->first();
-            if ($product->post_author == \Auth::user()->ID) {
                 $response = [
-                    'id' => $product->post_name,
-                    'title' => $product->post_title,
-                    'link' => getSiteUrl() . '/product/' . $product->post_name,
+                    'id' => $this->product->post_name,
+                    'title' => $this->product->post_title,
+                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
                 ];
                 return $this->respondWithData($response);
             } else {
@@ -172,9 +176,9 @@ class ProductsController extends BaseApiController
             }
         }
 
-        $product = Post::create([
+        $this->product = Post::create([
             'post_title' => $productName,
-            'post_name' => sanitize_title($entity['ProductName'] .'_v_' . $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum']),
+            'post_name' => $productId,
             'post_type' => 'product-service',
             'post_status' => 'publish',
             'post_author' => \Auth::user()->ID,
@@ -182,8 +186,39 @@ class ProductsController extends BaseApiController
             'comment_status' => 'closed',
             'ping_status' => 'closed',
         ]);
-        if ($request->get('product_type') == 'Application') {
-            $product->meta()->create(['meta_key' => 'capabilities', 'meta_value' => json_encode($jsonEntry['Capabilities'])]);
+
+        $this->product->post_name = Post::getUniquePostName($this->product, $this->product->post_name);
+        $this->product->save();
+
+        $this->_setProductVisibility($request, $entity);
+        $this->_setProductTypeFields($request, $jsonEntry);
+
+        $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
+        $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
+        $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
+        $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
+        $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
+        $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
+        
+        $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
+
+        $response = [
+            'id' => $this->product->post_name,
+            'title' => $this->product->post_title,
+            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+        ];
+        return $this->setStatusCode(201)->respondWithData($response);
+    }
+
+    /**
+     * Set up product type fields - capabilities for Application and test suites list for DataSource
+     * @param $request
+     * @param $jsonEntry
+     */
+    private function _setProductTypeFields($request, $jsonEntry)
+    {
+        if ($request->get('product_type') == 'DataSource') {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'capabilities'], ['meta_value' => json_encode($jsonEntry['Capabilities'])]);
         } else {
             $productSuites = [];
             foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
@@ -194,38 +229,29 @@ class ProductsController extends BaseApiController
                 }
                 $productSuites[] = $suite->suite_id;
             }
-            $product->meta()->create(['meta_key' => 'product_suites', 'meta_value' => json_encode($productSuites)]);
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
         }
-        $product->post_name = Post::getUniquePostName($product, $product->post_name);
-        $product->save();
+    }
 
-        $userOrganisation = \Auth::user()->organisation[0];
-
+    /**
+     * Set product visibility field
+     * @param $request
+     * @param $entity
+     */
+    private function _setProductVisibility($request, $entity)
+    {
         $organisation = Organisation::find($request->get('organisation_id'));
         $productsOrganisations = json_decode($organisation->products_organisations);
         if(!$productsOrganisations){
             $productsOrganisations = [$organisation->organisation_name];
         }
-
-        $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
-        $product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
-        $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
-        $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
+        
         if(in_array($entity['Manufacturer'], $productsOrganisations)){
-            $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Public']);
         } else {
-            $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Private']);
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
         }
-        $product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $userOrganisation->id]);
-
-        $response = [
-            'id' => $product->post_name,
-            'title' => $product->post_title,
-            'link' => getSiteUrl() . '/product/' . $product->post_name,
-        ];
-        return $this->setStatusCode(201)->respondWithData($response);
     }
-
     /**
      * @api {get} /v1/products Get user's products
      ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').

@@ -147,8 +147,8 @@ function saveProductService()
             return;
         }
     } else {
-        if (!wp_update_post(array('ID' => $id, 'post_title' => htmlspecialchars($_POST['product_name']), 'post_name' => sanitize_title(htmlspecialchars($_POST['product_name']))))) {
-            addMessage('There was an error while updating the test suite.', true);
+        if (!wp_update_post(array('ID' => $id, 'post_title' => htmlspecialchars($_POST['product_name'])))) {
+            addMessage('There was an error while updating the product.', true);
             return;
         }
     }
@@ -255,13 +255,13 @@ function saveProductService()
         $productOrganisations = [$user_organisation->organisation_name];
     }
     /**
-     * We should add product owner field to products organisations list if user
+     * We should add manufacturer field to organisation's manufacterers list if user
      * confirmed this action via popup on edit page
      */
     if(get_post_meta($id, 'product_visibility', true) == 'Private'
         && $product_visibility == 'Public'
-        && !in_array($_POST['product_owner'], $productOrganisations)){
-        $productOrganisations[] = $_POST['product_owner'];
+        && !in_array($_POST['manufacturer'], $productOrganisations)){
+        $productOrganisations[] = $_POST['manufacturer'];
         $wpdb->update("wp_organisations",
             ['products_organisations' => json_encode($productOrganisations)],
             ['id' => $user_organisation->id],
