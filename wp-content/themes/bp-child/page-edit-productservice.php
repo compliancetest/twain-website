@@ -82,11 +82,11 @@ if (isset($_SESSION['product_data'])) {
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Name:</label>
-
                                     <div class="has-field-tooltip">
                                         <input type="text" class="input required field-tooltip"
-                                               data-tooltip-content="Enter your product or service name as it is known in the marketplace." name="product_name" id="product_name"
-                                               value="<?php echo $product->name ?>"/>
+                                               data-tooltip-content="Enter your product or service name as it is known in the marketplace."
+                                               name="product_name" id="product_name" value="<?php echo $product->name ?>" readonly="readonly"
+                                               disabled="disabled"/>
                                     </div>
                                 </div>
                                 <div class="grid-cell">
@@ -108,8 +108,9 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell">
                                     <label>Version:</label>
 
-                                    <div class="has-defined-tooltip product-version-field">
-                                        <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version ?>"/>
+                                    <div class=" product-version-field">
+                                        <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version ?>"
+                                               readonly="readonly" disabled="disabled"/>
                                         <span style="width: 278px; margin-left: -139px; bottom: 52px; display: none;" class="simple_tooltip">Enter the version of your product or service. Want to test multiple versions? Create a product for each.<span></span></span>
                                     </div>
                                 </div>
@@ -141,7 +142,7 @@ if (isset($_SESSION['product_data'])) {
                                         <input type="checkbox" class="allow_override" name="allow_override" style="margin-right: 3px;" <?php if( $product->product_override == 'yes' ):?> checked="checked" <?php endif;?>>Override </br>
                                         <input type="text" style="width: 195px; margin-right: 10px; <?php if( $product->product_override != 'yes' ):?> display: none; <?php endif;?> margin-top: 10px;" class="input  <?php if( $product->product_override == 'yes' ):?> required <?php endif;?>field-tooltip admin_entry_input" name="product_owner_override" id="product_owner_override" value="<?php echo $product->product_override == 'yes' ? $product->product_owner_override : $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
                                     <?php }else{ ?>
-                                        <input type="text" style="width: 195px; margin-right: 10px;" class="input required field-tooltip" name="product_owner" id="product_owner" readonly value="<?php echo $product->product_override == 'yes' ? $product->product_owner_override : $user_organisation->organisation_name?>" data-default="<?php echo $product->manufacturer?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
+                                        <input type="text" style="width: 195px; margin-right: 10px;" class="input required field-tooltip" name="product_owner" id="product_owner" readonly value="<?php echo $product->product_override == 'yes' ? $product->product_owner_override : $user_organisation->organisation_name?>" data-default="<?php echo $user_organisation->organisation_name?>" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile." />
                                         <input type="checkbox" class="allow_override" name="allow_override" <?php if( $product->product_override == 'yes' ):?> checked="checked" <?php endif;?>style="margin-right: 3px;">Override
                                         <?php } ?>
                                     </div>
@@ -149,7 +150,9 @@ if (isset($_SESSION['product_data'])) {
                                     <label>Manufacturer:</label>
 
                                     <div class="has-field-tooltip">
-                                        <input type="text" style="width: 275px; margin-right: 10px; margin-top: 10px;" class="input field-tooltip" name="manufacturer" id="manufacturer" value="<?php echo $product->manufacturer?>" data-tooltip-content="Product manufacturer" />
+                                        <input type="text" style="width: 275px; margin-right: 10px; margin-top: 10px;" class="input field-tooltip" name="manufacturer"
+                                               id="manufacturer" value="<?php echo $product->manufacturer?>" readonly="readonly" disabled="disabled"
+                                               data-tooltip-content="Product manufacturer"/>
                                     </div>
                                     <div class="space10"></div>
                                     <label>Visibility:</label>
@@ -187,7 +190,7 @@ if (isset($_SESSION['product_data'])) {
                                    <label>Product Type:</label>
 
                                     <div class="has-field-tooltip">
-                                        <select name="product_type" class="select field-tooltip" data-tooltip-content="Product Type" id="productType">
+                                        <select name="product_type" class="select field-tooltip" data-tooltip-content="Product Type" id="productType" disabled="disabled">
                                             <option <?php if ($product->product_type == 'DataSource'): ?> selected="selected" <?php endif; ?> value="DataSource">DataSource</option>
                                             <option <?php if ($product->product_type == 'Application'): ?> selected="selected" <?php endif; ?> value="Application">Application</option>
                                         </select>
@@ -196,8 +199,8 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell width60P div_type_ds">
                                     <label>Capabilities(comma separated):</label>
 
-                                    <div class="has-defined-tooltip">
-                                        <textarea cols="" rows="" class="textarea field-tooltip" id="product_caps" name="capabilities"><?php if(is_array($product->capabilities)) echo implode(',', $product->capabilities) ?></textarea>
+                                    <div>
+                                        <textarea cols="" rows="" class="textarea field-tooltip" id="product_caps" name="capabilities" readonly="readonly" disabled="disabled"><?php if(is_array($product->capabilities)) echo implode(',', $product->capabilities) ?></textarea>
                                         <span class="simple_tooltip" style="width:540px; margin-left: -270px; bottom: 115px;"><span></span>Product capabilities list</span>
                                     </div>
 
