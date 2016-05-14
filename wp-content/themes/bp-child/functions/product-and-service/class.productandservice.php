@@ -34,6 +34,7 @@ class ProductAndService
     var $product_suites = [];
     var $product_features = [];
     var $product_type = '';
+    var $manufacturer = '';
 
     public $service_related_services = '';
 
@@ -63,6 +64,7 @@ class ProductAndService
         $this->organisation_id = $this->loadSingleValue('product_organisation_id');
         
         $this->owner = $this->loadSingleValue('product_owner');
+        $this->manufacturer = $this->loadSingleValue('product_manufacturer');
 
         $this->product_override = $this->loadSingleValue('product_override');
         $this->product_owner_override = $this->loadSingleValue('product_owner_override');
