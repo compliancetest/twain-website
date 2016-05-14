@@ -155,8 +155,8 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = htmlspecialchars($entity['ProductName']);
-        $productVersion = $entity['Version']['MajorNum'] . '-' . $entity['Version']['MinorNum'];
-        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . $productVersion;
+        $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
+        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . str_replace('.', '-', $productVersion);
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
             if ($this->product->post_author == \Auth::user()->ID) {
