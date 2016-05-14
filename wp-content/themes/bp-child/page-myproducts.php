@@ -125,11 +125,6 @@ get_header();
            <div class="clear"></div>
            <div class="space20"></div>
            <?php } ?>
-            <?php if(can_maintain_product_and_service($current_user->ID)){ ?>
-                <a href="/add-new-product-and-service" class="action-btn add-new-btn has-tooltip" title="Add Product"><span class="p"></span><span class="t">Add</span></a>
-            <?php } else { ?>
-                <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAINTAIN_PRODUCTS')?>&new=1" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip" title="Add Product"><span class="p"></span><span class="t">New Product</span></a>
-            <?php } ?>
             <div class="space20"></div>
         </div>
 
