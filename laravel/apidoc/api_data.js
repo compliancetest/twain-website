@@ -177,7 +177,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/v1/products",
-    "title": "Get user's products",
+    "title": "Get user organisation's products",
     "parameter": {
       "fields": {
         "Parameter": [

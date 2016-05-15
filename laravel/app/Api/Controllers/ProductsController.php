@@ -250,7 +250,7 @@ class ProductsController extends BaseApiController
         }
     }
     /**
-     * @api {get} /v1/products Get user's products
+     * @api {get} /v1/products Get user organisation's products
      ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
      *
      * @apiName getProducts
@@ -314,17 +314,26 @@ class ProductsController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
+        $userOrganisationId = \Auth::user()->organisation[0]->id;
+
         if($request->has('product_type')){
             $type = $request->get('product_type');
+
             $products = DB::table('wp_posts')
             ->join('wp_postmeta AS pm1', function ($join) use ($type) {
-                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                        ->where('pm1.meta_value', '=', $type)
-                        ->where('pm1.meta_key', '=', 'product_type');
-                })
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm1.meta_value', '=', $type)
+                    ->where('pm1.meta_key', '=', 'product_type');
+            })
+             ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm2.meta_value', '=', $userOrganisationId)
+                    ->where('pm2.meta_key', '=', 'product_organisation_id');
+            })
             ->where('wp_posts.post_type', '=', 'product-service')
-            ->where('wp_posts.post_author', '=', \Auth::user()->ID)
+            ->groupBy('wp_posts.ID')
             ->get();
+
             if(empty($products)){
                  return $this->respondNotFound('No products were found with '.$type.' type for this user!');
             }
