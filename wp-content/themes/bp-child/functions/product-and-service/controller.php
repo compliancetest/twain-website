@@ -146,11 +146,6 @@ function saveProductService()
             addMessage($id->get_error_message(), 'error');
             return;
         }
-    } else {
-        if (!wp_update_post(array('ID' => $id, 'post_title' => htmlspecialchars($_POST['product_name'])))) {
-            addMessage('There was an error while updating the product.', true);
-            return;
-        }
     }
 
     if (trim($_POST['product_url']) != '') {
@@ -193,11 +188,7 @@ function saveProductService()
     }
 
 
-    update_post_meta($id, 'product_id', $product_id);
-
     //Update Product Name ID Map Table on ESB
-    $esb = new ManageESB();
-    $esb->saveProductInfo($id, $product_id, $_POST['product_name']);
     if (is_super_admin()) {
         if (isset($_POST['allow_override'])) {
             update_post_meta($id, 'product_owner_override', $_POST['product_owner_override']);
@@ -218,35 +209,13 @@ function saveProductService()
         update_post_meta($id, 'product_owner', $user_organisation->organisation_admin);
     }
 
-    update_post_meta($id, 'product_type', $_POST['product_type']);
-
-    if($_POST['product_type'] == 'DataSource'){
-        $caps = [];
-        $capsRaw = explode(',', $_POST['capabilities']);
-        foreach($capsRaw as $cap){
-            $caps[] = trim($cap);
-        }
-        update_post_meta($id, 'capabilities', json_encode($caps));
-        $dataSourcesSuites = [];
-        foreach(getUserSubscribedSuites() as $suite){
-             $suite = new TestSuite($suite->suite_id);
-             $suite->load();
-             if($suite->ts_tester_role !== 'DataSource') {
-                continue;
-            }
-            $dataSourcesSuites[] = $suite->id;
-        }
-        update_post_meta($id, 'product_suites', json_encode($dataSourcesSuites));
-    } else {
+    if($_POST['product_type'] != 'DataSource'){
         update_post_meta($id, 'product_suites', json_encode($_POST['product_suites']));
         update_post_meta($id, 'product_features', json_encode($_POST['product_features']));
     }
 
 
-    update_post_meta($id, 'product_name', htmlspecialchars($_POST['product_name']));
     update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
-    update_post_meta($id, 'product_type', htmlspecialchars($_POST['product_type']));
-    update_post_meta($id, 'product_version', htmlspecialchars($_POST['product_version']));
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
     update_post_meta($id, 'product_description', stripslashes_deep($_POST['product_description']));
 
@@ -271,35 +240,6 @@ function saveProductService()
     }
     update_post_meta($id, 'product_visibility', $product_visibility);
 
-    //Save Related Products
-    $related_products = isset($_POST['related-product']) ? $_POST['related-product'] : array();
-    $related_products_relations = isset($_POST['related-product-relation']) ? $_POST['related-product-relation'] : array();
-
-    //remove old entries
-    $query = $wpdb->prepare("DELETE FROM " . $wpdb->prefix . "products_relationships WHERE product_id=%d", $id);
-    $wpdb->query($query);
-
-    foreach ($related_products as $i => $p) {
-        if (!$p)
-            continue;
-        $wpdb->insert($wpdb->prefix . "products_relationships", array('product_id' => $id, 'related_product_id' => $p, 'relationship' => $related_products_relations[$i]));
-    }
-
-    if (isset($_POST['services_to_delete']) && !empty($_POST['services_to_delete'])) {
-        $services = explode(',', trim($_POST['services_to_delete'], ','));
-        if (!empty($services)) {
-            foreach ($services AS $service) {
-                if (!Service::has_agreements($service)) {
-                    $cs = new CloudSearch();
-                    $cs->cloud_search_delete_item($service, 'service');
-                    $wpdb->query($wpdb->prepare("DELETE FROM wp_services WHERE wp_post_id = %d ", $service));
-                    wp_delete_post($service);
-                } else {
-                    addMessage("Can't delete '" . get_the_title($service) . "' service, because it has agreements", 'error');
-                }
-            }
-        }
-    }
     $full_search = new FulltextSearch();
     $cloud_search = new CloudSearch();
     /**

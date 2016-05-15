@@ -176,7 +176,7 @@ if(!defined('ABSPATH'))
 <div class="column left four_sixths nopadding">
     <div class="grid-box table-box" id="my_payment">
         <div class="grid-box-header">
-            <h5 class="left">Manufacturer list</h5>
+            <h5 class="left">Manufacturer List</h5>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">
