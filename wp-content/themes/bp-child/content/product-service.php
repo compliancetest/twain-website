@@ -66,6 +66,7 @@
                                 <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                             <?php endif; ?>
                             <li>Visibility: <strong><?php echo $product->visibility; ?></strong></li>
+                            <li>Product Type: <strong><?php echo $product->product_type; ?></strong></li>
                         </ul>
                         <div class="product-description"><?php echo $product->descrition; ?></div>
                     <?php endif;?>
