@@ -385,7 +385,7 @@ if (isset($_SESSION['product_data'])) {
                 <?php if($product->id && $product->visibility == 'Private'):?>
                     var organisations = <?php echo $user_organisation->products_organisations;?>;
                     if(jQuery('#product_visibility').val() == 'Public' && jQuery.inArray(jQuery('#manufacturer').val(), organisations) == -1){
-                        if(!confirm('Manufacturer is not from the organisation list. Are you sure?')){
+                        if(!confirm('Manufacturer is not from the manufacturer list of your organisation. Do you want to add it? If yes, all new products of this manufacturer will be created with "Public" visibility.')){
                             return false;
                         }
                     }

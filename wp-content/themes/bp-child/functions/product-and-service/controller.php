@@ -229,8 +229,8 @@ function saveProductService()
      */
     if(get_post_meta($id, 'product_visibility', true) == 'Private'
         && $product_visibility == 'Public'
-        && !in_array($_POST['manufacturer'], $productOrganisations)){
-        $productOrganisations[] = $_POST['manufacturer'];
+        && !in_array(get_post_meta($id, 'product_manufacturer', true), $productOrganisations)){
+        $productOrganisations[] = get_post_meta($id, 'product_manufacturer', true);
         $wpdb->update("wp_organisations",
             ['products_organisations' => json_encode($productOrganisations)],
             ['id' => $user_organisation->id],
