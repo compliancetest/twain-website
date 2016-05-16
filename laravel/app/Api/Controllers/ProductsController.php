@@ -162,7 +162,7 @@ class ProductsController extends BaseApiController
             if ($this->product->post_author == \Auth::user()->ID) {
 
                 $this->_setProductVisibility($request, $entity);
-                $this->_setProductTypeFields($request, $jsonEntry);
+                $this->_setProductTypeFields($request, $jsonEntry, false);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
                 $response = [
@@ -212,21 +212,23 @@ class ProductsController extends BaseApiController
      * @param $request
      * @param $jsonEntry
      */
-    private function _setProductTypeFields($request, $jsonEntry)
+    private function _setProductTypeFields($request, $jsonEntry, $isCreate = true)
     {
         if ($request->get('product_type') == 'DataSource') {
             $this->product->meta()->updateOrCreate(['meta_key' => 'capabilities'], ['meta_value' => json_encode($jsonEntry['Capabilities'])]);
         } else {
-            $productSuites = [];
-            foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
-                $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+            if ($isCreate) {
+                $productSuites = [];
+                foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+                    $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
 
-                if (!$productType || $productType->meta_value !== 'DataSource') {
-                    continue;
+                    if (!$productType || $productType->meta_value !== 'DataSource') {
+                        continue;
+                    }
+                    $productSuites[] = $suite->suite_id;
                 }
-                $productSuites[] = $suite->suite_id;
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
             }
-            $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
         }
     }
 
