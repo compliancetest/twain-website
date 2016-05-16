@@ -338,9 +338,17 @@ class ProductsController extends BaseApiController
                  return $this->respondNotFound('No products were found with '.$type.' type for this user!');
             }
         } else {
-            $products = Post::where(['post_author' => \Auth::user()->ID, 'post_type' => 'product-service'])->get();
-            if($products->isEmpty()){
-                 return $this->respondNotFound('No products were found for this user!');
+            $products = DB::table('wp_posts')
+                ->join('wp_postmeta AS pm1', function ($join) use ($userOrganisationId) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $userOrganisationId)
+                        ->where('pm1.meta_key', '=', 'product_organisation_id');
+                })
+                ->where('wp_posts.post_type', '=', 'product-service')
+                ->groupBy('wp_posts.ID')
+                ->get();
+            if (empty($products)) {
+                return $this->respondNotFound('No products were found for this user!');
             }
         }
 
