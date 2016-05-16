@@ -106,7 +106,7 @@ define({ "api": [
         },
         {
           "title": "Application example",
-          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n        \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    },\n}",
+          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n        \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    }\n}",
           "type": "json"
         }
       ]

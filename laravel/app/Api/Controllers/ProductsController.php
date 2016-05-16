@@ -87,7 +87,7 @@ class ProductsController extends BaseApiController
      *           "SupportedGroups": ["DG_CONTROL",
      *           "DG_IMAGE",
      *           "DF_DS2"]
-     *       },
+     *       }
      *   }
      * @apiName createProduct
      * @apiGroup Products
