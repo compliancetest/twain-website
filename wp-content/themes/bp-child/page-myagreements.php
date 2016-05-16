@@ -3,6 +3,12 @@
 * Template Name: My Agreements
 */
 
+/**
+ * We dont need this functionality for now - so we redirecting users to homepage
+ */
+wp_redirect('/');
+exit;
+
 global $post;
 $slug = get_post( $post )->post_name;
 

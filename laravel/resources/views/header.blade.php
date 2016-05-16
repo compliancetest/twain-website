@@ -77,7 +77,6 @@
                                     <li><a data-title="Transactions" href="{{ getSiteUrl() }}/my-transaction-log/" class="menu-transactions">Transactions</a></li>
                                     <li><a data-title="Support" href="{{ getSiteUrl() }}/my-support-tickets/" class="menu-support">Support</a></li>
                                     <li><a data-title="Profile" href="{{ getSiteUrl() }}/my-profile/" class="menu-profile">Profile</a></li>
-                                    <li class="last"><a data-title="Agreements" href="{{ getSiteUrl() }}/agreements/" class="menu-agreements">Agreements</a></li>
                                 </ul>
                             </li>
                             <li class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></li>
