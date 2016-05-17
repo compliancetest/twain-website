@@ -1,6 +1,5 @@
 <div class="block-loading-wrapper">
     <div class="community-forums">
-        <div class="success-message hide">Topic was deleted successfully!</div>
         <div class="topic-header clearfix">
             <a href="/communities/{{ $community->slug }}/forum" class="btn btn-default btn-with-icon btn-back pull-right">Back to forums</a>
             <h1>{{ $thread->title }}</h1>
@@ -137,10 +136,7 @@
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
-                        jQuery('.success-message').removeClass('hide');
-                        setTimeout(function () {
-                            jQuery('.success-message').addClass('hide');
-                        }, 3000);
+                        $('#messages-wrapper').html('<div class="message success">Post was deleted successfully!</div>');
                         $(elem).parents('.forum-post').slideUp('slow', function () {
                             $(elem).remove();
                         });

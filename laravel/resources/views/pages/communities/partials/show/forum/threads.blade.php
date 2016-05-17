@@ -1,7 +1,6 @@
 <div class="block-loading-wrapper">
     <div class="community-downloads">
         <div class="table-responsive">
-            <div class="success-message hide">Thread was deleted successfully!</div>
             <table class="table downloads-list-table">
                 <thead>
                     <tr>
@@ -156,10 +155,7 @@
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
-                        jQuery('.success-message').removeClass('hide');
-                        setTimeout(function () {
-                            jQuery('.success-message').addClass('hide');
-                        }, 3000);
+                        $('#messages-wrapper').html('<div class="message success">Thread was deleted successfully!</div>');
                         $(elem).closest('tr').slideUp('slow', function () {
                             $(elem).remove();
                         });
