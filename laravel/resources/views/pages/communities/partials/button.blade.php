@@ -39,11 +39,11 @@
         </div>
     </div>
 
-    <div class="modal fade" id="readTermsAndConditions{{ $community->slug }}" tabindex="-1" role="dialog">
+    <div class="modal fade readTermsModal" id="readTermsAndConditions{{ $community->slug }}" data-target="#confirmJoinCommunity{{ $community->slug }}" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close-modal" data-placement="left" data-target="#confirmJoinCommunity" data-toggle="modal" data-dismiss="modal" aria-label="Close">Close</button>
+                    <button type="button" class="close-modal" data-placement="left" data-target="#confirmJoinCommunity{{ $community->slug }}" data-toggle="modal" data-dismiss="modal" aria-label="Close">Close</button>
                     Terms and Conditions
                 </div>
                 <div class="modal-body">
