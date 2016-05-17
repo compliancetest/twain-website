@@ -56,8 +56,8 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key' => 'AKIAI5A2F2WZFQUDE77A',
-            'secret' => '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',
+            'key' => env('AWS_KEY', 'AKIAI5A2F2WZFQUDE77A'),
+            'secret' => env('AWS_SECRET', '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'),
             'region' => config('env.bucket.region'),
             'bucket' => config('env.bucket.website'),
         ],
