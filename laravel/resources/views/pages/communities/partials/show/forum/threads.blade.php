@@ -148,10 +148,9 @@
 
         jQuery('.btn-delete').on('click', function (e) {
             e.preventDefault();
-            $('#edit-thread-section').hide();
-            $('#add-new-thread-section').hide();
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
+                $('#addThreadSpinner').show();
                 $.ajax({
                     url: '/forums/{{ $community->slug }}/' + elem.attr('data-id'),
                     type: 'DELETE',
@@ -164,6 +163,12 @@
                         $(elem).closest('tr').slideUp('slow', function () {
                             $(elem).remove();
                         });
+                    },
+                    complete: function () {
+                        $('#edit-thread-section').hide();
+                        $('#add-new-thread-section').hide();
+                        $('.add-new-item-default').show();
+                        $('#addThreadSpinner').hide();
                     }
                 });
                 return true;
