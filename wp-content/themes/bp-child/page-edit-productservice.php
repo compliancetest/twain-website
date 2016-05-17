@@ -82,11 +82,11 @@ if (isset($_SESSION['product_data'])) {
                             <div class="field-row">
                                 <div class="grid-cell">
                                     <label>Name:</label>
-
                                     <div class="has-field-tooltip">
                                         <input type="text" class="input required field-tooltip"
-                                               data-tooltip-content="Enter your product or service name as it is known in the marketplace." name="product_name" id="product_name"
-                                               value="<?php echo $product->name ?>"/>
+                                               data-tooltip-content="Enter your product or service name as it is known in the marketplace."
+                                               name="product_name" id="product_name" value="<?php echo $product->name ?>" readonly="readonly"
+                                               disabled="disabled"/>
                                     </div>
                                 </div>
                                 <div class="grid-cell">
@@ -108,8 +108,9 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell">
                                     <label>Version:</label>
 
-                                    <div class="has-defined-tooltip product-version-field">
-                                        <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version ?>"/>
+                                    <div class=" product-version-field">
+                                        <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version ?>"
+                                               readonly="readonly" disabled="disabled"/>
                                         <span style="width: 278px; margin-left: -139px; bottom: 52px; display: none;" class="simple_tooltip">Enter the version of your product or service. Want to test multiple versions? Create a product for each.<span></span></span>
                                     </div>
                                 </div>
@@ -125,7 +126,7 @@ if (isset($_SESSION['product_data'])) {
                             </div>
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Owner:</label>
+                                    <label>Organisation:</label>
 
                                     <div class="has-field-tooltip">
                                         <?php
@@ -146,10 +147,18 @@ if (isset($_SESSION['product_data'])) {
                                         <?php } ?>
                                     </div>
                                     <div class="space10"></div>
+                                    <label>Manufacturer:</label>
+
+                                    <div class="has-field-tooltip">
+                                        <input type="text" style="width: 275px; margin-right: 10px; margin-top: 10px;" class="input field-tooltip" name="manufacturer"
+                                               id="manufacturer" value="<?php echo $product->manufacturer?>" readonly="readonly" disabled="disabled"
+                                               data-tooltip-content="Product manufacturer"/>
+                                    </div>
+                                    <div class="space10"></div>
                                     <label>Visibility:</label>
 
                                     <div class="has-field-tooltip">
-                                        <select name="product_visibility" class="select field-tooltip"
+                                        <select id="product_visibility" name="product_visibility" class="select field-tooltip"
                                                 data-tooltip-content="'Public' means anyone can see this product, 'Community' means visibility is limited to community members, 'Private' means that the product is only visible to your own organisation">
                                             <option <?php if ($product->visibility == 'Public'): ?> selected="selected" <?php endif; ?> value="Public">Public</option>
                                             <option <?php if ($product->visibility == 'Community'): ?> selected="selected" <?php endif; ?> value="Community">Community</option>
@@ -175,188 +184,64 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="clear"></div>
                             </div>
                             <div class="field-row">
+                            </div>
+                            <div class="field-row">
                                 <div class="grid-cell">
+                                   <label>Product Type:</label>
 
+                                    <div class="has-field-tooltip">
+                                        <select name="product_type" class="select field-tooltip" data-tooltip-content="Product Type" id="productType" disabled="disabled">
+                                            <option <?php if ($product->product_type == 'DataSource'): ?> selected="selected" <?php endif; ?> value="DataSource">DataSource</option>
+                                            <option <?php if ($product->product_type == 'Application'): ?> selected="selected" <?php endif; ?> value="Application">Application</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid-cell width60P div_type_ds">
+                                    <label>Capabilities(comma separated):</label>
+
+                                    <div>
+                                        <textarea cols="" rows="" class="textarea field-tooltip" id="product_caps" name="capabilities" readonly="readonly" disabled="disabled"><?php if(is_array($product->capabilities)) echo implode(',', $product->capabilities) ?></textarea>
+                                        <span class="simple_tooltip" style="width:540px; margin-left: -270px; bottom: 115px;"><span></span>Product capabilities list</span>
+                                    </div>
+
+                                </div>
+                                <div class="grid-cell width60P div_type_app">
+                                   <div class="field-row div_type_app" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
+                                     <label>Product Features:</label>
+                                        <?php foreach(getUserSubscribedSuites() as $suite):?>
+                                            <?php
+                                                $suite = new TestSuite($suite->suite_id);
+                                                $suite->load();
+                                                if($suite->ts_tester_role !== 'Application') {
+                                                    continue;
+                                                }?>
+                                                <label style="margin-left: 10px;">
+                                                    <input type="checkbox" name="product_suites[]" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
+                                                        <?php echo $suite->title;?>
+                                                </label>
+                                                <?php
+
+                                                foreach($suite->featuresList as $feature):
+                                            ?>
+                                                    <label class="tooltip-label has-tooltip">
+                                                        <input type="checkbox" name="product_features[]" class="product_features"
+                                                               data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?>
+                                                               value="<?php echo $feature['name'];?>"
+                                                        />
+                                                            <?php echo $feature['name'];?>
+                                                        <span class="simple_tooltip radius6"><?php echo $feature['description'];?><span></span></span>
+                                                    </label>
+                                                <?php endforeach;?>
+                                        <?php endforeach;?>
+                                    </div>
                                 </div>
                                 <div class="clear"></div>
                             </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="space20"></div>
-                <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box">
-                    <div class="grid-box-header">
-                        <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                        <h5 class="left">Related Products</h5>
-
-                        <div class="clear"></div>
-                    </div>
-                    <div class="grid-box-body">
-                        <div class="column">
-                            <?php if ($myProducts) { ?>
-                                <?php foreach ($product->relatedProducts as $row) { ?>
-                                    <div class="field-row">
-                                        <div class="grid-cell radio-cell width55P">
-                                            <label>Related Product: </label>
-                                            <select class="combobox select" name="related-product[]">
-                                                <option value=""></option>
-                                                <?php foreach ($myProducts as $p) { ?>
-                                                    <option
-                                                        value="<?php echo $p->ID ?>" <?php echo $p->ID == $row->related_product_id ? 'selected="selected"' : '' ?>><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell width30P">
-                                            <label>Relation Ship: </label>
-                                            <select class="select" name="related-product-relation[]">
-                                                <option value="Depends On" <?php echo $row->relationship == 'Depends On' ? 'selected="selected"' : '' ?>>Depends On</option>
-                                                <option value="Newer Version Of" <?php echo $row->relationship == 'Newer Version Of' ? 'selected="selected"' : '' ?>>Newer Version
-                                                    Of
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell right">
-                                            <label>&nbsp;</label>
-                                            <a href="#" class="action-btn delete-btn icon-btn has-tooltip" title="Delete Related Product"><span class="p"></span></a>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                <?php } ?>
-                                <?php if ($isNew && !$product->relatedProducts) { ?>
-                                    <div class="field-row new-row">
-                                        <div class="grid-cell width55P">
-                                            <label>Related Product: </label>
-                                            <select class="combobox select" name="related-product[]">
-                                                <option value=""></option>
-                                                <?php foreach ($myProducts as $p) { ?>
-                                                    <option value="<?php echo $p->ID ?>"><?php echo get_post_meta($p->ID, 'product_name', true) ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell width30P">
-                                            <label>Relation Ship: </label>
-                                            <select class="select" name="related-product-relation[]">
-                                                <option value="Depends On">Depends On</option>
-                                                <option value="Newer Version Of">Newer Version Of</option>
-                                            </select>
-                                        </div>
-                                        <div class="grid-cell right">
-                                            <label>&nbsp;</label>
-                                            <a href="#" class="action-btn delete-btn icon-btn has-tooltip" title="Delete Related Product"><span class="p"></span></a>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                <?php } ?>
-                                <div class="btn-row">
-                                    <a href="#" class="action-btn add-new-btn has-tooltip" id="add-related-product" title="Add Related Product"><span class="p"></span><span
-                                            class="t">Add</span></a>
-
-                                    <div class="clear"></div>
-                                </div>
-                            <?php } else { ?>
-                                <div class="field-row noborderbottom">
-                                    <div class="grid-cell width100P">
-                                        No Product Found!
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-                <?php if (!$isNew): ?>
-                    <div class="grid-box grid-box-expandable grid-box-opened" id="ps-related-box-serv">
-                        <div class="grid-box-header">
-                            <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                            <h5 class="left">Service Implementations</h5>
-
-                            <div class="clear"></div>
-                        </div>
-                        <div class="grid-box-body">
-                            <div class="column">
-                                <?php
-                                $args = array(
-                                    'post_type' => 'service',
-                                    'posts_per_page' => -1,
-                                    'meta_query' => array(
-                                        array(
-                                            'key' => 'service_product_id',
-                                            'value' => $product->id,
-                                        )
-                                    )
-                                );
-                                $posts = get_posts($args);
-                                ?>
-                                <input type="hidden" value="" name="services_to_delete" id="services_to_delete">
-                                <?php if ($posts): ?>
-                                    <?php foreach ($posts AS $post): ?>
-                                        <div class="field-row">
-                                            <div class="grid-cell width30P">
-                                                <label><?php echo get_the_title($post->ID); ?> </label>
-                                            </div>
-                                            <div class="grid-cell width30P">
-                                            </div>
-                                            <div class="grid-cell right">
-                                                <?php if (check_user_has_make_agreement_priv()): ?>
-                                                    <?php if (!Service::has_agreements($post->ID)): ?>
-                                                        <a href="#" class="action-btn delete-btn icon-btn delete_service has-tooltip right"
-                                                           data-serviceid="<?php echo $post->ID; ?>"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete Service Implementation<span></span></span><span
-                                                                class="p"></span></a>
-                                                    <?php endif; ?>
-                                                    <a href="/edit-service/?id=<?php echo $post->ID; ?>" class="action-btn edit-btn has-tooltip icon-btn"
-                                                       style="margin-right: 10px;"><span class="simple_tooltip radius6" style="margin-left: -80px; width: 150px;">Edit Service Implementation<span></span></span><span
-                                                            class="p"></span></a>
-                                                <?php else: ?>
-                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS') ?>"
-                                                       rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn delete-btn icon-btn has-tooltip right"
-                                                       data-serviceid="<?php echo $post->ID; ?>"><span class="simple_tooltip radius6" style="margin-left: -90px; width: 170px;">Delete Service Implementation<span></span></span><span
-                                                            class="p"></span></a>
-                                                    <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS') ?>"
-                                                       rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn edit-btn has-tooltip icon-btn"
-                                                       style="margin-right: 10px;"><span class="simple_tooltip radius6" style="margin-left: -80px; width: 150px;">Edit Service Implementation<span></span></span><span
-                                                            class="p"></span></a>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="padding10"></div>
-                                        <div class="clear"></div>
-                                    <?php endforeach; ?>
-
-                                <?php endif; ?>
-                                <div class="btn-row">
-                                    <?php if ($wpdb->get_row($wpdb->prepare("SELECT * FROM wp_compliance_claims WHERE product_id = %d ", $product->id))): ?>
-                                        <?php if (!check_user_has_make_agreement_priv()): ?>
-                                            <a href="/?cp-action=<?php echo wp_create_nonce("insufficient-privilege") ?>&privilege=<?php echo base64_encode('MAKE_AGREEMENTS') ?>"
-                                               rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 class="action-btn add-new-btn has-tooltip"
-                                               title="Add Service Implementation"><span class="p"></span><span class="t">Add</span></a>
-                                        <?php else: ?>
-                                            <a href="/add-new-service/" class="action-btn add-new-btn has-tooltip"><span class="simple_tooltip radius6"
-                                                                                                                         style="margin-left: -75px; width: 150px;">Add Service Implementation<span></span></span><span
-                                                    class="p"></span><span class="t">Add</span></a>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                        <a href="#cant_add_popup" rel="custom-popup" class="action-btn add-new-btn has-tooltip"><span class="simple_tooltip radius6"
-                                                                                                                                      style="margin-left: -75px; width: 150px;">Add Service Implementation<span></span></span><span
-                                                class="p"></span><span class="t">Add</span></a>
-
-                                        <div class="popup-box" id="cant_add_popup" style="display: none; width: 500px">
-                                            <div class="popup-box-header radius6 noradiusbottom">New Service Implementation</div>
-                                            <div class="popup-box-content">
-                                                <p>You need to have made a claim for this product before you can create service implementations for it</p>
-                                            </div>
-                                            <div class="popup-box-footer radius6 noradiustop">
-                                                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-
-                                                <div class="clear"></div>
-                                            </div>
-                                            <a class="close_btn"></a>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endif; ?>
                 <div class="grid-box">
                     <div class="grid-box-footer nobackground noshadow">
                         <div class="btn-row nopaddingleft">
@@ -378,6 +263,31 @@ if (isset($_SESSION['product_data'])) {
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
+
+            $('#productType').on('change', function(){
+                if($(this).val() == 'Application'){
+                    $('.div_type_app').show();
+                    $('.div_type_ds').hide();
+                } else {
+                    $('.div_type_app').hide();
+                    $('.div_type_ds').show();
+                }
+            });
+
+            $('#productType').change();
+
+            $('.product_suites').on('change', function(){
+                if(!$('.product_suites').is(':checked')){
+                     $(".product_features[data-suiteid='" + jQuery(this).val() + "']").attr('checked', false);
+                }
+                $('.product_features').attr('disabled', 'disabled');
+                $.each($('.product_suites:checked'), function(index, el){
+                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").removeAttr('disabled');
+                })
+            });
+
+            $('.product_suites').change();
+
             $('#product_description').redactor({
                 air: true,
                 minHeight: 80
@@ -471,6 +381,26 @@ if (isset($_SESSION['product_data'])) {
                         jQuery(this).addClass('input-error');
                     }
                 });
+
+                <?php if($product->id && $product->visibility == 'Private'):?>
+                    var organisations = <?php echo $user_organisation->products_organisations;?>;
+                    if(jQuery('#product_visibility').val() == 'Public' && jQuery.inArray(jQuery('#manufacturer').val(), organisations) == -1){
+                        if(!confirm('Manufacturer is not from the manufacturer list of your organisation. Do you want to add it? If yes, all new products of this manufacturer will be registered with "Public" visibility.')){
+                            return false;
+                        }
+                    }
+                <?php endif;?>
+                if($('#productType').val() == 'Application' && ( !$('.product_suites:checked').length || !$('.product_features:checked').length)){
+                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please select supported features / test suites.</div>');
+                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+                    return false;
+                }
+
+                 if($('#productType').val() == 'DataSource' && ! $('#product_caps').val()){
+                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please list supported capabilities.</div>');
+                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+                    return false;
+                }
 
                 if (!isValid) {
                     $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please complete fields in red.</div>');

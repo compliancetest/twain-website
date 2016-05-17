@@ -3,10 +3,12 @@
 namespace App\Api\Controllers;
 
 use App\Jobs\ProcessTransactionLog;
+use App\Organisation;
 use App\Post;
 use App\PostMeta;
 use Aws\Laravel\AwsFacade as AWS;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel;
@@ -15,67 +17,110 @@ use Validator;
 class ProductsController extends BaseApiController
 {
 
+    private $product;
+
     /**
      * @api {post} /v1/products Create product
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
-     * @apiParamExample {json} Example 'identity' value
+     * @apiParam {string} product_type  Mandatory - product type (either 'DataSource' or 'Application')
+     * @apiParam {integre} organisation_id  Mandatory - User's organisation ID
+     * @apiParamExample {json} DataSource example
      *
      *   {
-     *       "Identity": {
-     *         "Version": "CN-02a_v1.0",
-     *         "Protocol": {
-     *           "Major": 2,
-     *           "Minor": 3
-     *         },
-     *         "Manufacturer": "Drummond Group",
-     *         "Product": {
-     *           "Name": "CN-02a DS",
-     *           "Family": "Virtual Data Source"
-     *         },
-     *         "SupportedGroups": "DF_DSM2"
+     *     "Identity": {
+     *       "ProtocolMajor": 2,
+     *       "ProtocolMinor": 1,
+     *       "Manufacturer": "TWAIN Working Group",
+     *       "ProductName": "TWAIN2 FreeImage Software Scanner",
+     *       "ProductFamily": "Software Scan",
+     *       "Version": {
+     *         "MajorNum": 2,
+     *         "MinorNum": 1,
+     *         "Language": "TWLG_ENGLISH",
+     *         "Country": "TWCY_USA",
+     *         "Info": "2.1.3 sample debug 32bit"
      *       },
-     *       "Capabilities": [
-     *         "CAP_DEVICEONLINE",
-     *         "CAP_SUPPORTEDCAPS",
-     *         "CAP_UICONTROLLABLE",
-     *         "CAP_XFERCOUNT",
-     *         "ICAP_BITDEPTH",
-     *         "ICAP_BITORDER",
-     *         "ICAP_COMPRESSION",
-     *         "ICAP_PHYSICALHEIGHT",
-     *         "ICAP_PHYSICALWIDTH",
-     *         "ICAP_PIXELFLAVOR",
-     *         "ICAP_PIXELTYPE",
-     *         "ICAP_PLANARCHUNKY",
-     *         "ICAP_UNITS",
-     *         "ICAP_XFERMECH",
-     *         "ICAP_XNATIVERESOLUTION",
-     *         "ICAP_XRESOLUTION",
-     *         "ICAP_YNATIVERESOLUTION",
-     *         "ICAP_YRESOLUTION"
+     *       "SupportedGroups": [
+     *         "DG_CONTROL",
+     *         "DG_IMAGE",
+     *         "DF_DS2"
      *       ]
+     *     },
+     *     "Capabilities": [
+     *       "CAP_DEVICEONLINE",
+     *       "CAP_SUPPORTEDCAPS",
+     *       "CAP_UICONTROLLABLE",
+     *       "CAP_XFERCOUNT",
+     *       "ICAP_BITDEPTH",
+     *       "ICAP_BITORDER",
+     *       "ICAP_COMPRESSION",
+     *       "ICAP_PHYSICALHEIGHT",
+     *       "ICAP_PHYSICALWIDTH",
+     *       "ICAP_PIXELFLAVOR",
+     *       "ICAP_PIXELTYPE",
+     *       "ICAP_PLANARCHUNKY",
+     *       "ICAP_UNITS",
+     *       "ICAP_XFERMECH",
+     *       "ICAP_XNATIVERESOLUTION",
+     *       "ICAP_XRESOLUTION",
+     *       "ICAP_YNATIVERESOLUTION",
+     *       "ICAP_YRESOLUTION"
+     *     ]
      *   }
      *
+     * @apiParamExample {json} Application example
+     *   {
+     *       "Identity": {
+     *           "ProtocolMajor": 2,
+     *           "ProtocolMinor": 1,
+     *           "Manufacturer": "TWAIN Working Group",
+     *           "ProductName": "TWAIN2 FreeImage EHR Software",
+     *           "ProductFamily": "EHR Software",
+     *           "Version": {
+     *               "MajorNum": 2,
+     *               "MinorNum": 1,
+     *               "Language": "TWLG_ENGLISH",
+     *               "Country": "TWCY_USA",
+     *               "Info": "2.1.3 sample debug 32bit"
+     *           },
+     *           "SupportedGroups": ["DG_CONTROL",
+     *           "DG_IMAGE",
+     *           "DF_DS2"]
+     *       }
+     *   }
      * @apiName createProduct
      * @apiGroup Products
      *
      * @apiSuccessExample {json} Product created:
      *  {
      *     "data": {
-     *       "id": "cn-01a-ds",
-     *       "title": "CN-01a DS",
-     *       "link": "http:\/\/twain.my\/cn-01a-ds"
+     *       "id": "twain2-freeimage-software-scanner-v-2-1",
+     *       "title": "TWAIN2 FreeImage Software Scanner",
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
      *     },
      *     "code": 201
      *   }
      *
+     *  @apiSuccessExample {json} Product exist:
+     *  {
+     *     "data": {
+     *       "id": "twain2-freeimage-software-scanner-v-2-1",
+     *       "title": "TWAIN2 FreeImage Software Scanner",
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
+     *     },
+     *     "code": 200
+     *   }
+     *
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
-     *  {
+     *   {
      *     "errors": {
      *       "identity": [
-     *         "The identity must be a valid JSON string."
+     *         "The identity field is required."
+     *       ],
+     *       "product_type": [
+     *         "The product type field is required."
      *       ]
      *     },
      *     "code": 422
@@ -84,8 +129,10 @@ class ProductsController extends BaseApiController
      * @apiError 403 Permissions error
      * @apiErrorExample {json} Permissions error:
      * {
-     *    "error": {
-     *      "message": "This product was created by another user!"
+     *    "errors": {
+     *      "message": [
+     *          "This product was created by another user!"
+     *      ]
      *    },
      *    "code": 403
      *  }
@@ -97,25 +144,31 @@ class ProductsController extends BaseApiController
     public function create(\Illuminate\Http\Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'identity' => 'required|json'
+            'identity' => 'required|json',
+            'product_type' => 'required|in:DataSource,Application',
+            'organisation_id' => 'required|exists:wp_organisations,id',
         ]);
 
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
-        $entity = json_decode($request->get('identity'), true)['Identity'];
-        $productName = htmlspecialchars($entity['Product']['Name']);
-        $productId = sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . $entity['Version'];
+        $jsonEntry = json_decode($request->get('identity'), true);
+        $entity = $jsonEntry['Identity'];
+        $productName = htmlspecialchars($entity['ProductName']);
+        $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
+        $productId = $request->get('organisation_id') . '_' .sanitize_title($entity['Manufacturer']) . "_" . sanitize_title($productName) . "_v" . str_replace('.', '-', $productVersion);
+        $this->product = Post::where(['post_name' => $productId])->first();
+        if ($this->product) {
+            if ($this->product->post_author == \Auth::user()->ID) {
 
-        $databaseEntry = PostMeta::where(['meta_key' => 'product_id', 'meta_value' => $productId])->first();
+                $this->_setProductVisibility($request, $entity);
+                $this->_setProductTypeFields($request, $jsonEntry, false);
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
-        if ($databaseEntry) {
-            $product = Post::where(['ID' => $databaseEntry->post_id])->first();
-            if ($product->post_author == \Auth::user()->ID) {
                 $response = [
-                    'id' => $product->post_name,
-                    'title' => $product->post_title,
-                    'link' => getSiteUrl() . '/product/' . $product->post_name,
+                    'id' => $this->product->post_name,
+                    'title' => $this->product->post_title,
+                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
                 ];
                 return $this->respondWithData($response);
             } else {
@@ -123,9 +176,9 @@ class ProductsController extends BaseApiController
             }
         }
 
-        $product = Post::create([
+        $this->product = Post::create([
             'post_title' => $productName,
-            'post_name' => sanitize_title($entity['Version']),
+            'post_name' => $productId,
             'post_type' => 'product-service',
             'post_status' => 'publish',
             'post_author' => \Auth::user()->ID,
@@ -133,27 +186,74 @@ class ProductsController extends BaseApiController
             'comment_status' => 'closed',
             'ping_status' => 'closed',
         ]);
-        $product->post_name = Post::getUniquePostName($product, $product->post_name);
-        $product->save();
 
-        $userOrganisation = \Auth::user()->organisation[0];
+        $this->_setProductVisibility($request, $entity);
+        $this->_setProductTypeFields($request, $jsonEntry);
 
-        $product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
-        $product->meta()->create(['meta_key' => 'product_name', 'meta_value' => sanitize_title($productName)]);
-        $product->meta()->create(['meta_key' => 'product_version', 'meta_value' => htmlspecialchars($entity['Version'])]);
-        $product->meta()->create(['meta_key' => 'product_visibility', 'meta_value' => 'Public']);
-        $product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $userOrganisation->id]);
+        $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
+        $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
+        $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
+        $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
+        $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
+        $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
+        
+        $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
 
         $response = [
-            'id' => $product->post_name,
-            'title' => $product->post_title,
-            'link' => getSiteUrl() . '/product/' . $product->post_name,
+            'id' => $this->product->post_name,
+            'title' => $this->product->post_title,
+            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
         ];
         return $this->setStatusCode(201)->respondWithData($response);
     }
 
     /**
-     * @api {get} /v1/products Get user's products
+     * Set up product type fields - capabilities for Application and test suites list for DataSource
+     * @param $request
+     * @param $jsonEntry
+     */
+    private function _setProductTypeFields($request, $jsonEntry, $isCreate = true)
+    {
+        if ($request->get('product_type') == 'DataSource') {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'capabilities'], ['meta_value' => json_encode($jsonEntry['Capabilities'])]);
+        } else {
+            if ($isCreate) {
+                $productSuites = [];
+                foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+                    $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+
+                    if (!$productType || $productType->meta_value !== 'DataSource') {
+                        continue;
+                    }
+                    $productSuites[] = $suite->suite_id;
+                }
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
+            }
+        }
+    }
+
+    /**
+     * Set product visibility field
+     * @param $request
+     * @param $entity
+     */
+    private function _setProductVisibility($request, $entity)
+    {
+        $organisation = Organisation::find($request->get('organisation_id'));
+        $productsOrganisations = json_decode($organisation->products_organisations);
+        if(!$productsOrganisations){
+            $productsOrganisations = [$organisation->organisation_name];
+        }
+        
+        if(in_array($entity['Manufacturer'], $productsOrganisations)){
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Public']);
+        } else {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
+        }
+    }
+    /**
+     * @api {get} /v1/products Get user organisation's products
+     ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
      *
      * @apiName getProducts
      * @apiGroup Products
@@ -183,10 +283,22 @@ class ProductsController extends BaseApiController
      * @apiError 404 Products not found
      * @apiErrorExample {json} Products not found error:
      *  {
-     *     "error": {
-     *       "message": "No products were found for this user!"
+     *     "errors": {
+     *       "message": [
+     *          "No products were found for this user!"
+*             ]
      *     },
      *     "code": 404
+     *   }
+     * @apiError 422 Invalid product_type value
+     * @apiErrorExample {json} Invalid product_type value:
+     *   {
+     *     "errors": {
+     *       "product_type": [
+     *         "The selected product type is invalid."
+     *       ]
+     *     },
+     *     "code": 422
      *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
@@ -194,13 +306,54 @@ class ProductsController extends BaseApiController
      * @apiVersion 1.0.0
      */
 
-    public function get()
+    public function get(Request $request)
     {
-        $products = Post::where(['post_author' => \Auth::user()->ID, 'post_type' => 'product-service'])->get();
+        $validator = Validator::make($request->all(), [
+            'product_type' => 'in:DataSource,Application'
+        ]);
 
-        if($products->isEmpty()){
-             return $this->respondNotFound('No products were found for this user!');
+         if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
         }
+
+        $userOrganisationId = \Auth::user()->organisation[0]->id;
+
+        if($request->has('product_type')){
+            $type = $request->get('product_type');
+
+            $products = DB::table('wp_posts')
+            ->join('wp_postmeta AS pm1', function ($join) use ($type) {
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm1.meta_value', '=', $type)
+                    ->where('pm1.meta_key', '=', 'product_type');
+            })
+             ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm2.meta_value', '=', $userOrganisationId)
+                    ->where('pm2.meta_key', '=', 'product_organisation_id');
+            })
+            ->where('wp_posts.post_type', '=', 'product-service')
+            ->groupBy('wp_posts.ID')
+            ->get();
+
+            if(empty($products)){
+                 return $this->respondNotFound('No products were found with '.$type.' type for this user!');
+            }
+        } else {
+            $products = DB::table('wp_posts')
+                ->join('wp_postmeta AS pm1', function ($join) use ($userOrganisationId) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $userOrganisationId)
+                        ->where('pm1.meta_key', '=', 'product_organisation_id');
+                })
+                ->where('wp_posts.post_type', '=', 'product-service')
+                ->groupBy('wp_posts.ID')
+                ->get();
+            if (empty($products)) {
+                return $this->respondNotFound('No products were found for this user!');
+            }
+        }
+
         $response = [];
         foreach($products as $product){
             $response[] = [

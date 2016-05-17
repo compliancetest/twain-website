@@ -56,10 +56,10 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key' => 'AKIAI5A2F2WZFQUDE77A',
-            'secret' => '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',
-            'region' => 'us-west-2',
-            'bucket' => 'data.twain.gosource.com.au',
+            'key' => env('AWS_KEY', 'AKIAI5A2F2WZFQUDE77A'),
+            'secret' => env('AWS_SECRET', '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'),
+            'region' => config('env.bucket.region'),
+            'bucket' => config('env.bucket.website'),
         ],
 
     ],

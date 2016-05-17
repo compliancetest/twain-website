@@ -275,7 +275,7 @@ class FulltextSearch extends BaseAWS
                 }
                 $temp_data = array(
                     'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
+                    'last_updated_date' => date('Y-m-d\TH:i:s', abs(strtotime($post->post_modified))) . 'Z',
                     'post_author_name' => cp_get_user_fullname($post->post_author),
                     'post_author_id' => $post->post_author,
                     'post_content' => $post_data['descr'],

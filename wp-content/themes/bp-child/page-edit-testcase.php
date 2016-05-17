@@ -542,6 +542,52 @@ get_header();
                         </div>
                     </div>
                 </div>
+
+                <div class="space25"></div>
+                <div class="grid-box grid-box-expandable grid-box-opened" id="property-box">
+                    <div class="grid-box-header">
+                        <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                        <h5 class="left">Choose Features</h5>
+
+                        <div class="clear"></div>
+                    </div>
+                    <div class="grid-box-body">
+                        <div class="column">
+                            <?php
+                            $isFirst = true;
+                            foreach ($testsuites as $crow) {
+                                $suite = new TestSuite($crow->ID);
+                                $suite->load();
+                                $features = $suite->featuresList;
+                                if(!is_iterable($features)){
+                                    continue;
+                                }
+                                ?>
+                                <div class="featuresl-box">
+
+                                    <?php foreach ($features as $row) { ?>
+                                        <div class="field-row" <?php if(!in_array($crow->ID, $case->testSuite)):?> style="display: none;" <?php endif;?> >
+                                            <div class="grid-cell radio-cell">
+                                                <label><input type="checkbox" data-suiteid="<?php echo $crow->ID;?>" class="feature"
+                                                              name="feature[]"
+                                                              value="<?php echo $row['name'] ?>" <?php echo isset($case->featuresList) && in_array($row['name'], $case->featuresList) ? 'checked="checked"' : '' ?> /> <?php echo $row['name'] ?>
+                                                </label>
+                                            </div>
+                                            <div class="grid-cell width60P">
+                                                <?php echo $row['description'] ?>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <?php
+                                $isFirst = false;
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="space25"></div>
                 <div class="grid-box grid-box-expandable grid-box-opened" id="property-box">
                     <div class="grid-box-header">
@@ -693,6 +739,15 @@ get_header();
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
+
+            $('#suites-cell input').on('change', function(){
+                $('.feature').attr('checked', false);
+                $('.feature').closest('.field-row').hide();
+                $.each($('#suites-cell input:checked'), function(index, el){
+                    $(".feature[data-suiteid='" + jQuery(el).val() + "']").closest('.field-row').show();
+                })
+            });
+
             //Add Loading Div
             jQuery('#edit_test_case_wrapper .grid-box-body').append('<div class="loading1"></div>');
             //Delete

@@ -99,6 +99,15 @@ class Community extends Model
     }
 
     /**
+     * Relation with Community surveys
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function surveysResults()
+    {
+        return $this->hasMany('\App\CommunitySurveyResult');
+    }
+
+    /**
      * Get all approved community members
      * @return array|null
      */
@@ -230,7 +239,7 @@ class Community extends Model
     public function getImageUrl()
     {
         if (!empty($this->image) && Storage::exists($this->image)) {
-            return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/' . $this->image;
+            return 'https://s3-us-west-2.amazonaws.com/'.config('env.bucket.website').'/' . $this->image;
         }
         return getSiteUrl() . '/laravel/resources/assets/images/gravatar.jpg';
     }

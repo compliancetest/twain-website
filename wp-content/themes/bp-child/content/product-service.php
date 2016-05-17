@@ -57,7 +57,8 @@
                     </div>
                     <?php if( $can_view ):?>
                         <ul class="product-attributes">
-                            <li>Owner: <strong><?php echo $product->owner; ?></strong>
+                            <li>Organisation: <strong><?php echo $product->owner; ?></strong>
+                            <li>Manufacturer: <strong><?php echo $product->manufacturer; ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                             <li>Version: <strong><?php echo $product->version; ?></strong></li>
                             <!--<li>Type: <strong><?php echo $product->type; ?></strong></li>-->
@@ -65,6 +66,7 @@
                                 <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                             <?php endif; ?>
                             <li>Visibility: <strong><?php echo $product->visibility; ?></strong></li>
+                            <li>Product Type: <strong><?php echo $product->product_type; ?></strong></li>
                         </ul>
                         <div class="product-description"><?php echo $product->descrition; ?></div>
                     <?php endif;?>

@@ -29,7 +29,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n     \"message\": \"Valid Credentails!\",\n     \"code\": 200\n}",
+          "content": "{\n  \"data\": {\n    \"organisation_id\": 4\n  },\n  \"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -59,7 +59,7 @@
         },
         {
           "title": "Unauthorized:",
-          "content": "{\n   \"error\": {\n     \"message\": \"Unauthorized!\"\n   },\n   \"code\": 401\n}",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Unauthorized!\"\n     ]\n   },\n   \"code\": 401\n}",
           "type": "json"
         }
       ]
@@ -81,13 +81,32 @@
             "optional": false,
             "field": "identity",
             "description": "<p>Mandatory - product identity json.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_type",
+            "description": "<p>Mandatory - product type (either 'DataSource' or 'Application')</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "integre",
+            "optional": false,
+            "field": "organisation_id",
+            "description": "<p>Mandatory - User's organisation ID</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Request Example",
-          "content": "\n{\n  \"identity\": {\n    \"Identity\": {\n      \"Version\": \"CN-02a_v1.0\",\n      \"Protocol\": {\n        \"Major\": 2,\n        \"Minor\": 3\n      },\n      \"Manufacturer\": \"Drummond Group\",\n      \"Product\": {\n        \"Name\": \"CN-02a DS\",\n        \"Family\": \"Virtual Data Source\"\n      },\n      \"SupportedGroups\": \"DF_DSM2\"\n    },\n    \"Capabilities\": [\n      \"CAP_DEVICEONLINE\",\n      \"CAP_SUPPORTEDCAPS\",\n      \"CAP_UICONTROLLABLE\",\n      \"CAP_XFERCOUNT\",\n      \"ICAP_BITDEPTH\",\n      \"ICAP_BITORDER\",\n      \"ICAP_COMPRESSION\",\n      \"ICAP_PHYSICALHEIGHT\",\n      \"ICAP_PHYSICALWIDTH\",\n      \"ICAP_PIXELFLAVOR\",\n      \"ICAP_PIXELTYPE\",\n      \"ICAP_PLANARCHUNKY\",\n      \"ICAP_UNITS\",\n      \"ICAP_XFERMECH\",\n      \"ICAP_XNATIVERESOLUTION\",\n      \"ICAP_XRESOLUTION\",\n      \"ICAP_YNATIVERESOLUTION\",\n      \"ICAP_YRESOLUTION\"\n    ]\n  }\n}",
+          "title": "DataSource example",
+          "content": "\n{\n  \"Identity\": {\n    \"ProtocolMajor\": 2,\n    \"ProtocolMinor\": 1,\n    \"Manufacturer\": \"TWAIN Working Group\",\n    \"ProductName\": \"TWAIN2 FreeImage Software Scanner\",\n    \"ProductFamily\": \"Software Scan\",\n    \"Version\": {\n      \"MajorNum\": 2,\n      \"MinorNum\": 1,\n      \"Language\": \"TWLG_ENGLISH\",\n      \"Country\": \"TWCY_USA\",\n      \"Info\": \"2.1.3 sample debug 32bit\"\n    },\n    \"SupportedGroups\": [\n      \"DG_CONTROL\",\n      \"DG_IMAGE\",\n      \"DF_DS2\"\n    ]\n  },\n  \"Capabilities\": [\n    \"CAP_DEVICEONLINE\",\n    \"CAP_SUPPORTEDCAPS\",\n    \"CAP_UICONTROLLABLE\",\n    \"CAP_XFERCOUNT\",\n    \"ICAP_BITDEPTH\",\n    \"ICAP_BITORDER\",\n    \"ICAP_COMPRESSION\",\n    \"ICAP_PHYSICALHEIGHT\",\n    \"ICAP_PHYSICALWIDTH\",\n    \"ICAP_PIXELFLAVOR\",\n    \"ICAP_PIXELTYPE\",\n    \"ICAP_PLANARCHUNKY\",\n    \"ICAP_UNITS\",\n    \"ICAP_XFERMECH\",\n    \"ICAP_XNATIVERESOLUTION\",\n    \"ICAP_XRESOLUTION\",\n    \"ICAP_YNATIVERESOLUTION\",\n    \"ICAP_YRESOLUTION\"\n  ]\n}",
+          "type": "json"
+        },
+        {
+          "title": "Application example",
+          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n        \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    }\n}",
           "type": "json"
         }
       ]
@@ -98,7 +117,12 @@
       "examples": [
         {
           "title": "Product created:",
-          "content": "{\n   \"data\": {\n     \"id\": \"cn-01a-ds\",\n     \"title\": \"CN-01a DS\",\n     \"link\": \"http:\\/\\/twain.my\\/cn-01a-ds\"\n   },\n   \"code\": 201\n }",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 201\n }",
+          "type": "json"
+        },
+        {
+          "title": "Product exist:",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 200\n }",
           "type": "json"
         }
       ]
@@ -123,12 +147,12 @@
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\n   \"errors\": {\n     \"identity\": [\n       \"The identity must be a valid JSON string.\"\n     ]\n   },\n   \"code\": 422\n }",
+          "content": "{\n  \"errors\": {\n    \"identity\": [\n      \"The identity field is required.\"\n    ],\n    \"product_type\": [\n      \"The product type field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "Permissions error:",
-          "content": "{\n   \"error\": {\n     \"message\": \"This product was created by another user!\"\n   },\n   \"code\": 403\n }",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n         \"This product was created by another user!\"\n     ]\n   },\n   \"code\": 403\n }",
           "type": "json"
         }
       ]
@@ -153,7 +177,20 @@
   {
     "type": "get",
     "url": "/v1/products",
-    "title": "Get user's products",
+    "title": "Get user organisation's products",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - product type (either 'Application' or 'DataSource').</p>"
+          }
+        ]
+      }
+    },
     "name": "getProducts",
     "group": "Products",
     "success": {
@@ -173,13 +210,24 @@
             "optional": false,
             "field": "404",
             "description": "<p>Products not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Invalid product_type value</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Products not found error:",
-          "content": "{\n   \"error\": {\n     \"message\": \"No products were found for this user!\"\n   },\n   \"code\": 404\n }",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product_type value:",
+          "content": "{\n  \"errors\": {\n    \"product_type\": [\n      \"The selected product type is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
@@ -230,7 +278,7 @@
       "examples": [
         {
           "title": "Not Found error:",
-          "content": "{\n  \"message\": \"Profile not found\",\n  \"status_code\": 404\n}",
+          "content": "\n{\n    \"errors\": [\n      \"message\": [\n         \"Profile not found\"\n      ]\n    ],\n    \"code\": 404\n  }",
           "type": "json"
         }
       ]
@@ -273,7 +321,7 @@
       "examples": [
         {
           "title": "Please use start method first:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Please use start method first\"\n  },\n  \"code\": 400\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please use start method first\"\n    ]\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -331,17 +379,17 @@
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "TetsCase not configured:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Please set testing details\"\n  },\n  \"code\": 422\n}",
+          "content": "{\n  \"error\": {\n    \"message\": [\n       \"Please set testing details\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "No profile error response:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case doesn't have any profiles\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -393,12 +441,12 @@
       "examples": [
         {
           "title": "TestCase not found error:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "No profiles error response:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Test Case doesn't have any profiles\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case doesn't have any profiles\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -450,7 +498,7 @@
       "examples": [
         {
           "title": "You are not running any test case now:",
-          "content": "{\"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -540,7 +588,7 @@
         },
         {
           "title": "Please stop running case before start:",
-          "content": "{\n  \"errors\": {\n    \"message\": \"Please stop running case before start\"\n  },\n  \"code\": 400\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please stop running case before start\"\n    ]\n  },\n  \"code\": 400\n}",
           "type": "json"
         }
       ]
@@ -592,12 +640,12 @@
       "examples": [
         {
           "title": "Subscriptions not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Subscriptions not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
           "title": "Test Cases not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Test Cases not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         }
       ]
@@ -632,6 +680,26 @@
     "type": "get",
     "url": "/v1/testsuites",
     "title": "Request Test Suites list",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - get test suites by product type (either 'DataSource' or 'Application')</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_id",
+            "description": "<p>Optional - get test suites, associated with a product</p>"
+          }
+        ]
+      }
+    },
     "name": "getTestSuites",
     "group": "TestSuites",
     "description": "<p>Method used to get test suites list</p>",
@@ -641,15 +709,37 @@
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
           }
         ]
       },
       "examples": [
         {
+          "title": "No subscription:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"You do not have any active subscription\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Subscriptions not found:",
-          "content": "{\n  \"error\": {\n    \"message\": \"Subscriptions not found\"\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Suites not found\"\n    ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"errors\": {\n    \"tester_role\": [\n      \"The selected tester role is invalid.\"\n    ],\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
@@ -705,6 +795,20 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "product_id",
+            "description": "<p>Mandatory - product id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_suite_id",
+            "description": "<p>Mandatory - test suite id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "execution_id",
             "description": "<p>Mandatory - execution id string.</p>"
           }
@@ -736,7 +840,7 @@
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "content": "\n{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"test_suite_id\": [\n      \"The test suite id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ],\n    \"product_id\": [\n      \"The product id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]

@@ -34,7 +34,7 @@ class Profile extends Model
     {
         $s3 = AwsFacade::createClient('s3');
         return json_decode((string)$s3->getObject(array(
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.bucket.website'),
             'Key' => 'profiles/user/' . $this->token . '.json',
             'ResponseContentType' => 'application/json',
         ))['Body']);
@@ -57,7 +57,7 @@ class Profile extends Model
     {
         $disk = Storage::disk('s3');
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.bucket.website'),
             'Key' => 'profiles/user/' . $this->token . '.json',
             'ResponseContentDisposition' => 'attachment;filename="'.$this->profile_name.'.json"'
         ]);

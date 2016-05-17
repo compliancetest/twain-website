@@ -195,6 +195,17 @@ $xeroItems = ct_get_xero_items();
                         </div>
                         <div class="field-row">
                             <div class="grid-cell width95P">
+                                <label for="ts_tester_role">Product Type: </label>
+                                <input type="radio" name="ts_tester_role"  value="DataSource" <?php echo $suite->ts_tester_role == 'DataSource' ? 'checked="checked"' : '' ?> />
+                                <span class="label">DataSource</span>
+
+                               <input type="radio" name="ts_tester_role"  value="Application" <?php echo $suite->ts_tester_role == 'Application' ? 'checked="checked"' : '' ?> />
+                                <span class="label">Application</span><br/>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="field-row">
+                            <div class="grid-cell width95P">
                                 <label for="ts_identifier">Description: </label>
                                 <?php //wp_editor($suite->description, 'ts_description', array('textarea_name' => 'ts_description', 'media_buttons' => false)); ?>
                                 <textarea cols="" rows="" class="textarea large-textarea" name="ts_description"
@@ -339,6 +350,81 @@ $xeroItems = ct_get_xero_items();
 
                 </div>
             </div>
+
+             <div class="grid-box grid-box-expandable grid-box-opened" id="features-list-box">
+                <div class="grid-box-header">
+                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                    <h5 class="left">Features List</h5>
+
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-box-body">
+                    <div class="column">
+                        <?php foreach ($suite->featuresList as $row) { ?>
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Feature Name:</label>
+                                    <input type="text" class="input" name="feature_name[]"
+                                           value="<?php echo $row['name'] ?>"/>
+                                </div>
+                                <div class="grid-cell">
+                                    <label>Description:</label>
+                                    <textarea cols="" rows="" class="textarea"
+                                              name="feature_description[]"><?php echo $row['description'] ?></textarea>
+                                </div>
+                                <div class="grid-cell">
+                                    <label>&nbsp;</label>
+                                    <a href="#" class="action-btn blue-delete-btn icon-btn" onclick="jQuery(this).closest('.field-row').remove(); return false;"><span class="p"></span></a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        <?php } ?>
+                        <?php if (!$suite->id) { ?>
+                            <div class="field-row">
+                                <div class="grid-cell">
+                                    <label>Feature Name:</label>
+                                    <input type="text" class="input" name="feature_name[]" value=""/>
+                                </div>
+                                <div class="grid-cell">
+                                    <label>Description:</label>
+                                    <textarea cols="" rows="" class="textarea" name="feature_description[]"></textarea>
+                                </div>
+                                <div class="grid-cell">
+                                    <label>&nbsp;</label>
+                                    <a href="#" class="action-btn blue-delete-btn icon-btn" onclick="jQuery(this).closest('.field-row').remove(); return false;"><span class="p"></span></a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        <?php } ?>
+
+                        <div class="field-row clone_row" style="display: none;">
+                            <div class="grid-cell">
+                                <label>Feature Name:</label>
+                                <input type="text" class="input" name="feature_name[]" value=""/>
+                            </div>
+                            <div class="grid-cell">
+                                <label>Description:</label>
+                                <textarea cols="" rows="" class="textarea" name="feature_description[]"></textarea>
+                            </div>
+                            <div class="grid-cell">
+                                <label>&nbsp;</label>
+                                <a href="#" class="action-btn blue-delete-btn icon-btn" onclick="jQuery(this).closest('.field-row').remove(); return false;"><span class="p"></span></a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="btn-row">
+                            <div class="grid-cell">
+                                <a href="#" class="action-btn add-new-btn" id="add-feature"><span
+                                        class="p"></span><span class="t">New Feature</span></a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <?php
             $lastScenarioID = 1;
             ?>
@@ -868,6 +954,12 @@ $xeroItems = ct_get_xero_items();
                 '</div>');
             return false;
         });
+
+        jQuery('#add-feature').click(function () {
+            jQuery('#features-list-box .btn-row').before(jQuery('#features-list-box .clone_row').clone().removeClass('clone_row').removeAttr('style'));
+            return false;
+        });
+
         jQuery('#add-related-suite').click(function () {
             jQuery('#related-suites-box .btn-row').before('<div class="field-row">' +
                 '<div class="grid-cell width30P">' +

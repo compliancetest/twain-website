@@ -24,6 +24,6 @@ class CommunityArticleAttachment extends Model
 
     public function getUrl()
     {
-        return 'https://s3-us-west-2.amazonaws.com/data.twain.gosource.com.au/' . $this->location;
+        return 'https://s3-us-west-2.amazonaws.com/'.config('env.bucket.website').'/' . $this->location;
     }
 }

@@ -49,7 +49,7 @@ class CommunityDownloads extends Model
     {
         $disk = Storage::disk('s3');
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
-            'Bucket' => 'data.twain.gosource.com.au',
+            'Bucket' => config('env.bucket.website'),
             'Key' => $this->location,
             'ResponseContentDisposition' => 'attachment;filename="'.$this->title.'"'
         ]);

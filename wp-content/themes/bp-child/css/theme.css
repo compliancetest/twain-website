@@ -9107,3 +9107,16 @@ input.inactive_s{
 .site-search-result-list tbody td.last{
     text-align: left;
 }
+
+#container form .tooltip-label{
+    margin-left: 20px;
+}
+
+#container form .tooltip-label .simple_tooltip{
+    margin-left: -170px;
+    width: 340px;
+    left: 0;
+    bottom: 25px !important;
+    top: auto !important;
+}
+

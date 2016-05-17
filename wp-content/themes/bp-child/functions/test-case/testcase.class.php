@@ -68,6 +68,8 @@ class TestCases
 
     public $imagesData = array();
 
+    public $featuresList = array();
+
     
     public function __construct($id = null)
     {        
@@ -121,6 +123,7 @@ class TestCases
         $this->test_data_profile = $this->loadSingleValue('test_data_profile');
         $this->imagesData = json_decode($this->loadSingleValue('imagesData'), true);
         $this->capabilities = (array) json_decode($this->loadSingleValue('capabilities'), true);
+        $this->featuresList = (array) json_decode($this->loadSingleValue('featuresList'), true);
 
         if(!$this->version_major)
             $this->version_major = 0;

@@ -26,7 +26,8 @@ Route::group(array('prefix' => 'api/v1'), function () {
 Route::group(['middleware' => ['web']], function () {
 
     Route::resource('testingdetails', 'TestingDetailsController',
-        ['only' => ['store', 'update', 'index']]);
+        ['only' => ['store',  'index']]);
+    Route::get('testingdetails/{transaction}/output', 'TestingDetailsController@output');
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
 
@@ -124,6 +125,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
+
+        Route::get('communitysurveys/{community}/surveyresults', 'CommunitiesController@surveysList');
+        Route::post('communitysurveys/{community}/surveyresults', 'CommunitiesController@saveSurveysLinks');
 
     });
 

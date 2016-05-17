@@ -56,7 +56,9 @@ class TestSuite
 //    var $monthlySubscriptionPriceValue = 0;
     
     var $excerpt = '';
-    
+
+    var $ts_tester_role = '';
+
     var $community_id = null;
     
     var $type = array();
@@ -64,7 +66,9 @@ class TestSuite
     var $isRevision = false;
     
     var $scenarios = array();
-    
+
+    var $featuresList = array();
+
 //    var $signupPrice = 0;
 //
 //    var $signupPriceValue = 0;
@@ -159,7 +163,10 @@ class TestSuite
         $this->title = $p->post_title;
         
         $this->excerpt = $p->post_excerpt;
-        
+
+        $this->featuresList = json_decode($this->loadSingleValue('featuresList'), 1);
+        $this->ts_tester_role = $this->loadSingleValue('ts_tester_role');
+
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
     }
     

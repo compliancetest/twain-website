@@ -51,9 +51,9 @@ return [
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => 'AKIAI5A2F2WZFQUDE77A',
-            'secret' => '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',
-            'prefix' => 'https://sqs.us-west-2.amazonaws.com/355178332009',
+            'key' => env('AWS_KEY', 'AKIAI5A2F2WZFQUDE77A'),
+            'secret' => env('AWS_SECRET', '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'),
+            'prefix' => env('SQS_PREFIX', 'https://sqs.us-west-2.amazonaws.com/355178332009'),
             'queue' => env('SQS_QUEUE', 'transactions_local'),
             'region' => 'us-west-2',
         ],
