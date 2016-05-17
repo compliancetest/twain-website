@@ -45,7 +45,7 @@ function compliancetest_user_actions()
 
     } else if(wp_verify_nonce($cpAction ,'save_products_organisations')){
         $organisationsList = [];
-        foreach(explode(',', $_POST['product_organisations'] ) as $productOrganisation){
+        foreach(explode(';', $_POST['product_organisations'] ) as $productOrganisation){
             $organisationsList[] = trim($productOrganisation);
         }
         if(empty($organisationsList)){

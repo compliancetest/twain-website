@@ -186,9 +186,7 @@ class BaseApiController extends Controller
     protected function respondBadRequest($message)
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_BAD_REQUEST)
-            ->respond([
-                'errors' => $message
-            ]);
+            ->respondWithError($message);
     }
 
     /**

@@ -184,7 +184,7 @@ if(!defined('ABSPATH'))
                 <form action="#" method="post" id="org_products_form">
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Aliases</label></div>
-                        <input type="text" name="product_organisations" id="nickname" value="<?php echo implode(',', $productOrganisations);?>" class="input" autocomplete="off" style="width: 55%; float: left;margin-right: 10px;">
+                        <input type="text" name="product_organisations" id="nickname" value="<?php echo implode(';', $productOrganisations);?>" class="input" autocomplete="off" style="width: 55%; float: left;margin-right: 10px;">
                         <a href="#" class="action-btn process-btn submit_org_products"><span class="p"></span><span class="t">Save</span></a>
                         <div class="clear"></div>
                     </div>
@@ -200,7 +200,7 @@ if(!defined('ABSPATH'))
 <div class="right two_sixths">
     <div class="gray_message_box radius9 light_gray_txt">
         <div class="indicator"></div>
-        List of manufacturer aliases for product registration with pubplic visibility(comma separated)
+        List of manufacturer aliases for product registration with pubplic visibility(semicolon separated)
     </div>
 </div>
 <?php endif; ?>
