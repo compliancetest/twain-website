@@ -436,7 +436,7 @@ Template Name Posts: Test Suite
                             </select>
                             </label>
                         </div>
-                        <div class="styled_select left" style="margin-right: 30px">
+                        <div class="styled_select left right13">
                             <label>
                             <select name="conformance" class="change_ts">
                               <option value="">- Conformance Level -</option>
