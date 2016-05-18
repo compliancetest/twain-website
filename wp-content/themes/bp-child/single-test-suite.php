@@ -408,6 +408,7 @@ Template Name Posts: Test Suite
 		<?php
             $selectedScenario = isset($_GET['scenario']) ? $_GET['scenario'] : '';
             $selectedConfLevel = isset($_GET['conformance']) ? $_GET['conformance'] : '';
+            $selectedStatus = isset($_GET['tc_status']) ? $_GET['tc_status'] : '';
         ?>
 		<div class="clear"></div>
         
@@ -449,6 +450,20 @@ Template Name Posts: Test Suite
                             </select>
                             </label>
                         </div>
+
+                        <div class="styled_select left right13">
+                            <label>
+                            <select name="tc_status" class="change_ts">
+                              <option value="">- Status -</option>
+                                  <option <?php if($selectedStatus == 'Active'):?>selected="selected"<?php endif;?> value="Active" >Active</option>
+                                  <option <?php if($selectedStatus == 'Draft'):?>selected="selected"<?php endif;?> value="Draft" >Draft</option>
+                                  <option <?php if($selectedStatus == 'Build'):?>selected="selected"<?php endif;?> value="Build" >Build</option>
+                                  <option <?php if($selectedStatus == 'Deprecated'):?>selected="selected"<?php endif;?> value="Deprecated">Deprecated</option>
+                                  <option <?php if($selectedStatus == 'Obsolete'):?>selected="selected"<?php endif;?> value="Obsolete">Obsolete</option>
+                            </select>
+                            </label>
+                        </div>
+
                         <?php if(can_create_test_case()){ ?>
                         <a href="/add-new-test-case?suite_id=<?php echo $suite->id?>" class="action-btn add-new-btn"><span class="p"></span><span class="t">New Test Case</span></a>
                         <?php } ?>
@@ -470,7 +485,7 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
 						<div class="grid_cell nopaddingtop width18P toleft tocenter">Operational<br>Triplet</div>
-						<div class="grid_cell nopaddingtop toleft  <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width20P' : 'width24P' ?> single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop toleft  <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width20P' : 'width23P' ?> single_line">Test Intent Description</div>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
@@ -523,7 +538,11 @@ Template Name Posts: Test Suite
                         $args['meta_query'][] = array('key' => 'conformance_level_'. $suite->id, 'value' => $selectedConfLevel,'compare' => '=');
                         $params[] = 'conformance=' . urlencode($selectedConfLevel);
                     }
-                    
+
+                    if($selectedStatus){
+                        $args['meta_query'][] = array('key' => 'test_case_status', 'value' => $selectedStatus,'compare' => '=');
+                        $params[] = 'tc_status=' . urlencode($selectedStatus);
+                    }
                     $get_query = new WP_Query($args);
                     $get_query->post = $post;
                     //Add Order by Scenaro 
@@ -621,7 +640,7 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop toleft tocenter width22P text-nowrap padding0-10">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width24P' : 'width30P' ?> toleft">
+                                <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width23P' : 'width30P' ?> toleft">
                                     <div class="right10">
                                         <?php 
 
