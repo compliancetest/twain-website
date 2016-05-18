@@ -463,7 +463,7 @@ Template Name Posts: Test Suite
 					<div class="grid_row nopaddingbottom nopaddingtop tocenter testcases_grid special_grid_inner">
                         <div class="grid_cell nopaddingtop width20P toleft single_line">Test Scenario</div>
                         <div class="grid_cell nopaddingtop width2P toleft single_line"></div>
-						<div class="grid_cell nopaddingtop width7P toleft">Test Case</div>
+						<div class="grid_cell nopaddingtop width7P toleft single_line">Test Case</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Levels</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>

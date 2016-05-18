@@ -1,7 +1,6 @@
 <div class="block-loading-wrapper">
     <div class="community-downloads">
         <div class="table-responsive">
-            <div class="success-message hide">Thread was deleted successfully!</div>
             <table class="table downloads-list-table">
                 <thead>
                     <tr>
@@ -148,22 +147,24 @@
 
         jQuery('.btn-delete').on('click', function (e) {
             e.preventDefault();
-            $('#edit-thread-section').hide();
-            $('#add-new-thread-section').hide();
             var elem = jQuery(this);
             if (confirm('Are you sure?')) {
+                $('#addThreadSpinner').show();
                 $.ajax({
                     url: '/forums/{{ $community->slug }}/' + elem.attr('data-id'),
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
-                        jQuery('.success-message').removeClass('hide');
-                        setTimeout(function () {
-                            jQuery('.success-message').addClass('hide');
-                        }, 3000);
+                        $('#messages-wrapper').html('<div class="message success">Thread was deleted successfully!</div>');
                         $(elem).closest('tr').slideUp('slow', function () {
                             $(elem).remove();
                         });
+                    },
+                    complete: function () {
+                        $('#edit-thread-section').hide();
+                        $('#add-new-thread-section').hide();
+                        $('.add-new-item-default').show();
+                        $('#addThreadSpinner').hide();
                     }
                 });
                 return true;

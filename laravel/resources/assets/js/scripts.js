@@ -195,6 +195,10 @@ var Page = {
             $('.cancelMembershipInCommunity').click(function(){
                 self.submitCancelMembership($(this));
             });
+            $('.readTermsModal').on('hidden.bs.modal', function () {
+                var showModalId = $(this).data('target');
+                $(showModalId).modal('show');
+            })
         },
 
         showJoinCommunityModal: function(el,e){
