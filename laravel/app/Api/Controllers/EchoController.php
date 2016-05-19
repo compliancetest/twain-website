@@ -54,6 +54,18 @@ class EchoController extends BaseApiController
      *     "code": 401
      *  }
      *
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Forbidden:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     * 
      * @apiVersion 1.0.0
      */
     public function index(\Illuminate\Http\Request $request)
@@ -79,9 +91,15 @@ class EchoController extends BaseApiController
         if (\Auth::attempt($credentailsEmail, false) || \Auth::attempt($credentailsLogin, false)){
             $user = User::where(['user_login' => $request->get('username')])->orWhere(['user_email' => $request->get('username')])->first();
 
-            return $this->respondWithData([
-                'organisation_id' => OrganisationMember::where(['user_id' => $user->ID])->first()->organisation_id
-            ]);
+            $organisation = OrganisationMember::where(['user_id' => $user->ID])->first();
+
+            if ($organisation) {
+                return $this->respondWithData([
+                    'organisation_id' => $organisation->organisation_id
+                ]);
+            } else {
+                return $this->respondForbiddenError('Only organisation member can perform testing');
+            }
         }
         return $this->respondUnauthorizedError();
     }

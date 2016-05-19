@@ -22,6 +22,17 @@ class TestCasesController extends BaseApiController
      *
      * @apiDescription Method used to get Execution Profile data
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
      *   {
@@ -95,6 +106,17 @@ class TestCasesController extends BaseApiController
      *
      * @apiDescription Method used to get all test case profiles
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Test Case not found
      * @apiErrorExample {json} TestCase not found error:
      *   {
@@ -153,6 +175,17 @@ class TestCasesController extends BaseApiController
      * @apiGroup TestCases
      *
      * @apiDescription Method used to configure testing details
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
@@ -256,6 +289,17 @@ class TestCasesController extends BaseApiController
      *     "code": 400
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiSuccessExample {json} Success-Response:
      *   {
      *     "message": "Ok",
@@ -283,6 +327,17 @@ class TestCasesController extends BaseApiController
      * @apiGroup TestCases
      *
      * @apiDescription Method used to get testing details
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      * @apiError 404 User didn't use start method yet
      * @apiErrorExample {json} You are not running any test case now:

@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
         'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
         'community.user' => \App\Http\Middleware\CommunityUser::class,
 
-        'simpleauth' => \App\Http\Middleware\SimpleAuth::class
+        'simpleauth' => \App\Http\Middleware\SimpleAuth::class,
+        'organisation.member' => \App\Http\Middleware\OrganisationMember::class
     ];
 }

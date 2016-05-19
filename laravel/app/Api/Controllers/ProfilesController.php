@@ -65,6 +65,17 @@ class ProfilesController extends BaseApiController
      *     "code": 200
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Profile not found
      * @apiErrorExample {json} Not Found error:
      *

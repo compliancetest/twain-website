@@ -34,6 +34,18 @@ class TestSuitesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Subscriptions not found:
      *   {
@@ -161,6 +173,17 @@ class TestSuitesController extends BaseApiController
      * @apiGroup TestSuites
      *
      * @apiDescription Method used to get test suite's active test cases
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Subscriptions not found:
