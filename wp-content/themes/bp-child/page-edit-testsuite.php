@@ -350,6 +350,7 @@ $xeroItems = ct_get_xero_items();
 
                 </div>
             </div>
+            <div class="space20"></div>
 
              <div class="grid-box grid-box-expandable grid-box-opened" id="features-list-box">
                 <div class="grid-box-header">
@@ -595,7 +596,7 @@ $xeroItems = ct_get_xero_items();
                         </div>
                         <h6><b>Profile Type</b></h6>
 
-                        <div class="field-row noborder" id="suite_profile_types">
+                        <div class="field-row noborder clearfix" id="suite_profile_types">
                             <?php
                             $profileTypes = getCommunityProfileTypes($suite->community_id);
                             foreach ($profileTypes as $row) { ?>
