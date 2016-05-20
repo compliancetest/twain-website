@@ -48,6 +48,12 @@ define({ "api": [
             "optional": false,
             "field": "401",
             "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
           }
         ]
       },
@@ -60,6 +66,11 @@ define({ "api": [
         {
           "title": "Unauthorized:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Unauthorized!\"\n     ]\n   },\n   \"code\": 401\n}",
+          "type": "json"
+        },
+        {
+          "title": "Forbidden:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         }
       ]
@@ -140,7 +151,7 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "403",
-            "description": "<p>Permissions error</p>"
+            "description": "<p>Forbidden</p>"
           }
         ]
       },
@@ -148,6 +159,11 @@ define({ "api": [
         {
           "title": "Validation error:",
           "content": "{\n  \"errors\": {\n    \"identity\": [\n      \"The identity field is required.\"\n    ],\n    \"product_type\": [\n      \"The product type field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -208,6 +224,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Products not found</p>"
           },
@@ -220,6 +242,11 @@ define({ "api": [
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "Products not found error:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
@@ -270,12 +297,23 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Profile not found</p>"
           }
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "Not Found error:",
           "content": "\n{\n    \"errors\": [\n      \"message\": [\n         \"Profile not found\"\n      ]\n    ],\n    \"code\": 404\n  }",
@@ -315,6 +353,12 @@ define({ "api": [
             "optional": false,
             "field": "400",
             "description": "<p>User didn't use start method yet</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
           }
         ]
       },
@@ -322,6 +366,11 @@ define({ "api": [
         {
           "title": "Please use start method first:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please use start method first\"\n    ]\n  },\n  \"code\": 400\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         }
       ]
@@ -365,6 +414,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
           },
@@ -377,6 +432,11 @@ define({ "api": [
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "TestCase not found error:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
@@ -433,12 +493,23 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Test Case not found</p>"
           }
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "TestCase not found error:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test Case not found\"\n    ]\n  },\n  \"code\": 404\n}",
@@ -490,12 +561,23 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>User didn't use start method yet</p>"
           }
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "You are not running any test case now:",
           "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
@@ -569,6 +651,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "422",
             "description": "<p>Required field missed</p>"
           },
@@ -581,6 +669,11 @@ define({ "api": [
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "Validation error:",
           "content": "{\n  \"errors\": {\n    \"test_suite_id\": [\n      \"The selected test suite id is invalid.\"\n    ],\n    \"test_case_id\": [\n      \"The selected test case id is invalid.\"\n    ],\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
@@ -632,12 +725,23 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
           }
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "Subscriptions not found:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Subscriptions not found\"\n    ]\n  },\n  \"code\": 404\n}",
@@ -730,6 +834,11 @@ define({ "api": [
         {
           "title": "No subscription:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"You do not have any active subscription\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -832,12 +941,23 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "422",
             "description": "<p>Required field missed</p>"
           }
         ]
       },
       "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
         {
           "title": "Validation error:",
           "content": "\n{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"test_suite_id\": [\n      \"The test suite id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ],\n    \"product_id\": [\n      \"The product id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",

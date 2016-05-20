@@ -73,6 +73,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             $transaction->customer_id = $this->userId;
             $transaction->subscription_id = $organisationSubscription->id;
             $transaction->organisation_id = $organisationMember->organisation_id;
+            $transaction->s3_link = $transaction->getZipS3Link($this->fileName);
             $transaction->save();
         }
     }
@@ -112,6 +113,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->customer_id = $this->userId;
         $transaction->subscription_id = $organisationSubscription->id;
         $transaction->organisation_id = $organisationMember->organisation_id;
+        $transaction->s3_link = $transaction->getZipS3Link($this->fileName);
         $transaction->save();
 
         //execution log

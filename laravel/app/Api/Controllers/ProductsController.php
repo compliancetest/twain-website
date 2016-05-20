@@ -4,6 +4,7 @@ namespace App\Api\Controllers;
 
 use App\Jobs\ProcessTransactionLog;
 use App\Organisation;
+use App\OrganisationMember;
 use App\Post;
 use App\PostMeta;
 use Aws\Laravel\AwsFacade as AWS;
@@ -126,7 +127,18 @@ class ProductsController extends BaseApiController
      *     "code": 422
      *   }
      *
-     * @apiError 403 Permissions error
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
      * @apiErrorExample {json} Permissions error:
      * {
      *    "errors": {
@@ -278,6 +290,17 @@ class ProductsController extends BaseApiController
      *       }
      *     ],
      *     "code": 200
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
      *   }
      *
      * @apiError 404 Products not found

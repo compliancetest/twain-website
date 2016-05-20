@@ -142,7 +142,7 @@ get_header();
                         <div class="td td-convsn td-sortable tocenter td-two-lines">
                             Organisation<br>
                             Subscription Nickname<br>
-                            Conversation ID<br>
+                            Execution ID<br>
                         </div>
                         <div class="td td-date td-sortable tocenter td-two-lines">
                             Date<br>Time
@@ -211,8 +211,8 @@ get_header();
                                             $subscription = ct_get_organisation_subscription_by_id($row->subscription_id);
                                             echo $subscription ? $subscription->nickname : ' - ';
                                             echo '<br>';
-                                            if (strlen($row->execution_id) > 38) {
-                                                echo '<span title="' . $row->execution_id . '">' . substr($row->execution_id, 0, 15) . "....." . substr($row->execution_id, -15) . '</span>';
+                                            if(!empty($row->s3_link)) {
+                                                echo '<a href="' . $row->s3_link . '" target="_blank">' . $row->execution_id . '</a>';
                                             } else {
                                                 echo $row->execution_id;
                                             }

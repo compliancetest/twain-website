@@ -25,6 +25,18 @@ class TransactionsController extends BaseApiController
      *       "message": "File Uploaded",
      *       "code": 201
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
      *

@@ -4,22 +4,22 @@ Route::group(array('prefix' => 'api/v1'), function () {
 
     Route::post('echo', ['uses' => '\App\Api\Controllers\EchoController@index']);
 
-    Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => 'simpleauth']);
-    Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => 'simpleauth']);
+    Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::post('testcase/start', ['uses' => '\App\Api\Controllers\TestCasesController@start', 'middleware' => 'simpleauth']);
-    Route::delete('testcase/stop', ['uses' => '\App\Api\Controllers\TestCasesController@stop', 'middleware' => 'simpleauth']);
-    Route::get('testcase/status', ['uses' => '\App\Api\Controllers\TestCasesController@status', 'middleware' => 'simpleauth']);
+    Route::post('testcase/start', ['uses' => '\App\Api\Controllers\TestCasesController@start', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::delete('testcase/stop', ['uses' => '\App\Api\Controllers\TestCasesController@stop', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testcase/status', ['uses' => '\App\Api\Controllers\TestCasesController@status', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::get('testsuites', ['uses' => '\App\Api\Controllers\TestSuitesController@index', 'middleware' => 'simpleauth']);
-    Route::get('testsuites/{suiteId}/testcases', ['uses' => '\App\Api\Controllers\TestSuitesController@testcases', 'middleware' => 'simpleauth']);
+    Route::get('testsuites', ['uses' => '\App\Api\Controllers\TestSuitesController@index', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testsuites/{suiteId}/testcases', ['uses' => '\App\Api\Controllers\TestSuitesController@testcases', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => 'simpleauth']);
+    Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => 'simpleauth']);
+    Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => 'simpleauth']);
-    Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => 'simpleauth']);
+    Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => ['simpleauth', 'organisation.member']]);
 
 });
 
