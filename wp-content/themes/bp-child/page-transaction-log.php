@@ -211,7 +211,11 @@ get_header();
                                             $subscription = ct_get_organisation_subscription_by_id($row->subscription_id);
                                             echo $subscription ? $subscription->nickname : ' - ';
                                             echo '<br>';
-                                            echo '<a href="'.$row->s3_link.'" target="_blank">'.$row->execution_id.'</a>';
+                                            if(!empty($row->s3_link)) {
+                                                echo '<a href="' . $row->s3_link . '" target="_blank">' . $row->execution_id . '</a>';
+                                            } else {
+                                                echo $row->execution_id;
+                                            }
                                             ?>
                                         <input type="text" value="<?php echo $row->execution_id; ?>"
                                                readonly="readonly">
