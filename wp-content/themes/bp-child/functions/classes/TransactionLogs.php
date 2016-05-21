@@ -41,14 +41,19 @@ class TransactionLogs
     {
         global $wpdb;
 
-        $limit = ($page-1) * $limit . ', '.$limit;
+        if($limit == -1) {
+            $limit = "";
+        } else {
+            $limit = ($page - 1) * $limit . ', ' . $limit;
+            $limit = "  LIMIT $limit ";
+        }
         return [
             'results' => $wpdb->get_results("SELECT t.* FROM transactions AS t
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
-                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id ORDER BY $orderby $order LIMIT $limit"),
-            'total' => $wpdb->get_var("SELECT count(*) FROM transactions AS t
+                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id ORDER BY $orderby $order $limit"),
+            'total' => ($wpdb->get_var("SELECT count(cc.id) FROM (SELECT t.id FROM transactions AS t
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
-                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id "),
+                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id ) as cc ")),
         ];
     }
 

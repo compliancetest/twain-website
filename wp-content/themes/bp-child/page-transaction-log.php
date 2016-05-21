@@ -59,9 +59,11 @@ $selectedFilters = [
 ];
 $transactionsLog->setWhereQuery($sIds, $selectedFilters);
 
-$log_results = $transactionsLog->getUserTransactionLog();
-$log_results = $log_results['results'];
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+
+$log_results = $transactionsLog->getUserTransactionLog($page, $limit);
 $total = $log_results['total'];
+$log_results = $log_results['results'];
 $filters = $transactionsLog->getFilters($sIds);
 
 $params = array();
@@ -110,9 +112,9 @@ get_header();
             ?>
         </div>
         <div class="padding10">
-            <a href="/testingdetails/"
-               id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"
-               onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>
+<!--            <a href="/testingdetails/"-->
+<!--               id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"-->
+<!--               onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>-->
 
 <!--            <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span-->
 <!--                    class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>-->
@@ -315,11 +317,21 @@ get_header();
                     </div>
                 </div>
             </div>
-            <div class="space9"></div>
-            <?php if ($total > 20) { ?>
+            <div class="space20"></div>
+            <?php if ($total > 0) { ?>
                 <div class="pagination-wrapper">
                     <div class="pagination-limit">
                         <form method="get" action="<?php echo get_permalink() ?>" name="pform">
+
+                             Display #
+                            <select name="limit" class="select" onchange="document.pform.submit()">
+                                <option value="10" <?php echo $limit == 10 ? 'selected="selected"' : ''?>>10</option>
+                                <option value="20" <?php echo $limit == 20 ? 'selected="selected"' : ''?>>20</option>
+                                <option value="50" <?php echo $limit == 50 ? 'selected="selected"' : ''?>>50</option>
+                                <option value="100" <?php echo $limit == 100 ? 'selected="selected"' : ''?>>100</option>
+                                <option value="-1" <?php echo $limit == -1 ? 'selected="selected"' : ''?>>All</option>
+                            </select>
+
                             <?php if ($filterProduct) { ?>
                                 <input type="hidden" name="product" value="<?php echo $filterProduct ?>"/>
                             <?php } ?>
@@ -355,7 +367,7 @@ get_header();
                         $args = array(
                             'base' => get_permalink() . '%_%?',
                             'format' => 'page/%#%',
-                            'total' => ceil($total / 20),
+                            'total' => ceil($total / $limit),
                             'current' => $page,
                             'show_all' => False,
                             'end_size' => 5,
