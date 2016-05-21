@@ -228,16 +228,15 @@ function ct_get_user_viewable_subscriptions($user_id, $org_id = null)
     if (is_super_admin()) {
         $query = "SELECT os.nickname, os.id, os.organisation_id FROM {$wpdb->prefix}organisations_subscriptions AS os
                   WHERE 1 ";
-    } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT( os.id ), os.nickname, os.organisation_id FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}organisations_subscriptions AS os
+    } else if(doesUserAdminInAnyCommunity($user_id)) {
+        $query = $wpdb->prepare("SELECT DISTINCT( os.id ), os.nickname, os.organisation_id FROM communities_members AS cm, wp_organisations_subscriptions AS os
                 WHERE 
-                    os.user_id = bm.user_id AND bm.is_confirmed=1 
+                    os.user_id = cm.user_id AND cm.is_confirmed = 1 
                     AND
-                    (bm.user_id=%d OR bm.group_id 
+                    (cm.user_id = %d OR cm.community_id 
                         IN 
-                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                        ( SELECT community_id FROM communities_members WHERE user_id = %d AND is_admin = 1))
                 ", $user_id, $user_id);
-        
     } else {
         //Getting User Membership
         $organisation = ct_get_user_organisation();
