@@ -9,6 +9,8 @@ class TransactionLogs
     {
         if(!empty($subscriptions)){
             $this->where[] = ' subscription_id IN ('.implode(',', $subscriptions).') ';
+        } else {
+            $this->where[] = ' subscription_id IN (0) ';
         }
         if($filters['product_id']){
             $this->where[] = sprintf(' product_id = %d ', $filters['product_id']);
@@ -61,7 +63,11 @@ class TransactionLogs
     {
         global $wpdb;
 
-        $where = ' subscription_id IN ('.implode(',', $subscriptionsIds).') ';
+        if(!empty($subscriptionsIds)) {
+            $where = ' subscription_id IN (' . implode(',', $subscriptionsIds) . ') ';
+        } else {
+           $where = ' subscription_id IN (0) ';
+        }
         return [
             'product' => $wpdb->get_results("SELECT product_id FROM transactions WHERE $where GROUP BY product_id"),
             'test_case_id' => $wpdb->get_results("SELECT test_case_id FROM transactions WHERE $where GROUP BY test_case_id"),
