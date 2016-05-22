@@ -9,6 +9,8 @@ class TransactionLogs
     {
         if(!empty($subscriptions)){
             $this->where[] = ' subscription_id IN ('.implode(',', $subscriptions).') ';
+        } else {
+            $this->where[] = ' subscription_id IN (0) ';
         }
         if($filters['product_id']){
             $this->where[] = sprintf(' product_id = %d ', $filters['product_id']);
@@ -41,14 +43,19 @@ class TransactionLogs
     {
         global $wpdb;
 
-        $limit = ($page-1) * $limit . ', '.$limit;
+        if ($limit == -1) {
+            $limit = "";
+        } else {
+            $limit = ($page - 1) * $limit . ', ' . $limit;
+            $limit = "  LIMIT $limit ";
+        }
         return [
             'results' => $wpdb->get_results("SELECT t.* FROM transactions AS t
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
-                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id ORDER BY $orderby $order LIMIT $limit"),
-            'total' => $wpdb->get_var("SELECT count(*) FROM transactions AS t
+                                     WHERE " . implode(' AND ', $this->where) . " GROUP BY t.id ORDER BY $orderby $order $limit"),
+            'total' => $wpdb->get_var("SELECT count(cc.id) FROM (SELECT t.id FROM transactions AS t
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
-                                     WHERE ".implode(' AND ', $this->where)." GROUP BY t.id "),
+                                     WHERE " . implode(' AND ', $this->where) . " GROUP BY t.id ) as cc "),
         ];
     }
 
@@ -56,7 +63,11 @@ class TransactionLogs
     {
         global $wpdb;
 
-        $where = ' subscription_id IN ('.implode(',', $subscriptionsIds).') ';
+        if(!empty($subscriptionsIds)) {
+            $where = ' subscription_id IN (' . implode(',', $subscriptionsIds) . ') ';
+        } else {
+           $where = ' subscription_id IN (0) ';
+        }
         return [
             'product' => $wpdb->get_results("SELECT product_id FROM transactions WHERE $where GROUP BY product_id"),
             'test_case_id' => $wpdb->get_results("SELECT test_case_id FROM transactions WHERE $where GROUP BY test_case_id"),

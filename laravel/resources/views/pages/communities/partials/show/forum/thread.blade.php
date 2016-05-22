@@ -136,7 +136,7 @@
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
-                        $('#messages-wrapper').html('<div class="message success">Post was deleted successfully!</div>');
+                        $('#messages-wrapper').html('<div class="message success">Post was deleted successfully</div>');
                         $(elem).parents('.forum-post').slideUp('slow', function () {
                             $(elem).remove();
                         });
