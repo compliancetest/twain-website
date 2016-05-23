@@ -166,7 +166,7 @@ class ProductsController extends BaseApiController
         }
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
-        $productName = htmlspecialchars($entity['ProductName']);
+        $productName = $entity['ProductName'];
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
         $productId = $request->get('organisation_id') . '_' .$this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
         $this->product = Post::where(['post_name' => $productId])->first();
@@ -226,7 +226,7 @@ class ProductsController extends BaseApiController
      */
     private function cleanSlug($str)
     {
-        return preg_replace('/-{2,}/','-', strtolower(preg_replace("/[^A-Za-z0-9_]/", '-', $str)));
+        return trim(preg_replace('/-{2,}/', '-', strtolower(preg_replace("/[^A-Za-z0-9_]/", '-', $str))), ' _-');
     }
 
     /**
@@ -263,11 +263,11 @@ class ProductsController extends BaseApiController
     {
         $organisation = Organisation::find($request->get('organisation_id'));
         $productsOrganisations = json_decode($organisation->products_organisations);
-        if(!$productsOrganisations){
+        if (!$productsOrganisations) {
             $productsOrganisations = [$organisation->organisation_name];
         }
-        
-        if(in_array($entity['Manufacturer'], $productsOrganisations)){
+
+        if (in_array($entity['Manufacturer'], $productsOrganisations)) {
             $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Public']);
         } else {
             $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
