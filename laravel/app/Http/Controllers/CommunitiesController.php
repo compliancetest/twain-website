@@ -302,7 +302,7 @@ class CommunitiesController extends Controller
     private function handleImage($request, $model)
     {
         if ($request->file('image')) {
-            $model->image = config('env.env') . '/communities/avatars/' . $model->id . '/avatar.' . $request->file('image')->getClientOriginalExtension();
+            $model->image = 'communities/avatars/' . $model->id . '/avatar.' . $request->file('image')->getClientOriginalExtension();
             Storage::put($model->image, file_get_contents($request->file('image')));
             $model->save();
         }

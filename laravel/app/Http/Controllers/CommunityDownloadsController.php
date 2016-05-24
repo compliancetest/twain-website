@@ -85,7 +85,7 @@ class CommunityDownloadsController extends Controller
         $data = $request->all();
         $download = $community->downloads()->find($id);
         if($request->file('file')) {
-            $s3FilePath = '/communities/downloads/' . $community->id . '/' . $download->token . '.'.$request->file('file')->getClientOriginalExtension();
+            $s3FilePath = 'communities/downloads/' . $community->id . '/' . $download->token . '.'.$request->file('file')->getClientOriginalExtension();
             $data['title'] = $request->file('file')->getClientOriginalName();
             $data['location'] = $s3FilePath;
             $data['size'] = $request->file('file')->getSize();
