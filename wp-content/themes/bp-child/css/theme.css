@@ -4652,9 +4652,12 @@ span.button_sign {
 }
 #my_community_memberships .td-action{
     width: 55px;
+    text-align: center;
 }
 #my_community_memberships .action-btn{
-    position: relative;    
+    position: relative;
+    float: none;
+    display: inline-block;
 }
 #my_community_memberships .action-btn:hover .simple_tooltip{
     display: block;
