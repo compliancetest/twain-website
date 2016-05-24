@@ -92,11 +92,14 @@
 <script>
     jQuery(document).ready(function ($) {
 
-        $('#add-new-thread').on('click', function(){
+        $('#add-new-thread').on('click', function(e){
+            e.preventDefault();
             $('#add-new-thread-section').show();
             $('.add-new-item-default').hide();
         });
-        $('#cancel-add-new-thread').on('click', function(){
+        $('#cancel-add-new-thread').on('click', function(e){
+            $('#threadTitle, #threadDescription').val('');
+            e.preventDefault();
             $('#edit-thread-section').hide();
             $('#add-new-thread-section').hide();
             $('.add-new-item-default').show();
