@@ -73,11 +73,14 @@
 <script>
     jQuery(document).ready(function ($) {
 
-        $('#add-new-post').on('click', function(){
+        $('#add-new-post').on('click', function(e){
+            e.preventDefault();
             $('#add-new-post-section').show();
             $('.add-new-item-default').hide();
         });
-         $('#cancel-add-new-post').on('click', function(){
+         $('#cancel-add-new-post').on('click', function(e){
+             e.preventDefault();
+            $('#postTitle').val('');
             $('#edit-post-section').hide();
             $('#add-new-post-section').hide();
             $('.add-new-item-default').show();
