@@ -99,7 +99,11 @@ class ProcessTransactionLog extends Job implements ShouldQueue
 
         $organisationMember = OrganisationMember::where(['user_id' => $this->userId])->first();
         $organisationSubscription = OrganisationSubscription::where(
-            ['user_id' => $this->userId, 'organisation_id' => $organisationMember->organisation_id]
+            [
+                'user_id' => $this->userId,
+                'organisation_id' => $organisationMember->organisation_id,
+                'suite_family_mark' => $testSuite->ID,
+            ]
         )->first();
         $transaction = Transaction::firstOrCreate([
             'execution_id' => $this->executionId,
