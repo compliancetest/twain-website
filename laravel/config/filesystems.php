@@ -59,7 +59,7 @@ return [
             'key' => env('AWS_KEY', 'AKIAI5A2F2WZFQUDE77A'),
             'secret' => env('AWS_SECRET', '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'),
             'region' => getenv('BUCKET_REGION') ? getenv('BUCKET_REGION') : 'us-west-2',
-            'bucket' => getenv('BUCKET_WEBSITE') ? getenv('BUCKET_WEBSITE') : 'data.twain.gosource.com.au',
+            'bucket' => getenv('BUCKET_WEBSITE') ? getenv('BUCKET_WEBSITE') : 'www.integration.twain.gosource.com.au',
         ],
 
     ],

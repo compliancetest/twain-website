@@ -80,7 +80,7 @@ class TransactionsController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $fileName = config('env.env') . '/transactions/' .\Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
+        $fileName = \Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();
 
         $s3 = Aws::createClient('s3');
         $s3->putObject(array(

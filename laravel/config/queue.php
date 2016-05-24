@@ -53,8 +53,8 @@ return [
             'driver' => 'sqs',
             'key' => env('AWS_KEY', 'AKIAI5A2F2WZFQUDE77A'),
             'secret' => env('AWS_SECRET', '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'),
-            'prefix' => getenv('SQS_PREFIX'),
-            'queue' => getenv('SQS_QUEUE'),
+            'prefix' => getenv('SQS_PREFIX') ? getenv('SQS_PREFIX') : 'https://sqs.us-west-2.amazonaws.com/355178332009',
+            'queue' => getenv('SQS_QUEUE') ? getenv('SQS_QUEUE') : 'twain-local-transactions',
             'region' => 'us-west-2',
         ],
 
