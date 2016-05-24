@@ -8814,7 +8814,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8884,7 +8884,7 @@ body.modal-open,
 }
 /* line 119, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -9206,7 +9206,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1461683209') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9985,7 +9985,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1461683209') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10012,7 +10012,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1461683209') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10043,7 +10043,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1461683209') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10196,7 +10196,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1461683209') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10265,7 +10265,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12602,7 +12602,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -12837,7 +12837,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -13031,7 +13031,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -13086,7 +13086,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -13713,8 +13713,12 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
     -webkit-border-radius: 0;
     border-radius: 0;
   }
+  /* line 552, ../scss/_header.scss */
+  #header .dashboard-dropdown-menu.desktop-hide {
+    display: none;
+  }
 }
-/* line 555, ../scss/_header.scss */
+/* line 559, ../scss/_header.scss */
 .header-authorise .btn-login,
 .header-authorise .btn-signup {
   height: 28px;
@@ -13723,7 +13727,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   font-size: 12px;
   outline: none;
 }
-/* line 563, ../scss/_header.scss */
+/* line 567, ../scss/_header.scss */
 .header-authorise .btn-login:before,
 .header-authorise .btn-signup:before {
   content: '';
@@ -13731,7 +13735,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   left: 6px;
   top: 1px;
 }
-/* line 574, ../scss/_header.scss */
+/* line 578, ../scss/_header.scss */
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -13739,11 +13743,11 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   height: 24px;
   width: 12px;
 }
-/* line 580, ../scss/_header.scss */
+/* line 584, ../scss/_header.scss */
 .header-authorise .btn-signup {
   margin-left: 5px;
 }
-/* line 583, ../scss/_header.scss */
+/* line 587, ../scss/_header.scss */
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -13753,12 +13757,12 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 2px;
 }
 
-/* line 591, ../scss/_header.scss */
+/* line 595, ../scss/_header.scss */
 .header-login-block {
   position: relative;
   display: inline-block;
 }
-/* line 595, ../scss/_header.scss */
+/* line 599, ../scss/_header.scss */
 .header-login-block .header-login-from {
   display: none;
   position: absolute;
@@ -13777,7 +13781,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   padding: 13px;
 }
-/* line 610, ../scss/_header.scss */
+/* line 614, ../scss/_header.scss */
 .header-login-block .header-login-from:before {
   display: block;
   position: absolute;
@@ -13792,21 +13796,21 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   border-bottom-color: #FFF;
   content: '';
 }
-/* line 625, ../scss/_header.scss */
+/* line 629, ../scss/_header.scss */
 .header-login-block .header-login-from .form-group {
   margin: 0;
   padding: 0;
   width: 235px;
   position: relative;
 }
-/* line 631, ../scss/_header.scss */
+/* line 635, ../scss/_header.scss */
 .header-login-block .header-login-from .form-group label {
   position: absolute;
   left: 0;
   top: 0;
   margin: 0;
 }
-/* line 638, ../scss/_header.scss */
+/* line 642, ../scss/_header.scss */
 .header-login-block .header-login-from .form-group input {
   border: 0;
   background: none;
@@ -13820,13 +13824,13 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   border: none;
   outline: none;
 }
-/* line 653, ../scss/_header.scss */
+/* line 657, ../scss/_header.scss */
 .header-login-block .header-login-from .login-group {
   border-radius: 5px 5px 0 0;
   border: 1px solid #C8C8C8;
   height: 26px;
 }
-/* line 658, ../scss/_header.scss */
+/* line 662, ../scss/_header.scss */
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -13834,14 +13838,14 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   height: 24px;
   width: 28px;
 }
-/* line 663, ../scss/_header.scss */
+/* line 667, ../scss/_header.scss */
 .header-login-block .header-login-from .password-group {
   border-radius: 0 0 5px 5px;
   border: 1px solid #C8C8C8;
   border-top: 0;
   height: 25px;
 }
-/* line 669, ../scss/_header.scss */
+/* line 673, ../scss/_header.scss */
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -13849,17 +13853,17 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   height: 24px;
   width: 28px;
 }
-/* line 674, ../scss/_header.scss */
+/* line 678, ../scss/_header.scss */
 .header-login-block .header-login-from .header-login-form-actions {
   padding: 8px 0 0 0;
 }
-/* line 677, ../scss/_header.scss */
+/* line 681, ../scss/_header.scss */
 .header-login-block .header-login-from .header-login-form-actions a {
   font-size: 10px;
   color: #2c80e8;
   margin-top: 5px;
 }
-/* line 684, ../scss/_header.scss */
+/* line 688, ../scss/_header.scss */
 .header-login-block .header-login-from .header-login-error {
   color: #ff0000;
   display: none;
@@ -13868,7 +13872,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   clear: both;
   text-align: left;
 }
-/* line 693, ../scss/_header.scss */
+/* line 697, ../scss/_header.scss */
 .header-login-block .header-login-from .header-login-loading {
   position: absolute;
   display: none;
@@ -13883,12 +13887,12 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   text-align: center;
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 705, ../scss/_header.scss */
+/* line 709, ../scss/_header.scss */
 .header-login-block .header-login-from .header-login-loading .loader {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1461683209') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13898,7 +13902,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1461683209') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

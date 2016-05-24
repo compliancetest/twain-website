@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
 
     $('[data-toggle-block]').click(function(e){
         e.preventDefault();
-        $($(this).data('toggle-block')).toggle();
+        $($(this).data('toggle-block')).toggleClass('desktop-hide');
     });
 
     if ($.fn.redactor){

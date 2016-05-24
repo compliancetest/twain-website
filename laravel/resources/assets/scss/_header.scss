@@ -548,6 +548,10 @@
     border: 0;
     width: 100%;
     @include border-radius(0);
+
+    &.desktop-hide{
+      display: none;
+    }
   }
 }
 
