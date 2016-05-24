@@ -639,28 +639,10 @@ function formatBytes($bytes, $precision = 2) {
 */
 function addMessage($message, $type = 'success')
 {
-        /**
-         * This needs to share flash messages between laravel and wordpress
-         */
-//        require __DIR__ . '/../../../laravel/bootstrap/autoload.php';
-//
-//        $app = require_once __DIR__ . '/../../../laravel/bootstrap/app.php';
-//        if($app == 1) {
-//            $app = app();
-//        }
-//        $app->make('Illuminate\Contracts\Http\Kernel')->handle(Illuminate\Http\Request::capture());
-//        $id = $app['encrypter']->decrypt($_COOKIE[$app['config']['session.cookie']]);
-        file_put_contents(ABSPATH . 'laravel/storage/framework/sessions/'.md5($_SERVER['REMOTE_ADDR']).'.vars', json_encode(array('message' => $message, 'type' => $type)));
-//        $app['session']->driver()->setId($id);
-//        $app['session']->driver()->start();
-//        $oldData = $app['session']->driver()->get(MESSAGE_KEY);
-//        $app['session']->driver()->set(MESSAGE_KEY, array('message' => $message, 'type' => $type));
-//        $app['session']->driver()->save();
-//        if (!isset($_SESSION[MESSAGE_KEY])){
-//            $_SESSION[MESSAGE_KEY] = array();
-//
-//            $_SESSION[MESSAGE_KEY][] = array('message' => $message, 'type' => $type);
-//        }
+    global $wpdb;
+    $wpdb->insert('flash_messages',
+        ['key' => md5($_SERVER['REMOTE_ADDR']), 'data' => json_encode(array('message' => $message, 'type' => $type))]
+    );
 }
 
 //Get get params for search filter

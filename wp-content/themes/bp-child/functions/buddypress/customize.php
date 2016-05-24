@@ -75,17 +75,17 @@ function save_group_terms_and_license($group_id)
 
 function flushMessages($class = '')
 {
-    $filePath = ABSPATH . 'laravel/storage/framework/sessions/'.md5($_SERVER['REMOTE_ADDR']).'.vars';
-    if(file_exists($filePath) ){
-        $data = json_decode(file_get_contents($filePath),1);
-        if($data){
-             echo '<div id="messages-wrapper"  class="' . $class . '">';
-                echo '<div class="message ' . $data['type'] . '">' . $data['message'] . "</div>";
+    global $wpdb;
+    $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM flash_messages WHERE `key` = "%s"', md5($_SERVER['REMOTE_ADDR'])));
+    if ($row) {
+        $data = json_decode($row->data, 1);
+        if ($data) {
+            echo '<div id="messages-wrapper"  class="' . $class . '">';
+            echo '<div class="message ' . $data['type'] . '">' . $data['message'] . "</div>";
             echo '</div>';
-            @unlink($filePath);
+            $wpdb->get_row($wpdb->prepare('DELETE FROM flash_messages WHERE `key` = %s', md5($_SERVER['REMOTE_ADDR'])));
         }
     }
-
 }
 
 //Show Result Messages
