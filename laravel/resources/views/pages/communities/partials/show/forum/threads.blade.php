@@ -158,7 +158,12 @@
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
-                        $('#messages-wrapper').html('<div class="message success">Thread was deleted successfully</div>');
+                        if ($('#messages-wrapper').length > 0){
+                            $('#messages-wrapper').html('<div class="message success">Thread was deleted successfully</div>');
+                        } else {
+                            $('#header').after('<div id="messages-wrapper"><div class="message success">Thread was deleted successfully</div></div>');
+                        }
+
                         $(elem).closest('tr').slideUp('slow', function () {
                             $(elem).remove();
                         });
