@@ -3604,10 +3604,12 @@ background-image: url(../images/white_gloss.png);
     float: left;
     width: 24%;
     font-weight: bold;
+    overflow: hidden;
 }
 .product-page .related_products dd{
     display: block;
-    margin: 0 0 0 15%;
+    margin: 0 0 0 25%;
+    overflow: hidden;
 }
 .product-page #tab_related_services .related_products dd label{
     display: inline-block;
@@ -3669,10 +3671,12 @@ background-image: url(../images/white_gloss.png);
 .product-page .uses_products dt{
     float: left;
     width: 24%;
+    overflow: hidden;
 }
 .product-page .uses_products dd{
     display: block;
-    margin: 0 0 0 24%;
+    margin: 0 0 0 25%;
+    overflow: hidden;
 }
 
 .claims-list-wrapper{
