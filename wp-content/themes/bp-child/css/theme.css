@@ -4662,13 +4662,10 @@ span.button_sign {
     margin-left: -55px;
 }
 #my_subscriptions .td-community{
-    width: 206px;
+    width: 336px;
 }
 #my_subscriptions .td-suite{
-    width: 197px;
-}
-#my_subscriptions .td-error-checking{
-    width: 85px;
+    width: 389px;
 }
 #my_subscriptions .td-fee{
     width: 65px;

@@ -699,35 +699,7 @@
     });
 
 })(jQuery);
-function saveHarnessDetails(id)
-{
-    jQuery('#harness-detail-box' + id + ' .loading').show();
-    jQuery('#harness-detail-box' + id + ' .message').remove();
 
-    jQuery.ajax({
-        url: '/',
-        data: jQuery('#harness-form').serialize(),
-        type: 'POST',
-        success: function(rsp){
-            jQuery('#harness-detail-box' + id + ' .loading').hide();
-            if(rsp == 'success')
-            {
-                jQuery('#my_testsuites').prepend('<div style="margin-bottom:20px;" class="message success">Your data was saved!</div>');                
-                jQuery('#harness-detail-box' + id + ' .close-popup-btn').click();
-            }
-            else
-            {
-                jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + rsp + "</div>");
-            }
-        },
-        error: function(err){
-            jQuery('#harness-detail-box' + id + ' .loading').hide();
-            jQuery('#harness-detail-box' + id + ' .popup-box-footer').prepend('<div class="message error">' + err.responseText + "</div>");
-        }
-    });
-    
-    return false;
-}
 function saveVariableDefaults(obj)
 {
     var parentObj = jQuery(obj).parent().parent();

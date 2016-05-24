@@ -21,9 +21,6 @@ get_header();
                     <div class="thead tr">
                         <div class="td td-community">Community</div>
                         <div class="td td-suite">Test Suite</div>
-                        <div class="td td-error-checking tocenter two-lines">Limited Error <br> Checking</div>
-                        <div class="td td-error-checking tocenter two-lines">G018<br>Conformance</div>
-                        <div class="td td-error-checking tocenter two-lines">Force E2E <br>routing</div>
                         <div class="td td-status tocenter">Status</div>
                         <div class="td td-action tocenter">Action</div>
                         <div class="clear"></div>
@@ -54,15 +51,6 @@ get_header();
                             <div class="td td-suite">
                                 <a href="<?php echo get_permalink($row->suite_id)?>"><?php echo $row->suite_title ?></a>
                             </div>
-                            <div class="td td-error-checking tocenter">
-                                <input class="update-error-checking" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->limited_error_checking)?('checked'):(''); ?>></br>
-                            </div>
-                            <div class="td td-error-checking tocenter">
-                                <input class="update-mandatory_response_validation" type="checkbox" value="<?php echo $row->id;?>" <?php echo ($row->mandatory_response_validation)?('checked'):(''); ?>></br>
-                            </div>
-                            <div class="td td-error-checking tocenter">
-                                <input class="update-force" type="checkbox" name="force_e2e_routing" value="<?php echo $row->id;?>" <?php echo $row->force_e2e_routing ? 'checked="checked"' : '' ?> style="margin-left: -2px;"/>
-                            </div>
                             <div class="td td-status">
                                 <span class="status_btn status_<?php echo strtolower($row->status)?> has-tooltip">
                                     <?php echo $row->status?>
@@ -73,12 +61,6 @@ get_header();
                                                 case 'Active';
                                                     echo 'You have an active subscription to this test suite.';
                                                     break;
-                                                case 'InArrears';
-                                                    echo 'There is a problem with the payment method associated with your subscription to this test suite.';
-                                                    break;
-                                                case 'Frozen';
-                                                    echo 'Testing is frozen until the problem with the payment method associated with this subscription is resolved.';
-                                                    break;
                                                 case 'Unsubscribing';
                                                     echo 'You have requested to be unsubscribed from this test suite. This will occur at the end of the month.';
                                                     break;
@@ -88,8 +70,7 @@ get_header();
                                 </span>
                             </div>
                             <div class="td td-action tocenter">
-                                <a href="/?cp-action=<?php echo wp_create_nonce('get-harness')?>&id=<?php echo $row->id?>" class="action-btn harness-detail-btn harness-detail-link has-tooltip" data-id="<?php echo $row->id?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Harness Details<span></span></span></a>
-                                <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->parent_id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left10 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Release Subscription<span></span></span></a><br />
+                                <a href="<?php echo get_permalink($row->suite_id)?>?_organisation_nonce=<?php echo wp_create_nonce('unsubscribe')?>&id=<?php echo $row->parent_id?>&return=<?php echo base64_encode(get_permalink()) ?>" class="action-btn unsubscribe-btn icon-btn left15 has-tooltip" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1 cp-closeWhenClickOveraly=0><span class="p"></span><span class="simple_tooltip">Release Subscription<span></span></span></a><br />
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -114,47 +95,12 @@ get_header();
     </div>
     <div class="clear"></div>
 </div> <!--end content-->
-<input type="hidden" id="update-error-checking-action" value="<?php echo wp_create_nonce('update-error-checking-action')?>">
-<input type="hidden" id="update-mandatory_response_validation-action" value="<?php echo wp_create_nonce('update-mandatory_response_validation-action')?>">
-<input type="hidden" id="update-force-action" value="<?php echo wp_create_nonce('update-force-action')?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
     fixTdHeight(jQuery('#my_subscriptions'));
     //Fix Simple ToolTips
     jQuery('.td-status .simple_tooltip').each(function(){
         jQuery(this).css({'top': -1 * jQuery(this).outerHeight() - 6, 'margin-left': -1 * jQuery(this).outerWidth() / 2 + jQuery(this).parent().outerWidth() / 2});
-    });
-    jQuery('.update-error-checking').change(function(){
-        jQuery.ajax({
-            url: "/?cp-action="  + jQuery('#update-error-checking-action').val(),
-            data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == 'checked')?(1):(0)),
-            type: 'post',
-            dataType: 'json',
-            success: function(rsp) {
-            }
-        });
-    });
-    jQuery('.update-mandatory_response_validation').change(function(){
-        jQuery.ajax({
-            url: '/',
-            data: {
-                'cp-action' : jQuery('#update-mandatory_response_validation-action').val(),
-                'id':jQuery(this).val(),
-                'status' : jQuery(this).attr('checked') == 'checked' ? 1 : 0
-            },
-            type: 'post',
-            dataType: 'json'
-        });
-    });
-    jQuery('.update-force').change(function(){
-        jQuery.ajax({
-            url: "/?cp-action="  + jQuery('#update-force-action').val(),
-            data: 'id=' + jQuery(this).val() + '&status=' + ((jQuery(this).attr('checked') == 'checked')?(1):(0)),
-            type: 'post',
-            dataType: 'json',
-            success: function(rsp) {
-            }
-        });
     });
 })
 </script>
