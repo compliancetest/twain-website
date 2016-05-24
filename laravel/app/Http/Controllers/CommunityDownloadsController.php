@@ -33,7 +33,7 @@ class CommunityDownloadsController extends Controller
 
         $data['token'] = createClaimToken();
 
-        $s3FilePath = config('env.env') . '/communities/downloads/' . $community->id . '/' . $data['token'] . '.'.$request->file('file')->getClientOriginalExtension();
+        $s3FilePath = 'communities/downloads/' . $community->id . '/' . $data['token'] . '.'.$request->file('file')->getClientOriginalExtension();
 
         $data['title'] = $request->file('file')->getClientOriginalName();
         $data['location'] = $s3FilePath;

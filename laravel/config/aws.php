@@ -12,7 +12,7 @@ $data = [
         'local' => 'https://search-twain-fulltext-integration-tiep3cmrp26mcuygunmgyq43su.us-west-2.cloudsearch.amazonaws.com',
         'integration' => 'https://search-twain-fulltext-integration-tiep3cmrp26mcuygunmgyq43su.us-west-2.cloudsearch.amazonaws.com',
         'preproduction' => 'https://search-twain-fulltext-preproduction-ienflwzarmmmsmexdetc7oqmwi.us-west-2.cloudsearch.amazonaws.com',
-        'production' => 'https://search-twain-production-fulltext-fxvyoc3ptl6lljclioe5ghmski.us-west-2.cloudsearch.amazonaws.com',
+        'production' => 'https://search-twain-fulltext-production-ydih2jkp24asgt6uxvfzoj5aju.us-west-2.cloudsearch.amazonaws.com',
     ]
 ];
 if(env('APP_ENV') == 'local' || getenv('ENVIRONMENT') == 'local'){

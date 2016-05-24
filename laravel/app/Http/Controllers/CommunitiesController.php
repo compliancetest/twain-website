@@ -187,9 +187,6 @@ class CommunitiesController extends Controller
             }
         }
 
-        if ($request->get('redirect')) {
-            $redirect = $request->get('redirect');
-        }
         return Redirect::to(getSiteUrl() . '/communities/' . $community->slug . '/admin');
     }
 
