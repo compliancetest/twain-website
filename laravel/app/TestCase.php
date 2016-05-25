@@ -50,4 +50,17 @@ class TestCase extends Model
         return $strId;
     }
 
+    /**
+     * Check profile's is_optional flag
+     * @return bool
+     */
+    public function isOptional($testCaseId)
+    {
+        $result = PostMeta::where(['post_id' => $testCaseId, 'meta_key' => 'testcase_status', 'meta_value' => 'Yes'])->first();
+        if ($result) {
+            return true;
+        }
+        return false;
+    }
+
 }
