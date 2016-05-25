@@ -147,4 +147,15 @@ Route::group(['middleware' => ['web']], function () {
          Route::patch('/forums/{community}/post/{postId}', 'CommunityForumController@updateThreadPost');
          Route::post('forums/{community}/{threadSlug}', 'CommunityForumController@addThreadPost');
      });
+    
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('test-suite-coverage', 'TestPlansController@index');
+        Route::get('/testplan/create/{suiteId}', 'TestPlansController@create');
+        Route::get('/testplan/{testPlanId}/edit/', 'TestPlansController@edit');
+        Route::get('/testplan/{testPlanId}/view/{testCaseId}', 'TestPlansController@view');
+        Route::post('/testplan', 'TestPlansController@store');
+        Route::post('/testplan/{testPlanId}/exclude/{testCaseId}', 'TestPlansController@exclude');
+        Route::post('/testplan/{testPlanId}', 'TestPlansController@update');
+        Route::delete('/testplan/{planid}', 'TestPlansController@destroy');
+    });
 });

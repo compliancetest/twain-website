@@ -31,6 +31,7 @@ function sendEmails($sendTo, $template, $emailData)
 
 function getClientIP()
 {
+    return '31.202.16.252';
     if (isset($_SERVER)) {
 
         if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
