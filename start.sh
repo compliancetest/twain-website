@@ -11,4 +11,5 @@ nohup php /var/www/html/laravel/artisan queue:listen --timeout=300 > /dev/null 2
 
 cd /var/www/html/laravel && php artisan migrate --force
 
+
 /usr/sbin/apache2ctl -D FOREGROUND
