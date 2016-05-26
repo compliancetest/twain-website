@@ -66,6 +66,11 @@ class Post extends Model
     {
         $suiteId = $this->ID;
         $query = Post::select('wp_posts.*')
+             ->join('wp_postmeta AS pm1', function ($join) {
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm1.meta_value', '=', 'Active')
+                    ->where('pm1.meta_key', '=', 'test_case_status');
+            })
             ->join('wp_postmeta AS pm2', function ($join) {
                 $join->on('pm2.post_id', '=', 'wp_posts.ID')
                     ->where('pm2.meta_value', '=', '0')

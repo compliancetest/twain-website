@@ -106,10 +106,11 @@ class User extends Authenticatable
     public function getUserTestPlans()
     {
         $response = [];
-        foreach($this->suiteSubscriptions as $subscription){
-            $organisationSubscription = OrganisationSubscription::where(['user_id' => $this->ID, 'suite_family_mark' => $subscription->suite_family_mark])->first();
-            $testPlans = TestPlan::where(['organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $subscription->suite_family_mark])->get();
-            $suite = Post::find($subscription->suite_family_mark);
+        $organisationSubscription = OrganisationSubscription::where(['organisation_id' => $this->organisation[0]->id])->get();
+
+        foreach($organisationSubscription as $organisationSubscription){
+            $testPlans = TestPlan::where(['organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
+            $suite = Post::find($organisationSubscription->suite_family_mark);
             $response[$suite->post_title] = [
                  'testSuite' => $suite,
                  'testPlans' => [],
