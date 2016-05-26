@@ -197,7 +197,7 @@ get_header();
                                             </a>
                                         <?php endif;?>
                                         <?php $outcomeStatus = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_outcome_statuses WHERE id = %s", $row->test_outcome_status_id));?>
-                                        <?php $status = ($outcomeStatus ? ($outcomeStatus->code == 'PASS' ? 'success' : 'fail') : 'fail'); ?>
+                                        <?php $status = ($outcomeStatus ? ($outcomeStatus->code == 'PASS' ? 'success' : ($outcomeStatus->code == 'FAIL' ? 'ignored' : 'fail')) : 'fail'); ?>
                                         <span
                                             class="status-<?php echo $status;?>"><?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?></span>
                                         <br/>
