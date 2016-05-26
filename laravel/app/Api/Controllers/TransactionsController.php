@@ -16,6 +16,7 @@ class TransactionsController extends BaseApiController
      * @apiParam {string} product_id  Mandatory - product id string.
      * @apiParam {string} test_suite_id  Mandatory - test suite id string.
      * @apiParam {string} execution_id  Mandatory - execution id string.
+     * @apiParam {string} test_outcome  Optional - alloved values: Fail, Pass, Skip.
      *
      * @apiName createTansaction
      * @apiGroup Transactions
@@ -56,6 +57,9 @@ class TransactionsController extends BaseApiController
      *       ],
      *       "product_id": [
      *         "The product id field is required."
+     *       ],
+     *        "test_outcome": [
+     *         "The selected test outcome is invalid."
      *       ]
      *     },
      *     "code": 422
@@ -74,6 +78,7 @@ class TransactionsController extends BaseApiController
             'test_suite_id' => 'required|exists:wp_posts,post_name',
             'product_id' => 'required|exists:wp_posts,post_name',
             'execution_id' => 'required',
+            'test_outcome' => 'in:Pass,Fail,Skip',
         ]);
 
         if ($validator->fails()) {
@@ -94,6 +99,7 @@ class TransactionsController extends BaseApiController
             'test_suite_id' => $request->get('test_suite_id'),
             'execution_id' => $request->get('execution_id'),
             'product_id' => $request->get('product_id'),
+            'test_outcome' => strtoupper($request->get('test_outcome')),
         ];
         //adding entry to sqs. it will be processed in background
         $this->dispatch(new ProcessTransactionLog($fileName, $data));

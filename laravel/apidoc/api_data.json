@@ -920,6 +920,13 @@
             "optional": false,
             "field": "execution_id",
             "description": "<p>Mandatory - execution id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_outcome",
+            "description": "<p>Optional - alloved values: Fail, Pass, Skip.</p>"
           }
         ]
       }
@@ -960,7 +967,7 @@
         },
         {
           "title": "Validation error:",
-          "content": "\n{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"test_suite_id\": [\n      \"The test suite id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ],\n    \"product_id\": [\n      \"The product id field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "content": "\n{\n  \"errors\": {\n    \"file\": [\n      \"The file field is required.\"\n    ],\n    \"test_case_id\": [\n      \"The test case id field is required.\"\n    ],\n    \"test_suite_id\": [\n      \"The test suite id field is required.\"\n    ],\n    \"execution_id\": [\n      \"The execution id field is required.\"\n    ],\n    \"product_id\": [\n      \"The product id field is required.\"\n    ],\n     \"test_outcome\": [\n      \"The selected test outcome is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]
