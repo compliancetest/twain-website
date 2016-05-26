@@ -5,8 +5,12 @@ namespace App\Api\Controllers;
 use App\Jobs\ProcessTransactionLog;
 use App\Organisation;
 use App\OrganisationMember;
+use App\OrganisationSubscription;
 use App\Post;
 use App\PostMeta;
+use App\PricingPlan;
+use App\TestPlan;
+use App\TestPlanExcludedCases;
 use Aws\Laravel\AwsFacade as AWS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -161,6 +165,7 @@ class ProductsController extends BaseApiController
             'organisation_id' => 'required|exists:wp_organisations,id',
         ]);
 
+        $user = \Auth::user();
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
@@ -210,6 +215,45 @@ class ProductsController extends BaseApiController
         $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         
         $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
+
+        /**
+         * Create test plans for product
+         */
+        foreach ($user->getUserTestPlans() as $suiteName => $suite) {
+            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            if ($type != $request->get('product_type')) {
+                continue;
+            }
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
+            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+
+            foreach (explode(',', $attributes->value) as $level) {
+                $testPlan = TestPlan::create([
+                    'organisation_subscription_id' => $organisationSubscription->id,
+                    'product_id' => $this->product->ID,
+                    'suite_id' => $suite['testSuite']->ID,
+                    'creator_id' => $user->ID,
+                    'level' => $level,
+                    'role' => $request->get('product_type'),
+                ]);
+                if ($request->get('product_type') == 'DataSource') {
+                    $testCases = $suite['testSuite']->getTestCases([$level], [$request->get('product_type')]);
+                    foreach ($testCases as $testCase) {
+                        $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
+                        $diff = array_diff($capabilities, $jsonEntry['Capabilities']);
+                        if (empty($capabilities) || !empty($diff)) {
+                            TestPlanExcludedCases::create([
+                                'test_case_id' => $testCase->ID,
+                                'excluded_by_user_id' => $user->ID,
+                                'test_plan_id' => $testPlan->id,
+                                'reason' => empty($capabilities) ? 'Those capabilities not supported by test case: ' . implode(', ', $diff) : 'Supported capabilities list is empty',
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
 
         $response = [
             'id' => $this->product->post_name,

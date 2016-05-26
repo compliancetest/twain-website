@@ -34,7 +34,7 @@ class TestPlansController extends Controller
      */
     public function create($suiteId)
     {
-        $subscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID])->first();
+        $subscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $suiteId])->first();
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 

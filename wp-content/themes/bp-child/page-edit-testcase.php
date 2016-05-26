@@ -449,9 +449,15 @@ get_header();
                                 <select name="test_data_profile" style="width:300px;;">
                                     <option value=""></option>
                                     <?php
-                                    $suiteObj->load();
+                                    if(is_object($suiteObj)){
+                                        $suiteObj->load();
+                                        $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
+                                    } else {
+                                        $testSuitesRolesProfilesTypes = [];
+                                    }
+
                                     $profileInstances = $case->getAvailableProfileInstances();
-                                    $testSuitesRolesProfilesTypes = $suiteObj->loadProfileTypesToRoles($case->testSuite);
+
                                     $testSuitesRoles = array($case->harnessRole);
                                     foreach ($profileInstances as $instance) {
                                         $profileName = $instance->profile_name;
