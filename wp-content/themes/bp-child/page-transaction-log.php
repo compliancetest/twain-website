@@ -163,7 +163,7 @@ get_header();
                                 <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                 <div class="tr">
                                     <div class="td td-chk tocenter">
-                                        <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>"/>
+                                        <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>" <?php if($row->audit_record):?> disabled="disabled" <?php endif;?>/>
                                     </div>
                                     <div class="td td-product">
                                         <?php if($logs):?>
@@ -464,7 +464,7 @@ get_header();
             })
 
             jQuery('.chk-all').click(function () {
-                jQuery('#log-result-table .tbody input[type="checkbox"]:not(:disabled)').prop('checked', this.checked);
+                jQuery('#log-result-table .tbody input[type="checkbox"]:not(:disabled):not(.change_audit_record)').prop('checked', this.checked);
             })
             jQuery('#log-result-table .view-messages-link').click(function () {
                 jQuery(this).parents('.tr').find('.sub-table').animate({'height': 'toggle'});
@@ -478,12 +478,21 @@ get_header();
             })
 
             jQuery('#log-result-table .change_audit_record').on('change', function () {
+                var auditRecord = jQuery(this);
                 jQuery.ajax({
-                    url: '/transactions/'+jQuery(this).attr('data-id')+'/updateauditrecord',
+                    url: '/transactions/' + jQuery(this).attr('data-id') + '/updateauditrecord',
                     type: 'post',
                     data: {
                         'audit_record' : jQuery(this).is(':checked')
                     },
+                    success: function(){
+                        var tableRow = auditRecord.closest('div.tr');
+                        if (!auditRecord.is(':checked')) {
+                            tableRow.find('.td-chk input').removeAttr('disabled');
+                        } else {
+                            tableRow.find('.td-chk input').attr('disabled', 'disabled');
+                        }
+                    }
                 });
             })
         })

@@ -39,7 +39,7 @@ class TransactionLogs
         return $this;
     }
 
-    public function getUserTransactionLog($page = 1, $limit = 10, $orderby = 'updated_at', $order = 'desc')
+    public function getUserTransactionLog($page = 1, $limit = 10, $orderby = 'created_at', $order = 'desc')
     {
         global $wpdb;
 
