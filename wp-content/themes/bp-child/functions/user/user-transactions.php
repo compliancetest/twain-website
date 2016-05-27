@@ -244,57 +244,22 @@ function cp_save_transaction_log()
     
 }
 
-function cp_delete_transaction_log(){
-    global $wpdb;    
-    
-    if(!is_user_logged_in())
-    {
+function cp_delete_transaction_log()
+{
+    global $wpdb;
+
+    if (!is_user_logged_in()) {
         addMessage('Permission Denied!', 'error');
         return false;
     }
-    
-    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $_POST['id'] );
-    $lIds = array();
 
-    if(!$ids)
-    {
-        addMessage('Invalid Request!', 'error');
-        return false;
-    }else{
-        $esb = new ManageESB();
-        $rows =$esb->getTransactionLogByID($ids);
-    }
-    
-    if(!$rows)
-    {
-        addMessage('Invalid Request!', 'error');
-        return false;
-    }
+//    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $_POST['id'] );
+//    $lIds = array();
 
-    foreach($rows as $row)
-    {
-        $lIds[] = $row->ID;
-    }
-    
-    $esb = new ManageESB();
-    
-    //DELETE FROM MSH_METADATA_VALIDATION_RESULT
-/*    
-    $query = "DELETE FROM " . $esb->table_message_validation_results . " WHERE MSH_MESSAGE_METADATA_ID in (SELECT ID FROM " . $esb->table_message_metadata . ")";    
-    ManageESB::$esbdb->query($query);
-    
-    */
-    //Delete MSH_METADATA_PAYLOAD            
-    /*$query = "DELETE FROM " . $esb->table_message_metadata . " WHERE MSH_CONVERSATION_ID in (" . implode(", ", $lIds) . ")";    
-    ManageESB::$esbdb->query($query);*/
-    
-    
-    $query = "DELETE FROM " . $esb->table_conversation_metadata . " WHERE ID in (" . implode(", ", $lIds) . ")";    
-    ManageESB::$esbdb->query($query);
-    
-    
+    $wpdb->query("DELETE FROM transactions WHERE ID in ('" . implode("', '", $_POST['id']) . "')");
+
     addMessage("Selected data was removed!");
-    
+
     return true;
 }
 

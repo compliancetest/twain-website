@@ -111,10 +111,12 @@ class User extends Authenticatable
         foreach($organisationSubscriptions as $organisationSubscription){
             $testPlans = TestPlan::where(['organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
             $suite = Post::find($organisationSubscription->suite_family_mark);
-            $response[$suite->post_title] = [
-                 'testSuite' => $suite,
-                 'testPlans' => [],
-            ];
+            if(!isset($response[$suite->post_title] )) {
+                $response[$suite->post_title] = [
+                    'testSuite' => $suite,
+                    'testPlans' => [],
+                ];
+            }
             foreach($testPlans as $testPlan){
                  $response[$suite->post_title]['testPlans'][] = [
                      'product' => Post::find($testPlan->product_id),

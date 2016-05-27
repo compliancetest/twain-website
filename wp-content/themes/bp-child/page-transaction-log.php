@@ -116,8 +116,8 @@ get_header();
 <!--               id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"-->
 <!--               onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>-->
 
-<!--            <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right left5 has-tooltip"><span-->
-<!--                    class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>-->
+            <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right has-tooltip"><span
+                    class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
 <!--            <a href="#" id="edit-log-link" class="action-btn edit-btn icon-btn right has-tooltip"><span-->
 <!--                    class="p"></span><span class="simple_tooltip radius6">Edit Selected Rows<span></span></span></a>-->
 
@@ -388,48 +388,72 @@ get_header();
         </div>
     </div>
     <div class="clear"></div>
+
+    <div class="popup-box" id="delete-log-box" style="display: none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Delete Transactions</div>
+        <div class="popup-box-content">
+            <div class="delete_message">
+                Are you sure you want delete selected transactions?
+            </div>
+            <div class="delete_no_messages">
+                Please select a row
+            </div>
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <div class="loading loading-with-text radius6">
+                <div><b>DELETING TRANSACTIONS</b><span>Please wait...</span></div>
+            </div>
+            <a href="#" class="action-btn process-btn delete-log-confirm"><span class="p"></span><span class="t">Confirm</span></a>
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </div>
+
     <script type="text/javascript">
 
         jQuery(document).ready(function () {
 
             fixTdHeight(jQuery('#my_transaction_log .table-box'));
 
-            jQuery('#delete-log-link').click(function () {
-                var checked = jQuery('#log-result-table .tbody input[type="checkbox"]:checked').length;
-                if (checked == 0) {
-                    alert("Please select a row.");
-                    return false;
-                } else {
-                    var isAudit = false;
-
-                    var ids = new Array();
-                    jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
-                        ids.push(this.value);
-                        if (jQuery(this).parents('.tr').find('.td-audit').html() == 'Yes')
-                            isAudit = true;
-                    })
-                    if (isAudit && !confirm('Are you sure you want to delete? Some of the rows you have selected are marked as audit records')) {
-                        return false;
+            jQuery('#delete-log-link').cplightbox({
+                type: 'inline',
+                href: '#delete-log-box',
+                onStart: function(){
+                    if(jQuery('#log-result-table .tbody input[type="checkbox"]:checked').length < 1){
+                        jQuery('.delete_no_messages').show();
+                        jQuery('.delete_message').hide();
+                        jQuery('.delete-log-confirm').hide();
+                    } else {
+                        jQuery('.delete_no_messages').hide();
+                        jQuery('.delete_message').show();
+                        jQuery('.delete-log-confirm').show();
                     }
-
-                    jQuery('#my_transaction_log').append('<div class="loading1"></div>');
-                    jQuery('#my_transaction_log .loading1').show();
-
-                    jQuery.ajax({
-                        url: '/',
-                        data: {
-                            'cp-action': '<?php echo wp_create_nonce('delete-transaction-log')?>',
-                            'id': ids
-                        },
-                        type: 'post',
-                        dataType: 'html',
-                        success: function (rsp) {
-                            document.location.reload();
-
-                        }
-                    })
-                    return false;
                 }
+            });
+
+            jQuery('.delete-log-confirm').click(function () {
+                var ids = new Array();
+                jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
+                    ids.push(this.value);
+                })
+
+                jQuery('#delete-log-box .loading').show();
+
+                jQuery.ajax({
+                    url: '/',
+                    data: {
+                        'cp-action': '<?php echo wp_create_nonce('delete-transaction-log')?>',
+                        'id': ids
+                    },
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (rsp) {
+                        document.location.reload();
+
+                    }
+                })
+                return false;
             });
 
             jQuery('#my_transaction_log .clear-filter').click(function () {
