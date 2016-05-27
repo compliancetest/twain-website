@@ -54,7 +54,7 @@ function compliancetest_user_actions()
         $result = saveProductsOrganisations(intval($_POST['organisation_id']),json_encode($organisationsList));
         if($result === true || is_int($result)) {
             echo "success";
-            addMessage('Organisations list was saved successfully!');
+            addMessage('Manufacturer list was saved successfully!');
         } else
             echo $result;
         exit;

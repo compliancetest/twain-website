@@ -64,7 +64,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                 ?>
                                 </b>
             </td>
-            <td colspan="3">Initiating Messsage: <b><?php echo $case->initiationgMessage; ?></b></td>
+            <td colspan="3">Initiating Message: <b><?php echo $case->initiationgMessage; ?></b></td>
         </tr>
         <tr>
             <td class="td-label">Roles:</td>
@@ -75,7 +75,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                                 ?>
                                 </b>
             </td>
-            <td colspan="3">Initiator: <b><?php echo $case->Initiator; ?></b></td>
+            <td colspan="3">Initiator: <b><?php echo ucfirst($case->Initiator) ?></b></td>
         </tr>
         <tr>
             <td class="td-label">Properties:</td>
@@ -105,18 +105,21 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
             <td>Test Pattern: <b><a href="<?php echo get_site_url() ?>/help-faq/test-patterns/"><?php echo $case->testPattern; ?></a></b></td>
             <td>Bulk: <b><?php echo $case->bulk; ?></b></td>
         </tr>
+        <?php
+            $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
+            $scenarioDetail = $case->getScenario($test_suite_id);
+        ?>
+        <?php if (doesUserCommunityAdmin(get_current_user_id(), $community_id) || $scenarioDetail->code != 'Default'): ?>
         <tr>
             <td class="td-label">Scenario:</td>
             <td colspan="4">
                 <?php
-                $test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
-                $scenarioDetail = $case->getScenario($test_suite_id);
-                echo '<b>' . $scenarioDetail->code . ': </b>';
-                echo $scenarioDetail->description;
+                    echo '<b>' . $scenarioDetail->code . ': </b>';
+                    echo $scenarioDetail->description;
                 ?>
             </td>
         </tr>
-        
+        <?php endif; ?>
     </table>
     <br />
     <br />
