@@ -63,7 +63,7 @@ get_header();
                </div>
                <div class="grid-box-body">
                    <div class="thead tr">
-                       <div class="td td-claim-id tocenter">Claim ID</div>
+                       <div class="td td-claim-id">Claim ID</div>
                        <div class="td td-certificate">Certificate</div>
                        <div class="td td-issuer">Issuer</div>
                        <div class="td td-suite">Suite</div>
@@ -88,7 +88,7 @@ get_header();
                            foreach($claims as $claim){                                                  
                            ?>
                            <div class="tr">
-                               <div class="td td-claim-id toright"><?php echo $claim->claim_id ?></div>
+                               <div class="td td-claim-id"><div class="td-claim-id-value" title="<?php echo $claim->claim_id ?>"><?php echo $claim->claim_id ?></div></div>
                                <div class="td td-certificate">
                                     <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>', '', 'height=600'); return false">View</a>
                                     |

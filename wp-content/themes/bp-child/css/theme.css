@@ -4761,6 +4761,16 @@ span.button_sign {
 #my_products .td-claim-id{
     width: 130px;
 }
+#my_products .td-claim-id .td-claim-id-value{
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+   -ms-word-break: break-all;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
 #my_products .td-action{
     width: 70px;
     text-align: center;
@@ -4768,7 +4778,8 @@ span.button_sign {
     padding-right: 0;
 }
 #my_products .td-action a.action-btn{
-    margin-left: 7px;
+    margin: 0 3px;
+    display: inline-block;
 }
 #my_products .tbody .td-action{
     padding-top: 3px;
