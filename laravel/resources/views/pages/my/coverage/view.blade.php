@@ -11,7 +11,7 @@
             </li>
             <li>
                 <label>Transaction Log:</label>
-                <a href="/my-transaction-log?case={{ $testCase->ID }}" target="_blank">View Audit Record</a>
+                <a href="/my-transaction-log?case={{ $testCase->ID }}&productu={{ $testPlan->product_id }}&suite={{ $testPlan->suite_id }}" target="_blank">View Audit Record</a>
             </li>
             <li>
                 <label>Optional:</label>

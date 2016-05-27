@@ -65,6 +65,7 @@ class TestPlan extends Model
                     ->where('TO.code', '=', 'PASS');
             })
             ->where('product_id', $productId)
+            ->where('audit_record', true)
             ->lists('test_case_id');
     }
 
@@ -82,6 +83,7 @@ class TestPlan extends Model
                     ->where('TO.code', '!=', 'PASS');
             })
             ->where('product_id', $productId)
+            ->where('audit_record', true)
             ->lists('test_case_id');
     }
 }

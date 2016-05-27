@@ -202,8 +202,9 @@ get_header();
                                             class="status-<?php echo $status;?>"><?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?></span>
                                         <br/>
                                     </div>
-                                    <div
-                                        class="td td-audit tocenter"><?php echo !$row->audit_record ? "No" : "Yes" ?></div>
+                                    <div class="td td-audit tocenter">
+                                        <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record" data-id="<?php echo $row->id;?>">
+                                    </div>
                                     <div
                                         class="td td-convsn tocenter td-two-lines">
                                             <?php
@@ -474,6 +475,16 @@ get_header();
                     jQuery(this).parents('.tr').find('.view-messages-link .simple_tooltip').text('Hide message details');
                 }
                 return false;
+            })
+
+            jQuery('#log-result-table .change_audit_record').on('change', function () {
+                jQuery.ajax({
+                    url: '/transactions/'+jQuery(this).attr('data-id')+'/updateauditrecord',
+                    type: 'post',
+                    data: {
+                        'audit_record' : jQuery(this).is(':checked')
+                    },
+                });
             })
         })
     </script>
