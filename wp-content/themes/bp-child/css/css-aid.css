@@ -2138,6 +2138,7 @@ tr {
     -webkit-opacity: 0;
     filter: alpha(opacity=0);
     height: 100%;
+	cursor: pointer;
 }
 .custom-file-tag .file-btn{
     position: relative;

@@ -219,7 +219,7 @@ function getBrotherSuitesAndProfileTypes()
     $suitesHtml = "";
 
     $suitesHtml .= '<select name="ts[]" class="select">' .
-        '<option>- Select -</option>';
+        '<option value="">- Select -</option>';
     foreach ($brotherSuites as $row) {
         $suitesHtml .= '<option value="' . $row->ID . '">' . $row->post_title . '</option>';
     }

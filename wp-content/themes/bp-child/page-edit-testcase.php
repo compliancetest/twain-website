@@ -210,8 +210,7 @@ get_header();
                                 <div class="grid-cell">
                                     <label>Tester Role:</label>
                                     <select name="choose_tester_role" class="select">
-                                        <option>- Select -</option>
-
+                                        <option value="">- Select -</option>
                                         <?php foreach ($suiteRoles as $row) { ?>
                                             <option
                                                 value="<?php echo $row ?>" <?php echo $case->testerRole == $row ? 'selected="selected"' : '' ?>><?php echo $row ?></option>
@@ -221,7 +220,7 @@ get_header();
                                 <div class="grid-cell">
                                     <label>Harness Role:</label>
                                     <select name="choose_harness_role" class="select">
-                                        <option>- Select -</option>
+                                        <option value="">- Select -</option>
                                         <?php foreach ($suiteRoles as $row) { ?>
                                             <option
                                                 value="<?php echo $row ?>" <?php echo $case->harnessRole == $row ? 'selected="selected"' : '' ?>><?php echo $row ?></option>
@@ -366,7 +365,7 @@ get_header();
                             <div class="field-row">
                                 <div class="grid-cell width100P">
                                     <select name="choose_init_message" class="select">
-                                        <option>- Select -</option>
+                                        <option value="">- Select -</option>
                                         <?php
                                         foreach ($suiteInitMessages as $row) { ?>
                                             <option

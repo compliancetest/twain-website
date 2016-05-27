@@ -637,7 +637,7 @@ Template Name Posts: Test Suite
                                 </div>
                                 <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
                                 </div>-->
-                                <div class="grid_cell nopaddingtop toleft tocenter width22P text-nowrap padding0-10">
+                                <div class="grid_cell nopaddingtop tocenter width22P">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
                                 <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width23P' : 'width30P' ?> toleft">
