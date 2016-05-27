@@ -256,7 +256,7 @@ function cp_delete_transaction_log()
 //    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $_POST['id'] );
 //    $lIds = array();
 
-    $wpdb->query("DELETE FROM transactions WHERE ID in ('" . implode("', '", $_POST['id']) . "')");
+    $wpdb->query("DELETE FROM transactions WHERE ID in ('" . implode("', '", $_POST['id']) . "') AND audit_record = 0");
 
     addMessage("Selected data was removed!");
 

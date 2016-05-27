@@ -16,7 +16,7 @@ class TransactionsController extends BaseApiController
      * @apiParam {string} product_id  Mandatory - product id string.
      * @apiParam {string} test_suite_id  Mandatory - test suite id string.
      * @apiParam {string} execution_id  Mandatory - execution id string.
-     * @apiParam {string} test_outcome  Optional - alloved values: Fail, Pass, Skip.
+     * @apiParam {string} test_outcome  Optional - allowed values: Fail, Pass, Skip.
      *
      * @apiName createTansaction
      * @apiGroup Transactions
