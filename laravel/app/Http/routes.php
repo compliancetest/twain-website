@@ -157,5 +157,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('/testplan/{testPlanId}/exclude/{testCaseId}', 'TestPlansController@exclude');
         Route::post('/testplan/{testPlanId}', 'TestPlansController@update');
         Route::delete('/testplan/{planid}', 'TestPlansController@destroy');
+
+        Route::post('/transactions/{transactionId}/updateauditrecord', 'TransactionsController@updateauditrecord');
     });
 });
