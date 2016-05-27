@@ -490,7 +490,7 @@ get_header();
                         if (!auditRecord.is(':checked')) {
                             tableRow.find('.td-chk input').removeAttr('disabled');
                         } else {
-                            tableRow.find('.td-chk input').attr('disabled', 'disabled');
+                            tableRow.find('.td-chk input').attr('disabled', 'disabled').removeAttr('checked');
                         }
                     }
                 });

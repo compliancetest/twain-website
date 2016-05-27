@@ -70,7 +70,7 @@ class TestPlan extends Model
     }
 
     /**
-     * Get test cases list with not SUCESS status from transactions table
+     * Get test cases list with FAIL status from transactions table
      * @return mixed
      */
     public function getFailedCases($productId)
@@ -80,7 +80,25 @@ class TestPlan extends Model
             ->select('transactions.*')
             ->join('test_outcome_statuses AS TO', function ($join) use ($suiteId) {
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
-                    ->where('TO.code', '!=', 'PASS');
+                    ->where('TO.code', '=', 'FAIL');
+            })
+            ->where('product_id', $productId)
+            ->where('audit_record', true)
+            ->lists('test_case_id');
+    }
+
+    /**
+     * Get test cases list with SKIP status from transactions table
+     * @return mixed
+     */
+    public function getSkippedCases($productId)
+    {
+        $suiteId = $this->suite_id;
+        return DB::table('transactions')
+            ->select('transactions.*')
+            ->join('test_outcome_statuses AS TO', function ($join) use ($suiteId) {
+                $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
+                    ->where('TO.code', '=', 'SKIP');
             })
             ->where('product_id', $productId)
             ->where('audit_record', true)
