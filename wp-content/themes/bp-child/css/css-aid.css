@@ -2774,6 +2774,9 @@ table.result-table{
 	max-width: 235px;
 	padding: 50px;
 }
+#login_page_form #top_access .loading1{
+	top: 50px;
+}
 #login_page_form #top_access #wp-submit2{
 	padding: 2px 5px;
 	line-height: normal;
