@@ -55,7 +55,7 @@ class TestPlan extends Model
      * Get test cases list with SUCESS status from transactions table
      * @return mixed
      */
-    public function getSuccessCases()
+    public function getSuccessCases($productId)
     {
         $suiteId = $this->suite_id;
         return DB::table('transactions')
@@ -64,6 +64,7 @@ class TestPlan extends Model
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
                     ->where('TO.code', '=', 'PASS');
             })
+            ->where('product_id', $productId)
             ->lists('test_case_id');
     }
 
@@ -71,7 +72,7 @@ class TestPlan extends Model
      * Get test cases list with not SUCESS status from transactions table
      * @return mixed
      */
-    public function getFailedCases()
+    public function getFailedCases($productId)
     {
         $suiteId = $this->suite_id;
         return DB::table('transactions')
@@ -80,6 +81,7 @@ class TestPlan extends Model
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
                     ->where('TO.code', '!=', 'PASS');
             })
+            ->where('product_id', $productId)
             ->lists('test_case_id');
     }
 }

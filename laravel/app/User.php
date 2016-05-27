@@ -120,8 +120,8 @@ class User extends Authenticatable
                      'testPlan' => $testPlan,
                      'testPlanData' => [
                          'excludedCases' => $testPlan->getExcludedCases(),
-                         'successCases' => $testPlan->getSuccessCases(),
-                         'failedCases' => $testPlan->getFailedCases(),
+                         'successCases' => $testPlan->getSuccessCases($testPlan->product_id),
+                         'failedCases' => $testPlan->getFailedCases($testPlan->product_id),
                          'optionalCases' => $testPlan->getOptionalCases(),
                      ],
                  ];
