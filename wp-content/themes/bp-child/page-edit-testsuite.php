@@ -681,7 +681,7 @@ $xeroItems = ct_get_xero_items();
 
                                     <div class="styled_select">
                                         <select name="ts[]" class="select">
-                                            <option>- Select -</option>
+                                            <option value="">- Select -</option>
                                             <?php foreach ($availableSuites as $row) {
                                                 echo '<option value="' . $row->ID . '" ' . ($crow['id'] == $row->ID ? ' selected="selected"' : '') . '>' . $row->post_title . '</option>';
                                             } ?>
@@ -707,7 +707,7 @@ $xeroItems = ct_get_xero_items();
 
                                     <div class="styled_select">
                                         <select name="ts[]" class="select">
-                                            <option>- Select -</option>
+                                            <option value="">- Select -</option>
                                             <?php foreach ($availableSuites as $row) {
                                                 echo '<option value="' . $row->ID . '">' . $row->post_title . '</option>';
                                             } ?>
@@ -727,7 +727,7 @@ $xeroItems = ct_get_xero_items();
                         <?php } ?>
                         <div style="display: none" id="brother-suites">
                             <select name="ts[]" class="select">
-                                <option>- Select -</option>
+                                <option value="">- Select -</option>
                                 <?php foreach ($availableSuites as $row) {
                                     echo '<option value="' . $row->ID . '">' . $row->post_title . '</option>';
                                 } ?>

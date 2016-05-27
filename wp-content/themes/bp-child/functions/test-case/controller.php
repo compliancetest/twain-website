@@ -296,7 +296,7 @@ function getTestSuiteInfoForCase()
         <div class="grid-cell">
            <label>Tester Role:</label>                           
            <select name="choose_tester_role" class="select">
-               <option>- Select -</option>
+               <option value="">- Select -</option>
                <?php $changedRole = isset( $_POST['tester_role'] ) ? $_POST['tester_role'] :  $case->testerRole;?>
                <?php foreach($suiteRoles as $row) {?>
                     <option value="<?php echo $row?>" <?php echo $changedRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
@@ -307,7 +307,7 @@ function getTestSuiteInfoForCase()
            <label>Harness Role:</label>
            <?php $changedRole = isset( $_POST['harness_role'] ) ? $_POST['harness_role'] :  $case->testerRole;?>
            <select name="choose_harness_role" class="select">
-               <option>- Select -</option>
+               <option value="">- Select -</option>
                <?php foreach($suiteRoles as $row) {?>
                     <option value="<?php echo $row?>" <?php echo $changedRole == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
                <?php } ?>
@@ -321,7 +321,7 @@ function getTestSuiteInfoForCase()
         $initMsgHTML = '';
         ?>
         <select name="choose_init_message" class="select">
-           <option>- Select -</option>
+           <option value="">- Select -</option>
            <?php                                
            foreach($suiteInitMessages as $row) {?>
            <option value="<?php echo $row?>" <?php echo $case->initiationgMessage == $row ? 'selected="selected"' : ''?>><?php echo $row?></option>
