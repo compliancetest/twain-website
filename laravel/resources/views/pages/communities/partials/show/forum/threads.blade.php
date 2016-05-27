@@ -44,7 +44,7 @@
         </div>
         <div class="add-new-item-section">
             <div class="add-new-item-default">
-                <a href="#add-new-thread-section" id="add-new-thread" class="add-new-download-link">Add new thread</a>
+                <a href="#add-new-thread-section" id="add-new-thread" class="add-new-download-link">Add New Thread</a>
             </div>
             <div id="edit-thread-section"></div>
             <div id="add-new-thread-section" style="display: none;">
