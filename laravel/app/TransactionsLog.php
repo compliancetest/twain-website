@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionsLog extends Model
 {
 
-    use UuidTrait;
+    use UuidTrait, TransactionS3LinkTrait;
 
     public $incrementing = false;
 

@@ -298,7 +298,13 @@ get_header();
                                                                     -
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 9%;">
-                                                                    -
+                                                                    <?php if ($scanImages = json_decode($message->scan_results)): ?>
+                                                                        <?php foreach ($scanImages as $scanImage): ?>
+                                                                            <a href="<?php echo $scanImage; ?>" target="_blank">View</a>
+                                                                        <?php endforeach; ?>
+                                                                    <?php else: ?>
+                                                                        -
+                                                                    <?php endif; ?>
                                                                 </div>
                                                                 <div class="clear"></div>
                                                             </div>
