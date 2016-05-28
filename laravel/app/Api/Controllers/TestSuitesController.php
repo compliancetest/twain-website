@@ -254,9 +254,19 @@ class TestSuitesController extends BaseApiController
                 $join->on('pm3.post_id', '=', 'wp_posts.ID')
                     ->where('pm3.meta_key', '=', 'test_intent_description');
             })
+            ->join('wp_postmeta AS pm4', function ($join) {
+                $join->on('pm4.post_id', '=', 'wp_posts.ID')
+                    ->where('pm4.meta_key', 'LIKE', 'scenario_%');
+            })
+            ->join('wp_test_suites_scenarios AS scenario', function ($join) {
+                $join->on('scenario.id', '=', 'pm4.meta_value');
+            })
+
             ->where('wp_posts.post_type', '=', 'test-case')
             ->groupBy('wp_posts.ID')
-            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm3.meta_value')->get();
+            ->orderBy('scenario.sequence')
+            ->orderBy('wp_posts.post_title')
+            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm3.meta_value', 'pm4.meta_value AS scenarioId')->get();
 
         if (empty($testCases)) {
             return $this->respondNotFound("Test Cases not found");
