@@ -278,13 +278,7 @@ get_header();
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 36%;">
                                                                     <?php echo $message->data_group .' / ' . $message->data_argument_type . ' / '. $message->messages;?> </br>
-                                                                    <?php if($message->return_code == 'TWRC_ENDOFLIST'):?>
-                                                                        <span><?php echo $message->return_code;?></span>
-                                                                    <?php elseif($message->return_code == 'TWRC_SUCCESS'):?>
-                                                                        <span style="color: green;"><?php echo $message->return_code;?></span>
-                                                                    <?php else:?>
-                                                                        <span style="color: red;"><?php echo $message->return_code;?></span>
-                                                                    <?php endif;?>
+                                                                        <span style="color: <?php echo getReturnCodeColor($message->return_code);?>"><?php echo $message->return_code;?></span>
                                                                 </div>
                                                                 <div class="td td-message-date" style="width: 4%;"><?php if($message->session_state) echo $message->session_state;?></div>
                                                                 <div class="td td-message-part tocenter" style="width: 7%;">

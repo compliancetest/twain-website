@@ -1584,5 +1584,29 @@ function getCommunityAdmins($communityId){
 }
 
 /**
- * his hook used to allow non-wp-admins to attach files to articles
+ * Get ReurnCode label color
+ * @param $returnCode
+ * @return string
  */
+function getReturnCodeColor($returnCode){
+    switch ($returnCode){
+        case 'TWRC_SUCCESS':
+        case 'TWRC_XFERDONE':
+        case 'TWRC_DSEVENT':
+        case 'TWRC_ENDOFLIST':
+            $color = 'green';
+            break;
+        case 'TWRC_CANCEL':
+        case 'TWRC_CHECKSTATUS':
+            $color = 'orange';
+            break;
+        case 'TWRC_BUSY':
+        case 'TWRC_FAILURE':
+        case 'TWRC_NOTDSEVENT':
+        case 'TWRC_SCANNERLOCKED':
+        default:
+            $color = 'red';
+            break;
+    }
+    return $color;
+}
