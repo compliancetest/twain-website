@@ -7,7 +7,7 @@
         </div>
         @if(count($threadPosts))
             @foreach($threadPosts as $index => $threadPost)
-                <div class="forum-post" id="post_{{ $index+1 }}">
+                <div class="forum-post" id="post_{{ $index+1 }}" data-post-id="{{$threadPost->id}}">
                     <div class="forum-post-header">
                         <div class="pull-left">
                             <a href="#post_{{ $index+1 }}">#{{ $index+1 }}</a>
@@ -123,6 +123,16 @@
             jQuery.get('/forums/{{ $community->slug }}/editpost/' + jQuery(this).attr('data-id'), function (data) {
                 jQuery('#addpostSpinner').hide();
                 jQuery('#edit-post-section').show().html(data);
+            }).fail(function (jqXHR, status) {
+                    if (jqXHR.status == 422 && jqXHR.responseJSON.post_id.length > 0) {
+                       location.reload();
+                    } else {
+                        if ($('#messages-wrapper').length > 0){
+                            $('#messages-wrapper').html('<div class="message error">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        } else {
+                            $('#header').after('<div id="messages-wrapper"><div class="message error">' + formatErrorMessage(jqXHR, status) + '</div></div>');
+                        }
+                    }
             });
             jQuery('html, body').animate({
                 scrollTop: jQuery("#edit-post-section").offset().top
@@ -148,6 +158,24 @@
                         $(elem).parents('.forum-post').slideUp('slow', function () {
                             $(elem).remove();
                         });
+                    },
+                    error: function (jqXHR, status) {
+                        if (jqXHR.status == 422 && jqXHR.responseJSON.post_id.length > 0) {
+                            $("[data-post-id='" + jqXHR.responseJSON.post_id + "']").slideUp('slow', function () {
+                                $(this).remove();
+                            });
+                            if ($('#messages-wrapper').length > 0){
+                                $('#messages-wrapper').html('<div class="message error">' + jqXHR.responseJSON.message + '</div>');
+                            } else {
+                                $('#header').after('<div id="messages-wrapper"><div class="message error">' + jqXHR.responseJSON.message + '</div></div>');
+                            }
+                        } else {
+                            if ($('#messages-wrapper').length > 0){
+                                $('#messages-wrapper').html('<div class="message error">' + formatErrorMessage(jqXHR, status) + '</div>');
+                            } else {
+                                $('#header').after('<div id="messages-wrapper"><div class="message error">' + formatErrorMessage(jqXHR, status) + '</div></div>');
+                            }
+                        }
                     },
                     complete: function () {
                         $('#edit-post-section').hide();
