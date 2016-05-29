@@ -142,6 +142,7 @@ get_header();
                     <div class="grid-cell">
                         <label>Community</label>
                         <select name="community_id" id="community_id" class="select">
+                            <option value="">Select a Community</option>
                             <?php $communities = getCommunities(); ?>
                             <?php foreach ($communities as $group) { ?>
                                 <option value="<?php echo $group->id ?>">
@@ -312,6 +313,11 @@ get_header();
 
                 if (jQuery('#paymentForm #suite_family_mark').val() == '') {
                     jQuery('#paymentForm #suite_family_mark').addClass('select-error');
+                    isValid = false;
+                }
+
+                if (jQuery('#paymentForm #community_id').val() == '') {
+                    jQuery('#paymentForm #community_id').addClass('select-error');
                     isValid = false;
                 }
 
