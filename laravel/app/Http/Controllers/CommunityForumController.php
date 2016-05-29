@@ -46,6 +46,9 @@ class CommunityForumController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $thread = ForumThread::find($threadId);
+        if (is_null($thread)){
+            return response()->json(['message' => 'Thread not found', 'thread_id' => $threadId], 422);
+        }
         return view('pages.communities.forum.edit_thread', compact('community', 'thread'));
     }
 
@@ -83,6 +86,9 @@ class CommunityForumController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $thread = ForumThread::find($threadID);
+        if (is_null($thread)){
+            return response()->json(['message' => 'Thread not found', 'thread_id' => $threadID], 422);
+        }
         if (!$community->isAdmin()) {
             return response()->json(array('success' => false), 403);
         }
@@ -127,6 +133,9 @@ class CommunityForumController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $post = ForumThreadPost::find($postId);
+        if (is_null($post)){
+            return response()->json(['message' => 'Post not found', 'post_id' => $postId], 422);
+        }
         return view('pages.communities.forum.edit_post', compact('community', 'post'));
     }
 
@@ -164,6 +173,9 @@ class CommunityForumController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $post = ForumThreadPost::find($postId);
+        if (is_null($post)){
+            return response()->json(['message' => 'Post not found', 'post_id' => $postId], 422);
+        }
         if ($post->author_id != Auth::user()->ID && !$community->isAdmin()) {
             return response()->json(array('success' => false), 403);
         }
