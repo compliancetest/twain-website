@@ -42,12 +42,15 @@ get_header();
     <div class="container"> <!--Temporary -->
         <div class="column">
 
-           
+            <?php if(empty($products)): ?>
+                <p class="empty-row">No products added yet</p>
+            <?php endif; ?>
+
            <?php foreach($products as $product){ ?>
            <div class="grid-box grid-box-expandable table-box grid-box-opened">
                <div class="grid-box-header">
                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                   <h5 class="left">Products: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true )?></b></a></h5>                  
+                   <h5 class="left">Product: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true )?></b></a></h5>
                    <?php if(is_super_admin() || can_maintain_product_and_service($current_user->ID, $product->ID)){ ?>
                    <a class="gbh-btn gbh-btn-delete right delete-product-link" href="<?php echo get_site_url(); ?>/?id=<?php echo $product->ID?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1>Delete<span class="simple_tooltip radius6">Delete<span></span></span></a>
                    
