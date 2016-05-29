@@ -9140,3 +9140,12 @@ input.inactive_s{
     font-size: 14px;
     padding: 15px 0;
 }
+
+.json-view-panel{
+    overflow: auto;
+    max-width: 100%;
+}
+
+.view-profile-type-box{
+    max-width: 90% !important;
+}
