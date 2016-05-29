@@ -12740,6 +12740,11 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   display: inline-block;
 }
 
+/* line 755, ../scss/pages/_community.scss */
+input.notify-changes {
+  margin-top: 5px;
+}
+
 /* line 1, ../scss/pages/_community-downalods.scss */
 .downloads-list-table {
   margin: 0;
