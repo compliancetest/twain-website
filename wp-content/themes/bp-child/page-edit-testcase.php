@@ -723,7 +723,7 @@ get_header();
                             <?php } ?>
                             <a type="submit" class="action-btn process-btn submit-btn left15"><span
                                     class="p"></span><span
-                                    class="t">SAVE TEST CASE</span></a>
+                                    class="t">Save Test Case</span></a>
                             <a href="<?php echo get_permalink($_SESSION['test_suite_id']) ?>"
                                class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
 
