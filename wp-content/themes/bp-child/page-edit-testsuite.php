@@ -714,7 +714,7 @@ $xeroItems = ct_get_xero_items();
                                         </select>
                                     </div>
                                 </div>
-                                <div class="grid-cell">
+                                <div class="grid-cell width60P">
                                     <label>Description:</label>
                                     <textarea cols="" rows="" class="textarea" name="ts_desc[]"></textarea>
                                 </div>
