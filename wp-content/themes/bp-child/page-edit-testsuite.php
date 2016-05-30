@@ -910,8 +910,7 @@ $xeroItems = ct_get_xero_items();
                                                             id="send-notification" value="1" autocomplete="off"/> Send
                                     Notification to members</label></div>
                         <?php } ?>
-                        <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span
-                                class="t">SAVE TEST SUITE</span></a>
+                        <a href="#" class="action-btn process-btn submit-btn left15"><span class="p"></span><span class="t">Save Test Suite</span></a>
                         <a href="<?php echo $suite->id ? get_permalink($suite->id) : cp_get_group_permalink_by_id($suite->community_id) ?>"
                            class="action-btn cancel-btn"><span class="p"></span><span class="t">Cancel</span></a>
 
