@@ -34,7 +34,7 @@
                 @foreach($roles as $role)
                     <div class="radio">
                         <label>
-                            <input type="radio" name="role" class="role" value="{{ $role }}" @if($role == $testPlan->role) checked="checked" @endif>
+                            <input type="radio" name="role" class="role" value="{{ $role }}" @if(str_replace(' ', '', $role) == str_replace(' ', '', $testPlan->role)) checked="checked" @endif>
                             {{ $role }}
                         </label>
                     </div>

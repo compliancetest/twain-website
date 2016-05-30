@@ -238,7 +238,7 @@ class ProductsController extends BaseApiController
                     'role' => $request->get('product_type'),
                 ]);
                 if ($request->get('product_type') == 'DataSource') {
-                    $testCases = $suite['testSuite']->getTestCases([$level], [$request->get('product_type')]);
+                    $testCases = $suite['testSuite']->getTestCases($level, $request->get('product_type'));
                     foreach ($testCases as $testCase) {
                         $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
                         $diff = array_diff($capabilities, $jsonEntry['Capabilities']);
@@ -247,7 +247,7 @@ class ProductsController extends BaseApiController
                                 'test_case_id' => $testCase->ID,
                                 'excluded_by_user_id' => $user->ID,
                                 'test_plan_id' => $testPlan->id,
-                                'reason' => empty($capabilities) ? 'Those capabilities not supported by test case: ' . implode(', ', $diff) : 'Supported capabilities list is empty',
+                                'reason' => !empty($diff) ? 'Those capabilities not supported by test case: ' . implode(', ', $diff) : 'Supported capabilities list is empty',
                             ]);
                         }
                     }

@@ -62,7 +62,7 @@ class Post extends Model
      * @param array $levels
      * @return mixed
      */
-    public function getTestCases($roles = [], $levels = [])
+    public function getTestCases($roles = false, $levels = false)
     {
         $suiteId = $this->ID;
         $query = Post::select('wp_posts.*')
@@ -80,25 +80,34 @@ class Post extends Model
                 $join->on('pm3.post_id', '=', 'wp_posts.ID')
                     ->where('pm3.meta_value', '!=', 'Default')
                     ->where('pm3.meta_key', '=', 'conformance_level_'. $suiteId);
+            })
+            ->join('wp_postmeta AS pm4', function ($join) {
+                    $join->on('pm4.post_id', '=', 'wp_posts.ID')
+                        ->where('pm4.meta_key', 'LIKE', 'scenario_%');
+                })
+            ->join('wp_test_suites_scenarios AS scenario', function ($join) {
+                $join->on('scenario.id', '=', 'pm4.meta_value');
             });
 
 
-//        if ($levels) {
-//            $query->join('wp_postmeta AS pm4', function ($join) use ($suiteId, $levels) {
-//                $join->on('pm4.post_id', '=', 'wp_posts.ID')
-//                    ->where('pm4.meta_value', '=', $levels)
-//                    ->where('pm4.meta_key', '=', 'conformance_level_' . $suiteId);
-//            });
-//        }
-//        if ($roles) {
-//            $query->join('wp_postmeta AS pm5', function ($join) use ($roles) {
-//                $join->on('pm5.post_id', '=', 'wp_posts.ID')
-//                    ->where('pm5.meta_value', '=', $roles)
-//                    ->where('pm5.meta_key', '=', 'choose_tester_role');
-//            });
-//        }
+        if ($level) {
+            $query->join('wp_postmeta AS pm5', function ($join) use ($suiteId, $level) {
+                $join->on('pm5.post_id', '=', 'wp_posts.ID')
+                    ->where('pm5.meta_value', '=', $level)
+                    ->where('pm5.meta_key', '=', 'conformance_level_' . $suiteId);
+            });
+        }
+        if ($role) {
+            $query->join('wp_postmeta AS pm6', function ($join) use ($role) {
+                $join->on('pm6.post_id', '=', 'wp_posts.ID')
+                    ->where('pm6.meta_value', '=', $role)
+                    ->where('pm6.meta_key', '=', 'choose_tester_role');
+            });
+        }
         $query->where('wp_posts.post_type', '=', 'test-case')
-            ->groupBy('wp_posts.ID');
+            ->groupBy('wp_posts.ID')
+            ->orderBy('scenario.sequence')
+            ->orderBy('wp_posts.post_title');
         $query->get();
         return $query->with('meta')->get();
     }

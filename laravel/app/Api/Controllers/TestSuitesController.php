@@ -233,9 +233,9 @@ class TestSuitesController extends BaseApiController
     {
         $suite = Post::where(['post_name' => $suiteId])->first();
         $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
-        if (!$subscription) {
-            return $this->respondNotFound("Subscriptions not found");
-        }
+//        if (!$subscription) {
+//            return $this->respondNotFound("Subscriptions not found");
+//        }
 
         $cases = [];
 
