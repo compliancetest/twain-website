@@ -43,9 +43,9 @@ Template Name Posts: Test Suite
 					<div class="dark_gray_txt bold width75P left">
 						<h2 class="left"><?php the_title(); ?></h2>
                         <?php if(can_edit_suite($suite->id)){ ?>
-						<a href="/edit-test-suite?id=<?php echo get_the_ID()?>" class="action-btn edit-btn left10"><span class="p"></span><span class="t">EDIT</span></a>
+						<a href="/edit-test-suite?id=<?php echo get_the_ID()?>" class="action-btn edit-btn left10"><span class="p"></span><span class="t">Edit</span></a>
                         <?php } ?>
-                        <a href="<?php echo addPrintParams(get_permalink(), 'test-suite')?>" class="action-btn print-btn print-page-btn" id="print-suite-btn"><span class="p"></span><span class="t">PRINT</span></a>
+                        <a href="<?php echo addPrintParams(get_permalink(), 'test-suite')?>" class="action-btn print-btn print-page-btn" id="print-suite-btn"><span class="p"></span><span class="t">Print</span></a>
 						<div class="clear"></div>
 					</div>
 					<div class="width20P right">
