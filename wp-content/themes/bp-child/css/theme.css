@@ -4730,6 +4730,11 @@ span.button_sign {
    width: 95px;
    text-align: center;
 }
+#my_test_data_profiles .td-action .action-btn{
+    display: inline-block;
+    float: none;
+    margin: 0 3px;
+}
 .url-txt{
     padding: 3px 5px !important;    
     margin: 3px 0 !important;
