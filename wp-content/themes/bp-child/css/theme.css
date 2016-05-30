@@ -6539,11 +6539,11 @@ a.suite-subscript-link:hover{
 #testcases-list .grid_action_cell .action-btn{
     position: absolute;
     top: 0;
-    left: 0;
+    left: 16px;
 }
 #testcases-list .grid_action_cell .delete-btn{
     position: absolute;
-    left: 28px;
+    left: 44px;
 }
 .cnumber-desc{
     float: right;
