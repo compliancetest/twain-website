@@ -66,7 +66,7 @@ function editProfileTags(){
                     <div class="grid-cell" style="width: 100%;">
                         <input type="text" name="new_tag" id="new_tag" style="width: 85%;" class="">
 
-                        <a href="#" id="assign_tag" class="action-btn add-new-btn has-tooltip" style="margin-right: 0; float: right;">
+                        <a href="javascript:void(0);" id="assign_tag" class="action-btn add-new-btn has-tooltip" style="margin-right: 0; float: right;">
                             <span class="t">Add</span>
                             <span class="simple_tooltip radius6" style="top: -27px;">Assign tag to item<span></span></span>
                         </a>
