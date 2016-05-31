@@ -21,6 +21,10 @@ Route::group(array('prefix' => 'api/v1'), function () {
     Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => ['simpleauth', 'organisation.member']]);
     Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => ['simpleauth', 'organisation.member']]);
 
+    //test plans
+    Route::get('testplans', ['uses' => '\App\Api\Controllers\TestPlansController@index', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testplans/{testPlanId}/testcases', ['uses' => '\App\Api\Controllers\TestPlansController@testcases', 'middleware' => ['simpleauth', 'organisation.member']]);
+
 });
 
 Route::group(['middleware' => ['web']], function () {

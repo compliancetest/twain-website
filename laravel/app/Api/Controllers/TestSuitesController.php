@@ -19,7 +19,7 @@ class TestSuitesController extends BaseApiController
      * @apiParam {string} [product_id]  Optional - get test suites, associated with a product
      *
      * @apiName getTestSuites
-     * @apiGroup TestSuites
+     * @apiGroup Test Suites
      *
      * @apiDescription Method used to get test suites list
      *
@@ -167,10 +167,10 @@ class TestSuitesController extends BaseApiController
     }
 
     /**
-     * @api {get} /api/v1/testsuites/{SUITE_ID}/testcases Request Test Suite's Test Case
+     * @api {get} /v1/testsuites/{SUITE_ID}/testcases Request Test Suite's Test Case
      *
      * @apiName getTestCases
-     * @apiGroup TestSuites
+     * @apiGroup Test Suites
      *
      * @apiDescription Method used to get test suite's active test cases
      *
@@ -233,9 +233,9 @@ class TestSuitesController extends BaseApiController
     {
         $suite = Post::where(['post_name' => $suiteId])->first();
         $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
-//        if (!$subscription) {
-//            return $this->respondNotFound("Subscriptions not found");
-//        }
+        if (!$subscription) {
+            return $this->respondNotFound("Subscriptions not found");
+        }
 
         $cases = [];
 

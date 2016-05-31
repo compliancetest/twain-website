@@ -18,7 +18,7 @@ class TestCasesController extends BaseApiController
      * @api {get} /v1/testcase Request Test Execution profile
      *
      * @apiName getExecutionProfile
-     * @apiGroup TestCases
+     * @apiGroup Test Cases
      *
      * @apiDescription Method used to get Execution Profile data
      *
@@ -102,7 +102,7 @@ class TestCasesController extends BaseApiController
      * @api {get} /v1/testcases/:test_case_id/profiles Request Test Case profiles
      *
      * @apiName getProfiles
-     * @apiGroup TestCases
+     * @apiGroup Test Cases
      *
      * @apiDescription Method used to get all test case profiles
      *
@@ -172,7 +172,7 @@ class TestCasesController extends BaseApiController
      * @apiParam {string} product_id  Mandatory - product string ID.
      *
      * @apiName setTestingDetails
-     * @apiGroup TestCases
+     * @apiGroup Test Cases
      *
      * @apiDescription Method used to configure testing details
      *
@@ -274,7 +274,7 @@ class TestCasesController extends BaseApiController
      * @api {delete} /v1/testcase/stop Delete testing details
      *
      * @apiName deleteTestingDetails
-     * @apiGroup TestCases
+     * @apiGroup Test Cases
      *
      * @apiDescription Method used to configure reset testing details
      *
@@ -324,7 +324,7 @@ class TestCasesController extends BaseApiController
      * @api {get} /v1/testcase/status Get testing details
      *
      * @apiName getTestingDetails
-     * @apiGroup TestCases
+     * @apiGroup Test Cases
      *
      * @apiDescription Method used to get testing details
      *

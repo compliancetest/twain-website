@@ -343,7 +343,7 @@
     "url": "/v1/testcase/stop",
     "title": "Delete testing details",
     "name": "deleteTestingDetails",
-    "group": "TestCases",
+    "group": "Test_Cases",
     "description": "<p>Method used to configure reset testing details</p>",
     "error": {
       "fields": {
@@ -399,14 +399,14 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
-    "groupTitle": "TestCases"
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "get",
     "url": "/v1/testcase",
     "title": "Request Test Execution profile",
     "name": "getExecutionProfile",
-    "group": "TestCases",
+    "group": "Test_Cases",
     "description": "<p>Method used to get Execution Profile data</p>",
     "error": {
       "fields": {
@@ -478,14 +478,14 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
-    "groupTitle": "TestCases"
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "get",
     "url": "/v1/testcases/:test_case_id/profiles",
     "title": "Request Test Case profiles",
     "name": "getProfiles",
-    "group": "TestCases",
+    "group": "Test_Cases",
     "description": "<p>Method used to get all test case profiles</p>",
     "error": {
       "fields": {
@@ -546,14 +546,14 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
-    "groupTitle": "TestCases"
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "get",
     "url": "/v1/testcase/status",
     "title": "Get testing details",
     "name": "getTestingDetails",
-    "group": "TestCases",
+    "group": "Test_Cases",
     "description": "<p>Method used to get testing details</p>",
     "error": {
       "fields": {
@@ -609,7 +609,7 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
-    "groupTitle": "TestCases"
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "post",
@@ -643,7 +643,7 @@
       }
     },
     "name": "setTestingDetails",
-    "group": "TestCases",
+    "group": "Test_Cases",
     "description": "<p>Method used to configure testing details</p>",
     "error": {
       "fields": {
@@ -710,14 +710,169 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestCasesController.php",
-    "groupTitle": "TestCases"
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "get",
-    "url": "/api/v1/testsuites/{SUITE_ID}/testcases",
+    "url": "/v1/testplans/{TEST_PLAN_ID}/testcases",
+    "title": "Request Test plan's Test Cases",
+    "name": "getTestCases",
+    "group": "Test_Plans",
+    "description": "<p>Method used to get test plan's test cases</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Test Cases not found:",
+          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"sc-01-v1-0\",\n      \"title\": \"SC-01 v1.0\",\n      \"description\": \"Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.\"\n    }\n  ],\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestPlansController.php",
+    "groupTitle": "Test_Plans"
+  },
+  {
+    "type": "get",
+    "url": "/v1/testplans",
+    "title": "Request Organisation Test Plans",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Required - get test plans, associated with a product</p>"
+          }
+        ]
+      }
+    },
+    "name": "getTestPlans",
+    "group": "Test_Plans",
+    "description": "<p>Method used to get organisation's list of test plans, associated with provided product ID</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "No subscription:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"You do not have any active subscription\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Test plans not found:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test plans not found\"\n    ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"errors\": {\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"a1b2a99c-bbb0-4a55-80c2-2ad3d600dde5\",\n      \"test_suite_id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n      \"test_suite_title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\",\n      \"product_id\": \"4_twain2-freeimage-software-scanner_v2-201\",\n      \"product_title\": \"TWAIN2 FreeImage Software Scanner\",\n      \"conformance_level\": \"A\"\n    }\n  ],\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/TestPlansController.php",
+    "groupTitle": "Test_Plans"
+  },
+  {
+    "type": "get",
+    "url": "/v1/testsuites/{SUITE_ID}/testcases",
     "title": "Request Test Suite's Test Case",
     "name": "getTestCases",
-    "group": "TestSuites",
+    "group": "Test_Suites",
     "description": "<p>Method used to get test suite's active test cases</p>",
     "error": {
       "fields": {
@@ -778,7 +933,7 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestSuitesController.php",
-    "groupTitle": "TestSuites"
+    "groupTitle": "Test_Suites"
   },
   {
     "type": "get",
@@ -805,7 +960,7 @@
       }
     },
     "name": "getTestSuites",
-    "group": "TestSuites",
+    "group": "Test_Suites",
     "description": "<p>Method used to get test suites list</p>",
     "error": {
       "fields": {
@@ -877,7 +1032,7 @@
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/TestSuitesController.php",
-    "groupTitle": "TestSuites"
+    "groupTitle": "Test_Suites"
   },
   {
     "type": "post",
