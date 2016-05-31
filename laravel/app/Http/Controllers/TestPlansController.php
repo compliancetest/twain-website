@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OrganisationSubscription;
 use App\Post;
+use App\PostMeta;
 use App\PricingPlan;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
@@ -24,6 +25,7 @@ class TestPlansController extends Controller
     {
         $data = [
             'userSuites' => Auth::user()->getUserTestPlans(),
+            'pageTitle' => 'Test Suite Coverage',
         ];
         return view('pages.my.coverage.index')->with($data);
     }
@@ -55,6 +57,17 @@ class TestPlansController extends Controller
      */
     public function store(Requests\TestPlanRequest $request)
     {
+        $testPlanData = [
+            'product_id' => $request->get('product_id'),
+            'suite_id' => $request->get('suite_id'),
+            'level' => $request->get('level'),
+            'role' => $request->get('role'),
+            'is_claimed' => false,
+        ];
+        if (TestPlan::where($testPlanData)->first()) {
+            return JsonResponse::create(['message' => 'You already have test plan for this test suite'], 422);
+        }
+
         $testPlan = TestPlan::create($request->all());
         $testPlan->creator_id = Auth::user()->ID;
 
@@ -62,6 +75,11 @@ class TestPlansController extends Controller
         $testPlan->organisation_subscription_id = $organisationSubscription->id;
 
         $testPlan->save();
+
+        $productType = str_replace(' ', '', $request->get('role'));
+        if ($productType == 'DataSource') {
+            $testPlan->excludeTestCases();
+        }
 
         return JsonResponse::create(['status' => 'success']);
     }

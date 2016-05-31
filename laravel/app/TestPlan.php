@@ -104,4 +104,25 @@ class TestPlan extends Model
             ->where('audit_record', true)
             ->lists('test_case_id');
     }
+
+    /**
+     * Exclude cases with unsupported capabilities
+     */
+    public function excludeTestCases()
+    {
+        $testSuite = Post::find($this->suite_id);
+        $testCases = $testSuite->getTestCases($this->level, str_replace(' ', '', $this->role));
+        foreach ($testCases as $testCase) {
+            $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
+            $diff = array_diff($capabilities, (array) json_decode(@PostMeta::where(['post_id' => $this->product_id, 'meta_key' => 'capabilities'])->first()->meta_value));
+            if (!empty($diff)) {
+                TestPlanExcludedCases::create([
+                    'test_case_id' => $testCase->ID,
+                    'excluded_by_user_id' => \Auth::user()->ID,
+                    'test_plan_id' => $this->id,
+                    'reason' => 'Those capabilities not supported by test case: ' . implode(', ', $diff),
+                ]);
+            }
+        }
+    }
 }
