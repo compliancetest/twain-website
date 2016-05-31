@@ -32,7 +32,7 @@ class Organisation extends Model
      * @param bool $excludeClaimed
      * @return array
      */
-    public function getTestPlans($productStringId = false, $excludeClaimed = false)
+    public function getTestPlans($productStringId = false, $excludeClaimed = true)
     {
         $result = [];
         foreach ($this->subscriptions as $organisationSubscription) {
@@ -41,10 +41,12 @@ class Organisation extends Model
                 'organisation_subscription_id' => $organisationSubscription->id,
                 'suite_id' => $organisationSubscription->suite_family_mark
             ];
+
             if ($productStringId) {
                 $product = Post::where(['post_name' => $productStringId])->first();
                 $where['product_id'] = $product->ID;
             }
+
             $testPlans = TestPlan::where($where)->get();
             $suite = Post::find($organisationSubscription->suite_family_mark);
 
@@ -55,6 +57,12 @@ class Organisation extends Model
                 if ($excludeClaimed && $testPlan->is_claimed) {
                     continue;
                 }
+
+                // we shouldn't show test plans to user without subscription
+                if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_family_mark' => $testPlan->suite_id])) {
+                    continue;
+                }
+
                 $product = Post::find($testPlan->product_id);
                 $result[] = [
                     'id' => $testPlan->id,

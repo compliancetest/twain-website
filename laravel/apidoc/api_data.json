@@ -743,6 +743,11 @@
           "type": "json"
         },
         {
+          "title": "User don't have subscription to test plan's test suite:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"You don't have subscription to test plan's test suite\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Test Cases not found:",
           "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
           "type": "json"

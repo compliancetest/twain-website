@@ -124,6 +124,16 @@ class TestPlansController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiErrorExample {json} User don't have subscription to test plan's test suite:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "You don't have subscription to test plan's test suite"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test Cases not found:
      *   {
@@ -156,6 +166,10 @@ class TestPlansController extends BaseApiController
     {
         $testPlan = TestPlan::find($testPlanId);
 
+        // we shouldn't show test plan's data to user without subscription
+        if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_family_mark' => $testPlan->suite_id])) {
+            return $this->respondForbiddenError("You don't have subscription to test plan's test suite");
+        }
         $excludedCases = $testPlan->getExcludedCases();
         $successCases = $testPlan->getSuccessCases($testPlan->product_id);
         $failedCases = $testPlan->getFailedCases($testPlan->product_id);

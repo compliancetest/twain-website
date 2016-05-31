@@ -1594,6 +1594,7 @@ function getReturnCodeColor($returnCode){
         case 'TWRC_XFERDONE':
         case 'TWRC_DSEVENT':
         case 'TWRC_ENDOFLIST':
+        case 'TWRC_NOTDSEVENT':
             $color = 'green';
             break;
         case 'TWRC_CANCEL':
@@ -1602,7 +1603,6 @@ function getReturnCodeColor($returnCode){
             break;
         case 'TWRC_BUSY':
         case 'TWRC_FAILURE':
-        case 'TWRC_NOTDSEVENT':
         case 'TWRC_SCANNERLOCKED':
         default:
             $color = 'red';
