@@ -93,14 +93,14 @@ class TestPlansController extends Controller
     public function edit($testPlanId)
     {
         $testPlan = TestPlan::find($testPlanId);
-        $subscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID])->first();
+        $subscription = OrganisationSubscription::where(['suite_family_mark' => $testPlan->suite_id])->first();
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
-        $suiteType = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+        $suiteType = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'ts_tester_role'])->first()->meta_value;
 
         $data = [
-            'products' => Auth::user()->getProducts($suiteType->meta_value),
+            'products' => Auth::user()->getProducts($suiteType),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'testPlan' => $testPlan,

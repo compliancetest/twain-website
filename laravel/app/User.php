@@ -109,6 +109,10 @@ class User extends Authenticatable
         $organisationSubscriptions = OrganisationSubscription::where(['organisation_id' => $this->organisation[0]->id])->get();
 
         foreach($organisationSubscriptions as $organisationSubscription){
+            //user shouldn't see test plans for a test suite if he is not subscribed to test suite
+            if (!OrganisationSubscription::where(['user_id' => $this->ID, 'suite_family_mark' => $organisationSubscription->suite_family_mark])->first()) {
+                continue;
+            }
             $testPlans = TestPlan::where(['organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
             $suite = Post::find($organisationSubscription->suite_family_mark);
             if(!isset($response[$suite->post_title] )) {

@@ -59,7 +59,7 @@ class Organisation extends Model
                 }
 
                 // we shouldn't show test plans to user without subscription
-                if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_family_mark' => $testPlan->suite_id])) {
+                if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_family_mark' => $testPlan->suite_id])->first()) {
                     continue;
                 }
 
