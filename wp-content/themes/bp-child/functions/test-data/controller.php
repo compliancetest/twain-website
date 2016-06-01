@@ -553,14 +553,13 @@ function viewProfileType()
             </div>
 
             <div class="popup-box-footer radius6 noradiustop">
+                <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-type')?>&type_id=<?php echo $row->id?>" target="blank" class="action-btn process-btn download-btn"><span class="p"></span><span class="t">Download</span></a>
                 <?php if (isset($_REQUEST['back'])) { ?>
                     <a href="#trigger-message-box" class="action-btn cancel-btn" rel="custom-popup"
                        cp-type="inline"><span class="p"></span><span class="t">Close</span></a>
                 <?php } else { ?>
                     <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
                 <?php } ?>
-                <a href="<?php echo cp_get_group_permalink_by_id($row->community_id)?>testdata?td-action=<?php echo wp_create_nonce('download-profile-type')?>&type_id=<?php echo $row->id?>"
-                   target="blank" class="action-btn process-btn download-btn"><span class="p"></span><span class="t">Download</span></a>
                 <div class="clear"></div>
             </div>
             <?php if (!isset($_REQUEST['back'])) { ?>

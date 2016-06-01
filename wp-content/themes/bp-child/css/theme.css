@@ -4730,6 +4730,9 @@ span.button_sign {
    width: 95px;
    text-align: center;
 }
+#my_test_data_profiles .tbody .td-action{
+    font-size: 0; /* Fix for inline block element */
+}
 #my_test_data_profiles .td-action .action-btn{
     display: inline-block;
     float: none;
