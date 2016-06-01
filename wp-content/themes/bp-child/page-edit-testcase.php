@@ -604,7 +604,7 @@ get_header();
                     <div class="grid-box-body">
                         <div class="column">
                             <div class="field-row">
-                                <div class="grid-cell radio-cell" style="width: 150px;">
+                                <div class="grid-cell testcase-radio-cell" style="width: 150px;">
                                     <label>Outcome Type:</label>
                                     <input type="radio" name="outcome_type"
                                            value="Positive" <?php echo $case->outcomeType == 'Positive' ? 'checked="checked"' : '' ?> />
