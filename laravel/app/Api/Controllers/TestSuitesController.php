@@ -261,6 +261,11 @@ class TestSuitesController extends BaseApiController
             ->join('wp_test_suites_scenarios AS scenario', function ($join) {
                 $join->on('scenario.id', '=', 'pm4.meta_value');
             })
+            ->join('wp_postmeta AS pm5', function ($join) {
+                $join->on('pm5.post_id', '=', 'wp_posts.ID')
+                    ->where('pm5.meta_value', '=', '0')
+                    ->where('pm5.meta_key', '=', 'hide_case');
+            })
 
             ->where('wp_posts.post_type', '=', 'test-case')
             ->groupBy('wp_posts.ID')
