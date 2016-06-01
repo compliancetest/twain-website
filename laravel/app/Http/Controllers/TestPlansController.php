@@ -40,8 +40,9 @@ class TestPlansController extends Controller
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
+        $suiteType = PostMeta::where(['post_id' => $suiteId, 'meta_key' => 'ts_tester_role'])->first();
         $data = [
-            'products' => Auth::user()->getProducts(),
+            'products' => Auth::user()->getProducts($suiteType->meta_value),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'suiteId' => $suiteId,
@@ -96,8 +97,10 @@ class TestPlansController extends Controller
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
+        $suiteType = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+
         $data = [
-            'products' => Auth::user()->getProducts(),
+            'products' => Auth::user()->getProducts($suiteType->meta_value),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'testPlan' => $testPlan,
