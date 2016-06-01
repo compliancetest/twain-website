@@ -97,6 +97,11 @@ class TestPlansController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
+        // we shouldn't show test plan's data to user without subscription
+        if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'user_id' => \Auth::user()->ID])->first()) {
+            return $this->respondForbiddenError("You do not have any active subscription");
+        }
+
         $organisationPlans = \Auth::user()->organisation[0]->getTestPlans($request->get('product_id'));
         if (empty($organisationPlans)) {
             return $this->respondNotFound("Test plans not found");
