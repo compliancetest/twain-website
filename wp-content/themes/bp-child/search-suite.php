@@ -143,7 +143,7 @@ $testsuites = $get_posts->get_posts();
                                 <div class="grid_cell nopaddingtop width25P">Community</div>
                                 <div class="grid_cell nopaddingtop width25P">Name</div>
                                 <div class="grid_cell nopaddingtop width15P tocenter">Issuer</div>
-                                <div class="grid_cell nopaddingtop width20P tocenter">Date</div>
+                                <div class="grid_cell nopaddingtop width20P tocenter">Published</div>
                                 <div class="grid_cell nopaddingtop width15P tocenter">Status</div>
                                 <div class="clear"></div>
                             </div>
@@ -157,7 +157,7 @@ $testsuites = $get_posts->get_posts();
                                     $group = getCommunity($groupID);
                                     ?>
                                     <div class="grid_row grid_row_border">
-                                        <div class="grid_cell width25P">
+                                        <div class="grid_cell widNotify Changesth25P">
                                             <h5><a href="/communities/<?php echo $group->slug;?>"
                                                    class="blue_txt"><?php echo $group->title ?></a>
                                             </h5>
@@ -173,7 +173,7 @@ $testsuites = $get_posts->get_posts();
                                         </div>
                                         <div class="grid_cell width20P tocenter">
                                             <?php
-                                            echo formatDate(strtotime($issueDate), 'M Y');
+                                            echo formatDate(strtotime($issueDate), 'Y-m-d');
                                             ?>
                                         </div>
                                         <div class="grid_cell width15P tocenter">
