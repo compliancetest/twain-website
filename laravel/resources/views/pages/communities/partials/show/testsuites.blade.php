@@ -32,19 +32,12 @@
 
                             <p class="test-suite-description">{{ $testSuite->post_excerpt }}</p>
                         </td>
-                        <td class="text-center">{{ formatDate(@$postMeta->ts_issue_date) }}</td>
-                        <td class="text-center"><span
-                                    class="status status-{{ strtolower($suiteMeta->get('ts_status')->meta_value) }}">{{ $suiteMeta->get('ts_status')->meta_value }}</span>
-                        </td>
+                        <td class="text-center">{{ formatDate($suiteMeta->get('ts_issue_date')->meta_value) }}</td>
+                        <td class="text-center"><span class="status status-{{ strtolower($suiteMeta->get('ts_status')->meta_value) }}">{{ $suiteMeta->get('ts_status')->meta_value }}</span></td>
                         <td class="text-center">
-                            <input class="notify-changes" type="checkbox" value="{{ $testSuite->ID }}"
-                                   name="notify_changes{{ $testSuite->ID }}"
-                                   @if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $testSuite->ID, true)) checked="checked" @endif
-                            >
-                            <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt=""
-                                 style="display: none;"/>
+                            <input class="notify-changes" type="checkbox" value="{{ $testSuite->ID }}" name="notify_changes{{ $testSuite->ID }}" @if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $testSuite->ID, true)) checked="checked" @endif >
+                            <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt="" style="display: none;"/>
                         </td>
-
                         @if($isAdmin)
                             <td class="text-center td-actions">
 
