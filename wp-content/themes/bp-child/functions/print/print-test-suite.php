@@ -186,7 +186,7 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
                 <th>Outcome Type</th>
                 <th>Test Pattern</th>
                 <th>Bulk</th>
-                <th>Initating Message</th>
+                <th>Initiating Message</th>
                 <th style="min-width: 150px">Test Intent Description</th>                
             </tr>
         </thead>
