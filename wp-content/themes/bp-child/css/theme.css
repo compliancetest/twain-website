@@ -9158,6 +9158,6 @@ input.inactive_s{
     max-width: 90% !important;
 }
 
-.related-test-suite-description{
-
+.single-test-suite #messages-wrapper{
+    width: 1200px;
 }
