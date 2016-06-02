@@ -1214,7 +1214,7 @@ $xeroItems = ct_get_xero_items();
             var nameReg = /^[A-Za-z0-9-.]+$/;
             if (!nameReg.test(jQuery('#ts_identifier').val())) {
                 jQuery('#suite-info-box').find('.message').remove();
-                jQuery('#suite-info-box .column').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes [A-Za-z0-9-.]+</div>');
+                jQuery('#suite-info-box .column').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes.</div>');
                 jQuery('#ts_identifier').focus();
                 return false;
             }

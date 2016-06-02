@@ -852,7 +852,7 @@ get_header();
                 var nameReg = /^[A-Za-z0-9-.]+$/;
                 if (!nameReg.test(jQuery('#test_case_id').val())) {
                     jQuery('#edit_test_case_wrapper').find('.message').remove();
-                    jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes [A-Za-z0-9-.]+</div>');
+                    jQuery('#edit_test_case_wrapper .grid-box-footer').append('<div class="message error">Names must consist of only letters, numbers, dots and dashes.</div>');
                     return false;
                 }
 
