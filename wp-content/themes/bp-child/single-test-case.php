@@ -32,11 +32,8 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     <?php
                 }
                 ?>
-                <a href="<?php echo addPrintParams(get_permalink(), 'test-case') ?>"
-                   class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span
-                        class="t">PRINT</span></a>
-                <span class="right nomarginright"> Back to <a
-                        href="<?php echo get_permalink($test_suite_id) ?>"><?php echo get_the_title($test_suite_id) ?></a></span>
+                <a href="<?php echo addPrintParams(get_permalink(), 'test-case') ?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">Print</span></a>
+                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($test_suite_id) ?>"><?php echo get_the_title($test_suite_id) ?></a></span>
 
                 <div class="clear"></div>
                 <div class="dark_gray_txt redactor_editor"><?php echo $case->testIntentDescription; ?></div>
