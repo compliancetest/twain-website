@@ -485,7 +485,7 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
 						<div class="grid_cell nopaddingtop width18P toleft tocenter">Operational<br>Triplet</div>
-						<div class="grid_cell nopaddingtop toleft  <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width20P' : 'width23P' ?> single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop toleft width20P single_line">Test Intent Description</div>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
@@ -640,7 +640,7 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop tocenter width22P">
                                     <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop <?php echo (can_edit_test_case($row->ID) || can_delete_test_case($row->ID)) ? 'width23P' : 'width30P' ?> toleft">
+                                <div class="grid_cell nopaddingtop width23P toleft">
                                     <div class="right10">
                                         <?php 
 

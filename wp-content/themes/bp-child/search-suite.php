@@ -157,7 +157,7 @@ $testsuites = $get_posts->get_posts();
                                     $group = getCommunity($groupID);
                                     ?>
                                     <div class="grid_row grid_row_border">
-                                        <div class="grid_cell widNotify Changesth25P">
+                                        <div class="grid_cell width25P">
                                             <h5><a href="/communities/<?php echo $group->slug;?>"
                                                    class="blue_txt"><?php echo $group->title ?></a>
                                             </h5>
