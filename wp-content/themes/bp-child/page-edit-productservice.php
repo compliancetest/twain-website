@@ -167,9 +167,7 @@ if (isset($_SESSION['product_data'])) {
                                     </div>
                                     <div class="space10"></div>
                                     <?php if (is_super_admin()): ?>
-                                        <label><input type="checkbox" name="services_not_permitted"
-                                                      id="services_not_permitted" <?php echo isset($product->services_not_permitted) && $product->services_not_permitted == '1' ? 'checked="checked"' : '' ?> />
-                                            Services not permitted</label>
+                                        <label class="inline"><input type="checkbox" name="services_not_permitted" id="services_not_permitted" <?php echo isset($product->services_not_permitted) && $product->services_not_permitted == '1' ? 'checked="checked"' : '' ?> />Services not permitted</label>
                                     <?php endif; ?>
                                 </div>
                                 <div class="grid-cell width60P">

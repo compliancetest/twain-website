@@ -1487,6 +1487,9 @@ tr {
     font-weight: normal;
     line-height: 18px;
 }
+.grid-box-body .field-row label.inline{
+	display: inline-block;
+}
 
 .grid-box-body .field-row .input{
     width: 100%;
