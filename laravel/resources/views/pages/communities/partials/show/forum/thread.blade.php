@@ -115,6 +115,16 @@
             }
         });
 
+        //Show error if post was not found and page reloaded by javascript
+        if ( sessionStorage.reloadAfterFailGettingPost) {
+            if ($('#messages-wrapper').length > 0){
+                $('#messages-wrapper').html('<div class="message error">Post not found</div>');
+            } else {
+                $('#header').after('<div id="messages-wrapper"><div class="message error">Post not found</div></div>');
+            }
+            sessionStorage.removeItem('reloadAfterFailGettingPost');
+        }
+
         jQuery('.editPost').on('click', function (e) {
             e.preventDefault();
             jQuery('#addpostSpinner').show();
@@ -125,7 +135,9 @@
                 jQuery('#edit-post-section').show().html(data);
             }).fail(function (jqXHR, status) {
                     if (jqXHR.status == 422 && jqXHR.responseJSON.post_id.length > 0) {
-                       location.reload();
+                        //Set show error after reload flag
+                        sessionStorage.reloadAfterFailGettingPost = true;
+                        window.location.reload();
                     } else {
                         if ($('#messages-wrapper').length > 0){
                             $('#messages-wrapper').html('<div class="message error">' + formatErrorMessage(jqXHR, status) + '</div>');
