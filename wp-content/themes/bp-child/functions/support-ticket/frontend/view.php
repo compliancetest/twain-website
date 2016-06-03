@@ -111,7 +111,7 @@ function showSumitTicketBox()
 <!--                        <span class="left10">(1 Token = $--><?php //echo get_option('token_price')?><!--)</span>-->
                         <div class="clear"></div>
                     </div>
-                    <div class="field-row">
+                    <div class="field-row add-ticket-attachment-row">
                         <div class="attachments-wrap"></div>
                         <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>
                     </div>

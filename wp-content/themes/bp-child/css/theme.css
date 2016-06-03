@@ -7617,6 +7617,17 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     line-height: 16px;
     padding-left: 15px;
 }
+.add-ticket-attachment-row .file-item{
+    margin-bottom: 5px;
+}
+.add-ticket-attachment-row .file-item:after{
+    content: '';
+    display: table;
+    clear: both;
+}
+.add-ticket-attachment-row .delete-btn{
+    margin-top: 3px;
+}
 #new-message-wrap .field-row textarea{
     width: 860px;
 }
