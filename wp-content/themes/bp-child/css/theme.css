@@ -8040,7 +8040,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .plan-content{
-    display:none;
+    visibility: hidden;
 }
 
 .plan-description{

@@ -85,8 +85,7 @@ function moveSlider(size){
 }
 
 function showPlanDetails(el){
-    jQuery('.plan-content').hide();
-    jQuery('#' + el.data('plan-container')).show().css({ opacity: 0.5 }).animate({ opacity: 1 });
+    jQuery('#' + el.data('plan-container')).css('visibility', 'visible').animate({ opacity: 1 });
 }
 
 function updateURL(){
