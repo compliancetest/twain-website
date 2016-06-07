@@ -19,9 +19,9 @@
             <li class="surveys-tab"><a href="{{ $community->getUrl() }}surveys"
                                        @if($action == 'surveys') class="active" @endif>Surveys</a></li>
 
-            <li class="reports-tab"><a href="{{ $community->getUrl() }}reports"
-                                       @if($action == 'reports') class="active" @endif>Reports</a></li>
-
+<!--            <li class="reports-tab"><a href="{{ $community->getUrl() }}reports"-->
+<!--                                       @if($action == 'reports') class="active" @endif>Reports</a></li>-->
+<!---->
             @if(Auth::check() && $community->isAdmin(Auth::user()->ID))
                 <li class="admin-tab"><a href="{{ $community->getUrl() }}admin"
                                          @if($action == 'admin') class="active" @endif>Admin</a></li>
