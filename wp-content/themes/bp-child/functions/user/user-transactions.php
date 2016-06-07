@@ -263,6 +263,24 @@ function cp_delete_transaction_log()
     return true;
 }
 
+function cp_change_transaction_log()
+{
+    global $wpdb;
+
+    if (!doesUserAdminInAnyCommunity(get_current_user_id())) {
+        addMessage('Permission Denied!', 'error');
+        return false;
+    }
+
+    $outcome = $wpdb->get_var($wpdb->prepare("SELECT id FROM test_outcome_statuses WHERE code = %s ", $_REQUEST['outcome-code']));
+
+    $wpdb->query($wpdb->prepare("UPDATE transactions SET test_outcome_status_id = %s WHERE ID in ('" . implode("', '", $_POST['id']) . "') ", $outcome));
+
+    addMessage("Selected data was updated!");
+
+    return true;
+}
+
 //Get User Test Suites
 function getUserTestSuites($user_id = null)
 {

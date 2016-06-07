@@ -1610,3 +1610,25 @@ function getReturnCodeColor($returnCode){
     }
     return $color;
 }
+
+/**
+ * Detect color for outcome color
+ * @param $outcomeStatus
+ * @return string
+ */
+function getOutcomeStatusClass($outcomeStatus)
+{
+    switch ($outcomeStatus){
+        case 'PASS':
+            $color = 'success';
+            break;
+        case 'SKIP':
+        case 'PENDING':
+             $color = 'ignored';
+            break;
+        default:
+            $color = 'fail';
+            break;
+    }
+    return $color;
+}

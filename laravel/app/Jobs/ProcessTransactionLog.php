@@ -58,6 +58,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         try {
             $this->_process();
         } catch(\Exception $e){
+            error_log($e->getMessage());
+            error_log($e->getLine());
             File::deleteDirectory($this->rootFolder);
             $organisationMember = OrganisationMember::where(['user_id' => $this->userId])->first();
             $organisationSubscription = OrganisationSubscription::where(

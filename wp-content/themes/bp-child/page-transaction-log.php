@@ -112,9 +112,17 @@ get_header();
             ?>
         </div>
         <div class="padding10">
-<!--            <a href="/testingdetails/"-->
-<!--               id="trigger-message-link" class="action-btn icon-btn blue-btn expand-btn trigger-btn left"-->
-<!--               onclick="javascript: void(0)"><span class="p"></span><span class="t">Select Test Case</span></a>-->
+            <?php if (doesUserAdminInAnyCommunity(get_current_user_id())):?>
+                <a href="#" data-outcome="PASS"
+                   class="action-btn icon-btn green-btn expand-btn trigger-btn left trigger-message-link"
+                   onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Pass</span></a>
+                 <a href="#" data-outcome="FAIL"
+                   class="action-btn icon-btn red-btn expand-btn trigger-btn left5 trigger-message-link"
+                   onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Fail</span></a>
+                 <a href="#" data-outcome="SKIP"
+                   class="action-btn icon-btn blue-btn expand-btn trigger-btn left5 trigger-message-link"
+                   onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Skip</span></a>
+            <?php endif;?>
 
             <a href="#" id="delete-log-link" class="action-btn delete-btn icon-btn right has-tooltip"><span
                     class="p"></span><span class="simple_tooltip radius6">Delete Selected Rows<span></span></span></a>
@@ -197,13 +205,14 @@ get_header();
                                             </a>
                                         <?php endif;?>
                                         <?php $outcomeStatus = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_outcome_statuses WHERE id = %s", $row->test_outcome_status_id));?>
-                                        <?php $status = ($outcomeStatus ? ($outcomeStatus->code == 'PASS' ? 'success' : ($outcomeStatus->code == 'SKIP' ? 'ignored' : 'fail')) : 'fail'); ?>
+                                        <?php $status = getOutcomeStatusClass($outcomeStatus->code); ?>
                                         <span
                                             class="status-<?php echo $status;?>"><?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?></span>
                                         <br/>
                                     </div>
                                     <div class="td td-audit tocenter">
-                                        <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record" data-id="<?php echo $row->id;?>">
+                                        <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record"
+                                               data-id="<?php echo $row->id;?>" <?php if($outcomeStatus->code == 'PENDING' && !doesUserAdminInAnyCommunity(get_current_user_id())):?>disabled="disabled"<?php endif;?>>
                                     </div>
                                     <div
                                         class="td td-convsn tocenter td-two-lines">
@@ -411,6 +420,28 @@ get_header();
         <a class="close_btn"></a>
     </div>
 
+    <div class="popup-box" id="change_status_box" style="display: none; width: 500px">
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Change outcome Status</div>
+        <div class="popup-box-content">
+            <div class="change_status_message">
+                Are you sure you want change outcome status for selected transactions?
+            </div>
+            <div class="change_status_no_messages">
+                Please select a row
+            </div>
+            <input type="hidden" value="" class="change_status_data_type">
+        </div>
+        <div class="popup-box-footer radius6 noradiustop">
+            <div class="loading loading-with-text radius6">
+                <div><b>UPDATING TRANSACTIONS</b><span>Please wait...</span></div>
+            </div>
+            <a href="#" class="action-btn process-btn change_status_log-confirm"><span class="p"></span><span class="t">Confirm</span></a>
+            <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
+            <div class="clear"></div>
+        </div>
+        <a class="close_btn"></a>
+    </div>
+
     <script type="text/javascript">
 
         jQuery(document).ready(function () {
@@ -431,6 +462,51 @@ get_header();
                         jQuery('.delete-log-confirm').show();
                     }
                 }
+            });
+
+            jQuery('.trigger-message-link').click(function(){
+                jQuery('.change_status_data_type').val(jQuery(this).attr('data-outcome'));
+            });
+
+            jQuery('.trigger-message-link').cplightbox({
+                type: 'inline',
+                href: '#change_status_box',
+                onStart: function(){
+                    if(jQuery('#log-result-table .tbody input[type="checkbox"]:checked').length < 1){
+                        jQuery('.change_status_no_messages').show();
+                        jQuery('.change_status_message').hide();
+                        jQuery('.change_status_log-confirm').hide();
+                    } else {
+                        jQuery('.change_status_no_messages').hide();
+                        jQuery('.change_status_message').show();
+                        jQuery('.change_status_log-confirm').show();
+                    }
+                }
+            });
+
+            jQuery('.change_status_log-confirm').click(function () {
+                var ids = new Array();
+                jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
+                    ids.push(this.value);
+                })
+
+                jQuery('#change_status_box .loading').show();
+
+                jQuery.ajax({
+                    url: '/',
+                    data: {
+                        'cp-action': '<?php echo wp_create_nonce('change-transaction-log')?>',
+                        'id': ids,
+                        'outcome-code': jQuery('.change_status_data_type').val()
+                    },
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (rsp) {
+                        document.location.reload();
+
+                    }
+                })
+                return false;
             });
 
             jQuery('.delete-log-confirm').click(function () {
