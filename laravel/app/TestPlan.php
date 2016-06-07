@@ -27,6 +27,7 @@ class TestPlan extends Model
     public function getExcludedCases()
     {
         return $this->excludedCases->keyBy('test_case_id')->toArray();
+        return $this->excludedCases()->where('is_skipped', false)->get()->keyBy('test_case_id')->toArray();
     }
 
     /**
@@ -94,7 +95,7 @@ class TestPlan extends Model
     public function getSkippedCases($productId)
     {
         $suiteId = $this->suite_id;
-        return DB::table('transactions')
+        $skippedTransactions = DB::table('transactions')
             ->select('transactions.*')
             ->join('test_outcome_statuses AS TO', function ($join) use ($suiteId) {
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
@@ -103,6 +104,13 @@ class TestPlan extends Model
             ->where('product_id', $productId)
             ->where('audit_record', true)
             ->lists('test_case_id');
+
+        $skippedCases = DB::table('test_plans_excluded_cases')
+            ->select('test_plans_excluded_cases.*')
+            ->where('test_plan_id', $this->id)
+            ->where('is_skipped', true)
+            ->lists('test_case_id');
+        return array_merge($skippedCases, $skippedTransactions);
     }
 
     /**
@@ -120,7 +128,8 @@ class TestPlan extends Model
                     'test_case_id' => $testCase->ID,
                     'excluded_by_user_id' => \Auth::user()->ID,
                     'test_plan_id' => $this->id,
-                    'reason' => 'Those capabilities not supported by test case: ' . implode(', ', $diff),
+                    'reason' => 'Those capabilities not supported by data source: ' . implode(', ', $diff),
+                    'is_skipped' => true
                 ]);
             }
         }

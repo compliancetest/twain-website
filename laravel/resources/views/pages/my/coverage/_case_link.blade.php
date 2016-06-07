@@ -2,6 +2,11 @@
     <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
        data-tooltip="tooltip" class="coverage-test-case-item test-passed" title="{{ $case->post_title }}"></a>
 
+@elseif(in_array($case->ID, $testPlanData['skippedCases']))
+
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-skipped" title="{{ $case->post_title }} (excl)"></a>
+
 @elseif(array_key_exists($case->ID, $testPlanData['excludedCases']))
 
     <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"

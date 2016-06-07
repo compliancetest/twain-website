@@ -142,6 +142,7 @@ class User extends Authenticatable
                          'successCases' => $testPlan->getSuccessCases($testPlan->product_id),
                          'failedCases' => $testPlan->getFailedCases($testPlan->product_id),
                          'optionalCases' => $testPlan->getOptionalCases(),
+                         'skippedCases' => $testPlan->getSkippedCases($testPlan->product_id),
                      ],
                  ];
             }

@@ -13,7 +13,7 @@ class TestPlanExcludedCases extends Model
     protected $table = 'test_plans_excluded_cases';
 
     protected $fillable = [
-        'test_case_id', 'reason', 'excluded_by_user_id', 'date', 'test_plan_id'
+        'test_case_id', 'reason', 'excluded_by_user_id', 'date', 'test_plan_id', 'is_skipped'
     ];
 
     public function testPlan()

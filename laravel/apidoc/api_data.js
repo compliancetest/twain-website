@@ -1086,7 +1086,7 @@ define({ "api": [
             "type": "string",
             "optional": false,
             "field": "test_outcome",
-            "description": "<p>Optional - allowed values: Fail, Pass, Skip.</p>"
+            "description": "<p>Optional - allowed values: Fail, Pass, Skip, Pending.</p>"
           }
         ]
       }
