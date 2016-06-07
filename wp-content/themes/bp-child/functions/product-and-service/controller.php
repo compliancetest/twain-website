@@ -128,7 +128,7 @@ function saveProductService()
     $count = $wpdb->get_var($query);
 
     if ($count > 0) {
-        addMessage("Product IDs must be unique across all products configured on " . get_site_title() . ". The Product ID entered is already in use by another product, potentially for another organisation. Please enter a different product ID. We recommend a combination of owner, product name and version, e.g. {owner}_{product name}_{product version}, with spaces replaced with dashes.", "error");
+        addMessage("Product IDs must be unique across all products configured on " . get_site_title() . ". Please use another combination of owner, product name and version to generate other product ID", "error");
 
         $_SESSION['product_data'] = $_POST;
 
