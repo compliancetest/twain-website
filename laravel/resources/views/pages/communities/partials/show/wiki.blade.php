@@ -26,7 +26,7 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="text-center"><a href="#">{{ \App\User::find($article->creator_id)->getFullName() }}</a></td>
+                            <td class="text-center">{{ \App\User::find($article->creator_id)->getFullName() }}</td>
                             <td class="text-center">{{ $article->created_at }}</td>
                             <td class="text-center">{{ $article->updated_at }}</td>
                             <td class="text-center text-nowrap">
