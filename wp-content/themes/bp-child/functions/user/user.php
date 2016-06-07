@@ -123,6 +123,9 @@ function compliancetest_user_actions()
     }else if(wp_verify_nonce($cpAction, 'delete-transaction-log')){
         $result = cp_delete_transaction_log();        
         exit;
+     }else if(wp_verify_nonce($cpAction, 'change-transaction-log')){
+        $result = cp_change_transaction_log();
+        exit;
     }else if(wp_verify_nonce($cpAction, 'view-validation-log')){
         $result = cp_view_validation_log();        
         echo $result;
