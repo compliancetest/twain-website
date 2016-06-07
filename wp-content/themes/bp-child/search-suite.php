@@ -168,9 +168,7 @@ $testsuites = $get_posts->get_posts();
                                             </h5>
                                             <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
                                         </div>
-                                        <div class="grid_cell width15P tocenter">
-                                            <a href="<?php echo bp_get_group_permalink($group) ?>"><?php echo $issuer ?></a>
-                                        </div>
+                                        <div class="grid_cell width15P tocenter"><?php echo $issuer ?></div>
                                         <div class="grid_cell width20P tocenter">
                                             <?php
                                             echo formatDate(strtotime($issueDate), 'Y-m-d');
