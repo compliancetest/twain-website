@@ -243,11 +243,17 @@ $testsuites = $get_posts->get_posts();
                                     <?php
                                     foreach ($tsIssuers as $k => $v) {
                                         ?>
-                                        <label for="<?php echo $k ?>" class="blue_txt"><input type="checkbox"
+                                        <label class="blue_txt"><input type="checkbox"
                                                                                               name="issuer[]" <?php echo in_array($k, $filterIssuer) ? 'checked="checked"' : '' ?>
                                                                                               value="<?php echo $k ?>"
                                                                                               id="<?php echo $k ?>"
-                                                                                              class="input_filter"> <?php echo $k ?>
+                                                                                              class="input_filter">
+                                            <?php if (!empty($k)): ?>
+                                                <?php echo $k ?>
+                                            <?php else: ?>
+                                                No Issuer
+                                            <?php endif; ?>
+
                                             (<?php echo $v ?>)</label>
                                         <div class="clear"></div>
                                         <?php
