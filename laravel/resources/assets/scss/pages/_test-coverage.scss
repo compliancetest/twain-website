@@ -41,6 +41,9 @@
   &.test-passed{
     @include iconsSprite(test-case-passed);
   }
+  &.test-skipped{
+    @include iconsSprite(test-case-skipped);
+  }
 
   &:focus{
     outline: none;
