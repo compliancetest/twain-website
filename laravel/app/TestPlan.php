@@ -27,7 +27,6 @@ class TestPlan extends Model
     public function getExcludedCases()
     {
         return $this->excludedCases->keyBy('test_case_id')->toArray();
-        return $this->excludedCases()->where('is_skipped', false)->get()->keyBy('test_case_id')->toArray();
     }
 
     /**
