@@ -134,6 +134,17 @@
             }
         });
 
+        //Show error if post was not found and page reloaded by javascript
+        if ( sessionStorage.reloadAfterFailGettingThread) {
+            if ($('#messages-wrapper').length > 0){
+                $('#messages-wrapper').html('<div class="message error">Thread not found</div>');
+            } else {
+                $('#header').after('<div id="messages-wrapper"><div class="message error">Thread not found</div></div>');
+            }
+            sessionStorage.removeItem('reloadAfterFailGettingThread');
+        }
+
+
         jQuery('.editThread').on('click', function (e) {
             e.preventDefault();
             jQuery('#addThreadSpinner').show();
@@ -144,6 +155,8 @@
                 jQuery('#addThreadSpinner').hide();
             }).fail(function (jqXHR, status) {
                 if (jqXHR.status == 422 && jqXHR.responseJSON.thread_id.length > 0) {
+                    //Set show error after reload flag
+                    sessionStorage.reloadAfterFailGettingThread = true;
                     location.reload();
                 } else {
                     if ($('#messages-wrapper').length > 0){
