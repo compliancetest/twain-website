@@ -160,13 +160,13 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transactionLog->execution_order = $order++;
 
                 $transactionLog->data_group = $log['DataGroup'];
+                $transactionLog->step_outcome = !empty($log['Outcome']) ? $log['Outcome'] : '';
                 $transactionLog->data_argument_type = $log['DataArgumentType'];
                 $transactionLog->messages = $log['Messages'];
                 $transactionLog->return_code = $log['ReturnCode'];
                 $transactionLog->session_state = @$log['State'];
                 $transactionLog->status = @$log['ExecutionResult'];
                 $transactionLog->message_data = $log['Messages'];
-                $transactionLog->twain_session_id = '';
                 $transactionLog->screen_captures = json_encode([]);
                 //process and save images
                 $scanResults = [];

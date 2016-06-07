@@ -260,9 +260,7 @@ get_header();
                                                         Data
                                                     </div>
                                                     <div class="td td-message-view td-two-lines" style="width: 7%;">Date</br>Time</div>
-                                                    <div class="td td-message-view td-two-lines" style="width: 8%;">TWAIN Session
-                                                        ID
-                                                    </div>
+                                                    <div class="td td-message-view td-two-lines" style="width: 8%;">Step Outcome</div>
                                                     <div class="td td-service td-two-lines tocenter" style="width: 9%;">
                                                         Screen </br>
                                                         Capture
@@ -296,7 +294,9 @@ get_header();
                                                                     <?php endif;?>
                                                                 </div>
                                                                 <div class="td td-message-view" style="width: 7%;"><?php echo $message->updated_at;?></div>
-                                                                <div class="td td-message-view" style="width: 8%;"><?php echo $message->twain_session_id;?></div>
+                                                                <div class="td td-message-view" style="width: 8%;">
+                                                                    <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
+                                                                </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 9%;">
                                                                     -
                                                                 </div>
