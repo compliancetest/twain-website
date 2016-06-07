@@ -298,6 +298,7 @@
                     <div class="colored-box-header">Invited Users</div>
                     <div class="colored-box-body">
                         <div class="colored-box-content">
+                            <div class="table-responsive">
                                 <table class="table invitations_table">
                                 <tr>
                                     <th>Email</th>
@@ -329,6 +330,7 @@
                                     </tr>
                                 @endif
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>

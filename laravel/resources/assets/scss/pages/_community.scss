@@ -755,3 +755,14 @@
 input.notify-changes{
     margin-top: 5px;
 }
+
+.invitations_table > tbody {
+  > tr{
+    > td{
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+  }
+
+}
