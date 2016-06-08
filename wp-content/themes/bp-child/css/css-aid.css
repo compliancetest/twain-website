@@ -1926,6 +1926,18 @@ tr {
     -moz-box-shadow: 0 1px 0 0 #E68080 inset;
     -webkit-box-shadow: 0 1px 0 0 #E68080 inset;
 }
+.grey-btn{
+    border-color: darkgrey;
+    background: grey;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(grey), to(darkgrey));
+    background: -webkit-linear-gradient(top, grey, darkgrey);
+    background: -moz-linear-gradient(top, grey, darkgrey);
+    background: -ms-linear-gradient(top, grey, darkgrey);
+    background: -o-linear-gradient(top, grey, darkgrey);
+    box-shadow: 0 1px 0 0 grey inset;
+    -moz-box-shadow: 0 1px 0 0 grey inset;
+    -webkit-box-shadow: 0 1px 0 0 grey inset;
+}
 .orange-btn{
     border-color: #FFA500;
     background: #FFA500;
