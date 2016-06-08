@@ -91,10 +91,23 @@ class TestPlan extends Model
      * Get test cases list with SKIP status from transactions table
      * @return mixed
      */
-    public function getSkippedCases($productId)
+    public function getSkippedCases()
+    {
+        return DB::table('test_plans_excluded_cases')
+            ->select('test_plans_excluded_cases.*')
+            ->where('test_plan_id', $this->id)
+            ->where('is_skipped', true)
+            ->lists('test_case_id');
+    }
+
+     /**
+     * Get test cases list with SKIP status from transactions table
+     * @return mixed
+     */
+    public function getSkippedTransactions($productId)
     {
         $suiteId = $this->suite_id;
-        $skippedTransactions = DB::table('transactions')
+        return DB::table('transactions')
             ->select('transactions.*')
             ->join('test_outcome_statuses AS TO', function ($join) use ($suiteId) {
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
@@ -103,13 +116,6 @@ class TestPlan extends Model
             ->where('product_id', $productId)
             ->where('audit_record', true)
             ->lists('test_case_id');
-
-        $skippedCases = DB::table('test_plans_excluded_cases')
-            ->select('test_plans_excluded_cases.*')
-            ->where('test_plan_id', $this->id)
-            ->where('is_skipped', true)
-            ->lists('test_case_id');
-        return array_merge($skippedCases, $skippedTransactions);
     }
 
     /**
