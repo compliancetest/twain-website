@@ -123,7 +123,7 @@ class User extends Authenticatable
             }
             foreach($testPlans as $testPlan){
 
-                foreach($testPlan->getSkippedCases($testPlan->product_id) as $skippedCase){
+                foreach($testPlan->getSkippedTransactions($testPlan->product_id) as $skippedCase){
                     $testPlan->excludedCases()->updateOrCreate(
                         [
                             'test_case_id' => $skippedCase,
@@ -131,6 +131,7 @@ class User extends Authenticatable
                         [
                             'reason' => 'Test execution was skipped.',
                             'excluded_by_user_id' => $this->ID,
+                            'is_skipped' => true
                         ]
                     );
                 }
@@ -142,7 +143,7 @@ class User extends Authenticatable
                          'successCases' => $testPlan->getSuccessCases($testPlan->product_id),
                          'failedCases' => $testPlan->getFailedCases($testPlan->product_id),
                          'optionalCases' => $testPlan->getOptionalCases(),
-                         'skippedCases' => $testPlan->getSkippedCases($testPlan->product_id),
+                         'skippedCases' => $testPlan->getSkippedCases(),
                      ],
                  ];
             }
