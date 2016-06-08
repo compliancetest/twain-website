@@ -113,14 +113,14 @@ get_header();
         </div>
         <div class="padding10">
             <?php if (doesUserAdminInAnyCommunity(get_current_user_id())):?>
-                <a href="#" data-outcome="PASS"
+                <a href="#" data-outcome="Pass"
                    class="action-btn icon-btn green-btn expand-btn trigger-btn left trigger-message-link"
                    onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Pass</span></a>
-                 <a href="#" data-outcome="FAIL"
+                 <a href="#" data-outcome="Fail"
                    class="action-btn icon-btn red-btn expand-btn trigger-btn left5 trigger-message-link"
                    onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Fail</span></a>
-                 <a href="#" data-outcome="SKIP"
-                   class="action-btn icon-btn blue-btn expand-btn trigger-btn left5 trigger-message-link"
+                 <a href="#" data-outcome="Skip"
+                   class="action-btn icon-btn grey-btn expand-btn trigger-btn left5 trigger-message-link"
                    onclick="javascript: void(0)"><span class="p"></span><span class="t">Verify as Skip</span></a>
             <?php endif;?>
 
@@ -212,7 +212,7 @@ get_header();
                                     </div>
                                     <div class="td td-audit tocenter">
                                         <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record"
-                                               data-id="<?php echo $row->id;?>" <?php if($outcomeStatus->code == 'PENDING' && !doesUserAdminInAnyCommunity(get_current_user_id())):?>disabled="disabled"<?php endif;?>>
+                                               data-id="<?php echo $row->id;?>" <?php if($outcomeStatus->code == 'PENDING'):?>disabled="disabled"<?php endif;?>>
                                     </div>
                                     <div
                                         class="td td-convsn tocenter td-two-lines">
@@ -421,10 +421,10 @@ get_header();
     </div>
 
     <div class="popup-box" id="change_status_box" style="display: none; width: 500px">
-        <div class="popup-box-header radius6 noradiusbottom">Confirm Change outcome Status</div>
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Change Outcome Status</div>
         <div class="popup-box-content">
             <div class="change_status_message">
-                Are you sure you want change outcome status for selected transactions?
+                Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected transactions?
             </div>
             <div class="change_status_no_messages">
                 Please select a row
@@ -466,6 +466,7 @@ get_header();
 
             jQuery('.trigger-message-link').click(function(){
                 jQuery('.change_status_data_type').val(jQuery(this).attr('data-outcome'));
+                jQuery('.change_to_status').text(jQuery(this).attr('data-outcome'));
             });
 
             jQuery('.trigger-message-link').cplightbox({

@@ -272,7 +272,7 @@ function cp_change_transaction_log()
         return false;
     }
 
-    $outcome = $wpdb->get_var($wpdb->prepare("SELECT id FROM test_outcome_statuses WHERE code = %s ", $_REQUEST['outcome-code']));
+    $outcome = $wpdb->get_var($wpdb->prepare("SELECT id FROM test_outcome_statuses WHERE code = %s ", strtoupper($_REQUEST['outcome-code'])));
 
     $wpdb->query($wpdb->prepare("UPDATE transactions SET test_outcome_status_id = %s WHERE ID in ('" . implode("', '", $_POST['id']) . "') ", $outcome));
 
