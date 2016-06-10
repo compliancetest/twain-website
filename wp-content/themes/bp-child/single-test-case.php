@@ -83,7 +83,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
 
                     <div class="grid_row white_bcg noborderbottom">
                         <div class="grid_cell width10P left size13 bold dark_blue_txt">Properties:</div>
-                        <div class="grid_cell width30P left">
+                        <div class="grid_cell width25P left">
                             <p>Conformance Levels: <span>
                             <?php
                             $lArr = array();
@@ -114,11 +114,11 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             </div>
                         </div>
 
-                        <div class="grid_cell width10P left">
-                            <p>Bulk: <span><?php echo $case->bulk; ?></span></p>
+                        <div class="grid_cell width20P left">
+                            <p>Execution mode: <span><?php echo $case->executionMode; ?></span></p>
                         </div>
 
-                        <div class="grid_cell width15P left">
+                        <div class="grid_cell width10P left">
                             <p>Optional: <span><?php echo $case->optional; ?></span></p>
                         </div>
 

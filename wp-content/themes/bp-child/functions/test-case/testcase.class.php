@@ -59,7 +59,9 @@ class TestCases
     var $status = '';
     
     var $scenario = '';
-    
+
+    var $executionMode = '';
+
     var $familyMark = null;
 
     public $test_execution;
@@ -114,7 +116,12 @@ class TestCases
         $this->Initiator = $this->loadSingleValue('choose_initiator');
         $this->initiationgMessage = $this->loadSingleValue('choose_init_messages');
         $this->testCaseID = $this->loadSingleValue('test_case_id');
-        
+
+        $this->executionMode = $this->loadSingleValue('executionMode');
+        if (empty($this->executionMode)) {
+            $this->executionMode = 'Auto';
+        }
+
         
         $this->version_major = $this->loadSingleValue('version_major');
         $this->version_minor = $this->loadSingleValue('version_minor');

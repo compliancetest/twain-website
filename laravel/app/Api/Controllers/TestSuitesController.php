@@ -168,6 +168,7 @@ class TestSuitesController extends BaseApiController
 
     /**
      * @api {get} /v1/testsuites/{SUITE_ID}/testcases Request Test Suite's Test Case
+     * @apiParam {string} [execution_mode]  Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')
      *
      * @apiName getTestCases
      * @apiGroup Test Suites
@@ -207,6 +208,16 @@ class TestSuitesController extends BaseApiController
      *     "code": 404
      *   }
      *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} Validation error:
+     *   {
+     *     "errors": {
+     *       "execution_mode": [
+     *         "The selected execution mode is invalid."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
      * @apiSuccessExample {json} Success-Response:
      *   {
      *     "data": [
@@ -229,8 +240,17 @@ class TestSuitesController extends BaseApiController
      * @apiVersion 1.0.0
      */
 
-    public function testcases($suiteId)
+    public function testcases($suiteId, Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'execution_mode' => 'in:Auto,Manual'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
         $suite = Post::where(['post_name' => $suiteId])->first();
         $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
         if (!$subscription) {
@@ -239,7 +259,7 @@ class TestSuitesController extends BaseApiController
 
         $cases = [];
 
-        $testCases = DB::table('wp_posts')
+        $query = DB::table('wp_posts')
             ->join('wp_postmeta AS pm1', function ($join) use ($suite) {
                 $join->on('pm1.post_id', '=', 'wp_posts.ID')
                     ->where('pm1.meta_value', '=', $suite->ID)
@@ -265,9 +285,19 @@ class TestSuitesController extends BaseApiController
                 $join->on('pm5.post_id', '=', 'wp_posts.ID')
                     ->where('pm5.meta_value', '=', '0')
                     ->where('pm5.meta_key', '=', 'hide_case');
-            })
+            });
 
-            ->where('wp_posts.post_type', '=', 'test-case')
+        if ($request->get('execution_mode')) {
+            $executionMode = $request->get('execution_mode');
+
+            $query->join('wp_postmeta AS pm6', function ($join) use($executionMode) {
+                $join->on('pm6.post_id', '=', 'wp_posts.ID')
+                    ->where('pm6.meta_value', '=', $executionMode)
+                    ->where('pm6.meta_key', '=', 'executionMode');
+            });
+        }
+
+        $testCases = $query->where('wp_posts.post_type', '=', 'test-case')
             ->groupBy('wp_posts.ID')
             ->orderBy('scenario.sequence')
             ->orderBy('wp_posts.post_title')

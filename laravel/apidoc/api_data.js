@@ -876,6 +876,19 @@ define({ "api": [
     "type": "get",
     "url": "/v1/testsuites/{SUITE_ID}/testcases",
     "title": "Request Test Suite's Test Case",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "execution_mode",
+            "description": "<p>Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')</p>"
+          }
+        ]
+      }
+    },
     "name": "getTestCases",
     "group": "Test_Suites",
     "description": "<p>Method used to get test suite's active test cases</p>",
@@ -893,6 +906,12 @@ define({ "api": [
             "optional": false,
             "field": "404",
             "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
           }
         ]
       },
@@ -910,6 +929,11 @@ define({ "api": [
         {
           "title": "Test Cases not found:",
           "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"errors\": {\n    \"execution_mode\": [\n      \"The selected execution mode is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         }
       ]

@@ -609,13 +609,19 @@ function saveCase()
 
     cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
 
+    $executionMode = 'Auto';
     $caps = [];
-    if(intval($_POST['test_execution'])) {
-        $profile = (array) S3Wrapper::getProfile(ProfileInstance::getProfileBy('id', intval($_POST['test_execution']))->token);
+    if (intval($_POST['test_execution'])) {
+        $profile = (array)S3Wrapper::getProfile(ProfileInstance::getProfileBy('id', intval($_POST['test_execution']))->token);
         foreach ($profile['Meta']->Capabilities as $cap) {
             $caps[] = $cap->Cap;
         }
+
+        if (!empty($profile['Meta']->ExecutionMode)) {
+            $executionMode = $profile['Meta']->ExecutionMode;
+        }
     }
+    update_post_meta($id, 'executionMode', $executionMode);
     update_post_meta($id, 'capabilities', json_encode($caps));
     cp_update_post_meta($id, 'test_execution', $_POST['test_execution']);
     cp_update_post_meta($id, 'test_data_profile', $_POST['test_data_profile']);
