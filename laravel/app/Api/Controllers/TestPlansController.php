@@ -112,6 +112,7 @@ class TestPlansController extends BaseApiController
 
     /**
      * @api {get} /v1/testplans/{TEST_PLAN_ID}/testcases Request Test plan's Test Cases
+     * @apiParam {string} [execution_mode]  Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')
      *
      * @apiName getTestCases
      * @apiGroup Test Plans
@@ -150,6 +151,17 @@ class TestPlansController extends BaseApiController
      *     "code": 404
      *   }
      *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} Validation error:
+     *   {
+     *     "errors": {
+     *       "execution_mode": [
+     *         "The selected execution mode is invalid."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
+     *
      * @apiSuccessExample {json} Success-Response:
      *   {
      *     "data": [
@@ -167,8 +179,16 @@ class TestPlansController extends BaseApiController
      * @apiVersion 1.0.0
      */
 
-    public function testcases($testPlanId)
+    public function testcases($testPlanId, Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'execution_mode' => 'in:Auto,Manual'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
         $testPlan = TestPlan::find($testPlanId);
 
         // we shouldn't show test plan's data to user without subscription
@@ -184,7 +204,7 @@ class TestPlansController extends BaseApiController
 
         $suiteId = $testPlan->suite_id;
 
-        $testCases = DB::table('wp_posts')
+        $query = DB::table('wp_posts')
             ->join('wp_postmeta AS pm1', function ($join) use ($suiteId) {
                 $join->on('pm1.post_id', '=', 'wp_posts.ID')
                     ->where('pm1.meta_value', '=', $suiteId)
@@ -210,8 +230,19 @@ class TestPlansController extends BaseApiController
             })
             ->join('wp_test_suites_scenarios AS scenario', function ($join) {
                 $join->on('scenario.id', '=', 'pm4.meta_value');
-            })
-            ->where('wp_posts.post_type', '=', 'test-case')
+            });
+
+        if ($request->get('execution_mode')) {
+            $executionMode = $request->get('execution_mode');
+
+            $query->join('wp_postmeta AS pm6', function ($join) use ($executionMode) {
+                $join->on('pm6.post_id', '=', 'wp_posts.ID')
+                    ->where('pm6.meta_value', '=', $executionMode)
+                    ->where('pm6.meta_key', '=', 'executionMode');
+            });
+        }
+
+        $testCases = $query->where('wp_posts.post_type', '=', 'test-case')
             ->groupBy('wp_posts.ID')
             ->orderBy('scenario.sequence')
             ->orderBy('wp_posts.post_title')
