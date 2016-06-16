@@ -7,6 +7,7 @@ use App\TestCase;
 use App\TestingDetail;
 use App\Post;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel;
@@ -265,9 +266,31 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3()
+            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
+    }
+
+    /**
+     * Get test case images data
+     * @param $testCase
+     * @return array
+     */
+    private function _getTestCaseImages($testCase)
+    {
+        $images = [];
+        $imagesData = $testCase->postmeta()->where('meta_key', 'imagesData')->first();
+        if ($imagesData) {
+            $imagesData = json_decode($imagesData->meta_value);
+            foreach ($imagesData as $imageData) {
+                $images[] = [
+                    'link' => Storage::disk('s3')->url(config('env.env') . '/case_images/' . $testCase->ID . '/' . $imageData->name, $imageData->name),
+                    'description' => $imageData->description,
+                ];
+            }
+        }
+        return $images;
     }
 
     /**
@@ -387,7 +410,8 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3()
+            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
     }
