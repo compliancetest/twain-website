@@ -628,21 +628,27 @@ function saveCase()
 
     $imagesToSave = array();
 
-    if(!empty($_POST['saved_images'])){
-        foreach($_POST['saved_images'] as $savedImageKey => $savedImage){
+    /**
+     * Process existing attached images
+     */
+    if (!empty($_POST['saved_images'])) {
+        foreach ($_POST['saved_images'] as $savedImageKey => $savedImage) {
             $imagesToSave[] = array('name' => $savedImage, 'description' => $_POST['saved_images_description'][$savedImageKey]);
         }
     }
 
-    if(!empty($_FILES['images'])){
+    /**
+     * process new uploads
+     */
+    if (!empty($_FILES['images'])) {
         $s3 = new S3Wrapper();
         $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
-        foreach($_FILES['images']['name'] as $imageKey => $imageName){
+        foreach ($_FILES['images']['name'] as $imageKey => $imageName) {
             $tmpPath = $_FILES['images']['tmp_name'][$imageKey];
-            $extension = pathinfo($imageName, PATHINFO_EXTENSION);
-            if(!$_FILES['images']['error'][$imageKey] && @is_array(getimagesize($tmpPath)) && in_array($extension, $allowedExtensions)){
+            $extension = strtolower(pathinfo($imageName, PATHINFO_EXTENSION));
+            if (!$_FILES['images']['error'][$imageKey] && @is_array(getimagesize($tmpPath)) && in_array($extension, $allowedExtensions)) {
                 $imageName = md5(microtime() . $imageName . $imageKey) . '.' . $extension;
-                $s3->putObject(ENVIRONMENT .'/case_images/' .$id.'/'. $imageName, file_get_contents($tmpPath), pathinfo($tmpPath, FILEINFO_MIME));
+                $s3->putObject(ENVIRONMENT . '/case_images/' . $id . '/' . $imageName, file_get_contents($tmpPath), pathinfo($tmpPath, FILEINFO_MIME));
                 $imagesToSave[] = array('name' => $imageName, 'description' => @$_POST['images_description'][$imageKey]);
             }
         }
