@@ -252,6 +252,9 @@ class TestCasesController extends BaseApiController
         $model->start_time = Carbon::now();
         $model->is_running = true;
         $model->save();
+
+        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
+
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
@@ -267,6 +270,7 @@ class TestCasesController extends BaseApiController
                 'title' => $product->post_title,
             ],
             'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : false,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
@@ -396,6 +400,8 @@ class TestCasesController extends BaseApiController
         $testSuite = Post::find($model->test_suite_id);
         $testCase = Post::find($model->test_case_id);
 
+        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
+
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
@@ -411,6 +417,7 @@ class TestCasesController extends BaseApiController
                 'title' => $product->post_title,
             ],
             'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : false,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
