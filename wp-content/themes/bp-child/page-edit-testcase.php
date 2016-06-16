@@ -432,7 +432,7 @@ get_header();
 
                             </div>
 
-                            <h6><B>Test Data Profile</b></h6>
+                            <h6><B>Test Configuration</b></h6>
 
                             <div class="field-row">
                                 <div class="grid-cell width100P">

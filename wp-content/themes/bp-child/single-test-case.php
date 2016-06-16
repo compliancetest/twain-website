@@ -236,7 +236,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     <div class="grid_cell width100P toleft">
                         <div class="grid_head lighter_gray_bcg2 related">
                             <div class="grid_row nopaddingbottom nopaddingtop">
-                                <div class="grid_cell width100P size14 normal shadowwhite">Test Data Profile</div>
+                                <div class="grid_cell width100P size14 normal shadowwhite">Test Configuration</div>
                                 <div class="clear"></div>
                             </div>
                         </div>
