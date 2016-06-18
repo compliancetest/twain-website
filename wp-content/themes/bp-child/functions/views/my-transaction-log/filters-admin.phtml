@@ -75,34 +75,34 @@
                     </select>
                 </li>
                 <li>
-                    <label for="service">TWAIN Data Group: <?php if($filterType){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="service">TWAIN Data Group: <?php if($filterOutcome){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="serv" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tServices ) ):?>
                             <?php foreach($tServices as $s){ ?>
-                                <option value="<?php echo $s?>" <?php echo $s == $filterType ? "selected='selected'" : "" ?>><?php echo $s ?></option>
+                                <option value="<?php echo $s?>" <?php echo $s == $filterOutcome ? "selected='selected'" : "" ?>><?php echo $s ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>
                 </li>
                 <li>
-                    <label for="action">TWAIN Data Type: <?php if($filterGroup){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="action">TWAIN Data Type: <?php if($filterAudit){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="action" id="action" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tActions ) ):?>
                             <?php foreach($tActions as $a){ ?>
-                                <option value="<?php echo $a?>" <?php echo $a == $filterGroup ? "selected='selected'" : "" ?>><?php echo $a ?></option>
+                                <option value="<?php echo $a?>" <?php echo $a == $filterAudit ? "selected='selected'" : "" ?>><?php echo $a ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>
                 </li>
                 <li>
-                    <label for="partyid">TWAIN Message: <?php if($filterMessage){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="partyid">TWAIN Message: <?php if($filterScenario){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="partyid" id="partyid" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if( is_iterable( $tPartyIDs ) ):?>
                             <?php foreach($tPartyIDs as $p){ ?>
-                                <option value="<?php echo $p?>" <?php echo $p == $filterMessage ? "selected='selected'" : "" ?>><?php echo $p ?></option>
+                                <option value="<?php echo $p?>" <?php echo $p == $filterScenario ? "selected='selected'" : "" ?>><?php echo $p ?></option>
                             <?php } ?>
                         <?php endif;?>
                     </select>

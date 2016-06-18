@@ -4,37 +4,41 @@ class TransactionLogs
 {
 
     private $where = [];
+    private $join = '';
 
     public function setWhereQuery($subscriptions, $filters)
     {
-        if(!empty($subscriptions)){
-            $this->where[] = ' subscription_id IN ('.implode(',', $subscriptions).') ';
+        if (!empty($subscriptions)) {
+            $this->where[] = ' subscription_id IN (' . implode(',', $subscriptions) . ') ';
         } else {
             $this->where[] = ' subscription_id IN (0) ';
         }
-        if($filters['product_id']){
+        if ($filters['product_id']) {
             $this->where[] = sprintf(' product_id = %d ', $filters['product_id']);
         }
-        if($filters['test_case_id']){
+        if ($filters['test_case_id']) {
             $this->where[] = sprintf(' test_case_id = %d ', $filters['test_case_id']);
         }
-         if($filters['test_suite_id']){
+        if ($filters['test_suite_id']) {
             $this->where[] = sprintf(' test_suite_id = %d ', $filters['test_suite_id']);
         }
-         if($filters['subscription_id']){
+        if ($filters['subscription_id']) {
             $this->where[] = sprintf(' subscription_id = %d ', $filters['subscription_id']);
         }
-         if($filters['date']){
-            $this->where[] = " updated_at LIKE '".$filters['date']."%' ";
+        if ($filters['date']) {
+            $this->where[] = " updated_at LIKE '" . $filters['date'] . "%' ";
         }
-        if($filters['data_argument_type']){
-            $this->where[] = sprintf(" data_argument_type = '%s' ", $filters['data_argument_type']);
+        if ($filters['outcome']) {
+            $this->where[] = sprintf(" test_outcome_status_id = '%s' ", $filters['outcome']);
         }
-        if($filters['data_group']){
-            $this->where[] = sprintf(" data_group = '%s' ", $filters['data_group']);
+        if ($filters['audit']) {
+            $this->where[] = sprintf(" audit_record = '%s' ", $filters['audit']);
         }
-        if($filters['messages']){
-            $this->where[] = sprintf(" messages = '%s' ", $filters['messages']);
+        if ($filters['scenario']) {
+            $this->join = " 
+                JOIN wp_posts AS p1 ON t.test_case_id = p1.ID
+                JOIN wp_postmeta AS pm1 ON pm1.post_id = p1.ID AND pm1.meta_key LIKE 'scenario_%' AND pm1.meta_value = '" . filter_var($filters['scenario'], FILTER_SANITIZE_STRING) . "'
+            ";
         }
         return $this;
     }
@@ -51,9 +55,11 @@ class TransactionLogs
         }
         return [
             'results' => $wpdb->get_results("SELECT t.* FROM transactions AS t
+                                     $this->join
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
                                      WHERE " . implode(' AND ', $this->where) . " GROUP BY t.id ORDER BY $orderby $order $limit"),
             'total' => $wpdb->get_var("SELECT count(cc.id) FROM (SELECT t.id FROM transactions AS t
+                                     $this->join
                                      LEFT JOIN transactions_logs AS tl ON tl.transaction_id = t.id
                                      WHERE " . implode(' AND ', $this->where) . " GROUP BY t.id ) as cc "),
         ];
@@ -63,18 +69,23 @@ class TransactionLogs
     {
         global $wpdb;
 
-        if(!empty($subscriptionsIds)) {
+        if (!empty($subscriptionsIds)) {
             $where = ' subscription_id IN (' . implode(',', $subscriptionsIds) . ') ';
         } else {
-           $where = ' subscription_id IN (0) ';
+            $where = ' subscription_id IN (0) ';
         }
         return [
-            'product' => $wpdb->get_results("SELECT product_id FROM transactions WHERE $where GROUP BY product_id"),
-            'test_case_id' => $wpdb->get_results("SELECT test_case_id FROM transactions WHERE $where GROUP BY test_case_id"),
-            'test_suite_id' => $wpdb->get_results("SELECT test_suite_id FROM transactions WHERE $where GROUP BY test_suite_id"),
-            'data_group' => $wpdb->get_results("SELECT data_group FROM transactions_logs WHERE transaction_id IN( SELECT id FROM transactions WHERE $where) GROUP BY data_group"),
-            'data_type' => $wpdb->get_results("SELECT data_argument_type FROM transactions_logs WHERE transaction_id IN( SELECT id FROM transactions WHERE $where) GROUP BY data_argument_type"),
-            'data_message' => $wpdb->get_results("SELECT messages FROM transactions_logs WHERE transaction_id IN( SELECT id FROM transactions WHERE $where) GROUP BY messages"),
+            'product' => $wpdb->get_results("SELECT product_id FROM transactions AS t WHERE $where GROUP BY product_id"),
+            'test_case_id' => $wpdb->get_results("SELECT test_case_id, p.post_title FROM transactions AS t JOIN wp_posts AS p ON t.test_case_id = p.ID WHERE $where GROUP BY test_case_id ORDER BY post_title"),
+            'test_suite_id' => $wpdb->get_results("SELECT test_suite_id FROM transactions AS t WHERE $where GROUP BY test_suite_id"),
+            'audit' => $wpdb->get_results("SELECT audit_record FROM transactions AS t WHERE $where GROUP BY audit_record ORDER BY audit_record DESC"),
+            'test_outcome' => $wpdb->get_results("SELECT test_outcome_status_id, name FROM transactions AS t JOIN test_outcome_statuses AS os ON os.id = t.test_outcome_status_id WHERE $where GROUP BY t.test_outcome_status_id ORDER BY name ASC"),
+            'scenario' => $wpdb->get_results("
+                SELECT s.id, s.code FROM transactions AS t 
+                JOIN wp_posts AS p ON p.ID = t.test_case_id
+                JOIN wp_postmeta AS pm ON pm.meta_key LIKE 'scenario_%' AND pm.post_id = p.ID
+                JOIN wp_test_suites_scenarios AS s ON s.id = pm.meta_value
+                WHERE $where GROUP BY code ORDER BY s.sequence"),
         ];
     }
 

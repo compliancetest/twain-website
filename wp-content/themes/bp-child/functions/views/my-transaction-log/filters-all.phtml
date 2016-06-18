@@ -55,7 +55,7 @@
                                 <option
                                     value="<?php echo !$c->test_case_id ? 0 : $c->test_case_id ?>" <?php echo $filterCase != "" && $c->test_case_id == intval($filterCase) ? "selected='selected'" : "" ?>>
                                     <?php
-                                    echo get_the_title($c->test_case_id);
+                                    echo $c->post_title;
                                     ?>
                                 </option>
                             <?php } ?>
@@ -63,37 +63,37 @@
                     </select>
                 </li>
                 <li class="first">
-                    <label for="service">TWAIN Data Group: <?php if ($filterGroup) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="group" id="service" autocomplete="off" class="select">
+                    <label for="service">Audit: <?php if ($filterAudit) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="audit" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if (is_iterable($filters['data_group'])): ?>
-                            <?php foreach ($filters['data_group'] as $s) { ?>
+                        <?php if (is_iterable($filters['audit'])): ?>
+                            <?php foreach ($filters['audit'] as $s) { ?>
                                 <option
-                                    value="<?php echo $s->data_group ?>" <?php echo $s->data_group == $filterGroup ? "selected='selected'" : "" ?>><?php echo $s->data_group ?></option>
+                                    value="<?php echo $s->audit_record ?>" <?php echo $s->audit_record == $filterAudit ? "selected='selected'" : "" ?>><?php echo $s->audit_record ? 'Yes' : 'No' ?></option>
                             <?php } ?>
                         <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="action">TWAIN Data Type: <?php if ($filterType) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="type" id="action" autocomplete="off" class="select">
+                    <label for="action">Test Outcome: <?php if ($filterOutcome) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="outcome" id="action" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if (is_iterable($filters['data_type'])): ?>
-                            <?php foreach ($filters['data_type'] as $a) { ?>
+                        <?php if (is_iterable($filters['test_outcome'])): ?>
+                            <?php foreach ($filters['test_outcome'] as $a) { ?>
                                 <option
-                                    value="<?php echo $a->data_argument_type ?>" <?php echo $a->data_argument_type == $filterType ? "selected='selected'" : "" ?>><?php echo $a->data_argument_type ?></option>
+                                    value="<?php echo $a->test_outcome_status_id ?>" <?php echo $a->test_outcome_status_id == $filterOutcome ? "selected='selected'" : "" ?>><?php echo $a->name ?></option>
                             <?php } ?>
                         <?php endif; ?>
                     </select>
                 </li>
                 <li>
-                    <label for="partyid">TWAIN Message: <?php if ($filterMessage) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <select name="message" id="partyid" autocomplete="off" class="select">
+                    <label for="partyid">Scenario: <?php if ($filterScenario) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <select name="scenario" id="partyid" autocomplete="off" class="select">
                         <option value="">- All -</option>
-                        <?php if (is_iterable($filters['data_message'])): ?>
-                            <?php foreach ($filters['data_message'] as $p) { ?>
+                        <?php if (is_iterable($filters['scenario'])): ?>
+                            <?php foreach ($filters['scenario'] as $p) { ?>
                                 <option
-                                    value="<?php echo $p->messages ?>" <?php echo $p->messages == $filterMessage ? "selected='selected'" : "" ?>><?php echo $p->messages ?></option>
+                                    value="<?php echo $p->id ?>" <?php echo $p->id == $filterScenario ? "selected='selected'" : "" ?>><?php echo $p->code ?></option>
                             <?php } ?>
                         <?php endif; ?>
                     </select>
