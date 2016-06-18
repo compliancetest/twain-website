@@ -288,7 +288,7 @@ function saveSuite()
 
     //Check Version Updated or not
     $version_updated = false;
-    if (intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch'])) {
+    if (!$isNew && (intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch']))) {
         $version_updated = true;
     }
 
@@ -554,9 +554,8 @@ function saveSuite()
         if (!$version_updated) {
             $family_mark = $id;
         } else {
-            $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM {$wpdb->prefix}test_suites WHERE suite_id = %d ", $suite->id));
+            $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $suite->id));
         }
-
         $wpdb->insert($wpdb->prefix . "test_suites",
             array('suite_id' => $id,
                 'suite_title' => $_POST['ts_name'],
