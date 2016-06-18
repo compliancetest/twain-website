@@ -28,9 +28,9 @@ $filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['sub
 $filterProduct = isset($_GET['product']) ? htmlspecialchars($_GET['product']) : null;
 $filterSuite = isset($_GET['suite']) ? htmlspecialchars($_GET['suite']) : null;
 $filterCase = isset($_GET['case']) ? htmlspecialchars($_GET['case']) : null;
-$filterType = isset($_GET['type']) ? htmlspecialchars(urldecode($_GET['type'])) : null;
-$filterGroup = isset($_GET['group']) ? htmlspecialchars($_GET['group']) : null;
-$filterMessage = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : null;
+$filterOutcome = isset($_GET['outcome']) ? htmlspecialchars(urldecode($_GET['outcome'])) : null;
+$filterAudit = isset($_GET['audit']) ? htmlspecialchars($_GET['audit']) : null;
+$filterScenario = isset($_GET['scenario']) ? htmlspecialchars($_GET['scenario']) : null;
 $filterDate = isset($_GET['date']) ? htmlspecialchars($_GET['date']) : null;
 
 $orderBy = isset($_GET['orderby']) ? htmlspecialchars($_GET['orderby']) : 'updated_at';
@@ -51,9 +51,9 @@ $selectedFilters = [
     'product_id' => $filterProduct,
     'test_case_id' => $filterCase,
     'test_suite_id' => $filterSuite,
-    'data_argument_type' => $filterType,
-    'data_group' => $filterGroup,
-    'messages' => $filterMessage,
+    'outcome' => $filterOutcome,
+    'audit' => $filterAudit,
+    'scenario' => $filterScenario,
     'date' => $filterDate,
     'subscription_id' => $filterSubscription,
 ];
@@ -65,7 +65,6 @@ $log_results = $transactionsLog->getUserTransactionLog($page, $limit);
 $total = $log_results['total'];
 $log_results = $log_results['results'];
 $filters = $transactionsLog->getFilters($sIds);
-
 $params = array();
 
 $tbodyHTML = '';
@@ -79,14 +78,14 @@ if ($filterSuite) {
 if ($filterCase) {
     $params[] = 'case=' . $filterCase;
 }
-if ($filterType) {
-    $params[] = 'type=' . $filterType;
+if ($filterOutcome) {
+    $params[] = 'outcome=' . $filterOutcome;
 }
-if ($filterGroup) {
-    $params[] = 'group=' . $filterGroup;
+if ($filterAudit) {
+    $params[] = 'audit=' . $filterAudit;
 }
-if ($filterMessage) {
-    $params[] = 'message=' . $filterMessage;
+if ($filterScenario) {
+    $params[] = 'message=' . $filterScenario;
 }
 if ($filterDate) {
     $params[] = 'date=' . $filterDate;
@@ -351,14 +350,14 @@ get_header();
                             <?php if ($filterCase) { ?>
                                 <input type="hidden" name="case" value="<?php echo $filterCase ?>"/>
                             <?php } ?>
-                            <?php if ($filterType) { ?>
-                                <input type="hidden" name="serv" value="<?php echo urlencode($filterType) ?>"/>
+                            <?php if ($filterOutcome) { ?>
+                                <input type="hidden" name="serv" value="<?php echo urlencode($filterOutcome) ?>"/>
                             <?php } ?>
-                            <?php if ($filterGroup) { ?>
-                                <input type="hidden" name="action" value="<?php echo $filterGroup ?>"/>
+                            <?php if ($filterAudit) { ?>
+                                <input type="hidden" name="action" value="<?php echo $filterAudit ?>"/>
                             <?php } ?>
-                            <?php if ($filterMessage) { ?>
-                                <input type="hidden" name="partyid" value="<?php echo $filterMessage ?>"/>
+                            <?php if ($filterScenario) { ?>
+                                <input type="hidden" name="partyid" value="<?php echo $filterScenario ?>"/>
                             <?php } ?>
                             <?php if ($filterDate) { ?>
                                 <input type="hidden" name="date" value="<?php echo $filterDate ?>"/>
