@@ -57,7 +57,7 @@ Template Name Posts: Test Suite
 							<div class="grid_cell width100P left">
 								ID: <span><?php echo $suite->identifier?>_V<?php echo $suite->version_major?>.<?php echo $suite->version_minor?><?php if($suite->version_patch != 0) { ?>.<?php echo $suite->version_patch; ?><?php } ?></span>
                                 Published: <span><?php echo formatDate($suite->issueDate); ?></span>
-								Issuer: <a href="<?php echo bp_get_group_permalink($group); ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
+								Issuer: <a href="/test-suites/?issuer=<?php echo $suite->issuer; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
 								Status: <span class="status_btn status_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
 								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
 							</div>
