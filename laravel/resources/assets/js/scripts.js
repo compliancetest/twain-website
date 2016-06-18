@@ -669,8 +669,8 @@ var Page = {
             $('#coverageEditPlanForm').on('submit', function (e) {
                 e.preventDefault();
                 var form = $(this);
+                form.find('.modal-body .message').remove();
                 if (form.find('#availableProducts').val() || form.find('.level:checked').length == 0 || form.find('.level:checked').length == 0){
-                    form.find('.modal-body .message').remove();
                     form.find('.block-loading').show();
                     $.ajax({
                         url: form.attr('action'),
