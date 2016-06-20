@@ -17,6 +17,13 @@ class TestPlan extends Model
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function claim()
+    {
+        return $this->hasOne('App\Claim');
+    }
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function excludedCases()
@@ -52,7 +59,7 @@ class TestPlan extends Model
     }
 
     /**
-     * Get test cases list with SUCESS status from transactions table
+     * Get test cases list with SUCCESS status from transactions table
      * @return mixed
      */
     public function getSuccessCases($productId)
@@ -138,5 +145,48 @@ class TestPlan extends Model
                 ]);
             }
         }
+    }
+
+    public function canBeClaimed()
+    {
+        $suite = Post::find($this->suite_id);
+        $testCases = $suite->getTestCases($this->level, $this->role);
+
+        $excludedCases = $this->getExcludedCases();
+        $successCases = $this->getSuccessCases($this->product_id);
+        $optionalCases = $this->getOptionalCases();
+        $skippedCases = $this->getSkippedCases();
+
+        foreach ($testCases as $case) {
+            if (in_array($case->ID, $successCases) || in_array($case->ID, $skippedCases) || array_key_exists($case->ID, $excludedCases) || in_array($case->ID, $optionalCases)) {
+                //success case
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check that test plan has excluded / skipped cases
+     * @return bool
+     */
+    public function hasExclusions()
+    {
+        $suite = Post::find($this->suite_id);
+        $testCases = $suite->getTestCases($this->level, $this->role);
+
+        $excludedCases = $this->getExcludedCases();
+        $successCases = $this->getSuccessCases($this->product_id);
+        $skippedCases = $this->getSkippedCases();
+
+        $hasExclusions = false;
+
+        foreach ($testCases as $case) {
+            if (!in_array($case->ID, $successCases) && (in_array($case->ID, $skippedCases) || array_key_exists($case->ID, $excludedCases))) {
+                $hasExclusions = true;
+            }
+        }
+        return $hasExclusions;
     }
 }

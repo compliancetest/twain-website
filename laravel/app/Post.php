@@ -32,6 +32,17 @@ class Post extends Model
         return $this->hasMany('App\PostMeta');
     }
 
+    /**
+     * Get meta key value
+     * @param $metaKey
+     * @return mixed
+     */
+    public function getMetaByKey($metaKey)
+    {
+        return @$this->postmeta()->where('meta_key', $metaKey)->first()->meta_value;
+    }
+
+    
     public static function getCommunityTestSuites($communityId)
     {
         return DB::table('wp_posts')

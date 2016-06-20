@@ -91,14 +91,14 @@ get_header();
                            foreach($claims as $claim){                                                  
                            ?>
                            <div class="tr">
-                               <div class="td td-claim-id"><div class="td-claim-id-value" title="<?php echo $claim->claim_id ?>"><?php echo $claim->claim_id ?></div></div>
+                               <div class="td td-claim-id"><div class="td-claim-id-value" title="<?php echo $claim->id ?>"><?php echo $claim->id ?></div></div>
                                <div class="td td-certificate">
-                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>', '', 'height=600'); return false">View</a>
+                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->id );?>', '', 'height=600'); return false">View</a>
                                     |
-                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token, true );?>">Download</a>
+                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id, true );?>">Download</a>
                                </div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
-                               <div class="td td-suite"><a href="<?php echo get_permalink($claim->suite_id)?>"><?php echo get_the_title($claim->suite_id)?></a></div>
+                               <div class="td td-suite"><a href="<?php echo get_permalink($claim->test_suite_id)?>"><?php echo get_the_title($claim->test_suite_id)?></a></div>
                                <div class="td td-level"><?php echo implode(cp_explode($claim->conformance_level), ", ")?></div>
                                <div class="td td-role"><?php echo implode(cp_explode($claim->role), ", ")?></div>
                                <div class="td td-status status-<?php echo convert_css_name($claim->status) ?>"><?php echo $claim->status?></div>

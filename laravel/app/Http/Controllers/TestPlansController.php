@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Claim;
 use App\OrganisationSubscription;
 use App\Post;
 use App\PostMeta;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TestPlansController extends Controller
 {
@@ -162,6 +164,11 @@ class TestPlansController extends Controller
         return JsonResponse::create(['status' => 'Forbidden!'], 403);
     }
 
+    /**
+     * Delete test plan
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response|static
+     */
     public function destroy($id)
     {
         $testPlan = TestPlan::find($id);
@@ -172,5 +179,48 @@ class TestPlansController extends Controller
             return JsonResponse::create(['status' => 'success']);
         }
         return JsonResponse::create(['status' => 'Forbidden!'], 403);
+    }
+
+    /**
+     * Generate claim for test plan
+     * @param $testPlanId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function claim($testPlanId)
+    {
+        $user = Auth::user();
+        $testPlan = TestPlan::find($testPlanId);
+        if (!$testPlan || !$testPlan->canBeClaimed()) {
+            addMessage('You must complete the test plan before a claim can be made.', 'warning');
+            return redirect('test-suite-coverage');
+        }
+
+        if (!empty($testPlan->claim)) {
+            addMessage('An existing claim for this test plan already exists. Please delete it if you wish to update your claim for this test plan.', 'warning');
+            return redirect('test-suite-coverage');
+        }
+
+        $claim = $testPlan->claim()->create([
+            'product_id' => $testPlan->product_id,
+            'creator_id' => $user->ID,
+            'organisation_id' => $user->organisation[0]->id,
+            'test_suite_id' => $testPlan->suite_id,
+            'conformance_level' => $testPlan->level,
+            'role' => $testPlan->role,
+            'status' => 'Verified',
+            'has_exclusions' => $testPlan->hasExclusions(),
+        ]);
+
+        $pdfString = $claim->generatePDF();
+
+        Storage::put('claims/products/' . $claim->id . '.pdf', $pdfString);
+
+        $claim->sendNewClaimNotification();
+
+        $testPlan->is_claimed = true;
+        $testPlan->save();
+
+        addMessage('The plan was certified successfully');
+        return redirect('test-suite-coverage');
     }
 }

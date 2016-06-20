@@ -156,6 +156,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('test-suite-coverage', 'TestPlansController@index');
         Route::get('/testplan/create/{suiteId}', 'TestPlansController@create');
         Route::get('/testplan/{testPlanId}/edit/', 'TestPlansController@edit');
+        Route::get('/testplan/{testPlanId}/claim/', 'TestPlansController@claim');
         Route::get('/testplan/{testPlanId}/view/{testCaseId}', 'TestPlansController@view');
         Route::post('/testplan', 'TestPlansController@store');
         Route::post('/testplan/{testPlanId}/exclude/{testCaseId}', 'TestPlansController@exclude');

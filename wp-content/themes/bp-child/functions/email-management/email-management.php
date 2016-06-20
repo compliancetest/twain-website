@@ -1034,13 +1034,18 @@ function cp_send_email_to_admin($template_name, $data = array())
 
 function cp_send_email_to_community_admin($communities, $template_name, $data = array())
 {
-    global $bp, $wpdb;
+    global $wpdb;
 
     //Getting Community Admins
-    if (is_array($communities))
-        $query = "SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id IN (" . implode(", ", $communities) . ") AND p.is_admin = 1 AND p.is_banned = 0";
-    else
-        $query = $wpdb->prepare("SELECT u.* FROM {$bp->groups->table_name_members} AS p LEFT JOIN {$wpdb->users} AS u ON u.ID = p.user_id WHERE group_id = %d AND p.is_admin = 1 AND p.is_banned = 0", $communities);
+    if (is_array($communities)) {
+        $query = "SELECT u.* FROM communities_members AS p 
+                  LEFT JOIN wp_users AS u ON u.ID = p.user_id 
+                  WHERE community_id IN ('" . implode("', '", $communities) . "') AND p.is_admin = 1 ";
+    } else {
+        $query = $wpdb->prepare("SELECT u.* FROM communities_members AS p 
+                                 LEFT JOIN wp_users AS u ON u.ID = p.user_id 
+                                 WHERE community_id = %s AND p.is_admin = 1", $communities);
+    }
 
     $users = $wpdb->get_results($query);
 
