@@ -63,7 +63,9 @@
                                                        class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit plan"></a>
                                                     <a href="#removePlanModal-{{ $userPlan['testPlan']->id }}" data-toggle="modal" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip"
                                                        title="Delete plan"></a>
-                                                    {{--<a href="#" class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Claim"></a>--}}
+                                                    @if($userPlan['testPlan']->canBeClaimed() && !$userPlan['testPlan']->is_claimed)
+                                                        <a href="/testplan/{{ $userPlan['testPlan']->id }}/claim" class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Claim"></a>
+                                                    @endif
 
                                                     <!-- Remove Plan Confirmation Modal-->
                                                     <div class="modal fade" id="removePlanModal-{{ $userPlan['testPlan']->id }}" tabindex="-1" role="dialog">

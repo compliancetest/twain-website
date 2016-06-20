@@ -63,3 +63,18 @@ function getSiteUrl()
     $useHttps = getenv('ENVIRONMENT') == 'local' ? false : true;
     return url()->to('/', [], $useHttps);
 }
+
+/**
+ * get meta_value from wp_postmeta value for provided post
+ * @param $postId
+ * @param $metaKey
+ * @return bool
+ */
+function getPostMeta($postId, $metaKey)
+{
+    $meta = \App\PostMeta::where(['post_id' => $postId, 'meta_key' => $metaKey])->first();
+    if ($meta) {
+        return $meta->meta_value;
+    }
+    return false;
+}

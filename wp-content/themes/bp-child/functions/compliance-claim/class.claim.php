@@ -38,7 +38,7 @@ class ComplianceClaim
     {
         global $wpdb;
         
-        $query = $wpdb->prepare("SELECT c.*, pm.meta_value as issuer FROM " . TABLE_CLAIM . " as c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.suite_id AND pm.meta_key='ts_issuer' WHERE id=%d", $this->id);
+        $query = $wpdb->prepare("SELECT c.*, pm.meta_value as issuer FROM claims as c LEFT JOIN " . $wpdb->postmeta . " as pm on pm.post_id=c.test_suite_id AND pm.meta_key='ts_issuer' WHERE id=%d", $this->id);
         $row = $wpdb->get_row($query);
         
         if($row)
