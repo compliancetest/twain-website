@@ -11,9 +11,16 @@ class TransactionsLog extends Model
 
     public $incrementing = false;
 
-
     protected $fillable = [
         'execution_id',
         'transaction_id'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function transaction()
+    {
+        return $this->belongsTo('App\Transaction');
+    }
 }

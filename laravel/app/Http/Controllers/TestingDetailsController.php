@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TestingDetail;
+use App\Transaction;
 use App\TransactionsLog;
 use Aws\Laravel\AwsFacade;
 use Carbon\Carbon;
@@ -86,5 +87,16 @@ class TestingDetailsController extends Controller
         $entry = TransactionsLog::find($id);
         $reason = $entry->reason;
         return view('pages.testingdetails.reason', compact('reason'));
+    }
+
+    /**
+     * Render logs for a given transaction
+     * @param $transactionId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function logs($transactionId)
+    {
+        $logs = Transaction::find($transactionId)->logs;
+        return view('pages.testingdetails.logs', compact('logs'));
     }
 }
