@@ -29,10 +29,6 @@ jQuery(document).ready(function(){
         }
     })
 
-     jQuery('.s3output, .reason').cplightbox({
-        type: 'ajax',
-        closeWhenClickOveraly: false
-    })
 
     var triggerMessageTimer = null;
     

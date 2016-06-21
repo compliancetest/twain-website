@@ -15,6 +15,15 @@ class Transaction extends Model
     ];
 
     /**
+     * Transaction logs relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs()
+    {
+        return $this->hasMany('App\TransactionsLog')->orderBy('execution_order');
+    }
+
+    /**
      * Generate s3 link to zip file
      * @param $fileName
      * @return string

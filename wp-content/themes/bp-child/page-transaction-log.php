@@ -167,14 +167,14 @@ get_header();
                         <?php } else {
                             foreach ($log_results as $row) {
                                 ?>
-                                <?php $logs = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
+                                <?php $logs = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                 <div class="tr">
                                     <div class="td td-chk tocenter">
                                         <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>" <?php if($row->audit_record):?> disabled="disabled" <?php endif;?>/>
                                     </div>
                                     <div class="td td-product">
                                         <?php if($logs):?>
-                                            <a href="#" class="view-messages-link has-tooltip">
+                                            <a href="#" class="view-messages-link has-tooltip" data-id="<?php echo $row->id;?>">
                                                 <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                             </a>
                                         <?php endif;?>
@@ -199,7 +199,7 @@ get_header();
                                     </div>
                                     <div class="td td-outcome">
                                          <?php if($logs):?>
-                                            <a href="#" class="view-messages-link has-tooltip">
+                                            <a href="#" class="view-messages-link has-tooltip" data-id="<?php echo $row->id;?>">
                                                 <span class="simple_tooltip radius6" style="top: -14px; left: -12px;">Show message details<span></span></span>
                                             </a>
                                         <?php endif;?>
@@ -237,89 +237,8 @@ get_header();
                                     <div class="clear"></div>
 
                                     <?php if ($logs) { ?>
-                                        <div class="sub-table">
-                                            <div class="table">
-                                                <div class="thead tr">
-                                                    <div class="td td-from td-two-lines tocenter" style="width: 4%;">
-                                                        From</br>To
-                                                    </div>
+                                        <div class="sub-table" data-loaded="0">
 
-                                                    <div class="td td-service td-two-lines tocenter" style="width: 4%;">
-                                                        Test </br>
-                                                        Step
-                                                    </div>
-
-                                                    <div class="td td-service td-two-lines tocenter"
-                                                         style="width: 36%;">Operation Triplet </br>
-                                                        Return Code
-                                                    </div>
-                                                    <div class="td td-message-date td-two-lines" style="width: 4%;">Session State
-                                                    </div>
-                                                    <div class="td td-message-part tocenter td-two-lines" style="width: 7%;">Message
-                                                        Data
-                                                    </div>
-                                                    <div class="td td-message-view td-two-lines" style="width: 7%;">Date</br>Time</div>
-                                                    <div class="td td-message-view td-two-lines" style="width: 8%;">Step Outcome</div>
-                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
-                                                        Screen </br>
-                                                        Capture
-                                                    </div>
-                                                    <div class="td td-service td-two-lines tocenter" style="width: 9%;">
-                                                        Scan </br>
-                                                        Result
-                                                    </div>
-                                                    <div class="clear"></div>
-                                                </div>
-                                                <div class="tbody">
-                                                    <?php if ($logs): ?>
-                                                        <?php foreach ($logs as $message) { ?>
-                                                            <div class="tr">
-                                                                <div class="td td-from td-two-lines tocenter" style="width: 4%;">
-                                                                    <?php echo $message->from;?>
-                                                                    </br>
-                                                                    <?php echo $message->to;?>
-                                                                </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 4%;">
-                                                                    <?php echo $message->test_step;?>
-                                                                </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 36%;">
-                                                                    <?php echo $message->data_group .' / ' . $message->data_argument_type . ' / '. $message->messages;?> </br>
-                                                                        <span style="color: <?php echo getReturnCodeColor($message->return_code);?>"><?php echo $message->return_code;?></span>
-                                                                </div>
-                                                                <div class="td td-message-date" style="width: 4%;"><?php if($message->session_state) echo $message->session_state;?></div>
-                                                                <div class="td td-message-part tocenter" style="width: 7%;">
-                                                                    <?php if(!empty($message->log_output)):?>
-                                                                        <a href="/testingdetails/<?php echo $message->id;?>/output" class="s3output">View</a>
-                                                                    <?php endif;?>
-                                                                </div>
-                                                                <div class="td td-message-view" style="width: 7%;"><?php echo $message->updated_at;?></div>
-                                                                <div class="td td-message-view" style="width: 8%;">
-                                                                    <?php if(empty($message->reason)):?>
-                                                                        <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
-                                                                    <?php else:?>
-                                                                        <a href="/testingdetails/<?php echo $message->id;?>/reason" class="reason">
-                                                                            <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
-                                                                        </a>
-                                                                    <?php endif;?>
-                                                                </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
-                                                                    -
-                                                                </div>
-                                                                <div class="td td-service td-two-lines tocenter" style="width: 9%;">
-                                                                    <?php if ($scanImages = json_decode($message->scan_results)): ?>
-                                                                        <?php foreach ($scanImages as $scanImage): ?>
-                                                                            <a href="<?php echo $scanImage; ?>" target="_blank">View</a>
-                                                                        <?php endforeach; ?>
-                                                                    <?php else: ?>
-                                                                        -
-                                                                    <?php endif; ?>
-                                                                </div>
-                                                                <div class="clear"></div>
-                                                            </div>
-                                                        <?php } ?>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -472,9 +391,7 @@ get_header();
             jQuery('.trigger-message-link').click(function(){
                 jQuery('.change_status_data_type').val(jQuery(this).attr('data-outcome'));
                 jQuery('.change_to_status').text(jQuery(this).attr('data-outcome'));
-            });
-
-            jQuery('.trigger-message-link').cplightbox({
+            }).cplightbox({
                 type: 'inline',
                 href: '#change_status_box',
                 onStart: function(){
@@ -494,7 +411,7 @@ get_header();
                 var ids = new Array();
                 jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
-                })
+                });
 
                 jQuery('#change_status_box .loading').show();
 
@@ -511,7 +428,7 @@ get_header();
                         document.location.reload();
 
                     }
-                })
+                });
                 return false;
             });
 
@@ -519,7 +436,7 @@ get_header();
                 var ids = new Array();
                 jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
-                })
+                });
 
                 jQuery('#delete-log-box .loading').show();
 
@@ -535,7 +452,7 @@ get_header();
                         document.location.reload();
 
                     }
-                })
+                });
                 return false;
             });
 
@@ -543,21 +460,45 @@ get_header();
                 jQuery(this).parent().parent().find('input, select').val('');
                 jQuery('#filterForm').submit();
                 return false;
-            })
+            });
 
             jQuery('.chk-all').click(function () {
                 jQuery('#log-result-table .tbody input[type="checkbox"]:not(:disabled):not(.change_audit_record)').prop('checked', this.checked);
-            })
+            });
+
             jQuery('#log-result-table .view-messages-link').click(function () {
-                jQuery(this).parents('.tr').find('.sub-table').animate({'height': 'toggle'});
-                jQuery(this).parents('.tr').find('.view-messages-link').toggleClass('expanded');
-                if (!jQuery(this).parents('.tr').find('.view-messages-link').hasClass('expanded')) {
-                    jQuery(this).parents('.tr').find('.view-messages-link .simple_tooltip').text('Show message details');
+                var id = jQuery(this).attr('data-id');
+                var entry = jQuery(this).closest('.tr').find('.sub-table');
+                var tr = jQuery(this).parents('.tr');
+
+                if (entry.attr('data-loaded') == 0) {
+                    jQuery('#page-loader').show();
+                    jQuery.ajax({
+                        url: '/testingdetails/' + id + '/logs',
+                        type: 'get',
+                        success: function (data) {
+                            entry.html(data);
+                            entry.attr('data-loaded', 1);
+                            handleRequest(tr);
+                        },
+                        complete: function () {
+                            jQuery('#page-loader').hide();
+                        }
+                    });
                 } else {
-                    jQuery(this).parents('.tr').find('.view-messages-link .simple_tooltip').text('Hide message details');
+                    handleRequest(tr);
+                }
+                function handleRequest(tr) {
+                    tr.find('.sub-table').toggle();
+                    tr.find('.view-messages-link').toggleClass('expanded');
+                    if (!tr.find('.view-messages-link').hasClass('expanded')) {
+                        tr.find('.view-messages-link .simple_tooltip').text('Show message details');
+                    } else {
+                        tr.find('.view-messages-link .simple_tooltip').text('Hide message details');
+                    }
                 }
                 return false;
-            })
+            });
 
             jQuery('#log-result-table .change_audit_record').on('change', function () {
                 var auditRecord = jQuery(this);
@@ -582,5 +523,4 @@ get_header();
 </div> <!--end content-->
 
 <script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js'; ?>" type="text/javascript"></script>
-
 <?php get_footer(); ?>
