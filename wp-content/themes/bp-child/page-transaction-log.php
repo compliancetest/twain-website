@@ -294,7 +294,13 @@ get_header();
                                                                 </div>
                                                                 <div class="td td-message-view" style="width: 7%;"><?php echo $message->updated_at;?></div>
                                                                 <div class="td td-message-view" style="width: 8%;">
-                                                                    <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
+                                                                    <?php if(empty($message->reason)):?>
+                                                                        <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
+                                                                    <?php else:?>
+                                                                        <a href="/testingdetails/<?php echo $message->id;?>/reason" class="reason">
+                                                                            <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>"><?php echo $message->step_outcome;?></span>
+                                                                        </a>
+                                                                    <?php endif;?>
                                                                 </div>
                                                                 <div class="td td-service td-two-lines tocenter" style="width: 9%;">
                                                                     -

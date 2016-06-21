@@ -59,6 +59,11 @@ class TestingDetailsController extends Controller
         return redirect()->secure('my-transaction-log');
     }
 
+    /**
+     * Show testing output popup
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function output($id)
     {
         $entry = TransactionsLog::find($id);
@@ -69,5 +74,17 @@ class TestingDetailsController extends Controller
         ))['Body'];
         $link = $s3->getObjectUrl(config('env.bucket.transactions'), $entry['log_output'], '1 hour');
         return view('pages.testingdetails.output', compact('data', 'link'));
+    }
+
+    /**
+     * Show Fail / Skip reason popup
+     * @param $id
+     * @return $this
+     */
+    public function reason($id)
+    {
+        $entry = TransactionsLog::find($id);
+        $reason = $entry->reason;
+        return view('pages.testingdetails.reason', compact('reason'));
     }
 }

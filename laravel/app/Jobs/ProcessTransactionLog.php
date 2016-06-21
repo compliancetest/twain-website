@@ -168,6 +168,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transactionLog->status = @$log['ExecutionResult'];
                 $transactionLog->message_data = $log['Messages'];
                 $transactionLog->screen_captures = json_encode([]);
+                $transactionLog->reason = @$log['Reason'];
                 //process and save images
                 $scanResults = [];
                 /**
