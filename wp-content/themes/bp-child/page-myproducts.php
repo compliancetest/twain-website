@@ -88,14 +88,16 @@ get_header();
                            </div>
                            <?php
                        }else{
-                           foreach($claims as $claim){                                                  
+                           foreach($claims as $claim){
+                               $productName = $wpdb->get_var($wpdb->prepare("SELECT post_name FROM wp_posts WHERE ID = %d", $claim->product_id));
+                               $claimName = $productName . '_claim.pdf';
                            ?>
                            <div class="tr">
                                <div class="td td-claim-id"><div class="td-claim-id-value" title="<?php echo $claim->id ?>"><?php echo $claim->id ?></div></div>
                                <div class="td td-certificate">
-                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->id );?>', '', 'height=600'); return false">View</a>
+                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id, false ); ?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->id );?>', '', 'height=600'); return false">View</a>
                                     |
-                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id, true );?>">Download</a>
+                                    <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->id, true, $claimName );?>">Download</a>
                                </div>
                                <div class="td td-issuer"><?php echo $claim->issuer ?></div>
                                <div class="td td-suite"><a href="<?php echo get_permalink($claim->test_suite_id)?>"><?php echo get_the_title($claim->test_suite_id)?></a></div>

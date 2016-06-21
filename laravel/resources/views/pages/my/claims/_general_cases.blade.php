@@ -66,7 +66,13 @@
                 <td class="issued">{{ date('Y-m-d', strtotime(getPostMeta($testCase->ID, 'published'))) }}</td>
                 <td class="test-intent">{!! getPostMeta($testCase->ID, 'test_intent_description') !!}</td>
                 <td class="test-outcome">Pass</td>
-                <td class="supporting-evidence"><a href="{{ $testCase->link }}">Log file</a></td>
+                <td class="supporting-evidence">
+                    @if(empty($testCase->link))
+                        -
+                    @else
+                        <a href="{{ $testCase->link }}">Log file</a>
+                    @endif
+                </td>
             </tr>
         @endforeach
     @endforeach

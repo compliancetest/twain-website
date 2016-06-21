@@ -131,12 +131,12 @@ class S3Wrapper extends BaseAWS
      * @param $token - claim token from wp_compliance_claims table
      * @return array|bool|mixed|null
      */
-    public static function getProductClaimLink($token, $isDownloadLink = false)
+    public static function getProductClaimLink($token, $isDownloadLink = false, $filename = false)
     {
         if ($isDownloadLink) {
-            return self::getDownloadLink('claims/products', $token . '.pdf');
+            return self::getDownloadLink('claims/products', $token . '.pdf', $filename);
         }
-        return self::getLink('claims/products', $token . '.pdf');
+        return self::getLink('claims/products', $token . '.pdf', $filename);
     }
 
     /*
