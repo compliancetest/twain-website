@@ -391,9 +391,7 @@ get_header();
             jQuery('.trigger-message-link').click(function(){
                 jQuery('.change_status_data_type').val(jQuery(this).attr('data-outcome'));
                 jQuery('.change_to_status').text(jQuery(this).attr('data-outcome'));
-            });
-
-            jQuery('.trigger-message-link').cplightbox({
+            }).cplightbox({
                 type: 'inline',
                 href: '#change_status_box',
                 onStart: function(){
@@ -413,7 +411,7 @@ get_header();
                 var ids = new Array();
                 jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
-                })
+                });
 
                 jQuery('#change_status_box .loading').show();
 
@@ -430,7 +428,7 @@ get_header();
                         document.location.reload();
 
                     }
-                })
+                });
                 return false;
             });
 
@@ -438,7 +436,7 @@ get_header();
                 var ids = new Array();
                 jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
-                })
+                });
 
                 jQuery('#delete-log-box .loading').show();
 
@@ -454,7 +452,7 @@ get_header();
                         document.location.reload();
 
                     }
-                })
+                });
                 return false;
             });
 
@@ -462,11 +460,11 @@ get_header();
                 jQuery(this).parent().parent().find('input, select').val('');
                 jQuery('#filterForm').submit();
                 return false;
-            })
+            });
 
             jQuery('.chk-all').click(function () {
                 jQuery('#log-result-table .tbody input[type="checkbox"]:not(:disabled):not(.change_audit_record)').prop('checked', this.checked);
-            })
+            });
 
             jQuery('#log-result-table .view-messages-link').click(function () {
                 var id = jQuery(this).attr('data-id');
@@ -474,6 +472,7 @@ get_header();
                 var tr = jQuery(this).parents('.tr');
 
                 if (entry.attr('data-loaded') == 0) {
+                    jQuery('#page-loader').show();
                     jQuery.ajax({
                         url: '/testingdetails/' + id + '/logs',
                         type: 'get',
@@ -481,13 +480,16 @@ get_header();
                             entry.html(data);
                             entry.attr('data-loaded', 1);
                             handleRequest(tr);
+                        },
+                        complete: function () {
+                            jQuery('#page-loader').hide();
                         }
                     });
                 } else {
                     handleRequest(tr);
                 }
                 function handleRequest(tr) {
-                    tr.find('.sub-table').animate({'height': 'toggle'});
+                    tr.find('.sub-table').toggle();
                     tr.find('.view-messages-link').toggleClass('expanded');
                     if (!tr.find('.view-messages-link').hasClass('expanded')) {
                         tr.find('.view-messages-link .simple_tooltip').text('Show message details');
@@ -496,7 +498,7 @@ get_header();
                     }
                 }
                 return false;
-            })
+            });
 
             jQuery('#log-result-table .change_audit_record').on('change', function () {
                 var auditRecord = jQuery(this);
@@ -521,5 +523,4 @@ get_header();
 </div> <!--end content-->
 
 <script src="<?php echo '/wp-content/themes/bp-child/js/jquery-ui-timepicker-addon.js'; ?>" type="text/javascript"></script>
-
 <?php get_footer(); ?>
