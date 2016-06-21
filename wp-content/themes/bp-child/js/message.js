@@ -29,7 +29,7 @@ jQuery(document).ready(function(){
         }
     })
 
-     jQuery('.s3output').cplightbox({
+     jQuery('.s3output, .reason').cplightbox({
         type: 'ajax',
         closeWhenClickOveraly: false
     })

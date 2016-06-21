@@ -32,6 +32,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('testingdetails', 'TestingDetailsController',
         ['only' => ['store',  'index']]);
     Route::get('testingdetails/{transaction}/output', 'TestingDetailsController@output');
+    Route::get('testingdetails/{transaction}/reason', 'TestingDetailsController@reason');
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
 
