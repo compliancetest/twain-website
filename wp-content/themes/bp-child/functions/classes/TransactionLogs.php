@@ -26,7 +26,7 @@ class TransactionLogs
             $this->where[] = sprintf(' subscription_id = %d ', $filters['subscription_id']);
         }
         if ($filters['date']) {
-            $this->where[] = " updated_at LIKE '" . $filters['date'] . "%' ";
+            $this->where[] = " t.updated_at LIKE '" . date('Y-m-d', getUTCTimeStamp($filters['date'])) . "%' ";
         }
         if ($filters['outcome']) {
             $this->where[] = sprintf(" test_outcome_status_id = '%s' ", $filters['outcome']);
