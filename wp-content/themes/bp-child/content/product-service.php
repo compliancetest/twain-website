@@ -166,21 +166,21 @@
                     $used_product = $used_suite = 0;
                     $processed_claims = array();
                     foreach( $product_claims AS $product_claim ){
-                        $group = groups_get_group(array('group_id' => get_post_meta( $product_claim->suite_id, 'community_id', true)));
+                        $community = getCommunity(get_post_meta( $product_claim->test_suite_id, 'community_id', true));
                         array_push( $processed_claims, $product_claim->id );
                         $product_claim->conformance_level = trim( str_replace( ';;', ' ', $product_claim->conformance_level ) );
                         $product_claim->role = trim( str_replace( ';;', ' ', $product_claim->role ) );
                         ob_start();?>
                         <tr>
-                            <td><?php echo isset( $product_claim->claim_id ) ? $product_claim->claim_id : ''; ?></td>
-                            <td><a href="<?php echo bp_get_group_permalink($group); ?>"><?php echo $product_claim->issuer; ?></a></td>
-                            <td><a href="<?php echo get_permalink($product_claim->suite_id); ?>"><?php echo get_the_title( $product_claim->suite_id ); ?></a></td>
+                            <td><?php echo isset( $product_claim->id ) ? $product_claim->id : ''; ?></td>
+                            <td><a href="/communities/<?php echo $community->slug; ?>"><?php echo $product_claim->issuer; ?></a></td>
+                            <td><a href="<?php echo get_permalink($product_claim->test_suite_id); ?>"><?php echo get_the_title( $product_claim->test_suite_id ); ?></a></td>
                             <td class="centered"><?php echo $product_claim->conformance_level; ?></td>
                             <td class="centered"><?php echo $product_claim->role; ?></td>
                             <td class="centered"><span class="status-unverified">Verified</span></td>
                             <td class="centered"><?php echo isset( $product_claim->last_updated ) ? formatDate( $product_claim->last_updated ) : formatDate($product_claim->created_date); ?></td>
                             <td class="centered row-actions">
-                                <a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->token );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $product_claim->token );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->token, true );?>">Download</a>
+                                <a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->id );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $product_claim->id );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->id, true );?>">Download</a>
                             </td>
                         </tr>
                     <?php $testPlansHtml .= ob_get_clean();
