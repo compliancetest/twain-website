@@ -13,7 +13,8 @@ class CPPDF extends TCPDF {
         $this->Rect(0, 0, 210, 20, 'F', '', $fill_color = array(91, 117, 182));
 
         $drummond_group = K_PATH_IMAGES . "drummond-group.png";
-        $this->Image($drummond_group, 165, 3, 40, 0, 'PNG', '', 'N', false, $dpi = 300, '', false, false, 0, false, false, false, false);
+        $this->Image($drummond_group, 4, 4, 45, 0, 'PNG', home_url(), 'N', false, $dpi = 300, '', false, false, 0, false, false, false, false);
+
     }
 
 
