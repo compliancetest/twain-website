@@ -35,6 +35,7 @@ class ProductAndService
     var $product_features = [];
     var $product_type = '';
     var $manufacturer = '';
+    var $protocol_version = '';
 
     public $service_related_services = '';
 
@@ -88,6 +89,7 @@ class ProductAndService
         $this->product_suites = json_decode($this->loadSingleValue('product_suites'), 1);
         $this->product_features = json_decode($this->loadSingleValue('product_features'), 1);
         $this->product_type = $this->loadSingleValue('product_type');
+        $this->protocol_version = $this->loadSingleValue('protocol_version');
 
 
         $this->loadRelatedProducts();
