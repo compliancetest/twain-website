@@ -95,10 +95,6 @@ class Claim extends Model
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._description')->render(), 0, 1, 0, false, '', false);
 
-        // Print text using writeHTMLCell()
-        $compliance_tested_image = K_PATH_IMAGES . "compliance-tested.png";
-        $pdf->Image($compliance_tested_image, '', '', 120, '', 'PNG', '', 'N', false, 300, 'C', false, false, 1, false, false, false);
-
         // define active area for signature appearance
         $pdf->setSignatureAppearance(45, 72, 121, 29);
 
@@ -134,20 +130,24 @@ class Claim extends Model
         $excCases = $testPlan->getExcludedCases();
 
         //Classify the results by Scenario
-        $excludedCases = $generalCases = array();
+        $excludedCases = $skippedCases = $generalCases = array();
         foreach ($testSuite->getTestCases() as $case) {
             if (in_array($case->ID, $successCases)) {
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
-                $case->link = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->ID, 'test_suite_id' => $this->test_suite_id, 'audit_record' => true])->first()->s3_link;
+                $case->link = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->ID, 'audit_record' => true])->first()->s3_link;
                 $generalCases[$case->scenarioID][] = $case;
             } elseif (!in_array($case->ID, $optionalCases)) {
                 if (!isset($excludedCases[$case->scenarioID])) {
                     $excludedCases[$case->scenarioID] = array();
                 }
                 $case->reason = $excCases[$case->ID]['reason'];
-                $excludedCases[$case->scenarioID][] = $case;
+                if($excCases[$case->ID]['is_skipped'] == 1){
+                    $skippedCases[$case->scenarioID][] = $case;
+                } else {
+                    $excludedCases[$case->scenarioID][] = $case;
+                }
             }
 
         }
@@ -157,11 +157,18 @@ class Claim extends Model
         if (count($generalCases)) {
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._general_cases')->with(['generalCases' => $generalCases])->render(), 0, 1, 0, true, '', true);
         }
+        if (count($skippedCases)) {
+            if (count($skippedCases) > 0) {
+                $pdf->AddPage();
+            }
+            $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $skippedCases, 'message' => 'Skipped Test Cases'])->render(), 0, 1, 0, true, '', true);
+        }
+
         if (count($excludedCases)) {
             if (count($generalCases) > 0) {
                 $pdf->AddPage();
             }
-            $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['excludedCases' => $excludedCases])->render(), 0, 1, 0, true, '', true);
+            $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $excludedCases, 'message' => 'Excluded Test Cases'])->render(), 0, 1, 0, true, '', true);
         }
 
         // Return PDF file string

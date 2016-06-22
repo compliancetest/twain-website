@@ -54,13 +54,12 @@ function deleteClaim()
 {
     global $wpdb;
     
-    $productID = $_REQUEST['product_id'];
     $claimID = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-    
-    $user_id = get_current_user_id();
     
     $claim = new ComplianceClaim($claimID);
     $claim->load();
+
+    $testPlanId = $claim->test_plan_id;
 
     $redirectUrl = get_site_url() . '/' . base64_decode($_REQUEST['return']);
 
@@ -73,14 +72,15 @@ function deleteClaim()
         exit;
     }
     
-    if(!$wpdb->delete($wpdb->prefix . "compliance_claims", array('id' => $claimID)))
+    if(!$wpdb->delete('claims', array('id' => $claimID)))
     {
         addMessage($wpdb->last_error, 'error');
     }else{
-        \ClaimsConversations\ClaimsConversations::deleteByClaimId( $claimID );
+
+        $wpdb->update('test_plans', ['is_claimed' => 0], ['id' => $testPlanId]);
         //delete S3 files
         $s3 = new S3Wrapper();
-        $s3->deleteObject( '/claims/products/'. $claim->token . '.pdf' );
+        $s3->deleteObject( '/claims/products/'. $claimID . '.pdf' );
 
         $cloud_search = new CloudSearch();
         $cloud_search->cloud_search_delete_item( $claimID, 'claim' );
