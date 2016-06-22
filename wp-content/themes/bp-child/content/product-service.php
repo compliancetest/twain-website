@@ -67,6 +67,7 @@
                             <?php endif; ?>
                             <li>Visibility: <strong><?php echo $product->visibility; ?></strong></li>
                             <li>Product Type: <strong><?php echo $product->product_type; ?></strong></li>
+                            <li>Protocol Version: <strong><?php echo $product->protocol_version; ?></strong></li>
                         </ul>
                         <div class="product-description"><?php echo $product->descrition; ?></div>
                     <?php endif;?>

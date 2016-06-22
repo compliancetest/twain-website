@@ -208,6 +208,7 @@ class ProductsController extends BaseApiController
         $this->_setProductTypeFields($request, $jsonEntry);
 
         $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
+        $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor']]);
         $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
         $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
         $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);

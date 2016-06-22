@@ -108,7 +108,7 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell">
                                     <label>Version:</label>
 
-                                    <div class=" product-version-field">
+                                    <div class="product-version-field">
                                         <input type="text" class="input required" name="product_version" id="product_version" value="<?php echo $product->version ?>"
                                                readonly="readonly" disabled="disabled"/>
                                         <span style="width: 278px; margin-left: -139px; bottom: 52px; display: none;" class="simple_tooltip">Enter the version of your product or service. Want to test multiple versions? Create a product for each.<span></span></span>
@@ -149,11 +149,11 @@ if (isset($_SESSION['product_data'])) {
                                     <div class="space10"></div>
                                     <label>Manufacturer:</label>
 
-                                    <div class="has-field-tooltip">
-                                        <input type="text" style="width: 275px; margin-right: 10px; margin-top: 10px;" class="input field-tooltip" name="manufacturer"
-                                               id="manufacturer" value="<?php echo $product->manufacturer?>" readonly="readonly" disabled="disabled"
-                                               data-tooltip-content="Product manufacturer"/>
+                                    <div class="product-version-field">
+                                        <input type="text" class="input required" name="product_manufacturer" id="product_manufacturer" value="<?php echo $product->manufacturer ?>"
+                                               readonly="readonly" disabled="disabled"/>
                                     </div>
+                                    
                                     <div class="space10"></div>
                                     <label>Visibility:</label>
 
@@ -192,6 +192,14 @@ if (isset($_SESSION['product_data'])) {
                                             <option <?php if ($product->product_type == 'DataSource'): ?> selected="selected" <?php endif; ?> value="DataSource">DataSource</option>
                                             <option <?php if ($product->product_type == 'Application'): ?> selected="selected" <?php endif; ?> value="Application">Application</option>
                                         </select>
+                                    </div>
+
+                                    <div class="space10"></div>
+
+                                    <label>Protocol Version:</label>
+                                     <div class="product-version-field">
+                                        <input type="text" class="input required" name="protocol_version" id="protocol_version" value="<?php echo $product->protocol_version ?>"
+                                               readonly="readonly" disabled="disabled"/>
                                     </div>
                                 </div>
                                 <div class="grid-cell width60P div_type_ds">
