@@ -26,7 +26,9 @@ class ComplianceClaim
     var $issuer = '';
     
     var $token = '';
-    
+
+    var $test_plan_id = '';
+
     public function __construct($id = null)
     {
         if($id != null)
@@ -55,6 +57,7 @@ class ComplianceClaim
             $this->audit = $row->audit;
             $this->issuer = $row->issuer;
             $this->token = $row->token;
+            $this->test_plan_id = $row->test_plan_id;
         }
         
         return $row;

@@ -42,7 +42,7 @@
 
 <table cellspacing="1" cellpadding="3" class="test-cases-table" width="100%">
     <tr>
-        <th colspan="5">Excluded Test Cases</th>
+        <th colspan="5">{{ $message }}</th>
     </tr>
     <tr>
         <th class="test-scenario" style="width:25%; vertical-align:middle;">Test Scenario</th>
@@ -51,7 +51,7 @@
         <th class="test-intent" style="width:30%;">Test Intent Description</th>
         <th class="test-reason" style="width:25%;">Reason</th>
     </tr>
-    @foreach($excludedCases as $scenarioID => $testCases)
+    @foreach($cases as $scenarioID => $testCases)
         <?php $counter = 0;?>
         @foreach($testCases as $testCase)
             <tr class="{{ $counter++%2 == 0 ? 'odd' : 'even' }}">
