@@ -467,9 +467,11 @@ function saveSuite()
     }
     update_post_meta($id, 'featuresList', json_encode($features));
 
-    //Subscription Price
-//    cp_update_post_meta($id, 'monthly_subscription_price', $_POST['monthly_subscription_price']);
-//    cp_update_post_meta($id, 'signup_price', $_POST['signup_price']);
+    $protocolVersions = [];
+    if (!empty($_POST['protocol_versions'])) {
+        $protocolVersions = array_unique(array_map('trim', explode(',', $_POST['protocol_versions'])));
+    }
+    update_post_meta($id, 'protocol_versions', json_encode($protocolVersions));
 
     //Save Scenarios
     //Removed deleted scenarios

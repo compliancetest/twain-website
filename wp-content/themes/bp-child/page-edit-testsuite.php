@@ -902,6 +902,34 @@ $xeroItems = ct_get_xero_items();
                     </div>
                 </div>
             </div>
+            <div class="space20"></div>
+            <div class="grid-box grid-box-expandable grid-box-opened" id="excerpt-box">
+                <div class="grid-box-header">
+                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
+                    <h5 class="left">Protocol Versions</h5>
+
+                    <div class="clear"></div>
+                </div>
+                <div class="grid-box-body">
+                    <div class="column">
+                        <div class="field-row">
+                            <div class="grid-cell">
+                                <textarea cols="" rows="" name="protocol_versions"
+                                          class="textarea"><?php echo implode(',', $suite->protocol_versions) ?></textarea>
+                            </div>
+                            <div class="grid-cell width255">
+                                <label class="light-desc">
+                                    <i>List of supported protocol versions could be just a list of strings(separated by comma) with the following format:
+                                        ProtocolMajor.ProtocolMinor
+                                        For example: 2.3,2.3
+                                        Empty list of supported protocol versions is allowed and means that a test suite supports any version.</i>
+                                </label>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="grid-box">
                 <div class="grid-box-footer nobackground noshadow">
                     <div class="btn-row nopaddingright nopaddingleft">
