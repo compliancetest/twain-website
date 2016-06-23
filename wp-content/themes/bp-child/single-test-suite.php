@@ -59,8 +59,10 @@ Template Name Posts: Test Suite
                                 Published: <span><?php echo formatDate($suite->issueDate); ?></span>
 								Issuer: <a href="/test-suites/?issuer=<?php echo $suite->issuer; ?>"><span class="blue_txt"><?php echo $suite->issuer; ?></span></a>
 								Status: <span class="status_btn status_<?php echo sanitize_title($suite->status)?>"><?php echo $suite->status?></span>
-								Revision: <span><?php echo $suite->revisionDescription; ?></span> 								
-								Protocol Versions: <span><?php echo implode(', ', $suite->protocol_versions); ?></span>
+								Revision: <span><?php echo $suite->revisionDescription; ?></span>
+                                <?php if(!empty($suite->protocol_versions)):?>
+								    Protocol Versions: <span><?php echo implode(', ', $suite->protocol_versions); ?></span>
+                                <?php endif;?>
 							</div>
 							<div class="clear"></div>
 						</div>
