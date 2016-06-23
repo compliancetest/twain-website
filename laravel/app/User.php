@@ -151,7 +151,7 @@ class User extends Authenticatable
         return $response;
     }
 
-    public function getProducts($productType = 'DataSource')
+    public function getProducts($productType = 'DataSource', $protocolVersions = false)
     {
         $productType = str_replace(' ', '', $productType);
         $results = [];
@@ -181,6 +181,11 @@ class User extends Authenticatable
                 ->groupBy('wp_posts.ID')->get();
         }
         foreach ($products as $product) {
+            if($protocolVersions){
+                if (!in_array(PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'protocol_version'])->first()->meta_value, $protocolVersions)) {
+                    continue;
+                }
+            }
             if (str_replace(' ', '', PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value) == $productType) {
                 $results[] = $product;
             }

@@ -45,10 +45,11 @@ get_header();
     <div class="container"> <!--Temporary -->
         <div class="column">
 
+            <?php if (empty($allProducts['application']) && empty($allProducts['dataSource'])): ?>
+                <p class="empty-row">No products added yet</p>
+            <?php endif; ?>
+
             <?php foreach($allProducts as $productType => $products):?>
-                <?php if(empty($products)): ?>
-                    <p class="empty-row">No products added yet</p>
-                <?php endif; ?>
 
                <?php foreach($products as $product){ ?>
                    <div class="grid-box grid-box-expandable table-box grid-box-opened">
