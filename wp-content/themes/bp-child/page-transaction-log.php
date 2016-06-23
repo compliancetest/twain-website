@@ -179,7 +179,7 @@ get_header();
                                             </a>
                                         <?php endif;?>
                                         <?php if($row->product_id):?>
-                                            <a href="<?php echo get_permalink($row->product_id) ?>"><?php echo get_post_meta($row->product_id, 'product_name', true) ?></a>
+                                            <a href="<?php echo get_permalink($row->product_id) ?>"><?php echo get_post_meta($row->product_id, 'product_name', true) .' v'.get_post_meta($row->product_id, 'product_version', true) ?></a>
                                         <?php else:?>
                                             Not Assigned
                                         <?php endif;?>
