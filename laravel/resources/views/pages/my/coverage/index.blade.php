@@ -46,7 +46,10 @@
                                     @if($userSuite['testPlans'])
                                         @foreach($userSuite['testPlans'] as $userPlan)
                                             <tr id="coverage-plan-{{ $userPlan['testPlan']->id }}">
-                                                <td class="text-nowrap">{{ $userPlan['product']->post_title . ' v' . $userPlan['product']->getMetaByKey('product_version') }}</td>
+                                                <td class="text-nowrap">
+                                                    {{ $userPlan['product']->post_title }}
+                                                    @if($userPlan['product']) {{ ' v' . $userPlan['product']->getMetaByKey('product_version') }}@endif
+                                                </td>
                                                 <td class="text-center">{{ $userPlan['testPlan']->level }}</td>
                                                 <td>{{ $userPlan['testPlan']->role }}</td>
                                                 <td>
