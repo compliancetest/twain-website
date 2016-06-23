@@ -43,8 +43,9 @@ class TestPlansController extends Controller
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
         $suiteType = PostMeta::where(['post_id' => $suiteId, 'meta_key' => 'ts_tester_role'])->first();
+        $suiteProtocolVersions = PostMeta::where(['post_id' => $suiteId, 'meta_key' => 'protocol_versions'])->first();
         $data = [
-            'products' => Auth::user()->getProducts($suiteType->meta_value),
+            'products' => Auth::user()->getProducts($suiteType->meta_value, json_decode($suiteProtocolVersions->meta_value, true)),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'suiteId' => $suiteId,
@@ -100,9 +101,10 @@ class TestPlansController extends Controller
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
         $suiteType = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'ts_tester_role'])->first()->meta_value;
+        $suiteProtocolVersions = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'protocol_versions'])->first();
 
         $data = [
-            'products' => Auth::user()->getProducts($suiteType),
+            'products' => Auth::user()->getProducts($suiteType, json_decode($suiteProtocolVersions->meta_value, true)),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'testPlan' => $testPlan,

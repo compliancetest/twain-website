@@ -207,8 +207,9 @@ class ProductsController extends BaseApiController
         $this->_setProductVisibility($request, $entity);
         $this->_setProductTypeFields($request, $jsonEntry);
 
+        $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
         $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
-        $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor']]);
+        $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $protocolVersion]);
         $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
         $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
         $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
@@ -229,6 +230,14 @@ class ProductsController extends BaseApiController
             $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
             $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
+            /**
+             * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
+             */
+            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+
+            if (empty($testSuiteSupportedProtocols) || !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+                continue;
+            }
             foreach (explode(',', $attributes->value) as $level) {
                 $testPlan = TestPlan::create([
                     'organisation_subscription_id' => $organisationSubscription->id,
