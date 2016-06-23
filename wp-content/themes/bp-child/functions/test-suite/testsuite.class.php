@@ -69,6 +69,8 @@ class TestSuite
 
     var $featuresList = array();
 
+    var $protocol_versions = array();
+
 //    var $signupPrice = 0;
 //
 //    var $signupPriceValue = 0;
@@ -165,6 +167,7 @@ class TestSuite
         $this->excerpt = $p->post_excerpt;
 
         $this->featuresList = json_decode($this->loadSingleValue('featuresList'), 1);
+        $this->protocol_versions = json_decode($this->loadSingleValue('protocol_versions'), 1);
         $this->ts_tester_role = $this->loadSingleValue('ts_tester_role');
 
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
