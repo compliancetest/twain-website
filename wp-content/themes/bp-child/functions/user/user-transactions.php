@@ -316,7 +316,7 @@ function getUserTestSuites($user_id = null)
 }
 
 
-function getUserProductsAndServices($user_id = null, $exclusive = array())
+function getUserProductsAndServices($user_id = null, $exclusive = array(), $productType = false)
 {
     if($user_id == null)
         $user_id = get_current_user_id();
@@ -340,6 +340,13 @@ function getUserProductsAndServices($user_id = null, $exclusive = array())
                                 'compare' => "=",
                             )
         );
+        if($productType){
+            $args['meta_query'][] = array(
+                                'key' => 'product_type',
+                                'value' => $productType,
+                                'compare' => "=",
+                            );
+        }
     } 
     
     
