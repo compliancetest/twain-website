@@ -270,7 +270,7 @@ class TestCasesController extends BaseApiController
                 'title' => $product->post_title,
             ],
             'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
-            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : false,
+            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
@@ -417,7 +417,7 @@ class TestCasesController extends BaseApiController
                 'title' => $product->post_title,
             ],
             'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
-            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : false,
+            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
