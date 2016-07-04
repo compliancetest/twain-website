@@ -72,6 +72,13 @@ class TestPlansController extends Controller
             return JsonResponse::create(['message' => 'You already have test plan for this test suite'], 422);
         }
 
+        if ($request->get('role') == 'Application') {
+            $configuredTestSuites = json_decode(Post::find($request->get('product_id'))->getMetaByKey('product_suites'));
+            if (!in_array($request->get('suite_id'), $configuredTestSuites)) {
+                return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool'], 422);
+            }
+        }
+
         $testPlan = TestPlan::create($request->all());
         $testPlan->creator_id = Auth::user()->ID;
 
@@ -159,9 +166,17 @@ class TestPlansController extends Controller
         if (OrganisationSubscription::find($testPlan->organisation_subscription_id)->organisation_id ==
             OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $testPlan->suite_id])->first()->organisation_id
         ) {
+
+            if ($testPlan->role == 'Application') {
+                $configuredTestSuites = json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_suites'));
+                if (!in_array($testPlan->suite_id, $configuredTestSuites)) {
+                    return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool'], 422);
+                }
+            }
+
             $testPlan = $testPlan->fill($request->all());
             $testPlan->save();
-             return JsonResponse::create(['status' => 'success']);
+            return JsonResponse::create(['status' => 'success']);
         }
         return JsonResponse::create(['status' => 'Forbidden!'], 403);
     }
