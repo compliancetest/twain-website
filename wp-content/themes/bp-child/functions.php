@@ -4,6 +4,8 @@ if (stripos(get_option('siteurl'), 'https://') === 0) {
     $_SERVER['HTTPS'] = 'on';
 }
 
+add_filter( 'show_admin_bar', '__return_false', 99 );
+
 define('DEFAULT_AVATAR', '/wp-content/themes/bp-child/images/default-group-avatar.png');
 //Session Start
 if(!session_id())
@@ -380,19 +382,24 @@ function add_header_scripts()
     if(is_page('my-transaction-log'))
         wp_enqueue_script('message-trigger', get_stylesheet_directory_uri().'/js/message.js', $actions_depends, '1.0', true);
 
-    if(bp_is_groups_component()){
-        wp_enqueue_script('groups-download', get_stylesheet_directory_uri().'/groups/js/groups-downloads.js', $actions_depends, '1.0', true);
-    }
-    if(bp_is_item_admin()){
-        wp_enqueue_script('groups-admin', get_stylesheet_directory_uri().'/groups/js/groups-admin.js', $actions_depends, '1.0', true);
-    }
+//    if(bp_is_groups_component()){
+//        wp_enqueue_script('groups-download', get_stylesheet_directory_uri().'/groups/js/groups-downloads.js', $actions_depends, '1.0', true);
+//    }
+//    if(bp_is_item_admin()){
+//        wp_enqueue_script('groups-admin', get_stylesheet_directory_uri().'/groups/js/groups-admin.js', $actions_depends, '1.0', true);
+//    }
+//
+//    //Add Buddypress Docs StyleSheet
+//    if(!bp_docs_is_docs_component() && bp_is_group())
+//    {
+//        wp_enqueue_style( 'bp-docs-css', plugins_url() . '/' . BP_DOCS_PLUGIN_SLUG . '/includes/' . 'css/screen.css' );
+//    }
 
-    //Add Buddypress Docs StyleSheet
-    if(!bp_docs_is_docs_component() && bp_is_group())
-    {
-        wp_enqueue_style( 'bp-docs-css', plugins_url() . '/' . BP_DOCS_PLUGIN_SLUG . '/includes/' . 'css/screen.css' );
-    }
+    remove_action( 'wp_footer', 'bp_core_admin_bar', 8 );
 
+    remove_action( 'admin_footer', 'bp_core_admin_bar' );
+
+    remove_action( 'wp_head', 'bp_core_admin_bar_css', 1 );
 
     //Test Data
     wp_enqueue_script( 'iframe-trasport', get_stylesheet_directory_uri() . '/functions/test-data/jquery.iframe-transport.js', $actions_depends, '1.0', true );
