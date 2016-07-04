@@ -20,6 +20,8 @@ Route::group(array('prefix' => 'api/v1'), function () {
 
     Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => ['simpleauth', 'organisation.member']]);
     Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@listFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'post.product.exist']]);
+    Route::post('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@saveFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'post.product.exist']]);
 
     //test plans
     Route::get('testplans', ['uses' => '\App\Api\Controllers\TestPlansController@index', 'middleware' => ['simpleauth', 'organisation.member']]);

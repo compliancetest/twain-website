@@ -81,6 +81,181 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/v1/products/{productId}/features",
+    "title": "Set product features",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "features",
+            "description": "<p>Mandatory - features json.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Features JSON example",
+          "content": "\n[{\n    \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n    \"features\": [\"UI image transfer\"]\n}]",
+          "type": "json"
+        }
+      ]
+    },
+    "name": "Set_Features_List",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Product created",
+          "content": "{\n   \"data\": [\n     {\n       \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n       \"title\": \"TWAIN v2.3 Compliance - Applications v1.0\",\n       \"status\": true,\n       \"features\": [\n         {\n           \"title\": \"UI image transfer\",\n           \"description\": \"UI image transfer\",\n           \"status\": true\n         },\n         {\n           \"title\": \"Non-UI image transfer\",\n           \"description\": \"Non-UI image transfer\",\n           \"status\": false\n         }\n       ]\n     }\n   ],\n   \"code\": 200\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Invalid product ID</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error",
+          "content": "{\n  \"errors\": {\n    \"features\": [\n      \"The features field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Empty test suites list",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Please assign at least 1 test suite\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Empty test suite's features list",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Please define at least one feature for each test suite\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product ID",
+          "content": "{\n   \"errors\": {\n     \"message\": \"Product id is invalid\"\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product type",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product has incorrect type\"\n      ]\n    },\n    \"code\": 403\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "get",
+    "url": "/v1/products/{productId}/features",
+    "title": "Features list",
+    "name": "Supported_features",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Product's features list",
+          "content": "\n{\n   \"data\": [\n     {\n       \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n       \"title\": \"TWAIN v2.3 Compliance - Applications v1.0\",\n       \"status\": true,\n       \"features\": [\n         {\n           \"title\": \"UI image transfer\",\n           \"description\": \"UI image transfer\",\n           \"status\": true\n         },\n         {\n           \"title\": \"Non-UI image transfer\",\n           \"description\": \"Non-UI image transfer\",\n           \"status\": false\n         }\n       ]\n     }\n   ],\n   \"code\": 200\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Invalid product ID</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid product ID",
+          "content": "{\n   \"errors\": {\n     \"message\": \"Product id is invalid\"\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Not organisation member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product type",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product has incorrect type\"\n      ]\n    },\n    \"code\": 403\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "post",
     "url": "/v1/products",
     "title": "Create product",
     "parameter": {
