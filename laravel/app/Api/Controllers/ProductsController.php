@@ -262,6 +262,268 @@ class ProductsController extends BaseApiController
     }
 
     /**
+    * @api {get} /v1/products/{productId}/features Features list
+    *
+    * @apiName Supported features
+    * @apiGroup Products
+    *
+    * @apiSuccessExample {json} Product's features list
+    *
+    *   {
+    *      "data": [
+    *        {
+    *          "id": "twain-v2-3-compliance-applications-v1-0",
+    *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
+    *          "status": true,
+    *          "features": [
+    *            {
+    *              "title": "UI image transfer",
+    *              "description": "UI image transfer",
+    *              "status": true
+    *            },
+    *            {
+    *              "title": "Non-UI image transfer",
+    *              "description": "Non-UI image transfer",
+    *              "status": false
+    *            }
+    *          ]
+    *        }
+    *      ],
+    *      "code": 200
+    *    }
+    *
+    *
+    * @apiError 404 Invalid product ID
+    * @apiErrorExample {json} Invalid product ID
+    *   {
+    *      "errors": {
+    *        "message": "Product id is invalid"
+    *      },
+    *      "code": 404
+    *    }
+    *
+    * @apiError 403 Forbidden
+    * @apiErrorExample {json} Not organisation member
+    *   {
+    *     "errors": {
+    *       "message": [
+    *         "Only organisation member can perform testing"
+    *       ]
+    *     },
+    *     "code": 403
+    *   }
+    *
+    *
+    * @apiError 403 Forbidden
+    * @apiErrorExample {json} Invalid product type
+    *  {
+    *      "errors": {
+    *        "message": [
+    *          "This product has incorrect type"
+    *        ]
+    *      },
+    *      "code": 403
+    *    }
+    *
+    * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+    *
+    * @apiVersion 1.0.0
+    */
+
+    public function listFeatures($productId)
+    {
+        $product = Post::where(['post_name' => $productId])->first();
+
+        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
+
+        if ($type !== 'Application') {
+            return $this->respondForbiddenError('This product has incorrect type');
+        }
+
+        $productSuites = json_decode($product->getMetaByKey('product_suites'), true);
+        $productFeatures = json_decode($product->getMetaByKey('product_features'), true);
+        $result = [];
+        foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+            $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+
+            if (!$productType || $productType->meta_value !== 'Application') {
+                continue;
+            }
+
+            $suiteData = [
+                'id' => $suite->post_name,
+                'title' => $suite->name,
+                'status' => in_array($suite->suite_id, $productSuites) ? true : false,
+                'features' => [],
+            ];
+
+            $suiteFeatures = json_decode($productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'featuresList'])->first()->meta_value, true);
+
+            foreach ($suiteFeatures as $suiteFeature) {
+                $suiteData['features'][] = [
+                    'title' => $suiteFeature['name'],
+                    'description' => $suiteFeature['description'],
+                    'status' => in_array($suiteFeature['name'], $productFeatures) ? true : false,
+                ];
+            }
+            $result[] = $suiteData;
+        }
+
+        return $this->respondWithData($result);
+    }
+
+    /**
+     * @api {post} /v1/products/{productId}/features Set product features
+     *
+     * @apiParam {JSON} features  Mandatory - features json.
+     *
+     * @apiParamExample {json} Features JSON example
+     *
+     *   [{
+     *       "id": "twain-v2-3-compliance-applications-v1-0",
+     *       "features": ["UI image transfer"]
+     *   }]
+     *
+     * @apiName Set Features List
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Product created
+     *   {
+     *      "data": [
+     *        {
+     *          "id": "twain-v2-3-compliance-applications-v1-0",
+     *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
+     *          "status": true,
+     *          "features": [
+     *            {
+     *              "title": "UI image transfer",
+     *              "description": "UI image transfer",
+     *              "status": true
+     *            },
+     *            {
+     *              "title": "Non-UI image transfer",
+     *              "description": "Non-UI image transfer",
+     *              "status": false
+     *            }
+     *          ]
+     *        }
+     *      ],
+     *      "code": 200
+     *    }
+     *
+     *
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error
+     *   {
+     *     "errors": {
+     *       "features": [
+     *         "The features field is required."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organisation member
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organisation member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Empty test suites list
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Please assign at least 1 test suite"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Empty test suite's features list
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Please define at least one feature for each test suite"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 404 Invalid product ID
+     * @apiErrorExample {json} Invalid product ID
+     *   {
+     *      "errors": {
+     *        "message": "Product id is invalid"
+     *      },
+     *      "code": 404
+     *    }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Invalid product type
+     *  {
+     *      "errors": {
+     *        "message": [
+     *          "This product has incorrect type"
+     *        ]
+     *      },
+     *      "code": 403
+     *    }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     * @apiVersion 1.0.0
+     */
+
+    public function saveFeatures($productId, Request $request)
+    {
+        $product = Post::where(['post_name' => $productId])->first();
+        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
+
+        if ($type !== 'Application') {
+            return $this->respondForbiddenError('This product has incorrect type');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'features' => 'required|json',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $features = json_decode($request->get('features'), true);
+
+        $productTestSuites = $productFeatures = [];
+
+        //each product should be configured to use at least one test suite
+        if (empty($features)) {
+            return $this->respondForbiddenError('Please assign at least 1 test suite');
+        }
+
+        foreach ($features as $testSuite) {
+            $productTestSuites[] = Post::where(['post_name' => $testSuite['id']])->first()->ID;
+
+            //test suite's features list shouldn't be empty
+            if (empty($testSuite['features'])) {
+                return $this->respondForbiddenError('Please define at least one feature for each test suite');
+            }
+            $productFeatures = array_merge($productFeatures, $testSuite['features']);
+        }
+
+        $product->meta()->updateOrCreate(['meta_key' => 'product_features'], ['meta_value' => json_encode($productFeatures)]);
+        $product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productTestSuites)]);
+
+        return $this->listFeatures($productId);
+    }
+
+    /**
      * Generate uri for string
      * @param $str
      * @return mixed

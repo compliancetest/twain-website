@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
         'community.user' => \App\Http\Middleware\CommunityUser::class,
 
         'simpleauth' => \App\Http\Middleware\SimpleAuth::class,
-        'organisation.member' => \App\Http\Middleware\OrganisationMember::class
+        'organisation.member' => \App\Http\Middleware\OrganisationMember::class,
+        'post.product.exist' => \App\Http\Middleware\PostExists::class,
     ];
 }
