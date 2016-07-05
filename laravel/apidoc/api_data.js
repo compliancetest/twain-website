@@ -190,7 +190,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/v1/products/{productId}/features",
-    "title": "Features list",
+    "title": "Get product features",
     "name": "Supported_features",
     "group": "Products",
     "success": {

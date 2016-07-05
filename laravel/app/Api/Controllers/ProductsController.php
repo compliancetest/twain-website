@@ -14,6 +14,7 @@ use App\TestPlanExcludedCases;
 use Aws\Laravel\AwsFacade as AWS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel;
@@ -262,7 +263,7 @@ class ProductsController extends BaseApiController
     }
 
     /**
-    * @api {get} /v1/products/{productId}/features Features list
+    * @api {get} /v1/products/{productId}/features Get product features
     *
     * @apiName Supported features
     * @apiGroup Products
@@ -519,6 +520,43 @@ class ProductsController extends BaseApiController
 
         $product->meta()->updateOrCreate(['meta_key' => 'product_features'], ['meta_value' => json_encode($productFeatures)]);
         $product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productTestSuites)]);
+
+        //delete old and create new test plans
+        TestPlan::where(['product_id' => $product->ID, 'role' => 'Application'])->delete();
+
+        //generate new test plans
+        $protocolVersion = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'protocol_version'])->first()->meta_value;
+
+        $user = Auth::user();
+        foreach ($user->getUserTestPlans() as $suiteName => $suite) {
+            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            if ($type != 'Application') {
+                continue;
+            }
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
+            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+
+            /**
+             * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
+             */
+            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+
+            if (empty($testSuiteSupportedProtocols) || !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+                continue;
+            }
+            foreach (explode(',', $attributes->value) as $level) {
+                $testPlan = TestPlan::create([
+                    'organisation_subscription_id' => $organisationSubscription->id,
+                    'product_id' => $product->ID,
+                    'suite_id' => $suite['testSuite']->ID,
+                    'creator_id' => $user->ID,
+                    'level' => $level,
+                    'role' => 'Application',
+                ]);
+                $testPlan->excludeTestCases('Application', $productFeatures);
+            }
+        }
 
         return $this->listFeatures($productId);
     }
