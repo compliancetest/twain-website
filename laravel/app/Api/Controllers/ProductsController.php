@@ -340,8 +340,8 @@ class ProductsController extends BaseApiController
             return $this->respondForbiddenError('This product has incorrect type');
         }
 
-        $productSuites = json_decode($product->getMetaByKey('product_suites'), true);
-        $productFeatures = json_decode($product->getMetaByKey('product_features'), true);
+        $productSuites = (array) json_decode($product->getMetaByKey('product_suites'), true);
+        $productFeatures = (array) json_decode($product->getMetaByKey('product_features'), true);
         $result = [];
         foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
             $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
