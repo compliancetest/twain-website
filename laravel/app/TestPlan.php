@@ -126,23 +126,38 @@ class TestPlan extends Model
     }
 
     /**
-     * Exclude cases with unsupported capabilities
+     * Exclude cases with unsupported capabilities / features
      */
-    public function excludeTestCases()
+    public function excludeTestCases($type = 'DataSource', $applicationProductFeatures = [])
     {
         $testSuite = Post::find($this->suite_id);
         $testCases = $testSuite->getTestCases($this->level, str_replace(' ', '', $this->role));
         foreach ($testCases as $testCase) {
-            $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
-            $diff = array_diff($capabilities, (array) json_decode(@PostMeta::where(['post_id' => $this->product_id, 'meta_key' => 'capabilities'])->first()->meta_value));
-            if (!empty($diff)) {
-                TestPlanExcludedCases::create([
-                    'test_case_id' => $testCase->ID,
-                    'excluded_by_user_id' => \Auth::user()->ID,
-                    'test_plan_id' => $this->id,
-                    'reason' => 'Those capabilities not supported by data source: ' . implode(', ', $diff),
-                    'is_skipped' => true
-                ]);
+
+            if ($type == 'DataSource') {
+                $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
+                $diff = array_diff($capabilities, (array)json_decode(@PostMeta::where(['post_id' => $this->product_id, 'meta_key' => 'capabilities'])->first()->meta_value));
+                if (!empty($diff)) {
+                    TestPlanExcludedCases::create([
+                        'test_case_id' => $testCase->ID,
+                        'excluded_by_user_id' => \Auth::user()->ID,
+                        'test_plan_id' => $this->id,
+                        'reason' => 'Those capabilities not supported by data source: ' . implode(', ', $diff),
+                        'is_skipped' => true
+                    ]);
+                }
+            } else {
+                $testCaseFeatures = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'featuresList'])->first()->meta_value, true);
+                $diff = array_diff($testCaseFeatures, $applicationProductFeatures);
+                if (!empty($diff)) {
+                    TestPlanExcludedCases::create([
+                        'test_case_id' => $testCase->ID,
+                        'excluded_by_user_id' => \Auth::user()->ID,
+                        'test_plan_id' => $this->id,
+                        'reason' => 'Those features not supported by application: ' . implode(', ', $diff),
+                        'is_skipped' => true
+                    ]);
+                }
             }
         }
     }
