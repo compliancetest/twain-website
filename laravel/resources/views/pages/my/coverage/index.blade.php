@@ -99,7 +99,7 @@
                         });
 
                         //Remove test coverage plan modal
-                        $('.deleteTestCoveragePlan').click(function (e) {
+                        $('body').on('click', '.deleteTestCoveragePlan', function(e){
                             var self = $(this);
                             e.preventDefault();
 
