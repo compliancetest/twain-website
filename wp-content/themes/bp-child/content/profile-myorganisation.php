@@ -9,13 +9,11 @@ $org_membership = ct_get_user_organisation_membership($current_user->ID);
 
 if (!$org_membership) {
     $user_org = get_user_meta($current_user->ID, 'user_organisation', true);    
-    $user_org_abn = get_user_meta($current_user->ID, 'user_organisation_abn', true);            
     $user_org_web = get_user_meta($current_user->ID, 'user_organisation_web', true);
     $user_org_desc = get_user_meta($current_user->ID, 'user_organisation_desc', true);
 } else {
     $org_detail = new CT_Organisation($org_membership->organisation_id);
     $user_org = $org_detail->organisation_name;
-    $user_org_abn = $org_detail->abn;
     $user_org_web = $org_detail->organisation_website;
     $user_org_desc = $org_detail->organisation_description;
 }
@@ -65,11 +63,6 @@ if (!$org_membership) {
                         <input type="text" name="user_organisation_desc" value="" class="grid-cell in_input width70P">
                         <div class="clear"></div>
                     </div>
-                    <div class="grid-row">
-                        <div class="grid-cell width30P"><label>ABN</label></div>
-                        <input type="text" name="user_organisation_abn" value="" class="grid-cell in_input width70P">
-                        <div class="clear"></div>
-                    </div>
                     <div class="grid-row btn-row">
                         <a href="#" class="action-btn process-btn do_not_process"><span class="p"></span><span class="t">Confirm</span></a>
                         <a href="#" class="action-btn cancel-btn left10 create_organisation"><span class="p"></span><span class="t">Cancel</span></a>
@@ -108,11 +101,6 @@ if (!$org_membership) {
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Description</label></div>
                     <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>"  class="grid-cell width70P in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
-                    <div class="clear"></div>
-                </div>
-                <div class="grid-row">
-                    <div class="grid-cell width30P"><label>ABN</label></div>
-                    <div data-name="user_organisation_abn" data-value="<?php echo $user_org_abn;?>" class="grid-cell in_input"><?php echo !$user_org_abn ? '-' : $user_org_abn;?></div>
                     <div class="clear"></div>
                 </div>
             <?php endif;?>

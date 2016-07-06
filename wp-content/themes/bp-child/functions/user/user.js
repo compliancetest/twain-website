@@ -631,6 +631,10 @@
 
             var form = $(this).parents('form');
             form.find('.errors_msg').hide();
+            if(form.find('input[name="organisation_name"]').val().trim().length == 0){
+                showGridBoxResultMessage(form, 'Name field is required', 'error');
+                return false;
+            }
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
             $.ajax({

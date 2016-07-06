@@ -12,7 +12,6 @@
 
                 <li class="communities-tab"><a data-tooltip="tooltip" href="/my-communities/" title="My community memberships">Communities</a></li>
                 <li class="test-suites-tab"><a href="/my-test-suites/" data-tooltip="tooltip" title="My test suite subscriptions">Test Suites</a></li>
-                <li class="test-data-tab"><a href="/my-test-data/" data-tooltip="tooltip" title="My profile data">Test Data</a></li>
                 <li class="products-tab"><a href="/my-products/" data-tooltip="tooltip" title="My products under test">Products</a></li>
                 <li class="coverage-tab"><a href="/test-suite-coverage/" class="active" data-tooltip="tooltip" title="Completeness of my testing">Coverage</a></li>
                 <li class="transactions-tab"><a href="/my-transaction-log/" data-tooltip="tooltip" title="My test transactions">Transactions</a></li>

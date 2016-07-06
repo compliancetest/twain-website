@@ -3,11 +3,16 @@
  * Template Name: My Test Data
  */
 
+//we dont need this page for now, so show 404 when user trying access it by direct link
+global $wp_query;
+$wp_query->is_404 = true;
+$wp_query->is_single = false;
+$wp_query->is_page = false;
 
-if (!is_user_logged_in()) {
-    wp_redirect(home_url());
-    exit;
-}
+include( get_query_template( '404' ) );
+exit();
+wp_redirect(home_url());exit;
+
 get_header();
 $profileInstances = getCustomerProfileInstances(null, true);
 $subscriptions =  getUserSubscriptions(null, true);
