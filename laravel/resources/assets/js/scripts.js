@@ -632,7 +632,10 @@ var Page = {
                             success: function(rsp){
                                 form.find('.block-loading').hide();
                                 form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                                location.reload();
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $('.modal').modal('hide');
+                                $('#testCoveragePlanList').html(rsp.html);
                             },
                             complete: function(){
                             }
@@ -681,7 +684,10 @@ var Page = {
                         success: function(rsp){
                             form.find('.block-loading').hide();
                             form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                            location.reload();
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
+                            $('.modal').modal('hide');
+                            $('#testCoveragePlanList').html(rsp.html);
                         },
                         complete: function(){
                         }
