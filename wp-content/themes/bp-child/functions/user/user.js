@@ -618,6 +618,13 @@
             return false;
         });
 
+        //catch enter press for join organisation by key
+        $('.user_organisation_key').keypress(function(e) {
+            if(e.which == 13) {
+                e.preventDefault();
+                $('.join_organisation_submit').click();
+            }
+        });
 
         //save my details updates
         $('#organisation-container').on('click', '.process-btn', function(){
