@@ -120,6 +120,6 @@ class Post extends Model
             ->orderBy('scenario.sequence')
             ->orderBy('wp_posts.post_title');
         $query->get();
-        return $query->with('meta')->get();
+        return $query->get();
     }
 }
