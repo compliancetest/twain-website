@@ -75,9 +75,9 @@ class TransactionLogs
             $where = ' subscription_id IN (0) ';
         }
         return [
-            'product' => $wpdb->get_results("SELECT product_id FROM transactions AS t WHERE $where GROUP BY product_id"),
+            'product' => $wpdb->get_results("SELECT product_id, p.post_title AS name FROM transactions AS t LEFT JOIN wp_posts AS p ON p.ID = t.product_id WHERE $where GROUP BY product_id ORDER BY name"),
             'test_case_id' => $wpdb->get_results("SELECT test_case_id, p.post_title FROM transactions AS t JOIN wp_posts AS p ON t.test_case_id = p.ID WHERE $where GROUP BY test_case_id ORDER BY post_title"),
-            'test_suite_id' => $wpdb->get_results("SELECT test_suite_id FROM transactions AS t WHERE $where GROUP BY test_suite_id"),
+            'test_suite_id' => $wpdb->get_results("SELECT test_suite_id, p.post_title AS name FROM transactions AS t LEFT JOIN wp_posts AS p ON p.ID = t.test_suite_id WHERE $where GROUP BY test_suite_id ORDER BY name"),
             'audit' => $wpdb->get_results("SELECT audit_record FROM transactions AS t WHERE $where GROUP BY audit_record ORDER BY audit_record DESC"),
             'test_outcome' => $wpdb->get_results("SELECT test_outcome_status_id, name FROM transactions AS t JOIN test_outcome_statuses AS os ON os.id = t.test_outcome_status_id WHERE $where GROUP BY t.test_outcome_status_id ORDER BY name ASC"),
             'scenario' => $wpdb->get_results("
@@ -85,7 +85,7 @@ class TransactionLogs
                 JOIN wp_posts AS p ON p.ID = t.test_case_id
                 JOIN wp_postmeta AS pm ON pm.meta_key LIKE 'scenario_%' AND pm.post_id = p.ID
                 JOIN wp_test_suites_scenarios AS s ON s.id = pm.meta_value
-                WHERE $where GROUP BY code ORDER BY s.sequence"),
+                WHERE $where GROUP BY code ORDER BY s.code"),
         ];
     }
 
