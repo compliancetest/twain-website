@@ -24,8 +24,9 @@
         <div class="main-content">
 
             <div class="test-coverage" id="testCoveragePlanList">
-
-                {!! view('pages.my.coverage.test_plans_list', ['userSuites' => $userSuites]) !!}
+                <div id="testCoveragePlanListContent">
+                    {!! view('pages.my.coverage.test_plans_list', ['userSuites' => $userSuites]) !!}
+                </div>
 
                 <!-- Test Details Modal-->
                 <div class="modal fade" id="testDetailsModal" tabindex="-1" role="dialog">
