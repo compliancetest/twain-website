@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
         Page.coloredBoxAjaxSaveForm($(this));
     });
 
-    $('[data-ajax-modal]').click(function(e){
+    $('body').on('click', '[data-ajax-modal]', function(e){
         e.preventDefault();
         Page.loadModalContent($(this));
     });
@@ -632,7 +632,8 @@ var Page = {
                             success: function(rsp){
                                 form.find('.block-loading').hide();
                                 form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                                location.reload();
+                                $('.modal').modal('hide');
+                                $('#testCoveragePlanListContent').html(rsp.html);
                             },
                             complete: function(){
                             }
@@ -654,7 +655,8 @@ var Page = {
                         success: function(rsp){
                             form.find('.block-loading').hide();
                             form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                            location.reload();
+                            $('.modal').modal('hide');
+                            $('#testCoveragePlanListContent').html(rsp.html);
                         },
                         complete: function(){
                         }
@@ -681,7 +683,8 @@ var Page = {
                         success: function(rsp){
                             form.find('.block-loading').hide();
                             form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                            location.reload();
+                            $('.modal').modal('hide');
+                            $('#testCoveragePlanListContent').html(rsp.html);
                         },
                         complete: function(){
                         }

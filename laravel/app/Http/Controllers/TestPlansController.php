@@ -92,7 +92,7 @@ class TestPlansController extends Controller
             $testPlan->excludeTestCases();
         }
 
-        return JsonResponse::create(['status' => 'success']);
+        return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
     }
 
     /**
@@ -156,7 +156,7 @@ class TestPlansController extends Controller
         } else {
             TestPlanExcludedCases::where(['test_case_id' => $testCaseId, 'test_plan_id' => $testPlanId])->delete();
         }
-        return JsonResponse::create(['status' => 'success']);
+        return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
     }
 
 
@@ -176,7 +176,7 @@ class TestPlansController extends Controller
 
             $testPlan = $testPlan->fill($request->all());
             $testPlan->save();
-            return JsonResponse::create(['status' => 'success']);
+            return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
         }
         return JsonResponse::create(['status' => 'Forbidden!'], 403);
     }
