@@ -655,7 +655,8 @@ var Page = {
                         success: function(rsp){
                             form.find('.block-loading').hide();
                             form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
-                            location.reload();
+                            $('.modal').modal('hide');
+                            $('#testCoveragePlanListContent').html(rsp.html);
                         },
                         complete: function(){
                         }
