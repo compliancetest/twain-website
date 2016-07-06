@@ -29,12 +29,15 @@ if(!defined('ABSPATH')) {
                     <div class="grid-cell width70P">
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Name</label></div>
-                            <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input"><?php echo $organisation->organisation_name;?></div>
+                            <div data-name="organisation_name" data-value="<?php echo $organisation->organisation_name;?>" class="grid-cell in_input" data-required="true"><?php echo $organisation->organisation_name;?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Key</label></div>
-                            <div data-name="organisation_key" data-value="<?php echo $organisation->organisation_key;?>" data-type="skip" class="grid-cell in_input"><?php echo $organisation->organisation_key;?></div>
+                            <div id="orgKey" data-name="organisation_key" data-value="<?php echo $organisation->organisation_key;?>" data-type="skip" class="grid-cell in_input">
+                                <?php echo $organisation->organisation_key;?>
+                            </div>
+                            <button style="margin-top: -2px !important;float: right" class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#orgKey" onclick="return false;">Copy Key</button>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
@@ -172,19 +175,6 @@ if(!defined('ABSPATH')) {
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="grid-row grid-row-complex">
-                    <div class="grid-cell width30P">
-                        <label>ABN</label>
-                    </div>
-                    <div class="grid-cell width70P">
-                        <div class="grid-row">
-                            <div class="grid-cell width30P"><label>ABN Number</label></div>
-                            <div data-name="abn" data-value="<?php echo $organisation->abn;?>" class="grid-cell in_input"><?php echo $organisation->abn;?></div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                </div>
                 <div class="grid-row btn-row">
                     <a href="#" class="action-btn process-btn "><span class="p"></span><span class="t">Save</span></a>
                     <a href="#" class="action-btn cancel-btn edit-cancel-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
@@ -194,5 +184,16 @@ if(!defined('ABSPATH')) {
             </form>
         </div>
     </div>                
-    <div class="clear"></div>            
+    <div class="clear"></div>
+    <script src="/laravel/resources/assets/js/vendor/clipboard.js"></script>
+    <script>
+        var clipboard = new Clipboard('.copyProfileLink');
+        clipboard.on('success', function(e) {
+           jQuery('#orgKey').append( '<div class="message success copiedMessage">Organisation Key has been copied to clipboard.</div>');
+            var messageTimeoutHandler = setTimeout(function() {
+                jQuery('.copiedMessage').slideUp().remove();
+            }, 2000);
+        });
+
+    </script>
 

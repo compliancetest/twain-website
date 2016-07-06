@@ -167,6 +167,13 @@ function cp_user_organisation_detail_edit()
     $query = $wpdb->prepare("SELECT organisation_id FROM " . $wpdb->prefix . "organisations_members WHERE is_admin=1 AND user_id=%d AND organisation_id=%d", get_current_user_id(), $_REQUEST['organisation_id']);
     $user_organisation_id = $wpdb->get_var($query);
 
+    $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s AND id != %d", $_POST['organisation_name'], $user_organisation_id));
+    if ($is_name_used_in_xero) {
+        exit('A record for an organisation with the same Name has already been created.');
+    }
+
+
+
     if ($user_organisation_id) {
         $organisation = new CT_Organisation($user_organisation_id);
         $organisation->bind($_POST);
@@ -627,12 +634,10 @@ function cp_user_organisation_edit()
     $org_membership = ct_get_user_organisation_membership($current_user->ID);
     if (!$org_membership) {
         $user_organisation = htmlspecialchars($_POST['user_organisation']);
-        $user_organisation_abn = htmlspecialchars($_POST['user_organisation_abn']);
         $user_organisation_web = htmlspecialchars($_POST['user_organisation_web']);
         $user_organisation_desc = htmlspecialchars($_POST['user_organisation_desc']);
 
         update_user_meta($user_id, 'user_organisation', $user_organisation);
-        update_user_meta($user_id, 'user_organisation_abn', $user_organisation_abn);
         update_user_meta($user_id, 'user_organisation_web', $user_organisation_web);
         update_user_meta($user_id, 'user_organisation_desc', $user_organisation_desc);
     }
@@ -640,22 +645,19 @@ function cp_user_organisation_edit()
     $user_id = get_current_user_id();
 
     $user_org = trim(get_user_meta($user_id, 'user_organisation', true));
-    $user_org_abn = trim(get_user_meta($user_id, 'user_organisation_abn', true));
     $user_org_web = get_user_meta($user_id, 'user_organisation_web', true);
     $user_org_desc = get_user_meta($user_id, 'user_organisation_desc', true);
     $message_error = $message_success = false;
     //check that name and ABN for user organisation not empty
-    if (empty($user_org_abn) || empty($user_org) || $user_org_abn == '-' || $user_org == '-') {
-        $message_error = 'Organisation Name and ABN must be populated before an Organisation Record can be created';
+    if (empty($user_org) || $user_org == '-') {
+        $message_error = 'Organisation Name must be populated before an Organisation Record can be created';
     }
     if (false === $message_error) {
-        $is_abn_used = $is_name_used_in_xero = false;
-        //check that ABN number not used for another organisation
-        $is_abn_used = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE abn = %s ", $user_org_abn));
+        $is_name_used_in_xero = false;
         //check that organisation name not used in Xero
         $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
-        if ($is_name_used_in_xero || $is_abn_used) {
-            $message_error = 'A record for an organisation with the same ABN or Name has already been created. Your organisation may already be set up on ' . get_site_title() . '.';
+        if ($is_name_used_in_xero) {
+            $message_error = 'A record for an organisation with the same Name has already been created. Your organisation may already be set up on ' . get_site_title() . '.';
         }
     }
     if (false === $message_error) {
@@ -665,7 +667,6 @@ function cp_user_organisation_edit()
             'organisation_description' => $user_org_desc,
             'organisation_website' => $user_org_web,
             'invoice_me' => 0,
-            'abn' => $user_org_abn,
             'contact_first_name' => get_user_meta($user_id, 'first_name', true),
             'contact_last_name' => get_user_meta($user_id, 'last_name', true),
             'contact_email' => $current_user->user_email,
@@ -682,7 +683,6 @@ function cp_user_organisation_edit()
                 '[organisation]' => $user_org,
                 '[organisation_website]' => $user_org_web,
                 '[organisation_description]' => $user_org_desc,
-                '[organisation_abn]' => $user_org_abn
             );
 
             cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
