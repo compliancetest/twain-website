@@ -306,34 +306,48 @@ function showDeletePopup()
         <a id="close-popup-delete" class="close_btn"></a>
     </div>
     <?php if ($can_delete): ?>
-    <script>
-        jQuery(document).ready(function ($) {
-            $('.delete_prod_confirm').on('click', function () {
-                var item_id = $(this).attr('data-id');
-                $('.loading').show();
-                $.ajax({
-                    type: 'post',
-                    url: '/',
-                    data: {'_psnonce': '<?php echo wp_create_nonce( 'delete-product-confirm' );?>', 'id': item_id},
-                    success: function (data) {
-                        if (data == 'success') {
-                            location.href = '<?php echo base64_decode( $_REQUEST['return'] );?>';
+        <script>
+            jQuery(document).ready(function ($) {
+                $('.delete_prod_confirm').on('click', function () {
+                    var item_id = $(this).attr('data-id');
+                    $('.loading').show();
+                    $.ajax({
+                        type: 'post',
+                        url: '/',
+                        data: {'_psnonce': '<?php echo wp_create_nonce('delete-product-confirm');?>', 'id': item_id},
+                        success: function (data) {
+                            if (data == 'success') {
+                                location.href = '<?php echo base64_decode($_REQUEST['return']);?>';
+                            } else {
+                                location.reload();
+                            }
                         }
-                    }
+                    })
                 })
-            })
-        });
-    </script>
-<?php endif; ?>
+            });
+        </script>
+    <?php endif; ?>
     <?php
     exit;
 }
 
 function deleteProduct()
 {
+    global $wpdb;
     $id = filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT);
     $user_id = get_current_user_id();
     $can_delete = can_delete($id, $user_id);
+
+    //user can't delete product while it has claims / transactions
+    $transactions = $wpdb->get_row($wpdb->prepare("SELECT * FROM transactions WHERE product_id = %d", $id));
+    $claims = $wpdb->get_row($wpdb->prepare("SELECT * FROM claims WHERE product_id = %d", $id));
+    $testPlans = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_plans WHERE product_id = %d", $id));
+
+    if($transactions || $claims || $testPlans){
+        addMessage("You can't delete this product. Please delete claims, test plans and transactions associated with product and try again.", 'error');
+        exit('error');
+    }
+
     if ($can_delete['status'] == 'success') {
         $fullTextSearch = new FulltextSearch();
         $fullTextSearch->fullDelete($id);

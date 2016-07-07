@@ -1639,3 +1639,14 @@ function getOutcomeStatusClass($outcomeStatus)
     }
     return $color;
 }
+
+/**
+ * Check we can remove audit record flag. We can't do this if transaction used in any claim
+ * @param $transactionId
+ * @return bool
+ */
+function canRemoveAuditFlag($transactionId)
+{
+    global $wpdb;
+    return (boolean) $wpdb->get_row($wpdb->prepare("SELECT * FROM claim_transactions WHERE transaction_id = %s ", $transactionId));
+}
