@@ -31,6 +31,15 @@ class Claim extends Model
         return $this->belongsTo('App\TestPlan');
     }
 
+    /**
+     * List of transactions attached to claim via claim_transactions table
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions()
+    {
+        return $this->hasMany('App\ClaimTransactions');
+    }
+
     public function generatePDF()
     {
         require_once(THE_FUNCTION . '/tcpdf/cppdf.php');
@@ -136,7 +145,9 @@ class Claim extends Model
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
-                $case->link = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->ID, 'audit_record' => true])->first()->s3_link;
+                $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->ID, 'audit_record' => true])->first();
+                $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
+                $case->link = $tempTransaction->s3_link;
                 $generalCases[$case->scenarioID][] = $case;
             } elseif (!in_array($case->ID, $optionalCases)) {
                 if (!isset($excludedCases[$case->scenarioID])) {

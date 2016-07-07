@@ -210,8 +210,8 @@ get_header();
                                         <br/>
                                     </div>
                                     <div class="td td-audit tocenter">
-                                        <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record"
-                                               data-id="<?php echo $row->id;?>" <?php if($outcomeStatus->code == 'PENDING'):?>disabled="disabled"<?php endif;?>>
+                                        <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record" data-id="<?php echo $row->id;?>"
+                                               <?php if($outcomeStatus->code == 'PENDING' || ($row->audit_record && canRemoveAuditFlag($row->id))):?>disabled="disabled"<?php endif;?>>
                                     </div>
                                     <div
                                         class="td td-convsn tocenter td-two-lines">

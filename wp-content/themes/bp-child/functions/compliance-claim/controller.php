@@ -71,12 +71,12 @@ function deleteClaim()
         wp_redirect($return);
         exit;
     }
-    
+
     if(!$wpdb->delete('claims', array('id' => $claimID)))
     {
         addMessage($wpdb->last_error, 'error');
     }else{
-
+        $wpdb->delete('claim_transactions', array('claim_id' => $claimID));
         $wpdb->update('test_plans', ['is_claimed' => 0], ['id' => $testPlanId]);
         //delete S3 files
         $s3 = new S3Wrapper();
