@@ -164,6 +164,11 @@ define({ "api": [
           "type": "json"
         },
         {
+          "title": "Invalid test suite ID",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Test suite ID is invalid\"\n    ]\n  },\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
           "title": "Invalid product type",
           "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product has incorrect type\"\n      ]\n    },\n    \"code\": 403\n  }",
           "type": "json"
