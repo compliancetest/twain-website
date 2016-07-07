@@ -465,6 +465,17 @@ class ProductsController extends BaseApiController
      *      "code": 404
      *    }
      *
+     * @apiError 404 Invalid test suite ID
+     * @apiErrorExample {json} Invalid test suite ID
+     * {
+     *   "errors": {
+     *     "message": [
+     *       "Test suite ID is invalid"
+     *     ]
+     *   },
+     *   "code": 404
+     * }
+     *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Invalid product type
      *  {
@@ -508,7 +519,11 @@ class ProductsController extends BaseApiController
         }
 
         foreach ($features as $testSuite) {
-            $productTestSuites[] = Post::where(['post_name' => $testSuite['id']])->first()->ID;
+            $testSuiteEntry = Post::where(['post_name' => $testSuite['id']])->first();
+            if (!$testSuiteEntry) {
+                return $this->respondNotFound('Test suite ID is invalid');
+            }
+            $productTestSuites[] = $testSuiteEntry->ID;
 
             //test suite's features list shouldn't be empty
             if (empty($testSuite['features'])) {
