@@ -1246,17 +1246,18 @@ function ct_duplicate_data()
                         <td>
                             <i>
                             <?php
-                                $testCases = explode(',', $_POST['case_ids']);
+                                $testCases = explode(',', $_POST['case_ids']);;
                                 if (!empty($testCases) && is_array($testCases)) {
-                                    foreach ($testCases as $testCase)
+                                    foreach ($testCases as $testCase) {
                                         $testCaseData = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE post_name = %s ", trim($testCase)));
-                                    if ($testCaseData) {
-                                        $stepActions = cp_get_post_meta($testCaseData->ID, 'step_action', true);
-                                        $stepResults = cp_get_post_meta($testCaseData->ID, 'step_expected', true);
-                                        array_splice($stepActions, intval($_POST['step_number']) - 1, 0, array($_POST['step_action']));
-                                        update_post_meta($testCaseData->ID, 'step_action', $stepActions);
-                                        array_splice($stepResults, intval($_POST['step_number']) - 1, 0, array($_POST['result']));
-                                        update_post_meta($testCaseData->ID, 'step_expected', $stepResults);
+                                        if ($testCaseData) {
+                                            $stepActions = cp_get_post_meta($testCaseData->ID, 'step_action', true);
+                                            $stepResults = cp_get_post_meta($testCaseData->ID, 'step_expected', true);
+                                            array_splice($stepActions, intval($_POST['step_number']) - 1, 0, array($_POST['step_action']));
+                                            update_post_meta($testCaseData->ID, 'step_action', $stepActions);
+                                            array_splice($stepResults, intval($_POST['step_number']) - 1, 0, array($_POST['result']));
+                                            update_post_meta($testCaseData->ID, 'step_expected', $stepResults);
+                                        }
                                     }
                                 }
 
