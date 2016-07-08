@@ -64,12 +64,20 @@ function process_testsuite_actions()
 
                 $has_error = false;
 
-                if ($suites <= 1) {
+                if ($suite->id == $suite->familyMark && $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_test_suites WHERE family_mark = %d AND suite_id != %d ", $suite->familyMark, $suite->familyMark))) {
+                    addMessage("This test suite has newer version and can't be deleted.", 'error');
+                    wp_redirect($_SERVER['HTTP_REFERER']);
+                    exit;
+                }
+
+                if ($suites <= 1 && !$has_error) {
+
+
                     //Check Transactions, Subscriptions and Test Plans
                     $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d", $suite->id);
                     $subscriptions = $wpdb->get_var($query);
                     //Check Transactions, Subscriptions and Test Plans
-                    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}test_plans WHERE suite_id=%d AND is_deleted = 0", $suite->id);
+                    $query = $wpdb->prepare("SELECT count(*) FROM test_plans WHERE suite_id=%d", $suite->id);
                     $test_plans = $wpdb->get_var($query);
 
                     //Getting Transactions
