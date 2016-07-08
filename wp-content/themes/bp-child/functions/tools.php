@@ -1222,6 +1222,54 @@ function ct_duplicate_data()
             </form>
         </div>
 
+        <hr/>
+        <h2>Insert test steps</h2>
+        <div>
+            <form action="" method="post">
+                <label>Test cases IDs(e.g.it-03a-v1-0, ui-03a-v1-0) - separated by comma</label><br>
+                <input type="text" name="case_ids" required="required" style="width: 100%"><br>
+                 <label>Step number</label><br>
+                <input type="text" name="step_number" required="required" style="width: 100%"><br>
+                <label>Action</label><br>
+                <input type="text" name="step_action" required="required" style="width: 100%"><br>
+                <label>Expected Result</label><br>
+                <input type="text" name="result" required="required" style="width: 100%"><br>
+                <input type="hidden" name="action" value="<?php echo wp_create_nonce('insert_test_steps')?>" />
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" class="button button-primary" value="Generate" />
+                        </td>
+                    </tr>
+                    <?php if (wp_verify_nonce($action, 'insert_test_steps')): ?>
+                    <tr>
+                        <td>
+                            <i>
+                            <?php
+                                $testCases = explode(',', $_POST['case_ids']);
+                                if (!empty($testCases) && is_array($testCases)) {
+                                    foreach ($testCases as $testCase)
+                                        $testCaseData = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE post_name = %s ", trim($testCase)));
+                                    if ($testCaseData) {
+                                        $stepActions = cp_get_post_meta($testCaseData->ID, 'step_action', true);
+                                        $stepResults = cp_get_post_meta($testCaseData->ID, 'step_expected', true);
+                                        array_splice($stepActions, intval($_POST['step_number']) - 1, 0, array($_POST['step_action']));
+                                        update_post_meta($testCaseData->ID, 'step_action', $stepActions);
+                                        array_splice($stepResults, intval($_POST['step_number']) - 1, 0, array($_POST['result']));
+                                        update_post_meta($testCaseData->ID, 'step_expected', $stepResults);
+                                    }
+                                }
+
+                                echo 'Done';
+                            ?>
+                            </i>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                </table>
+            </form>
+        </div>
+
     </div>
     <?php
 }
