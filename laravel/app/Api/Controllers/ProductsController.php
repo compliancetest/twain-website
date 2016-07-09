@@ -514,7 +514,7 @@ class ProductsController extends BaseApiController
         $productTestSuites = $productFeatures = [];
 
         //each product should be configured to use at least one test suite
-        if (empty($features)) {
+        if (empty($features) || empty($features['id'])) {
             return $this->respondForbiddenError('Please assign at least 1 test suite');
         }
 
