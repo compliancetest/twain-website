@@ -37,7 +37,7 @@ if(!defined('ABSPATH')) {
                             <div id="orgKey" data-name="organisation_key" data-value="<?php echo $organisation->organisation_key;?>" data-type="skip" class="grid-cell in_input">
                                 <?php echo $organisation->organisation_key;?>
                             </div>
-                            <button style="margin-top: -2px !important;float: right" class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-target="#orgKey" onclick="return false;">Copy Key</button>
+                            <button style="margin-top: -2px !important;float: right" class="btn btn-success btn-with-icon btn-confirm copyProfileLink" data-clipboard-text="<?php echo $organisation->organisation_key;?>" onclick="return false;">Copy Key</button>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
