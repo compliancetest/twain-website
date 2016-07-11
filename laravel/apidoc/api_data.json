@@ -1,6 +1,68 @@
 [
   {
     "type": "post",
+    "url": "/v1/version",
+    "title": "Get latest version",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_type",
+            "description": "<p>Mandatory - Product Type (either 'Application' or 'DataSource').</p>"
+          }
+        ]
+      }
+    },
+    "name": "Latest_version",
+    "group": "Helpers",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": {\n    \"file_name\": \"file.zip\",\n    \"product_type\": \"Application\",\n    \"version\": \"v1\",\n    \"description\": \"description\",\n    \"size\": 106876,\n    \"license_agreement\": \"License agreement\",\n    \"last_updated\": \"2016-07-11 16:38:11\",\n    \"s3_link\": \"https://s3-us-west-2.amazonaws.com\"\n  },\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error",
+          "content": "{\n   \"errors\": {\n     \"product_type\": [\n       \"The product type field is required.\"\n     ]\n   },\n   \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not found",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Downloads with such product type not found\"\n     ]\n   },\n   \"code\": 404\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/VersionController.php",
+    "groupTitle": "Helpers"
+  },
+  {
+    "type": "post",
     "url": "/v1/echo",
     "title": "Validate credentials",
     "parameter": {

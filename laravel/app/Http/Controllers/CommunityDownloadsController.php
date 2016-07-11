@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\CommunityDownloads;
+use App\WpOptions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;

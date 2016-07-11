@@ -26,6 +26,7 @@ class CommunityDownloadsRequest extends Request
     {
         return [
             'file' => 'required',
+            'product_type' => 'required|in:Application,DataSource',
         ];
     }
 }

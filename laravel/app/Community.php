@@ -77,7 +77,7 @@ class Community extends Model
      */
     public function downloads()
     {
-        return $this->hasMany('App\CommunityDownloads');
+        return $this->hasMany('App\CommunityDownloads')->orderBy('updated_at', 'DESC');
     }
 
     /**
