@@ -5,7 +5,8 @@
             <table class="table downloads-list-table">
                 <thead>
                 <tr>
-                    <th class="text-left">File name</th>
+                    <th class="text-left">Filename</th>
+                    <th>Product Type</th>
                     <th>Size</th>
                     <th>License Agreement</th>
                     <th>Last Updated</th>
@@ -35,6 +36,7 @@
 
                                 <p>{{ $download->description }}</p>
                             </td>
+                            <td class="text-nowrap text-center">{{ $download->product_type }}</td>
                             <td class="text-nowrap text-center">{{ formatBytes($download->size) }}</td>
                             <td class="text-center">
                                 @if(empty($download->license))
@@ -105,6 +107,12 @@
 
                     <div class="file-description-fields">
                         <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Product Type ('DataSource' / 'Application'):</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="product_type" value=""/>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="fileVersion">File Version:</label>
 

@@ -16,6 +16,14 @@
                     {!! Form::text('title', null, ['readonly' => 'readonly', 'class' => 'form-control readonly']) !!}
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Product Type ('DataSource' / 'Application'):</label>
+                <div class="col-sm-9">
+                    {!! Form::text('product_type', null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">File Version:</label>
 
