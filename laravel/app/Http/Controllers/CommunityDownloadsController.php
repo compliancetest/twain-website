@@ -11,6 +11,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Validator;
 
 class CommunityDownloadsController extends Controller
 {
@@ -82,6 +83,13 @@ class CommunityDownloadsController extends Controller
      */
     public function update(Request $request, $slug, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'product_type' => 'required|in:Application,DataSource'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
         $community = $this->community;
         $data = $request->all();
         $download = $community->downloads()->find($id);
