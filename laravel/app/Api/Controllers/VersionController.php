@@ -10,7 +10,7 @@ class VersionController extends BaseApiController
 {
 
     /**
-    * @api {post} /v1/version Get latest version
+    * @api {get} /v1/version Get latest version
     * @apiParam {string} product_type  Mandatory - Product Type (either 'Application' or 'DataSource').
     *
     * @apiName Latest version
@@ -79,6 +79,6 @@ class VersionController extends BaseApiController
             ]);
         }
 
-        return $this->respondNotFound();
+        return $this->respondNotFound('Downloads with such product type not found');
     }
 }

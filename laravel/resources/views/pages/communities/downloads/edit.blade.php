@@ -2,6 +2,8 @@
 
 <h3>Edit File</h3>
 
+<div class="error-message" style="display: none;"></div>
+
 <div class="file-description-section">
     <div class="upload-file-field">
         <input type="file" name="file" class="input-file"/>
@@ -21,7 +23,7 @@
                 <label class="col-sm-3 control-label">Product Type ('DataSource' / 'Application'):</label>
                 <div class="col-sm-9">
                     {!! Form::text('product_type', null, ['class' => 'form-control']) !!}
-                </div>
+                 </div>
             </div>
 
             <div class="form-group">
