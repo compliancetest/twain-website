@@ -206,6 +206,11 @@
           "type": "json"
         },
         {
+          "title": "Validation error",
+          "content": "{\n  \"errors\": {\n    \"0.id\": [\n      \"Test suite id field should have string type\"\n    ],\n    \"0.features\": [\n      \"Features field is required\"\n    ]\n  },\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
           "title": "Not organisation member",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"

@@ -424,6 +424,20 @@ class ProductsController extends BaseApiController
      *     "code": 422
      *   }
      *
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error
+     * {
+     *   "errors": {
+     *     "0.id": [
+     *       "Test suite id field should have string type"
+     *     ],
+     *     "0.features": [
+     *       "Features field is required"
+     *     ]
+     *   },
+     *   "code": 422
+     * }
+     *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organisation member
      *   {
@@ -512,18 +526,20 @@ class ProductsController extends BaseApiController
 
         $features = json_decode($request->get('features'), true);
 
-        $productTestSuites = $productFeatures = [];
+        $validator = Validator::make($features, [
+            '*.id' => 'required|string|exists:wp_posts,post_name',
+            '*.features' => 'required|array'
+        ]);
 
-        //each product should be configured to use at least one test suite
-        if (empty($features) || empty($features['id'])) {
-            return $this->respondForbiddenError('Please assign at least 1 test suite');
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
         }
+
+        $productTestSuites = $productFeatures = [];
 
         foreach ($features as $testSuite) {
             $testSuiteEntry = Post::where(['post_name' => $testSuite['id']])->first();
-            if (!$testSuiteEntry) {
-                return $this->respondNotFound('Test suite ID is invalid');
-            }
+
             $productTestSuites[] = $testSuiteEntry->ID;
 
             //test suite's features list shouldn't be empty

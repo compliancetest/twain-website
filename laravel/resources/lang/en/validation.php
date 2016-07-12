@@ -95,6 +95,15 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        '*.id' => [
+            'required' => 'Test suite id field is required',
+            'string' => 'Test suite id field should have string type',
+            'exists' => 'Test suite ID is invalid',
+        ],
+        '*.features' => [
+            'required' => 'Features field is required',
+            'array' => 'Features field should have array type',
+        ],
     ],
 
     /*
