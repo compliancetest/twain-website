@@ -168,7 +168,7 @@ function wpcf7_mail_replace_tags( $content, $args = '' ) {
 	return $content;
 }
 
-add_action( 'phpmailer_init', 'wpcf7_phpmailer_init' );
+//add_action( 'phpmailer_init', 'wpcf7_phpmailer_init' );
 
 function wpcf7_phpmailer_init( $phpmailer ) {
 	$wpcf7_content_type = false;
