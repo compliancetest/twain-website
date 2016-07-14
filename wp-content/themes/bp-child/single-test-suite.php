@@ -19,8 +19,8 @@ Template Name Posts: Test Suite
     //If this is the revision, only the community admin can see it.
     if($suite->isRevision && !doesUserCommunityAdmin($user_id, $suite->community_id))
     {
-        addMessage("Sorry, you are not allowed to see the test suite", "error");
-        wp_redirect(bp_get_group_permalink($group));
+        addMessage("Sorry, you are not allowed to see that test suite", "error");
+        wp_redirect('/communities/' . $group->slug);
         exit;
     }
     
