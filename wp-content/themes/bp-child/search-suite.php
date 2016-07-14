@@ -119,8 +119,9 @@ $testsuites = $get_posts->get_posts();
             <?php get_sidebar('search') ?>
             <p class="search_result_label">
                 <?php if (count($testsuites) > 0) { ?>
-                    <?php $endResults = ($page == 1 && count($testsuites) < 10) ? count($testsuites) : $page * $posts_per_page;?>
-                    Showing <?php echo ($page - 1) * $posts_per_page + 1 ?> - <?php echo $endResults ?> of
+                    <?php $start = (($page - 1) * $posts_per_page + 1);?>
+                    <?php $endResults = $get_posts->found_posts < ($posts_per_page * $page) ? $get_posts->found_posts : $posts_per_page * $page;?>
+                    Showing <?php echo $start ?> - <?php echo $endResults ?> of
                     <b><?php echo $get_posts->found_posts ?></b> Results
                     <?php if ($term) { ?> for "<b><?php echo $term ?></b>" <?php } ?>
                 <?php } else { ?>
