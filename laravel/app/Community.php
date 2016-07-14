@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +79,20 @@ class Community extends Model
     public function downloads()
     {
         return $this->hasMany('App\CommunityDownloads')->orderBy('updated_at', 'DESC');
+    }
+
+    /**
+     * Get latest versions for non-admin users.
+     * Admins can see all versions
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function nonAdminDownloads()
+    {
+        $idsData = DB::select('SELECT MAX(created_at), id  FROM communities_downloads WHERE product_type IN("DataSource", "Application") GROUP BY product_type');
+        $ids = array_map(function ($entry) {
+            return $entry->id;
+        }, $idsData);
+        return $this->hasMany('App\CommunityDownloads')->whereIn('id', $ids)->orderBy('updated_at', 'DESC');
     }
 
     /**

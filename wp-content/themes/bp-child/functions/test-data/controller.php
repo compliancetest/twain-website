@@ -514,7 +514,47 @@ function downloadProfileType()
     exit;
 }
 
+function viewTestToolAgreement($id){
+     global $wpdb;
 
+    $query = $wpdb->prepare("SELECT * FROM communities_downloads WHERE id = %s", $id);
+    $row = $wpdb->get_row($query);
+    ?>
+        <div class="popup-box view-profile-type-box downloadLicenseModal" style="display: none; width: 400px;">
+            <div class="popup-box-header radius6 noradiusbottom">License Agreement</div>
+            <div class="popup-box-content grid-box-body">
+                <p><?php echo $row->license;?></p>
+                <input name="agree_license" value="agree_license" class="agree_community_license" autocomplete="off" type="checkbox">
+                 I agree with the License Agreement
+
+                <div class="message error" style="display:none;">Please agree with the License Agreement.</div>
+            </div>
+            <div class="popup-box-footer radius6 noradiustop">
+                <a class="action-btn download-btn submit-btn" href="/downloads/twain/getfile/<?php echo $row->id;?>">
+                    <span class="p"></span><span class="t">DOWNLOAD</span>
+                </a>
+                <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span
+                        class="t">Close</span></a>
+
+                <div class="clear"></div>
+            </div>
+            <a class="close_btn"></a>
+        </div>
+
+        <script>
+            jQuery('.downloadLicenseModal .download-btn').on('click', function (e) {
+                var modal = jQuery(this).closest('.downloadLicenseModal');
+                modal.find('.error').hide();
+                if (!modal.find('.agree_community_license').is(':checked')) {
+                    modal.find('.error').show();
+                    return false;
+                }
+                modal.find('.close_btn').click();
+            });
+        </script>
+    <?php
+    exit;
+}
 function viewProfileType()
 {
     global $wpdb;

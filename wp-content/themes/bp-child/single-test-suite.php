@@ -63,6 +63,19 @@ Template Name Posts: Test Suite
                                 <?php if(!empty($suite->protocol_versions)):?>
 								    Protocol Versions: <span><?php echo implode(', ', $suite->protocol_versions); ?></span>
                                 <?php endif;?>
+
+                                 <?php if(!empty($suite->testTool)):?>
+								    Test Tool:
+                                     <?php if(!empty($suite->testTool->license)):?>
+                                         <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" title="<?php echo $suite->testTool->description;?>">
+                                            <?php echo $suite->testTool->title;?>
+                                        </a>
+                                     <?php else:?>
+                                         <a href="<?php echo S3Wrapper::getDownloadLink('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au', $suite->testTool->location);?>" title="<?php echo $suite->testTool->description;?>">
+                                             <?php echo $suite->testTool->title;?>
+                                         </a>
+                                     <?php endif;?>
+                                <?php endif;?>
 							</div>
 							<div class="clear"></div>
 						</div>
