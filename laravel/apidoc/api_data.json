@@ -10,8 +10,8 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "product_type",
-            "description": "<p>Mandatory - Product Type (either 'Application' or 'DataSource').</p>"
+            "field": "test_tool_for",
+            "description": "<p>Mandatory - either 'Application' or 'DataSource'.</p>"
           }
         ]
       }
@@ -47,12 +47,12 @@
       "examples": [
         {
           "title": "Validation error",
-          "content": "{\n   \"errors\": {\n     \"product_type\": [\n       \"The product type field is required.\"\n     ]\n   },\n   \"code\": 422\n}",
+          "content": "{\n   \"errors\": {\n     \"test_tool_for\": [\n       \"The test tool for field is required.\"\n     ]\n   },\n   \"code\": 422\n}",
           "type": "json"
         },
         {
           "title": "Not found",
-          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Downloads with such product type not found\"\n     ]\n   },\n   \"code\": 404\n}",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Downloads not found\"\n     ]\n   },\n   \"code\": 404\n}",
           "type": "json"
         }
       ]

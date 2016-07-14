@@ -11,7 +11,7 @@ class VersionController extends BaseApiController
 
     /**
     * @api {get} /v1/version Get latest version
-    * @apiParam {string} product_type  Mandatory - Product Type (either 'Application' or 'DataSource').
+    * @apiParam {string} test_tool_for  Mandatory - either 'Application' or 'DataSource'.
     *
     * @apiName Latest version
     * @apiGroup Helpers
@@ -34,8 +34,8 @@ class VersionController extends BaseApiController
     * @apiErrorExample {json} Validation error
     *  {
     *     "errors": {
-    *       "product_type": [
-    *         "The product type field is required."
+    *       "test_tool_for": [
+    *         "The test tool for field is required."
     *       ]
     *     },
     *     "code": 422
@@ -46,7 +46,7 @@ class VersionController extends BaseApiController
     *  {
     *     "errors": {
     *       "message": [
-    *          "Downloads with such product type not found"
+    *          "Downloads not found"
     *       ]
     *     },
     *     "code": 404
@@ -57,14 +57,14 @@ class VersionController extends BaseApiController
     public function index(\Illuminate\Http\Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_type' => 'required|in:Application,DataSource'
+            'test_tool_for' => 'required|in:Application,DataSource'
         ]);
 
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $latestVersion = CommunityDownloads::where(['product_type' => $request->get('product_type')])->orderBy('created_at', 'DESC')->first();
+        $latestVersion = CommunityDownloads::where(['product_type' => $request->get('test_tool_for')])->orderBy('created_at', 'DESC')->first();
 
         if ($latestVersion) {
             return $this->respondWithData([
@@ -79,6 +79,6 @@ class VersionController extends BaseApiController
             ]);
         }
 
-        return $this->respondNotFound('Downloads with such product type not found');
+        return $this->respondNotFound('Downloads not found');
     }
 }
