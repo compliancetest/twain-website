@@ -27,6 +27,8 @@ function cp_process_test_data_actions()
             createUIFromProfileType($action);
         }else if(wp_verify_nonce($action, 'save-harness-instance') || wp_verify_nonce($action, 'save-tester-instance')){
             saveProfileInstance($action);
+        }else if(wp_verify_nonce($action, 'view_test_tool_agreement')){
+            viewTestToolAgreement($_REQUEST['id']);
         }else if(wp_verify_nonce($action, 'view-profile-type')){
             viewProfileType();
         }else if(wp_verify_nonce($action, 'view-profile-instance')){

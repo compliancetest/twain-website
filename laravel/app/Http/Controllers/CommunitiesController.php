@@ -101,7 +101,11 @@ class CommunitiesController extends Controller
             $data['instances'] = getCommunityProfileInstatnces($community->id);
         }
         if ($action == 'downloads') {
-            $data['downloads'] = $community->downloads;
+            if($community->isAdmin()) {
+                $data['downloads'] = $community->downloads;
+            } else {
+                $data['downloads'] = $community->nonAdminDownloads;
+            }
         }
         if ($action == 'surveys') {
             $surveys = [];

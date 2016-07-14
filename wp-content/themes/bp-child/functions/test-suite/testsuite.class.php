@@ -84,6 +84,8 @@ class TestSuite
     var $familyMark = null;
     
     var $messageTemplates = array();
+
+    public $testTool;
     
     public function __construct($id = null)
     {        
@@ -100,6 +102,8 @@ class TestSuite
     
     public function load($id = null)
     {
+        global $wpdb;
+
         if ($id !== null)
             $this->id = $id;
 
@@ -169,6 +173,10 @@ class TestSuite
         $this->featuresList = json_decode($this->loadSingleValue('featuresList'), 1);
         $this->protocol_versions = json_decode($this->loadSingleValue('protocol_versions'), 1);
         $this->ts_tester_role = $this->loadSingleValue('ts_tester_role');
+
+        if($this->ts_tester_role){
+            $this->testTool = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_downloads WHERE product_type = %s ORDER BY created_at DESC", $this->ts_tester_role));
+        }
 
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
     }
