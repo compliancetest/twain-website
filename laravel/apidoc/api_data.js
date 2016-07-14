@@ -1,6 +1,6 @@
 define({ "api": [
   {
-    "type": "post",
+    "type": "get",
     "url": "/v1/version",
     "title": "Get latest version",
     "parameter": {
