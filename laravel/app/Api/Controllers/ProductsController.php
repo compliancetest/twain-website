@@ -388,7 +388,7 @@ class ProductsController extends BaseApiController
      * @apiName Set Features List
      * @apiGroup Products
      *
-     * @apiSuccessExample {json} Product created
+     * @apiSuccessExample {json} Features saved
      *   {
      *      "data": [
      *        {
@@ -429,10 +429,10 @@ class ProductsController extends BaseApiController
      * {
      *   "errors": {
      *     "0.id": [
-     *       "Test suite id field should have string type"
+     *       "Test suite id field is required and should be a string"
      *     ],
      *     "0.features": [
-     *       "Features field is required"
+     *       "Features field is required and should be an array"
      *     ]
      *   },
      *   "code": 422
@@ -444,28 +444,6 @@ class ProductsController extends BaseApiController
      *     "errors": {
      *       "message": [
      *         "Only organisation member can perform testing"
-     *       ]
-     *     },
-     *     "code": 403
-     *   }
-     *
-     * @apiError 403 Forbidden
-     * @apiErrorExample {json} Empty test suites list
-     *   {
-     *     "errors": {
-     *       "message": [
-     *         "Please assign at least 1 test suite"
-     *       ]
-     *     },
-     *     "code": 403
-     *   }
-     *
-     * @apiError 403 Forbidden
-     * @apiErrorExample {json} Empty test suite's features list
-     *   {
-     *     "errors": {
-     *       "message": [
-     *         "Please define at least one feature for each test suite"
      *       ]
      *     },
      *     "code": 403
@@ -542,10 +520,6 @@ class ProductsController extends BaseApiController
 
             $productTestSuites[] = $testSuiteEntry->ID;
 
-            //test suite's features list shouldn't be empty
-            if (empty($testSuite['features'])) {
-                return $this->respondForbiddenError('Please define at least one feature for each test suite');
-            }
             $productFeatures = array_merge($productFeatures, $testSuite['features']);
         }
 

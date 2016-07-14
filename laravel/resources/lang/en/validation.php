@@ -97,12 +97,12 @@ return [
         ],
         '*.id' => [
             'required' => 'Test suite id field is required',
-            'string' => 'Test suite id field should have string type',
-            'exists' => 'Test suite ID is invalid',
+            'string' => 'Test suite id field is required and should be a string',
+            'exists' => 'Test suite id is invalid',
         ],
         '*.features' => [
             'required' => 'Features field is required',
-            'array' => 'Features field should have array type',
+            'array' => 'Features field is required and should be an array',
         ],
     ],
 
