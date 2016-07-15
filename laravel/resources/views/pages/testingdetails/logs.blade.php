@@ -40,7 +40,9 @@
                         {{ $message->to }}
                     </div>
                     <div class="td td-service td-two-lines tocenter" style="width: 4%;">
-                        {{ $message->test_step }}
+                        @if(!empty($message->test_step))
+                            <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
+                        @endif
                     </div>
                     <div class="td td-service td-two-lines tocenter" style="width: 36%;">
                         {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>

@@ -9201,3 +9201,12 @@ input.inactive_s{
     display: block;
     z-index: 100;
 }
+
+.step-anchor, .step-anchor:hover{
+    background: #fff;
+}
+
+.step-anchor:target{
+    background: #d7d7d7;
+    transition: 2s;
+}

@@ -374,7 +374,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                         <?php
                         foreach ($case->testSteps as $key => $row) {
                             ?>
-                            <div class="grid_row white_bcg padding5-10">
+                            <div class="grid_row padding5-10 step-anchor" id="step_anchor_<?php echo($key + 1); ?>">
                                 <div class="grid_cell width10P tocenter"><?php echo($key + 1); ?></div>
                                 <div
                                     class="grid_cell width35P left5P"><?php echo _convertLineSymbolToBR($row['action']); ?></div>

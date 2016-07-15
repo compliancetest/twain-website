@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\TestingDetail;
 use App\Transaction;
 use App\TransactionsLog;
@@ -97,6 +98,8 @@ class TestingDetailsController extends Controller
     public function logs($transactionId)
     {
         $logs = Transaction::find($transactionId)->logs;
-        return view('pages.testingdetails.logs', compact('logs'));
+        $transaction = Transaction::find($transactionId);
+        $testCase = Post::where(['ID' => $transaction->test_case_id])->first();
+        return view('pages.testingdetails.logs', compact('logs', 'testCase'));
     }
 }
