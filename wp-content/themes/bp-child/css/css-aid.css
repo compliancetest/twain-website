@@ -1249,8 +1249,9 @@ tr {
 	background-attachment: fixed;
 	z-index: 999;	
 	display: none;
-	left: 0px; 
-	top: 0px;    
+	left: 0;
+	top: 0;
+	max-width: 100%;
 }
 .loading{
     background: url(../images/loader.gif) no-repeat center center;
