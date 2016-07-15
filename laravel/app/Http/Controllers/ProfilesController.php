@@ -73,7 +73,7 @@ class ProfilesController extends Controller
             $profile->content_length = strlen(json_encode($profileData));
             $profile->profile_role = $profiletype->title;
 
-            $profile->putToS3(json_encode($profileData));
+            $profile->putToS3(json_encode($profileData, JSON_PRETTY_PRINT));
             $profile->save();
             return JsonResponse::create(['status' => 'success'], 200);
         }
@@ -103,50 +103,11 @@ class ProfilesController extends Controller
             $profile->profile_description = $profileData['Profile']['Description'];
             $profile->profile_name = $profileData['Profile']['Title'] . $profile->getVersion($profileData);
             $profile->content_length = strlen(json_encode($profileData));
-            $profile->putToS3(json_encode($profileData));
+            $profile->putToS3(json_encode($profileData, JSON_PRETTY_PRINT));
             $profile->save();
             return JsonResponse::create(['status' => 'success'], 200);
         }
         return JsonResponse::create(['status' => 'error'], 403);
-    }
-
-    /**
-     * Copy profile
-     * @param $communitySlug
-     * @param $profileId
-     * @return mixed
-     */
-    public function copy($communitySlug, $profileId)
-    {
-        $initialProfile = Profile::find($profileId);
-
-        $newProfile = $initialProfile->replicate();
-
-        $newProfile->token_original = $initialProfile->token;
-        $newProfile->type = 'tester';
-        $newProfile->token = sha1(time() . rand(0, 9999) . $initialProfile->type_id . $initialProfile->community_id);
-        $s3Content = $initialProfile->getProfileFromS3();
-        $newProfile->creator_id = Auth::user()->ID;
-        $newProfile->putToS3(json_encode($s3Content));
-        $newProfile->save();
-
-        $profileType = ProfileType::find($initialProfile->type_id);
-        $profileType->instances++;
-        $profileType->save();
-
-        $profile_meta = getProfileMetaData($s3Content);
-        foreach ($profile_meta as $meta_key => $meta_value) {
-            if (is_array($meta_key) || is_array($meta_value)) {
-                continue;
-            }
-
-            $newProfile->meta()->create([
-                'meta_key' => $meta_key,
-                'meta_value' => $meta_value
-            ]);
-        }
-
-        return JsonResponse::create(['status' => 'success'], 200);
     }
 
     /**

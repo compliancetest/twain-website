@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\CommunityBackups;
 use App\CommunityMembers;
 use App\CommunityMeta;
 use App\CommunitySurveyResult;
 use App\ForumThread;
 use App\ForumThreadRead;
 use App\Post;
+use App\Profile;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
@@ -94,8 +96,11 @@ class CommunitiesController extends Controller
                 ForumThreadRead::firstOrNew(['user_id' => Auth::user()->ID, 'thread_id' => $thread->id]);
             }
         }
-         if ($action == 'wiki') {
+        if ($action == 'wiki') {
             $data['articles'] = $community->articles()->with('attachments')->orderBy('updated_at')->get();
+        }
+        if ($action == 'backups') {
+            $data['backups'] = $community->backups()->orderBy('updated_at')->get();
         }
         if ($action == 'testdata') {
             $data['instances'] = getCommunityProfileInstatnces($community->id);
@@ -294,6 +299,33 @@ class CommunitiesController extends Controller
         foreach($request->get('links') as $surveyId => $link){
             CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
         }
+        return response()->json(['status' => 'success']);
+    }
+
+    public function backupTestData($communitySlug)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $profiles = getCommunityProfileInstatnces($community->id);
+
+        //download profiles and generate zip file
+        $zip = new \ZipArchive();
+        $zipName = date('Ymd_Hi_') . $communitySlug . '_backup.zip';
+        $zipPath = storage_path('app/public/' . $zipName);
+        $zip->open( $zipPath, \ZIPARCHIVE::CREATE);
+        foreach($profiles as $profile){
+            $profileObject = Profile::find($profile->id);
+            $zip->addFromString($profile->profile_name,  json_encode($profileObject->getProfileFromS3(), JSON_PRETTY_PRINT));
+        }
+        $zip->close();
+
+        //save backup's database entry and save zip to s3
+        Storage::put('backups/'.$communitySlug.'/' . $zipName, file_get_contents($zipPath));
+        $community->backups()->create([
+            'user_id' => \Auth::user()->ID,
+            's3_key' => 'backups/'.$communitySlug.'/' . $zipName, file_get_contents($zipPath)
+        ]);
+
+        @unlink($zipPath);
         return response()->json(['status' => 'success']);
     }
     /**
