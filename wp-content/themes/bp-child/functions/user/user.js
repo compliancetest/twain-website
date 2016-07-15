@@ -627,29 +627,24 @@
         });
 
         //save my details updates
-        $('#organisation-container').on('click', '.process-btn', function(){
+        $('#organisation-container').on('click', '.process-btn', function () {
 
             var form = $(this).parents('form');
             form.find('.errors_msg').hide();
-            if(form.find('input[name="organisation_name"]').val().trim().length == 0){
-                showGridBoxResultMessage(form, 'Name field is required', 'error');
-                return false;
-            }
+
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
             $.ajax({
                 url: '/my-profile/',
                 data: form.serialize(),
                 type: 'POST',
-                success: function(rsp)
-                {
+                success: function (rsp) {
                     hideGridBoxLoadingWrapper(form);
-                    if(rsp == 'success')
-                    {
+                    if (rsp == 'success') {
                         jQuery('.btn-row a').hide();
                         showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
                         document.location.reload();
-                    }else{
+                    } else {
                         showGridBoxResultMessage(form, rsp, 'error');
                     }
                 }
