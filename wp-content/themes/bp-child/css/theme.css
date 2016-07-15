@@ -9008,7 +9008,6 @@ input.inactive_s{
     padding: 6px 15px 7px 15px;
     text-align: center;
     white-space: nowrap;
-    position: relative;
 }
 
 .search-result-list thead th a{
@@ -9027,7 +9026,7 @@ input.inactive_s{
     background: #fff;
     border-bottom: 1px solid #d7d7d7;
     text-align: center;
-    padding: 13px 5px;
+    padding: 13px 4px;
     vertical-align: middle;
 }
 
@@ -9058,6 +9057,9 @@ input.inactive_s{
 }
 .search-result-list-wrapper .pagination-wrapper{
     margin: 20px 0 0 0;
+}
+.search-result-list-wrapper{
+    overflow: auto;
 }
 .radio-checkbox-holder{
     line-height: 24px;
