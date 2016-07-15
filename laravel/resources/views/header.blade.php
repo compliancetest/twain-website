@@ -54,6 +54,7 @@
                                                         <li><a href="{{ $sub->community->getUrl() }}reports/">Reports</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}surveys/">Surveys</a></li>
                                                         @if($sub->community->isAdmin())
+                                                            <li class="last"><a href="{{ $sub->community->getUrl() }}backups/">Test Data Backups</a></li>
                                                             <li class="last"><a href="{{ $sub->community->getUrl() }}admin/">Admin</a></li>
                                                         @endif
                                                     </ul>

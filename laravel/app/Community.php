@@ -36,6 +36,14 @@ class Community extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function backups()
+    {
+        return $this->hasMany('App\CommunityBackups')->orderBy('created_at', 'DESC');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function meta()
     {
         return $this->hasMany('App\CommunityMeta');

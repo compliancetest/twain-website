@@ -52,7 +52,6 @@
                             </div>
 
                         @endif
-                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/copy/{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" class="btn btn-icon btn-primary btn-copy" data-tooltip="tooltip" title="Copy Profile"></a>
                     </td>
                 </tr>
                 @endforeach
@@ -62,11 +61,18 @@
     </div>
 
      @if($isAdmin)
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="page-title-actions">
                 <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalCreateProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="page-title-actions">
+                <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" title="Create Test Data Backup">Create Test Data Backup</a>
+            </div>
+        </div>
+
+
     @endif
 </div>
 <div class="block-loading page-loader" id="communityTestDataListLoading"><div class="loading-content"><span class="loader"></span><div class="loading-text">COPYING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
@@ -123,47 +129,45 @@
 
         });
 
-        jQuery('.btn-copy').on('click', function (e) {
+        jQuery('.confirmBackup').on('click', function (e) {
             e.preventDefault();
             var elem = jQuery(this);
 
-            if (confirm('Are you sure?')) {
-                var profileName = elem.data('profile-name');
+            elem.closest('.modal-content').find('.block-loading').removeClass('hidden');
+            elem.closest('.modal-content').find('.modal-footer').hide();
+            elem.closest('.modal-content').find('.modal-header .close_modal').hide();
 
-                if (!profileName.length){
-                    profileName = 'Profile'
-                }
-
-                $('#communityTestDataListLoading').show();
-                jQuery.ajax({
-                    type: 'post',
-                    url: elem.attr('href'),
-                    success: function (data) {
-                        if (data.status == 'success') {
-                            $('#communityTestDataList').prepend('<div class="success-message">' + profileName + ' has been copied</div>');
-                            setTimeout(function () {
-                                $('#communityTestDataList > .success-message').slideUp(function () {
-                                    $(this).remove();
-                                });
-                            }, 2000);
-                        }
-                    },
-                    error: function (jqXHR, status) {
-                        $('#communityTestDataList').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+            jQuery.ajax({
+                type: 'post',
+                url: elem.attr('href'),
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $('.community-test-data > .col-md-12').append('<div class="success-message">New Test Data Backup was created successfully!</div>');
                         setTimeout(function () {
-                            $('#communityTestDataList > .error-message').slideUp(function () {
+                            $('.community-test-data > .col-md-12 > .success-message').slideUp(function () {
                                 $(this).remove();
                             });
                         }, 2000);
-                    },
-                    complete: function () {
-                        $('#communityTestDataListLoading').hide();
                     }
+                },
+                error: function (jqXHR, status) {
+                    $('.community-test-data > .col-md-12').append('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('.community-test-data > .col-md-12 > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
+                },
+                complete: function () {
+                    elem.closest('.modal-content').find('.modal-footer').show();
+                    elem.closest('.modal-content').find('.modal-header .close_modal').show();
+                    elem.closest('.modal-content').find('.block-loading').addClass('hidden');
+                    $('.modal').modal('hide');
+                }
+            });
 
-                });
-
-            }
         });
+
 
         $('#modalCopyProfileUrl, #modalViewProfile').on('hidden.bs.modal', function (e) {
             $(this).find('.modal-body').html('<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>');
@@ -242,6 +246,26 @@
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Create New Test Data Backup Modal--}}
+<div class="modal fade profile-modal" id="modalCreateBackup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                New Test Data Backup
+            </div>
+            <div class="modal-body">
+                <div class="block-loading hidden"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                Are you sure that you want create new zip backup and upload it to S3?
+            </div>
+            <div class="modal-footer">
+                <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}/backup" class="btn btn-success btn-with-icon btn-confirm confirmBackup">Confirm</a>
                 <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
             </div>
         </div>

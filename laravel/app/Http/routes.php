@@ -80,7 +80,6 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::group(['middleware' => ['community.user']], function () {
 
-        Route::post('communityprofiles/{community}/copy/{profileId}', 'ProfilesController@copy');
         Route::get('communityprofiles/{community}/viewprofile/{profileId}', 'ProfilesController@viewprofile');
 
         Route::get('profiletypes/{community}/downloadprofiletype/{profileTypeId}', 'ProfileTypeController@downloadprofiletype');
@@ -141,6 +140,10 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
+    //only community admin can create  test data backups
+    Route::group(['middleware' => ['community.admin']], function () {
+        Route::post('communities/{community}/backup', 'CommunitiesController@backupTestData');
+    });
 
     /**
      * Forums
