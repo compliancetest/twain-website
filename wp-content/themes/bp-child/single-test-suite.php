@@ -67,12 +67,14 @@ Template Name Posts: Test Suite
                                  <?php if(!empty($suite->testTool)):?>
 								    Test Tool:
                                      <?php if(!empty($suite->testTool->license)):?>
-                                         <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" title="<?php echo $suite->testTool->description;?>">
+                                         <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" class="test-tool-link has-tooltip">
                                             <?php echo $suite->testTool->title;?>
-                                        </a>
+                                            <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
+                                         </a>
                                      <?php else:?>
-                                         <a href="<?php echo S3Wrapper::getDownloadLink('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au', $suite->testTool->location);?>" title="<?php echo $suite->testTool->description;?>">
+                                         <a href="<?php echo S3Wrapper::getDownloadLink('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au', $suite->testTool->location);?>" class="test-tool-link has-tooltip">
                                              <?php echo $suite->testTool->title;?>
+                                             <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
                                          </a>
                                      <?php endif;?>
                                 <?php endif;?>

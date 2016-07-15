@@ -9210,3 +9210,11 @@ input.inactive_s{
     background: #d7d7d7;
     transition: 2s;
 }
+
+.test-tool-link .simple_tooltip{
+    position: absolute;
+    width: 250px;
+    left: 50%;
+    margin: 0 0 0 -130px;
+    z-index: 99;
+}
