@@ -708,7 +708,7 @@ class ProductsController extends BaseApiController
                     ->where('pm1.meta_key', '=', 'product_type');
             })
              ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
-                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                $join->on('pm2.post_id', '=', 'wp_posts.ID')
                     ->where('pm2.meta_value', '=', $userOrganisationId)
                     ->where('pm2.meta_key', '=', 'product_organisation_id');
             })
