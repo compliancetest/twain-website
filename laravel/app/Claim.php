@@ -140,7 +140,7 @@ class Claim extends Model
 
         //Classify the results by Scenario
         $excludedCases = $skippedCases = $generalCases = array();
-        foreach ($testSuite->getTestCases() as $case) {
+        foreach ($testSuite->getTestCases($testPlan->role, $testPlan->level) as $case) {
             if (in_array($case->ID, $successCases)) {
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();

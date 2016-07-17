@@ -101,17 +101,17 @@ class Post extends Model
             });
 
 
-        if ($level) {
-            $query->join('wp_postmeta AS pm5', function ($join) use ($suiteId, $level) {
+        if ($levels) {
+            $query->join('wp_postmeta AS pm5', function ($join) use ($suiteId, $levels) {
                 $join->on('pm5.post_id', '=', 'wp_posts.ID')
-                    ->where('pm5.meta_value', '=', $level)
+                    ->where('pm5.meta_value', '=', $levels)
                     ->where('pm5.meta_key', '=', 'conformance_level_' . $suiteId);
             });
         }
-        if ($role) {
-            $query->join('wp_postmeta AS pm6', function ($join) use ($role) {
+        if ($roles) {
+            $query->join('wp_postmeta AS pm6', function ($join) use ($roles) {
                 $join->on('pm6.post_id', '=', 'wp_posts.ID')
-                    ->where('pm6.meta_value', '=', $role)
+                    ->where('pm6.meta_value', '=', $roles)
                     ->where('pm6.meta_key', '=', 'choose_tester_role');
             });
         }
