@@ -155,7 +155,7 @@ class User extends Authenticatable
             $size = count($testPlans) - 1;
             for ($i = $size; $i >= 0; $i--) {
                 for ($j = 0; $j <= ($i - 1); $j++)
-                    if (strtolower($testPlans[$j]['product']->post_title) > strtolower($testPlans[$j + 1]['product']->post_title)) {
+                    if (strtolower($testPlans[$j]['product']->post_title . $testPlans[$j]['testPlan']->level) > strtolower($testPlans[$j + 1]['product']->post_title . $testPlans[$j + 1]['testPlan']->level)) {
                         $k = $testPlans[$j];
                         $testPlans[$j] = $testPlans[$j + 1];
                         $testPlans[$j + 1] = $k;
