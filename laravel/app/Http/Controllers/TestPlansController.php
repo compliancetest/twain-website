@@ -87,8 +87,10 @@ class TestPlansController extends Controller
 
         $testPlan->save();
 
+        $productFeatures = (array) json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_features'), true);
+
         $productType = str_replace(' ', '', $request->get('role'));
-        $testPlan->excludeTestCases($productType);
+        $testPlan->excludeTestCases($productType, $productFeatures);
 
         return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
     }
