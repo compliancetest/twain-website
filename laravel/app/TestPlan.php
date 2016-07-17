@@ -131,7 +131,7 @@ class TestPlan extends Model
     public function excludeTestCases($type = 'DataSource', $applicationProductFeatures = [])
     {
         $testSuite = Post::find($this->suite_id);
-        $testCases = $testSuite->getTestCases($this->level, str_replace(' ', '', $this->role));
+        $testCases = $testSuite->getTestCases(str_replace(' ', '', $this->role), $this->level);
         foreach ($testCases as $testCase) {
 
             if ($type == 'DataSource') {
@@ -165,7 +165,11 @@ class TestPlan extends Model
     public function canBeClaimed()
     {
         $suite = Post::find($this->suite_id);
-        $testCases = $suite->getTestCases($this->level, $this->role);
+        $testCases = $suite->getTestCases($this->role, $this->level);
+
+        if ($testCases->isEmpty()) {
+            return false;
+        }
 
         $excludedCases = $this->getExcludedCases();
         $successCases = $this->getSuccessCases($this->product_id);
@@ -189,7 +193,7 @@ class TestPlan extends Model
     public function hasExclusions()
     {
         $suite = Post::find($this->suite_id);
-        $testCases = $suite->getTestCases($this->level, $this->role);
+        $testCases = $suite->getTestCases($this->role, $this->level);
 
         $excludedCases = $this->getExcludedCases();
         $successCases = $this->getSuccessCases($this->product_id);
