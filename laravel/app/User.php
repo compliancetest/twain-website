@@ -148,6 +148,21 @@ class User extends Authenticatable
                  ];
             }
         }
+
+        //bubble sorting for test plans
+        foreach ($response as $testSuite => $testSuiteData) {
+            $testPlans = $testSuiteData['testPlans'];
+            $size = count($testPlans) - 1;
+            for ($i = $size; $i >= 0; $i--) {
+                for ($j = 0; $j <= ($i - 1); $j++)
+                    if (strtolower($testPlans[$j]['product']->post_title) > strtolower($testPlans[$j + 1]['product']->post_title)) {
+                        $k = $testPlans[$j];
+                        $testPlans[$j] = $testPlans[$j + 1];
+                        $testPlans[$j + 1] = $k;
+                    }
+            }
+            $response[$testSuite]['testPlans'] = $testPlans;
+        }
         return $response;
     }
 
@@ -157,7 +172,7 @@ class User extends Authenticatable
         $results = [];
         //admin will see all products
         if (is_super_admin()) {
-            $products = Post::where(['post_type' => 'product-service'])->get();
+            $products = Post::where(['post_type' => 'product-service'])->orderBy('post_title')->get();
         } else {
 
             $organisation = @$this->organisation[0];
@@ -178,6 +193,7 @@ class User extends Authenticatable
                         ->where('pm2.meta_key', '=', 'product_version');
                 })
                 ->where('wp_posts.post_type', '=', 'product-service')
+                ->orderBy('post_title')
                 ->groupBy('wp_posts.ID')->get();
         }
         foreach ($products as $product) {
