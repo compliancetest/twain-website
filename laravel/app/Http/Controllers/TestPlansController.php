@@ -88,9 +88,7 @@ class TestPlansController extends Controller
         $testPlan->save();
 
         $productType = str_replace(' ', '', $request->get('role'));
-        if ($productType == 'DataSource') {
-            $testPlan->excludeTestCases();
-        }
+        $testPlan->excludeTestCases($productType);
 
         return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
     }
