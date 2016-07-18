@@ -307,6 +307,10 @@ class CommunitiesController extends Controller
         $community = Community::findBySlug($communitySlug);
         $profiles = getCommunityProfileInstatnces($community->id);
 
+        if (empty($profiles)) {
+            return response()->json(['message' => 'Test data profiles not found'], 422);
+        }
+
         //download profiles and generate zip file
         $zip = new \ZipArchive();
         $zipName = date('Ymd_Hi_') . $communitySlug . '_backup.zip';
