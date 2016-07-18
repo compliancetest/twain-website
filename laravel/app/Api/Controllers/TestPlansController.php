@@ -204,6 +204,9 @@ class TestPlansController extends BaseApiController
 
         $suiteId = $testPlan->suite_id;
 
+        $roles = $testPlan->role;
+        $levels = $testPlan->level;
+
         $query = DB::table('wp_posts')
             ->join('wp_postmeta AS pm1', function ($join) use ($suiteId) {
                 $join->on('pm1.post_id', '=', 'wp_posts.ID')
@@ -230,6 +233,16 @@ class TestPlansController extends BaseApiController
             })
             ->join('wp_test_suites_scenarios AS scenario', function ($join) {
                 $join->on('scenario.id', '=', 'pm4.meta_value');
+            })
+            ->join('wp_postmeta AS pm7', function ($join) use ($roles) {
+                $join->on('pm7.post_id', '=', 'wp_posts.ID')
+                    ->where('pm7.meta_value', '=', $roles)
+                    ->where('pm7.meta_key', '=', 'choose_tester_role');
+            })
+            ->join('wp_postmeta AS pm8', function ($join) use ($suiteId, $levels) {
+                $join->on('pm8.post_id', '=', 'wp_posts.ID')
+                    ->where('pm8.meta_value', '=', $levels)
+                    ->where('pm8.meta_key', '=', 'conformance_level_' . $suiteId);
             });
 
         if ($request->get('execution_mode')) {
