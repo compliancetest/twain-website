@@ -51,7 +51,6 @@
                                                         <li><a href="{{ $sub->community->getUrl() }}wiki/">Articles</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}forum/">Forum</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}downloads/">Downloads</a></li>
-                                                        <li><a href="{{ $sub->community->getUrl() }}reports/">Reports</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}surveys/">Surveys</a></li>
                                                         @if($sub->community->isAdmin())
                                                             <li class="last"><a href="{{ $sub->community->getUrl() }}backups/">Test Data Backups</a></li>
