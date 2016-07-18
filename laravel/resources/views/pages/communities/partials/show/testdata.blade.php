@@ -66,11 +66,13 @@
                 <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalCreateProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="page-title-actions">
-                <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" title="Create Test Data Backup">Create Test Data Backup</a>
+        @if(count($instances))
+            <div class="col-md-3">
+                <div class="page-title-actions">
+                    <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" title="Create Test Data Backup">Create Test Data Backup</a>
+                </div>
             </div>
-        </div>
+        @endif
 
 
     @endif
