@@ -69,7 +69,7 @@
         @if(count($instances))
             <div class="col-md-3">
                 <div class="page-title-actions">
-                    <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" title="Create Test Data Backup">Create Test Data Backup</a>
+                    <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" data-backdrop="static" data-keyboard="false" title="Create Test Data Backup">Create Test Data Backup</a>
                 </div>
             </div>
         @endif
@@ -135,9 +135,7 @@
             e.preventDefault();
             var elem = jQuery(this);
 
-            elem.closest('.modal-content').find('.block-loading').removeClass('hidden');
-            elem.closest('.modal-content').find('.modal-footer').hide();
-            elem.closest('.modal-content').find('.modal-header .close_modal').hide();
+            elem.closest('.modal-content').find('.block-loading').show();
 
             jQuery.ajax({
                 type: 'post',
@@ -161,9 +159,7 @@
                     }, 2000);
                 },
                 complete: function () {
-                    elem.closest('.modal-content').find('.modal-footer').show();
-                    elem.closest('.modal-content').find('.modal-header .close_modal').show();
-                    elem.closest('.modal-content').find('.block-loading').addClass('hidden');
+                    elem.closest('.modal-content').find('.block-loading').hide();
                     $('.modal').modal('hide');
                 }
             });
@@ -263,13 +259,13 @@
                 New Test Data Backup
             </div>
             <div class="modal-body">
-                <div class="block-loading hidden"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING DATA</div><div class="loading-wait">Please wait...</div></div></div>
                 Are you sure that you want create new zip backup and upload it to S3?
             </div>
             <div class="modal-footer">
                 <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}/backup" class="btn btn-success btn-with-icon btn-confirm confirmBackup">Confirm</a>
                 <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
             </div>
+            <div class="block-loading"><div class="loading-content"><br /><span class="loader"></span><div class="loading-text">SAVING DATA</div><div class="loading-wait">Please wait...</div></div></div>
         </div>
     </div>
 </div>
