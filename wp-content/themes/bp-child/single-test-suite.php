@@ -67,14 +67,18 @@ Template Name Posts: Test Suite
                                  <?php if(!empty($suite->testTool)):?>
 								    Test Tool:
                                      <?php if(!empty($suite->testTool->license)):?>
-                                         <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" class="test-tool-link has-tooltip">
+                                         <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" class="test-tool-link<?php if(!empty($suite->testTool->description)): ?> has-tooltip<?php endif; ?>">
                                             <?php echo $suite->testTool->title;?>
-                                            <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
+                                            <?php if(!empty($suite->testTool->description)): ?>
+                                                <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
+                                            <?php endif; ?>
                                          </a>
                                      <?php else:?>
-                                         <a href="<?php echo S3Wrapper::getDownloadLink('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au', $suite->testTool->location);?>" class="test-tool-link has-tooltip">
+                                         <a href="<?php echo S3Wrapper::getDownloadLink('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au', $suite->testTool->location);?>" class="test-tool-link<?php if(!empty($suite->testTool->description)): ?> has-tooltip<?php endif; ?>">
                                              <?php echo $suite->testTool->title;?>
-                                             <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
+                                             <?php if(!empty($suite->testTool->description)): ?>
+                                                 <span class="simple_tooltip"><?php echo $suite->testTool->description;?><span></span></span>
+                                             <?php endif; ?>
                                          </a>
                                      <?php endif;?>
                                 <?php endif;?>
