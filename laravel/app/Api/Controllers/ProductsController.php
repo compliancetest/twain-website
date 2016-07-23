@@ -185,7 +185,7 @@ class ProductsController extends BaseApiController
 
                 $response = [
                     'id' => $this->product->post_name,
-                    'title' => $this->product->post_title,
+                    'title' => $this->product->post_title . ' v' . $productVersion,
                     'link' => getSiteUrl() . '/product/' . $this->product->post_name,
                 ];
                 return $this->respondWithData($response);
@@ -256,7 +256,7 @@ class ProductsController extends BaseApiController
 
         $response = [
             'id' => $this->product->post_name,
-            'title' => $this->product->post_title,
+            'title' => $this->product->post_title . ' v' . $productVersion,
             'link' => getSiteUrl() . '/product/' . $this->product->post_name,
         ];
         return $this->setStatusCode(201)->respondWithData($response);
@@ -702,19 +702,23 @@ class ProductsController extends BaseApiController
             $type = $request->get('product_type');
 
             $products = DB::table('wp_posts')
-            ->join('wp_postmeta AS pm1', function ($join) use ($type) {
-                $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                    ->where('pm1.meta_value', '=', $type)
-                    ->where('pm1.meta_key', '=', 'product_type');
-            })
-             ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
-                $join->on('pm2.post_id', '=', 'wp_posts.ID')
-                    ->where('pm2.meta_value', '=', $userOrganisationId)
-                    ->where('pm2.meta_key', '=', 'product_organisation_id');
-            })
-            ->where('wp_posts.post_type', '=', 'product-service')
-            ->groupBy('wp_posts.ID')
-            ->get();
+                ->join('wp_postmeta AS pm1', function ($join) use ($type) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $type)
+                        ->where('pm1.meta_key', '=', 'product_type');
+                })
+                ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
+                    $join->on('pm2.post_id', '=', 'wp_posts.ID')
+                        ->where('pm2.meta_value', '=', $userOrganisationId)
+                        ->where('pm2.meta_key', '=', 'product_organisation_id');
+                })
+                ->join('wp_postmeta AS version', function ($join) {
+                    $join->on('version.post_id', '=', 'wp_posts.ID')
+                        ->where('version.meta_key', '=', 'product_version');
+                })
+                ->where('wp_posts.post_type', '=', 'product-service')
+                ->groupBy('wp_posts.ID')
+                ->get();
 
             if(empty($products)){
                  return $this->respondNotFound('No products were found with '.$type.' type for this user!');
@@ -726,6 +730,10 @@ class ProductsController extends BaseApiController
                         ->where('pm1.meta_value', '=', $userOrganisationId)
                         ->where('pm1.meta_key', '=', 'product_organisation_id');
                 })
+                ->join('wp_postmeta AS version', function ($join) {
+                    $join->on('version.post_id', '=', 'wp_posts.ID')
+                        ->where('version.meta_key', '=', 'product_version');
+                })
                 ->where('wp_posts.post_type', '=', 'product-service')
                 ->groupBy('wp_posts.ID')
                 ->get();
@@ -735,10 +743,10 @@ class ProductsController extends BaseApiController
         }
 
         $response = [];
-        foreach($products as $product){
+        foreach ($products as $product) {
             $response[] = [
                 'id' => $product->post_name,
-                'title' => $product->post_title,
+                'title' => $product->post_title . ' v' . $product->meta_value,
                 'link' => getSiteUrl() . '/product/' . $product->post_name,
             ];
         }
