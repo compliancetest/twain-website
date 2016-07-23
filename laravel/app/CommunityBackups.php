@@ -34,7 +34,7 @@ class CommunityBackups extends Model
         $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
             'Bucket' => config('env.bucket.website'),
             'Key' => $this->s3_key,
-            'ResponseContentDisposition' => 'attachment;filename="'.pathinfo($this->s3_key, PATHINFO_FILENAME).'"'
+            'ResponseContentDisposition' => 'attachment;filename="'.pathinfo($this->s3_key, PATHINFO_FILENAME).'.zip"'
         ]);
 
         $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+20 minutes');
