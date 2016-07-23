@@ -318,7 +318,7 @@ class CommunitiesController extends Controller
         $zip->open( $zipPath, \ZIPARCHIVE::CREATE);
         foreach($profiles as $profile){
             $profileObject = Profile::find($profile->id);
-            $zip->addFromString($profile->profile_name,  json_encode($profileObject->getProfileFromS3(), JSON_PRETTY_PRINT));
+            $zip->addFromString($profile->profile_name . '.json',  json_encode($profileObject->getProfileFromS3(), JSON_PRETTY_PRINT));
         }
         $zip->close();
 
