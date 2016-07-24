@@ -227,7 +227,7 @@
                             if( opts.box ) {
                                 opts.box.remove();
                             }
-                            opts.box = null;
+                            //opts.box = null;
                         }else{
                             $('body').append(opts.box);
                         }
@@ -247,7 +247,7 @@
                             $overlay.hide();
                             if(opts.removeBoxAfterClose){
                                 opts.box.remove();
-                                opts.box = null;
+                                //opts.box = null;
                             }else{
                                 $('body').append(opts.box);
                             }
@@ -367,7 +367,7 @@
                     $overlay.hide();
                     if(opts.removeBoxAfterClose){
                         opts.box.remove();
-                        opts.box = null;
+                        //opts.box = null;
                     }else{
                         $('body').append(opts.box);
                     }
@@ -386,7 +386,7 @@
                         $overlay.hide();
                         if(opts.removeBoxAfterClose){
                             opts.box.remove();
-                            opts.box = null;
+                            //opts.box = null;
                         }else{
                             $('body').append(opts.box);
                         }
