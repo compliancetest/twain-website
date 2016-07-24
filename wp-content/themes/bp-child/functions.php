@@ -1650,3 +1650,13 @@ function canRemoveAuditFlag($transactionId)
     global $wpdb;
     return (boolean) $wpdb->get_row($wpdb->prepare("SELECT * FROM claim_transactions WHERE transaction_id = %s ", $transactionId));
 }
+
+/**
+ * Get Community URL
+ * @param $communityId
+ * @return string
+ */
+function getCommunityUrl($communityId){
+    $community = getCommunity($communityId);
+    return '/communities/' . $community->slug;
+}
