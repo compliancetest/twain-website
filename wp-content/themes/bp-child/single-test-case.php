@@ -118,7 +118,7 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             <p>Execution mode: <span><?php echo $case->executionMode; ?></span></p>
                         </div>
 
-                        <div class="grid_cell width10P left">
+                        <div class="grid_cell width10P no-wrap left">
                             <p>Optional: <span><?php echo $case->optional; ?></span></p>
                         </div>
 
