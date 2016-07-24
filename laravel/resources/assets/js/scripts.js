@@ -58,6 +58,14 @@ jQuery(document).ready(function($) {
         }
     });
 
+    //Replace mousewheel click by click button in IE.
+    $(document).on("mousedown", function(e) {
+        if ($(e.target).is("[data-ajax-modal]") && e.button === 1) {
+            $(e.target).click();
+            e.preventDefault();
+        }
+    });
+
     $('#confirmRemoveMembership').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
     });
