@@ -144,13 +144,16 @@ class CommunitiesController extends Controller
             $data['surveys'] = $surveys;
         }
         if ($action == 'admin') {
-            if(!$community->isAdmin()){
+            if (!$community->isAdmin() && !$community->isModerator()) {
                 return Redirect::to(getSiteUrl() . '/communities');
             }
             $data['communityMeta'] = $community->meta->keyBy('meta_key');
             $data['profileTypes'] = getCommunityProfileTypes($community->id);
             $data['invitedUsers'] = $community->invitations;
             $data['membershipRequests'] = $community->getMembershipRequests();
+            if($community->isModerator()){
+                $data['action'] = 'admin_page_for_support_users';
+            }
         }
         return view('pages.communities.show')->with($data);
     }

@@ -49,6 +49,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
+        'community.mod' => \App\Http\Middleware\CommunitySupport::class,
         'community.user' => \App\Http\Middleware\CommunityUser::class,
 
         'simpleauth' => \App\Http\Middleware\SimpleAuth::class,
