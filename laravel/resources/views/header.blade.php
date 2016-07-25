@@ -52,8 +52,10 @@
                                                         <li><a href="{{ $sub->community->getUrl() }}forum/">Forum</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}downloads/">Downloads</a></li>
                                                         <li><a href="{{ $sub->community->getUrl() }}surveys/">Surveys</a></li>
-                                                        @if($sub->community->isAdmin())
-                                                            <li class="last"><a href="{{ $sub->community->getUrl() }}backups/">Test Data Backups</a></li>
+                                                        @if($sub->community->isModerator() || $sub->community->isAdmin())
+                                                            @if($sub->community->isAdmin())
+                                                                <li class="last"><a href="{{ $sub->community->getUrl() }}backups/">Test Data Backups</a></li>
+                                                            @endif
                                                             <li class="last"><a href="{{ $sub->community->getUrl() }}admin/">Admin</a></li>
                                                         @endif
                                                     </ul>

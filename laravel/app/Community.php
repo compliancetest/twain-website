@@ -216,6 +216,21 @@ class Community extends Model
     }
 
     /**
+     * Check that given user is community support user
+     * @return array|null
+     */
+    public function isModerator($userId = false)
+    {
+        if (!$userId) {
+            if (!Auth::check()) {
+                return false;
+            }
+            $userId = Auth::user()->ID;
+        }
+        return (boolean)$this->members()->where(['is_mod' => true, 'user_id' => $userId])->first();
+    }
+
+    /**
      * Get community URL
      * @return array|null
      */

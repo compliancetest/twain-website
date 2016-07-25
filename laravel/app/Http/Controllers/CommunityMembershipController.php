@@ -164,28 +164,53 @@ class CommunityMembershipController extends Controller
     public function changeRole($communitySlug, Request $request)
     {
         $community = Community::findBySlug($communitySlug);
-        if ($request->get('role') == 'remove') {
-            foreach ($request->get('users') as $user_id) {
-                $user = get_userdata($user_id);
-                $emailData = array(
-                    '[name]' => cp_get_user_fullname($user_id),
-                    '[email]' => $user->user_email,
-                    '[website_url]' => get_site_url(),
-                    '[env]' => get_option('env'),
-                    '[username]' => $user->user_login,
-                    '[community]' => $community->title,
-                    '[community_url]' => $community->getUrl(),
-                    '[settings_link]' => $community->getUrl(),
-                    '[member_type]' => $request->get('role'),
-                );
-                $admins = $community->getAdmins();
-                sendEmails([['user_id' => $user_id]], 'remove_member', $emailData);
-                sendEmails($admins, 'remove_member_admin', $emailData);
-            }
-            $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->delete();
-        } else {
+        $isAdmin = $community->isAdmin();
 
+        if ($request->get('role') == 'remove') {
+            if ($isAdmin){
+                foreach ($request->get('users') as $user_id) {
+                    $user = get_userdata($user_id);
+                    $emailData = array(
+                        '[name]' => cp_get_user_fullname($user_id),
+                        '[email]' => $user->user_email,
+                        '[website_url]' => get_site_url(),
+                        '[env]' => get_option('env'),
+                        '[username]' => $user->user_login,
+                        '[community]' => $community->title,
+                        '[community_url]' => $community->getUrl(),
+                        '[settings_link]' => $community->getUrl(),
+                        '[member_type]' => $request->get('role'),
+                    );
+                    $admins = $community->getAdmins();
+                    sendEmails([['user_id' => $user_id]], 'remove_member', $emailData);
+                    sendEmails($admins, 'remove_member_admin', $emailData);
+                }
+                $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->delete();
+            }
+        } else {
             if ($request->get('role') == 'admin') {
+                if ($isAdmin) {
+                    foreach ($request->get('users') as $user_id) {
+                        $user = get_userdata($user_id);
+                        $emailData = array(
+                            '[name]' => cp_get_user_fullname($user_id),
+                            '[email]' => $user->user_email,
+                            '[website_url]' => get_site_url(),
+                            '[env]' => get_option('env'),
+                            '[username]' => $user->user_login,
+                            '[community]' => $community->title,
+                            '[community_url]' => $community->getUrl(),
+                            '[settings_link]' => $community->getUrl(),
+                            '[member_type]' => $request->get('role'),
+                        );
+                        $admins = $community->getAdmins();
+                        sendEmails([['user_id' => $user_id]], 'member_promoted', $emailData);
+                        sendEmails($admins, 'member_promoted_admin', $emailData);
+                    }
+                    $updateData = ['is_admin' => true, 'is_mod' => false];
+                }
+
+            } elseif ($request->get('role') == 'mod') {
                 foreach ($request->get('users') as $user_id) {
                     $user = get_userdata($user_id);
                     $emailData = array(
@@ -203,33 +228,36 @@ class CommunityMembershipController extends Controller
                     sendEmails([['user_id' => $user_id]], 'member_promoted', $emailData);
                     sendEmails($admins, 'member_promoted_admin', $emailData);
                 }
-                $updateData = ['is_admin' => true];
+                $updateData = ['is_mod' => true, 'is_admin' => false];
             } else {
-                foreach ($request->get('users') as $user_id) {
-                    $user = get_userdata($user_id);
-                    $emailData = array(
-                        '[name]' => cp_get_user_fullname($user_id),
-                        '[email]' => $user->user_email,
-                        '[website_url]' => get_site_url(),
-                        '[env]' => get_option('env'),
-                        '[username]' => $user->user_login,
-                        '[community]' => $community->title,
-                        '[community_url]' => $community->getUrl(),
-                        '[settings_link]' => $community->getUrl(),
-                        '[member_type]' => $request->get('role'),
-                    );
-                    $admins = $community->getAdmins();
-                    sendEmails([['user_id' => $user_id]], 'member_demoted', $emailData);
-                    sendEmails($admins, 'member_demoted_admin', $emailData);
+                if ($isAdmin) {
+                    foreach ($request->get('users') as $user_id) {
+                        $user = get_userdata($user_id);
+                        $emailData = array(
+                            '[name]' => cp_get_user_fullname($user_id),
+                            '[email]' => $user->user_email,
+                            '[website_url]' => get_site_url(),
+                            '[env]' => get_option('env'),
+                            '[username]' => $user->user_login,
+                            '[community]' => $community->title,
+                            '[community_url]' => $community->getUrl(),
+                            '[settings_link]' => $community->getUrl(),
+                            '[member_type]' => $request->get('role'),
+                        );
+                        $admins = $community->getAdmins();
+                        sendEmails([['user_id' => $user_id]], 'member_demoted', $emailData);
+                        sendEmails($admins, 'member_demoted_admin', $emailData);
+                    }
+                    $updateData = ['is_admin' => false, 'is_mod' => false];
                 }
-                $updateData = ['is_admin' => false];
             }
             $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->update($updateData);
         }
 
         $data = [
             'community' => $community,
-            'membershipRequests' => $community->getMembershipRequests()
+            'membershipRequests' => $community->getMembershipRequests(),
+            'isAdmin' => $isAdmin,
         ];
 
         $returnHTML = view('pages.communities.partials.show.admin-members')->with($data)->render();

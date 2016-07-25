@@ -48,7 +48,7 @@ function ct_is_support($ticket_id, $support_id = null)
     
     $community_id = $ticketDetail->community_id;
     
-    return doesUserCommunityAdmin( $support_id, $community_id );
+    return doesUserCommunitySupport( $support_id, $community_id );
     
 }
 
