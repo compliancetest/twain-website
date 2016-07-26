@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Post extends Model
@@ -121,5 +122,31 @@ class Post extends Model
             ->orderBy('wp_posts.post_title');
         $query->get();
         return $query->get();
+    }
+
+    /**
+     * Get products with PENDING transactions for test suite
+     * @return array
+     */
+    public function getProductsForNewVerifyRequest()
+    {
+        $response = [];
+        $testSuiteEntry = TestSuite::where(['suite_id' => $this->ID])->first();
+        $userSubscriptions = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $productsWithPendingTransactions = Transaction::where([
+                'subscription_id' => $userSubscription->id,
+                'test_suite_id' => $testSuiteEntry->family_mark,
+                'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
+            ])->groupBy('product_id')->get();
+            if ($productsWithPendingTransactions) {
+                foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
+                    $product = Post::find($productWithPendingTransactions->product_id);
+                    $response[$product->post_title] = $product;
+                }
+            }
+        }
+        ksort($response);
+        return $response;
     }
 }

@@ -610,7 +610,99 @@ var Page = {
         });
     },
 
+    verifyRequest: {
+        updateVerifyRequestDetailsForm: function () {
+            $('#availableProducts, #testPlanId').on('change', function (e) {
+                e.preventDefault();
+                var form = $('#createVerifyRequestForm');
 
+                var url = '/verify-requests/' + $('#suiteId').val() + '/create';
+                var product = $('#availableProducts').val();
+                var testPlan = $('#testPlanId').val();
+                if (product) {
+                    url += '/' + product;
+                    if (testPlan) {
+                        url += '/' + testPlan;
+                    }
+                }
+                form.find('.modal-body .message').remove();
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    error: function (jqXHR, status) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function (rsp) {
+                        form.find('.block-loading').hide();
+                        $('.modal-content').html(rsp);
+                    },
+                    complete: function () {
+                    }
+                })
+            });
+        },
+        selectTransactionWithMultipleValues: function () {
+            $('.transaction').on('change', function (e) {
+                e.preventDefault();
+                var entry = $(this);
+                if (entry.is(':checked')) {
+                    //only 1 transaction per test case is allowed
+                    $('input[data-case="' + entry.attr('data-case') + '"]:not(:checked)').attr('disabled', 'disabled');
+                } else {
+                    $('input[data-case="' + entry.attr('data-case') + '"]').removeAttr('disabled');
+                }
+            });
+        },
+        validateVerifyRequestDetailsForm: function () {
+            $('#createVerifyRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                form.find('.modal-body .message').remove();
+
+                var isValid = true;
+                $('.caseIdList').each(function(index, element){
+                    if($('input[data-case="' + $(element).attr('data-id') + '"]:checked').length == 0 || $('input[data-case="' + $(element).attr('data-id') + '"]:checked').length > 1){
+                        form.find('.modal-body').append('<div class="message error-message">Please select transaction for ' + $(element).text() + ' test case</div>');
+                        isValid = false;
+                    }
+                });
+                if(isValid === false){
+                    return false;
+                }
+
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        'suite_id' : $('#suiteId').val(),
+                        'product_id': $('#availableProducts').val(),
+                        'test_plan_id': $('#testPlanId').val(),
+                        'transactions': $('.transaction:checked').map(function(){
+                            return $( this ).data('case')
+                        }).get(),
+                    },
+                    error: function(jqXHR, status){
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function(rsp){
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 3000);
+                    },
+                    complete: function(){
+                    }
+                })
+            });
+        },
+    },
     testCoverage: {
         loadTestCaseDetails: function () {
             Page.testCoverage.toggleExcludedFields($('#caseExclude'));

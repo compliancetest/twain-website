@@ -33,4 +33,18 @@ class Transaction extends Model
         return 'https://s3-'.config('env.bucket.region').'.amazonaws.com/'.config('env.bucket.transactions').'/' . $fileName;
     }
 
+    public static function getTransactionsForVerifyRequest($productId, $testSuiteId)
+    {
+        $processedTransactions = [];
+        $transactions = Transaction::where([
+            'product_id' => $productId,
+            'test_suite_id' => $testSuiteId,
+            'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
+        ])->get();
+        foreach($transactions as $transaction){
+            $processedTransactions[$transaction->test_case_id][] = $transaction;
+        }
+        return $processedTransactions;
+    }
+
 }

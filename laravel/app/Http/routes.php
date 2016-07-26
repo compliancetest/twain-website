@@ -177,5 +177,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('/testplan/{planid}', 'TestPlansController@destroy');
 
         Route::post('/transactions/{transactionId}/updateauditrecord', 'TransactionsController@updateauditrecord');
+
+        Route::get('verify-requests', 'VerifyRequestsController@index');
+        Route::get('verify-requests/{testSuiteId}/create/{productId?}/{testPlanId?}', 'VerifyRequestsController@create');
+        Route::post('verify-requests', 'VerifyRequestsController@store');
+
     });
 });

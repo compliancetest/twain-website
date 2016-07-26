@@ -76,6 +76,7 @@
                                     {{--<li><a data-title="Test Data" href="{{ getSiteUrl() }}/my-test-data/" class="menu-test-data">Test Data</a></li>--}}
                                     <li><a data-title="Products" href="{{ getSiteUrl() }}/my-products/" class="menu-products">Products</a></li>
                                     <li><a data-title="Coverage" href="{{ getSiteUrl() }}/test-suite-coverage/" class="menu-coverage">Coverage</a></li>
+                                    <li><a data-title="Coverage" href="{{ getSiteUrl() }}/verify-requests/" class="menu-coverage">Verify Requests</a></li>
                                     <li><a data-title="Transactions" href="{{ getSiteUrl() }}/my-transaction-log/" class="menu-transactions">Transactions</a></li>
                                     <li><a data-title="Support" href="{{ getSiteUrl() }}/my-support-tickets/" class="menu-support">Support</a></li>
                                     <li><a data-title="Profile" href="{{ getSiteUrl() }}/my-profile/" class="menu-profile">Profile</a></li>
