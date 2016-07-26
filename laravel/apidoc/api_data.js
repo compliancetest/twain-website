@@ -52,10 +52,23 @@ define({ "api": [
         },
         {
           "title": "Not found",
-          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"Downloads not found\"\n     ]\n   },\n   \"code\": 404\n}",
+          "content": " {\n    \"errors\": {\n      \"message\": [\n         \"Downloads not found\"\n      ]\n    },\n    \"code\": 404\n }\n*",
           "type": "json"
         }
       ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
     },
     "version": "1.0.0",
     "filename": "app/Api/Controllers/VersionController.php",

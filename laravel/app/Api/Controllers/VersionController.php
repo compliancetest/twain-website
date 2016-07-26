@@ -51,6 +51,8 @@ class VersionController extends BaseApiController
     *     },
     *     "code": 404
     *  }
+    **
+    * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
     *
     * @apiVersion 1.0.0
     */
