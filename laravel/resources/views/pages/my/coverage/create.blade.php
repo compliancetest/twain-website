@@ -36,7 +36,7 @@
                 @foreach($roles as $role)
                     <div class="radio">
                         <label>
-                            <input type="radio" name="role" class="role" value="{{ $role }}">
+                            <input type="radio" name="role" class="role" value="{{ str_replace(' ', '', $role) }}">
                             {{ $role }}
                         </label>
                     </div>
