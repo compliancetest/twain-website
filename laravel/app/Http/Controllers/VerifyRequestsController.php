@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Community;
 use App\Post;
 use App\TestPlan;
 use App\Transaction;
@@ -40,7 +41,9 @@ class VerifyRequestsController extends Controller
         $products = $testSuite->getProductsForNewVerifyRequest();
         $transactions = $testPlans = [];
         if($productId){
-            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_id' => $testSuiteId])->get();
+            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_id' => $testSuiteId])
+                ->whereNotIn('id', VerifyRequest::where(['test_suite_id' => $testSuiteId, 'product_id' => $productId])->get()
+                ->pluck('test_plan_id'))->get();
         }
         if($testPlanId){
             $transactions = Transaction::getTransactionsForVerifyRequest($productId, $testSuiteId);
@@ -73,13 +76,29 @@ class VerifyRequestsController extends Controller
         $testPlan = TestPlan::find($request->get('test_plan_id'));
         VerifyRequest::create([
             'test_plan_id' => $testPlan->id,
+            'community_id' => Post::find($request->get('suite_id'))->getMetaByKey('community_id'),
             'requestor_id' => Auth::user()->ID,
             'product_id' => $request->get('product_id'),
             'test_suite_id' => $request->get('suite_id'),
             'transactions' => json_encode($request->get('transactions'))
         ]);
 
-        $userSuites = Auth::user()->suiteSubscriptions;
+        $userSuites = VerifyRequest::getUserRequests();
         return response()->json(['html' => view('pages.my.verify_requests.list', compact('userSuites'))->render()]);
+    }
+
+    /**
+     * Delete Verify Request entry
+     * @param $verifyRequestId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete($verifyRequestId)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        if (!$verifyRequest->canUserDelete()) {
+            return response()->json(['messages' => "You can't delete this Verify Request"], 422);
+        }
+        $verifyRequest->delete();
+        return response()->json(['status' => 'success']);
     }
 }

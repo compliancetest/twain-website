@@ -181,6 +181,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('verify-requests', 'VerifyRequestsController@index');
         Route::get('verify-requests/{testSuiteId}/create/{productId?}/{testPlanId?}', 'VerifyRequestsController@create');
         Route::post('verify-requests', 'VerifyRequestsController@store');
+        Route::delete('verify-requests/{requestId}', 'VerifyRequestsController@delete');
 
     });
 });

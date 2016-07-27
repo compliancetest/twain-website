@@ -63,27 +63,27 @@
 
 
                         //Remove test coverage plan modal
-                        $('body').on('click', '.deleteTestCoveragePlan', function(e){
+                        $('body').on('click', '.deleteVerifyRequest', function(e){
                             var self = $(this);
                             e.preventDefault();
 
                             var testCoveragePlan = {
-                                id: self.data('plan-id'),
+                                id: self.data('request-id'),
                                 link: self.attr('href')
                             };
 
-                            jQuery('#removePlanModal-' + testCoveragePlan.id + ' .modal-content').append('<div class="block-loading loading-shown"><div class="loading-content"><span class="loader"></span><div class="loading-text">REMOVING PLAN</div><div class="loading-wait">Please wait...</div></div></div>');
+                            jQuery('#removeVerifyRequestModal-' + testCoveragePlan.id + ' .modal-content').append('<div class="block-loading loading-shown"><div class="loading-content"><span class="loader"></span><div class="loading-text">PROCESSING</div><div class="loading-wait">Please wait...</div></div></div>');
                             jQuery.ajax({
                                 type: 'delete',
                                 url: testCoveragePlan.link,
                                 success: function (data) {
                                     $('.modal').modal('hide');
                                     if (data.status == 'success') {
-                                        $('#coverage-plan-' + testCoveragePlan.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                                        $('#verify-request-' + testCoveragePlan.id).addClass('removing').fadeTo("slow", 0.3, function () {
                                             $(this).remove();
-                                            $('#testCoveragePlanList').prepend('<div class="success-message">Plan has been removed</div>');
+                                            $('#verifyRequestsList').prepend('<div class="success-message">Verify Request has been removed</div>');
                                             setTimeout(function () {
-                                                $('#testCoveragePlanList > .success-message').slideUp(function () {
+                                                $('#verifyRequestsList > .success-message').slideUp(function () {
                                                     $(this).remove();
                                                 });
                                             }, 2000);
@@ -92,12 +92,12 @@
                                 },
                                 error: function (jqXHR, status) {
                                     $('.modal').modal('hide');
-                                    $('#testCoveragePlanList').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                                    $('#verifyRequestsList').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                                     setTimeout(function () {
-                                        $('#testCoveragePlanList > .error-message').slideUp(function () {
+                                        $('#verifyRequestsList > .error-message').slideUp(function () {
                                             $(this).remove();
                                         });
-                                    }, 5000);
+                                    }, 3000);
                                 }
                             })
                         });

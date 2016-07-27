@@ -682,7 +682,7 @@ var Page = {
                         'product_id': $('#availableProducts').val(),
                         'test_plan_id': $('#testPlanId').val(),
                         'transactions': $('.transaction:checked').map(function(){
-                            return $( this ).data('case')
+                            return $( this ).val()
                         }).get(),
                     },
                     error: function(jqXHR, status){
@@ -695,7 +695,7 @@ var Page = {
                         $('#verifyRequestsListContent').html(rsp.html);
                         setTimeout(function () {
                             $('.modal').modal('hide');
-                        }, 3000);
+                        }, 1500);
                     },
                     complete: function(){
                     }

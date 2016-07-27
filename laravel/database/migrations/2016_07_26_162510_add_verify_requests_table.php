@@ -15,6 +15,7 @@ class AddVerifyRequestsTable extends Migration
         Schema::create('verify_requests', function (Blueprint $table) {
             $table->primary('id');
             $table->uuid('id');
+            $table->uuid('community_id');
             $table->uuid('test_plan_id');
             $table->integer('test_suite_id');
             $table->integer('product_id');
