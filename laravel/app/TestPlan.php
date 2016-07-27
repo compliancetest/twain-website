@@ -131,7 +131,7 @@ class TestPlan extends Model
     public function excludeTestCases($type = 'DataSource', $applicationProductFeatures = [])
     {
         $testSuite = Post::find($this->suite_id);
-        $testCases = $testSuite->getTestCases(str_replace(' ', '', $this->role), $this->level);
+        $testCases = $testSuite->getTestCases($this->role, $this->level);
         foreach ($testCases as $testCase) {
 
             if ($type == 'DataSource') {
