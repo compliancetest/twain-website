@@ -254,6 +254,7 @@ class TestCasesController extends BaseApiController
         $model->save();
 
         $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
+        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
 
         $response = [
             'ExecutionId' => $model->id,
@@ -269,7 +270,7 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'ExecutionProfile' => $testExecutionProfile ? Profile::find($testExecutionProfile)->getProfileFromS3() : null,
             'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
             'images' => $this->_getTestCaseImages($testCase)
         ];
@@ -401,6 +402,7 @@ class TestCasesController extends BaseApiController
         $testCase = Post::find($model->test_case_id);
 
         $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
+        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
 
         $response = [
             'ExecutionId' => $model->id,
@@ -416,7 +418,7 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => Profile::find(TestCase::find($testCase->ID)->getTestExecutionProfileId())->getProfileFromS3(),
+            'ExecutionProfile' => $testExecutionProfile ? Profile::find($testExecutionProfile)->getProfileFromS3() : null,
             'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
             'images' => $this->_getTestCaseImages($testCase)
         ];
