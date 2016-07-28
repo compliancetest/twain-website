@@ -132,7 +132,7 @@ class Post extends Model
     {
         $response = [];
         $testSuiteEntry = TestSuite::where(['suite_id' => $this->ID])->first();
-        $userSubscriptions = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
+        $userSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->suiteSubscriptions[0]->organisation_id, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
         foreach ($userSubscriptions as $userSubscription) {
             $productsWithPendingTransactions = Transaction::where([
                 'subscription_id' => $userSubscription->id,
