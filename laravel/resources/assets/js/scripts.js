@@ -611,11 +611,38 @@ var Page = {
     },
 
     verifyRequest: {
+        supportUpdateCheckboxes: function () {
+            $('#hideResolved, #hideOthers').on('change', function (e) {
+                e.preventDefault();
+
+                var url = '/verify-requests/update-list';
+
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    data: {
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    error: function (jqXHR, status) {
+                    },
+                    success: function (rsp) {
+                        $('#verifyRequestsListContent').html(rsp.html);
+                    },
+                    complete: function () {
+                    }
+                })
+            });
+        },
         updateVerifyRequestDetailsForm: function () {
             $('#availableProducts, #testPlanId').on('change', function (e) {
                 e.preventDefault();
                 var form = $('#createVerifyRequestForm');
 
+                //reset test plans dropdown if we change product
+                if($(this).attr('id') == 'availableProducts'){
+                    $('#testPlanId').prop('selectedIndex',0);
+                }
                 var url = '/verify-requests/' + $('#suiteId').val() + '/create';
                 var product = $('#availableProducts').val();
                 var testPlan = $('#testPlanId').val();
@@ -636,7 +663,7 @@ var Page = {
                     },
                     success: function (rsp) {
                         form.find('.block-loading').hide();
-                        $('.modal-content').html(rsp);
+                        $('#createVerifyRequestModal .modal-content').html(rsp);
                     },
                     complete: function () {
                     }
@@ -702,6 +729,77 @@ var Page = {
                 })
             });
         },
+        validateAssignVerifyRequestDetailsForm: function () {
+            $('#assignVerifyRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                form.find('.modal-body .message').remove();
+
+                if (!$('#availableSupportUsers').val()) {
+                    form.find('.modal-body').append('<div class="message error-message">Please select Support user</div>');
+                    return false;
+                }
+                ;
+
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        'user_id': $('#availableSupportUsers').val(),
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    error: function (jqXHR, status) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function (rsp) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 1500);
+                    },
+                    complete: function () {
+                    }
+                })
+            })
+        },
+        validateResolveVerifyRequestDetailsForm: function () {
+            $('#resolveVerifyRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        'user_id': $('#availableSupportUsers').val(),
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    error: function (jqXHR, status) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function (rsp) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 1500);
+                    },
+                    complete: function () {
+                    }
+                })
+            })
+        }
     },
     testCoverage: {
         loadTestCaseDetails: function () {

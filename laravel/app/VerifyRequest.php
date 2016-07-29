@@ -20,25 +20,44 @@ class VerifyRequest extends Model
      * Get list of requests for user. Requests are grouped by test suites
      * @return array
      */
-    public function getUserRequests()
+    public function getUserRequests($hideResolved = true, $hideOthers = true)
     {
         $result = [];
         $user = Auth::user();
-        $userTestSuites = $user->suiteSubscriptions;
+
         $userCommunities = $user->subscriptions;
-        foreach ($userTestSuites as $userTestSuite) {
-            if (!isset($result[$userTestSuite->suite_family_mark])) {
-                $result[$userTestSuite->suite_family_mark] = [
-                    'testSuite' => Post::find($userTestSuite->suite_family_mark),
-                    'data' => [],
-                ];
+        foreach ($userCommunities as $userCommunity) {
+            $community = Community::find($userCommunity->community_id);
+            //admins and mods can see all community suites
+            if ($community->isAdmin() || $community->isModerator()) {
+                $userTestSuites = Post::getCommunityTestSuites($community->id);
+                array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
+                    $userTestSuites[$key]->suite_family_mark = $entry->ID;
+                });
+            } else {
+                $userTestSuites = $user->suiteSubscriptions;
             }
-            foreach ($userCommunities as $userCommunity) {
+
+            foreach ($userTestSuites as $userTestSuite) {
+                if (!isset($result[$userTestSuite->suite_family_mark])) {
+                    $result[$userTestSuite->suite_family_mark] = [
+                        'testSuite' => Post::find($userTestSuite->suite_family_mark),
+                        'data' => [],
+                    ];
+                }
+
                 if ($userCommunity->is_admin || $userCommunity->is_mod) {
-                    $requests = VerifyRequest::where([
+                    $query = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
                         'test_suite_id' => $userTestSuite->suite_family_mark,
-                    ])->get();
+                    ]);
+                    if ($hideResolved) {
+                        $query->where('status', '<>', 'Resolved');
+                    }
+                    if ($hideOthers) {
+                        $query->whereIn('assignee_id', [0, $user->ID]);
+                    }
+                    $requests = $query->get();
                 } else {
                     $requests = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
@@ -50,9 +69,11 @@ class VerifyRequest extends Model
                     foreach ($requests as $request) {
                         $result[$userTestSuite->suite_family_mark]['data'][] = [
                             'verifyRequest' => $request,
+                            'requestor' => User::find($request->requestor_id),
+                            'assignee' => $request->assignee_id ? User::find($request->assignee_id) : false,
                             'product' => Post::find($request->product_id),
                             'testPlan' => TestPlan::find($request->test_plan_id),
-                            'testCases' => Transaction::find(json_decode($request->transactions, true))->map(function($item, $key){
+                            'testCases' => Transaction::find(json_decode($request->transactions, true))->map(function ($item, $key) {
                                 return Post::find($item->test_case_id);
                             }),
                         ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\Post;
+use App\TestOutcomeStatus;
 use App\TestPlan;
 use App\Transaction;
 use App\VerifyRequest;
@@ -21,11 +22,28 @@ class VerifyRequestsController extends Controller
      */
     public function index()
     {
+         $userID = Auth::user()->ID;
          $data = [
             'userSuites' => VerifyRequest::getUserRequests(),
             'pageTitle' => 'Verify Requests',
+            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
         ];
         return view('pages.my.verify_requests.index')->with($data);
+    }
+
+    /**
+     * Render VerifyRequests form for Support user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateList(Request $request)
+    {
+        $userID = Auth::user()->ID;
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
 
     /**
@@ -70,7 +88,7 @@ class VerifyRequestsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->respondUnprocessableEntity($validator->messages());
+            return response()->json($validator->messages(), 422);
         }
 
         $testPlan = TestPlan::find($request->get('test_plan_id'));
@@ -100,5 +118,92 @@ class VerifyRequestsController extends Controller
         }
         $verifyRequest->delete();
         return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * Render assign moderator popup
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function assignPopup($testSuiteId, $verifyRequestId)
+    {
+        $communityId = Post::find($testSuiteId)->getMetaByKey('community_id');
+        $moderators = Community::find($communityId)->getModerators();
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+
+        return view('pages.my.verify_requests.assign_popup', compact('moderators', 'testSuiteId', 'verifyRequest'));
+    }
+
+    /**
+     * Save reassignment
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function assign($testSuiteId, $verifyRequestId, Request $request)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        if ($verifyRequest->status == 'Resolved') {
+            return response()->json(["You can't reassign resolved Verify Request"], 422);
+        }
+        if ($verifyRequest->status == 'New') {
+            $verifyRequest->status = 'In Progress';
+        }
+        $verifyRequest->assignee_id = $request->get('user_id');
+        $verifyRequest->save();
+
+        $userID = Auth::user()->ID;
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
+    }
+
+    /**
+     * Render Resolve VerifyRequest 
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function resolvePopup($testSuiteId, $verifyRequestId)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        $communityId = Post::find($testSuiteId)->getMetaByKey('community_id');
+        $transactions = Transaction::find(json_decode($verifyRequest->transactions, true));
+        return view('pages.my.verify_requests.resolve_popup', compact('transactions', 'testSuiteId', 'verifyRequest', 'communityId'));
+    }
+
+    /**
+     * Confirm resolving Verify Request. Transactions included to VerifyRequest will
+     * have 'PASS' status and VerifyRequest status will be changed to 'Resolved'
+     * @param $communityId
+     * @param $verifyRequestId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resolve($communityId, $verifyRequestId, Request $request)
+    {
+        $community = Community::find($communityId);
+        if (!$community->isModerator()) {
+            return response()->json(["Permissions error"], 422);
+        }
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+
+        Transaction::whereIn('id', json_decode($verifyRequest->transactions, true))->update(['test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PASS')]);
+
+        $verifyRequest->status = 'Resolved';
+        $verifyRequest->save();
+
+        $userID = Auth::user()->ID;
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
 }
