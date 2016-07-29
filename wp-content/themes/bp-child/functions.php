@@ -1522,6 +1522,23 @@ function doesUserAdminInAnyCommunity( $user_id, $communitiesList = false  ){
     return false;
 }
 
+function doesUserSupportInAnyCommunity( $user_id, $communitiesList = false  ){
+    global $wpdb;
+    $communities_ids = $wpdb->get_results("SELECT id FROM communities");
+    foreach( $communities_ids AS $communities_id ){
+        if( ! $communitiesList ){
+            if( doesUserCommunitySupport( $user_id, $communities_id->id ) ){
+                return true;
+            }
+        } else {
+            if( doesUserCommunitySupport( $user_id, $communities_id->id ) && in_array( $communities_id->id, $communitiesList ) ){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function ct_read_xml_from_amazon_s3($url)
 {
     $ch = curl_init($url);

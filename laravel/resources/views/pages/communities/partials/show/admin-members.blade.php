@@ -76,7 +76,7 @@
             <?php $user = \App\User::find($mod->user_id);?>
             <li class="col-sm-6">
                 <label>
-                    @if($isAdmin){
+                    @if($isAdmin)
                         <input type="checkbox" value="{{ $mod->user_id }}" name="id[]" @if($mod->user_id == Auth::user()->ID) disabled="disabled" @endif>
                     @endif
                     <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">

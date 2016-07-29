@@ -177,5 +177,19 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('/testplan/{planid}', 'TestPlansController@destroy');
 
         Route::post('/transactions/{transactionId}/updateauditrecord', 'TransactionsController@updateauditrecord');
+
+        Route::get('verify-requests', 'VerifyRequestsController@index');
+        Route::get('verify-requests/update-list', 'VerifyRequestsController@updateList');
+        Route::get('verify-requests/{testSuiteId}/create/{productId?}/{testPlanId?}', 'VerifyRequestsController@create');
+
+        Route::get('verify-requests/{testSuiteId}/resolve/{verifyRequestId}', 'VerifyRequestsController@resolvePopup');
+        Route::post('verify-requests/{communityId}/resolve/{verifyRequestId}', 'VerifyRequestsController@resolve');
+
+        Route::get('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assignPopup');
+        Route::post('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assign');
+
+        Route::post('verify-requests', 'VerifyRequestsController@store');
+        Route::delete('verify-requests/{requestId}', 'VerifyRequestsController@delete');
+
     });
 });
