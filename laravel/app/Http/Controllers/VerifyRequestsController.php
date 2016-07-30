@@ -26,7 +26,7 @@ class VerifyRequestsController extends Controller
          $data = [
             'userSuites' => VerifyRequest::getUserRequests(),
             'pageTitle' => 'Verify Requests',
-            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID),
         ];
         return view('pages.my.verify_requests.index')->with($data);
     }
@@ -41,7 +41,7 @@ class VerifyRequestsController extends Controller
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
@@ -92,7 +92,7 @@ class VerifyRequestsController extends Controller
         }
 
         $testPlan = TestPlan::find($request->get('test_plan_id'));
-        VerifyRequest::create([
+        $verifyRequest = VerifyRequest::create([
             'test_plan_id' => $testPlan->id,
             'community_id' => Post::find($request->get('suite_id'))->getMetaByKey('community_id'),
             'requestor_id' => Auth::user()->ID,
@@ -100,6 +100,8 @@ class VerifyRequestsController extends Controller
             'test_suite_id' => $request->get('suite_id'),
             'transactions' => json_encode($request->get('transactions'))
         ]);
+
+        $verifyRequest->sendNewVerifyRequestNotification();
 
         $userSuites = VerifyRequest::getUserRequests();
         return response()->json(['html' => view('pages.my.verify_requests.list', compact('userSuites'))->render()]);
@@ -156,16 +158,18 @@ class VerifyRequestsController extends Controller
         $verifyRequest->assignee_id = $request->get('user_id');
         $verifyRequest->save();
 
+        $verifyRequest->sendVerifyRequestNotification('assigned_verify_request');
+
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
 
     /**
-     * Render Resolve VerifyRequest 
+     * Render Resolve VerifyRequest
      * @param $testSuiteId
      * @param $verifyRequestId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -199,10 +203,12 @@ class VerifyRequestsController extends Controller
         $verifyRequest->status = 'Resolved';
         $verifyRequest->save();
 
+        $verifyRequest->sendVerifyRequestNotification('resolved_verify_request');
+
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserAdminInAnyCommunity($userID) || doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
