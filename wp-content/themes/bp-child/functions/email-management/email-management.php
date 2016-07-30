@@ -118,6 +118,53 @@ $ct_email_templates = array(
             )
         )
     ),
+    'Verify Requests Section' => array(
+        array(
+            'menu' => 'Verify Request Created',
+            'title' => 'Verify Request Created',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'new_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'new_verify_request_to_support'
+                )
+            )
+        ),
+        array(
+            'menu' => 'Verify Request Assigned',
+            'title' => 'Verify Request Assigned',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'assigned_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'assigned_verify_request_to_support'
+                ),
+            )
+        ),
+        array(
+            'menu' => 'Verify Request Resolved',
+            'title' => 'Verify Request Resolved',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'resolved_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'resolved_verify_request_to_support'
+                )
+            )
+        ),
+    ),
     'Organisation Section' => array(
         array(
             'menu' => 'Organisation Record Created',

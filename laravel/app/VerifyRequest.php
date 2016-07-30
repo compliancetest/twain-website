@@ -28,8 +28,8 @@ class VerifyRequest extends Model
         $userCommunities = $user->subscriptions;
         foreach ($userCommunities as $userCommunity) {
             $community = Community::find($userCommunity->community_id);
-            //admins and mods can see all community suites
-            if ($community->isAdmin() || $community->isModerator()) {
+            //Community Support users can see all community suites
+            if ($community->isModerator()) {
                 $userTestSuites = Post::getCommunityTestSuites($community->id);
                 array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
                     $userTestSuites[$key]->suite_family_mark = $entry->ID;
@@ -96,5 +96,26 @@ class VerifyRequest extends Model
             return false;
         }
         return true;
+    }
+
+    /**
+     * Send email notification about VerifyRequest action (add / assign / resolve)
+     */
+    public function sendVerifyRequestNotification($emailtemplateName)
+    {
+        $testSuite = Post::find($this->test_suite_id);
+        $community = Community::find($testSuite->getMetaByKey('community_id'));
+        $data = [
+            '[requestor_name]' => cp_get_user_fullname($this->requestor_id),
+            '[assignee_name]' => cp_get_user_fullname($this->assignee_id),
+            '[verify_request_id]' => $this->id,
+            '[website_url]' => getSiteUrl(),
+            '[community]' => $community->title,
+            '[test_suite]' => $testSuite->post_title,
+        ];
+        $community->sendEmailsToSupportUsers( $emailtemplateName . '_to_support', $data);
+
+        $requestorUser = User::find($this->requestor_id);
+        cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => $requestorUser->user_email], $emailtemplateName . '_to_user', $data);
     }
 }

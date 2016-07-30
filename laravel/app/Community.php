@@ -281,4 +281,17 @@ class Community extends Model
         }
         return getSiteUrl() . '/laravel/resources/assets/images/gravatar.jpg';
     }
+
+    /**
+     * Send email to all community support users
+     * @param $emailTemplate
+     * @param $data
+     */
+    public function sendEmailsToSupportUsers($emailTemplate, $data)
+    {
+        foreach ($this->getModerators() as $supportUser) {
+            $supportUser = User::find($supportUser->user_id);
+            cp_send_email(['name' => cp_get_user_fullname($supportUser->ID), 'email' => $supportUser->user_email], $emailTemplate, $data);
+        }
+    }
 }
