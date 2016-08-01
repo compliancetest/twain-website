@@ -43,7 +43,7 @@
                                     {{ formatDate($verifyRequest['verifyRequest']->updated_at, 'Y-m-d H:i:s') }}
                                 </td>
                                 <td class="text-center">
-                                    @if($isAdmin && $verifyRequest['verifyRequest']->status == 'In Progress')
+                                    @if($isAdmin && $verifyRequest['verifyRequest']->status == 'In Progress' && $verifyRequest['verifyRequest']->canBeResolved(Auth::user()))
                                         <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/resolve/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                            class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Resolve"></a>
                                     @endif
@@ -74,6 +74,120 @@
                                             </div>
                                         </div>
                                     @endif
+                                </td>
+                            </tr>
+                            <tr class="details_row" id="verify-request-details-{{ $verifyRequest['verifyRequest']->id }}">
+                                <td colspan="7">
+                                    <!-- ToDo-Ilia Please make colored buttons like on /my-transaction-log/ page for admins-->
+                                    <button class="verify_as_pass btn btn-success">Verify As Pass</button>
+                                    <button class="verify_as_fail btn btn-danger">Verify As Fail</button>
+                                    <button class="verify_as_skip btn btn-trigger">Verify As Skip</button>
+                                    <div class="table-responsive">
+                                        <table class="table colored-table" style="margin-top: 20px;">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Test Case</th>
+                                                    <th>Transaction ID</th>
+                                                    <th>Execution ID</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach(json_decode($verifyRequest['verifyRequest']->transactions, true) as  $transactionId)
+                                                    <?php
+                                                        $transaction = \App\Transaction::find($transactionId);
+                                                        $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->name;
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
+                                                                   data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
+                                                        </td>
+                                                        <td class="text-center">{{ \App\Post::find($transaction->test_case_id)->post_title }}</td>
+                                                        <td class="text-center">{{ $transaction->id }}</td>
+                                                        <td class="text-center">
+                                                            @if($transaction->s3_link)
+                                                                <a href="{!! $transaction->s3_link !!}" target="_blank"> {!! $transaction->execution_id !!} </a>
+                                                            @else
+                                                                {!! $transaction->execution_id !!}
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">{{ $testOutcomeStatus }}</td>
+                                                        <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
+                                                    </tr>
+                                                    <tr class="transactions_row" id="verify-request-transactions-{{ $transactionId }}">
+                                                        <td colspan="7">
+                                                            <div class="table-responsive">
+                                                                <table class="table colored-table" style="margin-top: 20px;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>From<br>To</th>
+                                                                            <th>Test<br>Step</th>
+                                                                            <th>Operation Triplet<br>Return Code</th>
+                                                                            <th>Session State</th>
+                                                                            <th>Message Data</th>
+                                                                            <th>Date Time</th>
+                                                                            <th>Step Outcome</th>
+                                                                            <th>Screen Capture</th>
+                                                                            <th>Scan Results</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($transaction->logs as $message)
+                                                                            <tr>
+                                                                                <td class="text-center">{{ $message->from }}<br>{{ $message->to }}</td>
+                                                                                <td>
+                                                                                    @if(!empty($message->test_step))
+                                                                                        <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
+                                                                                    <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if($message->session_state)
+                                                                                        {{ $message->session_state }}
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if(!empty($message->log_output))
+                                                                                        <a href="/testingdetails/{{ $message->id }}/output" class="s3output">View</a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>{{ $message->updated_at }}</td>
+                                                                                <td>
+                                                                                    @if(empty($message->reason))
+                                                                                        <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>">{{ $message->step_outcome }}</span>
+                                                                                    @else
+                                                                                        <a href="/testingdetails/{{ $message->id }}/reason" class="reason">
+                                                                                            <span class="status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
+                                                                                        </a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>-</td>
+                                                                                <td>
+                                                                                    @if ($scanImages = json_decode($message->scan_results))
+                                                                                        @foreach ($scanImages as $scanImage)
+                                                                                            <a href="{{ $scanImage }}" target="_blank">View</a>
+                                                                                        @endforeach
+                                                                                    @else
+                                                                                        -
+                                                                                    @endif
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

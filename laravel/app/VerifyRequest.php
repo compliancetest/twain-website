@@ -99,6 +99,27 @@ class VerifyRequest extends Model
     }
 
     /**
+     * Ensure that VerifyRequest can be resolved.
+     * VerifyRequest could be resolved only by assignee user and if it doesn't
+     * contain Pending transactions
+     * @param User $user
+     * @return bool
+     */
+    public function canBeResolved(User $user)
+    {
+        //only assignee user can resolve VerifyRequest
+        if ($user->ID != $this->assignee_id) {
+            return false;
+        }
+        $transactionIds = json_decode($this->transactions, true);
+        $pendingTransactions = Transaction::whereIn('id', $transactionIds)->where('test_outcome_status_id', TestOutcomeStatus::getIdByCode('PENDING'))->get();
+        if (!$pendingTransactions->isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Send email notification about VerifyRequest action (add / assign / resolve)
      */
     public function sendVerifyRequestNotification($emailtemplateName)

@@ -101,7 +101,7 @@ class VerifyRequestsController extends Controller
             'transactions' => json_encode($request->get('transactions'))
         ]);
 
-        $verifyRequest->sendNewVerifyRequestNotification();
+        $verifyRequest->sendVerifyRequestNotification('new_verify_request');
 
         $userSuites = VerifyRequest::getUserRequests();
         return response()->json(['html' => view('pages.my.verify_requests.list', compact('userSuites'))->render()]);
@@ -196,9 +196,12 @@ class VerifyRequestsController extends Controller
         if (!$community->isModerator()) {
             return response()->json(["Permissions error"], 422);
         }
+
         $verifyRequest = VerifyRequest::find($verifyRequestId);
 
-        Transaction::whereIn('id', json_decode($verifyRequest->transactions, true))->update(['test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PASS')]);
+        if (!$verifyRequest->canBeResolved(Auth::user())) {
+            return response()->json(["VerifyRequest could be resolved only by assignee user if it doesn't contain Pending transactions"], 422);
+        }
 
         $verifyRequest->status = 'Resolved';
         $verifyRequest->save();
