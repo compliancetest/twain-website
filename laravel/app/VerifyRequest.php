@@ -13,7 +13,7 @@ class VerifyRequest extends Model
 
     protected $fillable = [
         'test_plan_id', 'requestor_id', 'transactions', 'assignee_id',
-        'product_id', 'test_suite_id', 'community_id'
+        'product_id', 'test_suite_id', 'community_id', 'organisation_id'
     ];
 
     /**
@@ -62,7 +62,7 @@ class VerifyRequest extends Model
                     $requests = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
                         'test_suite_id' => $userTestSuite->suite_family_mark,
-                        'requestor_id' => $user->ID,
+                        'organisation_id' => Auth::user()->organisation[0]['id'],
                     ])->get();
                 }
                 if (is_object($requests) && !$requests->isEmpty()) {

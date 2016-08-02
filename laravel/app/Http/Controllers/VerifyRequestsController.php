@@ -98,7 +98,8 @@ class VerifyRequestsController extends Controller
             'requestor_id' => Auth::user()->ID,
             'product_id' => $request->get('product_id'),
             'test_suite_id' => $request->get('suite_id'),
-            'transactions' => json_encode($request->get('transactions'))
+            'transactions' => json_encode($request->get('transactions')),
+            'organisation_id' => Auth::user()->organisation[0]['id'],
         ]);
 
         $verifyRequest->sendVerifyRequestNotification('new_verify_request');
@@ -149,6 +150,9 @@ class VerifyRequestsController extends Controller
     public function assign($testSuiteId, $verifyRequestId, Request $request)
     {
         $verifyRequest = VerifyRequest::find($verifyRequestId);
+        if ($verifyRequest->assignee_id) {
+            return response()->json(["This Verify Request already assigned"], 422);
+        }
         if ($verifyRequest->status == 'Resolved') {
             return response()->json(["You can't reassign resolved Verify Request"], 422);
         }
