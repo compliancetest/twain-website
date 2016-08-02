@@ -341,7 +341,7 @@ function deleteProduct()
     //user can't delete product while it has claims / transactions
     $transactions = $wpdb->get_row($wpdb->prepare("SELECT * FROM transactions WHERE product_id = %d", $id));
     $claims = $wpdb->get_row($wpdb->prepare("SELECT * FROM claims WHERE product_id = %d", $id));
-    $testPlans = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_plans WHERE product_id = %d", $id));
+    $testPlans = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_plans WHERE product_id = %d AND deleted_at IS NULL", $id));
 
     if($transactions || $claims || $testPlans){
         addMessage("You can't delete this product. Please delete claims, test plans and transactions associated with product and try again.", 'error');
