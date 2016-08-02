@@ -81,7 +81,7 @@ function ct_is_group_admin_or_support($user_id = null)
     if(!$user_id)
         $user_id = get_current_user_id();
     
-    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod=1 OR is_admin=1)", $user_id);
+    $query = $wpdb->prepare("SELECT count(*) FROM communities_members WHERE user_id = %d AND (is_mod=1 OR is_admin=1)", $user_id);
     $c = $wpdb->get_var($query);
     
     return $c;

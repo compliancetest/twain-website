@@ -22,6 +22,10 @@ if ($user_status == 3) {
 }
 
 $tSubscriptions = ct_get_user_viewable_subscriptions($user->ID);
+if(doesUserSupportInAnyCommunity(get_current_user_id()) || doesUserAdminInAnyCommunity(get_current_user_id())) {
+    $tOrganisations = ct_get_user_viewable_organisations($user->ID);
+    $organisationsFilter = isset($_GET['organisation']) ? intval($_GET['organisation']) : null;
+}
 
 $filterSubscription = isset($_GET['subscription']) ? htmlspecialchars($_GET['subscription']) : null;
 
@@ -56,6 +60,7 @@ $selectedFilters = [
     'scenario' => $filterScenario,
     'date' => $filterDate,
     'subscription_id' => $filterSubscription,
+    'organisation_id' => $organisationsFilter,
 ];
 $transactionsLog->setWhereQuery($sIds, $selectedFilters);
 
@@ -93,7 +98,9 @@ if ($filterDate) {
 if (isset($filterSubscription)) {
     $params[] = 'subscription=' . $filterSubscription;
 }
-
+if (isset($organisationsFilter)) {
+    $params[] = 'organisation=' . $organisationsFilter;
+}
 get_header();
 ?>
 <div class="content" id="my_transaction_log">
@@ -276,22 +283,22 @@ get_header();
                                 <input type="hidden" name="case" value="<?php echo $filterCase ?>"/>
                             <?php } ?>
                             <?php if ($filterOutcome) { ?>
-                                <input type="hidden" name="serv" value="<?php echo urlencode($filterOutcome) ?>"/>
+                                <input type="hidden" name="outcome" value="<?php echo urlencode($filterOutcome) ?>"/>
                             <?php } ?>
                             <?php if ($filterAudit) { ?>
-                                <input type="hidden" name="action" value="<?php echo $filterAudit ?>"/>
+                                <input type="hidden" name="audit" value="<?php echo $filterAudit ?>"/>
                             <?php } ?>
                             <?php if ($filterScenario) { ?>
-                                <input type="hidden" name="partyid" value="<?php echo $filterScenario ?>"/>
+                                <input type="hidden" name="scenario" value="<?php echo $filterScenario ?>"/>
                             <?php } ?>
                             <?php if ($filterDate) { ?>
                                 <input type="hidden" name="date" value="<?php echo $filterDate ?>"/>
                             <?php } ?>
-                            <?php if ($filterCustomer) { ?>
-                                <input type="hidden" name="customer" value="<?php echo $filterCustomer ?>"/>
+                            <?php if ($filterSubscription) { ?>
+                                <input type="hidden" name="subscription" value="<?php echo $filterSubscription ?>"/>
                             <?php } ?>
-                            <?php if ($filterTags) { ?>
-                                <input type="hidden" name="tag" value="<?php echo $filterTags ?>"/>
+                            <?php if ($organisationsFilter) { ?>
+                                <input type="hidden" name="organisation" value="<?php echo $organisationsFilter ?>"/>
                             <?php } ?>
                         </form>
                     </div>
