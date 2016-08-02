@@ -18,7 +18,7 @@
                         @foreach($userSuite['data'] as $verifyRequest)
                             <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td class="text-left">
-                                    <a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title }} </a>
+                                    <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse"><span class="collapse-icon"></span></a><a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title }} </a>
                                 </td>
                                 <td class="col-sm-1 text-center" >{{ $verifyRequest['testPlan']->level }}</td>
                                 <td>
@@ -76,12 +76,11 @@
                                     @endif
                                 </td>
                             </tr>
-                            <tr class="details_row" id="verify-request-details-{{ $verifyRequest['verifyRequest']->id }}">
+                            <tr class="details_row collapse" id="verify-request-details-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td colspan="7">
-                                    <!-- ToDo-Ilia Please make colored buttons like on /my-transaction-log/ page for admins-->
-                                    <button class="verify_as_pass btn btn-success">Verify As Pass</button>
-                                    <button class="verify_as_fail btn btn-danger">Verify As Fail</button>
-                                    <button class="verify_as_skip btn btn-trigger">Verify As Skip</button>
+                                    <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
+                                    <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
+                                    <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
                                     <div class="table-responsive">
                                         <table class="table colored-table" style="margin-top: 20px;">
                                             <thead>
@@ -105,7 +104,11 @@
                                                             <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
                                                                    data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
                                                         </td>
-                                                        <td class="text-center">{{ \App\Post::find($transaction->test_case_id)->post_title }}</td>
+                                                        <td>
+                                                            <a href="#verify-request-transactions-{{ $transactionId }}" class="collapsed" data-toggle="collapse">
+                                                                <span class="collapse-icon"></span>{{ \App\Post::find($transaction->test_case_id)->post_title }}
+                                                            </a>
+                                                        </td>
                                                         <td class="text-center">{{ $transaction->id }}</td>
                                                         <td class="text-center">
                                                             @if($transaction->s3_link)
@@ -117,10 +120,10 @@
                                                         <td class="text-center">{{ $testOutcomeStatus }}</td>
                                                         <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                     </tr>
-                                                    <tr class="transactions_row" id="verify-request-transactions-{{ $transactionId }}">
+                                                    <tr class="transactions_row collapse" id="verify-request-transactions-{{ $transactionId }}">
                                                         <td colspan="7">
                                                             <div class="table-responsive">
-                                                                <table class="table colored-table" style="margin-top: 20px;">
+                                                                <table class="table colored-table">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>From<br>To</th>
