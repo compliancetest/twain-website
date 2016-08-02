@@ -6,9 +6,15 @@
     <div class="modal-body">
 
         <div class="form-group">
+            @if($verifyRequest->assignee_id)
+                <div class="alert alert-danger">
+                    This Verify Request already assigned
+                </div>
+            @endif
+
             <div class="col-sm-6">
                 <label for="availableProducts">Support Users</label>
-                <select name="user_id" id="availableSupportUsers" class="form-control">
+                <select name="user_id" id="availableSupportUsers" class="form-control" @if($verifyRequest->assignee_id) disabled="disabled" @endif>
                     <option value="">Select a Support User</option>
                     @foreach($moderators as $moderator)
                         <option @if($moderator->user_id == $verifyRequest->assignee_id) selected="selected"
@@ -23,7 +29,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+        @if(!$verifyRequest->assignee_id)
+            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+        @endif
         <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
     </div>
     <div class="block-loading">

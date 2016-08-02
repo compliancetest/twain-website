@@ -273,15 +273,15 @@ function ct_get_user_viewable_organisations($user_id = null)
                                  ";
         $data = $wpdb->get_results($query);
         
-    } else if(ct_is_group_admin_or_support($user_id)) {
-        $query = $wpdb->prepare("SELECT DISTINCT(o.id), o.organisation_name FROM {$wpdb->prefix}bp_groups_members AS bm, {$wpdb->prefix}users_subscriptions AS s
+    } else if(doesUserSupportInAnyCommunity($user_id) || doesUserAdminInAnyCommunity($user_id)) {
+        $query = $wpdb->prepare("SELECT DISTINCT(o.id), o.organisation_name FROM communities_members AS bm, {$wpdb->prefix}users_subscriptions AS s
                 LEFT JOIN {$wpdb->prefix}organisations AS o ON o.id = s.organisation_id
                 WHERE 
                     s.user_id = bm.user_id AND bm.is_confirmed=1 
                     AND
-                    (bm.user_id=%d OR bm.group_id 
+                    (bm.user_id=%d OR bm.community_id 
                         IN 
-                        ( SELECT group_id FROM {$wpdb->prefix}bp_groups_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
+                        ( SELECT community_id FROM communities_members WHERE user_id=%d AND (is_mod = 1 OR is_admin = 1)))
                 ORDER BY o.organisation_name
                 ", $user_id, $user_id);
         $data = $wpdb->get_results($query);

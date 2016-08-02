@@ -178,3 +178,13 @@ body.modal-open,
 
     }
 }
+
+.collapse-icon{
+    @include iconsSprite('blue-arrow-bottom');
+    padding: 0 3px 0 0;
+    vertical-align: middle;
+}
+
+.collapsed .collapse-icon{
+    @include iconsSprite('blue-arrow-right');
+}

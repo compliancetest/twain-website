@@ -13,6 +13,9 @@ class TransactionLogs
         } else {
             $this->where[] = ' subscription_id IN (0) ';
         }
+        if ($filters['organisation_id']) {
+            $this->where[] = sprintf(' subscription_id IN ( SELECT id FROM wp_organisations_subscriptions WHERE organisation_id = %d) ', $filters['organisation_id']);
+        }
         if ($filters['product_id']) {
             $this->where[] = sprintf(' product_id = %d ', $filters['product_id']);
         }

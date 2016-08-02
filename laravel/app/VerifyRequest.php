@@ -13,7 +13,7 @@ class VerifyRequest extends Model
 
     protected $fillable = [
         'test_plan_id', 'requestor_id', 'transactions', 'assignee_id',
-        'product_id', 'test_suite_id', 'community_id'
+        'product_id', 'test_suite_id', 'community_id', 'organisation_id'
     ];
 
     /**
@@ -62,7 +62,7 @@ class VerifyRequest extends Model
                     $requests = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
                         'test_suite_id' => $userTestSuite->suite_family_mark,
-                        'requestor_id' => $user->ID,
+                        'organisation_id' => Auth::user()->organisation[0]['id'],
                     ])->get();
                 }
                 if (is_object($requests) && !$requests->isEmpty()) {
@@ -93,6 +93,27 @@ class VerifyRequest extends Model
         $user = Auth::user();
         $community = Community::find($this->community_id);
         if ($user->ID != $this->requestor_id && !($community->isAdmin() || $community->isModerator())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Ensure that VerifyRequest can be resolved.
+     * VerifyRequest could be resolved only by assignee user and if it doesn't
+     * contain Pending transactions
+     * @param User $user
+     * @return bool
+     */
+    public function canBeResolved(User $user)
+    {
+        //only assignee user can resolve VerifyRequest
+        if ($user->ID != $this->assignee_id) {
+            return false;
+        }
+        $transactionIds = json_decode($this->transactions, true);
+        $pendingTransactions = Transaction::whereIn('id', $transactionIds)->where('test_outcome_status_id', TestOutcomeStatus::getIdByCode('PENDING'))->get();
+        if (!$pendingTransactions->isEmpty()) {
             return false;
         }
         return true;

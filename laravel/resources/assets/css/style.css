@@ -8814,7 +8814,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8884,7 +8884,7 @@ body.modal-open,
 }
 /* line 119, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -8928,7 +8928,7 @@ body.modal-open,
 #messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -498px;
+  background-position: 0 -490px;
   height: 24px;
   width: 24px;
 }
@@ -8941,9 +8941,29 @@ body.modal-open,
 #messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -522px;
+  background-position: 0 -466px;
   height: 24px;
   width: 24px;
+}
+
+/* line 182, ../scss/_common.scss */
+.collapse-icon {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -111px;
+  height: 11px;
+  width: 11px;
+  padding: 0 3px 0 0;
+  vertical-align: middle;
+}
+
+/* line 188, ../scss/_common.scss */
+.collapsed .collapse-icon {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: -11px -111px;
+  height: 11px;
+  width: 11px;
 }
 
 /* line 1, ../scss/blocks/_forms.scss */
@@ -9026,7 +9046,7 @@ select.form-control {
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -171px;
+  background-position: 0 -181px;
   height: 14px;
   width: 14px;
 }
@@ -9034,7 +9054,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -498px;
+  background-position: 0 -490px;
   height: 24px;
   width: 24px;
 }
@@ -9048,7 +9068,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -13px -146px;
+  background-position: 0 -169px;
   height: 12px;
   width: 12px;
 }
@@ -9056,7 +9076,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -522px;
+  background-position: 0 -466px;
   height: 24px;
   width: 24px;
 }
@@ -9106,7 +9126,7 @@ input[type="checkbox"] {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -382px;
+  background-position: 0 -350px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9206,7 +9226,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1464095847') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9320,7 +9340,7 @@ input[type="checkbox"] {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -146px;
+  background-position: -14px -133px;
   height: 12px;
   width: 13px;
   content: '';
@@ -9338,7 +9358,7 @@ input[type="checkbox"] {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -209px;
+  background-position: 0 -212px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9404,7 +9424,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -642px;
+  background-position: 0 -514px;
   height: 24px;
   width: 18px;
 }
@@ -9412,7 +9432,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -594px;
+  background-position: 0 -706px;
   height: 24px;
   width: 18px;
 }
@@ -9420,7 +9440,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -570px;
+  background-position: 0 -586px;
   height: 24px;
   width: 18px;
 }
@@ -9428,7 +9448,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -690px;
+  background-position: 0 -562px;
   height: 24px;
   width: 18px;
 }
@@ -9436,7 +9456,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -714px;
+  background-position: 0 -658px;
   height: 24px;
   width: 18px;
 }
@@ -9444,7 +9464,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -618px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9452,7 +9472,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -666px;
+  background-position: 0 -634px;
   height: 24px;
   width: 18px;
 }
@@ -9460,19 +9480,27 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -546px;
+  background-position: 0 -610px;
   height: 24px;
   width: 18px;
 }
 
-/* line 168, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-trigger:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -682px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 172, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 174, ../scss/blocks/_buttons.scss */
+/* line 178, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9500,21 +9528,21 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-copy:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -111px;
+  background-position: 0 -145px;
   height: 11px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -134px;
+  background-position: -12px -157px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -134px;
+  background-position: 0 -157px;
   height: 12px;
   width: 12px;
 }
@@ -9525,21 +9553,21 @@ input[type="checkbox"] {
   height: 9px;
   width: 12px;
 }
-/* line 202, ../scss/blocks/_buttons.scss */
+/* line 206, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -158px;
+  background-position: 0 -196px;
   height: 13px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -100px;
+  background-position: -10px -78px;
   height: 11px;
   width: 13px;
 }
@@ -9553,40 +9581,40 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -122px;
+  background-position: -13px -100px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -78px;
+  background-position: 0 -100px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -158px;
+  background-position: -12px -169px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-logout:before {
   background-image: url('../images/icons.png');
-  background-position: -11px -122px;
+  background-position: 0 -133px;
   height: 12px;
   width: 14px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: -13px -100px;
+  background-position: 0 -122px;
   height: 11px;
   width: 11px;
 }
 
-/* line 233, ../scss/blocks/_buttons.scss */
+/* line 237, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9611,7 +9639,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 250, ../scss/blocks/_buttons.scss */
+/* line 254, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9623,25 +9651,25 @@ input[type="checkbox"] {
   left: 6px;
   top: 7px;
 }
-/* line 258, ../scss/blocks/_buttons.scss */
+/* line 262, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 264, ../scss/blocks/_buttons.scss */
+/* line 268, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 268, ../scss/blocks/_buttons.scss */
+/* line 272, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 275, ../scss/blocks/_buttons.scss */
+/* line 279, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9653,18 +9681,18 @@ input[type="checkbox"] {
   cursor: pointer;
   width: 76px;
 }
-/* line 286, ../scss/blocks/_buttons.scss */
+/* line 290, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 288, ../scss/blocks/_buttons.scss */
+/* line 292, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 294, ../scss/blocks/_buttons.scss */
+/* line 298, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9672,44 +9700,44 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
 }
-/* line 302, ../scss/blocks/_buttons.scss */
+/* line 306, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 308, ../scss/blocks/_buttons.scss */
+/* line 312, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 313, ../scss/blocks/_buttons.scss */
+/* line 317, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -766px;
+  background-position: 0 -793px;
   height: 28px;
   width: 21px;
 }
-/* line 319, ../scss/blocks/_buttons.scss */
+/* line 323, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -738px;
+  background-position: 0 -765px;
   height: 28px;
   width: 21px;
 }
-/* line 325, ../scss/blocks/_buttons.scss */
+/* line 329, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -794px;
+  background-position: 0 -821px;
   height: 28px;
   width: 21px;
 }
-/* line 330, ../scss/blocks/_buttons.scss */
+/* line 334, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 336, ../scss/blocks/_buttons.scss */
+/* line 340, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -9985,7 +10013,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1464095847') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10012,7 +10040,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10043,7 +10071,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10167,7 +10195,7 @@ input[type="checkbox"] {
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -278px;
+  background-position: 0 -246px;
   height: 20px;
   width: 20px;
 }
@@ -10176,7 +10204,7 @@ input[type="checkbox"] {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -319px;
+  background-position: 0 -287px;
   height: 21px;
   width: 21px;
 }
@@ -10185,7 +10213,7 @@ input[type="checkbox"] {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -298px;
+  background-position: 0 -266px;
   height: 21px;
   width: 21px;
 }
@@ -10196,7 +10224,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464095847') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10265,7 +10293,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -11510,7 +11538,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.prev {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -427px;
+  background-position: 0 -395px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -11519,7 +11547,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination a.next {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -404px;
+  background-position: 0 -372px;
   height: 23px;
   width: 24px;
   text-indent: -9999px;
@@ -12151,7 +12179,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -209px;
+  background-position: -11px -212px;
   height: 16px;
   width: 16px;
 }
@@ -12159,7 +12187,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -185px;
+  background-position: -12px -196px;
   height: 16px;
   width: 16px;
 }
@@ -12177,7 +12205,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -225px;
+  background-position: 0 -730px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -12248,7 +12276,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -260px;
+  background-position: 0 -228px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -12602,7 +12630,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -12778,7 +12806,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -822px;
+  background-position: 0 -849px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12848,7 +12876,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -12872,7 +12900,7 @@ input.notify-changes {
 .community-downloads .form-actions .add-new-download-link:before, .community-forums .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -851px;
+  background-position: -14px -181px;
   height: 15px;
   width: 15px;
   content: '';
@@ -12899,7 +12927,7 @@ input.notify-changes {
 .community-downloads .download-license-red:before, .community-forums .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -340px;
+  background-position: 0 -329px;
   height: 21px;
   width: 18px;
 }
@@ -12911,7 +12939,7 @@ input.notify-changes {
 .community-downloads .download-license-green:before, .community-forums .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -361px;
+  background-position: 0 -308px;
   height: 21px;
   width: 18px;
 }
@@ -13050,7 +13078,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -13105,7 +13133,7 @@ input.notify-changes {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -13759,7 +13787,7 @@ input.notify-changes {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -225px;
+  background-position: 0 -878px;
   height: 24px;
   width: 12px;
 }
@@ -13771,7 +13799,7 @@ input.notify-changes {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -185px;
+  background-position: -12px -878px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -13854,7 +13882,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -474px;
+  background-position: 0 -418px;
   height: 24px;
   width: 28px;
 }
@@ -13869,7 +13897,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -450px;
+  background-position: 0 -442px;
   height: 24px;
   width: 28px;
 }
@@ -13912,7 +13940,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13922,7 +13950,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1464095847') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

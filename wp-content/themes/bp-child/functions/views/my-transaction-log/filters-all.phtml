@@ -104,6 +104,21 @@
                     <label for="date">Date: <?php if ($filterDate) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate ? '' : $filterDate; ?>" style="width: 170px;"/>
                 </li>
+
+                <?php if(doesUserSupportInAnyCommunity(get_current_user_id()) || doesUserAdminInAnyCommunity(get_current_user_id())):?>
+                    <li class="first">
+                        <label for="organisation">Organisation: <?php if ($filterOrganisation) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <select name="organisation" id="organisation" autocomplete="off" class="select">
+                            <option value="">- All -</option>
+                            <?php if (is_iterable($tOrganisations)): ?>
+                                <?php foreach ($tOrganisations as $org) { ?>
+                                    <option
+                                        value="<?php echo $org->id ?>" <?php echo $org->id == $organisationsFilter ? "selected='selected'" : "" ?>><?php echo $org->organisation_name; ?></option>
+                                <?php } ?>
+                            <?php endif; ?>
+                        </select>
+                    </li>
+                <?php endif;?>
             </ul>
             <div class="search-filter-actions">
                 <a class="action-btn process-btn submit-btn" href="#"><span class="p"></span><span class="t">Confirm</span></a>
