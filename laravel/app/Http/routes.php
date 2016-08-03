@@ -37,6 +37,7 @@ Route::group(['middleware' => ['web']], function () {
         ['only' => ['store',  'index']]);
     Route::get('testingdetails/{transaction}/output/{laravel?}', 'TestingDetailsController@output');
     Route::get('testingdetails/{transaction}/reason', 'TestingDetailsController@reason');
+    Route::get('testingdetails/{transaction}/transaction-reason/{laravel?}', 'TestingDetailsController@transactionReason');
     Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');

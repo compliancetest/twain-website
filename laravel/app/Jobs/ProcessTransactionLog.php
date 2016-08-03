@@ -31,6 +31,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
     public $productId;
     public $rootFolder;
     public $testOutcome;
+    public $reason;
 
     /**
      * ProcessTransactionLog constructor.
@@ -44,6 +45,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $this->testSuiteId = $data['test_suite_id'];
         $this->productId = $data['product_id'];
         $this->testOutcome = $data['test_outcome'];
+        $this->reason = @$data['reason'];
         $this->userId = Auth::user()->ID;
         $this->rootFolder = base_path() . '/storage/app/public/transactions/' . $this->executionId;
     }
@@ -118,6 +120,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->test_suite_id = $testSuite->ID;
         $transaction->audit_record = false;
         $transaction->test_outcome_status_id = $this->testOutcome ? TestOutcomeStatus::getIdByCode($this->testOutcome) : TestOutcomeStatus::getSuccessId();
+        $transaction->reason = $this->reason;
         $transaction->customer_id = $this->userId;
         $transaction->subscription_id = $organisationSubscription->id;
         $transaction->organisation_id = $organisationMember->organisation_id;

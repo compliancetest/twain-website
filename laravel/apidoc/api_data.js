@@ -1372,6 +1372,13 @@ define({ "api": [
             "optional": false,
             "field": "test_outcome",
             "description": "<p>Optional - allowed values: Fail, Pass, Skip, Pending.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "reason",
+            "description": "<p>Optional - a reason of fail or skip.</p>"
           }
         ]
       }

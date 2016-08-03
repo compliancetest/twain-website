@@ -212,8 +212,15 @@ get_header();
                                         <?php endif;?>
                                         <?php $outcomeStatus = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_outcome_statuses WHERE id = %s", $row->test_outcome_status_id));?>
                                         <?php $status = getOutcomeStatusClass($outcomeStatus->code); ?>
-                                        <span
-                                            class="status-<?php echo $status;?>"><?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?></span>
+                                        <span class="status-<?php echo $status;?>">
+                                            <?php if($row->reason):?>
+                                                <a href="/testingdetails/<?php echo $row->id;?>/transaction-reason" class="transaction_reason">
+                                                    <?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?>
+                                                </a>
+                                            <?php else:?>
+                                                <?php echo $outcomeStatus ? $outcomeStatus->name : 'FAIL';?>
+                                            <?php endif;?>
+                                        </span>
                                         <br/>
                                     </div>
                                     <div class="td td-audit tocenter">
@@ -379,6 +386,10 @@ get_header();
 
             fixTdHeight(jQuery('#my_transaction_log .table-box'));
 
+            jQuery('.transaction_reason').cplightbox({
+                type: 'ajax',
+                closeWhenClickOveraly: false
+            })
             jQuery('#delete-log-link').cplightbox({
                 type: 'inline',
                 href: '#delete-log-box',

@@ -84,6 +84,29 @@
                     </div>
                 </div>
 
+                <!-- View Transation Reason Modal-->
+                <div class="modal fade" id="viewReasonModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document" style="width: 500px;">
+                        <div class="modal-content block-loading-wrapper">
+                            <div class="modal-header">
+                                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                Message Data
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                            </div>
+                            <div class="block-loading loading-shown">
+                                <div class="loading-content"><span class="loader"></span>
+
+                                    <div class="loading-text">LOADING DATA</div>
+                                    <div class="loading-wait">Please wait...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- View Output Modal-->
                 <div class="modal fade" id="viewOutputModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document" style="width: 900px;">
@@ -118,6 +141,12 @@
                             <div class="modal-body">
                                 <div class="change_status_message">
                                     Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected transactions?
+
+                                    <div class="form-group" id="transaction_reason" style="margin-top: 20px;">
+                                        <label for="reason">Reason</label>
+                                        <input name="reason" type="text" class="form-control" id="reason_message"/>
+                                    </div>
+                                    <input type="text" name="reason" id="transaction_reason" style="display: none;">
                                 </div>
                                 <div class="change_status_no_messages">
                                     Please select a row
@@ -150,6 +179,11 @@
 
                         $('.change_status').click(function(){
                             $('.change_status_data_type').val($(this).attr('data-outcome'));
+                            if($(this).attr('data-outcome') == 'Pass'){
+                                $('#transaction_reason').hide();
+                            } else {
+                                $('#transaction_reason').show();
+                            }
                             $('.change_status_row_id').val($(this).closest('.details_row').attr('id'));
                             $('.change_to_status').text($(this).attr('data-outcome'));
                             var checkboxes = $(this).closest('.details_row').find('input.transaction:checked');
@@ -178,7 +212,8 @@
                                 data: {
                                     'verify_request_id': $('.change_status_row_id').val().replace('verify-request-details-', ''),
                                     'transactions': ids,
-                                    'outcome_code': jQuery('.change_status_data_type').val()
+                                    'outcome_code': jQuery('.change_status_data_type').val(),
+                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? false : $('#reason_message').val()
                                 },
                                 type: 'post',
                                 dataType: 'json',
