@@ -78,14 +78,18 @@
                             </tr>
                             <tr class="details_row collapse" id="verify-request-details-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td colspan="7">
-                                    <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
-                                    <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
-                                    <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                                    @if($isAdmin)
+                                        <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
+                                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
+                                        <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                                    @endif
                                     <div class="table-responsive">
                                         <table class="table colored-table" style="margin-top: 20px;">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    @if($isAdmin)
+                                                        <th></th>
+                                                    @endif
                                                     <th>Test Case</th>
                                                     <th>Transaction ID</th>
                                                     <th>Execution ID</th>
@@ -100,10 +104,12 @@
                                                         $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->name;
                                                     ?>
                                                     <tr>
-                                                        <td>
-                                                            <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
-                                                                   data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
-                                                        </td>
+                                                        @if($isAdmin)
+                                                            <td>
+                                                                <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
+                                                                       data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
+                                                            </td>
+                                                        @endif
                                                         <td>
                                                             <a href="#verify-request-transactions-{{ $transactionId }}" class="collapsed" data-toggle="collapse">
                                                                 <span class="collapse-icon"></span>{{ \App\Post::find($transaction->test_case_id)->post_title }}
@@ -158,7 +164,7 @@
                                                                                 </td>
                                                                                 <td class="text-center">
                                                                                     @if(!empty($message->log_output))
-                                                                                        <a href="/testingdetails/{{ $message->id }}/output" class="s3output">View</a>
+                                                                                        <a href="/testingdetails/{{ $message->id }}/output/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewOutputModal" class="s3_output">View</a>
                                                                                     @endif
                                                                                 </td>
                                                                                 <td class="text-center">{{ $message->updated_at }}</td>
