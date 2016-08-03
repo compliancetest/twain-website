@@ -63,7 +63,7 @@
 
                 <!-- Assign Verify Request Modal-->
                 <div class="modal fade" id="assignVerifyRequestModal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document" style="width: 900px;">
+                    <div class="modal-dialog" role="document" style="width: 500px;">
                         <div class="modal-content block-loading-wrapper">
                             <div class="modal-header">
                                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
@@ -107,6 +107,39 @@
                     </div>
                 </div>
 
+                <!-- Change Status Modal-->
+                <div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document" style="width: 500px;">
+                        <div class="modal-content block-loading-wrapper">
+                            <div class="modal-header">
+                                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                Message Data
+                            </div>
+                            <div class="modal-body">
+                                <div class="change_status_message">
+                                    Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected transactions?
+                                </div>
+                                <div class="change_status_no_messages">
+                                    Please select a row
+                                </div>
+                                <input type="hidden" value="" class="change_status_data_type">
+                                <input type="hidden" value="" class="change_status_row_id">
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success btn-with-icon btn-confirm confirm_change_status">Confirm</button>
+                                <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="block-loading">
+                                <div class="loading-content"><span class="loader"></span>
+
+                                    <div class="loading-text">LOADING DATA</div>
+                                    <div class="loading-wait">Please wait...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Init modal scripts-->
                 <script>
                     jQuery(document).ready(function ($) {
@@ -114,6 +147,64 @@
                         @if($isAdmin)
                             Page.verifyRequest.supportUpdateCheckboxes();
                         @endif
+
+                        $('.change_status').click(function(){
+                            $('.change_status_data_type').val($(this).attr('data-outcome'));
+                            $('.change_status_row_id').val($(this).closest('.details_row').attr('id'));
+                            $('.change_to_status').text($(this).attr('data-outcome'));
+                            var checkboxes = $(this).closest('.details_row').find('input.transaction:checked');
+                            if(checkboxes.length == 0){
+                                $('.change_status_message').hide();
+                                $('.change_status_no_messages').show();
+                                $('.confirm_change_status').hide();
+                            } else {
+                                $('.change_status_message').show();
+                                $('.change_status_no_messages').hide();
+                                $('.confirm_change_status').show();
+                            }
+                        })
+
+                        $('.confirm_change_status').on('click', function(e){
+                            var ids = new Array();
+                            jQuery('#'+$('.change_status_row_id').val()+' input.transaction:checked').each(function () {
+                                ids.push(this.value);
+                            });
+
+                            jQuery('#changeStatusModal .block-loading').show();
+
+
+                            jQuery.ajax({
+                                url: '/verify-requests/update-transactions',
+                                data: {
+                                    'verify_request_id': $('.change_status_row_id').val().replace('verify-request-details-', ''),
+                                    'transactions': ids,
+                                    'outcome_code': jQuery('.change_status_data_type').val()
+                                },
+                                type: 'post',
+                                dataType: 'json',
+                                success: function (rsp) {
+                                    $('.modal').modal('hide');
+                                    $('#changeStatusModal .block-loading').hide();
+                                    $('#'+$('.change_status_row_id').val()+' input.transaction:checked').each(function (index, elem) {
+                                        $(elem).removeAttr('checked').attr('disabled', 'disabled');
+                                        $(elem).closest('tr').find('td.row-outcome-status').html(jQuery('.change_status_data_type').val());
+                                    });
+                                    if($('#'+$('.change_status_row_id').val()+' input.transaction:checked').length == 0){
+                                        location.reload();
+                                    }
+
+                                },
+                                 error: function (jqXHR, status) {
+                                     jQuery('#changeStatusModal .block-loading').hide();
+                                     $('#changeStatusModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                                     setTimeout(function () {
+                                        $('#changeStatusModal .modal-body > .error-message').slideUp(function () {
+                                            $(this).remove();
+                                        });
+                                     }, 3000);
+                                }
+                            });
+                        });
 
                         //clear previous output data and show loading for next view popup
                         $('#viewOutputModal').on('hidden.bs.modal', function () {

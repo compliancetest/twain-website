@@ -219,4 +219,35 @@ class VerifyRequestsController extends Controller
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
+
+    /**
+     * Update transactions from VerifyRequest
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateTransactions(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'verify_request_id' => 'required|exists:verify_requests,id',
+            'transactions' => 'array|required',
+            'outcome_code' => 'required|in:Pass,Fail,Skip',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+        $verifyRequest = VerifyRequest::find($request->get('verify_request_id'));
+        if ($verifyRequest->assignee_id != Auth::user()->ID) {
+            return response()->json(["Only assignee can edit Verify Request"], 422);
+        }
+        $verifyRequestTransactions = json_decode($verifyRequest->transactions, true);
+        foreach ($verifyRequestTransactions as $verifyRequestTransaction) {
+            if (in_array($verifyRequestTransaction, $request->get('transactions'))) {
+                $transaction = Transaction::find($verifyRequestTransaction);
+                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')));
+                $transaction->save();
+            }
+        }
+        return response()->json(["success"]);
+    }
 }
