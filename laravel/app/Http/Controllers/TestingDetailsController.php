@@ -94,6 +94,21 @@ class TestingDetailsController extends Controller
     }
 
     /**
+     * Show Fail / Skip reason popup
+     * @param $id
+     * @return $this
+     */
+    public function transactionReason($transactionId, $laravel = false)
+    {
+        $entry = Transaction::find($transactionId);
+        $reason = $entry->reason;
+        if($laravel){
+            return view('pages.testingdetails.transaction_reason_laravel', compact('reason'));
+        }
+        return view('pages.testingdetails.transaction_reason', compact('reason'));
+    }
+
+    /**
      * Render logs for a given transaction
      * @param $transactionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

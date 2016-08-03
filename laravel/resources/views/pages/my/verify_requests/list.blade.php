@@ -127,7 +127,15 @@
                                                                 {!! $transaction->execution_id !!}
                                                             @endif
                                                         </td>
-                                                        <td class="text-center row-outcome-status">{{ $testOutcomeStatus }}</td>
+                                                        <td class="text-center row-outcome-status">
+                                                            @if($transaction->reason)
+                                                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
+                                                                    {{ $testOutcomeStatus }}
+                                                                </a>
+                                                            @else
+                                                                {{ $testOutcomeStatus }}
+                                                            @endif
+                                                        </td>
                                                         <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                     </tr>
                                                     <tr class="transactions_row collapse" id="verify-request-transactions-{{ $transactionId }}">

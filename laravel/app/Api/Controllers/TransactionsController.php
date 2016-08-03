@@ -17,6 +17,7 @@ class TransactionsController extends BaseApiController
      * @apiParam {string} test_suite_id  Mandatory - test suite id string.
      * @apiParam {string} execution_id  Mandatory - execution id string.
      * @apiParam {string} test_outcome  Optional - allowed values: Fail, Pass, Skip, Pending.
+     * @apiParam {string} reason  Optional - a reason of fail or skip.
      *
      * @apiName createTansaction
      * @apiGroup Transactions
@@ -78,6 +79,7 @@ class TransactionsController extends BaseApiController
             'test_suite_id' => 'required|exists:wp_posts,post_name',
             'product_id' => 'required|exists:wp_posts,post_name',
             'execution_id' => 'required',
+            'reason' => 'string',
             'test_outcome' => 'in:Pass,Fail,Skip,Pending',
         ]);
 
@@ -100,6 +102,7 @@ class TransactionsController extends BaseApiController
             'execution_id' => $request->get('execution_id'),
             'product_id' => $request->get('product_id'),
             'test_outcome' => strtoupper($request->get('test_outcome')),
+            'reason' => $request->get('reason'),
         ];
         //adding entry to sqs. it will be processed in background
         $this->dispatch(new ProcessTransactionLog($fileName, $data));
