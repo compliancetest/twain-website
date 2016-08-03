@@ -66,7 +66,7 @@ class TestingDetailsController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function output($id)
+    public function output($id, $laravel = false)
     {
         $entry = TransactionsLog::find($id);
         $s3 = AwsFacade::createClient('s3');
@@ -75,7 +75,10 @@ class TestingDetailsController extends Controller
             'Key' => $entry['log_output'],
         ))['Body'];
         $link = $s3->getObjectUrl(config('env.bucket.transactions'), $entry['log_output'], '1 hour');
-        return view('pages.testingdetails.output', compact('data', 'link'));
+        if (!$laravel) {
+            return view('pages.testingdetails.output', compact('data', 'link'));
+        }
+        return view('pages.testingdetails.output_laravel', compact('data', 'link'));
     }
 
     /**

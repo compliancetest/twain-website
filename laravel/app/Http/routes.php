@@ -35,7 +35,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::resource('testingdetails', 'TestingDetailsController',
         ['only' => ['store',  'index']]);
-    Route::get('testingdetails/{transaction}/output', 'TestingDetailsController@output');
+    Route::get('testingdetails/{transaction}/output/{laravel?}', 'TestingDetailsController@output');
     Route::get('testingdetails/{transaction}/reason', 'TestingDetailsController@reason');
     Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
 
