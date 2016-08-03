@@ -16,6 +16,7 @@
                     </tr>
                     </thead>
                         @foreach($userSuite['data'] as $verifyRequest)
+                            <?php $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID;?>
                             <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td class="text-left">
                                     <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse"><span class="collapse-icon"></span></a><a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title }} </a>
@@ -78,16 +79,19 @@
                             </tr>
                             <tr class="details_row collapse" id="verify-request-details-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td colspan="7">
-                                    @if($isAdmin)
-                                        <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
-                                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
-                                        <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                                    @if($canModerate)
+                                        <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger change_status"
+                                                data-outcome="Pass" data-toggle="modal" data-remote="true" data-target="#changeStatusModal">Verify As Pass</button>
+                                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status"
+                                                data-outcome="Fail" data-toggle="modal" data-remote="true" data-target="#changeStatusModal">Verify As Fail</button>
+                                        <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger change_status"
+                                                data-outcome="Skip" data-toggle="modal" data-remote="true" data-target="#changeStatusModal">Verify As Skip</button>
                                     @endif
                                     <div class="table-responsive">
                                         <table class="table colored-table" style="margin-top: 20px;">
                                             <thead>
                                                 <tr>
-                                                    @if($isAdmin)
+                                                    @if($canModerate)
                                                         <th></th>
                                                     @endif
                                                     <th>Test Case</th>
@@ -104,7 +108,7 @@
                                                         $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->name;
                                                     ?>
                                                     <tr>
-                                                        @if($isAdmin)
+                                                        @if($canModerate)
                                                             <td>
                                                                 <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
                                                                        data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
@@ -123,7 +127,7 @@
                                                                 {!! $transaction->execution_id !!}
                                                             @endif
                                                         </td>
-                                                        <td class="text-center">{{ $testOutcomeStatus }}</td>
+                                                        <td class="text-center row-outcome-status">{{ $testOutcomeStatus }}</td>
                                                         <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                     </tr>
                                                     <tr class="transactions_row collapse" id="verify-request-transactions-{{ $transactionId }}">

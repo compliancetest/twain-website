@@ -12,7 +12,7 @@
                 </div>
             @endif
 
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <label for="availableProducts">Support Users</label>
                 <select name="user_id" id="availableSupportUsers" class="form-control" @if($verifyRequest->assignee_id) disabled="disabled" @endif>
                     <option value="">Select a Support User</option>

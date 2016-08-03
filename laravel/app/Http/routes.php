@@ -185,6 +185,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('verify-requests/{testSuiteId}/resolve/{verifyRequestId}', 'VerifyRequestsController@resolvePopup');
         Route::post('verify-requests/{communityId}/resolve/{verifyRequestId}', 'VerifyRequestsController@resolve');
 
+        Route::post('verify-requests/update-transactions', 'VerifyRequestsController@updateTransactions');
+
         Route::get('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assignPopup');
         Route::post('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assign');
 
