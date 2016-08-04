@@ -609,6 +609,12 @@ define({ "api": [
             "optional": false,
             "field": "403",
             "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Test Case not configured properly</p>"
           }
         ]
       },
@@ -621,6 +627,11 @@ define({ "api": [
         {
           "title": "Not organisation member:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Please stop running case before start:",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
           "type": "json"
         }
       ]
@@ -915,6 +926,12 @@ define({ "api": [
             "optional": false,
             "field": "400",
             "description": "<p>User already has running test case</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Test Case not configured properly</p>"
           }
         ]
       },
@@ -932,6 +949,11 @@ define({ "api": [
         {
           "title": "Please stop running case before start:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Please stop running case before start\"\n    ]\n  },\n  \"code\": 400\n}",
+          "type": "json"
+        },
+        {
+          "title": "Please stop running case before start:",
+          "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
           "type": "json"
         }
       ]
