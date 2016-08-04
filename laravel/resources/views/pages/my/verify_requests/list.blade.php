@@ -182,9 +182,11 @@
                                                                                 <td class="text-center">{{ $message->updated_at }}</td>
                                                                                 <td class="text-center">
                                                                                     @if(empty($message->reason))
-                                                                                        <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>">{{ $message->step_outcome }}</span>
+                                                                                        <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
+                                                                                            {{ $message->step_outcome }}
+                                                                                        </span>
                                                                                     @else
-                                                                                        <a href="/testingdetails/{{ $message->id }}/reason" class="reason">
+                                                                                        <a href="/testingdetails/{{ $message->id }}/reason/laravel"  data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
                                                                                             <span class="status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
                                                                                         </a>
                                                                                     @endif

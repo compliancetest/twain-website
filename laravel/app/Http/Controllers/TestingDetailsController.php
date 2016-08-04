@@ -86,10 +86,13 @@ class TestingDetailsController extends Controller
      * @param $id
      * @return $this
      */
-    public function reason($id)
+    public function reason($id, $laravel = false)
     {
         $entry = TransactionsLog::find($id);
         $reason = $entry->reason;
+        if ($laravel) {
+            return view('pages.testingdetails.reason_laravel', compact('reason'));
+        }
         return view('pages.testingdetails.reason', compact('reason'));
     }
 
