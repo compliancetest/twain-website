@@ -217,6 +217,17 @@ class TestCasesController extends BaseApiController
      *     "code": 400
      *   }
      *
+     * @apiError 404 Test Case not configured properly
+     * @apiErrorExample {json} Please stop running case before start:
+     *  {
+     *     "errors": {
+     *       "message": [
+     *         "Execution profile is required for DataSource products"
+     *       ]
+     *     },
+     *     "code": 400
+     *   }
+     *
      * @apiSuccessExample {json} Success Response:
      * {"data":{"ExecutionId":"026d9d68-eb09-41be-af73-ab3e0db971c9","TestSuite":{"id":"twain-compliance-technical-app-v1-0","title":"TWAIN Compliance Technical - App v1.0"},"TestCase":{"id":"vv-01-v1-0","title":"VV-01 v1.0"},"Product":{"id":"test","title":"Test"},"ExecutionProfile":{"Profile":{"Type":"TCEF","Purpose":"TCEF for DS test case","Title":"VV-01_v1.0 TEFC","Description":"Test Case Execution Flow for VV-01 test case","Version":{"Major":1,"Minor":0}},"Meta":{"SystemUnderTest":"DataSource","Capabilities":[{"Cap":"ACAP_XFERMECH"}],"InitialState":4},"TestSteps":[[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESETALL"},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":2}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_GETCURRENT","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":3},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":3,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":4,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":5},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":6}],"SkipConditions":[{"ItemType":"ReturnCode","Operator":"NOT_EQ","Value":"TWRC_SUCCESS"}]}],[{"Optional":false,"Triplet":{"From":"APP","To":"DS","DataGroup":"DG_CONTROL","DataArgumentType":"DAT_CAPABILITY","Messages":"MSG_RESET","pCapability":{"Cap":"ACAP_XFERMECH"}},"PassConditions":[{"ItemType":"ReturnCode","Operator":"EQ","Value":"TWRC_SUCCESS","Step":7},{"ItemType":"Property","Operator":"EQ","Value":"ACAP_XFERMECH","Step":7,"Path":"pCapability.Cap"},{"ItemType":"Property","Operator":"EQ","Value":"TWON_ONEVALUE","Step":8,"Path":"pCapability.ConType"},{"ItemType":"Property","Operator":"EQ","Value":"TWTY_UINT16","Path":"pCapability.hContainer.ItemType","Step":9},{"ItemType":"Property","Operator":"EQ","Value":"TWSX_NATIVE","Path":"pCapability.hContainer.Item","Step":10}]}]]}},"code":200}
      *
@@ -256,6 +267,12 @@ class TestCasesController extends BaseApiController
         $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
         $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
 
+        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
+        if ($validateConfigs !== true) {
+            $this->stop();
+            return $this->respondNotFound($validateConfigs);
+        }
+
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
@@ -277,6 +294,23 @@ class TestCasesController extends BaseApiController
         return $this->respondWithData($response);
     }
 
+    /**
+     * Check that test case configured correctly.
+     * @param $type - 'Application' / 'DataSource'
+     * @param $testExecutionProfile
+     * @param $testConfigurationProfile
+     * @return mixed
+     */
+    private function _validateTestCaseConfiguration($type, $testExecutionProfile, $testConfigurationProfile)
+    {
+        if ($type == 'DataSource' && !$testExecutionProfile) {
+            return 'Execution profile is required for DataSource products.';
+        }
+        if ($type == 'Application' && !($testExecutionProfile && $testConfigurationProfile)) {
+            return 'Execution and Configuration profiles are required for Application products.';
+        }
+        return true;
+    }
     /**
      * Get test case images data
      * @param $testCase
@@ -326,6 +360,17 @@ class TestCasesController extends BaseApiController
      *       ]
      *     },
      *     "code": 403
+     *   }
+     *
+     * @apiError 404 Test Case not configured properly
+     * @apiErrorExample {json} Please stop running case before start:
+     *  {
+     *     "errors": {
+     *       "message": [
+     *         "Execution profile is required for DataSource products"
+     *       ]
+     *     },
+     *     "code": 400
      *   }
      *
      * @apiSuccessExample {json} Success-Response:
@@ -403,6 +448,12 @@ class TestCasesController extends BaseApiController
 
         $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
         $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
+
+        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
+        if ($validateConfigs !== true) {
+            $this->stop();
+            return $this->respondNotFound($validateConfigs);
+        }
 
         $response = [
             'ExecutionId' => $model->id,
