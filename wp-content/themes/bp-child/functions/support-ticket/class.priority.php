@@ -91,4 +91,29 @@ class CT_TicketPriority
         
         return $html;
     }
+
+     public function getCommunitiesSelectboxHTML($name = 'ticket_priority', $id='ticket_priority', $default = null, $emptyOptionLabel = '- All -')
+    {
+        $communities = $this->getCommunities();
+        $html = "<select name='community' id='community' class='select'>";
+        if($emptyOptionLabel)
+            $html .= "<option value=''>$emptyOptionLabel</option>";
+        foreach($communities as $k => $p)
+        {
+            $html .= "<option value='$p->id' " . ($p->id == $default ? "selected='selected'" : "") . ">$p->title</option>";
+        }
+        $html .= "</select>";
+
+        return $html;
+    }
+
+    public function getCommunities()
+    {
+        global $wpdb;
+        if(!is_super_admin()) {
+            return $wpdb->get_results($wpdb->prepare("SELECT * FROM communities AS c JOIN communities_members AS cm ON cm.community_id = c.id WHERE cm.user_id = %d AND is_mod = 1", get_current_user_id()));
+        } else {
+            return $wpdb->get_results("SELECT * FROM communities");
+        }
+    }
 }

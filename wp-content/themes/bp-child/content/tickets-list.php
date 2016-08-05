@@ -6,6 +6,7 @@
 $filterStatus = isset($_GET['status']) ? $_GET['status'] : 'not_closed';
 $filterCategory = isset($_GET['type']) ? $_GET['type'] : null;
 $filterPriority = isset($_GET['priority']) ? $_GET['priority'] : null;
+$filterCommunity = isset($_GET['community']) ? $_GET['community'] : null;
 
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('tickets');
 setItemsPerPage($limit, 'tickets');
@@ -19,7 +20,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'last_updated' ? 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 
-$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $page, $limit, $orderBy, $order);
+$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $page, $limit, $orderBy, $order);
 $tickets = $results['data'];
 $totalItems = $results['total'];
 
@@ -31,6 +32,8 @@ if($filterPriority)
     $params[] = 'priority=' . $filterPriority;
 if($filterCategory)
     $params[] = 'type=' . $filterCategory;
+if($filterCommunity)
+    $params[] = 'community=' . $filterCommunity;
 
 $is_support = getManagedCustomerWPIDs() ? true : false;
 
@@ -53,6 +56,10 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     <li>
                         <label for="ticket_priority">Priority <?php if($filterPriority != "" && $filterPriority != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <?php echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket_priority', $filterPriority); ?>
+                    </li>
+                    <li>
+                        <label for="community">Community <?php if($filterCommunity != "" && $filterCommunity != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <?php echo $ct_ticket_priority->getCommunitiesSelectboxHTML('community', 'community', $filterCommunity); ?>
                     </li>
                 </ul>
                 <div class="search-filter-actions">

@@ -183,7 +183,7 @@ function createSupportTicket()
 * Get User Tickets
 * 
 */
-function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
+function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $communityId = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
 {
     global $wpdb;
     
@@ -224,7 +224,16 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     if($priority_id !== null && $priority_id != "")
     {        
-        $where[] = $wpdb->prepare(" t.priority_id=%d", $priority_id);    
+        $where[] = $wpdb->prepare(" t.priority_id=%d", $priority_id);
+    }
+
+    if($communityId !== null && $communityId != "")
+    {
+        $where[] = $wpdb->prepare(" t.community_id = %s", $communityId);
+    }
+
+    if (!is_super_admin()) {
+        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
     }
 
     $orderQuery = "";
