@@ -91,8 +91,7 @@ class VerifyRequest extends Model
     public function canUserDelete()
     {
         $user = Auth::user();
-        $community = Community::find($this->community_id);
-        if ($user->ID != $this->requestor_id && !($community->isAdmin() || $community->isModerator())) {
+        if ($user->ID != $this->requestor_id) {
             return false;
         }
         return true;
