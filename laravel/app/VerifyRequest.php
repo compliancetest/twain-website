@@ -29,7 +29,7 @@ class VerifyRequest extends Model
         foreach ($userCommunities as $userCommunity) {
             $community = Community::find($userCommunity->community_id);
             //Community Support users can see all community suites
-            if ($community->isModerator()) {
+            if ($community->isModerator() || $community->isAdmin()) {
                 $userTestSuites = Post::getCommunityTestSuites($community->id);
                 array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
                     $userTestSuites[$key]->suite_family_mark = $entry->ID;
@@ -134,6 +134,7 @@ class VerifyRequest extends Model
             '[test_suite]' => $testSuite->post_title,
         ];
         $community->sendEmailsToSupportUsers( $emailtemplateName . '_to_support', $data);
+        $community->sendEmailsToAdminUsers( $emailtemplateName . '_to_support', $data);
 
         $requestorUser = User::find($this->requestor_id);
         cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => $requestorUser->user_email], $emailtemplateName . '_to_user', $data);

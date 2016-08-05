@@ -26,7 +26,7 @@ class VerifyRequestsController extends Controller
          $data = [
             'userSuites' => VerifyRequest::getUserRequests(),
             'pageTitle' => 'Verify Requests',
-            'isAdmin' => doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
         ];
         return view('pages.my.verify_requests.index')->with($data);
     }
@@ -41,7 +41,7 @@ class VerifyRequestsController extends Controller
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
@@ -132,7 +132,7 @@ class VerifyRequestsController extends Controller
     public function assignPopup($testSuiteId, $verifyRequestId)
     {
         $communityId = Post::find($testSuiteId)->getMetaByKey('community_id');
-        $moderators = Community::find($communityId)->getModerators();
+        $moderators = Community::find($communityId)->getAdminsAndModerators();
         $verifyRequest = VerifyRequest::find($verifyRequestId);
 
         return view('pages.my.verify_requests.assign_popup', compact('moderators', 'testSuiteId', 'verifyRequest'));
@@ -150,9 +150,6 @@ class VerifyRequestsController extends Controller
     public function assign($testSuiteId, $verifyRequestId, Request $request)
     {
         $verifyRequest = VerifyRequest::find($verifyRequestId);
-        if ($verifyRequest->assignee_id) {
-            return response()->json(["This Verify Request already assigned"], 422);
-        }
         if ($verifyRequest->status == 'Resolved') {
             return response()->json(["You can't reassign resolved Verify Request"], 422);
         }
@@ -167,7 +164,7 @@ class VerifyRequestsController extends Controller
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
@@ -197,7 +194,7 @@ class VerifyRequestsController extends Controller
     public function resolve($communityId, $verifyRequestId, Request $request)
     {
         $community = Community::find($communityId);
-        if (!$community->isModerator()) {
+        if (!$community->isModerator() && !$community->isAdmin()) {
             return response()->json(["Permissions error"], 422);
         }
 
@@ -215,7 +212,7 @@ class VerifyRequestsController extends Controller
         $userID = Auth::user()->ID;
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
-            'isAdmin' => doesUserSupportInAnyCommunity($userID),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }

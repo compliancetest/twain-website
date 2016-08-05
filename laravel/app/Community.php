@@ -191,6 +191,11 @@ class Community extends Model
         return $this->members()->where('is_mod', true)->get();
     }
 
+    public function getAdminsAndModerators()
+    {
+        return $this->members()->where('is_mod', true)->orWhere('is_admin', true)->groupBy('user_id')->get();
+    }
+
     /**
      * Get usual community members
      * @return array|null
@@ -292,6 +297,19 @@ class Community extends Model
         foreach ($this->getModerators() as $supportUser) {
             $supportUser = User::find($supportUser->user_id);
             cp_send_email(['name' => cp_get_user_fullname($supportUser->ID), 'email' => $supportUser->user_email], $emailTemplate, $data);
+        }
+    }
+
+     /**
+     * Send email to all community admin users
+     * @param $emailTemplate
+     * @param $data
+     */
+    public function sendEmailsToAdminUsers($emailTemplate, $data)
+    {
+        foreach ($this->getAdmins() as $adminUser) {
+            $adminUser = User::find($adminUser->user_id);
+            cp_send_email(['name' => cp_get_user_fullname($adminUser->ID), 'email' => $adminUser->user_email], $emailTemplate, $data);
         }
     }
 }
