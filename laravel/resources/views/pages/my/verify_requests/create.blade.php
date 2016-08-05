@@ -8,7 +8,7 @@
         <input type="hidden" name="suite_id" id="suiteId" value="{{ $testSuiteId }}">
 
         <div class="form-group">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <label for="availableProducts">Product</label>
                 <select name="product_id" id="availableProducts" class="form-control">
                     <option value="">Select a Product</option>
@@ -17,7 +17,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <label for="testPlan">Test Plan</label>
                 <select name="test_plan" id="testPlanId" class="form-control">
                     <option value="">Select Test Plan</option>
@@ -36,7 +36,6 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Transaction ID</th>
                                     <th>Execution ID</th>
                                     <th>Date</th>
                                 </tr>
@@ -44,17 +43,19 @@
                             <tbody>
                                 @foreach($transactions as $testCase => $caseTransactions)
                                         <tr>
-                                            <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}"> {{ \App\Post::find($testCase)->post_title }}</td>
+                                            <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}">
+                                                {{ \App\Post::find($testCase)->post_title }}
+                                                <a href="/my-transaction-log/?case={{ $testCase }}&product={{ $caseTransactions[0]->product_id }}&suite={{ $caseTransactions[0]->test_suite_id }}" target="_blank" style="float: right;">View Log</a>
+                                            </td>
                                         </tr>
                                         @foreach($caseTransactions as $transaction)
                                             <tr>
                                                 @if(count($caseTransactions) > 1)
-                                                    <td><input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                    <td class="text-center"><input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
                                                 @else
-                                                    <td><input type="checkbox" checked="checked" disabled="disabled" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                    <td class="text-center"><input type="checkbox" checked="checked" disabled="disabled" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
                                                 @endif
 
-                                                <td class="text-center">{{ $transaction->id }}</td>
                                                 <td class="text-center">
                                                     @if($transaction->s3_link)
                                                         <a href="{!! $transaction->s3_link !!}" target="_blank"> {!! $transaction->execution_id !!} </a>
