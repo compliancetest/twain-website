@@ -19,7 +19,9 @@
                             <?php $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID;?>
                             <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                 <td class="text-left">
-                                    <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse"><span class="collapse-icon"></span></a><a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title }} </a>
+                                    <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse">
+                                        <span class="collapse-icon"></span></a>
+                                    <a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title . ' v' . $verifyRequest['product']->getMetaByKey('product_version') }} </a>
                                 </td>
                                 <td class="col-sm-1 text-center" >{{ $verifyRequest['testPlan']->level }}</td>
                                 <td>
