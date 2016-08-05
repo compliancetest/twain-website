@@ -55,8 +55,9 @@ function showSumitTicketBox()
                             <label>Test Suites:</label>
                             <select name="suite_id" id="suite_id" class="select">
                                 <option value="">- Select -</option>
+                                <option value="general">General</option>
                                 <?php foreach($subscriptions as $s): ?>
-                                <option value="<?php echo $s->suite_id?>"><?php echo $s->suite_title?></option>
+                                    <option value="<?php echo $s->suite_id?>"><?php echo $s->suite_title?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
