@@ -40,7 +40,7 @@
 
                 <!-- Create Verify Request Modal-->
                 <div class="modal fade" id="createVerifyRequestModal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document" style="width: 900px;">
+                    <div class="modal-dialog" role="document" style="width: 700px;">
                         <div class="modal-content block-loading-wrapper">
                             <div class="modal-header">
                                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
