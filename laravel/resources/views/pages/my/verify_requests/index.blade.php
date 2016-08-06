@@ -272,6 +272,7 @@
                                     $('.modal').modal('hide');
                                     if (data.status == 'success') {
                                         $('#verify-request-' + testCoveragePlan.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                                            $(this).next('tr').remove();
                                             $(this).remove();
                                             $('#verifyRequestsList').prepend('<div class="success-message">Verify Request has been removed</div>');
                                             setTimeout(function () {
