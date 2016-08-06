@@ -181,6 +181,8 @@ class ProductsController extends BaseApiController
 
                 $this->_setProductVisibility($request, $entity);
                 $this->_setProductTypeFields($request, $jsonEntry, false);
+                $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
+                $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
                 $response = [
