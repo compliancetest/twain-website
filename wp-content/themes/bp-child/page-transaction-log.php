@@ -413,7 +413,7 @@ get_header();
                 type: 'inline',
                 href: '#change_status_box',
                 onStart: function(){
-                    if(jQuery('#log-result-table .tbody input[type="checkbox"]:checked').length < 1){
+                    if(jQuery('#log-result-table .tbody div.td-chk input[type="checkbox"]:checked').length < 1){
                         jQuery('.change_status_no_messages').show();
                         jQuery('.change_status_message').hide();
                         jQuery('.change_status_log-confirm').hide();
@@ -427,7 +427,7 @@ get_header();
 
             jQuery('.change_status_log-confirm').click(function () {
                 var ids = new Array();
-                jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
+                jQuery('#log-result-table .tbody div.td-chk input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
                 });
 
@@ -452,7 +452,7 @@ get_header();
 
             jQuery('.delete-log-confirm').click(function () {
                 var ids = new Array();
-                jQuery('#log-result-table .tbody input[type="checkbox"]:checked').each(function () {
+                jQuery('#log-result-table .tbody div.td-chk input[type="checkbox"]:checked').each(function () {
                     ids.push(this.value);
                 });
 
