@@ -256,8 +256,18 @@ function cp_delete_transaction_log()
 //    $ids = \ClaimsConversations\ClaimsConversations::filterConversationsIds( $_POST['id'] );
 //    $lIds = array();
 
-    $wpdb->query("DELETE FROM transactions WHERE ID in ('" . implode("', '", $_POST['id']) . "') AND audit_record = 0");
+    $notRemovedTransactions = [];
+    foreach ($_POST['id'] as $transactionId) {
+        if(!$wpdb->get_row("SELECT * FROM verify_requests WHERE transactions LIKE '%$transactionId%' ")) {
+            $wpdb->query($wpdb->prepare("DELETE FROM transactions WHERE ID = %d AND audit_record = 0", $transactionId));
+        } else {
+            $notRemovedTransactions[] = $transactionId;
+        }
+    }
 
+    if(!empty($notRemovedTransactions)){
+        addMessage("Those transactions used in Verify Requests and cannot be deleted: " . implode(' ,', $notRemovedTransactions), 'error');
+    }
     addMessage("Selected data was removed!");
 
     return true;

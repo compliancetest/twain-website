@@ -150,7 +150,7 @@ function deleteCase()
 {
     global $wpdb;
     
-    $id = $_REQUEST['id'];
+    $id = intval($_REQUEST['id']);
     
     $post = get_post($id);
     
@@ -158,7 +158,14 @@ function deleteCase()
     $majorVersion = get_post_meta($id, 'version_major', true);
     
     $return = isset($_REQUEST['return']) ? base64_decode($_REQUEST['return']) : "/";
-    
+
+    $caseTransactions = $wpdb->get_results($wpdb->prepare("SELECT * FROM transactions WHERE test_case_id = %d", $id));
+
+    if ($caseTransactions) {
+        addMessage('This Test Case has transactions!', 'error');
+        wp_redirect($return);
+        exit;
+    }
     if(!$post || $post->post_type != 'test-case')
     {
         addMessage('Invalid Request!', 'error');
