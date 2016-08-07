@@ -173,7 +173,7 @@
                         ob_start();?>
                         <tr>
                             <td><?php echo isset( $product_claim->id ) ? $product_claim->id : ''; ?></td>
-                            <td><a href="/communities/<?php echo $community->slug; ?>"><?php echo $product_claim->issuer; ?></a></td>
+                            <td><a href="/test-suites/?issuer=<?php echo $product_claim->issuer; ?>"><?php echo $product_claim->issuer; ?></a></td>
                             <td><a href="<?php echo get_permalink($product_claim->test_suite_id); ?>"><?php echo get_the_title( $product_claim->test_suite_id ); ?></a></td>
                             <td class="centered"><?php echo $product_claim->conformance_level; ?></td>
                             <td class="centered"><?php echo $product_claim->role; ?></td>
@@ -209,7 +209,7 @@
                         <?php ob_start();?>
                         <tr>
                             <td></td>
-                            <td><a href="<?php echo bp_get_group_permalink($group); ?>"><?php echo $testPlan->issuer; ?></a></td>
+                            <td><a href="/test-suites/?issuer=<?php echo $testPlan->issuer; ?>"><?php echo $testPlan->issuer; ?></a></td>
                             <td><a href="<?php echo get_permalink($testPlan->suite_id); ?>"><?php echo ct_get_suite_max_version( $testPlan->suite_id, true ); ?></a></td>
                             <td class="centered"><?php echo $testPlan->level; ?></td>
                             <td class="centered"><?php echo $testPlan->role; ?></td>
