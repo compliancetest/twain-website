@@ -56,9 +56,9 @@ get_header();
                             </div>
                             <div class="td td-action">
                                 <?php
-                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $group->id));
+                                    $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE community_id = %s AND is_admin = 1', $group->id));
                                 ?>
-                                <?php if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == get_current_user_id() ):?>
+                                <?php if ( count( $group_admins ) == 1 && $group->is_admin ):?>
                                     <a href="#" class="action-btn delete-btn icon-btn has-tooltip greyed-out-btn" onclick="return false;">
                                         <span class="p"></span>
                                         <span class="simple_tooltip radius6">This community must have at least one admin<span></span></span>
