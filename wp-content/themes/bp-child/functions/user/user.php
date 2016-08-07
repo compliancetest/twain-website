@@ -743,19 +743,22 @@ function cp_is_customer_support($customer_id, $user_id = false)
 function cp_is_customer_support_or_admin($customer_id, $user_id = false)
 {
     global $wpdb;
-    
-    if(!$user_id)
+
+    if (!$user_id)
         $user_id = get_current_user_id();
-    
-    if(!$user_id)
+
+    if (!$user_id)
         return false;
-    
+
+    if ($customer_id == $user_id) {
+        return true;
+    }
     //Getting Community IDs
-    $query = $wpdb->prepare("SELECT count(id) FROM " . $wpdb->prefix . "bp_groups_members WHERE (is_mod=1 OR is_admin=1) AND user_id=%d AND group_id IN 
-        (SELECT DISTINCT(group_id) FROM " . $wpdb->prefix . "bp_groups_members WHERE user_id=%d AND is_confirmed=1)", $user_id, $customer_id);
-    
+    $query = $wpdb->prepare("SELECT count(id) FROM communities_members WHERE (is_mod=1 OR is_admin=1) AND user_id=%d AND community_id IN 
+        (SELECT DISTINCT(community_id) FROM communities_members WHERE user_id=%d AND is_confirmed=1)", $user_id, $customer_id);
+
     $c = $wpdb->get_var($query);
-    
+
     return $c > 0 ? true : false;
 }
 
