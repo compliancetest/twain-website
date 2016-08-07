@@ -97,7 +97,9 @@ class CommunityMembershipController extends Controller
         $userId = $request->get('user_id');
         $community = Community::findBySlug($communitySlug);
         $community->members()->where(['user_id' => $request->get('user_id'), 'is_confirmed' => 0, 'community_id' => $community->id])->update(['is_confirmed' => true]);
+        $isAdmin = $community->isAdmin();
         $data = [
+            'isAdmin' => $isAdmin,
             'community' => $community,
             'membershipRequests' => $community->getMembershipRequests()
         ];
@@ -131,7 +133,9 @@ class CommunityMembershipController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $community->members()->where(['user_id' => $request->get('user_id'), 'is_confirmed' => 0, 'community_id' => $community->id])->delete();
+        $isAdmin = $community->isAdmin();
         $data = [
+            'isAdmin' => $isAdmin,
             'community' => $community,
             'membershipRequests' => $community->getMembershipRequests()
         ];
