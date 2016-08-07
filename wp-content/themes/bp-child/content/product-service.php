@@ -4,7 +4,6 @@
  */
 
     $user_id = get_current_user_id();
-    $prev_page = wp_get_referer() ? wp_get_referer() : '/products-and-services/';
     $has_edit_access = can_maintain_product_and_service( $user_id, $product->id );
     $can_view = can_view_product( $product, $has_edit_access );
     if( ! $can_view ){
@@ -18,7 +17,7 @@
         <?php if(!$isAjax){ ?>
             <div class="page-title clearfix">
                 <h4>Product Details</h4>
-                <a href="<?php echo $prev_page;?>" class="left action-btn back-btn has-tooltip left15" title="Back to Products">
+                <a href="/my-products/" class="left action-btn back-btn has-tooltip left15" title="Back to My Products">
                     <span class="p"></span>
                     <span class="t">Back</span>
                 </a>
