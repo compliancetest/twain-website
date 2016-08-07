@@ -56,7 +56,7 @@
                                                             @if($sub->community->isAdmin())
                                                                 <li class="last"><a href="{{ $sub->community->getUrl() }}backups/">Test Data Backups</a></li>
                                                             @endif
-                                                            <li class="last"><a href="{{ $sub->community->getUrl() }}admin/">Admin</a></li>
+                                                            <li class="last"><a href="{{ $sub->community->getUrl() }}admin/">Settings</a></li>
                                                         @endif
                                                     </ul>
                                                 </li>

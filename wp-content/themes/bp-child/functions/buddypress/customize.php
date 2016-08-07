@@ -588,7 +588,7 @@ function getDashboardPages($type = 'page')
                         if(doesUserCommunityAdmin(get_current_user_id(), $community->id)) {
                             $item2[] = array('title' => 'Test Data Backups', 'url' => $community_url . 'backups');
                         }
-                        $item2[] = array('title' => 'Admin', 'url' => $community_url . 'admin');
+                        $item2[] = array('title' => 'Settings', 'url' => $community_url . 'admin');
                     }
 
                     $testsuites = getCommunityTestSuites($community->id);
