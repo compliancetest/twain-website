@@ -107,7 +107,7 @@
 
                 <?php if(doesUserSupportInAnyCommunity(get_current_user_id()) || doesUserAdminInAnyCommunity(get_current_user_id())):?>
                     <li class="first">
-                        <label for="organisation">Organisation: <?php if ($filterOrganisation) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <label for="organisation">Organisation: <?php if ($organisationsFilter) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="organisation" id="organisation" autocomplete="off" class="select">
                             <option value="">- All -</option>
                             <?php if (is_iterable($tOrganisations)): ?>
