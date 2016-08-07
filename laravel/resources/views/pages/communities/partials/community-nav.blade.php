@@ -26,7 +26,7 @@
                                              @if($action == 'backups') class="active" @endif>Test Data Backups</a></li>
                 @endif
                 <li class="admin-tab"><a href="{{ $community->getUrl() }}admin"
-                                         @if($action == 'admin' || $action == 'admin_page_for_support_users') class="active" @endif>Admin</a></li>
+                                         @if($action == 'admin' || $action == 'admin_page_for_support_users') class="active" @endif>Settings</a></li>
             @endif
 
         @else
