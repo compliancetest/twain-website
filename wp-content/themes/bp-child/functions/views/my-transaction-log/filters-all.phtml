@@ -65,13 +65,13 @@
                     </select>
                 </li>
                 <li class="first">
-                    <label for="service">Audit: <?php if ($filterAudit) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <label for="service">Audit: <?php if ($filterAudit === '0' || $filterAudit === '1') { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="audit" id="service" autocomplete="off" class="select">
                         <option value="">- All -</option>
                         <?php if (is_iterable($filters['audit'])): ?>
                             <?php foreach ($filters['audit'] as $s) { ?>
                                 <option
-                                    value="<?php echo $s->audit_record ?>" <?php echo $s->audit_record == $filterAudit ? "selected='selected'" : "" ?>><?php echo $s->audit_record ? 'Yes' : 'No' ?></option>
+                                    value="<?php echo $s->audit_record ?>" <?php echo $s->audit_record === $filterAudit ? "selected='selected'" : "" ?>><?php echo $s->audit_record ? 'Yes' : 'No' ?></option>
                             <?php } ?>
                         <?php endif; ?>
                     </select>
