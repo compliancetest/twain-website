@@ -292,7 +292,7 @@ get_header();
                             <?php if ($filterOutcome) { ?>
                                 <input type="hidden" name="outcome" value="<?php echo urlencode($filterOutcome) ?>"/>
                             <?php } ?>
-                            <?php if ($filterAudit) { ?>
+                            <?php if ($filterAudit === '0' || $filterAudit === '1') { ?>
                                 <input type="hidden" name="audit" value="<?php echo $filterAudit ?>"/>
                             <?php } ?>
                             <?php if ($filterScenario) { ?>
