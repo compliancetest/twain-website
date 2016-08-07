@@ -225,6 +225,7 @@
                     type: 'DELETE',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (result) {
+                        $('#edit-download-section').html('');
                         jQuery('.success-message').removeClass('hide');
                         setTimeout(function () {
                             jQuery('.success-message').addClass('hide');
