@@ -171,7 +171,6 @@ class CommunitiesController extends Controller
         $community = Community::findBySlug($slug);
 
         if ($request->file('image')) {
-            $this->validate($request, ['image' => 'image']);
             $this->handleImage($request, $community);
         }
         if ($request->has('title') && $request->has('description')) {
@@ -342,6 +341,16 @@ class CommunitiesController extends Controller
     private function handleImage($request, $model)
     {
         if ($request->file('image')) {
+            $validator = Validator::make($request->all(), [
+                'image' => 'image',
+            ], [
+                'image' => 'Invalid image type'
+            ]);
+
+            if ($validator->fails()) {
+                addMessage(implode(', ', $validator->messages()->get('image')), 'error');
+                return Redirect::to(getSiteUrl() . '/communities/' . $model->slug . '/admin');
+            }
             $model->image = 'communities/avatars/' . $model->id . '/avatar.' . $request->file('image')->getClientOriginalExtension();
             Storage::put($model->image, file_get_contents($request->file('image')));
             $model->save();
