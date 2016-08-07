@@ -135,7 +135,8 @@ function ct_process_organisation_action()
                             You need to join the community before subscribing. Do you wish to do that now?
                         </div>                    
                         <div class="popup-box-footer radius6 noradiustop">
-                            <a href="<?php echo cp_get_group_permalink_by_id($community_id) ?>" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
+                            <?php $community = getCommunity($community_id);?>
+                            <a href="/communities/<?php echo $community->slug;?>" class="action-btn process-btn"><span class="p"></span><span class="t">Confirm</span></a>
                             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                             <div class="clear"></div>
                         </div>
