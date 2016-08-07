@@ -59,6 +59,8 @@ class ProfilesController extends Controller
             }
 
             $profiletype = ProfileType::find($request->get('profile-type-id'));
+            $profiletype->instances++;
+            $profiletype->save();
             $profile = $community->profiles()->create(['profile_name' => $profileData['Profile']['Title']]);
             $profile->type = 'harness';
             $profile->type_id = $profiletype->id;
@@ -96,6 +98,8 @@ class ProfilesController extends Controller
                 return JsonResponse::create(['status' => 'error', 'message' => 'Invalid JSON!'], 422);
             }
             $profiletype = ProfileType::find($request->get('profile-type-id'));
+            $profiletype->instances++;
+            $profiletype->save();
             $profile->type_id = $profiletype->id;
             $profile->type_name = $profiletype->getTitle();
             $profile->profile_role = $profiletype->title;
