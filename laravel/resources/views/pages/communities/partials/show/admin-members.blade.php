@@ -61,7 +61,9 @@
                     <span class="member-info">
                         <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
                         <span class="member-email">{{ $user->user_email }}</span>
-                        <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $admin->user_id }}">Demote to Member</button>
+                        @if($admin->user_id != Auth::user()->ID)
+                            <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $admin->user_id }}">Demote to Member</button>
+                        @endif
                     </span>
                 </li>
             @endforeach

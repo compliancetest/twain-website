@@ -185,7 +185,11 @@ class CommunityMembershipController extends Controller
                     sendEmails([['user_id' => $user_id]], 'remove_member', $emailData);
                     sendEmails($admins, 'remove_member_admin', $emailData);
                 }
-                $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->delete();
+                $community->members()
+                    ->whereIn('user_id', $request->get('users'))
+                    ->where(['is_confirmed' => 1, 'community_id' => $community->id])
+                    ->where('user_id', '!=', Auth::user()->ID)
+                    ->delete();
             }
         } else {
             if ($request->get('role') == 'admin') {
@@ -251,7 +255,11 @@ class CommunityMembershipController extends Controller
                     $updateData = ['is_admin' => false, 'is_mod' => false];
                 }
             }
-            $community->members()->whereIn('user_id', $request->get('users'))->where(['is_confirmed' => 1, 'community_id' => $community->id])->update($updateData);
+            $community->members()
+                ->whereIn('user_id', $request->get('users'))
+                ->where(['is_confirmed' => 1, 'community_id' => $community->id])
+                ->where('user_id', '!=', Auth::user()->ID)
+                ->update($updateData);
         }
 
         $data = [
