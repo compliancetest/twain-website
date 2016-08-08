@@ -308,12 +308,12 @@ $xeroItems = ct_get_xero_items();
                                 <div class="grid-cell">
                                     <label>Conformance Level Code:</label>
                                     <input type="text" class="input" name="lvl_code[]"
-                                           value="<?php echo $row['code'] ?>"/>
+                                           value="<?php echo ctE($row['code']) ?>"/>
                                 </div>
                                 <div class="grid-cell">
                                     <label>Conformance Level Description:</label>
                                     <textarea cols="" rows="" class="textarea"
-                                              name="lvl_desc[]"><?php echo $row['desc'] ?></textarea>
+                                              name="lvl_desc[]"><?php echo ctE($row['desc']) ?></textarea>
                                 </div>
                                 <div class="grid-cell">
                                     <label>&nbsp;</label>

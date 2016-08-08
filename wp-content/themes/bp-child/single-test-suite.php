@@ -118,9 +118,9 @@ Template Name Posts: Test Suite
                         foreach($suite->roles as $idx=>$row){
 
                             ?>
-                            <div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['name']; ?></div>
+                            <div class="grid_cell width25P blue_txt size13 <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'top0bottom5';} ?>"><?php echo ctE($row['name']); ?></div>
                             <div class="grid_cell width70P">
-                                <?php echo $row['desc']; ?>
+                                <?php echo ctE($row['desc']); ?>
                             </div>
                             <div class="clear"></div>
                             <div class="grey-border-bottom <?php if ($idx == ((count($suite->roles)) -1 )) { echo 'displaynone';} ?>"></div>
@@ -140,9 +140,9 @@ Template Name Posts: Test Suite
                             if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $row['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                 continue;
                             ?>
-                            <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo $row['code']; ?></div>
+                            <div class="grid_cell width10P blue_txt size13 <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'top0bottom5';} ?>"><?php echo ctE($row['code']); ?></div>
                             <div class="grid_cell width90P">
-                                <?php echo $row['desc']; ?>
+                                <?php echo ctE($row['desc']); ?>
                             </div>
                             <div class="clear"></div>
                             <div class="grey-border-bottom <?php if ($i == ((count($suite->conformanceLevel)) -1 )) { echo 'displaynone';} ?>"></div>
@@ -466,7 +466,7 @@ Template Name Posts: Test Suite
                               foreach($suite->conformanceLevel as $r){                                  
                                   if(!doesUserCommunityAdmin($user_id, $suite->community_id) && $r['code'] == TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE)
                                       continue;
-                                  echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.$r['code'].'" >'.$r['code'].'</option>';
+                                  echo '<option ' . ($r['code'] == $selectedConfLevel ? 'selected="selected"' : '') . ' value="'.ctE($r['code']).'" >'.ctE($r['code']).'</option>';
                               }
                               ?>
                             </select>
