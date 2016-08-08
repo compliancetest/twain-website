@@ -353,6 +353,8 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
     return true;
 }
 function can_view_product( $product, $has_edit_access ){
+    global $wpdb;
+
     if( $product->visibility == 'Public' ){
         return true;
     }
@@ -360,15 +362,21 @@ function can_view_product( $product, $has_edit_access ){
         if( ! is_user_logged_in() ){
             return false;
         }
-        $current_user_communities = groups_get_user_groups( get_current_user_id() );
-        $publisher_communities = groups_get_user_groups( get_post( $product->id )->post_author );
-        $intersection = array_intersect( $current_user_communities['groups'], $publisher_communities['groups'] );
-        if( ! empty( $intersection ) ){
+        if(get_post( $product->id )->post_author == get_current_user_id()){
             return true;
+        }
+        $current_user_communities = $wpdb->get_results($wpdb->prepare("SELECT * FROM communities_members WHERE user_id = %d AND is_confirmed = 1", get_current_user_id()));
+        $publisher_communities = $wpdb->get_results($wpdb->prepare("SELECT * FROM communities_members WHERE user_id = %d AND is_confirmed = 1", get_post( $product->id )->post_author));
+        foreach($current_user_communities as $current_user_community){
+            foreach($publisher_communities as $publisher_community){
+                if($publisher_community->community_id == $current_user_community->community_id){
+                    return true;
+                }
+            }
         }
     }
     if( $product->visibility == 'Private' ){
-        if( (  $has_edit_access ||  is_super_admin() ) && $product->visibility == 'Private' ){
+        if(get_post( $product->id )->post_author == get_current_user_id() ||  is_super_admin()){
             return true;
         }
     }
