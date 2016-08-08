@@ -23,14 +23,14 @@ if (!defined('ABSPATH'))
                     <form action="#" method="post">
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>First Name</label></div>
-                            <div data-name="first_name" data-value="<?php echo htmlentities($fname); ?>"
-                                 class="grid-cell in_input"><?php echo htmlentities($fname); ?></div>
+                            <div data-name="first_name" data-value="<?php echo ctE($fname); ?>"
+                                 class="grid-cell in_input"><?php echo ctE($fname); ?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Last Name</label></div>
-                            <div data-name="last_name" data-value="<?php echo htmlentities($lname); ?>"
-                                 class="grid-cell in_input"><?php echo htmlentities($lname); ?></div>
+                            <div data-name="last_name" data-value="<?php echo ctE($lname); ?>"
+                                 class="grid-cell in_input"><?php echo ctE($lname); ?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
@@ -41,8 +41,8 @@ if (!defined('ABSPATH'))
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>Phone Number</label></div>
-                            <div data-name="phone_number" data-value="<?php echo htmlentities($phone); ?>"
-                                 class="grid-cell in_input"><?php echo !$phone ? '-' : htmlentities($phone); ?></div>
+                            <div data-name="phone_number" data-value="<?php echo ctE($phone); ?>"
+                                 class="grid-cell in_input"><?php echo !$phone ? '-' : ctE($phone); ?></div>
                             <div class="clear"></div>
                         </div>
                         <div class="grid-row">
@@ -71,8 +71,8 @@ if (!defined('ABSPATH'))
                         </div>
                         <div class="grid-row">
                             <div class="grid-cell width30P"><label>About me</label></div>
-                            <div data-name="biography" data-value="<?php echo $biography ?>" class="grid-cell in_input" style="word-wrap: break-word;overflow-wrap: break-word;width: 70%;"
-                                 data-type="textarea"><?php echo !$biography ? '-' : _convertLineSymbolToBR($biography) ?></div>
+                            <div data-name="biography" data-value="<?php echo ctE($biography) ?>" class="grid-cell in_input" style="word-wrap: break-word;overflow-wrap: break-word;width: 70%;"
+                                 data-type="textarea"><?php echo !$biography ? '-' : ctE($biography) ?></div>
                             <div class="clear"></div>
                             <?php wp_nonce_field('my_details_edit', 'cp-action'); ?>
                         </div>
@@ -153,7 +153,7 @@ if (!defined('ABSPATH'))
     <div class="right two_fifths">
         <div class="gray_message_box radius9 light_gray_txt">
             <div class="indicator"></div>
-            <?php echo htmlentities($my_details_desc); ?>
+            <?php echo ctE($my_details_desc); ?>
         </div>
     </div>
 <?php endif; ?>

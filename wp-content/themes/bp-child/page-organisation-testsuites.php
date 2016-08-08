@@ -54,17 +54,17 @@ get_header();
                                             ?>
                                             <div class="tr">
                                                 <div class="td td-community">
-                                                    <?php echo $row->community_name ?>
+                                                    <?php echo ctE($row->community_name); ?>
                                                 </div>
                                                 <div class="td td-suite">
                                                     <?php echo $row->suite_title ?>
                                                 </div>
                                                 <div class="td td-nickname">
-                                                    <?php echo stripslashes($row->nickname); ?>
+                                                    <?php echo ctE($row->nickname); ?>
                                                 </div>
                                                 <div class="td td-assignee">
-                                                    <?php echo $row->full_name; ?>
-                                                    <?php echo ($row->user_email) ? ('<br/>(' . $row->user_email . ')') : (''); ?>
+                                                    <?php echo ctE($row->full_name); ?>
+                                                    <?php echo ($row->user_email) ? ('<br/>(' . ctE($row->user_email) . ')') : (''); ?>
                                                 </div>
                                                 <div class="td td-status">
                                         <span
@@ -171,7 +171,7 @@ get_header();
                                 <option
                                     value="<?php echo $row->id ?>" <?php echo ($row->is_default == '1') ? ('selected="selected"') : (''); ?>>
                                     <?php
-                                    echo stripslashes($row->nickname);
+                                    echo ctE($row->nickname);
                                     if (!$row->invoice_me)
                                         echo " " . chunk_split(encrypt_card_number($row->card_number), 4) ?>
                                 </option>

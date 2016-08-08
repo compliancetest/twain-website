@@ -1677,3 +1677,13 @@ function getCommunityUrl($communityId){
     $community = getCommunity($communityId);
     return '/communities/' . $community->slug;
 }
+
+/**
+ * Escape string
+ * @param $string
+ * @return string
+ */
+function ctE($string)
+{
+    return htmlentities($string, ENT_COMPAT, 'UTF-8', false);
+}
