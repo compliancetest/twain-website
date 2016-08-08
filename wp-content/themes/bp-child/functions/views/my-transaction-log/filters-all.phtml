@@ -113,7 +113,7 @@
                             <?php if (is_iterable($tOrganisations)): ?>
                                 <?php foreach ($tOrganisations as $org) { ?>
                                     <option
-                                        value="<?php echo $org->id ?>" <?php echo $org->id == $organisationsFilter ? "selected='selected'" : "" ?>><?php echo $org->organisation_name; ?></option>
+                                        value="<?php echo $org->id ?>" <?php echo $org->id == $organisationsFilter ? "selected='selected'" : "" ?>><?php echo ctE($org->organisation_name); ?></option>
                                 <?php } ?>
                             <?php endif; ?>
                         </select>
