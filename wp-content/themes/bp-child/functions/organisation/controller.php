@@ -423,7 +423,7 @@ class CT_Organisation_Controller
     {
         global $wpdb;
         
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0 ORDER BY nickname LIMIT 1", $organisation_id, $family_mark);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}organisations_subscriptions WHERE organisation_id=%d AND suite_family_mark=%d AND user_id=0 AND status = 'Active' ORDER BY nickname LIMIT 1", $organisation_id, $family_mark);
         $subscription = $wpdb->get_row($query);
         
         if (!$subscription) {
