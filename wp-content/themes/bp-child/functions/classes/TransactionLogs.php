@@ -34,7 +34,7 @@ class TransactionLogs
         if ($filters['outcome']) {
             $this->where[] = sprintf(" test_outcome_status_id = '%s' ", $filters['outcome']);
         }
-        if ($filters['audit']) {
+        if ($filters['audit'] == '1' || $filters['audit'] == '0') {
             $this->where[] = sprintf(" audit_record = '%s' ", $filters['audit']);
         }
         if ($filters['scenario']) {
