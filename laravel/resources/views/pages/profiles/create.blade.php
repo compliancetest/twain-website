@@ -62,7 +62,7 @@
                 jQuery.ajax({
                     url: '/communityprofiles/{{ $community->slug }}/create/',
                     data: {
-                        'profile_type_id': jQuery('#modalCreateProfile #profile-type-id').val()
+                        'profile-type-id': jQuery('#modalCreateProfile #profile-type-id').val()
                     },
                     success: function (rsp) {
                         jQuery("#modalCreateProfile .modal-content").html(rsp);
@@ -153,17 +153,17 @@
                 url: "/communityprofiles/{{ $community->slug }}/",
                 data: {
                     'data': encodeURIComponent(JSON.stringify(profileData.value())),
-                    'profile_type_id': jQuery('#modalCreateProfile #profile-type-id').val()
+                    'profile-type-id': jQuery('#modalCreateProfile #profile-type-id').val()
                 },
                 type: 'POST',
                 success: function(rsp)
                 {
-                    if(jQuery(rsp).find('status').text() == 'success')
+                    if(rsp.status == 'success')
                     {
                         jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
                         location.reload();
                     }else{
-                        jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + jQuery(rsp).find('msg').text() + '</p>');
+                        jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.msg + '</p>');
                     }
                 },
                 error: function(rsp){
