@@ -4,7 +4,6 @@
  */
 
     $user_id = get_current_user_id();
-    $has_edit_access = can_maintain_product_and_service( $user_id, $product->id );
     $can_view = can_view_product( $product, $has_edit_access );
     if( ! $can_view ){
         addMessage( 'The visibility settings defined by the product owner prevent the display of further information.', 'error' );
@@ -56,11 +55,11 @@
                     </div>
                     <?php if( $can_view ):?>
                         <ul class="product-attributes">
-                            <li>Organisation: <strong><?php echo $product->owner; ?></strong>
-                            <li>Manufacturer: <strong><?php echo $product->manufacturer; ?></strong>
+                            <li>Organisation: <strong><?php echo ctE($product->owner); ?></strong>
+                            <li>Manufacturer: <strong><?php echo ctE($product->manufacturer); ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
-                            <li>Version: <strong><?php echo $product->version; ?></strong></li>
-                            <!--<li>Type: <strong><?php echo $product->type; ?></strong></li>-->
+                            <li>Version: <strong><?php echo ctE($product->version); ?></strong></li>
+                            <!--<li>Type: <strong><?php echo ctE($product->type); ?></strong></li>-->
                             <?php if($product->accessURL): ?>
                                 <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                             <?php endif; ?>
@@ -68,7 +67,7 @@
                             <li>Product Type: <strong><?php echo $product->product_type; ?></strong></li>
                             <li>Protocol Version: <strong><?php echo $product->protocol_version; ?></strong></li>
                         </ul>
-                        <div class="product-description"><?php echo $product->descrition; ?></div>
+                        <div class="product-description"><?php echo ctE($product->descrition); ?></div>
                     <?php endif;?>
                 </div>
             </div>
