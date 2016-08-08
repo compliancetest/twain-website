@@ -1,4 +1,4 @@
-<div class="popup-box" id="view-validation-log-box" style="width: 500px">
+<div class="popup-box" id="view-validation-log-box" style="display: none; width: 500px;">
     <div class="popup-box-header radius6 noradiusbottom">Message Data</div>
     <div class="popup-box-content">
         <div class="space10"></div>
