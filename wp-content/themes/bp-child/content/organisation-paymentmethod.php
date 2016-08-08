@@ -42,7 +42,7 @@ if(!defined('ABSPATH'))
                <?php foreach($cards as $card){ ?>
                 <div class="tr">
                     <div class="td td-nickname">
-                        <?php echo stripslashes( $card->nickname ); ?>
+                        <?php echo ctE( $card->nickname ); ?>
                         <input type="hidden" id="cnumber" value="<?php echo $card->card_number?>" />                                    
                     </div>                    
                     <div class="td td-card-number">
@@ -53,7 +53,7 @@ if(!defined('ABSPATH'))
                         <?php endif; ?>
                     </div>
                     <div class="td td-reference">
-                        <?php echo stripslashes( $card->customer_reference );?>
+                        <?php echo ctE( $card->customer_reference );?>
                     </div>
                     <div class="td td-status tocenter">
                         <span class="status_btn status_<?php echo strtolower($card->status)?> has-tooltip">

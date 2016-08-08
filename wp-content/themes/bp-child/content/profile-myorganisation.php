@@ -90,17 +90,17 @@ if (!$org_membership) {
             <?php else:?>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Name</label></div>
-                    <div data-name="user_organisation_web" data-value="<?php echo $user_org;?>"  class="grid-cell in_input"><?php echo !$user_org ? '-' : $user_org;?></div>
+                    <div data-name="user_organisation_web" data-value="<?php echo ctE($user_org);?>"  class="grid-cell in_input"><?php echo !$user_org ? '-' : ctE($user_org);?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Website</label></div>
-                    <div data-name="user_organisation_web" data-value="<?php echo $user_org_web;?>"  class="grid-cell in_input"><?php echo !$user_org_web ? '-' : $user_org_web;?></div>
+                    <div data-name="user_organisation_web" data-value="<?php echo ctE($user_org_web);?>"  class="grid-cell in_input"><?php echo !$user_org_web ? '-' : ctE($user_org_web);?></div>
                     <div class="clear"></div>
                 </div>
                 <div class="grid-row">
                     <div class="grid-cell width30P"><label>Description</label></div>
-                    <div data-name="user_organisation_desc" data-value="<?php echo $user_org_desc;?>"  class="grid-cell width70P in_input"><?php echo !$user_org_desc ? '-' : $user_org_desc;?></div>
+                    <div data-name="user_organisation_desc" data-value="<?php echo ctE($user_org_desc);?>"  class="grid-cell width70P in_input"><?php echo !$user_org_desc ? '-' : ctE($user_org_desc);?></div>
                     <div class="clear"></div>
                 </div>
             <?php endif;?>
