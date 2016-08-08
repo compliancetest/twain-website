@@ -270,7 +270,7 @@ class TestCasesController extends BaseApiController
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
             $this->stop();
-            return $this->respondNotFound($validateConfigs);
+            return $this->respondNotFound(sprintf($validateConfigs, $testCase->ID));
         }
 
         $response = [
@@ -303,11 +303,8 @@ class TestCasesController extends BaseApiController
      */
     private function _validateTestCaseConfiguration($type, $testExecutionProfile, $testConfigurationProfile)
     {
-        if ($type == 'DataSource' && !$testExecutionProfile) {
-            return 'Execution profile is required for DataSource products.';
-        }
-        if ($type == 'Application' && !($testExecutionProfile && $testConfigurationProfile)) {
-            return 'Execution and Configuration profiles are required for Application products.';
+        if (($type == 'DataSource' && !$testExecutionProfile) || ($type == 'Application' && !($testExecutionProfile && $testConfigurationProfile))) {
+            return 'Wrong test case configuration. Please contact support quoting test case id: %s.';
         }
         return true;
     }
@@ -452,7 +449,7 @@ class TestCasesController extends BaseApiController
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
             $this->stop();
-            return $this->respondNotFound($validateConfigs);
+            return $this->respondNotFound(sprintf($validateConfigs, $model->test_case_id));
         }
 
         $response = [
