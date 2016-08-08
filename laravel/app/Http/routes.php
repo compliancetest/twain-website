@@ -194,5 +194,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('verify-requests', 'VerifyRequestsController@store');
         Route::delete('verify-requests/{requestId}', 'VerifyRequestsController@delete');
 
+        Route::get('my-transaction-log-new', 'TransactionsController@index');
+
     });
 });
