@@ -11,6 +11,11 @@ use App\Http\Requests;
 class TransactionsController extends Controller
 {
 
+
+    public function index()
+    {
+        return view('pages.transactions.index');
+    }
     /**
      * Change audit_record flag for transaction entry
      * @param $transactionId
