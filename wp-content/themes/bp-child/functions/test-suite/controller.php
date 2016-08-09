@@ -597,12 +597,6 @@ function saveSuite()
         cp_sort_test_suites($suite->familyMark, $_POST['ts_version_major']);
 
         if (!$majorVersionIncreased) {
-            $subscription = ct_get_assigned_organisation_subscription($user_id, $suite->familyMark);
-            $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
-            if ($subscription && !$harness_detail) {
-                $organisationController = new CT_Organisation_Controller();
-                $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
-            }
             cp_update_subscriptions($suite->familyMark, $_POST['ts_version_major']);
         }
 
