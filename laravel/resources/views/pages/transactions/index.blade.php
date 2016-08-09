@@ -103,8 +103,8 @@
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterDate">Date:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker">
-                                <span class="input-group-addon"><span id="filterCalendar" class="calendar-icon"></span></span>
+                                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
                             </div>
                         </div>
                     </div>
