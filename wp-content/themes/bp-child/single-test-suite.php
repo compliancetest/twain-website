@@ -286,8 +286,8 @@ Template Name Posts: Test Suite
                     $harness_detail = ct_get_suite_harness_detail($user_id, $suite->id);
                         
                     if ($subscription && !$harness_detail) {
-                        $organisationController = new CT_Organisation_Controller();                            
-//                        $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
+                        $organisationController = new CT_Organisation_Controller();
+                        $organisationController->create_user_harness_detail($user_id, $suite->id, $subscription->organisation_id, $subscription->id);
                     }
                     
                     if (!$subscription)
