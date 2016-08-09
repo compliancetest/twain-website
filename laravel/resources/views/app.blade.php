@@ -44,6 +44,7 @@
 </div>
 
 @include('footer')
+@yield('page-scripts')
 <script>
     jQuery(document).ready(function($) {
         Page.communityCreate.init();

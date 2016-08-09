@@ -103,8 +103,8 @@
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterDate">Date:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="inputDate" aria-describedby="inputGroupSuccess3Status">
-                                <span class="input-group-addon"><img src="/wp-content/themes/bp-child/images/calendar-icon.png" alt=""></span>
+                                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker">
+                                <span class="input-group-addon"><span id="filterCalendar" class="calendar-icon"></span></span>
                             </div>
                         </div>
                     </div>
@@ -122,14 +122,241 @@
                     </div>
 
                     <div class="transaction-filter-footer">
-                        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+                        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>&nbsp;&nbsp;
                         <button type="button" class="btn btn-default btn-with-icon btn-clear">Clear</button>
                     </div>
                 </form>
             </div>
         </div>
+
+        <div class="transaction-list-actions">
+            <div class="pull-left">
+                <button type="button" class="btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
+                <button type="button" class="btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
+                <button type="button" class="btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
+            </div>
+            <div class="pull-right">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="paginationLimit">Display #</label>
+                        <select class="form-control" id="paginationLimit" name="limit">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">All</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="log-result-table">
+            <div class="table-responsive">
+                <div class="log-results-table-wrapper">
+                    <table class="table colored-parent-table log-results-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><input type="checkbox"></th>
+                                <th class="text-left">Product Name</th>
+                                <th>Test Suite<br/>Test Case</th>
+                                <th>Test<br/>Outcome</th>
+                                <th>Audit<br/>Record</th>
+                                <th>
+                                    Organisation<br/>
+                                    Subscription Nickname<br/>
+                                    Execution ID
+                                </th>
+                                <th>Date<br/>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center"><input type="checkbox"></td>
+                                <td class="product-name">
+                                    <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-1"><span class="collapse-icon"></span></a>
+                                    <a href="#" class="product-name-link">Panasonic KV-S1026C KV-S1015C v15.0</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="http://twain.lc/test-suite/twain-v2-3-compliance-data-sources-v1-0/">TWAIN v2.3 Compliance &ndash; Data Sources v1.0</a>
+                                    <br />
+                                    <a href="http://twain.lc/test-case/vn-06-v1-0/">VN-06 v1.0</a>
+                                </td>
+                                <td>
+                                    <a data-toggle="collapse" class="collapsed" href="#product-1"><span class="collapse-icon"></span></a>
+                                    <span class="text-status-ignored">Skip</span>
+                                </td>
+                                <td class="text-center"><input type="checkbox"></td>
+                                <td class="text-center">
+                                    Panasonic<br />
+                                    DS Tech 4<br />
+                                    <a target="_blank" href="#">7cc6066a-db11-40bb-a040-0fe5356424db</a>
+                                </td>
+                                <td class="text-center">2016-07-04<br/>16:30:53</td>
+                            </tr>
+                            <tr id="product-1" class="collapse">
+                                <td></td>
+                                <td colspan="6">
+                                    <table class="table colored-table log-results-sub-table">
+                                        <thead>
+                                            <tr>
+                                                <th>From<br/>To</th>
+                                                <th>Test<br/> Step</th>
+                                                <th>
+                                                    Operation Triplet<br/>
+                                                    Return Code
+                                                </th>
+                                                <th>Session<br/>State</th>
+                                                <th>Message<br/> Data</th>
+                                                <th>Date<br/>Time</th>
+                                                <th>Step<br/>Outcome</th>
+                                                <th>Screen<br/>Capture</th>
+                                                <th>Scan<br/>Result</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>APP<br/>DS</td>
+                                                <td><a href="#">3</a></td>
+                                                <td>
+                                                    DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                    <span class="text-status-success">TWRC_SUCCESS</span>
+                                                </td>
+                                                <td>3</td>
+                                                <td><a href="#">View</a></td>
+                                                <td>2016-07-04<br/>13:20:59</td>
+                                                <td><span class="text-status-success">Pass</span></td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>APP<br/>DS</td>
+                                                <td><a href="#">3</a></td>
+                                                <td>
+                                                    DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                    <span class="text-status-success">TWRC_SUCCESS</span>
+                                                </td>
+                                                <td>3</td>
+                                                <td><a href="#">View</a></td>
+                                                <td>2016-07-04<br/>13:20:59</td>
+                                                <td><span class="text-status-success">Pass</span></td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><input type="checkbox"></td>
+                                <td class="product-name">
+                                    <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-2"><span class="collapse-icon"></span></a>
+                                    <a href="#" class="product-name-link">Panasonic KV-S1026C KV-S1015C v15.0</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="http://twain.lc/test-suite/twain-v2-3-compliance-data-sources-v1-0/">TWAIN v2.3 Compliance &ndash; Data Sources v1.0</a>
+                                    <br />
+                                    <a href="http://twain.lc/test-case/vn-06-v1-0/">VN-06 v1.0</a>
+                                </td>
+                                <td>
+                                    <a data-toggle="collapse" class="collapsed" href="#product-2"><span class="collapse-icon"></span></a>
+                                    <span class="text-status-success">Pass</span>
+                                </td>
+                                <td class="text-center"><input type="checkbox"></td>
+                                <td class="text-center">
+                                    Panasonic<br />
+                                    DS Tech 4<br />
+                                    <a target="_blank" href="#">7cc6066a-db11-40bb-a040-0fe5356424db</a>
+                                </td>
+                                <td class="text-center">2016-07-04<br/>16:30:53</td>
+                            </tr>
+                            <tr id="product-2" class="collapse">
+                                <td></td>
+                                <td colspan="6">
+                                    <table class="table colored-table log-results-sub-table">
+                                        <thead>
+                                        <tr>
+                                            <th>From<br/>To</th>
+                                            <th>Test<br/> Step</th>
+                                            <th>
+                                                Operation Triplet<br/>
+                                                Return Code
+                                            </th>
+                                            <th>Session<br/>State</th>
+                                            <th>Message<br/> Data</th>
+                                            <th>Date<br/>Time</th>
+                                            <th>Step<br/>Outcome</th>
+                                            <th>Screen<br/>Capture</th>
+                                            <th>Scan<br/>Result</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>APP<br/>DS</td>
+                                            <td><a href="#">3</a></td>
+                                            <td>
+                                                DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                <span class="text-status-success">TWRC_SUCCESS</span>
+                                            </td>
+                                            <td>3</td>
+                                            <td><a href="#">View</a></td>
+                                            <td>2016-07-04<br/>13:20:59</td>
+                                            <td><span class="text-status-success">Pass</span></td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>APP<br/>DS</td>
+                                            <td><a href="#">3</a></td>
+                                            <td>
+                                                DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                <span class="text-status-success">TWRC_SUCCESS</span>
+                                            </td>
+                                            <td>3</td>
+                                            <td><a href="#">View</a></td>
+                                            <td>2016-07-04<br/>13:20:59</td>
+                                            <td><span class="text-status-success">Pass</span></td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="pagination-wrapper">
+                <div class="pagination">
+                    <a href="#" class="prev">prev</a>
+                    <span class="current">1</span>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <span class="pager-dots">...</span>
+                    <a href="#">140</a>
+                    <a href="#">141</a>
+                    <a href="#">142</a>
+                    <a href="#" class="next">next</a>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </div>
 
+@stop
+
+@section('page-scripts')
+<script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
+<script>
+    jQuery(document).ready(function($) {
+        $('#filterCalendar').click(function () {
+            $('#filterDate').datepicker('show');
+        });
+    });
+</script>
 @stop
