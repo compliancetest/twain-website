@@ -26,7 +26,7 @@
         <div class="transaction-filter">
             <div class="transaction-filter-title">Filter By:</div>
             <div class="transaction-filter-content">
-                <form action="#" method="post">
+                <form action="#" method="get">
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterSubscription">Subscription:</label>
@@ -174,6 +174,7 @@
                         <tbody>
                             @foreach($transactions AS $transaction)
                                 <?php
+                                    $eloquentTransaction = \App\Transaction::find($transaction->id);
                                     $product = \App\Post::find($transaction->product_id);
                                     $testCase = \App\Post::find($transaction->test_case_id);
                                     $testSuite = \App\Post::find($transaction->test_suite_id);
@@ -230,8 +231,7 @@
                                 </tr>
 
                                 <tr id="product-{{ $transaction->id }}" class="collapse">
-                                    <td></td>
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <table class="table colored-table log-results-sub-table">
                                             <thead>
                                                 <tr>
@@ -250,34 +250,57 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>APP<br/>DS</td>
-                                                    <td><a href="#">3</a></td>
-                                                    <td>
-                                                        DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                        <span class="text-status-success">TWRC_SUCCESS</span>
-                                                    </td>
-                                                    <td>3</td>
-                                                    <td><a href="#">View</a></td>
-                                                    <td>2016-07-04<br/>13:20:59</td>
-                                                    <td><span class="text-status-success">Pass</span></td>
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>APP<br/>DS</td>
-                                                    <td><a href="#">3</a></td>
-                                                    <td>
-                                                        DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                        <span class="text-status-success">TWRC_SUCCESS</span>
-                                                    </td>
-                                                    <td>3</td>
-                                                    <td><a href="#">View</a></td>
-                                                    <td>2016-07-04<br/>13:20:59</td>
-                                                    <td><span class="text-status-success">Pass</span></td>
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                </tr>
+                                                @if($eloquentTransaction->logs)
+                                                    @foreach($eloquentTransaction->logs AS $message)
+                                                        <tr>
+                                                            <td>{{ $message->from }}<br/>{{ $message->to }}</td>
+                                                            <td>
+                                                                 @if(!empty($message->test_step))
+                                                                    <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
+                                                                <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
+                                                            </td>
+                                                            <td>
+                                                                @if($message->session_state)
+                                                                    {{ $message->session_state }}
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if(!empty($message->log_output))
+                                                                    <a href="/testingdetails/{{ $message->id }}/output" class="s3output">View</a>
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $message->updated_at }}</td>
+                                                            <td>
+                                                                @if(empty($message->reason))
+                                                                    <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
+                                                                @else
+                                                                    <a href="/testingdetails/{{ $message->id }}/reason" class="reason">
+                                                                        <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                            <td>-</td>
+                                                            <td>
+                                                                @if ($scanImages = json_decode($message->scan_results))
+                                                                    @foreach ($scanImages as $scanImage)
+                                                                        <a href="{{ $scanImage }}" target="_blank">View</a>
+                                                                    @endforeach
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
+                                                @else
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">No data</td>
+                                                    </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </td>
@@ -287,18 +310,9 @@
                     </table>
                 </div>
             </div>
+
             <div class="pagination-wrapper">
-                <div class="pagination">
-                    <a href="#" class="prev">prev</a>
-                    <span class="current">1</span>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <span class="pager-dots">...</span>
-                    <a href="#">140</a>
-                    <a href="#">141</a>
-                    <a href="#">142</a>
-                    <a href="#" class="next">next</a>
-                </div>
+                    {{ $transactions->appends($_GET)->render() }}
             </div>
 
         </div>
