@@ -172,159 +172,117 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-center"><input type="checkbox"></td>
-                                <td class="product-name">
-                                    <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-1"><span class="collapse-icon"></span></a>
-                                    <a href="#" class="product-name-link">Panasonic KV-S1026C KV-S1015C v15.0</a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="http://twain.lc/test-suite/twain-v2-3-compliance-data-sources-v1-0/">TWAIN v2.3 Compliance &ndash; Data Sources v1.0</a>
-                                    <br />
-                                    <a href="http://twain.lc/test-case/vn-06-v1-0/">VN-06 v1.0</a>
-                                </td>
-                                <td>
-                                    <a data-toggle="collapse" class="collapsed" href="#product-1"><span class="collapse-icon"></span></a>
-                                    <span class="text-status-ignored">Skip</span>
-                                </td>
-                                <td class="text-center"><input type="checkbox"></td>
-                                <td class="text-center">
-                                    Panasonic<br />
-                                    DS Tech 4<br />
-                                    <a target="_blank" href="#">7cc6066a-db11-40bb-a040-0fe5356424db</a>
-                                </td>
-                                <td class="text-center">2016-07-04<br/>16:30:53</td>
-                            </tr>
-                            <tr id="product-1" class="collapse">
-                                <td></td>
-                                <td colspan="6">
-                                    <table class="table colored-table log-results-sub-table">
-                                        <thead>
-                                            <tr>
-                                                <th>From<br/>To</th>
-                                                <th>Test<br/> Step</th>
-                                                <th>
-                                                    Operation Triplet<br/>
-                                                    Return Code
-                                                </th>
-                                                <th>Session<br/>State</th>
-                                                <th>Message<br/> Data</th>
-                                                <th>Date<br/>Time</th>
-                                                <th>Step<br/>Outcome</th>
-                                                <th>Screen<br/>Capture</th>
-                                                <th>Scan<br/>Result</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>APP<br/>DS</td>
-                                                <td><a href="#">3</a></td>
-                                                <td>
-                                                    DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                    <span class="text-status-success">TWRC_SUCCESS</span>
-                                                </td>
-                                                <td>3</td>
-                                                <td><a href="#">View</a></td>
-                                                <td>2016-07-04<br/>13:20:59</td>
-                                                <td><span class="text-status-success">Pass</span></td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                            </tr>
-                                            <tr>
-                                                <td>APP<br/>DS</td>
-                                                <td><a href="#">3</a></td>
-                                                <td>
-                                                    DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                    <span class="text-status-success">TWRC_SUCCESS</span>
-                                                </td>
-                                                <td>3</td>
-                                                <td><a href="#">View</a></td>
-                                                <td>2016-07-04<br/>13:20:59</td>
-                                                <td><span class="text-status-success">Pass</span></td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center"><input type="checkbox"></td>
-                                <td class="product-name">
-                                    <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-2"><span class="collapse-icon"></span></a>
-                                    <a href="#" class="product-name-link">Panasonic KV-S1026C KV-S1015C v15.0</a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="http://twain.lc/test-suite/twain-v2-3-compliance-data-sources-v1-0/">TWAIN v2.3 Compliance &ndash; Data Sources v1.0</a>
-                                    <br />
-                                    <a href="http://twain.lc/test-case/vn-06-v1-0/">VN-06 v1.0</a>
-                                </td>
-                                <td>
-                                    <a data-toggle="collapse" class="collapsed" href="#product-2"><span class="collapse-icon"></span></a>
-                                    <span class="text-status-success">Pass</span>
-                                </td>
-                                <td class="text-center"><input type="checkbox"></td>
-                                <td class="text-center">
-                                    Panasonic<br />
-                                    DS Tech 4<br />
-                                    <a target="_blank" href="#">7cc6066a-db11-40bb-a040-0fe5356424db</a>
-                                </td>
-                                <td class="text-center">2016-07-04<br/>16:30:53</td>
-                            </tr>
-                            <tr id="product-2" class="collapse">
-                                <td></td>
-                                <td colspan="6">
-                                    <table class="table colored-table log-results-sub-table">
-                                        <thead>
-                                        <tr>
-                                            <th>From<br/>To</th>
-                                            <th>Test<br/> Step</th>
-                                            <th>
-                                                Operation Triplet<br/>
-                                                Return Code
-                                            </th>
-                                            <th>Session<br/>State</th>
-                                            <th>Message<br/> Data</th>
-                                            <th>Date<br/>Time</th>
-                                            <th>Step<br/>Outcome</th>
-                                            <th>Screen<br/>Capture</th>
-                                            <th>Scan<br/>Result</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>APP<br/>DS</td>
-                                            <td><a href="#">3</a></td>
-                                            <td>
-                                                DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                <span class="text-status-success">TWRC_SUCCESS</span>
-                                            </td>
-                                            <td>3</td>
-                                            <td><a href="#">View</a></td>
-                                            <td>2016-07-04<br/>13:20:59</td>
-                                            <td><span class="text-status-success">Pass</span></td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
-                                        <tr>
-                                            <td>APP<br/>DS</td>
-                                            <td><a href="#">3</a></td>
-                                            <td>
-                                                DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
-                                                <span class="text-status-success">TWRC_SUCCESS</span>
-                                            </td>
-                                            <td>3</td>
-                                            <td><a href="#">View</a></td>
-                                            <td>2016-07-04<br/>13:20:59</td>
-                                            <td><span class="text-status-success">Pass</span></td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
+                            @foreach($transactions AS $transaction)
+                                <?php
+                                    $product = \App\Post::find($transaction->product_id);
+                                    $testCase = \App\Post::find($transaction->test_case_id);
+                                    $testSuite = \App\Post::find($transaction->test_suite_id);
+                                    $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
+                                    $status = getOutcomeStatusClass($outcomeStatus->code);
+                                    $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
+                                    $organisation = \App\Organisation::find($subscription->organisation_id);
+                                ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="id[]" id="id{{ $transaction->id }}" value="{{ $transaction->id }}"
+                                        @if($transaction->audit_record) disabled="disabled" @endif>
+                                    </td>
+                                    <td class="product-name">
+                                        <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                                        <a href="/product/{{ $product->post_name }}" class="product-name-link" target="_blank">{{ $product->post_title }}</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="/test-suite/{{ $testSuite->post_name }}/" target="_blank">{{ $testSuite->post_title }}</a>
+                                        <br />
+                                        <a href="/test-case/{{ $testCase->post_name }}/" target="_blank">{{ $testCase->post_title }}</a>
+                                    </td>
+                                    <td>
+                                        <a data-toggle="collapse" class="collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                                        <span class="text-status-{{ $status }}">
+                                            @if(!empty($transaction->reason))
+                                                <a href="/testingdetails/<?php echo $transaction->id;?>/transaction-reason" class="transaction_reason">
+                                                    {{ $outcomeStatus->name }}
+                                                </a>
+                                            @else
+                                                {{ $outcomeStatus->name }}
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $organisation->organisation_name }}
+                                        <br />
+                                        {{ $subscription->nickname }}
+                                        <br />
+                                        @if(!empty($transaction->s3_link))
+                                            <a href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
+                                        @else
+                                            {{ $transaction->execution_id }}
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{ formatDate($transaction->updated_at, 'Y-m-d') }}
+                                        <br>
+                                        {{ formatDate($transaction->updated_at, 'H:i:s') }}
+                                    </td>
+                                </tr>
 
+                                <tr id="product-{{ $transaction->id }}" class="collapse">
+                                    <td></td>
+                                    <td colspan="6">
+                                        <table class="table colored-table log-results-sub-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>From<br/>To</th>
+                                                    <th>Test<br/> Step</th>
+                                                    <th>
+                                                        Operation Triplet<br/>
+                                                        Return Code
+                                                    </th>
+                                                    <th>Session<br/>State</th>
+                                                    <th>Message<br/> Data</th>
+                                                    <th>Date<br/>Time</th>
+                                                    <th>Step<br/>Outcome</th>
+                                                    <th>Screen<br/>Capture</th>
+                                                    <th>Scan<br/>Result</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>APP<br/>DS</td>
+                                                    <td><a href="#">3</a></td>
+                                                    <td>
+                                                        DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                        <span class="text-status-success">TWRC_SUCCESS</span>
+                                                    </td>
+                                                    <td>3</td>
+                                                    <td><a href="#">View</a></td>
+                                                    <td>2016-07-04<br/>13:20:59</td>
+                                                    <td><span class="text-status-success">Pass</span></td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>APP<br/>DS</td>
+                                                    <td><a href="#">3</a></td>
+                                                    <td>
+                                                        DG_CONTROL / DAT_IDENTITY / MSG_OPENDS<br/>
+                                                        <span class="text-status-success">TWRC_SUCCESS</span>
+                                                    </td>
+                                                    <td>3</td>
+                                                    <td><a href="#">View</a></td>
+                                                    <td>2016-07-04<br/>13:20:59</td>
+                                                    <td><span class="text-status-success">Pass</span></td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
