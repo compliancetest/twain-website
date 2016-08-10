@@ -30,41 +30,41 @@
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterSubscription">Subscription:</label>
-                            <select class="form-control" id="filterSubscription" name="subscription">
+                            <select class="form-control" id="filterSubscription" name="subscription_id">
                                 <option value="">- All -</option>
-                                <option value="1">Option 1</option>
-                                <option value="1">Option 2</option>
-                                <option value="1">Option 3</option>
+                                @foreach($filters['subscription_id'] as $subscription)
+                                    <option value="{{ $subscription->id }}">{{ $subscription->nickname }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterProduct">Product:</label>
-                            <select class="form-control" id="filterProduct" name="subscription">
+                            <select class="form-control" id="filterProduct" name="product_id">
                                 <option value="">- All -</option>
-                                <option value="1">Product 1</option>
-                                <option value="1">Product 2</option>
-                                <option value="1">Product 3</option>
+                                @foreach($filters['product_id'] as $product)
+                                    <option value="{{ $product->ID }}">{{ $product->post_title }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterSuite">Test Suite:</label>
-                            <select class="form-control" id="filterSuite" name="subscription">
+                            <select class="form-control" id="filterSuite" name="test_suite_id">
                                 <option value="">- All -</option>
-                                <option value="1">Suite 1</option>
-                                <option value="1">Suite 2</option>
-                                <option value="1">Suite 3</option>
+                                @foreach($filters['test_suite_id'] as $testSuite)
+                                    <option value="{{ $testSuite->ID }}">{{ $testSuite->post_title }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterCase">Test Case:</label>
-                            <select class="form-control" id="filterCase" name="subscription">
+                            <select class="form-control" id="filterCase" name="test_case_id">
                                 <option value="">- All -</option>
-                                <option value="1">Case 1</option>
-                                <option value="1">Case 2</option>
-                                <option value="1">Case 3</option>
+                                @foreach($filters['test_case_id'] as $testCase)
+                                    <option value="{{ $testCase->ID }}">{{ $testCase->post_title }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -72,21 +72,21 @@
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterAudit">Audit:</label>
-                            <select class="form-control" id="filterAudit" name="subscription">
+                            <select class="form-control" id="filterAudit" name="audit_record">
                                 <option value="">- All -</option>
-                                <option value="1">Audit 1</option>
-                                <option value="1">Audit 2</option>
-                                <option value="1">Audit 3</option>
+                                @foreach($filters['audit_record'] as $auditRecord)
+                                    <option value="{{ $auditRecord }}">{{ $auditRecord }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterTestOutcome">Test Outcome:</label>
-                            <select class="form-control" id="filterTestOutcome" name="subscription">
+                            <select class="form-control" id="filterTestOutcome" name="test_outcome_status_id">
                                 <option value="">- All -</option>
-                                <option value="1">Test Outcome 1</option>
-                                <option value="1">Test Outcome 2</option>
-                                <option value="1">Test Outcome 3</option>
+                                @foreach($filters['test_outcome_status_id'] as $testOutcome)
+                                    <option value="{{ $testOutcome->id }}">{{ $testOutcome->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -109,17 +109,19 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-md-3">
-                            <label for="filterOrganisation">Organisation:</label>
-                            <select class="form-control" id="filterOrganisation" name="subscription">
-                                <option value="">- All -</option>
-                                <option value="1">Organisation 1</option>
-                                <option value="1">Organisation 2</option>
-                                <option value="1">Organisation 3</option>
-                            </select>
+                    @if(doesUserAdminInAnyCommunity(Auth::user()->ID) || doesUserAdminInAnyCommunity(Auth::user()->ID))
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-md-3">
+                                <label for="filterOrganisation">Organisation:</label>
+                                <select class="form-control" id="filterOrganisation" name="organisation_id">
+                                    <option value="">- All -</option>
+                                    @foreach($filters['organisation_id'] as $organisation)
+                                        <option value="{{ $organisation->id }}">{{ $organisation->organisation_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     <div class="transaction-filter-footer">
                         <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>&nbsp;&nbsp;

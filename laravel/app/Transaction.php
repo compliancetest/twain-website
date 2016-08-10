@@ -102,6 +102,23 @@ class Transaction extends Model
         $this->whereModel->orderBy('updated_at', 'desc');
     }
 
+    public function processFilters()
+    {
+        $organisationSubscriptions = OrganisationSubscription::whereIn('ID', $this->whereModel->groupBy('subscription_id')->pluck('subscription_id'))->orderBy('nickname');
+        $arr =  [
+            'subscription_id' => $organisationSubscriptions->get(),
+            'product_id' => Post::whereIn('ID', $this->whereModel->groupBy('product_id')->pluck('product_id'))->orderBy('post_title')->get(),
+            'test_case_id' => Post::whereIn('ID', $this->whereModel->groupBy('test_case_id')->pluck('test_case_id'))->orderBy('post_title')->get(),
+            'test_suite_id' => Post::whereIn('ID', $this->whereModel->groupBy('test_suite_id')->pluck('test_suite_id'))->orderBy('post_title')->get(),
+            'audit_record' => $this->whereModel->groupBy('audit_record')->pluck('audit_record'),
+            'test_outcome_status_id' => TestOutcomeStatus::whereIn('id', $this->whereModel->groupBy('test_outcome_status_id')->pluck('test_outcome_status_id'))->orderBy('name')->get(),
+//            'scenario_id' => $this->whereModel->groupBy('scenario_id')->get(),
+            'organisation_id' => Organisation::whereIn('id', $organisationSubscriptions->pluck('organisation_id'))->get(),
+        ];
+        return $arr;
+        dd($arr);
+    }
+
     public static function getUserTransactionLog($filters, $page = 1, $totalPerPage = 10)
     {
         $subscriptions = [];
@@ -110,7 +127,10 @@ class Transaction extends Model
         });
         $transaction = new Transaction();
         $transaction->setWhereQuery($subscriptions, $filters);
-        return $transaction->whereModel->paginate($totalPerPage);
+        return [
+            $transaction->processFilters(),
+            $transaction->whereModel->paginate($totalPerPage)
+        ];
     }
 
 }
