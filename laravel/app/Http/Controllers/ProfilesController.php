@@ -30,8 +30,8 @@ class ProfilesController extends Controller
     {
         $community = Community::findBySlug($communitySlug);
         $profileType = false;
-        if ($request->has('profile_type_id')) {
-            $profileType = ProfileType::find($request->get('profile_type_id'));
+        if ($request->has('profile-type-id')) {
+            $profileType = ProfileType::find($request->get('profile-type-id'));
         }
         return view('pages.profiles.create')->with(['community' => $community, 'profileType' => $profileType])->render();
     }

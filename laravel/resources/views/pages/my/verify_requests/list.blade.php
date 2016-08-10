@@ -159,53 +159,55 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            @foreach($transaction->logs as $message)
-                                                                                <?php $testCase = \App\Post::find($transaction->test_case_id);?>
-                                                                                <tr>
-                                                                                    <td class="text-center">{{ $message->from }}<br>{{ $message->to }}</td>
-                                                                                    <td class="text-center">
-                                                                                        @if(!empty($message->test_step))
-                                                                                            <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
-                                                                                        <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        @if($message->session_state)
-                                                                                            {{ $message->session_state }}
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        @if(!empty($message->log_output))
-                                                                                            <a href="/testingdetails/{{ $message->id }}/output/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewOutputModal" class="s3_output">View</a>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    <td class="text-center">{{ $message->updated_at }}</td>
-                                                                                    <td class="text-center">
-                                                                                        @if(empty($message->reason))
-                                                                                            <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
-                                                                                                {{ $message->step_outcome }}
-                                                                                            </span>
-                                                                                        @else
-                                                                                            <a href="/testingdetails/{{ $message->id }}/reason/laravel"  data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
-                                                                                                <span class="status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
-                                                                                            </a>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                    <td class="text-center">-</td>
-                                                                                    <td class="text-center">
-                                                                                        @if ($scanImages = json_decode($message->scan_results))
-                                                                                            @foreach ($scanImages as $scanImage)
-                                                                                                <a href="{{ $scanImage }}" target="_blank">View</a>
-                                                                                            @endforeach
-                                                                                        @else
-                                                                                            -
-                                                                                        @endif
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforeach
+                                                                            @if($transaction->logs)
+                                                                                @foreach($transaction->logs as $message)
+                                                                                    <?php $testCase = \App\Post::find($transaction->test_case_id);?>
+                                                                                    <tr>
+                                                                                        <td class="text-center">{{ $message->from }}<br>{{ $message->to }}</td>
+                                                                                        <td class="text-center">
+                                                                                            @if(!empty($message->test_step))
+                                                                                                <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
+                                                                                            <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            @if($message->session_state)
+                                                                                                {{ $message->session_state }}
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="text-center">
+                                                                                            @if(!empty($message->log_output))
+                                                                                                <a href="/testingdetails/{{ $message->id }}/output/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewOutputModal" class="s3_output">View</a>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="text-center">{{ $message->updated_at }}</td>
+                                                                                        <td class="text-center">
+                                                                                            @if(empty($message->reason))
+                                                                                                <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
+                                                                                                    {{ $message->step_outcome }}
+                                                                                                </span>
+                                                                                            @else
+                                                                                                <a href="/testingdetails/{{ $message->id }}/reason/laravel"  data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
+                                                                                                    <span class="status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
+                                                                                                </a>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="text-center">-</td>
+                                                                                        <td class="text-center">
+                                                                                            @if ($scanImages = json_decode($message->scan_results))
+                                                                                                @foreach ($scanImages as $scanImage)
+                                                                                                    <a href="{{ $scanImage }}" target="_blank">View</a>
+                                                                                                @endforeach
+                                                                                            @else
+                                                                                                -
+                                                                                            @endif
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            @endif
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
