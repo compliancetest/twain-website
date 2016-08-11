@@ -2,64 +2,76 @@
   text-align: center;
 }
 
-.pagination{
+.pagination {
   margin: 10px 0;
-  display: inline-block;
-  border: 1px solid #d8d8d8;
   background: #f2f2f2;
   @include background-image(linear-gradient(top, #ffffff, #e5e5e5));
   @include border-radius(3px);
 
-  a{
-    width: 27px;
-    height: 23px;
-    line-height: 23px;
-    border-right: solid 1px #dcdcdc;
-    font-size: 13px;
-    font-weight: 600;
-    float: left;
-    color: #2c80e8;
+  > li {
 
-    &:hover{
+    > a,
+    > span {
+      min-width: 23px;
+      text-align: center;
+      padding: 4px 9px;
+      font-weight: 600;
+      color: $app-blue;
+      font-size: 13px;
+      background: none;
+      border: 1px solid #dcdcdc;
+    }
+    &:first-child {
+      > a,
+      > span {
+        @include iconsSprite(pager-prev);
+        text-indent: -9999px;
+        @include border-left-radius(3px);
+      }
+    }
+    &:last-child {
+      > a,
+      > span {
+        @include iconsSprite(pager-next);
+        text-indent: -9999px;
+        @include border-right-radius(3px);
+      }
+    }
+  }
+
+  > li > a,
+  > li > span {
+    &:hover,
+    &:focus {
+      color: $app-blue;
       background-color: #e9e9e9;
-      text-decoration: none;
+      border-color: #dcdcdc;
     }
+  }
 
-    &.prev{
-      @include iconsSprite(pager-prev);
-      text-indent: -9999px;
-    }
-    &.next{
-      @include iconsSprite(pager-next);
-      text-indent: -9999px;
-      border-right: none;
+  > .active > a,
+  > .active > span {
+    &,
+    &:hover,
+    &:focus {
+      border-color: #dcdcdc;
+      color: #18529b;
+      background-color: transparent;
+      @include box-shadow(0 0 15px -2px rgba(0, 0, 0, 0.4) inset);
     }
 
   }
 
-  .pager-dots{
-    width: 27px;
-    height: 23px;
-    line-height: 23px;
-    border-right: solid 1px #dcdcdc;
-    font-size: 13px;
-    font-weight: 600;
-    float: left;
-    color: #2c80e8;
+  > .disabled {
+    > span,
+    > span:hover,
+    > span:focus,
+    > a,
+    > a:hover,
+    > a:focus {
+      color: $pagination-disabled-color;
+      background-color: transparent;
+      border-color: #dcdcdc;
+    }
   }
-
-  .current{
-    width: 26px;
-    height: 23px;
-    line-height: 23px;
-    border-right: solid 1px #dcdcdc;
-    font-size: 13px;
-    font-weight: 600;
-    float: left;
-    color: #18529b;
-    background: #fff;
-    @include box-shadow(0 0 15px -2px rgba(0, 0, 0, 0.4) inset);
-  }
-
 }
-

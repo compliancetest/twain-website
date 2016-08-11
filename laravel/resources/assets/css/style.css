@@ -8928,7 +8928,7 @@ body.modal-open,
 #messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -488px;
+  background-position: 0 -466px;
   height: 24px;
   width: 24px;
 }
@@ -8941,7 +8941,7 @@ body.modal-open,
 #messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -512px;
+  background-position: 0 -442px;
   height: 24px;
   width: 24px;
 }
@@ -9054,7 +9054,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -488px;
+  background-position: 0 -466px;
   height: 24px;
   width: 24px;
 }
@@ -9076,7 +9076,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -512px;
+  background-position: 0 -442px;
   height: 24px;
   width: 24px;
 }
@@ -9424,7 +9424,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -608px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9432,7 +9432,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -536px;
+  background-position: 0 -490px;
   height: 24px;
   width: 18px;
 }
@@ -9440,7 +9440,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -656px;
+  background-position: 0 -610px;
   height: 24px;
   width: 18px;
 }
@@ -9448,7 +9448,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -632px;
+  background-position: 0 -562px;
   height: 24px;
   width: 18px;
 }
@@ -9456,7 +9456,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -752px;
+  background-position: 0 -682px;
   height: 24px;
   width: 18px;
 }
@@ -9464,7 +9464,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -584px;
+  background-position: 0 -586px;
   height: 24px;
   width: 18px;
 }
@@ -9472,7 +9472,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -704px;
+  background-position: 0 -634px;
   height: 24px;
   width: 18px;
 }
@@ -9480,7 +9480,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -680px;
+  background-position: 0 -706px;
   height: 24px;
   width: 18px;
 }
@@ -9488,7 +9488,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -728px;
+  background-position: 0 -658px;
   height: 24px;
   width: 18px;
 }
@@ -9496,7 +9496,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-clear:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -560px;
+  background-position: 0 -514px;
   height: 24px;
   width: 18px;
 }
@@ -9720,7 +9720,7 @@ input[type="checkbox"] {
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -839px;
+  background-position: 0 -871px;
   height: 28px;
   width: 21px;
 }
@@ -9728,7 +9728,7 @@ input[type="checkbox"] {
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -811px;
+  background-position: 0 -843px;
   height: 28px;
   width: 21px;
 }
@@ -9736,7 +9736,7 @@ input[type="checkbox"] {
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -867px;
+  background-position: 0 -815px;
   height: 28px;
   width: 21px;
 }
@@ -10280,7 +10280,7 @@ input[type="checkbox"] {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -288px;
+  background-position: 0 -309px;
   height: 21px;
   width: 21px;
 }
@@ -10289,7 +10289,7 @@ input[type="checkbox"] {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -309px;
+  background-position: 0 -288px;
   height: 21px;
   width: 21px;
 }
@@ -11622,8 +11622,6 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 /* line 5, ../scss/blocks/_pagination.scss */
 .pagination {
   margin: 10px 0;
-  display: inline-block;
-  border: 1px solid #d8d8d8;
   background: #f2f2f2;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U1ZTVlNSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -11636,64 +11634,70 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-radius: 3px;
 }
 /* line 13, ../scss/blocks/_pagination.scss */
-.pagination a {
-  width: 27px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
+.pagination > li > a,
+.pagination > li > span {
+  min-width: 23px;
+  text-align: center;
+  padding: 4px 9px;
   font-weight: 600;
-  float: left;
   color: #2c80e8;
+  font-size: 13px;
+  background: none;
+  border: 1px solid #dcdcdc;
 }
-/* line 23, ../scss/blocks/_pagination.scss */
-.pagination a:hover {
+/* line 25, ../scss/blocks/_pagination.scss */
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -790px;
+  height: 25px;
+  width: 24px;
+  text-indent: -9999px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+/* line 33, ../scss/blocks/_pagination.scss */
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -765px;
+  height: 25px;
+  width: 24px;
+  text-indent: -9999px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+/* line 44, ../scss/blocks/_pagination.scss */
+.pagination > li > a:hover, .pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+  color: #2c80e8;
   background-color: #e9e9e9;
-  text-decoration: none;
+  border-color: #dcdcdc;
 }
-/* line 28, ../scss/blocks/_pagination.scss */
-.pagination a.prev {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -417px;
-  height: 23px;
-  width: 24px;
-  text-indent: -9999px;
-}
-/* line 32, ../scss/blocks/_pagination.scss */
-.pagination a.next {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -394px;
-  height: 23px;
-  width: 24px;
-  text-indent: -9999px;
-  border-right: none;
-}
-/* line 40, ../scss/blocks/_pagination.scss */
-.pagination .pager-dots {
-  width: 27px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
-  font-weight: 600;
-  float: left;
-  color: #2c80e8;
-}
-/* line 51, ../scss/blocks/_pagination.scss */
-.pagination .current {
-  width: 26px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
-  font-weight: 600;
-  float: left;
+/* line 54, ../scss/blocks/_pagination.scss */
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
+.pagination > .active > span,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+  border-color: #dcdcdc;
   color: #18529b;
-  background: #fff;
+  background-color: transparent;
   -webkit-box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
   box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
+}
+/* line 66, ../scss/blocks/_pagination.scss */
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777777;
+  background-color: transparent;
+  border-color: #dcdcdc;
 }
 
 /* line 1, ../scss/blocks/_mime-types.scss */
@@ -12881,7 +12885,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -776px;
+  background-position: 0 -730px;
   height: 16px;
   width: 16px;
 }
@@ -12907,7 +12911,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -776px;
+  background-position: -16px -730px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -13508,7 +13512,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -895px;
+  background-position: 0 -899px;
   height: 29px;
   width: 29px;
   content: '';
@@ -14691,7 +14695,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -440px;
+  background-position: 0 -418px;
   height: 24px;
   width: 28px;
 }
@@ -14706,7 +14710,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -464px;
+  background-position: 0 -394px;
   height: 24px;
   width: 28px;
 }
