@@ -768,6 +768,84 @@ var Page = {
                 })
             })
         },
+        validateAcceptVerifyRequestDetailsForm: function () {
+            $('#acceptVerifyRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                form.find('.modal-body .message').remove();
+
+                if (!$('#confirmRequest').is(':checked')) {
+                    form.find('.modal-body').append('<div class="message error-message">Please confirm</div>');
+                    return false;
+                }
+                ;
+
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        'user_id': $('#availableSupportUsers').val(),
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    error: function (jqXHR, status) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function (rsp) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 1500);
+                    },
+                    complete: function () {
+                    }
+                })
+            })
+        },
+        validateUnassignVerifyRequestDetailsForm: function () {
+            $('#unassignVerifyRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                form.find('.modal-body .message').remove();
+
+                if (!$('#confirmUnAssign').is(':checked')) {
+                    form.find('.modal-body').append('<div class="message error-message">Please confirm</div>');
+                    return false;
+                }
+                ;
+
+                form.find('.block-loading').show();
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'post',
+                    data: {
+                        'user_id': $('#availableSupportUsers').val(),
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    error: function (jqXHR, status) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    },
+                    success: function (rsp) {
+                        form.find('.block-loading').hide();
+                        form.find('.modal-body').append('<div class="message success-message">Changes saved successfully.</div>');
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 1500);
+                    },
+                    complete: function () {
+                    }
+                })
+            })
+        },
         validateResolveVerifyRequestDetailsForm: function () {
             $('#resolveVerifyRequestForm').on('submit', function (e) {
                 e.preventDefault();

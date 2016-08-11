@@ -122,7 +122,7 @@ $ct_email_templates = array(
         array(
             'menu' => 'Verify Request Created',
             'title' => 'Verify Request Created',
-            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -135,9 +135,9 @@ $ct_email_templates = array(
             )
         ),
         array(
-            'menu' => 'Verify Request Assigned',
-            'title' => 'Verify Request Assigned',
-            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'menu' => 'New Verify Request Assigned',
+            'title' => 'New Verify Request Assigned',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
             'fields' => array(
                 array(
                     'title' => 'For User',
@@ -150,9 +150,69 @@ $ct_email_templates = array(
             )
         ),
         array(
-            'menu' => 'Verify Request Resolved',
-            'title' => 'Verify Request Resolved',
-            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [assignee_name]',
+            'menu' => 'New Verify Request Accepted',
+            'title' => 'New Verify Request Accepted',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'accepted_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'accepted_verify_request_to_support'
+                ),
+            )
+        ),
+        array(
+            'menu' => 'Assigned Verify Request Accepted',
+            'title' => 'Assigned Verify Request Accepted',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'assigned_accepted_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'assigned_accepted_verify_request_to_support'
+                ),
+            )
+        ),
+        array(
+            'menu' => 'Assigned Verify Request Un-Assigned',
+            'title' => 'Assigned Verify Request Un-Assigned',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'assigned_unassigned_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'assigned_unassigned_verify_request_to_support'
+                ),
+            )
+        ),
+        array(
+            'menu' => 'Accepted Verify Request Un-Assigned',
+            'title' => 'Accepted Verify Request Un-Assigned',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'accepted_unasigned_verify_request_to_user'
+                ),
+                array(
+                    'title' => 'For Support Users',
+                    'id' => 'accepted_unasigned_verify_request_to_support'
+                ),
+            )
+        ),
+        array(
+            'menu' => 'Accepted Verify Request Resolved',
+            'title' => 'Accepted Verify Request Resolved',
+            'shortcodes' => '[requestor_name], [verify_request_id], [website_url], [community], [test_suite], [product], [level], [assignee_name]',
             'fields' => array(
                 array(
                     'title' => 'For User',

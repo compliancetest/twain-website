@@ -47,14 +47,28 @@
                                         {{ formatDate($verifyRequest['verifyRequest']->updated_at, 'Y-m-d H:i:s') }}
                                     </td>
                                     <td class="text-center">
+
                                         @if($isAdmin && $verifyRequest['verifyRequest']->status == 'In Progress' && $verifyRequest['verifyRequest']->canBeResolved(Auth::user()))
                                             <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/resolve/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                                class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Resolve"></a>
                                         @endif
+
                                         @if($isAdmin && $verifyRequest['verifyRequest']->status != 'Resolved')
                                             <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/assign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="Assign Verify Request"></a>
                                         @endif
+
+                                        @if($isAdmin && ( $verifyRequest['verifyRequest']->status == 'New' ||
+                                            ($verifyRequest['verifyRequest']->is_accepted == false && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID)))
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/accept/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#acceptVerifyRequestModal"
+                                               class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Accept Verify Request"></a>
+                                        @endif
+
+                                        @if($isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID)
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/unassign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#unassignVerifyRequestModal"
+                                               class="btn btn-warning btn-icon btn-delete" data-tooltip="tooltip" title="Unassign Verify Request"></a>
+                                        @endif
+
                                         @if($verifyRequest['verifyRequest']->canUserDelete())
                                             <a href="#removeVerifyRequestModal-{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
                                                class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Delete Verify Request"></a>
