@@ -25,8 +25,8 @@
     <div class="main-content">
         <div class="transaction-filter">
             <div class="transaction-filter-title">Filter By:</div>
-            <div class="transaction-filter-content">
-                <form action="#" method="get">
+            <div class="transaction-filter-content block-loading-wrapper">
+                <form action="#" method="get" id="filterByForm">
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterSubscription">Subscription:</label>
@@ -130,6 +130,12 @@
                         <button type="button" class="btn btn-default btn-with-icon btn-clear" onclick="location.href = '/my-transaction-log-new'">Clear</button>
                     </div>
                 </form>
+                <div class="block-loading" id="filterBySpinner">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -193,7 +199,7 @@
                                         @if($transaction->audit_record) disabled="disabled" @endif>
                                     </td>
                                     <td class="product-name">
-                                        <a data-toggle="collapse" class="product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                                        <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
                                         <a href="/product/{{ $product->post_name }}" class="product-name-link" target="_blank">{{ $product->post_title }}</a>
                                     </td>
                                     <td class="text-center">
@@ -202,7 +208,7 @@
                                         <a href="/test-case/{{ $testCase->post_name }}/" target="_blank">{{ $testCase->post_title }}</a>
                                     </td>
                                     <td>
-                                        <a data-toggle="collapse" class="collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                                        <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
                                         <span class="text-status-{{ $status }}">
                                             @if(!empty($transaction->reason))
                                                 <a href="/testingdetails/<?php echo $transaction->id;?>/transaction-reason" class="transaction_reason">
@@ -234,79 +240,16 @@
                                     </td>
                                 </tr>
 
-                                <tr id="product-{{ $transaction->id }}" class="collapse">
+                                <tr id="product-{{ $transaction->id }}" data-transaction-id="{{ $transaction->id }}" class="logRow collapse">
                                     <td colspan="7">
-                                        <table class="table colored-table log-results-sub-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>From<br/>To</th>
-                                                    <th>Test<br/> Step</th>
-                                                    <th>
-                                                        Operation Triplet<br/>
-                                                        Return Code
-                                                    </th>
-                                                    <th>Session<br/>State</th>
-                                                    <th>Message<br/> Data</th>
-                                                    <th>Date<br/>Time</th>
-                                                    <th>Step<br/>Outcome</th>
-                                                    <th>Screen<br/>Capture</th>
-                                                    <th>Scan<br/>Result</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($eloquentTransaction->logs)
-                                                    @foreach($eloquentTransaction->logs AS $message)
-                                                        <tr>
-                                                            <td>{{ $message->from }}<br/>{{ $message->to }}</td>
-                                                            <td>
-                                                                 @if(!empty($message->test_step))
-                                                                    <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
-                                                                <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
-                                                            </td>
-                                                            <td>
-                                                                @if($message->session_state)
-                                                                    {{ $message->session_state }}
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(!empty($message->log_output))
-                                                                    <a href="/testingdetails/{{ $message->id }}/output" class="s3output">View</a>
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $message->updated_at }}</td>
-                                                            <td>
-                                                                @if(empty($message->reason))
-                                                                    <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
-                                                                @else
-                                                                    <a href="/testingdetails/{{ $message->id }}/reason" class="reason">
-                                                                        <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
-                                                                    </a>
-                                                                @endif
-                                                            </td>
-                                                            <td>-</td>
-                                                            <td>
-                                                                @if ($scanImages = json_decode($message->scan_results))
-                                                                    @foreach ($scanImages as $scanImage)
-                                                                        <a href="{{ $scanImage }}" target="_blank">View</a>
-                                                                    @endforeach
-                                                                @else
-                                                                    -
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-                                                @else
-                                                    <tr>
-                                                        <td colspan="9" class="text-center">No data</td>
-                                                    </tr>
-                                                @endif
-                                            </tbody>
-                                        </table>
+                                        <div class="block-loading-wrapper">
+                                            <div class="block-loading loading-shown">
+                                                <div class="loading-content"><span class="loader"></span>
+                                                    <div class="loading-text">LOADING</div>
+                                                    <div class="loading-wait">Please wait...</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -324,6 +267,21 @@
 
 </div>
 
+{{-- Testing Details Modal--}}
+<div class="modal fade" id="modalLogTestingDetails" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+                Message Data
+            </div>
+            <div class="modal-body">
+                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('page-scripts')
@@ -333,6 +291,46 @@
         $('#filterCalendar').click(function () {
             $('#filterDate').datepicker('show');
         });
+
+        $('body').on('change', '#filterByForm .form-control', function () {
+            $('#filterBySpinner').show();
+
+            //todo: Remove it after ajax will be implemented and move hide functionality on ajax complete callback
+            setTimeout(function(){
+                alert("Filter by data loaded");
+                $('#filterBySpinner').hide();
+            }, 1000);
+        });
+
+        //When open log, load transaction details
+        $('.logRow').on('show.bs.collapse', function () {
+            var transactionId = $(this).data('transactionId');
+            var entry = $(this);
+
+            if (!entry.data('loaded')){
+                jQuery.ajax({
+                    url: '/testingdetails/' + transactionId + '/logs',
+                    type: 'get',
+                    success: function (data) {
+                        entry.find('td').html(data);
+                        entry.data('loaded', 1);
+                    }
+                });
+            }
+        });
+
+        //OnClose Message Data popup remove data and replace it to the loader
+        $('#modalLogTestingDetails').on('hidden.bs.modal', function (e) {
+            var popupLoadingBlock = '<div class="modal-header">' +
+                '<button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>' +
+                'Message Data' +
+                '</div>' +
+                '<div class="modal-body">' +
+                '<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>' +
+                '</div>';
+            $(this).find('.modal-content').html(popupLoadingBlock);
+        })
+
     });
 </script>
 @stop

@@ -173,6 +173,10 @@
   @include btnIconsSprite(btn-clear);
 }
 
+.btn-download{
+  @include btnIconsSprite(btn-download);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
