@@ -33,7 +33,7 @@
                             <select class="form-control" id="filterSubscription" name="subscription_id">
                                 <option value="">- All -</option>
                                 @foreach($filters['subscription_id'] as $subscription)
-                                    <option value="{{ $subscription->id }}">{{ $subscription->nickname }}</option>
+                                    <option value="{{ $subscription->id }}" @if($request->get('subscription_id') == $subscription->id) selected="selected" @endif>{{ $subscription->nickname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +43,7 @@
                             <select class="form-control" id="filterProduct" name="product_id">
                                 <option value="">- All -</option>
                                 @foreach($filters['product_id'] as $product)
-                                    <option value="{{ $product->ID }}">{{ $product->post_title }}</option>
+                                    <option value="{{ $product->ID }}" @if($request->get('product_id') == $product->ID) selected="selected" @endif>{{ $product->post_title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -53,7 +53,7 @@
                             <select class="form-control" id="filterSuite" name="test_suite_id">
                                 <option value="">- All -</option>
                                 @foreach($filters['test_suite_id'] as $testSuite)
-                                    <option value="{{ $testSuite->ID }}">{{ $testSuite->post_title }}</option>
+                                    <option value="{{ $testSuite->ID }}" @if($request->get('test_suite_id') == $testSuite->ID) selected="selected" @endif>{{ $testSuite->post_title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -63,7 +63,7 @@
                             <select class="form-control" id="filterCase" name="test_case_id">
                                 <option value="">- All -</option>
                                 @foreach($filters['test_case_id'] as $testCase)
-                                    <option value="{{ $testCase->ID }}">{{ $testCase->post_title }}</option>
+                                    <option value="{{ $testCase->ID }}" @if($request->get('test_case_id') == $testCase->ID) selected="selected" @endif>{{ $testCase->post_title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -75,7 +75,8 @@
                             <select class="form-control" id="filterAudit" name="audit_record">
                                 <option value="">- All -</option>
                                 @foreach($filters['audit_record'] as $auditRecord)
-                                    <option value="{{ $auditRecord }}">{{ $auditRecord }}</option>
+                                    <?php $auditRecord = $auditRecord ? 'yes' : 'no';?>
+                                    <option value="{{ $auditRecord}}" @if($request->get('audit_record') == $auditRecord) selected="selected" @endif>{{ ucfirst($auditRecord) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -85,25 +86,26 @@
                             <select class="form-control" id="filterTestOutcome" name="test_outcome_status_id">
                                 <option value="">- All -</option>
                                 @foreach($filters['test_outcome_status_id'] as $testOutcome)
-                                    <option value="{{ $testOutcome->id }}">{{ $testOutcome->name }}</option>
+                                    <option value="{{ $testOutcome->id }}" @if($request->get('test_outcome_status_id') == $testOutcome->id) selected="selected" @endif>{{ $testOutcome->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterScenario">Scenario:</label>
-                            <select class="form-control" id="filterScenario" name="subscription">
+                            <select class="form-control" id="filterScenario" name="scenario_id">
                                 <option value="">- All -</option>
-                                <option value="1">Scenario 1</option>
-                                <option value="1">Scenario 2</option>
-                                <option value="1">Scenario 3</option>
+                                @foreach($filters['scenario_id'] as $scenario)
+                                    <option value="{{ $scenario->id }}" @if($request->get('scenario_id') == $scenario->id) selected="selected" @endif>{{ $scenario->code }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group col-sm-6 col-md-3">
                             <label for="filterDate">Date:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-format="yyyy-mm-dd" name="date"
+                                        @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
                                 <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
                             </div>
                         </div>
@@ -125,7 +127,7 @@
 
                     <div class="transaction-filter-footer">
                         <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>&nbsp;&nbsp;
-                        <button type="button" class="btn btn-default btn-with-icon btn-clear">Clear</button>
+                        <button type="button" class="btn btn-default btn-with-icon btn-clear" onclick="location.href = '/my-transaction-log-new'">Clear</button>
                     </div>
                 </form>
             </div>

@@ -80,13 +80,13 @@ class Transaction extends Model
             $this->whereModel->where('subscription_id', $filters['subscription_id']);
         }
         if ($filters['date']) {
-            $this->whereModel->whereRaw(" ( t.updated_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND t.updated_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
+            $this->whereModel->whereRaw(" ( updated_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND updated_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
         }
         if ($filters['outcome']) {
             $this->whereModel->where('test_outcome_status_id', $filters['outcome']);
         }
-        if ($filters['audit'] == '1' || $filters['audit'] == '0') {
-            $this->whereModel->where('audit_record', $filters['audit']);
+        if ($filters['audit_record']) {
+            $this->whereModel->where('audit_record', $filters['audit_record'] == 'yes' ? true : false);
         }
         if ($filters['scenario']) {
             $this->whereModel
@@ -100,23 +100,28 @@ class Transaction extends Model
                 });
         }
         $this->whereModel->orderBy('updated_at', 'desc');
+        return $this->whereModel;
     }
 
-    public function processFilters()
+    public function processFilters($subscriptions, $filters)
     {
-        $organisationSubscriptions = OrganisationSubscription::whereIn('ID', $this->whereModel->groupBy('subscription_id')->pluck('subscription_id'))->orderBy('nickname');
+        $organisationSubscriptions = OrganisationSubscription::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('subscription_id')->pluck('subscription_id'))->orderBy('nickname');
+        $subscriptionsList = $organisationSubscriptions->lists('id');
         $arr =  [
             'subscription_id' => $organisationSubscriptions->get(),
-            'product_id' => Post::whereIn('ID', $this->whereModel->groupBy('product_id')->pluck('product_id'))->orderBy('post_title')->get(),
-            'test_case_id' => Post::whereIn('ID', $this->whereModel->groupBy('test_case_id')->pluck('test_case_id'))->orderBy('post_title')->get(),
-            'test_suite_id' => Post::whereIn('ID', $this->whereModel->groupBy('test_suite_id')->pluck('test_suite_id'))->orderBy('post_title')->get(),
-            'audit_record' => $this->whereModel->groupBy('audit_record')->pluck('audit_record'),
-            'test_outcome_status_id' => TestOutcomeStatus::whereIn('id', $this->whereModel->groupBy('test_outcome_status_id')->pluck('test_outcome_status_id'))->orderBy('name')->get(),
-//            'scenario_id' => $this->whereModel->groupBy('scenario_id')->get(),
+            'product_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('product_id')->pluck('product_id'))->orderBy('post_title')->get(),
+            'test_case_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_case_id')->pluck('test_case_id'))->orderBy('post_title')->get(),
+            'test_suite_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_suite_id')->pluck('test_suite_id'))->orderBy('post_title')->get(),
+            'audit_record' => $this->setWhereQuery($subscriptions, $filters)->groupBy('audit_record')->pluck('audit_record'),
+            'test_outcome_status_id' => TestOutcomeStatus::whereIn('id', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_outcome_status_id')->pluck('test_outcome_status_id'))->orderBy('name')->get(),
+            'scenario_id' => DB::select("SELECT s.id, s.code FROM transactions AS t
+                JOIN wp_posts AS p ON p.ID = t.test_case_id
+                JOIN wp_postmeta AS pm ON pm.meta_key LIKE 'scenario_%' AND pm.post_id = p.ID
+                JOIN wp_test_suites_scenarios AS s ON s.id = pm.meta_value
+                WHERE subscription_id IN ( ? ) GROUP BY code ORDER BY s.code", (!$subscriptionsList->isEmpty() ? $subscriptionsList->toArray() : [-1])),
             'organisation_id' => Organisation::whereIn('id', $organisationSubscriptions->pluck('organisation_id'))->get(),
         ];
         return $arr;
-        dd($arr);
     }
 
     public static function getUserTransactionLog($filters, $page = 1, $totalPerPage = 10)
@@ -126,10 +131,9 @@ class Transaction extends Model
             return $subscriptions[] = $entry->id;
         });
         $transaction = new Transaction();
-        $transaction->setWhereQuery($subscriptions, $filters);
         return [
-            $transaction->processFilters(),
-            $transaction->whereModel->paginate($totalPerPage)
+            $transaction->processFilters($subscriptions, $filters),
+            $transaction->setWhereQuery($subscriptions, $filters)->paginate($totalPerPage)
         ];
     }
 

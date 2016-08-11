@@ -14,7 +14,7 @@ class TransactionsController extends Controller
     public function index(Request $request)
     {
         list($filters, $transactions) = Transaction::getUserTransactionLog($request);
-        return view('pages.transactions.index', compact('transactions', 'filters'));
+        return view('pages.transactions.index', compact('transactions', 'filters', 'request'));
     }
     /**
      * Change audit_record flag for transaction entry
