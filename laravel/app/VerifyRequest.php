@@ -125,6 +125,8 @@ class VerifyRequest extends Model
     {
         $testSuite = Post::find($this->test_suite_id);
         $community = Community::find($testSuite->getMetaByKey('community_id'));
+        $testPlan = TestPlan::find($this->test_plan_id);
+        $product = Post::find($this->product_id);
         $data = [
             '[requestor_name]' => cp_get_user_fullname($this->requestor_id),
             '[assignee_name]' => cp_get_user_fullname($this->assignee_id),
@@ -132,11 +134,13 @@ class VerifyRequest extends Model
             '[website_url]' => getSiteUrl(),
             '[community]' => $community->title,
             '[test_suite]' => $testSuite->post_title,
+            '[level]' => $testPlan->level,
+            '[product]' => $product->post_title,
         ];
         $community->sendEmailsToSupportUsers( $emailtemplateName . '_to_support', $data);
         $community->sendEmailsToAdminUsers( $emailtemplateName . '_to_support', $data);
 
         $requestorUser = User::find($this->requestor_id);
-        cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => $requestorUser->user_email], $emailtemplateName . '_to_user', $data);
+        cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => 'ivansolowjew@gmail.com'], $emailtemplateName . '_to_user', $data);
     }
 }

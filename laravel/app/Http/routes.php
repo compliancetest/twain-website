@@ -191,6 +191,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assignPopup');
         Route::post('verify-requests/{testSuiteId}/assign/{verifyRequestId}', 'VerifyRequestsController@assign');
 
+        Route::get('verify-requests/{testSuiteId}/accept/{verifyRequestId}', 'VerifyRequestsController@acceptPopup');
+        Route::post('verify-requests/{testSuiteId}/accept/{verifyRequestId}', 'VerifyRequestsController@accept');
+
+        Route::get('verify-requests/{testSuiteId}/unassign/{verifyRequestId}', 'VerifyRequestsController@unassignPopup');
+        Route::post('verify-requests/{testSuiteId}/unassign/{verifyRequestId}', 'VerifyRequestsController@unassign');
+
         Route::post('verify-requests', 'VerifyRequestsController@store');
         Route::delete('verify-requests/{requestId}', 'VerifyRequestsController@delete');
 

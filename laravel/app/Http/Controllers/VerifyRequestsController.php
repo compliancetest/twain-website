@@ -154,7 +154,7 @@ class VerifyRequestsController extends Controller
             return response()->json(["You can't reassign resolved Verify Request"], 422);
         }
         if ($verifyRequest->status == 'New') {
-            $verifyRequest->status = 'In Progress';
+            $verifyRequest->status = 'Assigned';
         }
         $verifyRequest->assignee_id = $request->get('user_id');
         $verifyRequest->save();
@@ -162,6 +162,105 @@ class VerifyRequestsController extends Controller
         $verifyRequest->sendVerifyRequestNotification('assigned_verify_request');
 
         $userID = Auth::user()->ID;
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
+    }
+
+     /**
+     * Render accept Verift Request popup
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function acceptPopup($testSuiteId, $verifyRequestId)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+
+        return view('pages.my.verify_requests.accept_popup', compact('testSuiteId', 'verifyRequest'));
+    }
+
+    /**
+     * Save accept
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function accept($testSuiteId, $verifyRequestId, Request $request)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        if ($verifyRequest->status == 'Resolved') {
+            return response()->json(["You can't reassign resolved Verify Request"], 422);
+        }
+
+        $userID = Auth::user()->ID;
+
+        $requestAlreadyAssigned = $verifyRequest->assignee_id ? true : false;
+
+        $verifyRequest->assignee_id = $userID;
+        $verifyRequest->status = 'In Progress';
+        $verifyRequest->is_accepted = true;
+        $verifyRequest->save();
+
+        if ($requestAlreadyAssigned) {
+            $verifyRequest->sendVerifyRequestNotification('assigned_accepted_verify_request');
+        } else {
+            $verifyRequest->sendVerifyRequestNotification('accepted_verify_request');
+        }
+
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
+    }
+
+    /**
+     * Render unassign Verift Request popup
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function unassignPopup($testSuiteId, $verifyRequestId)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        return view('pages.my.verify_requests.unassign_popup', compact('testSuiteId', 'verifyRequest'));
+    }
+
+     /**
+     * Save unassign
+     * @param $testSuiteId
+     * @param $verifyRequestId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function unassign($testSuiteId, $verifyRequestId, Request $request)
+    {
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        if ($verifyRequest->status == 'Resolved') {
+            return response()->json(["You can't reassign resolved Verify Request"], 422);
+        }
+
+        $userID = Auth::user()->ID;
+
+        if ($verifyRequest->is_accepted) {
+            $verifyRequest->sendVerifyRequestNotification('accepted_unasigned_verify_request');
+        } else {
+            $verifyRequest->sendVerifyRequestNotification('assigned_unassigned_verify_request');
+        }
+
+        $verifyRequest->assignee_id = 0;
+        $verifyRequest->status = 'New';
+        $verifyRequest->is_accepted = false;
+        $verifyRequest->save();
+
         $data = [
             'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
             'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
