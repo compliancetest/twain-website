@@ -182,7 +182,7 @@
                         <div class="modal-content block-loading-wrapper">
                             <div class="modal-header">
                                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                                Message Data
+                                Verify Transaction
                             </div>
                             <div class="modal-body">
                                 <div class="change_status_message">
@@ -259,7 +259,9 @@
                                     'verify_request_id': $('.change_status_row_id').val().replace('verify-request-details-', ''),
                                     'transactions': ids,
                                     'outcome_code': jQuery('.change_status_data_type').val(),
-                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? false : $('#reason_message').val()
+                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? false : $('#reason_message').val(),
+                                     'hideResolved': $('#hideResolved:checked').length,
+                                     'hideOthers': $('#hideOthers:checked').length,
                                 },
                                 type: 'post',
                                 dataType: 'json',
@@ -271,7 +273,10 @@
                                         $(elem).closest('tr').find('td.row-outcome-status').html(jQuery('.change_status_data_type').val());
                                     });
                                     if($('#'+$('.change_status_row_id').val()+' input.transaction:checked').length == 0){
-                                        location.reload();
+                                        $('#verifyRequestsListContent').html(rsp.html);
+                                        setTimeout(function () {
+                                            $('.modal').modal('hide');
+                                        }, 1500);
                                     }
 
                                 },

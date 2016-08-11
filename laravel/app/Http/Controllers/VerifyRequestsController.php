@@ -347,6 +347,11 @@ class VerifyRequestsController extends Controller
                 $transaction->save();
             }
         }
-        return response()->json(["success"]);
+        $userID = Auth::user()->ID;
+        $data = [
+            'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+            'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
+        ];
+        return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
 }
