@@ -141,6 +141,6 @@ class VerifyRequest extends Model
         $community->sendEmailsToAdminUsers( $emailtemplateName . '_to_support', $data);
 
         $requestorUser = User::find($this->requestor_id);
-        cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => 'ivansolowjew@gmail.com'], $emailtemplateName . '_to_user', $data);
+        cp_send_email(['name' => cp_get_user_fullname($requestorUser->ID), 'email' => $requestorUser->user_email], $emailtemplateName . '_to_user', $data);
     }
 }
