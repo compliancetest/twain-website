@@ -17,7 +17,7 @@
                     </thead>
                         @if($userSuite['data'])
                             @foreach($userSuite['data'] as $verifyRequest)
-                                <?php $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID;?>
+                                <?php $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->is_accepted;?>
                                 <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                     <td class="text-left">
                                         <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse">
