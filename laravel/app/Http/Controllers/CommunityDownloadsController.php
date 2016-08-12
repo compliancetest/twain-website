@@ -93,6 +93,8 @@ class CommunityDownloadsController extends Controller
         $community = $this->community;
         $data = $request->all();
         $download = $community->downloads()->find($id);
+        $download->is_installer = $request->get('is_installer');
+        $download->show_to_members = $request->get('show_to_members');
         if($request->file('file')) {
             $s3FilePath = 'communities/downloads/' . $community->id . '/' . $download->token . '.'.$request->file('file')->getClientOriginalExtension();
             $data['title'] = $request->file('file')->getClientOriginalName();

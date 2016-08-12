@@ -96,11 +96,15 @@ class Community extends Model
      */
     public function nonAdminDownloads()
     {
-        $idsData = DB::select('SELECT MAX(created_at), id  FROM communities_downloads WHERE product_type IN("DataSource", "Application") GROUP BY product_type');
-        $ids = array_map(function ($entry) {
+        $idsData = DB::select('SELECT MAX(created_at), id  FROM communities_downloads WHERE product_type IN("DataSource", "Application") AND is_installer = true GROUP BY product_type');
+        $ids1 = array_map(function ($entry) {
             return $entry->id;
         }, $idsData);
-        return $this->hasMany('App\CommunityDownloads')->whereIn('id', $ids)->orderBy('updated_at', 'DESC');
+        $idsData = DB::select('SELECT id  FROM communities_downloads WHERE show_to_members = true');
+        $ids2 = array_map(function ($entry) {
+            return $entry->id;
+        }, $idsData);
+        return $this->hasMany('App\CommunityDownloads')->whereIn('id', array_merge($ids1, $ids2))->orderBy('updated_at', 'DESC');
     }
 
     /**

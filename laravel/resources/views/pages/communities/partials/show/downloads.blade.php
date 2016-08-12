@@ -114,6 +114,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-3 control-label">Installer:</label>
+
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="is_installer" value="1"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Show to members:</label>
+
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="show_to_members" value="1"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-3 control-label" for="fileVersion">File Version:</label>
 
                                 <div class="col-sm-9">

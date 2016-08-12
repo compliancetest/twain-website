@@ -14,7 +14,7 @@ class CommunityDownloads extends Model
 
     protected $table = 'communities_downloads';
 
-    protected $fillable = ['version', 'description', 'license', 'token', 'size', 'location', 'title', 'version_description', 'product_type'];
+    protected $fillable = ['version', 'description', 'license', 'token', 'size', 'location', 'title', 'version_description', 'product_type', 'is_installer', 'show_to_members'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
