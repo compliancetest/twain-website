@@ -175,7 +175,7 @@ class TestSuite
         $this->ts_tester_role = $this->loadSingleValue('ts_tester_role');
 
         if($this->ts_tester_role){
-            $this->testTool = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_downloads WHERE product_type = %s ORDER BY created_at DESC", $this->ts_tester_role));
+            $this->testTool = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_downloads WHERE product_type = %s AND is_installer = 1 ORDER BY created_at DESC", $this->ts_tester_role));
         }
 
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;
