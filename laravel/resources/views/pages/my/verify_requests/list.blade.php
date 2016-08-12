@@ -48,7 +48,7 @@
                                     </td>
                                     <td class="text-center">
 
-                                        @if($isAdmin && $verifyRequest['verifyRequest']->status == 'In Progress' && $verifyRequest['verifyRequest']->canBeResolved(Auth::user()))
+                                        @if($isAdmin && $verifyRequest['verifyRequest']->canBeResolved(Auth::user()))
                                             <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/resolve/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                                class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Resolve"></a>
                                         @endif
@@ -64,7 +64,7 @@
                                                class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" title="Accept Verify Request"></a>
                                         @endif
 
-                                        @if($isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID)
+                                        @if($isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->status != 'Resolved')
                                             <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/unassign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#unassignVerifyRequestModal"
                                                class="btn btn-warning btn-icon btn-delete" data-tooltip="tooltip" title="Unassign Verify Request"></a>
                                         @endif
@@ -128,7 +128,7 @@
                                                             @if($canModerate)
                                                                 <td>
                                                                     <input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}"
-                                                                           data-case="{{ $testCase }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
+                                                                           data-case="{{ $transaction->test_case_id }}" @if($testOutcomeStatus != 'Pending') disabled="disabled" @endif>
                                                                 </td>
                                                             @endif
                                                             <td>
@@ -145,7 +145,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class="text-center row-outcome-status">
-                                                                @if($transaction->reason)
+                                                                @if(!empty($transaction->reason))
                                                                     <a href="/testingdetails/{{ $transaction->id }}/transaction-reason/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
                                                                         {{ $testOutcomeStatus }}
                                                                     </a>

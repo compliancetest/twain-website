@@ -107,7 +107,7 @@ class VerifyRequest extends Model
     public function canBeResolved(User $user)
     {
         //only assignee user can resolve VerifyRequest
-        if ($user->ID != $this->assignee_id && $this->status != 'In Progress') {
+        if ($user->ID != $this->assignee_id || $this->status != 'In Progress') {
             return false;
         }
         $transactionIds = json_decode($this->transactions, true);
