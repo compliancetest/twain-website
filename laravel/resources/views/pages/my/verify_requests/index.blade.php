@@ -223,7 +223,7 @@
                             Page.verifyRequest.supportUpdateCheckboxes();
                         @endif
 
-                        $('.change_status').click(function(){
+                        $('body').on('click', '.change_status', function(){
                             $('.change_status_data_type').val($(this).attr('data-outcome'));
                             if($(this).attr('data-outcome') == 'Pass'){
                                 $('#transaction_reason').hide();
