@@ -12,7 +12,7 @@ class VersionController extends BaseApiController
     /**
     * @api {get} /v1/version Get latest version
     * @apiParam {string} test_tool_for  Mandatory - either 'Application' or 'DataSource'.
-    * @apiParam {boolean} installer  Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.
+    * @apiParam {boolean} [installer]  Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.
     *
     * @apiName Latest version
     * @apiGroup Helpers
@@ -67,8 +67,8 @@ class VersionController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $isInstaller = boolval($request->get('installer'));
-        
+        $isInstaller = !$request->get('installer') || $request->get('installer') == 'false' ? false : true;
+
         $latestVersion = CommunityDownloads::where(['product_type' => $request->get('test_tool_for'), 'is_installer' => $isInstaller])->orderBy('created_at', 'DESC')->first();
 
         if ($latestVersion) {
