@@ -12,6 +12,13 @@
             "optional": false,
             "field": "test_tool_for",
             "description": "<p>Mandatory - either 'Application' or 'DataSource'.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "boolean",
+            "optional": false,
+            "field": "installer",
+            "description": "<p>Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.</p>"
           }
         ]
       }

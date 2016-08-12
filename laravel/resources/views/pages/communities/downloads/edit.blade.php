@@ -33,6 +33,23 @@
                     {!! Form::text('version', null, ['class' => 'form-control']) !!}
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Installer:</label>
+
+                <div class="col-sm-9">
+                    {!! Form::checkbox('is_installer', 1,  !empty($download->is_installer)) !!}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Show to members:</label>
+
+                <div class="col-sm-9">
+                    {!! Form::checkbox('show_to_members', 1,  !empty($download->show_to_members)) !!}
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">Description:</label>
 
