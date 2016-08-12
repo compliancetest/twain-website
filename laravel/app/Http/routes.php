@@ -178,6 +178,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('/testplan/{planid}', 'TestPlansController@destroy');
 
         Route::post('/transactions/{transactionId}/updateauditrecord', 'TransactionsController@updateauditrecord');
+        Route::get('/transactions/filters', 'TransactionsController@filters');
+        Route::get('/transactions/transactions-list', 'TransactionsController@transactionsList');
 
         Route::get('verify-requests', 'VerifyRequestsController@index');
         Route::get('verify-requests/update-list', 'VerifyRequestsController@updateList');

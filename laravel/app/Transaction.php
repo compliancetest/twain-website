@@ -57,15 +57,21 @@ class Transaction extends Model
         return $processedTransactions;
     }
 
+    /**
+     * Where query based on filters selected by user
+     * @param $subscriptions
+     * @param $filters
+     * @return null
+     */
     public function setWhereQuery($subscriptions, $filters)
     {
         if (!empty($subscriptions)) {
-            $this->whereModel = DB::table('transactions')->whereIn('subscription_id',  $subscriptions);
+            $this->whereModel = DB::table('transactions')->whereIn('subscription_id', $subscriptions);
         } else {
-            $this->whereModel = DB::table('transactions')->whereIn('subscription_id',  [0]);
+            $this->whereModel = DB::table('transactions')->whereIn('subscription_id', [0]);
         }
         if ($filters['organisation_id']) {
-            $this->whereModel->whereRaw(sprintf(' subscription_id IN ( SELECT id FROM wp_organisations_subscriptions WHERE organisation_id = %d) ', $filters['organisation_id'])) ;
+            $this->whereModel->whereRaw(sprintf(' subscription_id IN ( SELECT id FROM wp_organisations_subscriptions WHERE organisation_id = %d) ', $filters['organisation_id']));
         }
         if ($filters['product_id']) {
             $this->whereModel->where('product_id', $filters['product_id']);
@@ -93,7 +99,7 @@ class Transaction extends Model
                 ->join('wp_posts AS p1', function ($join) {
                     $join->on('t.test_case_id', '=', 'p1.ID');
                 })
-                ->join('wp_postmeta AS pm1', function ($join) use ($filters){
+                ->join('wp_postmeta AS pm1', function ($join) use ($filters) {
                     $join->on('pm1.post_id', '=', 'p1.ID')
                         ->where('pm1.meta_key', 'LIKE', 'scenario_%')
                         ->where('pm1.meta_value', '=', filter_var($filters['scenario'], FILTER_SANITIZE_STRING));
@@ -103,11 +109,17 @@ class Transaction extends Model
         return $this->whereModel;
     }
 
+    /**
+     * Process filters and configure where query
+     * @param $subscriptions
+     * @param $filters
+     * @return array
+     */
     public function processFilters($subscriptions, $filters)
     {
         $organisationSubscriptions = OrganisationSubscription::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('subscription_id')->pluck('subscription_id'))->orderBy('nickname');
         $subscriptionsList = $organisationSubscriptions->lists('id');
-        $arr =  [
+        $arr = [
             'subscription_id' => $organisationSubscriptions->get(),
             'product_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('product_id')->pluck('product_id'))->orderBy('post_title')->get(),
             'test_case_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_case_id')->pluck('test_case_id'))->orderBy('post_title')->get(),
@@ -124,17 +136,39 @@ class Transaction extends Model
         return $arr;
     }
 
+    /**
+     * Get transactions data
+     * @param $filters
+     * @param int $page
+     * @param int $totalPerPage
+     * @return mixed
+     */
     public static function getUserTransactionLog($filters, $page = 1, $totalPerPage = 10)
+    {
+        $transaction = new Transaction();
+        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->paginate($totalPerPage);
+    }
+
+    /**
+     * Get Filters list
+     * @param $filters
+     */
+    public static function getFilters($filters)
+    {
+        $transaction = new Transaction();
+        return $transaction->processFilters(self::getUserSubscriptions(), $filters);
+    }
+
+    /**
+     * Get array of subscriptions accessible by user
+     * @return array
+     */
+    public static function getUserSubscriptions()
     {
         $subscriptions = [];
         array_walk(ct_get_user_viewable_subscriptions(Auth::user()->ID), function ($entry) use (&$subscriptions) {
             return $subscriptions[] = $entry->id;
         });
-        $transaction = new Transaction();
-        return [
-            $transaction->processFilters($subscriptions, $filters),
-            $transaction->setWhereQuery($subscriptions, $filters)->paginate($totalPerPage)
-        ];
+        return $subscriptions;
     }
-
 }

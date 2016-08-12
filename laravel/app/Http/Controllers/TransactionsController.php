@@ -13,9 +13,29 @@ class TransactionsController extends Controller
 
     public function index(Request $request)
     {
-        list($filters, $transactions) = Transaction::getUserTransactionLog($request);
+        $transactions = Transaction::getUserTransactionLog($request);
+        $filters = Transaction::getFilters($request);
         return view('pages.transactions.index', compact('transactions', 'filters', 'request'));
     }
+
+    public function filters(Request $request)
+    {
+        $data = [
+            'filters' => Transaction::getFilters($request),
+            'request' => $request,
+        ];
+        return response()->json(['html' => view('pages.transactions.filters')->with($data)->render()]);
+    }
+
+    public function transactionsList(Request $request)
+    {
+        $data = [
+            'transactions' => Transaction::getUserTransactionLog($request),
+            'request' => $request,
+        ];
+        return response()->json(['html' => view('pages.transactions.transactions')->with($data)->render()]);
+    }
+
     /**
      * Change audit_record flag for transaction entry
      * @param $transactionId
