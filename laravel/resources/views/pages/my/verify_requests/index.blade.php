@@ -259,20 +259,20 @@
                                     'verify_request_id': $('.change_status_row_id').val().replace('verify-request-details-', ''),
                                     'transactions': ids,
                                     'outcome_code': jQuery('.change_status_data_type').val(),
-                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? false : $('#reason_message').val(),
-                                     'hideResolved': $('#hideResolved:checked').length,
-                                     'hideOthers': $('#hideOthers:checked').length,
+                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? 0 : $('#reason_message').val(),
+                                    'hideResolved': $('#hideResolved:checked').length,
+                                    'hideOthers': $('#hideOthers:checked').length,
                                 },
                                 type: 'post',
                                 dataType: 'json',
                                 success: function (rsp) {
                                     $('.modal').modal('hide');
                                     $('#changeStatusModal .block-loading').hide();
-                                    $('#'+$('.change_status_row_id').val()+' input.transaction:checked').each(function (index, elem) {
+                                    $('#' + $('.change_status_row_id').val() + ' input.transaction:checked').each(function (index, elem) {
                                         $(elem).removeAttr('checked').attr('disabled', 'disabled');
                                         $(elem).closest('tr').find('td.row-outcome-status').html(jQuery('.change_status_data_type').val());
                                     });
-                                    if($('#'+$('.change_status_row_id').val()+' input.transaction:checked').length == 0){
+                                    if ($('#' + $('.change_status_row_id').val() + ' input.transaction:checked').length == 0) {
                                         $('#verifyRequestsListContent').html(rsp.html);
                                         setTimeout(function () {
                                             $('.modal').modal('hide');
@@ -280,14 +280,14 @@
                                     }
 
                                 },
-                                 error: function (jqXHR, status) {
-                                     jQuery('#changeStatusModal .block-loading').hide();
-                                     $('#changeStatusModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
-                                     setTimeout(function () {
+                                error: function (jqXHR, status) {
+                                    jQuery('#changeStatusModal .block-loading').hide();
+                                    $('#changeStatusModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                                    setTimeout(function () {
                                         $('#changeStatusModal .modal-body > .error-message').slideUp(function () {
                                             $(this).remove();
                                         });
-                                     }, 3000);
+                                    }, 3000);
                                 }
                             });
                         });
