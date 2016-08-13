@@ -101,6 +101,7 @@ if (isset($filterSubscription)) {
 if (isset($organisationsFilter)) {
     $params[] = 'organisation=' . $organisationsFilter;
 }
+$isMember = doesUserAdminInAnyCommunity(get_current_user_id()) || doesUserSupportInAnyCommunity(get_current_user_id()) ? false : true;
 get_header();
 ?>
 <div class="content" id="my_transaction_log">
@@ -155,9 +156,11 @@ get_header();
                         <div class="td td-audit td-two-lines tocenter td-sortable">
                             Audit<br/>Record
                         </div>
-                        <div class="td td-convsn td-sortable tocenter td-two-lines">
-                            Organisation<br>
-                            Subscription Nickname<br>
+                        <div class="td td-convsn td-sortable tocenter <?php if(!$isMember):?>td-two-lines<?php endif;?>">
+                            <?php if(!$isMember):?>
+                                Organisation<br>
+                                Subscription Nickname<br>
+                            <?php endif;?>
                             Execution ID<br>
                         </div>
                         <div class="td td-date td-sortable tocenter td-two-lines">
@@ -228,15 +231,18 @@ get_header();
                                                <?php if($outcomeStatus->code == 'PENDING' || ($row->audit_record && canRemoveAuditFlag($row->id))):?>disabled="disabled"<?php endif;?>>
                                     </div>
                                     <div
-                                        class="td td-convsn tocenter td-two-lines">
-                                            <?php
-                                            $organisation = ct_get_organisation_by_subscription_id($row->subscription_id);
-                                            echo $organisation ? $organisation->organisation_name : ' - ';
-                                            echo '<br>';
-                                            $subscription = ct_get_organisation_subscription_by_id($row->subscription_id);
-                                            echo $subscription ? $subscription->nickname : ' - ';
-                                            echo '<br>';
-                                            if(!empty($row->s3_link)) {
+                                        class="td td-convsn tocenter <?php if(!$isMember):?>td-two-lines<?php endif;?>">
+                                            <?php if(!$isMember):?>
+                                                <?php
+                                                $organisation = ct_get_organisation_by_subscription_id($row->subscription_id);
+                                                echo $organisation ? $organisation->organisation_name : ' - ';
+                                                echo '<br>';
+                                                $subscription = ct_get_organisation_subscription_by_id($row->subscription_id);
+                                                echo $subscription ? $subscription->nickname : ' - ';
+                                                echo '<br>';?>
+                                            <?php endif;?>
+
+                                            <?php if(!empty($row->s3_link)) {
                                                 echo '<a href="' . $row->s3_link . '" target="_blank">' . $row->execution_id . '</a>';
                                             } else {
                                                 echo $row->execution_id;
