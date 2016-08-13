@@ -58,7 +58,7 @@
                             <a href="/testingdetails/{{ $message->id }}/output" class="s3output">View</a>
                         @endif
                     </div>
-                    <div class="td td-message-view" style="width: 7%;">{{ $message->updated_at }}</div>
+                    <div class="td td-message-view" style="width: 7%;">{{ formatDate($message->created_at, 'Y-m-d H:i:s') }}</div>
                     <div class="td td-message-view" style="width: 8%;">
                         @if(empty($message->reason))
                             <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>">{{ $message->step_outcome }}</span>
