@@ -5,20 +5,6 @@
         <div class="search-filters-box">
             <ul class="search-filters-list clearfix">
                 <li class="first">
-                    <label for="subscription">Subscription: <?php if ($filterSubscription != null) { ?><a href="#" class="clear-filter"
-                                                                                                                                          title="Clear Filter">X</a><?php } ?>
-                    </label>
-                    <select name="subscription" id="subscription" autocomplete="off" class="select">
-                        <option value="">- All -</option>
-                        <?php if (is_iterable($tSubscriptions)): ?>
-                            <?php foreach ($tSubscriptions as $s) { ?>
-                                <option value="<?php echo $s->id ?>"
-                                        data-org-id="<?php echo $s->organisation_id ?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
-                            <?php } ?>
-                        <?php endif; ?>
-                    </select>
-                </li>
-                <li>
                     <label for="product">Product: <?php if ($filterProduct != "" && $filterProduct != null) { ?><a href="#" class="clear-filter"
                                                                                                                              title="Clear Filter">X</a><?php } ?></label>
                     <select name="product" id="product" autocomplete="off" class="select">
@@ -64,6 +50,11 @@
                         <?php endif; ?>
                     </select>
                 </li>
+                <li>
+                    <label for="date">Date: <?php if ($filterDate) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate ? '' : $filterDate; ?>" style="width: 170px;"/>
+                </li>
+
                 <li class="first">
                     <label for="service">Audit: <?php if ($filterAudit === '0' || $filterAudit === '1') { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                     <select name="audit" id="service" autocomplete="off" class="select">
@@ -100,12 +91,23 @@
                         <?php endif; ?>
                     </select>
                 </li>
-                <li>
-                    <label for="date">Date: <?php if ($filterDate) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                    <input type="text" name="date" id="date" class="input datepicker" value="<?php echo !$filterDate ? '' : $filterDate; ?>" style="width: 170px;"/>
-                </li>
 
-                <?php if(doesUserSupportInAnyCommunity(get_current_user_id()) || doesUserAdminInAnyCommunity(get_current_user_id())):?>
+
+                <?php if(!$isMember):?>
+                    <li>
+                        <label for="subscription">Subscription: <?php if ($filterSubscription != null) { ?><a href="#" class="clear-filter"
+                                                                                                                                              title="Clear Filter">X</a><?php } ?>
+                        </label>
+                        <select name="subscription" id="subscription" autocomplete="off" class="select">
+                            <option value="">- All -</option>
+                            <?php if (is_iterable($tSubscriptions)): ?>
+                                <?php foreach ($tSubscriptions as $s) { ?>
+                                    <option value="<?php echo $s->id ?>"
+                                            data-org-id="<?php echo $s->organisation_id ?>" <?php echo $filterSubscription != "" && $s->id == intval($filterSubscription) ? "selected='selected'" : "" ?>><?php echo $s->nickname ?></option>
+                                <?php } ?>
+                            <?php endif; ?>
+                        </select>
+                    </li>
                     <li class="first">
                         <label for="organisation">Organisation: <?php if ($organisationsFilter) { ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
                         <select name="organisation" id="organisation" autocomplete="off" class="select">
