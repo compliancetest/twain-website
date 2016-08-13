@@ -138,6 +138,9 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     'execution_id' => $order,
                     'transaction_id' => $transaction->id,
                 ]);
+                if (isset($log['DateTime'])) {
+                    $transactionLog->created_at = $log['DateTime'];
+                }
                 $transactionLog->test_step = @$log['Step'];
                 if ($log['From']) {
                     $from = $log['From'];
