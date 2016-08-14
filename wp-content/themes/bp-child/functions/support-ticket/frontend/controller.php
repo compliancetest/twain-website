@@ -110,11 +110,12 @@ function createSupportTicket()
             $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
         }
     }
-    $community_id = get_post_meta($suite_id, 'community_id', true);
+    $community_id = $suite_id == 'general' ? 'general' : get_post_meta($suite_id, 'community_id', true);
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
         'community_id' => $community_id,
+        'test_suite_id' => $suite_id,
         'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
@@ -183,7 +184,7 @@ function createSupportTicket()
 * Get User Tickets
 * 
 */
-function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $communityId = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
+function getUserTickets($category_id = null, $status_id = null, $priority_id = null, $communityId = null, $filterTestSuite = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
 {
     global $wpdb;
     
@@ -231,6 +232,10 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     {
         $where[] = $wpdb->prepare(" t.community_id = %s", $communityId);
     }
+    if($filterTestSuite !== null && $filterTestSuite != "")
+    {
+        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+    }
 
     if (!is_super_admin()) {
         $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
@@ -271,6 +276,138 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     
     return array('total' => $totalItems, 'data' => $rows);
     
+}
+
+/**
+* Get data for TestSuites filter
+*
+*/
+function getTestSuitesFilter($category_id = null, $status_id = null, $priority_id = null, $communityId = null, $filterTestSuite = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
+{
+    global $wpdb;
+
+    $user_id = get_current_user_id();
+
+    if(!$user_id)
+        return array();
+
+    $where = array();
+
+    $customer_ids = getManagedCustomerWPIDs($user_id);
+
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, um.meta_value as organisation, o.organisation_name AS organisation1 FROM " . TABLE_TICKETS . " AS t "
+           . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
+           . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations_members AS m ON m.user_id=t.customer_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations AS o ON o.id=m.organisation_id "
+           . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
+
+    $customer_ids[] = $user_id;
+    $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
+
+    if($category_id !== null && $category_id != "")
+    {
+        $where[] = $wpdb->prepare(" t.category_id=%d", $category_id);
+    }
+
+    if($status_id !== null && $status_id != "")
+    {
+        if( $status_id === 'not_closed' ){
+            $where[] = " t.status_id != 4 ";
+        } else {
+            $where[] = $wpdb->prepare(" t.status_id=%d", $status_id);
+        }
+    }
+
+    if($priority_id !== null && $priority_id != "")
+    {
+        $where[] = $wpdb->prepare(" t.priority_id=%d", $priority_id);
+    }
+
+    if($communityId !== null && $communityId != "")
+    {
+        $where[] = $wpdb->prepare(" t.community_id = %s", $communityId);
+    }
+    if($filterTestSuite !== null && $filterTestSuite != "")
+    {
+        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+    }
+
+    if (!is_super_admin()) {
+        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
+    }
+
+    $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY test_suite_id";
+
+    return $wpdb->get_results($query);
+}
+
+/**
+* Get data for TestSuites filter
+*
+*/
+function getCommunitiesFilter($category_id = null, $status_id = null, $priority_id = null, $communityId = null, $filterTestSuite = null, $page = 1, $limit = -1, $orderBy = null, $order = 'desc')
+{
+    global $wpdb;
+
+    $user_id = get_current_user_id();
+
+    if(!$user_id)
+        return array();
+
+    $where = array();
+
+    $customer_ids = getManagedCustomerWPIDs($user_id);
+
+    $query = "SELECT t.*, ts.status AS status_title, tc.category_title, tp.priority AS priority_title, u.display_name AS customer_name, um.meta_value as organisation, o.organisation_name AS organisation1 FROM " . TABLE_TICKETS . " AS t "
+           . "LEFT JOIN " . TABLE_TICKET_STATUSES . " AS ts ON ts.id=t.status_id "
+           . "LEFT JOIN " . TABLE_TICKET_CATEGORIES . " AS tc ON tc.id=t.category_id "
+           . "LEFT JOIN " . TABLE_TICKET_PRIORITIES . " AS tp ON tp.id=t.priority_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations_members AS m ON m.user_id=t.customer_id "
+           . "LEFT JOIN " . $wpdb->prefix . "organisations AS o ON o.id=m.organisation_id "
+           . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
+
+    $customer_ids[] = $user_id;
+    $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
+
+    if($category_id !== null && $category_id != "")
+    {
+        $where[] = $wpdb->prepare(" t.category_id=%d", $category_id);
+    }
+
+    if($status_id !== null && $status_id != "")
+    {
+        if( $status_id === 'not_closed' ){
+            $where[] = " t.status_id != 4 ";
+        } else {
+            $where[] = $wpdb->prepare(" t.status_id=%d", $status_id);
+        }
+    }
+
+    if($priority_id !== null && $priority_id != "")
+    {
+        $where[] = $wpdb->prepare(" t.priority_id=%d", $priority_id);
+    }
+
+    if($communityId !== null && $communityId != "")
+    {
+        $where[] = $wpdb->prepare(" t.community_id = %s", $communityId);
+    }
+    if($filterTestSuite !== null && $filterTestSuite != "")
+    {
+        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+    }
+
+    if (!is_super_admin()) {
+        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
+    }
+
+    $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY community_id";
+
+    return $wpdb->get_results($query);
 }
 
 /**
