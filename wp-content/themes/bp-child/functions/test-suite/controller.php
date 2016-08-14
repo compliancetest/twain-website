@@ -296,6 +296,7 @@ function saveSuite()
 
     //Check Version Updated or not
     $version_updated = false;
+    $majorVersionIncreased = (intval($suite->version_major) < intval($_POST['ts_version_major'])) ? true : false;
     if (!$isNew && (intval($suite->version_major) != intval($_POST['ts_version_major']) || intval($suite->version_minor) != intval($_POST['ts_version_minor']) || intval($suite->version_patch) != intval($_POST['ts_version_patch']))) {
         $version_updated = true;
     }
@@ -594,7 +595,10 @@ function saveSuite()
             cp_update_post_meta($suite->id, 'hide_suite', 1);
         }
         cp_sort_test_suites($suite->familyMark, $_POST['ts_version_major']);
-        cp_update_subscriptions($suite->familyMark, $_POST['ts_version_major']);
+
+        if (!$majorVersionIncreased) {
+            cp_update_subscriptions($suite->familyMark, $_POST['ts_version_major']);
+        }
 
         //Associate all test case that are linked to the old version to the new one with Default conformance level
         $query = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key='conformance_level_" . $suite->id . "'";

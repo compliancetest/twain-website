@@ -84,6 +84,52 @@
                     </div>
                 </div>
 
+                <!-- UnAssign Verify Request Modal-->
+                <div class="modal fade" id="unassignVerifyRequestModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document" style="width: 500px;">
+                        <div class="modal-content block-loading-wrapper">
+                            <div class="modal-header">
+                                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                Un-Assign A Verify Request
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                            </div>
+                            <div class="block-loading loading-shown">
+                                <div class="loading-content"><span class="loader"></span>
+
+                                    <div class="loading-text">LOADING DATA</div>
+                                    <div class="loading-wait">Please wait...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accept Verify Request Modal-->
+                <div class="modal fade" id="acceptVerifyRequestModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document" style="width: 500px;">
+                        <div class="modal-content block-loading-wrapper">
+                            <div class="modal-header">
+                                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                Accept A Verify Request
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                            </div>
+                            <div class="block-loading loading-shown">
+                                <div class="loading-content"><span class="loader"></span>
+
+                                    <div class="loading-text">LOADING DATA</div>
+                                    <div class="loading-wait">Please wait...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- View Transation Reason Modal-->
                 <div class="modal fade" id="viewReasonModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document" style="width: 500px;">
@@ -136,7 +182,7 @@
                         <div class="modal-content block-loading-wrapper">
                             <div class="modal-header">
                                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                                Message Data
+                                Verify Transaction
                             </div>
                             <div class="modal-body">
                                 <div class="change_status_message">
@@ -177,7 +223,7 @@
                             Page.verifyRequest.supportUpdateCheckboxes();
                         @endif
 
-                        $('.change_status').click(function(){
+                        $('body').on('click', '.change_status', function(){
                             $('.change_status_data_type').val($(this).attr('data-outcome'));
                             if($(this).attr('data-outcome') == 'Pass'){
                                 $('#transaction_reason').hide();
@@ -213,30 +259,35 @@
                                     'verify_request_id': $('.change_status_row_id').val().replace('verify-request-details-', ''),
                                     'transactions': ids,
                                     'outcome_code': jQuery('.change_status_data_type').val(),
-                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? false : $('#reason_message').val()
+                                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? 0 : $('#reason_message').val(),
+                                    'hideResolved': $('#hideResolved:checked').length,
+                                    'hideOthers': $('#hideOthers:checked').length,
                                 },
                                 type: 'post',
                                 dataType: 'json',
                                 success: function (rsp) {
                                     $('.modal').modal('hide');
                                     $('#changeStatusModal .block-loading').hide();
-                                    $('#'+$('.change_status_row_id').val()+' input.transaction:checked').each(function (index, elem) {
+                                    $('#' + $('.change_status_row_id').val() + ' input.transaction:checked').each(function (index, elem) {
                                         $(elem).removeAttr('checked').attr('disabled', 'disabled');
                                         $(elem).closest('tr').find('td.row-outcome-status').html(jQuery('.change_status_data_type').val());
                                     });
-                                    if($('#'+$('.change_status_row_id').val()+' input.transaction:checked').length == 0){
-                                        location.reload();
+                                    if ($('#' + $('.change_status_row_id').val() + ' input.transaction:checked').length == 0) {
+                                        $('#verifyRequestsListContent').html(rsp.html);
+                                        setTimeout(function () {
+                                            $('.modal').modal('hide');
+                                        }, 1500);
                                     }
 
                                 },
-                                 error: function (jqXHR, status) {
-                                     jQuery('#changeStatusModal .block-loading').hide();
-                                     $('#changeStatusModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
-                                     setTimeout(function () {
+                                error: function (jqXHR, status) {
+                                    jQuery('#changeStatusModal .block-loading').hide();
+                                    $('#changeStatusModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                                    setTimeout(function () {
                                         $('#changeStatusModal .modal-body > .error-message').slideUp(function () {
                                             $(this).remove();
                                         });
-                                     }, 3000);
+                                    }, 3000);
                                 }
                             });
                         });

@@ -107,7 +107,7 @@ class VerifyRequest extends Model
     public function canBeResolved(User $user)
     {
         //only assignee user can resolve VerifyRequest
-        if ($user->ID != $this->assignee_id) {
+        if ($user->ID != $this->assignee_id || $this->status != 'In Progress') {
             return false;
         }
         $transactionIds = json_decode($this->transactions, true);
@@ -125,6 +125,8 @@ class VerifyRequest extends Model
     {
         $testSuite = Post::find($this->test_suite_id);
         $community = Community::find($testSuite->getMetaByKey('community_id'));
+        $testPlan = TestPlan::find($this->test_plan_id);
+        $product = Post::find($this->product_id);
         $data = [
             '[requestor_name]' => cp_get_user_fullname($this->requestor_id),
             '[assignee_name]' => cp_get_user_fullname($this->assignee_id),
@@ -132,6 +134,8 @@ class VerifyRequest extends Model
             '[website_url]' => getSiteUrl(),
             '[community]' => $community->title,
             '[test_suite]' => $testSuite->post_title,
+            '[level]' => $testPlan->level,
+            '[product]' => $product->post_title,
         ];
         $community->sendEmailsToSupportUsers( $emailtemplateName . '_to_support', $data);
         $community->sendEmailsToAdminUsers( $emailtemplateName . '_to_support', $data);

@@ -10,7 +10,7 @@
                 <thead>
                 <tr>
                     <th>Test Case ID</th>
-                    <th>Transaction ID</th>
+                    <th>Status</th>
                     <th>Execution ID</th>
                     <th>Date</th>
                 </tr>
@@ -20,7 +20,7 @@
                     <?php $testCase = \App\Post::find($transaction->test_case_id);?>
                     <tr>
                         <td class="text-center">{{ $testCase->post_title }}</td>
-                        <td class="text-center">{{ $transaction->id }}</td>
+                        <td class="text-center">{{ \App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->name }}</td>
                         <td class="text-center">
                             @if($transaction->s3_link)
                                 <a href="{!! $transaction->s3_link !!}" target="_blank"> {!! $transaction->execution_id !!} </a>
