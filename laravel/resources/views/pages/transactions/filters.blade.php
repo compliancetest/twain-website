@@ -1,15 +1,6 @@
 <form action="#" method="get" id="filterByForm">
     <div class="row">
-        <div class="form-group col-sm-6 col-md-3">
-            <label for="filterSubscription">Subscription:</label>
-            <select class="form-control" id="filterSubscription" name="subscription_id">
-                <option value="">- All -</option>
-                @foreach($filters['subscription_id'] as $subscription)
-                    <option value="{{ $subscription->id }}"
-                            @if($request->get('subscription_id') == $subscription->id) selected="selected" @endif>{{ $subscription->nickname }}</option>
-                @endforeach
-            </select>
-        </div>
+
 
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterProduct">Product:</label>
@@ -39,6 +30,15 @@
                     <option value="{{ $testCase->ID }}" @if($request->get('test_case_id') == $testCase->ID) selected="selected" @endif>{{ $testCase->post_title }}</option>
                 @endforeach
             </select>
+        </div>
+
+        <div class="form-group col-sm-6 col-md-3">
+            <label for="filterDate">Date:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-format="yyyy-mm-dd" name="date"
+                       @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
+                <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
+            </div>
         </div>
     </div>
 
@@ -75,17 +75,24 @@
             </select>
         </div>
 
-        <div class="form-group col-sm-6 col-md-3">
-            <label for="filterDate">Date:</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-format="yyyy-mm-dd" name="date"
-                       @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
-                <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
+        @if($supportOrAdmin)
+
+            <div class="form-group col-sm-6 col-md-3">
+                <label for="filterSubscription">Subscription:</label>
+                <select class="form-control" id="filterSubscription" name="subscription_id">
+                    <option value="">- All -</option>
+                    @foreach($filters['subscription_id'] as $subscription)
+                        <option value="{{ $subscription->id }}"
+                                @if($request->get('subscription_id') == $subscription->id) selected="selected" @endif>{{ $subscription->nickname }}</option>
+                    @endforeach
+                </select>
             </div>
-        </div>
+        @endif
+
     </div>
 
-    @if(doesUserAdminInAnyCommunity(Auth::user()->ID) || doesUserAdminInAnyCommunity(Auth::user()->ID))
+    @if($supportOrAdmin)
+
         <div class="row">
             <div class="form-group col-sm-6 col-md-3">
                 <label for="filterOrganisation">Organisation:</label>

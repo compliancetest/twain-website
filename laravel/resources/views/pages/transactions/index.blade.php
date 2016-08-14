@@ -7,7 +7,7 @@
     <div class="tabs-menu">
         <ul>
             @if(is_organisation_admin())
-            <li class="organisation-tab"><a href="/my-organisation/" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
+                <li class="organisation-tab"><a href="/my-organisation/" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
             @endif
 
             <li class="communities-tab"><a data-tooltip="tooltip" href="/my-communities/" title="My community memberships">Communities</a></li>
@@ -34,9 +34,11 @@
 
         <div class="transaction-list-actions">
             <div class="pull-left">
-                <button type="button" class="btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
-                <button type="button" class="btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
-                <button type="button" class="btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                @if($supportOrAdmin)
+                    <button type="button" class="btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
+                    <button type="button" class="btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
+                    <button type="button" class="btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                @endif
                 <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
             </div>
             <div class="pull-right">

@@ -9,8 +9,10 @@
                 <th>Test<br/>Outcome</th>
                 <th>Audit<br/>Record</th>
                 <th>
-                    Organisation<br/>
-                    Subscription Nickname<br/>
+                    @if($isAdmin)
+                        Organisation<br/>
+                        Subscription Nickname<br/>
+                    @endif
                     Execution ID
                 </th>
                 <th>Date<br/>Time</th>
@@ -25,8 +27,10 @@
                 $testSuite = \App\Post::find($transaction->test_suite_id);
                 $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
                 $status = getOutcomeStatusClass($outcomeStatus->code);
-                $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
-                $organisation = \App\Organisation::find($subscription->organisation_id);
+                if($supportOrAdmin){
+                    $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
+                    $organisation = \App\Organisation::find($subscription->organisation_id);
+                }
                 ?>
                 <tr>
                     <td class="text-center">
@@ -58,10 +62,12 @@
                         <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox">
                     </td>
                     <td class="text-center">
-                        {{ $organisation->organisation_name }}
-                        <br/>
-                        {{ $subscription->nickname }}
-                        <br/>
+                        @if($supportOrAdmin)
+                            {{ $organisation->organisation_name }}
+                            <br/>
+                            {{ $subscription->nickname }}
+                            <br/>
+                        @endif
                         @if(!empty($transaction->s3_link))
                             <a href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
                         @else
