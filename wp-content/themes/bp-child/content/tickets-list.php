@@ -7,6 +7,7 @@ $filterStatus = isset($_GET['status']) ? $_GET['status'] : 'not_closed';
 $filterCategory = isset($_GET['type']) ? $_GET['type'] : null;
 $filterPriority = isset($_GET['priority']) ? $_GET['priority'] : null;
 $filterCommunity = isset($_GET['community']) ? $_GET['community'] : null;
+$filterTestSuite = !empty($_GET['test_suite']) ? $_GET['test_suite'] : null;
 
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : getItemsPerPage('tickets');
 setItemsPerPage($limit, 'tickets');
@@ -20,7 +21,9 @@ $order = isset($_GET['order']) ? $_GET['order'] : ($orderBy == 'last_updated' ? 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 
 
-$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $page, $limit, $orderBy, $order);
+$results = getUserTickets($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $filterTestSuite, $page, $limit, $orderBy, $order);
+$testSuites = getTestSuitesFilter($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $filterTestSuite, $page, $limit, $orderBy, $order);
+$communitiesEntries = getCommunitiesFilter($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $filterTestSuite, $page, $limit, $orderBy, $order);
 $tickets = $results['data'];
 $totalItems = $results['total'];
 
@@ -34,6 +37,8 @@ if($filterCategory)
     $params[] = 'type=' . $filterCategory;
 if($filterCommunity)
     $params[] = 'community=' . $filterCommunity;
+if($filterTestSuite)
+    $params[] = 'test_suite=' . $filterTestSuite;
 
 $is_support = getManagedCustomerWPIDs() ? true : false;
 
@@ -59,7 +64,22 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     </li>
                     <li>
                         <label for="community">Community <?php if($filterCommunity != "" && $filterCommunity != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
-                        <?php echo $ct_ticket_priority->getCommunitiesSelectboxHTML('community', 'community', $filterCommunity); ?>
+                        <select name='community' id='community' class='select'>
+                            <option value="">- All -</option>
+                            <?php foreach($communitiesEntries as $communitiesEntry):?>
+                                <option value="<?php echo $communitiesEntry->community_id;?>" <?php if($filterCommunity !== null && $filterCommunity == $communitiesEntry->community_id):?>selected="selected"<?php endif;?>><?php echo $communitiesEntry->community_id != 'general' ? getCommunity($communitiesEntry->community_id)->title : 'General';?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </li>
+                    <li class="first">
+                        <label for="test_suite">Test Suite <?php if($filterTestSuite != "" && $filterTestSuite != null){ ?><a href="#" class="clear-filter" title="Clear Filter">X</a><?php } ?></label>
+                        <select name='test_suite' id='test_suite' class='select'>
+                            <option value="">- All -</option>
+                            <?php foreach($testSuites as $testSuite):?>
+                                <?php if(!$testSuite->test_suite_id) continue;?>
+                                <option value="<?php echo $testSuite->test_suite_id;?>" <?php if($filterTestSuite == $testSuite->test_suite_id):?>selected="selected"<?php endif;?>><?php echo get_the_title($testSuite->test_suite_id);?></option>
+                            <?php endforeach;?>
+                        </select>
                     </li>
                 </ul>
                 <div class="search-filter-actions">
@@ -113,7 +133,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                </div>-->
                <div class="td td-ticket-updated td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=last_updated&order=<?php echo $orderBy == 'last_updated' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'last_updated'){ ?>class="<?php echo $order?>"<?php } ?>>Updated <span class="sort"></span></a>
-               </div>                               
+               </div>
                <div class="clear"></div>
            </div>
            <div class="tbody fix-table-height">
@@ -167,7 +187,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                             <div class="td td-ticket-type <?php if( $show_community ):?>td-two-lines tocenter<?php endif;?>">
                                 <?php echo $ticket->category_title ?>
                                 <?php if( $show_community ):?>
-                                    <br><?php $community = groups_get_group(array('group_id' => $ticket->community_id)); echo bp_get_group_name($community);;?>
+                                    <br><?php echo $ticket->community_id == 'general' ? 'General' : getCommunity($ticket->community_id)->title;?>
                                 <?php endif;?>
                             </div>
                             <div class="td td-ticket-status tocenter">

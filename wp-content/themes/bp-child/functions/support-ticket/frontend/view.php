@@ -52,7 +52,7 @@ function showSumitTicketBox()
                 <div class="popup-box-content grid-box-body">                
                     <div class="field-row">
                         <div class="grid-cell">
-                            <label>Test Suites:</label>
+                            <label>Test Suite:</label>
                             <select name="suite_id" id="suite_id" class="select">
                                 <option value="">- Select -</option>
                                 <option value="general">General</option>
