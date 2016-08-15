@@ -95,100 +95,114 @@
             $('.checkTransaction').prop('checked', $(this).is(':checked'));
         });
 
+        function getUrlVar(url, key){
+            var result = new RegExp(key + "=([^&]*)", "i").exec(url);
+            return result && unescape(result[1]) || "";
+        }
+
+        $('body').on('click', '.pagination a', function(e){
+            e.preventDefault();
+            $('#filterBySpinner').show();
+            var link = $(this);
+            var form = $('#filterByForm');
+            $.ajax({
+                url: '/transactions/transactions-list',
+                type: 'get',
+                data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('#log-result-table').html(rsp.html);
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            });
+        });
+
         $('body').on('click', '.btn-clear', function () {
             $('#filterBySpinner').show();
 
             var form = $('#filterByForm');
 
             $.ajax({
-                    url: '/transactions/filters',
-                    type: 'get',
-                    data: {},
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-
+                url: '/transactions/filters',
+                type: 'get',
+                data: {},
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('.transaction-filter-content').html(rsp.html);
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            })
         });
 
         $('body').on('change', '#filterByForm .form-control', function () {
             $('#filterBySpinner').show();
-
             var form = $('#filterByForm');
-
             $.ajax({
-                    url: '/transactions/filters',
-                    type: 'get',
-                    data: form.serialize(),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-
+                url: '/transactions/filters',
+                type: 'get',
+                data: form.serialize(),
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('.transaction-filter-content').html(rsp.html);
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            })
         });
-
 
         $('body').on('change', '.auditRecordCheckbox', function (e) {
             e.preventDefault();
             $('#filterBySpinner').show();
-
             var auditCheckbox = $(this);
-
             $.ajax({
-                    url: '/transactions/' + auditCheckbox.attr('data-id') + '/updateauditrecord',
-                    type: 'post',
-                    data: {
-                        'audit_record' : auditCheckbox.is(':checked')
-                    },
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-
+                url: '/transactions/' + auditCheckbox.attr('data-id') + '/updateauditrecord',
+                type: 'post',
+                data: {
+                    'audit_record': auditCheckbox.is(':checked')
+                },
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            })
         });
 
         $('body').on('submit', '#filterByForm', function (e) {
             e.preventDefault();
             $('#filterBySpinner').show();
-
             var form = $('#filterByForm');
-
             $.ajax({
-                    url: '/transactions/transactions-list',
-                    type: 'get',
-                    data: form.serialize(),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-
+                url: '/transactions/transactions-list',
+                type: 'get',
+                data: form.serialize(),
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('#log-result-table').html(rsp.html);
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            })
         });
 
         //When open log, load transaction details
-        $('body').on('show.bs.collapse','.logRow', function () {
+        $('body').on('show.bs.collapse', '.logRow', function () {
             var transactionId = $(this).data('transactionId');
             var entry = $(this);
 
-            if (!entry.data('loaded')){
+            if (!entry.data('loaded')) {
                 jQuery.ajax({
                     url: '/testingdetails/' + transactionId + '/logs',
                     type: 'get',
