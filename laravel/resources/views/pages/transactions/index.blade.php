@@ -91,6 +91,9 @@
             $('#filterDate').datepicker('show');
         });
 
+        $('body').on('change', '.checkAll', function () {
+            $('.checkTransaction').prop('checked', $(this).is(':checked'));
+        });
 
         $('body').on('click', '.btn-clear', function () {
             $('#filterBySpinner').show();
@@ -139,16 +142,17 @@
             e.preventDefault();
             $('#filterBySpinner').show();
 
-            var form = $('#filterByForm');
+            var auditCheckbox = $(this);
 
             $.ajax({
-                    url: '/transactions/updateauditrecord',
-                    type: 'get',
-                    data: form.serialize(),
+                    url: '/transactions/' + auditCheckbox.attr('data-id') + '/updateauditrecord',
+                    type: 'post',
+                    data: {
+                        'audit_record' : auditCheckbox.is(':checked')
+                    },
                     error: function (jqXHR, status) {
                     },
                     success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
                     },
                     complete: function () {
                         $('#filterBySpinner').hide();

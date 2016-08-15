@@ -3,13 +3,13 @@
         <table class="table colored-parent-table log-results-table">
             <thead>
             <tr>
-                <th class="text-center"><input type="checkbox"></th>
+                <th class="text-center"><input type="checkbox" class="checkAll"></th>
                 <th class="text-left">Product Name</th>
                 <th>Test Suite<br/>Test Case</th>
                 <th>Test<br/>Outcome</th>
                 <th>Audit<br/>Record</th>
                 <th>
-                    @if($isAdmin)
+                    @if($supportOrAdmin)
                         Organisation<br/>
                         Subscription Nickname<br/>
                     @endif
@@ -34,7 +34,7 @@
                 ?>
                 <tr>
                     <td class="text-center">
-                        <input type="checkbox" name="id[]" id="id{{ $transaction->id }}" value="{{ $transaction->id }}"
+                        <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
                                @if($transaction->audit_record) disabled="disabled" @endif>
                     </td>
                     <td class="product-name">
@@ -59,7 +59,7 @@
                                         </span>
                     </td>
                     <td class="text-center">
-                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox">
+                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox" data-id="{{ $transaction->id }}">
                     </td>
                     <td class="text-center">
                         @if($supportOrAdmin)
