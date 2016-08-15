@@ -66,10 +66,22 @@ class Transaction extends Model
     public function setWhereQuery($subscriptions, $filters)
     {
         if (!empty($subscriptions)) {
-            $this->whereModel = DB::table('transactions')->whereIn('subscription_id', $subscriptions);
+            $this->whereModel = DB::table('transactions as t')->whereIn('subscription_id', $subscriptions);
         } else {
-            $this->whereModel = DB::table('transactions')->whereIn('subscription_id', [0]);
+            $this->whereModel = DB::table('transactions as t')->whereIn('subscription_id', [0]);
         }
+
+        $this->whereModel->join('wp_posts AS p1', function ($join) {
+            $join->on('t.test_case_id', '=', 'p1.ID');
+        })
+        ->join('wp_postmeta AS pm1', function ($join) use ($filters) {
+            $join->on('pm1.post_id', '=', 'p1.ID')
+                ->where('pm1.meta_key', 'LIKE', 'scenario_%');
+        })
+         ->join('wp_test_suites_scenarios AS s', function ($join) {
+            $join->on('s.id', '=', 'pm1.meta_value');
+        });
+
         if ($filters['organisation_id']) {
             $this->whereModel->whereRaw(sprintf(' subscription_id IN ( SELECT id FROM wp_organisations_subscriptions WHERE organisation_id = %d) ', $filters['organisation_id']));
         }
@@ -88,24 +100,16 @@ class Transaction extends Model
         if ($filters['date']) {
             $this->whereModel->whereRaw(" ( updated_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND updated_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
         }
-        if ($filters['outcome']) {
-            $this->whereModel->where('test_outcome_status_id', $filters['outcome']);
+        if ($filters['test_outcome_status_id']) {
+            $this->whereModel->where('test_outcome_status_id', $filters['test_outcome_status_id']);
         }
         if ($filters['audit_record']) {
             $this->whereModel->where('audit_record', $filters['audit_record'] == 'yes' ? true : false);
         }
-        if ($filters['scenario']) {
+        if ($filters['scenario_id']) {
             $this->whereModel
-                ->join('wp_posts AS p1', function ($join) {
-                    $join->on('t.test_case_id', '=', 'p1.ID');
-                })
-                ->join('wp_postmeta AS pm1', function ($join) use ($filters) {
-                    $join->on('pm1.post_id', '=', 'p1.ID')
-                        ->where('pm1.meta_key', 'LIKE', 'scenario_%')
-                        ->where('pm1.meta_value', '=', filter_var($filters['scenario'], FILTER_SANITIZE_STRING));
-                });
+                ->where('pm1.meta_value', '=', filter_var($filters['scenario_id'], FILTER_SANITIZE_STRING));
         }
-        $this->whereModel->orderBy('updated_at', 'desc');
         return $this->whereModel;
     }
 
@@ -118,7 +122,6 @@ class Transaction extends Model
     public function processFilters($subscriptions, $filters)
     {
         $organisationSubscriptions = OrganisationSubscription::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('subscription_id')->pluck('subscription_id'))->orderBy('nickname');
-        $subscriptionsList = $organisationSubscriptions->lists('id');
         $arr = [
             'subscription_id' => $organisationSubscriptions->get(),
             'product_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('product_id')->pluck('product_id'))->orderBy('post_title')->get(),
@@ -126,11 +129,11 @@ class Transaction extends Model
             'test_suite_id' => Post::whereIn('ID', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_suite_id')->pluck('test_suite_id'))->orderBy('post_title')->get(),
             'audit_record' => $this->setWhereQuery($subscriptions, $filters)->groupBy('audit_record')->pluck('audit_record'),
             'test_outcome_status_id' => TestOutcomeStatus::whereIn('id', $this->setWhereQuery($subscriptions, $filters)->groupBy('test_outcome_status_id')->pluck('test_outcome_status_id'))->orderBy('name')->get(),
-            'scenario_id' => DB::select("SELECT s.id, s.code FROM transactions AS t
-                JOIN wp_posts AS p ON p.ID = t.test_case_id
-                JOIN wp_postmeta AS pm ON pm.meta_key LIKE 'scenario_%' AND pm.post_id = p.ID
-                JOIN wp_test_suites_scenarios AS s ON s.id = pm.meta_value
-                WHERE subscription_id IN ( ? ) GROUP BY code ORDER BY s.code", (!$subscriptionsList->isEmpty() ? $subscriptionsList->toArray() : [-1])),
+            'scenario_id' => $this->setWhereQuery($subscriptions, $filters)
+                ->select("s.id", "s.code")
+                ->groupBy('s.code')
+                ->orderBy('s.code')
+                ->get(),
             'organisation_id' => Organisation::whereIn('id', $organisationSubscriptions->pluck('organisation_id'))->get(),
         ];
         return $arr;
@@ -143,10 +146,10 @@ class Transaction extends Model
      * @param int $totalPerPage
      * @return mixed
      */
-    public static function getUserTransactionLog($filters, $page = 1, $totalPerPage = 10)
+    public static function getUserTransactionLog($filters, $totalPerPage = 10)
     {
         $transaction = new Transaction();
-        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->paginate($totalPerPage);
+        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id")->orderBy('updated_at', 'desc')->paginate($totalPerPage);
     }
 
     /**

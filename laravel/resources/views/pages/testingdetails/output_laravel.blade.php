@@ -7,8 +7,8 @@
         <div id="data"></div>
     </div>
     <div class="modal-footer">
-        <a href="{{ $link }}" target="_blank" class="btn btn-success btn-with-icon btn-confirm">Download</a>
         <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+        <a href="{{ $link }}" target="_blank" class="btn btn-success btn-with-icon btn-confirm">Download</a>
     </div>
     <div class="block-loading">
         <div class="loading-content"><span class="loader"></span>

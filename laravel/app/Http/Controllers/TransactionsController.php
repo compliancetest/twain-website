@@ -11,6 +11,11 @@ use App\Http\Requests;
 class TransactionsController extends Controller
 {
 
+    /**
+     * Display transactions list
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $transactions = Transaction::getUserTransactionLog($request);
@@ -18,6 +23,11 @@ class TransactionsController extends Controller
         return view('pages.transactions.index', compact('transactions', 'filters', 'request'));
     }
 
+    /**
+     * Render filters view
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function filters(Request $request)
     {
         $data = [
@@ -27,6 +37,11 @@ class TransactionsController extends Controller
         return response()->json(['html' => view('pages.transactions.filters')->with($data)->render()]);
     }
 
+    /**
+     * Render transactions list based on filters
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function transactionsList(Request $request)
     {
         $data = [

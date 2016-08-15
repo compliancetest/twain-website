@@ -50,7 +50,7 @@
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
                                         <span class="text-status-{{ $status }}">
                                             @if(!empty($transaction->reason))
-                                                <a href="/testingdetails/<?php echo $transaction->id;?>/transaction-reason" class="transaction_reason">
+                                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" class="transaction_reason">
                                                     {{ $outcomeStatus->name }}
                                                 </a>
                                             @else

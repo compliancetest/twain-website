@@ -6,8 +6,8 @@
     <div id="data"></div>
 </div>
 <div class="modal-footer">
-    <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default btn-with-icon btn-cancel">Close</button>
     <a href="{{ $link }}" target="_blank" class="btn btn-success btn-with-icon btn-download">Download</a>
+    <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default btn-with-icon btn-cancel">Close</button>
 </div>
 <script type="text/javascript">
     var t_data = Jsonary.create({!! $data !!}).readOnlyCopy();
