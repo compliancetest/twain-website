@@ -336,7 +336,7 @@ function getTestSuitesFilter($category_id = null, $status_id = null, $priority_i
     }
 
     if (!is_super_admin()) {
-        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
+        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND (is_mod = 1 OR is_admin = 1))) ", get_current_user_id(), get_current_user_id());
     }
 
     $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY test_suite_id";
@@ -402,7 +402,7 @@ function getCommunitiesFilter($category_id = null, $status_id = null, $priority_
     }
 
     if (!is_super_admin()) {
-        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND is_mod = 1)) ", get_current_user_id(), get_current_user_id());
+        $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND (is_mod = 1 OR is_admin = 1))) ", get_current_user_id(), get_current_user_id());
     }
 
     $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY community_id";
