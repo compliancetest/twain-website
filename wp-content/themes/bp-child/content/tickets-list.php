@@ -111,10 +111,10 @@ $show_community = $is_support || is_super_admin() ? true : false;
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=title&order=<?php echo $orderBy == 'title' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'title'){ ?>class="<?php echo $order?>"<?php } ?>>Subject <span class="sort"></span></a>
                </div>
                <?php if($is_support):?>
-               <div class="td td-ticket-customer td-sortable">
+               <div class="td td-ticket-customer td-sortable tocenter">
                     <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=customer_name&order=<?php echo $orderBy == 'customer_name' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'customer_name'){ ?>class="<?php echo $order?>"<?php } ?>>Customer<span class="sort"></span></a>
                </div>
-               <div class="td td-ticket-org td-sortable">
+               <div class="td td-ticket-org td-sortable tocenter">
                     <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organisation<span class="sort"></span></a>
                </div>
                
@@ -122,8 +122,8 @@ $show_community = $is_support || is_super_admin() ? true : false;
                <div class="td td-ticket-requested td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=created_date&order=<?php echo $orderBy == 'created_date' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'created_date'){ ?>class="<?php echo $order?>"<?php } ?>>Requested <span class="sort"></span></a>
                </div>
-               <div class="td td-ticket-type td-sortable tocenter <?php if( $show_community ):?>td-two-lines<?php endif;?>">
-                   <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=category_id&order=<?php echo $orderBy == 'category_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'category_id'){ ?>class="<?php echo $order?>"<?php } ?>>Type <?php if( $show_community ):?><br>Community<?php endif;?><span class="sort"></span></a>
+               <div class="td td-ticket-type td-sortable tocenter td-two-lines">
+                   <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=category_id&order=<?php echo $orderBy == 'category_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'category_id'){ ?>class="<?php echo $order?>"<?php } ?>>Type <br>Community<br>Test Suite<span class="sort"></span></a>
                </div>
                <div class="td td-ticket-status td-sortable tocenter">
                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=status_id&order=<?php echo $orderBy == 'status_id' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'status_id'){ ?>class="<?php echo $order?>"<?php } ?>>Status <span class="sort"></span></a>
@@ -142,7 +142,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                    foreach($tickets as $ticket)
                    {                       
                        $userGroups = groups_get_user_groups( $ticket->customer_id);
-                       if(!is_admin() && !is_super_admin() && !doesUserAdminInAnyCommunity( get_current_user_id(),  $userGroups['groups'] ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
+                       if(!is_admin() && !is_super_admin() && !doesUserAdminInAnyCommunity( get_current_user_id() ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
                        {
                            continue;
                        }
@@ -176,19 +176,18 @@ $show_community = $is_support || is_super_admin() ? true : false;
                                 <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo $ticket->title?></a>
                             </div>
                             <?php if($is_support):?>
-                            <div class="td td-ticket-customer td-sortable">
-                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo $ticket->customer_name; ?></a>
+                            <div class="td td-ticket-customer td-sortable tocenter">
+                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo cp_get_user_fullname($ticket->customer_id); ?></a>
                             </div>
-                            <div class="td td-ticket-org td-sortable">
+                            <div class="td td-ticket-org td-sortable tocenter">
                                 <?php echo $ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation; ?>
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
-                            <div class="td td-ticket-type <?php if( $show_community ):?>td-two-lines tocenter<?php endif;?>">
+                            <div class="td td-ticket-type td-two-lines tocenter">
                                 <?php echo $ticket->category_title ?>
-                                <?php if( $show_community ):?>
-                                    <br><?php echo $ticket->community_id == 'general' ? 'General' : getCommunity($ticket->community_id)->title;?>
-                                <?php endif;?>
+                                <br><?php echo $ticket->community_id == 'general' ? 'General' : getCommunity($ticket->community_id)->title;?>
+                                <br><?php echo $ticket->test_suite_id ? get_the_title($ticket->test_suite_id) : '-';?>
                             </div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">
