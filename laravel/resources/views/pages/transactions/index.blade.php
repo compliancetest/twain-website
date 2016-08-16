@@ -31,38 +31,45 @@
 
             </div>
         </div>
-
-        <div class="transaction-list-actions">
-            <div class="pull-left">
-                @if($supportOrAdmin)
-                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass"
-                       data-tooltip="tooltip" title="Verify As Pass">Verify As Pass</a>
-                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail"
-                           data-tooltip="tooltip" title="Verify As Fail">Verify As Fail</a>
-                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip"
-                           data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
-                @endif
-            </div>
-            <div class="pull-right">
-                <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
-                {{--<div class="form-inline">--}}
-                    {{--<div class="form-group">--}}
-                        {{--<label for="paginationLimit">Display #</label>--}}
-                        {{--<select class="form-control" id="paginationLimit" name="limit">--}}
-                            {{--<option value="10">10</option>--}}
-                            {{--<option value="20">20</option>--}}
-                            {{--<option value="50">50</option>--}}
-                            {{--<option value="100">100</option>--}}
-                            {{--<option value="-1">All</option>--}}
-                        {{--</select>--}}
+        <div class="block-loading-wrapper">
+            <div class="transaction-list-actions">
+                <div class="pull-left">
+                    @if($supportOrAdmin)
+                        <a href="#verifyAsModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass"
+                           data-tooltip="tooltip" title="Verify As Pass">Verify As Pass</a>
+                        <a href="#verifyAsModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail"
+                               data-tooltip="tooltip" title="Verify As Fail">Verify As Fail</a>
+                        <a href="#verifyAsModal" data-toggle="modal" class="btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip"
+                               data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
+                    @endif
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
+                    {{--<div class="form-inline">--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label for="paginationLimit">Display #</label>--}}
+                            {{--<select class="form-control" id="paginationLimit" name="limit">--}}
+                                {{--<option value="10">10</option>--}}
+                                {{--<option value="20">20</option>--}}
+                                {{--<option value="50">50</option>--}}
+                                {{--<option value="100">100</option>--}}
+                                {{--<option value="-1">All</option>--}}
+                            {{--</select>--}}
+                        {{--</div>--}}
                     {{--</div>--}}
-                {{--</div>--}}
+                </div>
             </div>
-        </div>
 
-        <div id="log-result-table">
+            <div id="log-result-table">
+                @include('pages.transactions.transactions')
+            </div>
 
-            @include('pages.transactions.transactions')
+            <div id="loadLogResultsSpinner" class="block-loading">
+                <div class="loading-content"><span class="loader"></span>
+                    <div class="loading-text">LOADING DATA</div>
+                    <div class="loading-wait">Please wait...</div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -205,7 +212,7 @@
 
         $('body').on('click', '.pagination a', function(e){
             e.preventDefault();
-            $('#filterBySpinner').show();
+            $('#filterBySpinner, #loadLogResultsSpinner').show();
             var link = $(this);
             var form = $('#filterByForm');
             $.ajax({
@@ -218,47 +225,20 @@
                     $('#log-result-table').html(rsp.html);
                 },
                 complete: function () {
-                    $('#filterBySpinner').hide();
+                    $('#filterBySpinner, #loadLogResultsSpinner').hide();
                 }
             });
         });
 
         $('body').on('click', '.btn-clear', function () {
-            $('#filterBySpinner').show();
-
-            var form = $('#filterByForm');
-
-            $.ajax({
-                url: '/transactions/filters',
-                type: 'get',
-                data: {},
-                error: function (jqXHR, status) {
-                },
-                success: function (rsp) {
-                    $('.transaction-filter-content').html(rsp.html);
-                },
-                complete: function () {
-                    $('#filterBySpinner').hide();
-                }
-            })
+            $('#filterByForm')[0].reset();
+            getTransactionFilters();
         });
 
         $('body').on('change', '#filterByForm .form-control', function () {
             $('#filterBySpinner').show();
             var form = $('#filterByForm');
-            $.ajax({
-                url: '/transactions/filters',
-                type: 'get',
-                data: form.serialize(),
-                error: function (jqXHR, status) {
-                },
-                success: function (rsp) {
-                    $('.transaction-filter-content').html(rsp.html);
-                },
-                complete: function () {
-                    $('#filterBySpinner').hide();
-                }
-            })
+            getTransactionFilters(form.serialize());
         });
 
         $('body').on('change', '.auditRecordCheckbox', function (e) {
@@ -288,7 +268,8 @@
 
         $('body').on('submit', '#filterByForm', function (e) {
             e.preventDefault();
-            $('#filterBySpinner').show();
+            $('#filterBySpinner, #loadLogResultsSpinner').show();
+
             var form = $('#filterByForm');
             $.ajax({
                 url: '/transactions/transactions-list',
@@ -300,7 +281,7 @@
                     $('#log-result-table').html(rsp.html);
                 },
                 complete: function () {
-                    $('#filterBySpinner').hide();
+                    $('#filterBySpinner, #loadLogResultsSpinner').hide();
                 }
             })
         });
@@ -332,7 +313,36 @@
                 '<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>' +
                 '</div>';
             $(this).find('.modal-content').html(popupLoadingBlock);
-        })
+        });
+
+
+        $('body').on('click', '#filterByForm .clear-filter', function (e) {
+            $(this).parent().find('input, select').val('');
+            var form = $('#filterByForm');
+            getTransactionFilters(form.serialize());
+        });
+
+        /**
+         * Load actual filters data
+         * @param data Serialised form data
+         */
+        function getTransactionFilters(data){
+            $('#filterBySpinner').show();
+            $.ajax({
+                url: '/transactions/filters',
+                type: 'get',
+                data: data,
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('.transaction-filter-content').html(rsp.html);
+                },
+                complete: function () {
+                    $('#filterBySpinner').hide();
+                }
+            })
+        }
+
 
     });
 </script>

@@ -1,7 +1,6 @@
 <form action="#" method="get" id="filterByForm">
     <div class="row">
 
-
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterProduct">Product:</label>
             <select class="form-control" id="filterProduct" name="product_id">
@@ -10,6 +9,7 @@
                     <option value="{{ $product->ID }}" @if($request->get('product_id') == $product->ID) selected="selected" @endif>{{ $product->post_title }}</option>
                 @endforeach
             </select>
+            @if(($request->get('product_id')) && ($request->get('product_id') !== '') && ($request->get('product_id') == $product->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -20,6 +20,7 @@
                     <option value="{{ $testSuite->ID }}" @if($request->get('test_suite_id') == $testSuite->ID) selected="selected" @endif>{{ $testSuite->post_title }}</option>
                 @endforeach
             </select>
+            @if(($request->get('test_suite_id')) && ($request->get('test_suite_id') !== '') && ($request->get('test_suite_id') == $testSuite->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -30,6 +31,7 @@
                     <option value="{{ $testCase->ID }}" @if($request->get('test_case_id') == $testCase->ID) selected="selected" @endif>{{ $testCase->post_title }}</option>
                 @endforeach
             </select>
+            @if(($request->get('test_case_id')) && ($request->get('test_case_id') !== '') && ($request->get('test_case_id') == $testCase->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -39,6 +41,7 @@
                        @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
                 <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
             </div>
+            @if(($request->get('date')) && ($request->get('date') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
     </div>
 
@@ -52,6 +55,7 @@
                     <option value="{{ $auditRecord}}" @if($request->get('audit_record') == $auditRecord) selected="selected" @endif>{{ ucfirst($auditRecord) }}</option>
                 @endforeach
             </select>
+            @if(($request->get('audit_record')) && ($request->get('audit_record') !== '') && ($request->get('audit_record') == $auditRecord))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -60,9 +64,10 @@
                 <option value="">- All -</option>
                 @foreach($filters['test_outcome_status_id'] as $testOutcome)
                     <option value="{{ $testOutcome->id }}"
-                            @if($request->get('test_outcome_status_id') == $testOutcome->id) selected="selected" @endif>{{ $testOutcome->name }}</option>
+                        @if($request->get('test_outcome_status_id') == $testOutcome->id) selected="selected" @endif>{{ $testOutcome->name }}</option>
                 @endforeach
             </select>
+            @if(($request->get('test_outcome_status_id')) && ($request->get('test_outcome_status_id') !== '') && ($request->get('test_outcome_status_id') == $testOutcome->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -73,6 +78,7 @@
                     <option value="{{ $scenario->id }}" @if($request->get('scenario_id') == $scenario->id) selected="selected" @endif>{{ $scenario->code }}</option>
                 @endforeach
             </select>
+            @if(($request->get('scenario_id')) && ($request->get('scenario_id') !== '') && ($request->get('scenario_id') == $scenario->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         @if($supportOrAdmin)
@@ -86,6 +92,7 @@
                                 @if($request->get('subscription_id') == $subscription->id) selected="selected" @endif>{{ $subscription->nickname }}</option>
                     @endforeach
                 </select>
+                @if(($request->get('subscription_id')) && ($request->get('subscription_id') !== '') && ($request->get('subscription_id') == $subscription->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
             </div>
         @endif
 
@@ -100,9 +107,10 @@
                     <option value="">- All -</option>
                     @foreach($filters['organisation_id'] as $organisation)
                         <option value="{{ $organisation->id }}"
-                        @if($request->get('organisation_id')) selected="selected" @endif>{{ $organisation->organisation_name }}</option>
+                        @if($request->get('organisation_id') == $organisation->id) selected="selected" @endif>{{ $organisation->organisation_name }}</option>
                     @endforeach
                 </select>
+                @if(($request->get('organisation_id')) && ($request->get('organisation_id') !== '') && ($request->get('organisation_id') == $organisation->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
             </div>
         </div>
     @endif

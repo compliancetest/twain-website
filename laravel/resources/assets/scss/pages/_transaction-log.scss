@@ -33,6 +33,20 @@
       background: #fff;
     }
 
+    .clear-filter{
+      position: absolute;
+      color: #e33f3f;
+      text-shadow:0 1px 1px rgba(0,0,0, 0.5);
+      font-size: 10px;
+      font-weight: bold;
+      right: -4px;
+      top: 18px;
+      line-height: 28px;
+      display: block;
+      padding: 0 4px;
+      cursor: pointer;
+    }
+
   }
 
   .transaction-filter-footer{
