@@ -121,6 +121,7 @@ function compliancetest_user_actions()
         echo $result;
         exit;
     }else if(wp_verify_nonce($cpAction, 'delete-transaction-log')){
+        //todo-delete Functionality moved to laravel
         $result = cp_delete_transaction_log();        
         exit;
      }else if(wp_verify_nonce($cpAction, 'change-transaction-log')){

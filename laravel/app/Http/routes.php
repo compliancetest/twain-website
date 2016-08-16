@@ -180,8 +180,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('/transactions/{transactionId}/updateauditrecord', 'TransactionsController@updateauditrecord');
         Route::get('/transactions/filters', 'TransactionsController@filters');
         Route::get('/transactions/transactions-list', 'TransactionsController@transactionsList');
-        
+
         Route::post('/transactions/update-transactions', 'TransactionsController@updateTransactions');
+
+        Route::delete('/transactions/batch-delete', 'TransactionsController@batchDelete');
 
         Route::get('verify-requests', 'VerifyRequestsController@index');
         Route::get('verify-requests/update-list', 'VerifyRequestsController@updateList');

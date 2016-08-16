@@ -90,4 +90,28 @@ class TransactionsController extends Controller
         }
         return response()->json(['success']);
     }
+
+     /**
+     * Delete transactions
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function batchDelete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'transactions' => 'array|required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        foreach ($request->get('transactions') as $transactionToDelete) {
+            $transaction = Transaction::find($transactionToDelete);
+            if ($transaction->canBeDeleted()) {
+                $transaction->delete();
+            }
+        }
+        return response()->json(['success']);
+    }
 }

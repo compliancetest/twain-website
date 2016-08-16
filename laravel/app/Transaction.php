@@ -28,6 +28,20 @@ class Transaction extends Model
     }
 
     /**
+     * Ensure that transaction can be deleted by current user
+     * @return bool
+     */
+    public function canBeDeleted()
+    {
+        $usedInVerifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $this->id . '%')->first();
+        $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions()) || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
+        if (!$usedInVerifyRequest && $hasAccessToTransaction && $this->audit_record == false) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Generate s3 link to zip file
      * @param $fileName
      * @return string

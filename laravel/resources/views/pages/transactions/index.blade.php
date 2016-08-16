@@ -44,7 +44,8 @@
                     @endif
                 </div>
                 <div class="pull-right">
-                    <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
+                    <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
+                               data-tooltip="tooltip" title="Remove Transactions">Remove Transactions</a>
                     {{--<div class="form-inline">--}}
                         {{--<div class="form-group">--}}
                             {{--<label for="paginationLimit">Display #</label>--}}
@@ -130,7 +131,38 @@
     </div>
 </div>
 
+{{-- Delete Transaction Modal--}}
+<div class="modal fade" id="deleteTransactionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content block-loading-wrapper">
+            <div class="modal-header">
+                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                Delete Transactions
+            </div>
+            <div class="modal-body">
+                <div class="delete_message">
+                   Are you sure you want delete selected transactions?
+                </div>
+                <div class="delete_no_rows_message">
+                    Please select a row
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-with-icon btn-confirm confirm_delete_transactions">Confirm</button>
+                <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            <div class="block-loading">
+                <div class="loading-content"><span class="loader"></span>
+                    <div class="loading-text">LOADING DATA</div>
+                    <div class="loading-wait">Please wait...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @include('pages.popups.transaction_reason')
+
 @stop
 
 @section('page-scripts')
@@ -163,6 +195,49 @@
                 $('.change_status_no_messages').hide();
                 $('.confirm_change_status').show();
             }
+        });
+
+        $('body').on('click', '.delete_transactions', function(){
+            var checkboxes = $('input.checkTransaction:checked');
+            if(checkboxes.length == 0){
+                $('.delete_message, .confirm_delete_transactions').hide();
+                $('.delete_no_rows_message').show();
+            } else {
+                $('.delete_message, .confirm_delete_transactions').show();
+                $('.delete_no_rows_message').hide();
+            }
+        });
+
+        $('.confirm_delete_transactions').on('click', function(e){
+            var ids = new Array();
+            jQuery('.checkTransaction:checked').each(function () {
+                ids.push(this.value);
+            });
+
+            jQuery('#verifyAsModal .block-loading').show();
+
+            jQuery.ajax({
+                url: '/transactions/batch-delete',
+                type: 'delete',
+                data: {
+                    'transactions': ids,
+                },
+                dataType: 'json',
+                success: function (rsp) {
+                    $('.modal').modal('hide');
+                    $('#verifyAsModal .block-loading').hide();
+                    $('#filterByForm').submit();
+                },
+                error: function (jqXHR, status) {
+                    jQuery('#verifyAsModal .block-loading').hide();
+                    $('#verifyAsModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('#verifyAsModal .modal-body > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
         });
 
         $('.confirm_change_status').on('click', function(e){
@@ -243,7 +318,7 @@
 
         $('body').on('change', '.auditRecordCheckbox', function (e) {
             e.preventDefault();
-            $('#filterBySpinner').show();
+            $('#loadLogResultsSpinner').show();
             var auditCheckbox = $(this);
             $.ajax({
                 url: '/transactions/' + auditCheckbox.attr('data-id') + '/updateauditrecord',
@@ -256,7 +331,7 @@
                 success: function (rsp) {
                 },
                 complete: function () {
-                    $('#filterBySpinner').hide();
+                    $('#loadLogResultsSpinner').hide();
                     if(auditCheckbox.is(':checked')){
                         auditCheckbox.closest('tr').find('.checkTransaction').attr('disabled', 'disabled').prop('checked', false);
                     } else {
