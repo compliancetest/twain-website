@@ -49,8 +49,9 @@
                     <td>
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
                                         <span class="text-status-{{ $status }}">
-                                            @if(!empty($transaction->reason))
-                                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" class="transaction_reason">
+                                            @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
+                                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal"
+                                                   data-tooltip="tooltip" title="Reason">
                                                     {{ $outcomeStatus->name }}
                                                 </a>
                                             @else

@@ -146,7 +146,7 @@ class Transaction extends Model
      * @param int $totalPerPage
      * @return mixed
      */
-    public static function getUserTransactionLog($filters, $totalPerPage = 10)
+    public static function getUserTransactionLog($filters, $totalPerPage = 25)
     {
         $transaction = new Transaction();
         return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id")->orderBy('updated_at', 'desc')->paginate($totalPerPage);

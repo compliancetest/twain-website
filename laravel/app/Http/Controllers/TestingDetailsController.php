@@ -101,7 +101,7 @@ class TestingDetailsController extends Controller
      * @param $id
      * @return $this
      */
-    public function transactionReason($transactionId, $laravel = false)
+    public function transactionReason($transactionId, $laravel = true)
     {
         $entry = Transaction::find($transactionId);
         $reason = $entry->reason;

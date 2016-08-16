@@ -35,25 +35,28 @@
         <div class="transaction-list-actions">
             <div class="pull-left">
                 @if($supportOrAdmin)
-                    <button type="button" class="btn btn-success btn-with-icon btn-trigger">Verify As Pass</button>
-                    <button type="button" class="btn btn-danger btn-with-icon btn-trigger">Verify As Fail</button>
-                    <button type="button" class="btn btn-default btn-with-icon btn-trigger">Verify As Skip</button>
+                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass"
+                       data-tooltip="tooltip" title="Verify As Pass">Verify As Pass</a>
+                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail"
+                           data-tooltip="tooltip" title="Verify As Fail">Verify As Fail</a>
+                    <a href="#verifyAsModal" data-toggle="modal" class="btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip"
+                           data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
                 @endif
-                <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
             </div>
             <div class="pull-right">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="paginationLimit">Display #</label>
-                        <select class="form-control" id="paginationLimit" name="limit">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="-1">All</option>
-                        </select>
-                    </div>
-                </div>
+                <button type="button" class="btn btn-danger btn-with-icon btn-delete" data-tooltip="tooltip" data-placement="top">Remove Selected</button>
+                {{--<div class="form-inline">--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="paginationLimit">Display #</label>--}}
+                        {{--<select class="form-control" id="paginationLimit" name="limit">--}}
+                            {{--<option value="10">10</option>--}}
+                            {{--<option value="20">20</option>--}}
+                            {{--<option value="50">50</option>--}}
+                            {{--<option value="100">100</option>--}}
+                            {{--<option value="-1">All</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
         </div>
 
@@ -81,6 +84,46 @@
     </div>
 </div>
 
+{{-- Change transaction status Modal--}}
+<div class="modal fade" id="verifyAsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content block-loading-wrapper">
+            <div class="modal-header">
+                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                Verify Transaction
+            </div>
+            <div class="modal-body">
+                <div class="change_status_message">
+                    Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected transactions?
+
+                    <div class="form-group" id="transaction_reason" style="margin-top: 20px;">
+                        <label for="reason">Reason</label>
+                        <input name="reason" type="text" class="form-control" id="reason_message"/>
+                    </div>
+                    <input type="text" name="reason" id="transaction_reason" style="display: none;">
+                </div>
+                <div class="change_status_no_messages">
+                    Please select a row
+                </div>
+                <input type="hidden" value="" class="change_status_data_type">
+                <input type="hidden" value="" class="change_status_row_id">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-with-icon btn-confirm confirm_change_status">Confirm</button>
+                <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            <div class="block-loading">
+                <div class="loading-content"><span class="loader"></span>
+
+                    <div class="loading-text">LOADING DATA</div>
+                    <div class="loading-wait">Please wait...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@include('pages.popups.transaction_reason')
 @stop
 
 @section('page-scripts')
@@ -95,6 +138,66 @@
             $('.checkTransaction').prop('checked', $(this).is(':checked'));
         });
 
+        $('body').on('click', '.change_status', function(){
+            $('.change_status_data_type').val($(this).attr('data-outcome'));
+            if($(this).attr('data-outcome') == 'Pass'){
+                $('#transaction_reason').hide();
+            } else {
+                $('#transaction_reason').show();
+            }
+            $('.change_to_status').text($(this).attr('data-outcome'));
+            var checkboxes = $('input.checkTransaction:checked');
+            if(checkboxes.length == 0){
+                $('.change_status_message').hide();
+                $('.change_status_no_messages').show();
+                $('.confirm_change_status').hide();
+            } else {
+                $('.change_status_message').show();
+                $('.change_status_no_messages').hide();
+                $('.confirm_change_status').show();
+            }
+        });
+
+        $('.confirm_change_status').on('click', function(e){
+            var ids = new Array();
+            jQuery('.checkTransaction:checked').each(function () {
+                ids.push(this.value);
+            });
+
+            jQuery('#verifyAsModal .block-loading').show();
+
+            jQuery.ajax({
+                url: '/transactions/update-transactions',
+                data: {
+                    'transactions': ids,
+                    'outcome_code': jQuery('.change_status_data_type').val(),
+                    'reason': jQuery('.change_status_data_type').val() == 'Pass' ? 0 : $('#reason_message').val(),
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (rsp) {
+                    $('.modal').modal('hide');
+                    $('#verifyAsModal .block-loading').hide();
+                    $('#filterByForm').submit();
+                },
+                error: function (jqXHR, status) {
+                    jQuery('#verifyAsModal .block-loading').hide();
+                    $('#verifyAsModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('#verifyAsModal .modal-body > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
+        });
+
+        /**
+         * Extract GET param value from URL
+         * @param url
+         * @param key
+         * @returns {Array|{index: number, input: string}|string}
+         */
         function getUrlVar(url, key){
             var result = new RegExp(key + "=([^&]*)", "i").exec(url);
             return result && unescape(result[1]) || "";
@@ -174,6 +277,11 @@
                 },
                 complete: function () {
                     $('#filterBySpinner').hide();
+                    if(auditCheckbox.is(':checked')){
+                        auditCheckbox.closest('tr').find('.checkTransaction').attr('disabled', 'disabled').prop('checked', false);
+                    } else {
+                        auditCheckbox.closest('tr').find('.checkTransaction').removeAttr('disabled');
+                    }
                 }
             })
         });
