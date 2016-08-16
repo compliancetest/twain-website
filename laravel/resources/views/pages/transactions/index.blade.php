@@ -137,7 +137,7 @@
 <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function($) {
-        $('#filterCalendar').click(function () {
+        $('body').on('click', '#filterCalendar', function () {
             $('#filterDate').datepicker('show');
         });
 
