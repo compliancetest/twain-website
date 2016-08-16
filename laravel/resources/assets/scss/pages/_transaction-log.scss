@@ -1,0 +1,125 @@
+.transaction-filter{
+
+  .transaction-filter-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  .transaction-filter-content{
+    border: 1px solid #d7d7d7;
+    padding: 11px 20px 0 20px;
+
+    .calendar-icon{
+      @include iconsSprite(calendar);
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    label{
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 1px 0;
+      line-height: normal;
+    }
+
+    select{
+      option{
+        padding: 3px 5px;
+      }
+    }
+
+    #filterDate[readonly]{
+      background: #fff;
+    }
+
+    .clear-filter{
+      position: absolute;
+      color: #e33f3f;
+      text-shadow:0 1px 1px rgba(0,0,0, 0.5);
+      font-size: 10px;
+      font-weight: bold;
+      right: -4px;
+      top: 18px;
+      line-height: 28px;
+      display: block;
+      padding: 0 4px;
+      cursor: pointer;
+    }
+
+  }
+
+  .transaction-filter-footer{
+    margin: 15px -20px 0 -20px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #d7d7d7;
+    padding: 9px 20px;
+    overflow: hidden;
+  }
+
+}
+
+.transaction-list-actions{
+  padding: 10px 0;
+  @include pie-clearfix;
+}
+
+.log-results-table-wrapper{
+  border-bottom: 1px solid #1d76c0;
+
+  table{
+    margin: 0;
+  }
+
+  .block-loading-wrapper{
+    min-height: 90px;
+  }
+}
+
+.log-results-table{
+  > tbody {
+    > tr > td{
+      background: #d9d9d9 image-url('separate-bg/table-tr-bg-even.png') repeat 0 0;
+    }
+    > tr:nth-child(4n-1) > td,
+    > tr:nth-child(4n+4) > td{
+      background: #eee image-url('separate-bg/table-tr-bg-odd.png') repeat 0 0;
+    }
+    > tr > td:last-child{
+      border-right: 1px solid #1d76c0;
+    }
+  }
+
+  .product-name{
+    .product-collapse-link{
+      float: left;
+    }
+    .product-name-link{
+      display: block;
+      overflow: hidden;
+      margin: 0 0 0 15px;
+    }
+  }
+}
+
+.log-results-sub-table{
+
+  > thead > tr > th {
+    padding: 5px;
+  }
+
+
+  > tbody > tr{
+    > td {
+      text-align: center;
+      padding: 5px;
+      background: #d9d9d9 image-url('separate-bg/table-tr-bg-even.png') repeat 0 0;
+      vertical-align: middle;
+    }
+
+    &:nth-child(2n+1) > td{
+      background: #eee image-url('separate-bg/table-tr-bg-odd.png') repeat 0 0;
+    }
+  }
+
+}

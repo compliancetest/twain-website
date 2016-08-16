@@ -1,9 +1,13 @@
 <?php
 
-$segments = ( isset($_SERVER['REQUEST_URI']) ? explode('/', trim($_SERVER['REQUEST_URI'],'/')) : array('/') );
+if(strpos($_SERVER['REQUEST_URI'], '?') !== false){
+   $segments = (isset($_SERVER['REQUEST_URI']) ? explode('/', trim(explode('?', $_SERVER['REQUEST_URI'])[0], '/')) : array('/'));
+} else {
+    $segments = (isset($_SERVER['REQUEST_URI']) ? explode('/', trim($_SERVER['REQUEST_URI'], '/')) : array('/'));
+}
 
 $urls = ['communities', 'membership', 'downloads', 'sso', 'api', 'testingdetails', 'articles', 'communityprofiles', 'profiletypes', 'forums',
-    'communitysurveys', 'test-suite-coverage', 'testplan', 'transactions', 'verify-requests'];
+    'communitysurveys', 'test-suite-coverage', 'testplan', 'transactions', 'verify-requests', 'my-transaction-log-new'];
 
 if ( in_array($segments[0], $urls) || strpos($segments[0], 'communities?') === 0) {
     require_once __DIR__ . '/laravel/public/index.php';

@@ -365,1335 +365,6 @@ th {
     border: 1px solid #ddd !important;
   }
 }
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
-}
-/* line 24, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* line 37, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-asterisk:before {
-  content: "\002a";
-}
-
-/* line 38, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-plus:before {
-  content: "\002b";
-}
-
-/* line 40, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-euro:before,
-.glyphicon-eur:before {
-  content: "\20ac";
-}
-
-/* line 41, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-minus:before {
-  content: "\2212";
-}
-
-/* line 42, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cloud:before {
-  content: "\2601";
-}
-
-/* line 43, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-envelope:before {
-  content: "\2709";
-}
-
-/* line 44, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-pencil:before {
-  content: "\270f";
-}
-
-/* line 45, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-glass:before {
-  content: "\e001";
-}
-
-/* line 46, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-music:before {
-  content: "\e002";
-}
-
-/* line 47, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-search:before {
-  content: "\e003";
-}
-
-/* line 48, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-heart:before {
-  content: "\e005";
-}
-
-/* line 49, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-star:before {
-  content: "\e006";
-}
-
-/* line 50, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-star-empty:before {
-  content: "\e007";
-}
-
-/* line 51, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-user:before {
-  content: "\e008";
-}
-
-/* line 52, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-film:before {
-  content: "\e009";
-}
-
-/* line 53, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-th-large:before {
-  content: "\e010";
-}
-
-/* line 54, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-th:before {
-  content: "\e011";
-}
-
-/* line 55, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-th-list:before {
-  content: "\e012";
-}
-
-/* line 56, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ok:before {
-  content: "\e013";
-}
-
-/* line 57, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-remove:before {
-  content: "\e014";
-}
-
-/* line 58, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-zoom-in:before {
-  content: "\e015";
-}
-
-/* line 59, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-zoom-out:before {
-  content: "\e016";
-}
-
-/* line 60, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-off:before {
-  content: "\e017";
-}
-
-/* line 61, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-signal:before {
-  content: "\e018";
-}
-
-/* line 62, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cog:before {
-  content: "\e019";
-}
-
-/* line 63, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-trash:before {
-  content: "\e020";
-}
-
-/* line 64, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-home:before {
-  content: "\e021";
-}
-
-/* line 65, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-file:before {
-  content: "\e022";
-}
-
-/* line 66, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-time:before {
-  content: "\e023";
-}
-
-/* line 67, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-road:before {
-  content: "\e024";
-}
-
-/* line 68, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-download-alt:before {
-  content: "\e025";
-}
-
-/* line 69, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-download:before {
-  content: "\e026";
-}
-
-/* line 70, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-upload:before {
-  content: "\e027";
-}
-
-/* line 71, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-inbox:before {
-  content: "\e028";
-}
-
-/* line 72, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-play-circle:before {
-  content: "\e029";
-}
-
-/* line 73, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-repeat:before {
-  content: "\e030";
-}
-
-/* line 74, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-refresh:before {
-  content: "\e031";
-}
-
-/* line 75, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-list-alt:before {
-  content: "\e032";
-}
-
-/* line 76, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-lock:before {
-  content: "\e033";
-}
-
-/* line 77, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-flag:before {
-  content: "\e034";
-}
-
-/* line 78, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-headphones:before {
-  content: "\e035";
-}
-
-/* line 79, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-volume-off:before {
-  content: "\e036";
-}
-
-/* line 80, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-volume-down:before {
-  content: "\e037";
-}
-
-/* line 81, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-volume-up:before {
-  content: "\e038";
-}
-
-/* line 82, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-qrcode:before {
-  content: "\e039";
-}
-
-/* line 83, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-barcode:before {
-  content: "\e040";
-}
-
-/* line 84, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tag:before {
-  content: "\e041";
-}
-
-/* line 85, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tags:before {
-  content: "\e042";
-}
-
-/* line 86, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-book:before {
-  content: "\e043";
-}
-
-/* line 87, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bookmark:before {
-  content: "\e044";
-}
-
-/* line 88, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-print:before {
-  content: "\e045";
-}
-
-/* line 89, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-camera:before {
-  content: "\e046";
-}
-
-/* line 90, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-font:before {
-  content: "\e047";
-}
-
-/* line 91, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bold:before {
-  content: "\e048";
-}
-
-/* line 92, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-italic:before {
-  content: "\e049";
-}
-
-/* line 93, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-text-height:before {
-  content: "\e050";
-}
-
-/* line 94, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-text-width:before {
-  content: "\e051";
-}
-
-/* line 95, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-align-left:before {
-  content: "\e052";
-}
-
-/* line 96, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-align-center:before {
-  content: "\e053";
-}
-
-/* line 97, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-align-right:before {
-  content: "\e054";
-}
-
-/* line 98, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-align-justify:before {
-  content: "\e055";
-}
-
-/* line 99, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-list:before {
-  content: "\e056";
-}
-
-/* line 100, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-indent-left:before {
-  content: "\e057";
-}
-
-/* line 101, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-indent-right:before {
-  content: "\e058";
-}
-
-/* line 102, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-facetime-video:before {
-  content: "\e059";
-}
-
-/* line 103, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-picture:before {
-  content: "\e060";
-}
-
-/* line 104, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-map-marker:before {
-  content: "\e062";
-}
-
-/* line 105, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-adjust:before {
-  content: "\e063";
-}
-
-/* line 106, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tint:before {
-  content: "\e064";
-}
-
-/* line 107, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-edit:before {
-  content: "\e065";
-}
-
-/* line 108, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-share:before {
-  content: "\e066";
-}
-
-/* line 109, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-check:before {
-  content: "\e067";
-}
-
-/* line 110, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-move:before {
-  content: "\e068";
-}
-
-/* line 111, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-step-backward:before {
-  content: "\e069";
-}
-
-/* line 112, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-fast-backward:before {
-  content: "\e070";
-}
-
-/* line 113, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-backward:before {
-  content: "\e071";
-}
-
-/* line 114, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-play:before {
-  content: "\e072";
-}
-
-/* line 115, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-pause:before {
-  content: "\e073";
-}
-
-/* line 116, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-stop:before {
-  content: "\e074";
-}
-
-/* line 117, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-forward:before {
-  content: "\e075";
-}
-
-/* line 118, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-fast-forward:before {
-  content: "\e076";
-}
-
-/* line 119, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-step-forward:before {
-  content: "\e077";
-}
-
-/* line 120, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-eject:before {
-  content: "\e078";
-}
-
-/* line 121, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-chevron-left:before {
-  content: "\e079";
-}
-
-/* line 122, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-chevron-right:before {
-  content: "\e080";
-}
-
-/* line 123, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-plus-sign:before {
-  content: "\e081";
-}
-
-/* line 124, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-minus-sign:before {
-  content: "\e082";
-}
-
-/* line 125, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-remove-sign:before {
-  content: "\e083";
-}
-
-/* line 126, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ok-sign:before {
-  content: "\e084";
-}
-
-/* line 127, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-question-sign:before {
-  content: "\e085";
-}
-
-/* line 128, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-info-sign:before {
-  content: "\e086";
-}
-
-/* line 129, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-screenshot:before {
-  content: "\e087";
-}
-
-/* line 130, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-remove-circle:before {
-  content: "\e088";
-}
-
-/* line 131, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ok-circle:before {
-  content: "\e089";
-}
-
-/* line 132, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ban-circle:before {
-  content: "\e090";
-}
-
-/* line 133, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-arrow-left:before {
-  content: "\e091";
-}
-
-/* line 134, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-arrow-right:before {
-  content: "\e092";
-}
-
-/* line 135, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-arrow-up:before {
-  content: "\e093";
-}
-
-/* line 136, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-arrow-down:before {
-  content: "\e094";
-}
-
-/* line 137, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-share-alt:before {
-  content: "\e095";
-}
-
-/* line 138, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-resize-full:before {
-  content: "\e096";
-}
-
-/* line 139, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-resize-small:before {
-  content: "\e097";
-}
-
-/* line 140, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-exclamation-sign:before {
-  content: "\e101";
-}
-
-/* line 141, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-gift:before {
-  content: "\e102";
-}
-
-/* line 142, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-leaf:before {
-  content: "\e103";
-}
-
-/* line 143, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-fire:before {
-  content: "\e104";
-}
-
-/* line 144, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-eye-open:before {
-  content: "\e105";
-}
-
-/* line 145, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-eye-close:before {
-  content: "\e106";
-}
-
-/* line 146, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-warning-sign:before {
-  content: "\e107";
-}
-
-/* line 147, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-plane:before {
-  content: "\e108";
-}
-
-/* line 148, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-calendar:before {
-  content: "\e109";
-}
-
-/* line 149, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-random:before {
-  content: "\e110";
-}
-
-/* line 150, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-comment:before {
-  content: "\e111";
-}
-
-/* line 151, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-magnet:before {
-  content: "\e112";
-}
-
-/* line 152, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-chevron-up:before {
-  content: "\e113";
-}
-
-/* line 153, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-chevron-down:before {
-  content: "\e114";
-}
-
-/* line 154, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-retweet:before {
-  content: "\e115";
-}
-
-/* line 155, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-shopping-cart:before {
-  content: "\e116";
-}
-
-/* line 156, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-folder-close:before {
-  content: "\e117";
-}
-
-/* line 157, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-folder-open:before {
-  content: "\e118";
-}
-
-/* line 158, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-resize-vertical:before {
-  content: "\e119";
-}
-
-/* line 159, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-resize-horizontal:before {
-  content: "\e120";
-}
-
-/* line 160, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hdd:before {
-  content: "\e121";
-}
-
-/* line 161, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bullhorn:before {
-  content: "\e122";
-}
-
-/* line 162, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bell:before {
-  content: "\e123";
-}
-
-/* line 163, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-certificate:before {
-  content: "\e124";
-}
-
-/* line 164, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-thumbs-up:before {
-  content: "\e125";
-}
-
-/* line 165, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-thumbs-down:before {
-  content: "\e126";
-}
-
-/* line 166, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hand-right:before {
-  content: "\e127";
-}
-
-/* line 167, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hand-left:before {
-  content: "\e128";
-}
-
-/* line 168, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hand-up:before {
-  content: "\e129";
-}
-
-/* line 169, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hand-down:before {
-  content: "\e130";
-}
-
-/* line 170, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-circle-arrow-right:before {
-  content: "\e131";
-}
-
-/* line 171, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-circle-arrow-left:before {
-  content: "\e132";
-}
-
-/* line 172, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-circle-arrow-up:before {
-  content: "\e133";
-}
-
-/* line 173, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-circle-arrow-down:before {
-  content: "\e134";
-}
-
-/* line 174, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-globe:before {
-  content: "\e135";
-}
-
-/* line 175, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-wrench:before {
-  content: "\e136";
-}
-
-/* line 176, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tasks:before {
-  content: "\e137";
-}
-
-/* line 177, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-filter:before {
-  content: "\e138";
-}
-
-/* line 178, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-briefcase:before {
-  content: "\e139";
-}
-
-/* line 179, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-fullscreen:before {
-  content: "\e140";
-}
-
-/* line 180, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-dashboard:before {
-  content: "\e141";
-}
-
-/* line 181, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-paperclip:before {
-  content: "\e142";
-}
-
-/* line 182, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-heart-empty:before {
-  content: "\e143";
-}
-
-/* line 183, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-link:before {
-  content: "\e144";
-}
-
-/* line 184, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-phone:before {
-  content: "\e145";
-}
-
-/* line 185, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-pushpin:before {
-  content: "\e146";
-}
-
-/* line 186, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-usd:before {
-  content: "\e148";
-}
-
-/* line 187, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-gbp:before {
-  content: "\e149";
-}
-
-/* line 188, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort:before {
-  content: "\e150";
-}
-
-/* line 189, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-alphabet:before {
-  content: "\e151";
-}
-
-/* line 190, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-alphabet-alt:before {
-  content: "\e152";
-}
-
-/* line 191, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-order:before {
-  content: "\e153";
-}
-
-/* line 192, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-order-alt:before {
-  content: "\e154";
-}
-
-/* line 193, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-attributes:before {
-  content: "\e155";
-}
-
-/* line 194, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sort-by-attributes-alt:before {
-  content: "\e156";
-}
-
-/* line 195, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-unchecked:before {
-  content: "\e157";
-}
-
-/* line 196, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-expand:before {
-  content: "\e158";
-}
-
-/* line 197, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-collapse-down:before {
-  content: "\e159";
-}
-
-/* line 198, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-collapse-up:before {
-  content: "\e160";
-}
-
-/* line 199, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-log-in:before {
-  content: "\e161";
-}
-
-/* line 200, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-flash:before {
-  content: "\e162";
-}
-
-/* line 201, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-log-out:before {
-  content: "\e163";
-}
-
-/* line 202, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-new-window:before {
-  content: "\e164";
-}
-
-/* line 203, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-record:before {
-  content: "\e165";
-}
-
-/* line 204, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-save:before {
-  content: "\e166";
-}
-
-/* line 205, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-open:before {
-  content: "\e167";
-}
-
-/* line 206, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-saved:before {
-  content: "\e168";
-}
-
-/* line 207, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-import:before {
-  content: "\e169";
-}
-
-/* line 208, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-export:before {
-  content: "\e170";
-}
-
-/* line 209, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-send:before {
-  content: "\e171";
-}
-
-/* line 210, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-floppy-disk:before {
-  content: "\e172";
-}
-
-/* line 211, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-floppy-saved:before {
-  content: "\e173";
-}
-
-/* line 212, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-floppy-remove:before {
-  content: "\e174";
-}
-
-/* line 213, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-floppy-save:before {
-  content: "\e175";
-}
-
-/* line 214, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-floppy-open:before {
-  content: "\e176";
-}
-
-/* line 215, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-credit-card:before {
-  content: "\e177";
-}
-
-/* line 216, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-transfer:before {
-  content: "\e178";
-}
-
-/* line 217, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cutlery:before {
-  content: "\e179";
-}
-
-/* line 218, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-header:before {
-  content: "\e180";
-}
-
-/* line 219, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-compressed:before {
-  content: "\e181";
-}
-
-/* line 220, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-earphone:before {
-  content: "\e182";
-}
-
-/* line 221, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-phone-alt:before {
-  content: "\e183";
-}
-
-/* line 222, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tower:before {
-  content: "\e184";
-}
-
-/* line 223, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-stats:before {
-  content: "\e185";
-}
-
-/* line 224, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sd-video:before {
-  content: "\e186";
-}
-
-/* line 225, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hd-video:before {
-  content: "\e187";
-}
-
-/* line 226, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-subtitles:before {
-  content: "\e188";
-}
-
-/* line 227, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sound-stereo:before {
-  content: "\e189";
-}
-
-/* line 228, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sound-dolby:before {
-  content: "\e190";
-}
-
-/* line 229, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sound-5-1:before {
-  content: "\e191";
-}
-
-/* line 230, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sound-6-1:before {
-  content: "\e192";
-}
-
-/* line 231, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sound-7-1:before {
-  content: "\e193";
-}
-
-/* line 232, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-copyright-mark:before {
-  content: "\e194";
-}
-
-/* line 233, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-registration-mark:before {
-  content: "\e195";
-}
-
-/* line 234, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cloud-download:before {
-  content: "\e197";
-}
-
-/* line 235, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cloud-upload:before {
-  content: "\e198";
-}
-
-/* line 236, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tree-conifer:before {
-  content: "\e199";
-}
-
-/* line 237, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tree-deciduous:before {
-  content: "\e200";
-}
-
-/* line 238, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-cd:before {
-  content: "\e201";
-}
-
-/* line 239, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-save-file:before {
-  content: "\e202";
-}
-
-/* line 240, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-open-file:before {
-  content: "\e203";
-}
-
-/* line 241, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-level-up:before {
-  content: "\e204";
-}
-
-/* line 242, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-copy:before {
-  content: "\e205";
-}
-
-/* line 243, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-paste:before {
-  content: "\e206";
-}
-
-/* line 252, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-alert:before {
-  content: "\e209";
-}
-
-/* line 253, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-equalizer:before {
-  content: "\e210";
-}
-
-/* line 254, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-king:before {
-  content: "\e211";
-}
-
-/* line 255, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-queen:before {
-  content: "\e212";
-}
-
-/* line 256, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-pawn:before {
-  content: "\e213";
-}
-
-/* line 257, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bishop:before {
-  content: "\e214";
-}
-
-/* line 258, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-knight:before {
-  content: "\e215";
-}
-
-/* line 259, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-baby-formula:before {
-  content: "\e216";
-}
-
-/* line 260, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-tent:before {
-  content: "\26fa";
-}
-
-/* line 261, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-blackboard:before {
-  content: "\e218";
-}
-
-/* line 262, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bed:before {
-  content: "\e219";
-}
-
-/* line 263, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-apple:before {
-  content: "\f8ff";
-}
-
-/* line 264, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-erase:before {
-  content: "\e221";
-}
-
-/* line 265, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-hourglass:before {
-  content: "\231b";
-}
-
-/* line 266, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-lamp:before {
-  content: "\e223";
-}
-
-/* line 267, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-duplicate:before {
-  content: "\e224";
-}
-
-/* line 268, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-piggy-bank:before {
-  content: "\e225";
-}
-
-/* line 269, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-scissors:before {
-  content: "\e226";
-}
-
-/* line 270, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-bitcoin:before {
-  content: "\e227";
-}
-
-/* line 271, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-btc:before {
-  content: "\e227";
-}
-
-/* line 272, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-xbt:before {
-  content: "\e227";
-}
-
-/* line 273, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-yen:before {
-  content: "\00a5";
-}
-
-/* line 274, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-jpy:before {
-  content: "\00a5";
-}
-
-/* line 275, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ruble:before {
-  content: "\20bd";
-}
-
-/* line 276, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-rub:before {
-  content: "\20bd";
-}
-
-/* line 277, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-scale:before {
-  content: "\e230";
-}
-
-/* line 278, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ice-lolly:before {
-  content: "\e231";
-}
-
-/* line 279, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-ice-lolly-tasted:before {
-  content: "\e232";
-}
-
-/* line 280, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-education:before {
-  content: "\e233";
-}
-
-/* line 281, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-option-horizontal:before {
-  content: "\e234";
-}
-
-/* line 282, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-option-vertical:before {
-  content: "\e235";
-}
-
-/* line 283, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-menu-hamburger:before {
-  content: "\e236";
-}
-
-/* line 284, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-modal-window:before {
-  content: "\e237";
-}
-
-/* line 285, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-oil:before {
-  content: "\e238";
-}
-
-/* line 286, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-grain:before {
-  content: "\e239";
-}
-
-/* line 287, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-sunglasses:before {
-  content: "\e240";
-}
-
-/* line 288, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-text-size:before {
-  content: "\e241";
-}
-
-/* line 289, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-text-color:before {
-  content: "\e242";
-}
-
-/* line 290, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-text-background:before {
-  content: "\e243";
-}
-
-/* line 291, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-top:before {
-  content: "\e244";
-}
-
-/* line 292, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-bottom:before {
-  content: "\e245";
-}
-
-/* line 293, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-horizontal:before {
-  content: "\e246";
-}
-
-/* line 294, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-left:before {
-  content: "\e247";
-}
-
-/* line 295, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-vertical:before {
-  content: "\e248";
-}
-
-/* line 296, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-object-align-right:before {
-  content: "\e249";
-}
-
-/* line 297, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-triangle-right:before {
-  content: "\e250";
-}
-
-/* line 298, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-triangle-left:before {
-  content: "\e251";
-}
-
-/* line 299, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-triangle-bottom:before {
-  content: "\e252";
-}
-
-/* line 300, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-triangle-top:before {
-  content: "\e253";
-}
-
-/* line 301, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-console:before {
-  content: "\e254";
-}
-
-/* line 302, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-superscript:before {
-  content: "\e255";
-}
-
-/* line 303, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-subscript:before {
-  content: "\e256";
-}
-
-/* line 304, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-menu-left:before {
-  content: "\e257";
-}
-
-/* line 305, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-menu-right:before {
-  content: "\e258";
-}
-
-/* line 306, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-menu-down:before {
-  content: "\e259";
-}
-
-/* line 307, ../scss/bootstrap/_glyphicons.scss */
-.glyphicon-menu-up:before {
-  content: "\e260";
-}
-
 /* line 11, ../scss/bootstrap/_scaffolding.scss */
 * {
   -webkit-box-sizing: border-box;
@@ -8880,9 +7551,11 @@ body.modal-open,
   width: 100%;
   top: 50%;
   padding: 0;
-  margin: -54px 0 0 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
-/* line 119, ../scss/_common.scss */
+/* line 121, ../scss/_common.scss */
 .block-loading .loading-content .loader {
   background: url('../images/loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
@@ -8890,19 +7563,19 @@ body.modal-open,
   display: block;
   margin: 0 auto;
 }
-/* line 127, ../scss/_common.scss */
+/* line 129, ../scss/_common.scss */
 .block-loading .loading-content .loading-text {
   color: #e33f3f;
   font-size: 18px;
   font-weight: 700;
 }
-/* line 133, ../scss/_common.scss */
+/* line 135, ../scss/_common.scss */
 .block-loading .loading-content .loading-wait {
   color: #e33f3f;
   font-size: 12px;
 }
 
-/* line 144, ../scss/_common.scss */
+/* line 146, ../scss/_common.scss */
 #messages-wrapper .message {
   position: relative;
   font-size: 13px;
@@ -8912,56 +7585,56 @@ body.modal-open,
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
-/* line 152, ../scss/_common.scss */
+/* line 154, ../scss/_common.scss */
 #messages-wrapper .message:before {
   content: '';
   position: absolute;
   left: 7px;
   top: 7px;
 }
-/* line 159, ../scss/_common.scss */
+/* line 161, ../scss/_common.scss */
 #messages-wrapper .message.error {
   background: #e52727;
   border: 1px solid #b61313;
 }
-/* line 163, ../scss/_common.scss */
+/* line 165, ../scss/_common.scss */
 #messages-wrapper .message.error:before {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -490px;
-  height: 24px;
-  width: 24px;
-}
-/* line 169, ../scss/_common.scss */
-#messages-wrapper .message.success {
-  background: #3db118;
-  border: 1px solid #37a215;
-}
-/* line 173, ../scss/_common.scss */
-#messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
   background-position: 0 -466px;
   height: 24px;
   width: 24px;
 }
+/* line 171, ../scss/_common.scss */
+#messages-wrapper .message.success {
+  background: #3db118;
+  border: 1px solid #37a215;
+}
+/* line 175, ../scss/_common.scss */
+#messages-wrapper .message.success:before {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -442px;
+  height: 24px;
+  width: 24px;
+}
 
-/* line 182, ../scss/_common.scss */
+/* line 184, ../scss/_common.scss */
 .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -111px;
+  background-position: 0 -122px;
   height: 11px;
   width: 11px;
   padding: 0 3px 0 0;
   vertical-align: middle;
 }
 
-/* line 188, ../scss/_common.scss */
+/* line 190, ../scss/_common.scss */
 .collapsed .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -111px;
+  background-position: -13px -100px;
   height: 11px;
   width: 11px;
 }
@@ -9046,7 +7719,7 @@ select.form-control {
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -181px;
+  background-position: -14px -181px;
   height: 14px;
   width: 14px;
 }
@@ -9054,7 +7727,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -490px;
+  background-position: 0 -466px;
   height: 24px;
   width: 24px;
 }
@@ -9068,7 +7741,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -169px;
+  background-position: 0 -157px;
   height: 12px;
   width: 12px;
 }
@@ -9076,7 +7749,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -466px;
+  background-position: 0 -442px;
   height: 24px;
   width: 24px;
 }
@@ -9126,7 +7799,7 @@ input[type="checkbox"] {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -350px;
+  background-position: 0 -372px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9358,7 +8031,7 @@ input[type="checkbox"] {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -212px;
+  background-position: 0 -210px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9424,7 +8097,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -514px;
+  background-position: 0 -682px;
   height: 24px;
   width: 18px;
 }
@@ -9440,7 +8113,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -586px;
+  background-position: 0 -538px;
   height: 24px;
   width: 18px;
 }
@@ -9448,7 +8121,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -562px;
+  background-position: 0 -730px;
   height: 24px;
   width: 18px;
 }
@@ -9456,7 +8129,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -658px;
+  background-position: 0 -490px;
   height: 24px;
   width: 18px;
 }
@@ -9464,7 +8137,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -538px;
+  background-position: 0 -586px;
   height: 24px;
   width: 18px;
 }
@@ -9472,7 +8145,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -634px;
+  background-position: 0 -658px;
   height: 24px;
   width: 18px;
 }
@@ -9480,7 +8153,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -610px;
+  background-position: 0 -562px;
   height: 24px;
   width: 18px;
 }
@@ -9488,19 +8161,35 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -682px;
+  background-position: 0 -610px;
   height: 24px;
   width: 18px;
 }
 
-/* line 172, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-clear:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -514px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 29, ../scss/_mixins.scss */
+.btn-download:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -634px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 180, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 178, ../scss/blocks/_buttons.scss */
+/* line 186, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9514,35 +8203,35 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -89px;
+  background-position: -12px -89px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -89px;
+  background-position: 0 -89px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-copy:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -145px;
+  background-position: -11px -122px;
   height: 11px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -157px;
+  background-position: -12px -169px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -157px;
+  background-position: -12px -157px;
   height: 12px;
   width: 12px;
 }
@@ -9553,21 +8242,21 @@ input[type="checkbox"] {
   height: 9px;
   width: 12px;
 }
-/* line 206, ../scss/blocks/_buttons.scss */
+/* line 214, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -196px;
+  background-position: 0 -195px;
   height: 13px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -78px;
+  background-position: 0 -100px;
   height: 11px;
   width: 13px;
 }
@@ -9581,21 +8270,21 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: -13px -100px;
+  background-position: 0 -111px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -100px;
+  background-position: -10px -78px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -169px;
+  background-position: -10px -145px;
   height: 12px;
   width: 12px;
 }
@@ -9609,12 +8298,12 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -122px;
+  background-position: -11px -111px;
   height: 11px;
   width: 11px;
 }
 
-/* line 237, ../scss/blocks/_buttons.scss */
+/* line 245, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9639,7 +8328,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 254, ../scss/blocks/_buttons.scss */
+/* line 262, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9651,25 +8340,25 @@ input[type="checkbox"] {
   left: 6px;
   top: 7px;
 }
-/* line 262, ../scss/blocks/_buttons.scss */
+/* line 270, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 268, ../scss/blocks/_buttons.scss */
+/* line 276, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 272, ../scss/blocks/_buttons.scss */
+/* line 280, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 279, ../scss/blocks/_buttons.scss */
+/* line 287, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9681,18 +8370,18 @@ input[type="checkbox"] {
   cursor: pointer;
   width: 76px;
 }
-/* line 290, ../scss/blocks/_buttons.scss */
+/* line 298, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 292, ../scss/blocks/_buttons.scss */
+/* line 300, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 298, ../scss/blocks/_buttons.scss */
+/* line 306, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9700,44 +8389,44 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
 }
-/* line 306, ../scss/blocks/_buttons.scss */
+/* line 314, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 312, ../scss/blocks/_buttons.scss */
+/* line 320, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 317, ../scss/blocks/_buttons.scss */
+/* line 325, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -793px;
+  background-position: 0 -867px;
   height: 28px;
   width: 21px;
 }
-/* line 323, ../scss/blocks/_buttons.scss */
+/* line 331, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -765px;
+  background-position: 0 -839px;
   height: 28px;
   width: 21px;
 }
-/* line 329, ../scss/blocks/_buttons.scss */
+/* line 337, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -821px;
+  background-position: 0 -895px;
   height: 28px;
   width: 21px;
 }
-/* line 334, ../scss/blocks/_buttons.scss */
+/* line 342, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 340, ../scss/blocks/_buttons.scss */
+/* line 348, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -10074,6 +8763,72 @@ input[type="checkbox"] {
   background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
 }
 
+/* line 123, ../scss/blocks/_tables.scss */
+.colored-parent-table > thead > tr > th {
+  color: #ececec;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
+  box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1464095855') repeat-x 0 0;
+  border: 1px solid #1d76c0;
+  border-left: 0;
+  border-top: solid 1px #1d76c0;
+  padding: 8px 10px;
+}
+/* line 133, ../scss/blocks/_tables.scss */
+.colored-parent-table > thead > tr > th:first-child {
+  border-left: 1px solid #1d76c0;
+}
+/* line 137, ../scss/blocks/_tables.scss */
+.colored-parent-table > thead > tr > th.text-left {
+  text-align: left;
+}
+/* line 149, ../scss/blocks/_tables.scss */
+.colored-parent-table > caption + thead > tr:first-child > th,
+.colored-parent-table > colgroup + thead > tr:first-child > th,
+.colored-parent-table > thead:first-child > tr:first-child > th {
+  border-top: solid 1px #1d76c0;
+}
+/* line 155, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody {
+  border-right: 1px solid #ccc;
+}
+/* line 158, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr {
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+}
+/* line 161, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr > td {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #f5f5f5;
+  color: #3c3f43;
+  padding: 8px 5px;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
+}
+/* line 171, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr > td:first-child {
+  border-left: 1px solid #1d76c0;
+}
+/* line 175, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr > td a {
+  text-decoration: underline;
+}
+/* line 178, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr > td a.btn {
+  text-decoration: none;
+}
+/* line 182, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr > td a:hover {
+  text-decoration: none;
+}
+/* line 190, ../scss/blocks/_tables.scss */
+.colored-parent-table > tbody > tr:nth-child(2n+1) {
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+}
+
 /* line 1, ../scss/blocks/_statuses.scss */
 .status {
   color: #fff;
@@ -10195,7 +8950,7 @@ input[type="checkbox"] {
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -246px;
+  background-position: 0 -268px;
   height: 20px;
   width: 20px;
 }
@@ -10204,7 +8959,7 @@ input[type="checkbox"] {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -287px;
+  background-position: 0 -288px;
   height: 21px;
   width: 21px;
 }
@@ -10213,9 +8968,50 @@ input[type="checkbox"] {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -266px;
+  background-position: 0 -309px;
   height: 21px;
   width: 21px;
+}
+
+/* line 80, ../scss/blocks/_statuses.scss */
+.text-status-active {
+  color: #47a518;
+}
+
+/* line 83, ../scss/blocks/_statuses.scss */
+.text-status-suspended {
+  color: #d9231f;
+}
+
+/* line 86, ../scss/blocks/_statuses.scss */
+.text-status-success,
+.text-status-pass,
+.text-status-certified {
+  color: #4aa31e;
+}
+
+/* line 91, ../scss/blocks/_statuses.scss */
+.text-status-fail,
+.text-status-testing,
+.text-status-failure {
+  color: #e33f3f;
+}
+
+/* line 96, ../scss/blocks/_statuses.scss */
+.text-status-not_performed,
+.text-status-unverified {
+  color: #666;
+}
+
+/* line 100, ../scss/blocks/_statuses.scss */
+.text-status-warning {
+  color: #CC6600;
+}
+
+/* line 103, ../scss/blocks/_statuses.scss */
+.text-status-duplicate,
+.text-status-ignored {
+  color: #606060;
 }
 
 /* line 1, ../scss/blocks/_colored-box.scss */
@@ -11505,8 +10301,6 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 /* line 5, ../scss/blocks/_pagination.scss */
 .pagination {
   margin: 10px 0;
-  display: inline-block;
-  border: 1px solid #d8d8d8;
   background: #f2f2f2;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U1ZTVlNSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -11519,64 +10313,70 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
   border-radius: 3px;
 }
 /* line 13, ../scss/blocks/_pagination.scss */
-.pagination a {
-  width: 27px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
+.pagination > li > a,
+.pagination > li > span {
+  min-width: 23px;
+  text-align: center;
+  padding: 4px 9px;
   font-weight: 600;
-  float: left;
   color: #2c80e8;
+  font-size: 13px;
+  background: none;
+  border: 1px solid #dcdcdc;
 }
-/* line 23, ../scss/blocks/_pagination.scss */
-.pagination a:hover {
+/* line 25, ../scss/blocks/_pagination.scss */
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -814px;
+  height: 25px;
+  width: 24px;
+  text-indent: -9999px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+/* line 33, ../scss/blocks/_pagination.scss */
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -789px;
+  height: 25px;
+  width: 24px;
+  text-indent: -9999px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+/* line 44, ../scss/blocks/_pagination.scss */
+.pagination > li > a:hover, .pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+  color: #2c80e8;
   background-color: #e9e9e9;
-  text-decoration: none;
+  border-color: #dcdcdc;
 }
-/* line 28, ../scss/blocks/_pagination.scss */
-.pagination a.prev {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -395px;
-  height: 23px;
-  width: 24px;
-  text-indent: -9999px;
-}
-/* line 32, ../scss/blocks/_pagination.scss */
-.pagination a.next {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: 0 -372px;
-  height: 23px;
-  width: 24px;
-  text-indent: -9999px;
-  border-right: none;
-}
-/* line 40, ../scss/blocks/_pagination.scss */
-.pagination .pager-dots {
-  width: 27px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
-  font-weight: 600;
-  float: left;
-  color: #2c80e8;
-}
-/* line 51, ../scss/blocks/_pagination.scss */
-.pagination .current {
-  width: 26px;
-  height: 23px;
-  line-height: 23px;
-  border-right: solid 1px #dcdcdc;
-  font-size: 13px;
-  font-weight: 600;
-  float: left;
+/* line 54, ../scss/blocks/_pagination.scss */
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
+.pagination > .active > span,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+  border-color: #dcdcdc;
   color: #18529b;
-  background: #fff;
+  background-color: transparent;
   -webkit-box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
   box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.4) inset;
+}
+/* line 66, ../scss/blocks/_pagination.scss */
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777777;
+  background-color: transparent;
+  border-color: #dcdcdc;
 }
 
 /* line 1, ../scss/blocks/_mime-types.scss */
@@ -11993,6 +10793,591 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   line-height: 24px;
 }
 
+/*!
+ * Datepicker for Bootstrap v1.7.0-dev (https://github.com/eternicode/bootstrap-datepicker)
+ *
+ * Copyright 2012 Stefan Petre
+ * Improvements by Andrew Rowls
+ * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ */
+/* line 9, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker {
+  padding: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  direction: ltr;
+}
+
+/* line 16, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-inline {
+  width: 220px;
+}
+
+/* line 19, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker.datepicker-rtl {
+  direction: rtl;
+}
+
+/* line 22, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker.datepicker-rtl table tr td span {
+  float: right;
+}
+
+/* line 25, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown {
+  top: 0;
+  left: 0;
+}
+
+/* line 29, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown:before {
+  content: '';
+  display: inline-block;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #999;
+  border-top: 0;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+}
+
+/* line 39, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown:after {
+  content: '';
+  display: inline-block;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #fff;
+  border-top: 0;
+  position: absolute;
+}
+
+/* line 48, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-left:before {
+  left: 6px;
+}
+
+/* line 51, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-left:after {
+  left: 7px;
+}
+
+/* line 54, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-right:before {
+  right: 6px;
+}
+
+/* line 57, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-right:after {
+  right: 7px;
+}
+
+/* line 60, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-bottom:before {
+  top: -7px;
+}
+
+/* line 63, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-bottom:after {
+  top: -6px;
+}
+
+/* line 66, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-top:before {
+  bottom: -7px;
+  border-bottom: 0;
+  border-top: 7px solid #999;
+}
+
+/* line 71, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker-dropdown.datepicker-orient-top:after {
+  bottom: -6px;
+  border-bottom: 0;
+  border-top: 6px solid #fff;
+}
+
+/* line 76, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table {
+  margin: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* line 85, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker td,
+.datepicker th {
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+}
+
+/* line 95, ../scss/blocks/_bootstrap-datepicker.scss */
+.table-striped .datepicker table tr td,
+.table-striped .datepicker table tr th {
+  background-color: transparent;
+}
+
+/* line 99, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.day:hover,
+.datepicker table tr td.day.focused {
+  background: #eee;
+  cursor: pointer;
+}
+
+/* line 104, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.old,
+.datepicker table tr td.new {
+  color: #999;
+}
+
+/* line 108, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover {
+  background: none;
+  color: #999;
+  cursor: default;
+}
+
+/* line 114, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.highlighted {
+  background: #d9edf7;
+  border-radius: 0;
+}
+
+/* line 118, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.today,
+.datepicker table tr td.today:hover,
+.datepicker table tr td.today.disabled,
+.datepicker table tr td.today.disabled:hover {
+  background-color: #fde19a;
+  background-image: -moz-linear-gradient(to bottom, #fdd49a, #fdf59a);
+  background-image: -ms-linear-gradient(to bottom, #fdd49a, #fdf59a);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fdd49a), to(#fdf59a));
+  background-image: -webkit-linear-gradient(to bottom, #fdd49a, #fdf59a);
+  background-image: -o-linear-gradient(to bottom, #fdd49a, #fdf59a);
+  background-image: linear-gradient(to bottom, #fdd49a, #fdf59a);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdd49a', endColorstr='#fdf59a', GradientType=0);
+  border-color: #fdf59a #fdf59a #fbed50;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #000;
+}
+
+/* line 136, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.today:hover,
+.datepicker table tr td.today:hover:hover,
+.datepicker table tr td.today.disabled:hover,
+.datepicker table tr td.today.disabled:hover:hover,
+.datepicker table tr td.today:active,
+.datepicker table tr td.today:hover:active,
+.datepicker table tr td.today.disabled:active,
+.datepicker table tr td.today.disabled:hover:active,
+.datepicker table tr td.today.active,
+.datepicker table tr td.today:hover.active,
+.datepicker table tr td.today.disabled.active,
+.datepicker table tr td.today.disabled:hover.active,
+.datepicker table tr td.today.disabled,
+.datepicker table tr td.today:hover.disabled,
+.datepicker table tr td.today.disabled.disabled,
+.datepicker table tr td.today.disabled:hover.disabled,
+.datepicker table tr td.today[disabled],
+.datepicker table tr td.today:hover[disabled],
+.datepicker table tr td.today.disabled[disabled],
+.datepicker table tr td.today.disabled:hover[disabled] {
+  background-color: #fdf59a;
+}
+
+/* line 158, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.today:active,
+.datepicker table tr td.today:hover:active,
+.datepicker table tr td.today.disabled:active,
+.datepicker table tr td.today.disabled:hover:active,
+.datepicker table tr td.today.active,
+.datepicker table tr td.today:hover.active,
+.datepicker table tr td.today.disabled.active,
+.datepicker table tr td.today.disabled:hover.active {
+  background-color: #fbf069 \9;
+}
+
+/* line 168, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.today:hover:hover {
+  color: #000;
+}
+
+/* line 171, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.today.active:hover {
+  color: #fff;
+}
+
+/* line 174, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.range,
+.datepicker table tr td.range:hover,
+.datepicker table tr td.range.disabled,
+.datepicker table tr td.range.disabled:hover {
+  background: #eee;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+/* line 183, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.range.today,
+.datepicker table tr td.range.today:hover,
+.datepicker table tr td.range.today.disabled,
+.datepicker table tr td.range.today.disabled:hover {
+  background-color: #f3d17a;
+  background-image: -moz-linear-gradient(to bottom, #f3c17a, #f3e97a);
+  background-image: -ms-linear-gradient(to bottom, #f3c17a, #f3e97a);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f3c17a), to(#f3e97a));
+  background-image: -webkit-linear-gradient(to bottom, #f3c17a, #f3e97a);
+  background-image: -o-linear-gradient(to bottom, #f3c17a, #f3e97a);
+  background-image: linear-gradient(to bottom, #f3c17a, #f3e97a);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3c17a', endColorstr='#f3e97a', GradientType=0);
+  border-color: #f3e97a #f3e97a #edde34;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+/* line 203, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.range.today:hover,
+.datepicker table tr td.range.today:hover:hover,
+.datepicker table tr td.range.today.disabled:hover,
+.datepicker table tr td.range.today.disabled:hover:hover,
+.datepicker table tr td.range.today:active,
+.datepicker table tr td.range.today:hover:active,
+.datepicker table tr td.range.today.disabled:active,
+.datepicker table tr td.range.today.disabled:hover:active,
+.datepicker table tr td.range.today.active,
+.datepicker table tr td.range.today:hover.active,
+.datepicker table tr td.range.today.disabled.active,
+.datepicker table tr td.range.today.disabled:hover.active,
+.datepicker table tr td.range.today.disabled,
+.datepicker table tr td.range.today:hover.disabled,
+.datepicker table tr td.range.today.disabled.disabled,
+.datepicker table tr td.range.today.disabled:hover.disabled,
+.datepicker table tr td.range.today[disabled],
+.datepicker table tr td.range.today:hover[disabled],
+.datepicker table tr td.range.today.disabled[disabled],
+.datepicker table tr td.range.today.disabled:hover[disabled] {
+  background-color: #f3e97a;
+}
+
+/* line 225, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.range.today:active,
+.datepicker table tr td.range.today:hover:active,
+.datepicker table tr td.range.today.disabled:active,
+.datepicker table tr td.range.today.disabled:hover:active,
+.datepicker table tr td.range.today.active,
+.datepicker table tr td.range.today:hover.active,
+.datepicker table tr td.range.today.disabled.active,
+.datepicker table tr td.range.today.disabled:hover.active {
+  background-color: #efe24b \9;
+}
+
+/* line 235, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.selected,
+.datepicker table tr td.selected:hover,
+.datepicker table tr td.selected.disabled,
+.datepicker table tr td.selected.disabled:hover {
+  background-color: #9e9e9e;
+  background-image: -moz-linear-gradient(to bottom, #b3b3b3, #808080);
+  background-image: -ms-linear-gradient(to bottom, #b3b3b3, #808080);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b3b3b3), to(#808080));
+  background-image: -webkit-linear-gradient(to bottom, #b3b3b3, #808080);
+  background-image: -o-linear-gradient(to bottom, #b3b3b3, #808080);
+  background-image: linear-gradient(to bottom, #b3b3b3, #808080);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3b3b3', endColorstr='#808080', GradientType=0);
+  border-color: #808080 #808080 #595959;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* line 254, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.selected:hover,
+.datepicker table tr td.selected:hover:hover,
+.datepicker table tr td.selected.disabled:hover,
+.datepicker table tr td.selected.disabled:hover:hover,
+.datepicker table tr td.selected:active,
+.datepicker table tr td.selected:hover:active,
+.datepicker table tr td.selected.disabled:active,
+.datepicker table tr td.selected.disabled:hover:active,
+.datepicker table tr td.selected.active,
+.datepicker table tr td.selected:hover.active,
+.datepicker table tr td.selected.disabled.active,
+.datepicker table tr td.selected.disabled:hover.active,
+.datepicker table tr td.selected.disabled,
+.datepicker table tr td.selected:hover.disabled,
+.datepicker table tr td.selected.disabled.disabled,
+.datepicker table tr td.selected.disabled:hover.disabled,
+.datepicker table tr td.selected[disabled],
+.datepicker table tr td.selected:hover[disabled],
+.datepicker table tr td.selected.disabled[disabled],
+.datepicker table tr td.selected.disabled:hover[disabled] {
+  background-color: #808080;
+}
+
+/* line 276, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.selected:active,
+.datepicker table tr td.selected:hover:active,
+.datepicker table tr td.selected.disabled:active,
+.datepicker table tr td.selected.disabled:hover:active,
+.datepicker table tr td.selected.active,
+.datepicker table tr td.selected:hover.active,
+.datepicker table tr td.selected.disabled.active,
+.datepicker table tr td.selected.disabled:hover.active {
+  background-color: #666666 \9;
+}
+
+/* line 286, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.active,
+.datepicker table tr td.active:hover,
+.datepicker table tr td.active.disabled,
+.datepicker table tr td.active.disabled:hover {
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -ms-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#0044cc));
+  background-image: -webkit-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -o-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* line 305, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.active:hover,
+.datepicker table tr td.active:hover:hover,
+.datepicker table tr td.active.disabled:hover,
+.datepicker table tr td.active.disabled:hover:hover,
+.datepicker table tr td.active:active,
+.datepicker table tr td.active:hover:active,
+.datepicker table tr td.active.disabled:active,
+.datepicker table tr td.active.disabled:hover:active,
+.datepicker table tr td.active.active,
+.datepicker table tr td.active:hover.active,
+.datepicker table tr td.active.disabled.active,
+.datepicker table tr td.active.disabled:hover.active,
+.datepicker table tr td.active.disabled,
+.datepicker table tr td.active:hover.disabled,
+.datepicker table tr td.active.disabled.disabled,
+.datepicker table tr td.active.disabled:hover.disabled,
+.datepicker table tr td.active[disabled],
+.datepicker table tr td.active:hover[disabled],
+.datepicker table tr td.active.disabled[disabled],
+.datepicker table tr td.active.disabled:hover[disabled] {
+  background-color: #0044cc;
+}
+
+/* line 327, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td.active:active,
+.datepicker table tr td.active:hover:active,
+.datepicker table tr td.active.disabled:active,
+.datepicker table tr td.active.disabled:hover:active,
+.datepicker table tr td.active.active,
+.datepicker table tr td.active:hover.active,
+.datepicker table tr td.active.disabled.active,
+.datepicker table tr td.active.disabled:hover.active {
+  background-color: #003399 \9;
+}
+
+/* line 337, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span {
+  display: block;
+  width: 23%;
+  height: 54px;
+  line-height: 54px;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/* line 349, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span:hover,
+.datepicker table tr td span.focused {
+  background: #eee;
+}
+
+/* line 353, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span.disabled,
+.datepicker table tr td span.disabled:hover {
+  background: none;
+  color: #999;
+  cursor: default;
+}
+
+/* line 359, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span.active,
+.datepicker table tr td span.active:hover,
+.datepicker table tr td span.active.disabled,
+.datepicker table tr td span.active.disabled:hover {
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -ms-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#0044cc));
+  background-image: -webkit-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: -o-linear-gradient(to bottom, #08c, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#08c', endColorstr='#0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* line 378, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span.active:hover,
+.datepicker table tr td span.active:hover:hover,
+.datepicker table tr td span.active.disabled:hover,
+.datepicker table tr td span.active.disabled:hover:hover,
+.datepicker table tr td span.active:active,
+.datepicker table tr td span.active:hover:active,
+.datepicker table tr td span.active.disabled:active,
+.datepicker table tr td span.active.disabled:hover:active,
+.datepicker table tr td span.active.active,
+.datepicker table tr td span.active:hover.active,
+.datepicker table tr td span.active.disabled.active,
+.datepicker table tr td span.active.disabled:hover.active,
+.datepicker table tr td span.active.disabled,
+.datepicker table tr td span.active:hover.disabled,
+.datepicker table tr td span.active.disabled.disabled,
+.datepicker table tr td span.active.disabled:hover.disabled,
+.datepicker table tr td span.active[disabled],
+.datepicker table tr td span.active:hover[disabled],
+.datepicker table tr td span.active.disabled[disabled],
+.datepicker table tr td span.active.disabled:hover[disabled] {
+  background-color: #0044cc;
+}
+
+/* line 400, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span.active:active,
+.datepicker table tr td span.active:hover:active,
+.datepicker table tr td span.active.disabled:active,
+.datepicker table tr td span.active.disabled:hover:active,
+.datepicker table tr td span.active.active,
+.datepicker table tr td span.active:hover.active,
+.datepicker table tr td span.active.disabled.active,
+.datepicker table tr td span.active.disabled:hover.active {
+  background-color: #003399 \9;
+}
+
+/* line 410, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker table tr td span.old,
+.datepicker table tr td span.new {
+  color: #999;
+}
+
+/* line 414, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker .datepicker-switch {
+  width: 145px;
+}
+
+/* line 417, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker .datepicker-switch,
+.datepicker .prev,
+.datepicker .next,
+.datepicker tfoot tr th {
+  cursor: pointer;
+}
+
+/* line 423, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker .datepicker-switch:hover,
+.datepicker .prev:hover,
+.datepicker .next:hover,
+.datepicker tfoot tr th:hover {
+  background: #eee;
+}
+
+/* line 429, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker .prev.disabled,
+.datepicker .next.disabled {
+  visibility: hidden;
+}
+
+/* line 433, ../scss/blocks/_bootstrap-datepicker.scss */
+.datepicker .cw {
+  font-size: 10px;
+  width: 12px;
+  padding: 0 2px 0 5px;
+  vertical-align: middle;
+}
+
+/* line 439, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-append.date .add-on,
+.input-prepend.date .add-on {
+  cursor: pointer;
+}
+
+/* line 443, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+  margin-top: 3px;
+}
+
+/* line 447, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-daterange input {
+  text-align: center;
+}
+
+/* line 450, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-daterange input:first-child {
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+/* line 455, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-daterange input:last-child {
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+
+/* line 460, ../scss/blocks/_bootstrap-datepicker.scss */
+.input-daterange .add-on {
+  display: inline-block;
+  width: auto;
+  min-width: 16px;
+  height: 18px;
+  padding: 4px 5px;
+  font-weight: normal;
+  line-height: 18px;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff;
+  vertical-align: middle;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+/*# sourceMappingURL=bootstrap-datepicker.css.map */
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -12179,7 +11564,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -212px;
+  background-position: 0 -754px;
   height: 16px;
   width: 16px;
 }
@@ -12187,7 +11572,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -196px;
+  background-position: -11px -210px;
   height: 16px;
   width: 16px;
 }
@@ -12205,7 +11590,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -730px;
+  background-position: -16px -754px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -12276,7 +11661,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -228px;
+  background-position: 0 -250px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -12806,7 +12191,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -849px;
+  background-position: 0 -923px;
   height: 29px;
   width: 29px;
   content: '';
@@ -12900,7 +12285,7 @@ input.notify-changes {
 .community-downloads .form-actions .add-new-download-link:before, .community-forums .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -14px -181px;
+  background-position: -12px -195px;
   height: 15px;
   width: 15px;
   content: '';
@@ -12927,7 +12312,7 @@ input.notify-changes {
 .community-downloads .download-license-red:before, .community-forums .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -329px;
+  background-position: 0 -351px;
   height: 21px;
   width: 18px;
 }
@@ -12939,7 +12324,7 @@ input.notify-changes {
 .community-downloads .download-license-green:before, .community-forums .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -308px;
+  background-position: 0 -330px;
   height: 21px;
   width: 18px;
 }
@@ -13127,6 +12512,130 @@ input.notify-changes {
 /* line 54, ../scss/pages/_forum.scss */
 .topic-description {
   margin: 0 0 20px 0;
+}
+
+/* line 3, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+/* line 9, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content {
+  border: 1px solid #d7d7d7;
+  padding: 11px 20px 0 20px;
+}
+/* line 13, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content .calendar-icon {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -181px;
+  height: 14px;
+  width: 14px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+/* line 19, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content label {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 1px 0;
+  line-height: normal;
+}
+/* line 27, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content select option {
+  padding: 3px 5px;
+}
+/* line 32, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content #filterDate[readonly] {
+  background: #fff;
+}
+/* line 36, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-content .clear-filter {
+  position: absolute;
+  color: #e33f3f;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  font-size: 10px;
+  font-weight: bold;
+  right: -4px;
+  top: 18px;
+  line-height: 28px;
+  display: block;
+  padding: 0 4px;
+  cursor: pointer;
+}
+/* line 52, ../scss/pages/_transaction-log.scss */
+.transaction-filter .transaction-filter-footer {
+  margin: 15px -20px 0 -20px;
+  background-color: #f0f0f0;
+  border-top: 1px solid #d7d7d7;
+  padding: 9px 20px;
+  overflow: hidden;
+}
+
+/* line 62, ../scss/pages/_transaction-log.scss */
+.transaction-list-actions {
+  padding: 10px 0;
+  *zoom: 1;
+}
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+.transaction-list-actions:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* line 67, ../scss/pages/_transaction-log.scss */
+.log-results-table-wrapper {
+  border-bottom: 1px solid #1d76c0;
+}
+/* line 70, ../scss/pages/_transaction-log.scss */
+.log-results-table-wrapper table {
+  margin: 0;
+}
+/* line 74, ../scss/pages/_transaction-log.scss */
+.log-results-table-wrapper .block-loading-wrapper {
+  min-height: 90px;
+}
+
+/* line 81, ../scss/pages/_transaction-log.scss */
+.log-results-table > tbody > tr > td {
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+}
+/* line 84, ../scss/pages/_transaction-log.scss */
+.log-results-table > tbody > tr:nth-child(4n-1) > td,
+.log-results-table > tbody > tr:nth-child(4n+4) > td {
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+}
+/* line 88, ../scss/pages/_transaction-log.scss */
+.log-results-table > tbody > tr > td:last-child {
+  border-right: 1px solid #1d76c0;
+}
+/* line 94, ../scss/pages/_transaction-log.scss */
+.log-results-table .product-name .product-collapse-link {
+  float: left;
+}
+/* line 97, ../scss/pages/_transaction-log.scss */
+.log-results-table .product-name .product-name-link {
+  display: block;
+  overflow: hidden;
+  margin: 0 0 0 15px;
+}
+
+/* line 107, ../scss/pages/_transaction-log.scss */
+.log-results-sub-table > thead > tr > th {
+  padding: 5px;
+}
+/* line 113, ../scss/pages/_transaction-log.scss */
+.log-results-sub-table > tbody > tr > td {
+  text-align: center;
+  padding: 5px;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  vertical-align: middle;
+}
+/* line 120, ../scss/pages/_transaction-log.scss */
+.log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 
 /* line 3, ../scss/_header.scss */
@@ -13787,7 +13296,7 @@ input.notify-changes {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -878px;
+  background-position: -12px -226px;
   height: 24px;
   width: 12px;
 }
@@ -13799,7 +13308,7 @@ input.notify-changes {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -878px;
+  background-position: 0 -226px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -13882,7 +13391,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -418px;
+  background-position: 0 -394px;
   height: 24px;
   width: 28px;
 }
@@ -13897,7 +13406,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -442px;
+  background-position: 0 -418px;
   height: 24px;
   width: 28px;
 }

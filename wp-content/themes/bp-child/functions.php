@@ -1505,8 +1505,11 @@ function generate_and_download_site( $data ){
     exit();
 }
 
-function doesUserAdminInAnyCommunity( $user_id, $communitiesList = false  ){
+function doesUserAdminInAnyCommunity( $user_id = false, $communitiesList = false  ){
     global $wpdb;
+    if(!$user_id){
+        $user_id = get_current_user_id();
+    }
     $communities_ids = $wpdb->get_results("SELECT id FROM communities");
     foreach( $communities_ids AS $communities_id ){
         if( ! $communitiesList ){
@@ -1522,8 +1525,11 @@ function doesUserAdminInAnyCommunity( $user_id, $communitiesList = false  ){
     return false;
 }
 
-function doesUserSupportInAnyCommunity( $user_id, $communitiesList = false  ){
+function doesUserSupportInAnyCommunity( $user_id = false, $communitiesList = false  ){
     global $wpdb;
+    if(!$user_id){
+        $user_id = get_current_user_id();
+    }
     $communities_ids = $wpdb->get_results("SELECT id FROM communities");
     foreach( $communities_ids AS $communities_id ){
         if( ! $communitiesList ){

@@ -158,6 +158,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\WordpressServiceProvider::class,
+        App\Providers\CheckRoleServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,

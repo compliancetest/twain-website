@@ -1,23 +1,14 @@
-<div class="popup-box" id="view-validation-log-box" style="display: none; width: 500px;">
-    <div class="popup-box-header radius6 noradiusbottom">Message Data</div>
-    <div class="popup-box-content">
-        <div class="space10"></div>
-        <div class="grid-box table-box">
-           <div class="grid-box-body">
-               <div id="data"></div>
-           </div>
-       </div>
-       <div class="space10"></div>
-    </div>
-    <div class="popup-box-footer radius6 noradiustop">
-        <a href="#" cp-type="inline"  class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
-        <a href="{{ $link }}" target="_blank" class="action-btn download-btn"><span class="p"></span><span class="t">Download</span></a>
-
-        <div class="clear"></div>
-    </div>
-    <a class="close_btn"></a>
+<div class="modal-header">
+    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
+    Message Data
 </div>
-
+<div class="modal-body">
+    <div id="data"></div>
+</div>
+<div class="modal-footer">
+    <a href="{{ $link }}" target="_blank" class="btn btn-success btn-with-icon btn-download">Download</a>
+    <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default btn-with-icon btn-cancel">Close</button>
+</div>
 <script type="text/javascript">
     var t_data = Jsonary.create({!! $data !!}).readOnlyCopy();
     var t_element = document.getElementById('data');

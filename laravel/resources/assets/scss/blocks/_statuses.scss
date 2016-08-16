@@ -77,3 +77,30 @@
   @include iconsSprite(item-invalid);
 }
 
+.text-status-active{
+  color: #47a518;
+}
+.text-status-suspended{
+  color: #d9231f;
+}
+.text-status-success,
+.text-status-pass,
+.text-status-certified{
+  color: #4aa31e;
+}
+.text-status-fail,
+.text-status-testing,
+.text-status-failure{
+  color: #e33f3f;
+}
+.text-status-not_performed,
+.text-status-unverified{
+  color: #666;
+}
+.text-status-warning{
+  color: #CC6600;
+}
+.text-status-duplicate,
+.text-status-ignored {
+  color: #606060;
+}

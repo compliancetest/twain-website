@@ -115,3 +115,81 @@
         }
     }
 }
+
+.colored-parent-table{
+    > thead{
+        >tr{
+
+            > th{
+                color: #ececec;
+                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+                @include box-shadow(0 1px 2px 0 rgba(255, 255, 255, 0.4) inset);
+                background: #1f7ac7 image-url('separate-bg/blue-table-header.png') repeat-x 0 0;
+                border: 1px solid #1d76c0;
+                border-left: 0;
+                border-top: solid 1px #1d76c0;
+                padding: 8px 10px;
+
+                &:first-child{
+                    border-left: 1px solid #1d76c0;
+                }
+
+                &.text-left{
+                    text-align: left;
+                }
+            }
+
+        }
+    }
+
+    > caption + thead,
+    > colgroup + thead,
+    > thead:first-child {
+        > tr:first-child {
+            > th{
+                border-top: solid 1px #1d76c0;
+            }
+        }
+    }
+
+    > tbody{
+        border-right: 1px solid #ccc;
+
+        > tr{
+            background: #eee image-url('separate-bg/table-tr-bg-odd.png') repeat 0 0;
+
+            > td{
+                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+                border-top: 1px solid #f5f5f5;
+                color: #3c3f43;
+                padding: 8px 5px;
+                font-size: 11px;
+                font-weight: 600;
+                text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
+
+                &:first-child{
+                    border-left: 1px solid #1d76c0;
+                }
+
+                a{
+                    text-decoration: underline;
+
+                    &.btn{
+                        text-decoration: none;
+                    }
+
+                    &:hover{
+                        text-decoration: none;
+                    }
+                }
+            }
+
+        }
+
+        > tr:nth-child(2n+1){
+            background: #d9d9d9 image-url('separate-bg/table-tr-bg-even.png') repeat 0 0;
+        }
+    }
+
+}
