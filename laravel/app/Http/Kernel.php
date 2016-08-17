@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
         'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
         'community.mod' => \App\Http\Middleware\CommunitySupport::class,
         'community.user' => \App\Http\Middleware\CommunityUser::class,
+        'api.logs' => \App\Http\Middleware\LogAfterRequest::class,
 
         'simpleauth' => \App\Http\Middleware\SimpleAuth::class,
         'organisation.member' => \App\Http\Middleware\OrganisationMember::class,
