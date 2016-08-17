@@ -1,6 +1,6 @@
 <?php
 
-Route::group(array('prefix' => 'api/v1'), function () {
+Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function () {
 
     Route::post('echo', ['uses' => '\App\Api\Controllers\EchoController@index']);
 
