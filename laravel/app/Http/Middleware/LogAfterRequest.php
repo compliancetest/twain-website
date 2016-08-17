@@ -18,7 +18,7 @@ class LogAfterRequest
     {
         ApiLog::create([
             'user_id' => Auth::user()->ID,
-            'ip_address' => $request->ip(),
+            'ip_address' => $request->getClientIp(),
             'request_type' => $request->method(),
             'uri' => $request->path(),
             'request' => json_encode($request->all(), JSON_PRETTY_PRINT),
