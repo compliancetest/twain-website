@@ -82,7 +82,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="5" class="empty-row ">No file uploaded yet</td>
+                        <td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row ">No file uploaded yet</td>
                     </tr>
                 @endif
                 </tbody>
