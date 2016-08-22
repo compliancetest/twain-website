@@ -19,4 +19,13 @@ class ClaimTransactions extends Model
     {
         return $this->belongsTo('App\Claim');
     }
+
+    /**
+     * Each record related to transaction entry
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function transaction()
+    {
+        return $this->belongsTo('App\Transaction');
+    }
 }
