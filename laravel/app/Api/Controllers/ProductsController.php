@@ -144,6 +144,17 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
+     * @apiErrorExample {json} No subscription with provided Product Type:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Please subscribe to Test Suite with '{Application|DataSource}' Product Type"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
      * @apiErrorExample {json} Permissions error:
      * {
      *    "errors": {

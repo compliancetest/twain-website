@@ -424,6 +424,11 @@ define({ "api": [
           "type": "json"
         },
         {
+          "title": "No subscription with provided Product Type:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Please subscribe to Test Suite with '{Application|DataSource}' Product Type\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Permissions error:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n         \"This product was created by another user!\"\n     ]\n   },\n   \"code\": 403\n }",
           "type": "json"
