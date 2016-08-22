@@ -55,6 +55,7 @@ class Kernel extends HttpKernel
 
         'simpleauth' => \App\Http\Middleware\SimpleAuth::class,
         'organisation.member' => \App\Http\Middleware\OrganisationMember::class,
+        'organisation.subscriptions.product_type' => \App\Http\Middleware\DoesUserHasSubscriptionToProductType::class,
         'post.product.exist' => \App\Http\Middleware\PostExists::class,
     ];
 }
