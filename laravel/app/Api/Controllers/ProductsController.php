@@ -238,7 +238,7 @@ class ProductsController extends BaseApiController
              */
             $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
 
-            if (empty($testSuiteSupportedProtocols) || !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+            if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
                 continue;
             }
             foreach (explode(',', $attributes->value) as $level) {
