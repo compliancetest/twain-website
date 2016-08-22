@@ -107,30 +107,6 @@ class Claim extends Model
         // define active area for signature appearance
         $pdf->setSignatureAppearance(45, 72, 121, 29);
 
-        // Print text using writeHTMLCell()
-        $pdf->writeHTMLCell('', '', '', '', view('pages.my.claims._cert_info')->with([
-            'product' => Post::find($this->product_id),
-            'testSuite' => Post::find($this->test_suite_id),
-            'claim' => $this,
-        ])->render(), 0, 1, 0, true, '', true);
-
-        // Styles for QR code
-        $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
-
-        // QRCODE,H : QR-CODE Best error correction
-        $pdf->write2DBarcode(getSiteUrl() . '/claims/' . $this->id . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
-
-        $link = '<div style="text-align:center;"><a href="' . $this->getPdfUrl() . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . $this->getPdfUrl() . '</a></div>';
-
-        $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
-
-        $pdf->SetMargins(3.8, 24.5, 3.8, true);
-
-        // Add a page
-        $pdf->AddPage();
-
-        $pdf->setTextShadow(array('enabled' => false));
-
         $testSuite = TestSuite::find($this->test_suite_id);
         $testPlan = TestPlan::find($this->test_plan_id);
 
@@ -162,6 +138,34 @@ class Claim extends Model
             }
 
         }
+
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell('', '', '', '', view('pages.my.claims._cert_info')->with([
+            'product' => Post::find($this->product_id),
+            'testSuite' => Post::find($this->test_suite_id),
+            'claim' => $this,
+            'passCount' => count($generalCases),
+            'excludeCount' => count($excludedCases),
+            'skipCount' => count($skippedCases),
+            'totalCount' => count($skippedCases) + count($excludedCases) + count($generalCases),
+        ])->render(), 0, 1, 0, true, '', true);
+
+        // Styles for QR code
+        $style = array('border' => false, 'padding' => 0, 'vpadding' => 10, 'fgcolor' => array(0, 0, 0), 'position' => 'C');
+
+        // QRCODE,H : QR-CODE Best error correction
+        $pdf->write2DBarcode(getSiteUrl() . '/claims/' . $this->id . ".pdf", 'QRCODE,H', '', '', 40, 40, $style, 'N');
+
+        $link = '<div style="text-align:center;"><a href="' . $this->getPdfUrl() . '" target="_blank" style="font-size:13pt; text-decoration:none;">' . $this->getPdfUrl() . '</a></div>';
+
+        $pdf->writeHTMLCell(0, 0, '', '', $link, 0, 1, 0, true, '', true);
+
+        $pdf->SetMargins(3.8, 24.5, 3.8, true);
+
+        // Add a page
+        $pdf->AddPage();
+
+        $pdf->setTextShadow(array('enabled' => false));
 
         $pdf->SetFont('opensans', '', 13, '', true);
 
