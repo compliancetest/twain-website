@@ -376,7 +376,12 @@ function can_view_product( $product, $has_edit_access ){
         }
     }
     if( $product->visibility == 'Private' ){
-        if(get_post( $product->id )->post_author == get_current_user_id() ||  is_super_admin()){
+        $postAuthorId = get_post( $product->id )->post_author;
+        $currentUserId = get_current_user_id();
+
+        $postAuthorOrganisation = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_members WHERE user_id = %d", $postAuthorId));
+        $currentUserOrganisation = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_organisations_members WHERE user_id = %d", $currentUserId));
+        if( $postAuthorId == $currentUserId ||  is_super_admin() || $postAuthorOrganisation->organisation_id == $currentUserOrganisation->organisation_id){
             return true;
         }
     }

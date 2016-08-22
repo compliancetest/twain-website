@@ -59,7 +59,6 @@
                             <li>Manufacturer: <strong><?php echo ctE($product->manufacturer); ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                             <li>Version: <strong><?php echo ctE($product->version); ?></strong></li>
-                            <!--<li>Type: <strong><?php echo ctE($product->type); ?></strong></li>-->
                             <?php if($product->accessURL): ?>
                                 <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                             <?php endif; ?>
@@ -67,7 +66,7 @@
                             <li>Product Type: <strong><?php echo $product->product_type; ?></strong></li>
                             <li>Protocol Version: <strong><?php echo $product->protocol_version; ?></strong></li>
                         </ul>
-                        <div class="product-description"><?php echo ctE($product->descrition); ?></div>
+                        <div class="product-description"><?php echo $product->descrition; ?></div>
                     <?php endif;?>
                 </div>
             </div>
