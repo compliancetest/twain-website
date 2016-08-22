@@ -17,7 +17,7 @@ class LogAfterRequest
     public function terminate($request, $response)
     {
         ApiLog::create([
-            'user_id' => Auth::user()->ID,
+            'user_id' => (integer) Auth::user()->ID,
             'ip_address' => $request->getClientIp(),
             'request_type' => $request->method(),
             'uri' => $request->path(),
