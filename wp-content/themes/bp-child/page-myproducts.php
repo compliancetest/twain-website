@@ -91,8 +91,10 @@ get_header();
                                    <?php
                                }else{
                                    foreach($claims as $claim){
-                                       $productName = $wpdb->get_var($wpdb->prepare("SELECT post_name FROM wp_posts WHERE ID = %d", $claim->product_id));
-                                       $claimName = $productName . '_claim.pdf';
+                                       $productStrName = $wpdb->get_var($wpdb->prepare("SELECT post_name FROM wp_posts WHERE ID = %d", $claim->product_id));
+                                       $productName = substr($productStrName, strpos($productStrName, '_', 2) + 1, strlen($productStrName));
+                                       $claimSuite = get_post_meta($claim->test_suite_id, 'ts_identifier', true). '_v' . get_post_meta($claim->test_suite_id, 'ts_version_major', true). '-' . get_post_meta($claim->test_suite_id, 'ts_version_minor', true);;
+                                       $claimName = $productName . '_' . $claimSuite .'_' . $claim->conformance_level . '_claim.pdf';
                                    ?>
                                    <div class="tr">
                                        <div class="td td-claim-id"><div class="td-claim-id-value" title="<?php echo $claim->id ?>"><?php echo $claim->id ?></div></div>
@@ -106,7 +108,7 @@ get_header();
                                        <div class="td td-level"><?php echo implode(cp_explode($claim->conformance_level), ", ")?></div>
                                        <div class="td td-role"><?php echo implode(cp_explode($claim->role), ", ")?></div>
                                        <div class="td td-status status-<?php echo convert_css_name($claim->status) ?>"><?php echo $claim->status?></div>
-                                       <div class="td td-date"><?php echo formatDate($claim->last_updated)?></div>
+                                       <div class="td td-date"><?php echo formatDate($claim->created_at)?></div>
 
                                        <div class="td td-action tocenter">
                                            <a href="<?php echo get_permalink()?>?_claimnonce=<?php echo wp_create_nonce('delete-claim')?>&product_id=<?php echo $product->ID?>&id=<?php echo $claim->id?>&return=<?php echo base64_encode($slug) ?>" class="action-btn delete-btn icon-btn has-tooltip delete-claim-link"><span class="p"></span><span class="simple_tooltip">Delete Claim<span></span></span></a>

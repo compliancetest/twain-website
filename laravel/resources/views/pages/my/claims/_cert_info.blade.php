@@ -63,4 +63,22 @@
         <th>Date of Claim</th>
         <td>{{ $claim->created_at->format('d F Y') }}</td>
     </tr>
+    @if($passCount)
+        <tr>
+            <th>Test Cases Passed</th>
+            <td>{{ $passCount }} of {{ $totalCount }}</td>
+        </tr>
+    @endif
+    @if($skipCount)
+        <tr>
+            <th>Test Cases Skipped</th>
+            <td>{{ $skipCount }} of {{ $totalCount }}</td>
+        </tr>
+    @endif
+    @if($excludeCount)
+        <tr>
+            <th>Test Cases Excluded</th>
+            <td>{{ $excludeCount }} of {{ $totalCount }}</td>
+        </tr>
+    @endif
 </table>
