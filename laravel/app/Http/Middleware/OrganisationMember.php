@@ -18,7 +18,7 @@ class OrganisationMember
     {
         $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
         if (!$organisation) {
-            return response()->json(['errors' => ['message' => 'Only organisation member can perform testing'], 'code' => 403], 403);
+            return response()->json(['errors' => ['message' => ['Only organisation member can perform testing']], 'code' => 403], 403);
         }
         return $next($request);
     }

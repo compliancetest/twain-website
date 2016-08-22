@@ -24,6 +24,6 @@ class DoesUserHasSubscriptionToProductType
                 return $next($request);
             }
         }
-        return response()->json(['errors' => ['message' => sprintf("Please subscribe to Test Suite with '%s' Product Type", $request->get('product_type'))], 'code' => 403], 403);
+        return response()->json(['errors' => ['message' => [sprintf("Please subscribe to Test Suite with '%s' Product Type", $request->get('product_type'))]], 'code' => 403], 403);
     }
 }
