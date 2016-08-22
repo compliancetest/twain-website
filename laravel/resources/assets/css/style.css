@@ -365,6 +365,1335 @@ th {
     border: 1px solid #ddd !important;
   }
 }
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
+  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+}
+/* line 24, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* line 37, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-asterisk:before {
+  content: "\002a";
+}
+
+/* line 38, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-plus:before {
+  content: "\002b";
+}
+
+/* line 40, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-euro:before,
+.glyphicon-eur:before {
+  content: "\20ac";
+}
+
+/* line 41, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-minus:before {
+  content: "\2212";
+}
+
+/* line 42, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cloud:before {
+  content: "\2601";
+}
+
+/* line 43, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-envelope:before {
+  content: "\2709";
+}
+
+/* line 44, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-pencil:before {
+  content: "\270f";
+}
+
+/* line 45, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-glass:before {
+  content: "\e001";
+}
+
+/* line 46, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-music:before {
+  content: "\e002";
+}
+
+/* line 47, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-search:before {
+  content: "\e003";
+}
+
+/* line 48, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-heart:before {
+  content: "\e005";
+}
+
+/* line 49, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-star:before {
+  content: "\e006";
+}
+
+/* line 50, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-star-empty:before {
+  content: "\e007";
+}
+
+/* line 51, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-user:before {
+  content: "\e008";
+}
+
+/* line 52, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-film:before {
+  content: "\e009";
+}
+
+/* line 53, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-th-large:before {
+  content: "\e010";
+}
+
+/* line 54, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-th:before {
+  content: "\e011";
+}
+
+/* line 55, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-th-list:before {
+  content: "\e012";
+}
+
+/* line 56, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ok:before {
+  content: "\e013";
+}
+
+/* line 57, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-remove:before {
+  content: "\e014";
+}
+
+/* line 58, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-zoom-in:before {
+  content: "\e015";
+}
+
+/* line 59, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-zoom-out:before {
+  content: "\e016";
+}
+
+/* line 60, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-off:before {
+  content: "\e017";
+}
+
+/* line 61, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-signal:before {
+  content: "\e018";
+}
+
+/* line 62, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cog:before {
+  content: "\e019";
+}
+
+/* line 63, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-trash:before {
+  content: "\e020";
+}
+
+/* line 64, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-home:before {
+  content: "\e021";
+}
+
+/* line 65, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-file:before {
+  content: "\e022";
+}
+
+/* line 66, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-time:before {
+  content: "\e023";
+}
+
+/* line 67, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-road:before {
+  content: "\e024";
+}
+
+/* line 68, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-download-alt:before {
+  content: "\e025";
+}
+
+/* line 69, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-download:before {
+  content: "\e026";
+}
+
+/* line 70, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-upload:before {
+  content: "\e027";
+}
+
+/* line 71, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-inbox:before {
+  content: "\e028";
+}
+
+/* line 72, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-play-circle:before {
+  content: "\e029";
+}
+
+/* line 73, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-repeat:before {
+  content: "\e030";
+}
+
+/* line 74, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-refresh:before {
+  content: "\e031";
+}
+
+/* line 75, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-list-alt:before {
+  content: "\e032";
+}
+
+/* line 76, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-lock:before {
+  content: "\e033";
+}
+
+/* line 77, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-flag:before {
+  content: "\e034";
+}
+
+/* line 78, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-headphones:before {
+  content: "\e035";
+}
+
+/* line 79, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-volume-off:before {
+  content: "\e036";
+}
+
+/* line 80, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-volume-down:before {
+  content: "\e037";
+}
+
+/* line 81, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-volume-up:before {
+  content: "\e038";
+}
+
+/* line 82, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-qrcode:before {
+  content: "\e039";
+}
+
+/* line 83, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-barcode:before {
+  content: "\e040";
+}
+
+/* line 84, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tag:before {
+  content: "\e041";
+}
+
+/* line 85, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tags:before {
+  content: "\e042";
+}
+
+/* line 86, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-book:before {
+  content: "\e043";
+}
+
+/* line 87, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bookmark:before {
+  content: "\e044";
+}
+
+/* line 88, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-print:before {
+  content: "\e045";
+}
+
+/* line 89, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-camera:before {
+  content: "\e046";
+}
+
+/* line 90, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-font:before {
+  content: "\e047";
+}
+
+/* line 91, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bold:before {
+  content: "\e048";
+}
+
+/* line 92, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-italic:before {
+  content: "\e049";
+}
+
+/* line 93, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-text-height:before {
+  content: "\e050";
+}
+
+/* line 94, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-text-width:before {
+  content: "\e051";
+}
+
+/* line 95, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-align-left:before {
+  content: "\e052";
+}
+
+/* line 96, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-align-center:before {
+  content: "\e053";
+}
+
+/* line 97, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-align-right:before {
+  content: "\e054";
+}
+
+/* line 98, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-align-justify:before {
+  content: "\e055";
+}
+
+/* line 99, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-list:before {
+  content: "\e056";
+}
+
+/* line 100, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-indent-left:before {
+  content: "\e057";
+}
+
+/* line 101, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-indent-right:before {
+  content: "\e058";
+}
+
+/* line 102, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-facetime-video:before {
+  content: "\e059";
+}
+
+/* line 103, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-picture:before {
+  content: "\e060";
+}
+
+/* line 104, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-map-marker:before {
+  content: "\e062";
+}
+
+/* line 105, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-adjust:before {
+  content: "\e063";
+}
+
+/* line 106, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tint:before {
+  content: "\e064";
+}
+
+/* line 107, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-edit:before {
+  content: "\e065";
+}
+
+/* line 108, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-share:before {
+  content: "\e066";
+}
+
+/* line 109, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-check:before {
+  content: "\e067";
+}
+
+/* line 110, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-move:before {
+  content: "\e068";
+}
+
+/* line 111, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-step-backward:before {
+  content: "\e069";
+}
+
+/* line 112, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-fast-backward:before {
+  content: "\e070";
+}
+
+/* line 113, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-backward:before {
+  content: "\e071";
+}
+
+/* line 114, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-play:before {
+  content: "\e072";
+}
+
+/* line 115, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-pause:before {
+  content: "\e073";
+}
+
+/* line 116, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-stop:before {
+  content: "\e074";
+}
+
+/* line 117, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-forward:before {
+  content: "\e075";
+}
+
+/* line 118, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-fast-forward:before {
+  content: "\e076";
+}
+
+/* line 119, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-step-forward:before {
+  content: "\e077";
+}
+
+/* line 120, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-eject:before {
+  content: "\e078";
+}
+
+/* line 121, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-chevron-left:before {
+  content: "\e079";
+}
+
+/* line 122, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-chevron-right:before {
+  content: "\e080";
+}
+
+/* line 123, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-plus-sign:before {
+  content: "\e081";
+}
+
+/* line 124, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-minus-sign:before {
+  content: "\e082";
+}
+
+/* line 125, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-remove-sign:before {
+  content: "\e083";
+}
+
+/* line 126, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ok-sign:before {
+  content: "\e084";
+}
+
+/* line 127, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-question-sign:before {
+  content: "\e085";
+}
+
+/* line 128, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-info-sign:before {
+  content: "\e086";
+}
+
+/* line 129, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-screenshot:before {
+  content: "\e087";
+}
+
+/* line 130, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-remove-circle:before {
+  content: "\e088";
+}
+
+/* line 131, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ok-circle:before {
+  content: "\e089";
+}
+
+/* line 132, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ban-circle:before {
+  content: "\e090";
+}
+
+/* line 133, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-arrow-left:before {
+  content: "\e091";
+}
+
+/* line 134, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-arrow-right:before {
+  content: "\e092";
+}
+
+/* line 135, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-arrow-up:before {
+  content: "\e093";
+}
+
+/* line 136, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-arrow-down:before {
+  content: "\e094";
+}
+
+/* line 137, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-share-alt:before {
+  content: "\e095";
+}
+
+/* line 138, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-resize-full:before {
+  content: "\e096";
+}
+
+/* line 139, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-resize-small:before {
+  content: "\e097";
+}
+
+/* line 140, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-exclamation-sign:before {
+  content: "\e101";
+}
+
+/* line 141, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-gift:before {
+  content: "\e102";
+}
+
+/* line 142, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-leaf:before {
+  content: "\e103";
+}
+
+/* line 143, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-fire:before {
+  content: "\e104";
+}
+
+/* line 144, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-eye-open:before {
+  content: "\e105";
+}
+
+/* line 145, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-eye-close:before {
+  content: "\e106";
+}
+
+/* line 146, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-warning-sign:before {
+  content: "\e107";
+}
+
+/* line 147, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-plane:before {
+  content: "\e108";
+}
+
+/* line 148, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-calendar:before {
+  content: "\e109";
+}
+
+/* line 149, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-random:before {
+  content: "\e110";
+}
+
+/* line 150, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-comment:before {
+  content: "\e111";
+}
+
+/* line 151, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-magnet:before {
+  content: "\e112";
+}
+
+/* line 152, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-chevron-up:before {
+  content: "\e113";
+}
+
+/* line 153, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-chevron-down:before {
+  content: "\e114";
+}
+
+/* line 154, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-retweet:before {
+  content: "\e115";
+}
+
+/* line 155, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-shopping-cart:before {
+  content: "\e116";
+}
+
+/* line 156, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-folder-close:before {
+  content: "\e117";
+}
+
+/* line 157, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-folder-open:before {
+  content: "\e118";
+}
+
+/* line 158, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-resize-vertical:before {
+  content: "\e119";
+}
+
+/* line 159, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-resize-horizontal:before {
+  content: "\e120";
+}
+
+/* line 160, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hdd:before {
+  content: "\e121";
+}
+
+/* line 161, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bullhorn:before {
+  content: "\e122";
+}
+
+/* line 162, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bell:before {
+  content: "\e123";
+}
+
+/* line 163, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-certificate:before {
+  content: "\e124";
+}
+
+/* line 164, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-thumbs-up:before {
+  content: "\e125";
+}
+
+/* line 165, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-thumbs-down:before {
+  content: "\e126";
+}
+
+/* line 166, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hand-right:before {
+  content: "\e127";
+}
+
+/* line 167, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hand-left:before {
+  content: "\e128";
+}
+
+/* line 168, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hand-up:before {
+  content: "\e129";
+}
+
+/* line 169, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hand-down:before {
+  content: "\e130";
+}
+
+/* line 170, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-circle-arrow-right:before {
+  content: "\e131";
+}
+
+/* line 171, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-circle-arrow-left:before {
+  content: "\e132";
+}
+
+/* line 172, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-circle-arrow-up:before {
+  content: "\e133";
+}
+
+/* line 173, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-circle-arrow-down:before {
+  content: "\e134";
+}
+
+/* line 174, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-globe:before {
+  content: "\e135";
+}
+
+/* line 175, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-wrench:before {
+  content: "\e136";
+}
+
+/* line 176, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tasks:before {
+  content: "\e137";
+}
+
+/* line 177, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-filter:before {
+  content: "\e138";
+}
+
+/* line 178, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-briefcase:before {
+  content: "\e139";
+}
+
+/* line 179, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-fullscreen:before {
+  content: "\e140";
+}
+
+/* line 180, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-dashboard:before {
+  content: "\e141";
+}
+
+/* line 181, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-paperclip:before {
+  content: "\e142";
+}
+
+/* line 182, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-heart-empty:before {
+  content: "\e143";
+}
+
+/* line 183, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-link:before {
+  content: "\e144";
+}
+
+/* line 184, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-phone:before {
+  content: "\e145";
+}
+
+/* line 185, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-pushpin:before {
+  content: "\e146";
+}
+
+/* line 186, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-usd:before {
+  content: "\e148";
+}
+
+/* line 187, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-gbp:before {
+  content: "\e149";
+}
+
+/* line 188, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort:before {
+  content: "\e150";
+}
+
+/* line 189, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-alphabet:before {
+  content: "\e151";
+}
+
+/* line 190, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-alphabet-alt:before {
+  content: "\e152";
+}
+
+/* line 191, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-order:before {
+  content: "\e153";
+}
+
+/* line 192, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-order-alt:before {
+  content: "\e154";
+}
+
+/* line 193, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-attributes:before {
+  content: "\e155";
+}
+
+/* line 194, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sort-by-attributes-alt:before {
+  content: "\e156";
+}
+
+/* line 195, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-unchecked:before {
+  content: "\e157";
+}
+
+/* line 196, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-expand:before {
+  content: "\e158";
+}
+
+/* line 197, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-collapse-down:before {
+  content: "\e159";
+}
+
+/* line 198, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-collapse-up:before {
+  content: "\e160";
+}
+
+/* line 199, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-log-in:before {
+  content: "\e161";
+}
+
+/* line 200, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-flash:before {
+  content: "\e162";
+}
+
+/* line 201, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-log-out:before {
+  content: "\e163";
+}
+
+/* line 202, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-new-window:before {
+  content: "\e164";
+}
+
+/* line 203, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-record:before {
+  content: "\e165";
+}
+
+/* line 204, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-save:before {
+  content: "\e166";
+}
+
+/* line 205, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-open:before {
+  content: "\e167";
+}
+
+/* line 206, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-saved:before {
+  content: "\e168";
+}
+
+/* line 207, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-import:before {
+  content: "\e169";
+}
+
+/* line 208, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-export:before {
+  content: "\e170";
+}
+
+/* line 209, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-send:before {
+  content: "\e171";
+}
+
+/* line 210, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-floppy-disk:before {
+  content: "\e172";
+}
+
+/* line 211, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-floppy-saved:before {
+  content: "\e173";
+}
+
+/* line 212, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-floppy-remove:before {
+  content: "\e174";
+}
+
+/* line 213, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-floppy-save:before {
+  content: "\e175";
+}
+
+/* line 214, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-floppy-open:before {
+  content: "\e176";
+}
+
+/* line 215, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-credit-card:before {
+  content: "\e177";
+}
+
+/* line 216, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-transfer:before {
+  content: "\e178";
+}
+
+/* line 217, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cutlery:before {
+  content: "\e179";
+}
+
+/* line 218, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-header:before {
+  content: "\e180";
+}
+
+/* line 219, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-compressed:before {
+  content: "\e181";
+}
+
+/* line 220, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-earphone:before {
+  content: "\e182";
+}
+
+/* line 221, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-phone-alt:before {
+  content: "\e183";
+}
+
+/* line 222, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tower:before {
+  content: "\e184";
+}
+
+/* line 223, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-stats:before {
+  content: "\e185";
+}
+
+/* line 224, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sd-video:before {
+  content: "\e186";
+}
+
+/* line 225, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hd-video:before {
+  content: "\e187";
+}
+
+/* line 226, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-subtitles:before {
+  content: "\e188";
+}
+
+/* line 227, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sound-stereo:before {
+  content: "\e189";
+}
+
+/* line 228, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sound-dolby:before {
+  content: "\e190";
+}
+
+/* line 229, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sound-5-1:before {
+  content: "\e191";
+}
+
+/* line 230, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sound-6-1:before {
+  content: "\e192";
+}
+
+/* line 231, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sound-7-1:before {
+  content: "\e193";
+}
+
+/* line 232, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-copyright-mark:before {
+  content: "\e194";
+}
+
+/* line 233, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-registration-mark:before {
+  content: "\e195";
+}
+
+/* line 234, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cloud-download:before {
+  content: "\e197";
+}
+
+/* line 235, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cloud-upload:before {
+  content: "\e198";
+}
+
+/* line 236, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tree-conifer:before {
+  content: "\e199";
+}
+
+/* line 237, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tree-deciduous:before {
+  content: "\e200";
+}
+
+/* line 238, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-cd:before {
+  content: "\e201";
+}
+
+/* line 239, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-save-file:before {
+  content: "\e202";
+}
+
+/* line 240, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-open-file:before {
+  content: "\e203";
+}
+
+/* line 241, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-level-up:before {
+  content: "\e204";
+}
+
+/* line 242, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-copy:before {
+  content: "\e205";
+}
+
+/* line 243, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-paste:before {
+  content: "\e206";
+}
+
+/* line 252, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-alert:before {
+  content: "\e209";
+}
+
+/* line 253, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-equalizer:before {
+  content: "\e210";
+}
+
+/* line 254, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-king:before {
+  content: "\e211";
+}
+
+/* line 255, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-queen:before {
+  content: "\e212";
+}
+
+/* line 256, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-pawn:before {
+  content: "\e213";
+}
+
+/* line 257, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bishop:before {
+  content: "\e214";
+}
+
+/* line 258, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-knight:before {
+  content: "\e215";
+}
+
+/* line 259, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-baby-formula:before {
+  content: "\e216";
+}
+
+/* line 260, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-tent:before {
+  content: "\26fa";
+}
+
+/* line 261, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-blackboard:before {
+  content: "\e218";
+}
+
+/* line 262, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bed:before {
+  content: "\e219";
+}
+
+/* line 263, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-apple:before {
+  content: "\f8ff";
+}
+
+/* line 264, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-erase:before {
+  content: "\e221";
+}
+
+/* line 265, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-hourglass:before {
+  content: "\231b";
+}
+
+/* line 266, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-lamp:before {
+  content: "\e223";
+}
+
+/* line 267, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-duplicate:before {
+  content: "\e224";
+}
+
+/* line 268, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-piggy-bank:before {
+  content: "\e225";
+}
+
+/* line 269, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-scissors:before {
+  content: "\e226";
+}
+
+/* line 270, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-bitcoin:before {
+  content: "\e227";
+}
+
+/* line 271, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-btc:before {
+  content: "\e227";
+}
+
+/* line 272, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-xbt:before {
+  content: "\e227";
+}
+
+/* line 273, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-yen:before {
+  content: "\00a5";
+}
+
+/* line 274, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-jpy:before {
+  content: "\00a5";
+}
+
+/* line 275, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ruble:before {
+  content: "\20bd";
+}
+
+/* line 276, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-rub:before {
+  content: "\20bd";
+}
+
+/* line 277, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-scale:before {
+  content: "\e230";
+}
+
+/* line 278, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ice-lolly:before {
+  content: "\e231";
+}
+
+/* line 279, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-ice-lolly-tasted:before {
+  content: "\e232";
+}
+
+/* line 280, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-education:before {
+  content: "\e233";
+}
+
+/* line 281, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-option-horizontal:before {
+  content: "\e234";
+}
+
+/* line 282, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-option-vertical:before {
+  content: "\e235";
+}
+
+/* line 283, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-menu-hamburger:before {
+  content: "\e236";
+}
+
+/* line 284, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-modal-window:before {
+  content: "\e237";
+}
+
+/* line 285, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-oil:before {
+  content: "\e238";
+}
+
+/* line 286, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-grain:before {
+  content: "\e239";
+}
+
+/* line 287, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-sunglasses:before {
+  content: "\e240";
+}
+
+/* line 288, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-text-size:before {
+  content: "\e241";
+}
+
+/* line 289, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-text-color:before {
+  content: "\e242";
+}
+
+/* line 290, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-text-background:before {
+  content: "\e243";
+}
+
+/* line 291, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-top:before {
+  content: "\e244";
+}
+
+/* line 292, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-bottom:before {
+  content: "\e245";
+}
+
+/* line 293, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-horizontal:before {
+  content: "\e246";
+}
+
+/* line 294, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-left:before {
+  content: "\e247";
+}
+
+/* line 295, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-vertical:before {
+  content: "\e248";
+}
+
+/* line 296, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-object-align-right:before {
+  content: "\e249";
+}
+
+/* line 297, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-triangle-right:before {
+  content: "\e250";
+}
+
+/* line 298, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-triangle-left:before {
+  content: "\e251";
+}
+
+/* line 299, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-triangle-bottom:before {
+  content: "\e252";
+}
+
+/* line 300, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-triangle-top:before {
+  content: "\e253";
+}
+
+/* line 301, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-console:before {
+  content: "\e254";
+}
+
+/* line 302, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-superscript:before {
+  content: "\e255";
+}
+
+/* line 303, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-subscript:before {
+  content: "\e256";
+}
+
+/* line 304, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-menu-left:before {
+  content: "\e257";
+}
+
+/* line 305, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-menu-right:before {
+  content: "\e258";
+}
+
+/* line 306, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-menu-down:before {
+  content: "\e259";
+}
+
+/* line 307, ../scss/bootstrap/_glyphicons.scss */
+.glyphicon-menu-up:before {
+  content: "\e260";
+}
+
 /* line 11, ../scss/bootstrap/_scaffolding.scss */
 * {
   -webkit-box-sizing: border-box;
@@ -7490,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -7562,7 +8891,7 @@ body.modal-open,
 }
 /* line 125, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -7904,7 +9233,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1464095847') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -8707,7 +10036,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1464095847') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -8734,7 +10063,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -8765,7 +10094,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -8774,7 +10103,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471523691') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -8800,7 +10129,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -8831,7 +10160,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -9025,7 +10354,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464095847') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -9094,7 +10423,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12020,7 +13349,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -12266,7 +13595,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -12468,7 +13797,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -12583,7 +13912,7 @@ input.notify-changes {
   padding: 10px 0;
   *zoom: 1;
 }
-/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .transaction-list-actions:after {
   content: "";
   display: table;
@@ -12605,12 +13934,12 @@ input.notify-changes {
 
 /* line 81, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
 }
 /* line 84, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 /* line 88, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
@@ -12635,19 +13964,19 @@ input.notify-changes {
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
   vertical-align: middle;
 }
 /* line 120, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -13454,7 +14783,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1464095847') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13464,7 +14793,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1464095847') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
