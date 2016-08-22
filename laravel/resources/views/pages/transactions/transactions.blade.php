@@ -36,7 +36,7 @@
                 <tr>
                     <td class="text-center">
                         @if($transactionUsedInClaims)
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="This transaction is used in claim record and can't be deleted">&nbsp;</span>
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="This transaction is used in claim record and can't be deleted"></span>
                         @else
                             <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
                                @if($transaction->audit_record || $transactionUsedInClaims) disabled="disabled" @endif>
