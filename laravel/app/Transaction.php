@@ -27,6 +27,11 @@ class Transaction extends Model
         return $this->hasMany('App\TransactionsLog')->orderBy('execution_order');
     }
 
+    public function usedInClaims()
+    {
+        return $this->hasMany('App\ClaimTransactions');
+    }
+
     /**
      * Ensure that transaction can be deleted by current user
      * @return bool
@@ -35,7 +40,7 @@ class Transaction extends Model
     {
         $usedInVerifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $this->id . '%')->first();
         $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions()) || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
-        if (!$usedInVerifyRequest && $hasAccessToTransaction && $this->audit_record == false) {
+        if (!$usedInVerifyRequest && $hasAccessToTransaction && $this->audit_record == false && $this->usedInClaims->isEmpty()) {
             return true;
         }
         return false;

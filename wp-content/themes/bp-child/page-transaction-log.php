@@ -180,7 +180,8 @@ get_header();
                                 <?php $logs = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM transactions_logs WHERE transaction_id = %s ORDER by execution_order", $row->id)); ?>
                                 <div class="tr">
                                     <div class="td td-chk tocenter">
-                                        <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>" <?php if($row->audit_record):?> disabled="disabled" <?php endif;?>/>
+                                        <?php $canBeChecked = $row->audit_record || !canRemoveAuditFlag($row->id) ? true : false;?>
+                                        <input type="checkbox" name="id[]" id="id<?php echo $row->id ?>" value="<?php echo $row->id ?>" <?php if($canBeChecked):?> disabled="disabled" <?php endif;?>/>
                                     </div>
                                     <div class="td td-product">
                                         <?php if($logs):?>
@@ -228,7 +229,7 @@ get_header();
                                     </div>
                                     <div class="td td-audit tocenter">
                                         <input type="checkbox" <?php if($row->audit_record):?> checked="checked" <?php endif;?> class="change_audit_record" data-id="<?php echo $row->id;?>"
-                                               <?php if($outcomeStatus->code == 'PENDING' || ($row->audit_record && canRemoveAuditFlag($row->id))):?>disabled="disabled"<?php endif;?>>
+                                               <?php if($outcomeStatus->code == 'PENDING'):?>disabled="disabled"<?php endif;?>>
                                     </div>
                                     <div
                                         class="td td-convsn tocenter <?php if(!$isMember):?>td-two-lines<?php endif;?>">

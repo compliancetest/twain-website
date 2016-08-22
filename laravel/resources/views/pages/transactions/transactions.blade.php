@@ -31,11 +31,16 @@
                     $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
                     $organisation = \App\Organisation::find($subscription->organisation_id);
                 }
+                $transactionUsedInClaims = !$eloquentTransaction->usedInClaims->isEmpty();
                 ?>
                 <tr>
                     <td class="text-center">
-                        <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
-                               @if($transaction->audit_record) disabled="disabled" @endif>
+                        @if($transactionUsedInClaims)
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="This transaction is used in claim record and can't be deleted"></span>
+                        @else
+                            <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
+                               @if($transaction->audit_record || $transactionUsedInClaims) disabled="disabled" @endif>
+                        @endif
                     </td>
                     <td class="product-name">
                         <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
@@ -103,3 +108,7 @@
 <div class="pagination-wrapper">
     {{ $transactions->appends($_GET)->render() }}
 </div>
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>
