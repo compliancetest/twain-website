@@ -139,15 +139,18 @@ class Claim extends Model
 
         }
 
+        $countPassCases = $this->countCases($generalCases);
+        $countSkipCases = $this->countCases($skippedCases);
+        $countExcludeCases = $this->countCases($excludedCases);
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell('', '', '', '', view('pages.my.claims._cert_info')->with([
             'product' => Post::find($this->product_id),
             'testSuite' => Post::find($this->test_suite_id),
             'claim' => $this,
-            'passCount' => count($generalCases),
-            'excludeCount' => count($excludedCases),
-            'skipCount' => count($skippedCases),
-            'totalCount' => count($skippedCases) + count($excludedCases) + count($generalCases),
+            'passCount' => $countPassCases,
+            'excludeCount' => $countSkipCases,
+            'skipCount' => $countExcludeCases,
+            'totalCount' => $countPassCases + $countSkipCases + $countExcludeCases,
         ])->render(), 0, 1, 0, true, '', true);
 
         // Styles for QR code
@@ -225,5 +228,23 @@ class Claim extends Model
     public function getPdfUrl()
     {
         return 'https://s3-' . config('env.bucket.region') . '.amazonaws.com/' . config('env.bucket.website') . '/claims/products/' . $this->id . '.pdf';
+    }
+
+    /**
+     * Count test cases
+     * @param $cases
+     * @return int
+     */
+    private function countCases($cases)
+    {
+        $count = 0;
+        foreach ($cases as $case) {
+            if (is_array($case) && !empty($case)) {
+                foreach ($case as $subCases) {
+                    $count++;
+                }
+            }
+        }
+        return $count;
     }
 }
