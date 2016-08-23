@@ -107,7 +107,7 @@ class Claim extends Model
         // define active area for signature appearance
         $pdf->setSignatureAppearance(45, 72, 121, 29);
 
-        $testSuite = TestSuite::find($this->test_suite_id);
+        $testSuite = Post::find($this->test_suite_id);
         $testPlan = TestPlan::find($this->test_plan_id);
 
         $successCases = $testPlan->getSuccessCases($this->product_id);
