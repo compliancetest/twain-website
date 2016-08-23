@@ -218,38 +218,6 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Generate JSON file from uploaded Excel
-     * Used on communite admin page
-     * @param $slug
-     * @param Request $request
-     * @return mixed
-     */
-    public function generateJson($slug, Request $request)
-    {
-        $folders = glob(ABSPATH . 'wp-content/uploads/json_zips/*');
-        foreach ($folders as $folder) {
-            if (file_exists($folder)) {
-                $between = date_diff(date_create(date('Y-m-d H:i:s')), date_create(date('Y-m-d H:i:s', filemtime($folder))))->format('%a');
-                if ($between >= 2) {
-                    array_map('unlink', glob($folder . '/*.*'));
-                    rmdir($folder);
-                }
-            }
-        }
-
-        require_once(ABSPATH . 'wp-content/themes/bp-child/functions/generate-json/JsonGenerator.php');
-
-        if ($request->file('upload')) {
-            $jg = new JsonGenerator($request->file('upload'));
-            $zipLink = $jg->checkSheets();
-            if (!empty($zipLink)) {
-                $request->session()->set('zipLink', $zipLink);
-            }
-        }
-        return Redirect::to(getSiteUrl() . '/communities/' . $slug . '/admin');
-    }
-
-    /**
      * Approve / disapprove organisation, so it can use all community test suites for testing
      * @param $communitySlug
      * @param Request $request

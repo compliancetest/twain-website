@@ -467,26 +467,6 @@
                     </div>
                 </div>
 
-                {!! Form::open(['id'=> 'community-json-form', 'file' => true, 'data-save-method' => 'ajax', 'method' => 'post', 'url' => getSiteUrl() . '/communities/'.$community->slug .'/getjson']) !!}
-                <div class="colored-box">
-                    <div class="colored-box-header">Generate JSON</div>
-                    <div class="colored-box-body">
-                        <div class="colored-box-content">
-                            <div class="upload-file-field">
-                                <input type="file" name="profile_excel_file" class="input-file" data-file-type="image" data-file-extensions="(.xls, .xlsx file)"/>
-                            </div>
-                            <div class="upload-file-field-additional-btn">
-                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Generate JSON</button>
-                            </div>
-                            @if(Session::has('zipLink'))
-                                <a href="{{ Session::get('zipLink') }}">json_profiles.zip</a>
-                            @endif
-                        </div>
-                        <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
-                    </div>
-                </div>
-                {{ Form::close() }}
-
             </div>
 
         </div>
