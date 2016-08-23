@@ -197,7 +197,7 @@ function ct_process_organisation_action()
 <!--                      <form name="" action="--><?php //echo site_url() ?><!--/index.php" method="post">-->
                         <div class="popup-box-header radius6 noradiusbottom">Request A Subscription</div>
                         <div class="popup-box-content">                        
-                            Access to the "<?php echo getCommunity($community_id)->title;?>" community test suites have not been approved for your organisation yet.
+                            Access to the "<?php echo getCommunity($community_id)->title;?>" community test suites has not been approved for your organisation yet.
                             Please contact a community admin for details.
                         </div>                    
                         <div class="popup-box-footer radius6 noradiustop">
