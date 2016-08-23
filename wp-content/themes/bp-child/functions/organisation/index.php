@@ -197,7 +197,8 @@ function ct_process_organisation_action()
 <!--                      <form name="" action="--><?php //echo site_url() ?><!--/index.php" method="post">-->
                         <div class="popup-box-header radius6 noradiusbottom">Request A Subscription</div>
                         <div class="popup-box-content">                        
-                            "<?php echo getCommunity($community_id)->title;?>" community not approved your organisation yet
+                            Access to the "<?php echo getCommunity($community_id)->title;?>" community test suites have not been approved for your organisation yet.
+                            Please contact a community admin for details.
                         </div>                    
                         <div class="popup-box-footer radius6 noradiustop">
 <!--                            <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show()"><span class="p"></span><span class="t">Confirm</span></a>-->
@@ -378,15 +379,19 @@ function ct_process_organisation_action()
             if (!$organisation || !doesUserCommunityMember($user_id, $community_id)) {
                 addMessage("Invalid Request!", "error");
             } else {
-                if(!DISPLAY_SUBSCRIPTIONS){
+                $sid = $controller->allocate_subscription_to_user($user_id, $organisation->id, $family_mark);
+                if (!DISPLAY_SUBSCRIPTIONS && !$sid) {
                     $suite_class->load();
-                    $controller->subscribe($family_mark, 0, $suite_class->identifier . '_v'.$suite_class->version_major.'-' .$suite_class->version_minor, $user_id, array_shift(array_values($suite_class->test_suite_plans)));
+                    $controller->subscribe($family_mark, 0, $suite_class->identifier . '_v' . $suite_class->version_major . '-' . $suite_class->version_minor, $user_id, array_shift(array_values($suite_class->test_suite_plans)));
                 }
-                if ($sid = $controller->allocate_subscription_to_user($user_id, $organisation->id, $family_mark)) {
+                if (!$sid) {
+                    $sid = $controller->allocate_subscription_to_user($user_id, $organisation->id, $family_mark);
+                }
+                if ($sid) {
                     $controller->create_user_harness_detail($user_id, $suite_id, $organisation->id, $sid);
                     addMessage('You subscribed successfully');
                 } else {
-                    addMessage($controller->last_message, "error");                    
+                    addMessage($controller->last_message, "error");
                 }
             }            
             wp_redirect(get_permalink($suite_id));
