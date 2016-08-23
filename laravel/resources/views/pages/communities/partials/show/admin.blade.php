@@ -294,6 +294,45 @@
                     </div>
                 </div>
 
+
+                <div class="colored-box">
+                    <div class="colored-box-header">Testing Approved</div>
+                    <div class="colored-box-body">
+                        <div class="colored-box-content">
+                            <div class="table-responsive">
+                                <table class="table invitations_table">
+                                <tr>
+                                    <th>Organisation</th>
+                                    <th>Contact email</th>
+                                    <th>Is approved?</th>
+                                </tr>
+                                @if(count($organisations) > 0)
+                                    @foreach($organisations as $organisation)
+                                        <tr>
+                                            <td>
+                                                {{ $organisation->organisation_name }}
+                                            </td>
+                                            <td>{{ $organisation->contact_email }}</td>
+                                            <td class="text-center">
+                                                <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation" data-community="{{ $community->slug }}"
+                                                @if(\App\CommunityApprovedOrganisation::where(['organisation_id' => $organisation->id, 'community_id' => $community->id])->first()) checked="checked" @endif>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">No data yet</td>
+                                    </tr>
+                                @endif
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="approveOrganisationSaving" class="color-box-loading">
+                        <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
+                    </div>
+                </div>
+
                 <div class="colored-box">
                     <div class="colored-box-header">Invited Users</div>
                     <div class="colored-box-body">

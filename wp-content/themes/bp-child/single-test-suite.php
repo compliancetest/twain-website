@@ -304,13 +304,15 @@ Template Name Posts: Test Suite
                             ?>
                                 <div class="test-suite-actions">
                                     <?php if( ! empty( $suite->test_suite_plans ) ):?>
-                                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">View Pricing<br>Plans</span>
-                                                <span class="r"></span>
-                                            </span>
-                                        </a>
+                                        <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                            <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">View Pricing<br>Plans</span>
+                                                    <span class="r"></span>
+                                                </span>
+                                            </a>
+                                        <?php endif;?>
                                     <?php else:?>
                                         <a class="pricing-plans-link big-red-btn" href="/contact-us/">
                                             <span class="price-b">
@@ -344,13 +346,15 @@ Template Name Posts: Test Suite
                             ?>
                                 <div class="test-suite-actions">
                                     <?php if( ! empty( $suite->test_suite_plans ) ):?>
-                                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">View Pricing<br>Plans</span>
-                                                <span class="r"></span>
-                                            </span>
-                                        </a>
+                                        <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                            <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">View Pricing<br>Plans</span>
+                                                    <span class="r"></span>
+                                                </span>
+                                            </a>
+                                        <?php endif;?>
                                         <?php else:?>
                                         <a class="pricing-plans-link big-red-btn" href="/contact-us/">
                                             <span class="price-b">

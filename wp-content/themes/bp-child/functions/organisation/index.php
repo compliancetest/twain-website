@@ -146,7 +146,14 @@ function ct_process_organisation_action()
                     <?php
                     exit;        
                 }
-                if(ct_get_organisation_unallocated_subscriptions($organisation->id, $familyMark) > 0) { //Has unallocated subscriptions
+                if(DISPLAY_SUBSCRIPTIONS){
+                    $hasunallocated = ct_get_organisation_unallocated_subscriptions($organisation->id, $familyMark) > 0;
+                } else {
+                    global $wpdb;
+                    $userOrganisation = ct_get_user_organisation(get_current_user_id());
+                    $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $community_id, $userOrganisation->id)) ? true : false;
+                }
+                if($hasunallocated) { //Has unallocated subscriptions
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                   <form name="" id="confirmSubscriptionForm" action="<?php echo site_url() ?>/index.php" method="post">
@@ -187,22 +194,19 @@ function ct_process_organisation_action()
                     $organisation_admin = ct_get_organisation_admin($organisation->id);
                     ?>
                     <div class="popup-box" style="display: none; width: 500px">
-                      <form name="" action="<?php echo site_url() ?>/index.php" method="post">
+<!--                      <form name="" action="--><?php //echo site_url() ?><!--/index.php" method="post">-->
                         <div class="popup-box-header radius6 noradiusbottom">Request A Subscription</div>
                         <div class="popup-box-content">                        
-                            There are currently no organisation subscriptions available to allocate to you.
-                            Do you wish to request a subscription from your organisation administrator (<?php echo $organisation_admin->user_email?>)?
-                            <?php wp_nonce_field('request-subscription', '_organisation_nonce') ?>                        
-                            <input type="hidden" name="suite_id" value="<?php echo $suite_id?>" />
+                            "<?php echo getCommunity($community_id)->title;?>" community not approved your organisation yet
                         </div>                    
                         <div class="popup-box-footer radius6 noradiustop">
-                            <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show()"><span class="p"></span><span class="t">Confirm</span></a>
+<!--                            <a href="#" class="action-btn process-btn submit-btn" onclick="jQuery(this).parents('form').find('.loading').show()"><span class="p"></span><span class="t">Confirm</span></a>-->
                             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                             <div class="clear"></div>
                         </div>
                         <a class="close_btn"></a>                        
                         <div class="loading loading-with-text"><div><b>SUBMITTING REQUEST</b><span>Please wait...</span></div></div>
-                      </form>
+<!--                      </form>-->
                     </div>
                     <?php
                     exit;
@@ -374,6 +378,10 @@ function ct_process_organisation_action()
             if (!$organisation || !doesUserCommunityMember($user_id, $community_id)) {
                 addMessage("Invalid Request!", "error");
             } else {
+                if(!DISPLAY_SUBSCRIPTIONS){
+                    $suite_class->load();
+                    $controller->subscribe($family_mark, 0, $suite_class->identifier . '_v'.$suite_class->version_major.'-' .$suite_class->version_minor, $user_id, array_shift(array_values($suite_class->test_suite_plans)));
+                }
                 if ($sid = $controller->allocate_subscription_to_user($user_id, $organisation->id, $family_mark)) {
                     $controller->create_user_harness_detail($user_id, $suite_id, $organisation->id, $sid);
                     addMessage('You subscribed successfully');

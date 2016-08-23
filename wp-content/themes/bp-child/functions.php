@@ -11,6 +11,9 @@ define('DEFAULT_AVATAR', '/wp-content/themes/bp-child/images/default-group-avata
 if(!session_id())
     session_start();
 
+if(!defined('DISPLAY_SUBSCRIPTIONS'))
+    define('DISPLAY_SUBSCRIPTIONS', false);
+
 //Define Site Constants
 if(!defined('MESSAGE_KEY'))
     define('MESSAGE_KEY', 'cp_messages');

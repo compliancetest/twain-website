@@ -17,9 +17,13 @@ class CT_Organisation_Controller
         global $wpdb;
         
         //Get organisation id of which the user is assigned
-        $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1", $user_id);
+        if (DISPLAY_SUBSCRIPTIONS) {
+            $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d AND is_admin=1", $user_id);
+        } else {
+            $query = $wpdb->prepare("SELECT organisation_id FROM {$wpdb->prefix}organisations_members WHERE user_id=%d", $user_id);
+        }
+
         $organisation_id = $wpdb->get_var($query);
-        
         if (!$organisation_id) {
             $this->last_message = "Only an organisation admin can purchase subscription.";
             return false;
@@ -36,10 +40,12 @@ class CT_Organisation_Controller
         
         $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id=%d AND id=%d", $organisation_id, $payment_method);
         $payment_method = $wpdb->get_var($query);
-        
-        if (!$payment_method) {
-            $this->last_message = "Payment method is not valid.";
-            return false;
+
+        if(DISPLAY_SUBSCRIPTIONS) {
+            if (!$payment_method) {
+                $this->last_message = "Payment method is not valid.";
+                return false;
+            }
         }
         
         if (!$nickname) {

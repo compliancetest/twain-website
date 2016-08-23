@@ -6,7 +6,7 @@
             <select class="form-control" id="filterProduct" name="product_id">
                 <option value="">- All -</option>
                 @foreach($filters['product_id'] as $product)
-                    <option value="{{ $product->ID }}" @if($request->get('product_id') == $product->ID) selected="selected" @endif>{{ $product->post_title }}</option>
+                    <option value="{{ $product->ID }}" @if($request->get('product_id') == $product->ID) selected="selected" @endif>{{ $product->post_title .' v' . \App\PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_version'])->first()->meta_value}}</option>
                 @endforeach
             </select>
             @if(($request->get('product_id')) && ($request->get('product_id') !== '') && ($request->get('product_id') == $product->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif

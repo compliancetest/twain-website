@@ -356,6 +356,10 @@ var Page = {
             var self = this;
             customizeFileTag();
 
+            $('.approveOrganisation').click(function(e) {
+                self.approveOrganisation($(this), e);
+            });
+
             $('#addAddNewProfileType').click(function(e) {
                 self.showAddNewProfileType(e);
             });
@@ -406,6 +410,25 @@ var Page = {
                 success: function (rsp) {
                     self.hideAddNewProfileType(e);
                     location.reload();
+                }
+            });
+
+        },
+
+        approveOrganisation: function(elem, e){
+            var self = this;
+
+            $('#approveOrganisationSaving').show();
+
+            jQuery.ajax({
+                type: 'post',
+                url: '/communities/' + elem.data('community') + '/approve_organisation',
+                data: {
+                    'organisation_id' : elem.val(),
+                    'is_checked' : elem.is(":checked") ? 1 : 0,
+                },
+                success: function (rsp) {
+                    $('#approveOrganisationSaving').hide();
                 }
             });
 
