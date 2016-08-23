@@ -120,9 +120,12 @@ get_header();
                             </div>
                         </div>
                         <div class="clear"></div>
+                        
+                        <?php if(DISPLAY_SUBSCRIPTIONS):?>
                         <a href="#subscribe-box" cp-closeWhenClickOveraly=0 rel="custom-popup" cp-type="inline"
                            class="action-btn process-btn add-new-btn top10 has-tooltip" id="purchase-subscribe"><span
                                 class="p"></span><span class="t">Add</span><span class="simple_tooltip"><span></span>Purchase A Subscription</span></a>
+                        <?php endif;?>
 
                         <div class="clear"></div>
                     </div>

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\CommunityApprovedOrganisation;
 use App\CommunityBackups;
 use App\CommunityMembers;
 use App\CommunityMeta;
 use App\CommunitySurveyResult;
 use App\ForumThread;
 use App\ForumThreadRead;
+use App\Organisation;
 use App\Post;
 use App\Profile;
 use Illuminate\Http\Request;
@@ -150,6 +152,7 @@ class CommunitiesController extends Controller
             $data['communityMeta'] = $community->meta->keyBy('meta_key');
             $data['profileTypes'] = getCommunityProfileTypes($community->id);
             $data['invitedUsers'] = $community->invitations;
+            $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
             if($community->isModerator()){
                 $data['action'] = 'admin_page_for_support_users';
@@ -246,6 +249,37 @@ class CommunitiesController extends Controller
         return Redirect::to(getSiteUrl() . '/communities/' . $slug . '/admin');
     }
 
+    /**
+     * Approve / disapprove organisation, so it can use all community test suites for testing
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approveOrganisation($communitySlug, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'organisation_id' => 'exists:wp_organisations,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid organisation'], 422);
+        }
+
+        $community = Community::findBySlug($communitySlug);
+        if ($request->get('is_checked')) {
+            CommunityApprovedOrganisation::create([
+                'organisation_id' => $request->get('organisation_id'),
+                'community_id' => $community->id,
+                'approved_by' => Auth::user()->ID
+            ]);
+        } else {
+            CommunityApprovedOrganisation::where([
+                'organisation_id' => $request->get('organisation_id'),
+                'community_id' => $community->id,
+            ])->delete();
+        }
+        return response()->json(array('success' => true));
+    }
     /**
      * Render list of surveys
      * @param $communitySlug

@@ -131,6 +131,8 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
 
+        Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
+
         Route::post('membership/{community}/reject', 'CommunityMembershipController@rejectUser');
         Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
 
