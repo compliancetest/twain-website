@@ -642,10 +642,6 @@ $xeroItems = ct_get_xero_items();
                                     <div class="grid-cell">
                                         <a href="<?php echo get_permalink($row->ID) ?>"
                                            class="test-case-link"><?php echo get_the_title($row->ID) ?></a>
-                                        <a href="#" class="action-btn blue-delete-btn icon-btn"
-                                           data-id="<?php echo $row->ID ?>"
-                                           data-action="<?php echo wp_create_nonce('hide_testcase') ?>"><span
-                                                class="p"></span></a>
                                     </div>
                                 <?php } ?>
 
