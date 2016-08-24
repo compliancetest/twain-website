@@ -17,9 +17,9 @@
             jQuery('.dashboard-tabs .menu-organisation').remove();
         </script>
     <?php endif; ?>
-    <?php if ( ! check_user_has_make_agreement_priv() ): ?>
+    <?php if ( ! is_super_admin() ): ?>
         <script type="text/javascript">
-            jQuery('.dashboard-tabs .menu-agreements').remove();
+            jQuery('.dashboard-tabs .menu-apilogs').remove();
         </script>
     <?php endif; ?>
     
