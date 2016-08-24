@@ -81,9 +81,9 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        {{ formatDate($transaction->updated_at, 'Y-m-d') }}
+                        {{ formatDate($transaction->created_at, 'Y-m-d') }}
                         <br>
-                        {{ formatDate($transaction->updated_at, 'H:i:s') }}
+                        {{ formatDate($transaction->created_at, 'H:i:s') }}
                     </td>
                 </tr>
 

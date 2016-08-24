@@ -218,5 +218,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('api-logs/logs-list', 'ApiLogsController@logsList');
         Route::get('api-logs/{logId}/request', 'ApiLogsController@requestData');
         Route::get('api-logs/{logId}/response', 'ApiLogsController@responseData');
+
+        Route::get('api-logs/{logId}/download-request', 'ApiLogsController@downloadRequest');
+        Route::get('api-logs/{logId}/download-response', 'ApiLogsController@downloadResponse');
     });
 });
