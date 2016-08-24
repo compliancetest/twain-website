@@ -51,6 +51,9 @@ class Kernel extends HttpKernel
         'community.admin' => \App\Http\Middleware\CommunityAdmin::class,
         'community.mod' => \App\Http\Middleware\CommunitySupport::class,
         'community.user' => \App\Http\Middleware\CommunityUser::class,
+
+        'wordpress.super_admin' => \App\Http\Middleware\WordpressSuperAdmin::class,
+
         'api.logs' => \App\Http\Middleware\LogAfterRequest::class,
 
         'simpleauth' => \App\Http\Middleware\SimpleAuth::class,

@@ -211,4 +211,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('my-transaction-log', 'TransactionsController@index');
 
     });
+
+    Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
+        Route::get('api-logs', 'ApiLogsController@index');
+        Route::get('api-logs/filters', 'ApiLogsController@filters');
+        Route::get('api-logs/logs-list', 'ApiLogsController@logsList');
+        Route::get('api-logs/{logId}/request', 'ApiLogsController@requestData');
+        Route::get('api-logs/{logId}/response', 'ApiLogsController@responseData');
+    });
 });

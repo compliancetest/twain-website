@@ -19,6 +19,10 @@
                 <li class="support-tab"><a href="/my-support-tickets/" data-tooltip="tooltip" title="My support tickets">Support</a></li>
                 <li class="profile-tab"><a href="/my-profile/" data-tooltip="tooltip" title="My profile">Profile</a></li>
 
+                 @if(is_super_admin())
+                    <li class="transactions-tab"><a href="/api-logs/" data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
+                @endif
+
             </ul>
         </div>
 

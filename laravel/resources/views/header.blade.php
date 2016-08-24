@@ -80,6 +80,10 @@
                                     <li><a data-title="Transactions" href="{{ getSiteUrl() }}/my-transaction-log/" class="menu-transactions">Transactions</a></li>
                                     <li><a data-title="Support" href="{{ getSiteUrl() }}/my-support-tickets/" class="menu-support">Support</a></li>
                                     <li><a data-title="Profile" href="{{ getSiteUrl() }}/my-profile/" class="menu-profile">Profile</a></li>
+
+                                    @if(is_super_admin())
+                                        <li><a data-title="ApiLogs" href="{{ getSiteUrl() }}/api-logs/" class="menu-transactions">ApiLogs</a></li>
+                                    @endif
                                 </ul>
                             </li>
                             <li class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></li>
