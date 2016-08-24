@@ -44,7 +44,7 @@
                     </td>
                     <td class="product-name">
                         <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                        <a href="/product/{{ $product->post_name }}" class="product-name-link" target="_blank">{{ $product->post_title }}</a>
+                        <a href="/product/{{ $product->post_name }}" class="product-name-link" target="_blank">{{ $product->post_title . ' v' . $product->getMetaByKey('product_version') }}</a>
                     </td>
                     <td class="text-center">
                         <a href="/test-suite/{{ $testSuite->post_name }}/" target="_blank">{{ $testSuite->post_title }}</a>
