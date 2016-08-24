@@ -14,7 +14,7 @@
             @foreach($logs AS $log)
                 <tr>
                     <td class="text-center">
-                        {{ cp_get_user_fullname($log->user_id) }}
+                        <a href="/members/{{ \App\User::find($log->user_id)->user_nicename }}" target="_blank">{{ cp_get_user_fullname($log->user_id) }}</a>
                     </td>
                     <td class="text-center">
                         {{ $log->request_type }}
