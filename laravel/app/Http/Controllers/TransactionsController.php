@@ -20,7 +20,8 @@ class TransactionsController extends Controller
     {
         $transactions = Transaction::getUserTransactionLog($request);
         $filters = Transaction::getFilters($request);
-        return view('pages.transactions.index', compact('transactions', 'filters', 'request'));
+        $pageTitle = 'My Transaction Log';
+        return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle'));
     }
 
     /**
