@@ -1661,6 +1661,7 @@ function getOutcomeStatusClass($outcomeStatus)
         case 'SKIP':
         case 'PENDING':
         case 'New':
+        case 'Skip':
              $color = 'ignored';
             break;
         default:
