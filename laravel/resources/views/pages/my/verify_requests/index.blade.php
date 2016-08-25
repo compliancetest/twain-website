@@ -158,7 +158,7 @@
                 </div>
 
                 <!-- View Output Modal-->
-                <div class="modal fade" id="viewOutputModal" tabindex="-1" role="dialog">
+                <div class="modal fade" id="modalLogTestingDetails" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document" style="width: 900px;">
                         <div class="modal-content block-loading-wrapper">
                             <div class="modal-header">
@@ -297,7 +297,7 @@
                         });
 
                         //clear previous output data and show loading for next view popup
-                        $('#viewOutputModal').on('hidden.bs.modal', function () {
+                        $('#modalLogTestingDetails').on('hidden.bs.modal', function () {
                             $(this).find('.modal-content #data').html('');
                             $(this).find('.modal-content .block-loading').show();
                         });
@@ -348,6 +348,22 @@
                                     }, 3000);
                                 }
                             })
+                        });
+                         //When open log, load transaction details
+                        $('body').on('show.bs.collapse', '.logRow', function () {
+                            var transactionId = $(this).data('transactionId');
+                            var entry = $(this);
+
+                            if (!entry.data('loaded')) {
+                                jQuery.ajax({
+                                    url: '/testingdetails/' + transactionId + '/logs',
+                                    type: 'get',
+                                    success: function (data) {
+                                        entry.find('td').html(data);
+                                        entry.data('loaded', 1);
+                                    }
+                                });
+                            }
                         });
                     });
                 </script>
