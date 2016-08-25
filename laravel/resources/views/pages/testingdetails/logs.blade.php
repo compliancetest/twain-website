@@ -40,7 +40,7 @@
                            data-target="#modalLogTestingDetails">View</a>
                     @endif
                 </td>
-                <td>{{ $message->updated_at }}</td>
+                <td>{!! formatDate($message->created_at, 'Y-m-d <\b\r> H:i:s') !!}</td>
                 <td>
                     @if(empty($message->reason))
                         <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>

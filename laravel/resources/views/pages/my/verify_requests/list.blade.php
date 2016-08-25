@@ -6,9 +6,9 @@
                 <table class="table colored-table">
                     <thead>
                     <tr>
-                        <th class="text-left">Product</th>
+                        <th class="text-left" style="width: 20%">Product</th>
                         <th class="col-sm-1">Level</th>
-                        <th>Test Cases</th>
+                        <th style="width: 30%">Test Cases</th>
                         <th>Status</th>
                         <th>Requestor</br>Assignee</th>
                         <th>Submitted</br>Updated</th>
