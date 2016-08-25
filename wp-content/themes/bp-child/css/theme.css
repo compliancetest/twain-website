@@ -7932,11 +7932,11 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     text-align: center;
 }
 #organisation_subscriptions .td-assignee{
-    width: 147px;
+    width: 207px;
     word-wrap: break-word;
 }
 #organisation_subscriptions .td-action{
-    width: 110px;
+    width: 50px;
 }
 .td-convsn input[type="text"], 
 .td-message-part input[type="text"] {
