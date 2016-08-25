@@ -35,7 +35,7 @@ class VerifyRequest extends Model
                     $userTestSuites[$key]->suite_family_mark = $entry->ID;
                 });
             } else {
-                $userTestSuites = $user->suiteSubscriptions;
+                $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }
 
             foreach ($userTestSuites as $userTestSuite) {
