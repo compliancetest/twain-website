@@ -1652,11 +1652,15 @@ function getReturnCodeColor($returnCode){
 function getOutcomeStatusClass($outcomeStatus)
 {
     switch ($outcomeStatus){
+        case 'Resolved':
+        case 'Assigned':
+        case 'In Progress':
         case 'PASS':
             $color = 'success';
             break;
         case 'SKIP':
         case 'PENDING':
+        case 'New':
              $color = 'ignored';
             break;
         default:
