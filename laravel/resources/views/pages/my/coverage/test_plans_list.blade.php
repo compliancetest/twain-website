@@ -26,14 +26,13 @@
                                 <td>{{ $userPlan['testPlan']->role }}</td>
                                 <td>
                                     <div class="coverage-progress">
-                                        <?php error_log($userPlan['testPlan']->role);?>
                                         @foreach($userSuite['testSuite']->getTestCases($userPlan['testPlan']->role, $userPlan['testPlan']->level) as $case)
                                             @include('pages.my.coverage._case_link', ['testPlanData' => $userPlan['testPlanData']])
                                         @endforeach
                                     </div>
                                 </td>
                                 <td class="col-sm-1 text-nowrap">
-                                    <a href="/my-transaction-log?suite={{ $userSuite['testSuite']->ID }}&product={{ $userPlan['product']->ID }}" target="_blank" class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
+                                    <a href="/my-transaction-log?test_suite_id={{ $userSuite['testSuite']->ID }}&product_id={{ $userPlan['product']->ID }}" target="_blank" class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
 
                                     <a href="/testplan/{{ $userPlan['testPlan']->id }}/edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#editPlanModal"
                                        class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit plan"></a>

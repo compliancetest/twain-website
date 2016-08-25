@@ -17,7 +17,16 @@
                     </thead>
                         @if($userSuite['data'])
                             @foreach($userSuite['data'] as $verifyRequest)
-                                <?php $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->is_accepted;?>
+                                <?php
+                                    $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->is_accepted;
+                                    $testPlanData = [
+                                         'excludedCases' => $verifyRequest['testPlan']->getExcludedCases(),
+                                         'successCases' => $verifyRequest['testPlan']->getSuccessCases($verifyRequest['testPlan']->product_id),
+                                         'failedCases' => $verifyRequest['testPlan']->getFailedCases($verifyRequest['testPlan']->product_id),
+                                         'optionalCases' => $verifyRequest['testPlan']->getOptionalCases(),
+                                         'skippedCases' => $verifyRequest['testPlan']->getSkippedCases(),
+                                     ];
+                                ?>
                                 <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                     <td class="text-left">
                                         <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse">
@@ -29,11 +38,15 @@
                                         {{ $verifyRequest->transactions }}
                                         <div class="coverage-progress">
                                             @foreach($verifyRequest['testCases'] as $case)
-                                                <a href="#" data-tooltip="tooltip" class="coverage-test-case-item" title="{{ $case->post_title }}"></a>
+                                                @include('pages.my.verify_requests._case_link', ['testPlanData' => $testPlanData])
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td class="text-center">{{ $verifyRequest['verifyRequest']->status }}</td>
+                                    <td class="text-center">
+                                        <span class="text-status-{{ getOutcomeStatusClass($verifyRequest['verifyRequest']->status) }}">
+                                            {{ $verifyRequest['verifyRequest']->status }}
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <a href="/members/{{ $verifyRequest['requestor']->user_nicename }}" target="_blank"> {{ cp_get_user_fullname($verifyRequest['verifyRequest']->requestor_id) }}</a></br>
                                         @if($verifyRequest['verifyRequest']->assignee_id)
@@ -122,7 +135,9 @@
                                                     @foreach(json_decode($verifyRequest['verifyRequest']->transactions, true) as  $transactionId)
                                                         <?php
                                                             $transaction = \App\Transaction::find($transactionId);
-                                                            $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->name;
+                                                            $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
+                                                            $status = getOutcomeStatusClass($testOutcomeStatus->code);
+                                                            $testOutcomeStatus = $testOutcomeStatus->name;
                                                         ?>
                                                         <tr>
                                                             @if($canModerate)
@@ -145,13 +160,15 @@
                                                                 @endif
                                                             </td>
                                                             <td class="text-center row-outcome-status">
-                                                                @if(!empty($transaction->reason))
-                                                                    <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
+                                                                <span class="status-{{ $status }}">
+                                                                    @if(!empty($transaction->reason))
+                                                                        <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
+                                                                            {{ $testOutcomeStatus }}
+                                                                        </a>
+                                                                    @else
                                                                         {{ $testOutcomeStatus }}
-                                                                    </a>
-                                                                @else
-                                                                    {{ $testOutcomeStatus }}
-                                                                @endif
+                                                                    @endif
+                                                                </span>
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                         </tr>
