@@ -6,9 +6,9 @@
                 <table class="table colored-table">
                     <thead>
                     <tr>
-                        <th class="text-left">Product</th>
+                        <th class="text-left" style="width: 20%">Product</th>
                         <th class="col-sm-1">Level</th>
-                        <th>Test Cases</th>
+                        <th style="width: 30%">Test Cases</th>
                         <th>Status</th>
                         <th>Requestor</br>Assignee</th>
                         <th>Submitted</br>Updated</th>
@@ -146,7 +146,7 @@
                                                             </td>
                                                             <td class="text-center row-outcome-status">
                                                                 @if(!empty($transaction->reason))
-                                                                    <a href="/testingdetails/{{ $transaction->id }}/transaction-reason/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
+                                                                    <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
                                                                         {{ $testOutcomeStatus }}
                                                                     </a>
                                                                 @else
@@ -155,75 +155,15 @@
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                         </tr>
-                                                        <tr class="transactions_row collapse" id="verify-request-transactions-{{ $transactionId }}">
+                                                        <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transactionId }}" data-transaction-id="{{ $transaction->id }}">
                                                             <td colspan="7">
-                                                                <div class="table-responsive">
-                                                                    <table class="table colored-table">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>From<br>To</th>
-                                                                                <th>Test<br>Step</th>
-                                                                                <th>Operation Triplet<br>Return Code</th>
-                                                                                <th>Session State</th>
-                                                                                <th>Message Data</th>
-                                                                                <th>Date Time</th>
-                                                                                <th>Step Outcome</th>
-                                                                                <th>Screen Capture</th>
-                                                                                <th>Scan Results</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @if($transaction->logs)
-                                                                                @foreach($transaction->logs as $message)
-                                                                                    <?php $testCase = \App\Post::find($transaction->test_case_id);?>
-                                                                                    <tr>
-                                                                                        <td class="text-center">{{ $message->from }}<br>{{ $message->to }}</td>
-                                                                                        <td class="text-center">
-                                                                                            @if(!empty($message->test_step))
-                                                                                                <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
-                                                                                            @endif
-                                                                                        </td>
-                                                                                        <td class="text-center">
-                                                                                            {{ $message->data_group }} / {{ $message->data_argument_type }} / {{ $message->messages }} </br>
-                                                                                            <span style="color: {{ getReturnCodeColor($message->return_code) }}">{{ $message->return_code }}</span>
-                                                                                        </td>
-                                                                                        <td class="text-center">
-                                                                                            @if($message->session_state)
-                                                                                                {{ $message->session_state }}
-                                                                                            @endif
-                                                                                        </td>
-                                                                                        <td class="text-center">
-                                                                                            @if(!empty($message->log_output))
-                                                                                                <a href="/testingdetails/{{ $message->id }}/output/laravel" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewOutputModal" class="s3_output">View</a>
-                                                                                            @endif
-                                                                                        </td>
-                                                                                        <td class="text-center">{{ $message->updated_at }}</td>
-                                                                                        <td class="text-center">
-                                                                                            @if(empty($message->reason))
-                                                                                                <span class="status-<?php echo getOutcomeStatusClass(strtoupper($message->step_outcome));?>" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
-                                                                                                    {{ $message->step_outcome }}
-                                                                                                </span>
-                                                                                            @else
-                                                                                                <a href="/testingdetails/{{ $message->id }}/reason/laravel"  data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" >
-                                                                                                    <span class="status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
-                                                                                                </a>
-                                                                                            @endif
-                                                                                        </td>
-                                                                                        <td class="text-center">-</td>
-                                                                                        <td class="text-center">
-                                                                                            @if ($scanImages = json_decode($message->scan_results))
-                                                                                                @foreach ($scanImages as $scanImage)
-                                                                                                    <a href="{{ $scanImage }}" target="_blank">View</a>
-                                                                                                @endforeach
-                                                                                            @else
-                                                                                                -
-                                                                                            @endif
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </tbody>
-                                                                    </table>
+                                                                <div class="block-loading-wrapper">
+                                                                    <div class="block-loading loading-shown">
+                                                                        <div class="loading-content"><span class="loader"></span>
+                                                                            <div class="loading-text">LOADING</div>
+                                                                            <div class="loading-wait">Please wait...</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
