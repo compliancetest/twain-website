@@ -160,7 +160,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class="text-center row-outcome-status">
-                                                                <span class="status-{{ $status }}">
+                                                                <span class="text-status-{{ $status }}">
                                                                     @if(!empty($transaction->reason))
                                                                         <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
                                                                             {{ $testOutcomeStatus }}
