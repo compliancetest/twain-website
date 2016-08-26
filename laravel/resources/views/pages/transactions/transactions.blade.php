@@ -65,7 +65,9 @@
                                         </span>
                     </td>
                     <td class="text-center">
-                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox" data-id="{{ $transaction->id }}">
+                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"
+                               @if(\App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING') disabled="disabled" @endif
+                               data-id="{{ $transaction->id }}">
                     </td>
                     <td class="text-center">
                         @if($supportOrAdmin)
