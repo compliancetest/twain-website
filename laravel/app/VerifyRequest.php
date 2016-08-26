@@ -97,6 +97,10 @@ class VerifyRequest extends Model
         return true;
     }
 
+    public function getTestCaseStatus($caseId)
+    {
+        return TestOutcomeStatus::find(Transaction::where(['test_case_id' => $caseId])->whereIn('id', json_decode($this->transactions, true))->first()->test_outcome_status_id)->name;
+    }
     /**
      * Ensure that VerifyRequest can be resolved.
      * VerifyRequest could be resolved only by assignee user and if it doesn't

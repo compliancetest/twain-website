@@ -53,16 +53,15 @@
                     </td>
                     <td>
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                                        <span class="text-status-{{ $status }}">
                                             @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
                                                 <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal"
-                                                   data-tooltip="tooltip" title="Reason">
+                                                   data-tooltip="tooltip" title="Reason" class="text-status-{{ $status }}">
                                                     {{ $outcomeStatus->name }}
                                                 </a>
                                             @else
-                                                {{ $outcomeStatus->name }}
+                                                <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
                                             @endif
-                                        </span>
+
                     </td>
                     <td class="text-center">
                         <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"

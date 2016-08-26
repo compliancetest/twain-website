@@ -9,10 +9,12 @@
                 <label>Identifier:</label>
                 <a href="/{{ $testCase->post_name }}" target="_blank">{{ $testCase->post_title }}</a>
             </li>
-            <li>
-                <label>Transaction Log:</label>
-                <a href="/my-transaction-log?test_case_id={{ $testCase->ID }}&product_id={{ $testPlan->product_id }}&test_suite_id={{ $testPlan->suite_id }}" target="_blank">View Audit Record</a>
-            </li>
+            @if(!$hasTransactions->isEmpty())
+                <li>
+                    <label>Transaction Log:</label>
+                    <a href="/my-transaction-log?test_case_id={{ $testCase->ID }}&product_id={{ $testPlan->product_id }}&test_suite_id={{ $testPlan->suite_id }}" target="_blank">View Audit Record</a>
+                </li>
+            @endif
             <li>
                 <label>Optional:</label>
                 <strong>{{ \App\TestCase::isOptional($testCase->ID) ? 'Yes' : 'No' }}</strong>

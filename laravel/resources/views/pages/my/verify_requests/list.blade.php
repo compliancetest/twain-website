@@ -19,13 +19,6 @@
                             @foreach($userSuite['data'] as $verifyRequest)
                                 <?php
                                     $canModerate = $isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->is_accepted;
-                                    $testPlanData = [
-                                         'excludedCases' => $verifyRequest['testPlan']->getExcludedCases(),
-                                         'successCases' => $verifyRequest['testPlan']->getSuccessCases($verifyRequest['testPlan']->product_id),
-                                         'failedCases' => $verifyRequest['testPlan']->getFailedCases($verifyRequest['testPlan']->product_id),
-                                         'optionalCases' => $verifyRequest['testPlan']->getOptionalCases(),
-                                         'skippedCases' => $verifyRequest['testPlan']->getSkippedCases(),
-                                     ];
                                 ?>
                                 <tr id="verify-request-{{ $verifyRequest['verifyRequest']->id }}">
                                     <td class="text-left">
@@ -38,7 +31,8 @@
                                         {{ $verifyRequest->transactions }}
                                         <div class="coverage-progress">
                                             @foreach($verifyRequest['testCases'] as $case)
-                                                @include('pages.my.verify_requests._case_link', ['testPlanData' => $testPlanData])
+                                                <?php $status = $verifyRequest['verifyRequest']->getTestCaseStatus($case->ID);?>
+                                                @include('pages.my.verify_requests._case_link', ['status' => $status])
                                             @endforeach
                                         </div>
                                     </td>
@@ -125,7 +119,6 @@
                                                             <th></th>
                                                         @endif
                                                         <th>Test Case</th>
-                                                        <th>Transaction ID</th>
                                                         <th>Execution ID</th>
                                                         <th>Status</th>
                                                         <th>Date</th>
@@ -151,7 +144,6 @@
                                                                     <span class="collapse-icon"></span>{{ \App\Post::find($transaction->test_case_id)->post_title }}
                                                                 </a>
                                                             </td>
-                                                            <td class="text-center">{{ $transaction->id }}</td>
                                                             <td class="text-center">
                                                                 @if($transaction->s3_link)
                                                                     <a href="{!! $transaction->s3_link !!}" target="_blank"> {!! $transaction->execution_id !!} </a>
@@ -160,15 +152,13 @@
                                                                 @endif
                                                             </td>
                                                             <td class="text-center row-outcome-status">
-                                                                <span class="text-status-{{ $status }}">
                                                                     @if(!empty($transaction->reason))
-                                                                        <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output">
+                                                                        <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal" class="s3_output text-status-{{ $status }}">
                                                                             {{ $testOutcomeStatus }}
                                                                         </a>
                                                                     @else
-                                                                        {{ $testOutcomeStatus }}
+                                                                        <span class="text-status-{{ $status }}">{{ $testOutcomeStatus }}</span>
                                                                     @endif
-                                                                </span>
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                         </tr>

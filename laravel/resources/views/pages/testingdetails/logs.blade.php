@@ -45,9 +45,9 @@
                     @if(empty($message->reason))
                         <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
                     @else
-                        <a href="/testingdetails/{{ $message->id }}/reason" class="s3output" data-toggle="modal" data-remote="true" data-ajax-modal
+                        <a href="/testingdetails/{{ $message->id }}/reason" class="s3output text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}" data-toggle="modal" data-remote="true" data-ajax-modal
                            data-target="#modalLogTestingDetails">
-                            <span class="text-status-{{ getOutcomeStatusClass(strtoupper($message->step_outcome)) }}">{{ $message->step_outcome }}</span>
+                            {{ $message->step_outcome }}
                         </a>
                     @endif
                 </td>
