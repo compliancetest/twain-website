@@ -517,13 +517,28 @@ class ProductsController extends BaseApiController
 
         $features = json_decode($request->get('features'), true);
 
-        $validator = Validator::make($features, [
-            '*.id' => 'required|string|exists:wp_posts,post_name',
-            '*.features' => 'required|array'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->respondUnprocessableEntity($validator->messages());
+        $errors = [];
+        foreach ($features as $key => $feature) {
+            $validator = Validator::make($feature, [
+                'id' => 'required|string|exists:wp_posts,post_name',
+                'features' => 'required|array',
+            ],
+                [
+                    'id.required' => 'Test suite id field is required',
+                    'id.string' => 'Test suite id field is required and should be a string',
+                    'id.exists' => 'Test suite id is invalid',
+                    'features.required' => 'Features field is required',
+                    'features.array' => 'Features field is required and should be an array',
+                ]
+            );
+            if ($validator->fails()) {
+                foreach ($validator->messages()->toArray() as $errorMessage) {
+                    $errors[] = $errorMessage[0] . sprintf('. Feature index - %d.', $key);
+                }
+            }
+        }
+        if ($errors) {
+            return $this->respondUnprocessableEntity(['message' => $errors]);
         }
 
         $productTestSuites = $productFeatures = [];
