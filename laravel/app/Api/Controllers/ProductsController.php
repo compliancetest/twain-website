@@ -440,16 +440,16 @@ class ProductsController extends BaseApiController
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error
      * {
-     *   "errors": {
-     *     "0.id": [
-     *       "Test suite id field is required and should be a string"
-     *     ],
-     *     "0.features": [
-     *       "Features field is required and should be an array"
-     *     ]
-     *   },
-     *   "code": 422
-     * }
+     *     "errors": {
+     *       "message": [
+     *         "Test suite id is invalid. Feature index - 0.",
+     *         "Features field is required. Feature index - 0.",
+     *         "Test suite id is invalid. Feature index - 1.",
+     *         "Features field is required. Feature index - 1."
+     *       ]
+     *     },
+     *     "code": 422
+     *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organisation member

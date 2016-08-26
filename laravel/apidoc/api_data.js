@@ -227,7 +227,7 @@ define({ "api": [
         },
         {
           "title": "Validation error",
-          "content": "{\n  \"errors\": {\n    \"0.id\": [\n      \"Test suite id field is required and should be a string\"\n    ],\n    \"0.features\": [\n      \"Features field is required and should be an array\"\n    ]\n  },\n  \"code\": 422\n}",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"Test suite id is invalid. Feature index - 0.\",\n        \"Features field is required. Feature index - 0.\",\n        \"Test suite id is invalid. Feature index - 1.\",\n        \"Features field is required. Feature index - 1.\"\n      ]\n    },\n    \"code\": 422\n  }",
           "type": "json"
         },
         {

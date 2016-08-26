@@ -10311,7 +10311,12 @@ input[type="checkbox"] {
 .text-status-active {
   color: #47a518;
 }
-
+.text-status-in-progress{
+  color: blue;
+}
+.text-status-assigned{
+  color: orange;
+}
 /* line 83, ../scss/blocks/_statuses.scss */
 .text-status-suspended {
   color: #d9231f;

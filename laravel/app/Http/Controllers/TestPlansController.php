@@ -9,6 +9,7 @@ use App\PostMeta;
 use App\PricingPlan;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
+use App\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -135,6 +136,11 @@ class TestPlansController extends Controller
             'testCase' => $testCase,
             'testPlan' => $testPlan,
             'isExcluded' => $isExcluded,
+            'hasTransactions' => Transaction::where([
+                'test_case_id' => $testCase->ID,
+                'product_id' => $testPlan->product_id,
+                'test_suite_id' => $testPlan->suite_id,
+            ])->get()
         ];
         return view('pages.my.coverage.view')->with($data)->render();
     }
