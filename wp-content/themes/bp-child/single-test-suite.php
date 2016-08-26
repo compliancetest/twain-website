@@ -300,76 +300,97 @@ Template Name Posts: Test Suite
                         }
                     }
                     if (!$subscription) {
-                            if ( ct_is_organisation_admin( $user_id ) ) {
-                            ?>
-                                <div class="test-suite-actions">
-                                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
-                                        <?php if(DISPLAY_SUBSCRIPTIONS):?>
-                                            <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                                <span class="price-b">
-                                                    <span class="l"></span>
-                                                    <span class="m">View Pricing<br>Plans</span>
-                                                    <span class="r"></span>
-                                                </span>
-                                            </a>
-                                        <?php endif;?>
-                                    <?php else:?>
-                                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">CONTACT US<br>For Pricing</span>
-                                                <span class="r"></span>
-                                            </span>
-                                        </a>
-                                    <?php endif;?>
-                                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                                    </a>
-                                </div>
-                            <?php
-                            } else if ($organisation = ct_get_user_organisation($user_id)) {
-                            ?>
-                                <div class="test-suite-actions">
-<!--                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">-->
-<!--                                        <span class="price-b">-->
-<!--                                            <span class="l"></span>-->
-<!--                                            <span class="m">View Pricing<br>Plans</span>-->
-<!--                                            <span class="r"></span>-->
-<!--                                        </span>-->
-<!--                                    </a>-->
-                                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                                    </a>
-                                </div>
-                            <?php
-                            } else {
-                            ?>
-                                <div class="test-suite-actions">
-                                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
-                                        <?php if(DISPLAY_SUBSCRIPTIONS):?>
-                                            <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                                <span class="price-b">
-                                                    <span class="l"></span>
-                                                    <span class="m">View Pricing<br>Plans</span>
-                                                    <span class="r"></span>
-                                                </span>
-                                            </a>
-                                        <?php endif;?>
+                            if(DISPLAY_SUBSCRIPTIONS):
+                                if ( ct_is_organisation_admin( $user_id ) ) {
+                                ?>
+                                    <div class="test-suite-actions">
+                                        <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                                            <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                                <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                    <span class="price-b">
+                                                        <span class="l"></span>
+                                                        <span class="m">View Pricing<br>Plans</span>
+                                                        <span class="r"></span>
+                                                    </span>
+                                                </a>
+                                            <?php endif;?>
                                         <?php else:?>
-                                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">CONTACT US<br>For Pricing</span>
-                                                <span class="r"></span>
-                                            </span>
+                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">CONTACT US<br>For Pricing</span>
+                                                    <span class="r"></span>
+                                                </span>
+                                            </a>
+                                        <?php endif;?>
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                            <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                                         </a>
-                                    <?php endif;?>
-                                    <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
-                                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                                    </a>
-                                </div>
-                            <?php
-                            }
+                                    </div>
+                                <?php
+                                } else if ($organisation = ct_get_user_organisation($user_id)) {
+                                ?>
+                                    <div class="test-suite-actions">
+    <!--                                    <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">-->
+    <!--                                        <span class="price-b">-->
+    <!--                                            <span class="l"></span>-->
+    <!--                                            <span class="m">View Pricing<br>Plans</span>-->
+    <!--                                            <span class="r"></span>-->
+    <!--                                        </span>-->
+    <!--                                    </a>-->
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                            <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                } else {
+                                ?>
+                                    <div class="test-suite-actions">
+                                        <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                                            <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                                <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                    <span class="price-b">
+                                                        <span class="l"></span>
+                                                        <span class="m">View Pricing<br>Plans</span>
+                                                        <span class="r"></span>
+                                                    </span>
+                                                </a>
+                                            <?php endif;?>
+                                            <?php else:?>
+                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">CONTACT US<br>For Pricing</span>
+                                                    <span class="r"></span>
+                                                </span>
+                                            </a>
+                                        <?php endif;?>
+                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                            <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                            else: ?>
+                                <div class="test-suite-actions">
+                                        <?php
+                                            $userOrganisation = ct_get_user_organisation(get_current_user_id());
+                                            $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $community_id, $userOrganisation->id)) ? true : false;
+                                        if(!$hasunallocated):?>
+                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">CONTACT US<br>For Pricing</span>
+                                                    <span class="r"></span>
+                                                </span>
+                                            </a>
+                                        <?php else:?>
+                                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('subscribe') ?>&suite_id=<?php echo $suite->id ?>" rel="custom-popup" cp-type="ajax" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0 cp-removeBoxAfterClose=1>
+                                                <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
+                                            </a>
+                                        <?php endif;?>
+                                    </div>
+                            <?php endif;
                     } else {
                         if ($subscription->status == 'Active') {
                         ?>
@@ -402,26 +423,36 @@ Template Name Posts: Test Suite
                     
             ?>
                 <div class="test-suite-actions">
-                    <?php if( ! empty( $suite->test_suite_plans ) ):?>
-                        <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">View Pricing<br>Plans</span>
-                                                <span class="r"></span>
-                                            </span>
+                    <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                        <?php if( ! empty( $suite->test_suite_plans ) ):?>
+                            <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">View Pricing<br>Plans</span>
+                                                    <span class="r"></span>
+                                                </span>
+                            </a>
+                        <?php else:?>
+                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                                <span class="price-b">
+                                                    <span class="l"></span>
+                                                    <span class="m">CONTACT US<br>For Pricing</span>
+                                                    <span class="r"></span>
+                                                </span>
+                            </a>
+                        <?php endif;?>
+                        <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>
+                            <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                         </a>
                     <?php else:?>
                         <a class="pricing-plans-link big-red-btn" href="/contact-us/">
-                                            <span class="price-b">
-                                                <span class="l"></span>
-                                                <span class="m">CONTACT US<br>For Pricing</span>
-                                                <span class="r"></span>
-                                            </span>
+                            <span class="price-b">
+                                <span class="l"></span>
+                                <span class="m">CONTACT US<br>For Pricing</span>
+                                <span class="r"></span>
+                            </span>
                         </a>
                     <?php endif;?>
-                    <a href="#registration-popup" rel="custom-popup" cp-type="inline" class="suite-subscript-link suite-subscript-link-oneline" cp-closeWhenClickOveraly=0>
-                        <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
-                    </a>
                 </div>
             <?php
                 }                                
