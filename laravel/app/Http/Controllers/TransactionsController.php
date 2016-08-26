@@ -61,6 +61,9 @@ class TransactionsController extends Controller
     public function updateauditrecord($transactionId, Request $request)
     {
         $transaction = Transaction::find($transactionId);
+        if (TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING') {
+            return response(['message' => "You can mark Pending transaction as audit record"], 422);
+        }
         $transaction->audit_record = $request->get('audit_record') === "true" ? true : false ;
         $transaction->save();
         return response(['status' => 'success']);
