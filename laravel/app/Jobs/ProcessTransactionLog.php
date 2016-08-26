@@ -119,10 +119,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->product_id = $product->ID;
         $transaction->test_suite_id = $testSuite->ID;
         $transaction->audit_record = false;
-        $transaction->reason = $this->reason;
         $transaction->test_outcome_status_id = $this->testOutcome ? TestOutcomeStatus::getIdByCode($this->testOutcome) : TestOutcomeStatus::getSuccessId();
-
-
+        $transaction->reason = $this->reason;
         $transaction->customer_id = $this->userId;
         $transaction->subscription_id = $organisationSubscription->id;
         $transaction->organisation_id = $organisationMember->organisation_id;
@@ -201,28 +199,6 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transactionLog->save();
             }
         }
-
-        if($testCase->post_name == 'ca-01-v1-0'){
-            $firstImage = file_exists($this->rootFolder . '/scan_result/image_1.png');
-            $firstImageMetadata = file_exists($this->rootFolder . '/scan_result/image_1.png.json');
-            $secondImage = file_exists($this->rootFolder . '/scan_result/image_2.png');
-            $secondImageMetadata = file_exists($this->rootFolder . '/scan_result/image_2.png.json');
-            $allFilesExists = $secondImage && $firstImage && $firstImageMetadata && $secondImageMetadata;
-            if($allFilesExists &&
-                (json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'))->ImageWidth >
-                    json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'))->ImageWidth)){
-                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
-            } else {
-                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
-                $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
-            }
-        } else {
-            if (!$transaction->logs()->where(['return_code' => 'TWRC_XFERDONE', 'scan_results' => '[]'])->get()->isEmpty()) {
-                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
-                $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
-            }
-        }
-        $transaction->save();
         File::deleteDirectory($this->rootFolder);
     }
 }
