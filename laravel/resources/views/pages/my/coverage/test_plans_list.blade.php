@@ -32,7 +32,9 @@
                                     </div>
                                 </td>
                                 <td class="col-sm-1 text-nowrap">
-                                    <a href="/my-transaction-log?test_suite_id={{ $userSuite['testSuite']->ID }}&product_id={{ $userPlan['product']->ID }}" target="_blank" class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
+                                    @if(!\App\Transaction::where(['product_id' => $userPlan['product']->ID, 'test_suite_id' => $userSuite['testSuite']->ID])->get()->isEmpty())
+                                        <a href="/my-transaction-log/?test_suite_id={{ $userSuite['testSuite']->ID }}&product_id={{ $userPlan['product']->ID }}" target="_blank" class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
+                                    @endif
 
                                     <a href="/testplan/{{ $userPlan['testPlan']->id }}/edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#editPlanModal"
                                        class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit plan"></a>
