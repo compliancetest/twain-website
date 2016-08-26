@@ -72,9 +72,14 @@ class ApiLogsController extends Controller
     public function downloadRequest($logId)
     {
         $apiLog = ApiLog::find($logId);
-        return response($apiLog->request, 200)->withHeaders([
-            'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="requestData.json"'
+        $fileData = '';
+        $request = json_decode($apiLog->request, true);
+        foreach($request as $key => $value){
+            $fileData .= $key . ':' . $value . PHP_EOL;
+        }
+        return response($fileData, 200)->withHeaders([
+            'Content-Type' => 'plain/txt',
+            'Content-Disposition' => 'attachment; filename="requestData.txt"'
         ]);
     }
 
