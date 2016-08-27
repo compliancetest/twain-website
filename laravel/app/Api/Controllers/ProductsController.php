@@ -563,7 +563,7 @@ class ProductsController extends BaseApiController
         $user = Auth::user();
         foreach ($user->getUserTestPlans() as $suiteName => $suite) {
             $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-            if ($type != 'Application') {
+            if ($type != 'Application' || !in_array($suite['testSuite']->post_name, array_values(array_column($features, 'id')))) {
                 continue;
             }
             $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();

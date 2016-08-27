@@ -1235,6 +1235,13 @@ $xeroItems = ct_get_xero_items();
                 return false;
             }
 
+            if ($('input[name=ts_tester_role]:checked').length == 0) {
+                jQuery('#suite-info-box').find('.message').remove();
+                jQuery('#suite-info-box .column').append('<div class="message error">Product Type field is required</div>');
+                jQuery('input[name="ts_tester_role"]').focus();
+                return false;
+            }
+
             //Check test suite name
             var nameReg = /^[A-Za-z0-9-.]+$/;
             if (!nameReg.test(jQuery('#ts_identifier').val())) {
