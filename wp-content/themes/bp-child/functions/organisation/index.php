@@ -419,13 +419,15 @@ function ct_process_organisation_action()
                 <div class="popup-box" id="unsubscription-confirm-box" style="display: none; width: 450px;">
                     <form name="unsubscribe-form" action="/index.php" method="post">
                         <div class="popup-box-header radius6 noradiusbottom">Confirm Subscription Release</div>
-                        <div class="popup-box-content grid-box-body">    
-                            <p>Releasing this subscription will make it available to other testers in your organisation. </p>
+                        <div class="popup-box-content grid-box-body">
+                            <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                <p>Releasing this subscription will make it available to other testers in your organisation. </p>
+                            <?php endif;?>
                             <p>Are you sure that you want to release this subscription?</p>
                         </div>
                         <div class="popup-box-footer radius6 noradiustop">      
-                            <div class="right">
-                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">OK</span></a>            
+                            <div class="left">
+                                <a href="#" class="action-btn process-btn submit-btn"><span class="p"></span><span class="t">Confirm</span></a>
                                 <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>            
                             </div>
                             <div class="clear"></div>
