@@ -222,7 +222,7 @@ if (isset($_SESSION['product_data'])) {
                                                     continue;
                                                 }?>
                                                 <label style="margin-left: 10px;">
-                                                    <input type="checkbox" name="product_suites[]" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
+                                                    <input type="checkbox" name="product_suites[]" readonly="readonly" disabled="disabled" class="product_suites" <?php echo isset($product->product_suites) && in_array($suite->id, $product->product_suites) ? 'checked="checked"' : '' ?> value="<?php echo $suite->id;?>"/>
                                                         <?php echo $suite->title;?>
                                                 </label>
                                                 <?php
@@ -230,7 +230,7 @@ if (isset($_SESSION['product_data'])) {
                                                 foreach($suite->featuresList as $feature):
                                             ?>
                                                     <label class="tooltip-label has-tooltip">
-                                                        <input type="checkbox" name="product_features[]" class="product_features"
+                                                        <input type="checkbox" name="product_features[]" class="product_features" readonly="readonly" disabled="disabled"
                                                                data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?>
                                                                value="<?php echo $feature['name'];?>"
                                                         />
@@ -282,15 +282,15 @@ if (isset($_SESSION['product_data'])) {
 
             $('#productType').change();
 
-            $('.product_suites').on('change', function(){
-                if(!$('.product_suites').is(':checked')){
-                     $(".product_features[data-suiteid='" + jQuery(this).val() + "']").attr('checked', false);
-                }
-                $('.product_features').attr('disabled', 'disabled');
-                $.each($('.product_suites:checked'), function(index, el){
-                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").removeAttr('disabled');
-                })
-            });
+//            $('.product_suites').on('change', function(){
+//                if(!$('.product_suites').is(':checked')){
+//                     $(".product_features[data-suiteid='" + jQuery(this).val() + "']").attr('checked', false);
+//                }
+//                $('.product_features').attr('disabled', 'disabled');
+//                $.each($('.product_suites:checked'), function(index, el){
+//                    $(".product_features[data-suiteid='" + jQuery(el).val() + "']").removeAttr('disabled');
+//                })
+//            });
 
             $('.product_suites').change();
 
@@ -396,11 +396,11 @@ if (isset($_SESSION['product_data'])) {
                         }
                     }
                 <?php endif;?>
-                if($('#productType').val() == 'Application' && ( !$('.product_suites:checked').length || !$('.product_features:checked').length)){
-                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please select supported features / test suites.</div>');
-                    $('#psForm .grid-box-footer .message').fadeIn('fast');
-                    return false;
-                }
+//                if($('#productType').val() == 'Application' && ( !$('.product_suites:checked').length || !$('.product_features:checked').length)){
+//                    $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please select supported features / test suites.</div>');
+//                    $('#psForm .grid-box-footer .message').fadeIn('fast');
+//                    return false;
+//                }
 
                  if($('#productType').val() == 'DataSource' && ! $('#product_caps').val()){
                     $('#psForm .grid-box-footer').append('<div class="message error" style="display: none">Please list supported capabilities.</div>');

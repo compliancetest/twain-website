@@ -38,7 +38,7 @@
                 <div class="product-info">
                     <div class="product-identifiers">
                         <div class="product-actions">
-                            <?php if(is_super_admin() || $has_edit_access ){ ?>
+                            <?php if(is_super_admin() || can_maintain_product_and_service(get_current_user_id(), $product->id)){ ?>
                                 <a href="<?php get_permalink()?>?id=<?php echo $product->id?>&_psnonce=<?php echo wp_create_nonce('delete-product') ?>&return=<?php echo base64_encode("/my-products") ?>" class="action-btn delete-btn right left10" rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span class="p"></span><span class="t">Delete</span></a>
                                 <a href="/edit-product-and-service?id=<?php echo $product->id?>" class="action-btn edit-btn right"><span class="p"></span><span class="t">Edit</span></a>
                             <?php } else { ?>
