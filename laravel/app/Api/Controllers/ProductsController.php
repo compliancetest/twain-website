@@ -443,9 +443,8 @@ class ProductsController extends BaseApiController
      *     "errors": {
      *       "message": [
      *         "Test suite id is invalid. Feature index - 0.",
-     *         "Features field is required. Feature index - 0.",
      *         "Test suite id is invalid. Feature index - 1.",
-     *         "Features field is required. Feature index - 1."
+     *         "Features field should be an array. Feature index - 1."
      *       ]
      *     },
      *     "code": 422
@@ -521,14 +520,13 @@ class ProductsController extends BaseApiController
         foreach ($features as $key => $feature) {
             $validator = Validator::make($feature, [
                 'id' => 'required|string|exists:wp_posts,post_name',
-                'features' => 'required|array',
+                'features' => 'array',
             ],
                 [
                     'id.required' => 'Test suite id field is required',
                     'id.string' => 'Test suite id field is required and should be a string',
                     'id.exists' => 'Test suite id is invalid',
-                    'features.required' => 'Features field is required',
-                    'features.array' => 'Features field is required and should be an array',
+                    'features.array' => 'Features field should be an array',
                 ]
             );
             if ($validator->fails()) {

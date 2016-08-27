@@ -227,7 +227,7 @@
         },
         {
           "title": "Validation error",
-          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"Test suite id is invalid. Feature index - 0.\",\n        \"Features field is required. Feature index - 0.\",\n        \"Test suite id is invalid. Feature index - 1.\",\n        \"Features field is required. Feature index - 1.\"\n      ]\n    },\n    \"code\": 422\n  }",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"Test suite id is invalid. Feature index - 0.\",\n        \"Test suite id is invalid. Feature index - 1.\",\n        \"Features field should be an array. Feature index - 1.\"\n      ]\n    },\n    \"code\": 422\n  }",
           "type": "json"
         },
         {
