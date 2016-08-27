@@ -46,22 +46,21 @@
                         <a href="#verifyAsModal" data-toggle="modal" class="btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip"
                                data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
                     @endif
+                     <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
+                               data-tooltip="tooltip" title="Remove Transactions">Remove Transactions</a>
                 </div>
                 <div class="pull-right">
-                    <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
-                               data-tooltip="tooltip" title="Remove Transactions">Remove Transactions</a>
-                    {{--<div class="form-inline">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="paginationLimit">Display #</label>--}}
-                            {{--<select class="form-control" id="paginationLimit" name="limit">--}}
-                                {{--<option value="10">10</option>--}}
-                                {{--<option value="20">20</option>--}}
-                                {{--<option value="50">50</option>--}}
-                                {{--<option value="100">100</option>--}}
-                                {{--<option value="-1">All</option>--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="paginationLimit">Display #</label>
+                            <select class="form-control" id="paginationLimit" name="limit">
+                                <option value="10">10</option>
+                                <option value="25" selected="selected">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -173,6 +172,11 @@
 <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function($) {
+
+        $('body').on('change', '#paginationLimit', function(){
+            $('#perPage').val($(this).val());
+            $('#filterByForm').submit();
+        });
         $('body').on('click', '#filterCalendar', function () {
             $('#filterDate').datepicker('show');
         });
@@ -294,6 +298,7 @@
             $('#filterBySpinner, #loadLogResultsSpinner').show();
             var link = $(this);
             var form = $('#filterByForm');
+            console.log(getUrlVar(link.attr('href'), 'page'));
             $.ajax({
                 url: '/transactions/transactions-list',
                 type: 'get',

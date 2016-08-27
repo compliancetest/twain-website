@@ -1,6 +1,8 @@
 <form action="#" method="get" id="filterByForm">
     <div class="row">
 
+        <input type="hidden" name="itemsCount" value="{{ $perPage }}" id="perPage">
+
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterProduct">Product:</label>
             <select class="form-control" id="filterProduct" name="product_id">
