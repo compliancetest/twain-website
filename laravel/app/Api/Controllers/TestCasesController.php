@@ -46,7 +46,7 @@ class TestCasesController extends BaseApiController
      *   }
      *
      * @apiError 422 Unprocessable entity
-     * @apiErrorExample {json} TetsCase not configured:
+     * @apiErrorExample {json} TestCase not configured:
      *   {
      *     "error": {
      *       "message": [

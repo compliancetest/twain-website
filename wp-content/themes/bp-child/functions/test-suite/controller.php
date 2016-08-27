@@ -414,32 +414,43 @@ function saveSuite()
     }
 
     //Save Pricing Plans
-    if (isset($_POST['test_suite_plans']) && !empty($_POST['test_suite_plans'])) {
-        $sequence = $result_plans = array();
-        $counter = 0;
-        foreach ($_POST['test_suite_plans'] AS $plan) {
-            if (isset($_POST['pricing_plans_sequence_' . $plan]) && !empty($_POST['pricing_plans_sequence_' . $plan])) {
-                $result_plans[$_POST['pricing_plans_sequence_' . $plan]] = $plan;
-                $sequence[$plan] = $_POST['pricing_plans_sequence_' . $plan];
-            } else {
-                while (true) {
-                    if (!isset($result_plans[$counter])) {
-                        $result_plans[$counter] = $plan;
-                        $sequence[$plan] = $counter;
-                        break;
-                    } else {
-                        $counter++;
+    if(DISPLAY_SUBSCRIPTIONS) {
+        if (isset($_POST['test_suite_plans']) && !empty($_POST['test_suite_plans'])) {
+            $sequence = $result_plans = array();
+            $counter = 0;
+            foreach ($_POST['test_suite_plans'] AS $plan) {
+                if (isset($_POST['pricing_plans_sequence_' . $plan]) && !empty($_POST['pricing_plans_sequence_' . $plan])) {
+                    $result_plans[$_POST['pricing_plans_sequence_' . $plan]] = $plan;
+                    $sequence[$plan] = $_POST['pricing_plans_sequence_' . $plan];
+                } else {
+                    while (true) {
+                        if (!isset($result_plans[$counter])) {
+                            $result_plans[$counter] = $plan;
+                            $sequence[$plan] = $counter;
+                            break;
+                        } else {
+                            $counter++;
+                        }
                     }
                 }
+                $counter++;
             }
-            $counter++;
+            ksort($result_plans);
+            update_post_meta($id, 'test_suite_plans_order', $sequence);
+            update_post_meta($id, 'test_suite_plans', implode('|', $result_plans));
+        } else {
+            update_post_meta($id, 'test_suite_plans_order', '');
+            update_post_meta($id, 'test_suite_plans', '');
         }
-        ksort($result_plans);
-        update_post_meta($id, 'test_suite_plans_order', $sequence);
-        update_post_meta($id, 'test_suite_plans', implode('|', $result_plans));
     } else {
+        if($_POST['ts_tester_role'] == 'Application'){
+            $planId = $wpdb->get_var("SELECT id FROM wp_pricing_plans WHERE id_str = 'TWAIN_APPLICATION'");
+            update_post_meta($id, 'test_suite_plans', $planId);
+        } else {
+            $planId = $wpdb->get_var("SELECT id FROM wp_pricing_plans WHERE id_str = 'TWAIN_DATA_SOURCE'");
+            update_post_meta($id, 'test_suite_plans', $planId);
+        }
         update_post_meta($id, 'test_suite_plans_order', '');
-        update_post_meta($id, 'test_suite_plans', '');
     }
     //Save Related Test Suites
     $ts = $_POST['ts'];
