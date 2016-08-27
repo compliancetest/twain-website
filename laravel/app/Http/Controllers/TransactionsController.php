@@ -18,10 +18,11 @@ class TransactionsController extends Controller
      */
     public function index(Request $request)
     {
-        $transactions = Transaction::getUserTransactionLog($request);
+        $perPage = 25;
+        $transactions = Transaction::getUserTransactionLog($request, $perPage);
         $filters = Transaction::getFilters($request);
         $pageTitle = 'My Transaction Log';
-        return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle'));
+        return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle', 'perPage'));
     }
 
     /**
@@ -31,9 +32,11 @@ class TransactionsController extends Controller
      */
     public function filters(Request $request)
     {
+        $perPage = $this->getItemsPerPage($request);
         $data = [
             'filters' => Transaction::getFilters($request),
             'request' => $request,
+            'perPage' => $perPage
         ];
         return response()->json(['html' => view('pages.transactions.filters')->with($data)->render()]);
     }
@@ -45,9 +48,11 @@ class TransactionsController extends Controller
      */
     public function transactionsList(Request $request)
     {
+        $perPage = $this->getItemsPerPage($request);
         $data = [
-            'transactions' => Transaction::getUserTransactionLog($request),
+            'transactions' => Transaction::getUserTransactionLog($request, $perPage),
             'request' => $request,
+            'perPage' => $perPage
         ];
         return response()->json(['html' => view('pages.transactions.transactions')->with($data)->render()]);
     }
@@ -117,5 +122,10 @@ class TransactionsController extends Controller
             }
         }
         return response()->json(['success']);
+    }
+
+    public function getItemsPerPage($request)
+    {
+        return in_array($request->get('itemsCount'), [10, 25, 50, 100]) ? $request->get('itemsCount') : 25;
     }
 }
