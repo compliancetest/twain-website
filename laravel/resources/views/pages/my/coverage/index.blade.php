@@ -15,7 +15,7 @@
                 <li class="products-tab"><a href="/my-products/" data-tooltip="tooltip" title="My products under test">Products</a></li>
                 <li class="coverage-tab"><a href="/test-suite-coverage/" class="active" data-tooltip="tooltip" title="Completeness of my testing">Coverage</a></li>
                 <li class="coverage-tab"><a href="/verify-requests/" data-tooltip="tooltip" title="My Verify Transactions Requests">Verify Requests</a></li>
-                <li class="transactions-tab"><a href="/my-transaction-log/" data-tooltip="tooltip" title="My test transactions">Transactions</a></li>
+                <li class="transactions-tab"><a href="/my-transaction-log/" data-tooltip="tooltip" title="My Test Results">Test Results</a></li>
                 <li class="support-tab"><a href="/my-support-tickets/" data-tooltip="tooltip" title="My support tickets">Support</a></li>
                 <li class="profile-tab"><a href="/my-profile/" data-tooltip="tooltip" title="My profile">Profile</a></li>
 
