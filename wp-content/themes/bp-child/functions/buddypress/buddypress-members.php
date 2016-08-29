@@ -17,54 +17,18 @@ function cp_change_avatar()
             exit;
         }
         
-        $bp = buddypress();
-
-        if ( ! isset( $bp->avatar_admin ) )
-            $bp->avatar_admin = new stdClass();
-
-        $bp->avatar_admin->step = 'upload-image';
-
         if ( !empty( $_FILES ) ) {
-
-            // Check the nonce
-            check_admin_referer( 'bp_avatar_upload' );
-
-            // Pass the file to the avatar upload handler
-            if ( bp_core_avatar_handle_upload( $_FILES, 'xprofile_avatar_upload_dir' ) ) {
-                $bp->avatar_admin->step = 'crop-image';
-
-                // Make sure we include the jQuery jCrop file for image cropping
-                add_action( 'wp_print_scripts', 'bp_core_add_jquery_cropper' );
-            }else{
-//                hook_buddypress_action_messages();
-            }
+            $s3Wrapper = new S3Wrapper();
+            $bucketName = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
+            $bucketName = 'www.integration.twain.gosource.com.au';
+            $s3Key = '/avatars/' . md5(get_current_user_id()) .'.' . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+            $s3Wrapper->putObject($s3Key, file_get_contents($_FILES['file']['tmp_name']), $_FILES['file']['type'], $bucketName);
+            update_user_meta(get_current_user_id(), 'avatar_s3_path', '/avatars/' .$s3Key);
         }
+        addMessage( 'Your new avatar was uploaded successfully.');
+        wp_redirect("/my-profile");
+        exit;
 
-        // If the image cropping is done, crop the image and save a full/thumb version
-        if ( isset( $_POST['avatar-crop-submit'] ) ) {
-
-            // Check the nonce
-            check_admin_referer( 'bp_avatar_cropstore' );
-
-            $args = array(
-                'item_id'       => bp_loggedin_user_id(),
-                'original_file' => $_POST['image_src'],
-                'crop_x'        => $_POST['x'],
-                'crop_y'        => $_POST['y'],
-                'crop_w'        => $_POST['width'],
-                'crop_h'        => $_POST['height']
-            );
-
-            if ( ! bp_core_avatar_handle_crop( $args ) ) {
-//                addMessage( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
-            } else {
-                addMessage( __( 'Your new avatar was uploaded successfully.', 'buddypress' ) );
-//                do_action( 'xprofile_avatar_uploaded' );
-            }
-            wp_redirect("/my-profile");
-            exit;
-        }
-        
     }
     
 }
@@ -81,10 +45,8 @@ function cp_xprofile_action_delete_avatar() {
     
     if(is_user_logged_in() &&  wp_verify_nonce($_REQUEST['cp-action'], 'delete-avatar'))
     {
-        if ( bp_core_delete_existing_avatar( array( 'item_id' => bp_loggedin_user_id() ) ) )
-            addMessage( __( 'Your avatar was deleted successfully!', 'buddypress' ) );
-        else
-            addMessage( __( 'There was a problem deleting that avatar, please try again.', 'buddypress' ), 'error' );
+        delete_user_meta(get_current_user_id(), 'avatar_s3_path');
+        addMessage( __( 'Your avatar was deleted successfully!', 'buddypress' ) );
 
         wp_redirect( wp_get_referer() );    
         exit;

@@ -55,11 +55,14 @@
                         </div>
 
                         <div class="header-user-info">
-                            <?php $userAvatar = get_avatar($current_user->user_email, 32);?>
-                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                            <?php
+                                $key = get_user_meta(get_current_user_id(), 'avatar_s3_path', true);
+                                $avatarLink = getUserAvatar(get_current_user_id());
+                            ?>
+                            <?php if(!$avatarLink):?>
                                 <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
                             <?php else:?>
-                                <?php echo get_avatar($current_user->user_email, 32);  ?>
+                                <img src="<?php echo $avatarLink;?>" class="avatar user-12-avatar avatar-32 photo" width="32" height="32" alt="Avatar">
                             <?php endif;?>
                             <div class="header-welcome">
                                 Welcome
