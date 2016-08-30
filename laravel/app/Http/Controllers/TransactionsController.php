@@ -21,7 +21,7 @@ class TransactionsController extends Controller
         $perPage = 25;
         $transactions = Transaction::getUserTransactionLog($request, $perPage);
         $filters = Transaction::getFilters($request);
-        $pageTitle = 'My Transaction Log';
+        $pageTitle = 'My Test Results';
         return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle', 'perPage'));
     }
 

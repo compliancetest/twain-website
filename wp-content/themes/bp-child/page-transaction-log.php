@@ -345,10 +345,10 @@ get_header();
     <div class="clear"></div>
 
     <div class="popup-box" id="delete-log-box" style="display: none; width: 500px">
-        <div class="popup-box-header radius6 noradiusbottom">Confirm Delete Transactions</div>
+        <div class="popup-box-header radius6 noradiusbottom">Confirm Delete Test Results</div>
         <div class="popup-box-content">
             <div class="delete_message">
-                Are you sure you want delete selected transactions?
+                Are you sure you want delete selected test results?
             </div>
             <div class="delete_no_messages">
                 Please select a row
@@ -356,7 +356,7 @@ get_header();
         </div>
         <div class="popup-box-footer radius6 noradiustop">
             <div class="loading loading-with-text radius6">
-                <div><b>DELETING TRANSACTIONS</b><span>Please wait...</span></div>
+                <div><b>DELETING TEST RESULTS</b><span>Please wait...</span></div>
             </div>
             <a href="#" class="action-btn process-btn delete-log-confirm"><span class="p"></span><span class="t">Confirm</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
@@ -369,7 +369,7 @@ get_header();
         <div class="popup-box-header radius6 noradiusbottom">Confirm Change Outcome Status</div>
         <div class="popup-box-content">
             <div class="change_status_message">
-                Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected transactions?
+                Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected test results?
             </div>
             <div class="change_status_no_messages">
                 Please select a row
@@ -378,7 +378,7 @@ get_header();
         </div>
         <div class="popup-box-footer radius6 noradiustop">
             <div class="loading loading-with-text radius6">
-                <div><b>UPDATING TRANSACTIONS</b><span>Please wait...</span></div>
+                <div><b>UPDATING TEST RESULTS</b><span>Please wait...</span></div>
             </div>
             <a href="#" class="action-btn process-btn change_status_log-confirm"><span class="p"></span><span class="t">Confirm</span></a>
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Cancel</span></a>
