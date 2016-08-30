@@ -88,8 +88,9 @@ function compliancetest_user_actions()
         if ( $sub = $wpdb->get_row($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s', get_current_user_id(), $gID) )) {
 
             // Stop sole admins from abandoning their group
-            $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE user_id = %d AND community_id = %s AND is_admin = 1', get_current_user_id(), $gID));
-             if ( 1 == count( $group_admins ) && $group_admins[0]->user_id == bp_loggedin_user_id() ) {
+            $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE community_id = %s AND is_admin = 1', $gID));
+
+             if ( 2 > count( $group_admins )) {
                  echo __('This community must have at least one admin', 'buddypress');
              } else {
                 $result = $wpdb->delete( 'communities_members',
