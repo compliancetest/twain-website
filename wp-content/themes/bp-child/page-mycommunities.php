@@ -58,7 +58,7 @@ get_header();
                                 <?php
                                     $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE community_id = %s AND is_admin = 1', $group->id));
                                 ?>
-                                <?php if ( count( $group_admins ) == 1 && $group->is_admin ):?>
+                                <?php if ( count( $group_admins ) < 2 && $group->is_admin ):?>
                                     <a href="#" class="action-btn delete-btn icon-btn has-tooltip greyed-out-btn" onclick="return false;">
                                         <span class="p"></span>
                                         <span class="simple_tooltip radius6">This community must have at least one admin<span></span></span>
