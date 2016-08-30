@@ -141,8 +141,10 @@
                                                             @endif
                                                             <td>
                                                                 <a href="#verify-request-transactions-{{ $transactionId }}" class="collapsed" data-toggle="collapse">
-                                                                    <span class="collapse-icon"></span>{{ \App\Post::find($transaction->test_case_id)->post_title }}
+                                                                    <span class="collapse-icon"></span>
                                                                 </a>
+                                                                <?php $testCaseData = \App\Post::find($transaction->test_case_id);?>
+                                                                <a href="/test-case/{{ $testCaseData->post_name }}" target="_blank">{{ $testCaseData->post_title }}</a>
                                                             </td>
                                                             <td class="text-center">
                                                                 @if($transaction->s3_link)

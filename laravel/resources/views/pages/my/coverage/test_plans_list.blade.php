@@ -19,8 +19,10 @@
                         @foreach($userSuite['testPlans'] as $userPlan)
                             <tr id="coverage-plan-{{ $userPlan['testPlan']->id }}">
                                 <td class="text-nowrap">
-                                    {{ $userPlan['product']->post_title }}
-                                    @if($userPlan['product']) {{ ' v' . $userPlan['product']->getMetaByKey('product_version') }}@endif
+                                    <a href="/product/{{ $userPlan['product']->post_name }}" target="_blank">
+                                        {{ $userPlan['product']->post_title }}
+                                        @if($userPlan['product']) {{ ' v' . $userPlan['product']->getMetaByKey('product_version') }}@endif
+                                    </a>
                                 </td>
                                 <td class="text-center">{{ $userPlan['testPlan']->level }}</td>
                                 <td>{{ $userPlan['testPlan']->role }}</td>
