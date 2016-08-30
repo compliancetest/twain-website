@@ -208,9 +208,11 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             $secondImage = file_exists($this->rootFolder . '/scan_result/image_2.png');
             $secondImageMetadata = file_exists($this->rootFolder . '/scan_result/image_2.png.json');
             $allFilesExists = $secondImage && $firstImage && $firstImageMetadata && $secondImageMetadata;
+            $decodedFirstFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'));
+            $decodedSecondFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'));
             if($allFilesExists &&
-                (json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'))->ImageWidth >
-                    json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'))->ImageWidth)){
+                (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
+                    ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))){
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
             } else {
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
