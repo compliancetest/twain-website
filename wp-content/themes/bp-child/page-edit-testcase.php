@@ -353,31 +353,6 @@ get_header();
                 </div>
                 <div class="space25"></div>
 
-                <div class="grid-box grid-box-expandable grid-box-opened" id="choose-init-msg-box">
-                    <div class="grid-box-header">
-                        <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                        <h5 class="left">Choose Operational Triplet</h5>
-
-                        <div class="clear"></div>
-                    </div>
-                    <div class="grid-box-body">
-                        <div class="column">
-                            <div class="field-row">
-                                <div class="grid-cell width100P">
-                                    <select name="choose_init_message" class="select">
-                                        <option value="">- Select -</option>
-                                        <?php
-                                        foreach ($suiteInitMessages as $row) { ?>
-                                            <option
-                                                value="<?php echo $row ?>" <?php echo $case->initiationgMessage == $row ? 'selected="selected"' : '' ?>><?php echo $row ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="space25"></div>
                 <div class="grid-box grid-box-expandable grid-box-opened" id="test-data-box">
                     <div class="grid-box-header">
@@ -612,14 +587,6 @@ get_header();
                                     <input type="radio" name="outcome_type"
                                            value="Negative" <?php echo $case->outcomeType == 'Negative' ? 'checked="checked"' : '' ?> />
                                     Negative
-                                </div>
-                                <div class="grid-cell testcase-radio-cell" style="width: 100px;">
-                                    <label>Bulk:</label>
-                                    <input type="radio" name="bulk"
-                                           value="Yes" <?php echo $case->bulk == 'Yes' ? 'checked="checked"' : '' ?> />
-                                    Yes
-                                    <input type="radio" name="bulk"
-                                           value="No" <?php echo $case->bulk == 'No' ? 'checked="checked"' : '' ?> /> No
                                 </div>
 
                                 <div class="grid-cell testcase-radio-cell" style="width: 100px;">

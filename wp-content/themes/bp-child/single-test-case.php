@@ -57,9 +57,6 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             </p>
                         </div>
 
-                        <div class="grid_cell width30P left">
-                            <p>Operational Triplet: <span><?php echo $case->initiationgMessage; ?></span></p>
-                        </div>
                         <div class="clear"></div>
                     </div>
 
