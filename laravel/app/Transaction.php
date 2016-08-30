@@ -119,6 +119,9 @@ class Transaction extends Model
         if ($filters['date']) {
             $this->whereModel->whereRaw(" ( updated_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND updated_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
         }
+        if ($filters['execution_id']) {
+            $this->whereModel->where('execution_id', $filters['execution_id']);
+        }
         if ($filters['test_outcome_status_id']) {
             $this->whereModel->where('test_outcome_status_id', $filters['test_outcome_status_id']);
         }

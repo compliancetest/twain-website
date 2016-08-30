@@ -83,8 +83,17 @@
             @if(($request->get('scenario_id')) && ($request->get('scenario_id') !== '') && ($request->get('scenario_id') == $scenario->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
-        @if($supportOrAdmin)
+        <div class="form-group col-sm-6 col-md-3">
+            <label for="filterExecutionId">Execution ID:</label>
+            <input class="form-control" id="filterExecutionId" name="execution_id" value="{{ $request->get('execution_id') }}">
+            @if(($request->get('execution_id')) && ($request->get('execution_id') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
+        </div>
 
+    </div>
+
+    @if($supportOrAdmin)
+
+        <div class="row">
             <div class="form-group col-sm-6 col-md-3">
                 <label for="filterSubscription">Subscription:</label>
                 <select class="form-control" id="filterSubscription" name="subscription_id">
@@ -96,13 +105,7 @@
                 </select>
                 @if(($request->get('subscription_id')) && ($request->get('subscription_id') !== '') && ($request->get('subscription_id') == $subscription->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
             </div>
-        @endif
 
-    </div>
-
-    @if($supportOrAdmin)
-
-        <div class="row">
             <div class="form-group col-sm-6 col-md-3">
                 <label for="filterOrganisation">Organisation:</label>
                 <select class="form-control" id="filterOrganisation" name="organisation_id">
