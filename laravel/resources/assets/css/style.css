@@ -8819,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8891,7 +8891,7 @@ body.modal-open,
 }
 /* line 125, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
+  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -9218,6 +9218,19 @@ input[type="checkbox"] {
   width: 700px;
 }
 
+/* line 103, ../scss/blocks/_modals.scss */
+.modal-dialog.modal-fluid {
+  width: auto;
+  max-width: 95%;
+  min-width: 500px;
+}
+@media screen and (max-width: 768px) {
+  /* line 103, ../scss/blocks/_modals.scss */
+  .modal-dialog.modal-fluid {
+    min-width: 1px;
+  }
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 @media (min-width: 767px) {
@@ -9233,7 +9246,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464095847') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -10036,7 +10049,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464095847') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10063,7 +10076,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10094,7 +10107,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -10103,7 +10116,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471523691') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10129,7 +10142,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -10160,7 +10173,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10311,43 +10324,48 @@ input[type="checkbox"] {
 .text-status-active {
   color: #47a518;
 }
-.text-status-in-progress{
+
+/* line 83, ../scss/blocks/_statuses.scss */
+.text-status-in-progress {
   color: blue;
 }
-.text-status-assigned{
+
+/* line 86, ../scss/blocks/_statuses.scss */
+.text-status-assigned {
   color: orange;
 }
-/* line 83, ../scss/blocks/_statuses.scss */
+
+/* line 89, ../scss/blocks/_statuses.scss */
 .text-status-suspended {
   color: #d9231f;
 }
 
-/* line 86, ../scss/blocks/_statuses.scss */
+/* line 92, ../scss/blocks/_statuses.scss */
 .text-status-success,
 .text-status-pass,
 .text-status-certified {
   color: #4aa31e;
 }
 
-/* line 91, ../scss/blocks/_statuses.scss */
+/* line 97, ../scss/blocks/_statuses.scss */
 .text-status-fail,
 .text-status-testing,
 .text-status-failure {
   color: #e33f3f;
 }
 
-/* line 96, ../scss/blocks/_statuses.scss */
+/* line 102, ../scss/blocks/_statuses.scss */
 .text-status-not_performed,
 .text-status-unverified {
   color: #666;
 }
 
-/* line 100, ../scss/blocks/_statuses.scss */
+/* line 106, ../scss/blocks/_statuses.scss */
 .text-status-warning {
   color: #CC6600;
 }
 
-/* line 103, ../scss/blocks/_statuses.scss */
+/* line 109, ../scss/blocks/_statuses.scss */
 .text-status-duplicate,
 .text-status-ignored {
   color: #606060;
@@ -10359,7 +10377,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464095847') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10428,7 +10446,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464095847') no-repeat 0 0;
+  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12717,6 +12735,354 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
 }
 
 /*# sourceMappingURL=bootstrap-datepicker.css.map */
+/*
+ * jQuery FlexSlider v2.6.2
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 and later license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ *
+ */
+/* ====================================================================================================================
+ * FONT-FACE
+ * ====================================================================================================================*/
+@font-face {
+  font-family: 'flexslider-icon';
+  src: url("../fonts/flexslider/flexslider-icon.eot");
+  src: url("../fonts/flexslider/flexslider-icon.eot?#iefix") format("embedded-opentype"), url("../fonts/flexslider/flexslider-icon.woff") format("woff"), url("../fonts/flexslider/flexslider-icon.ttf") format("truetype"), url("../fonts/flexslider/flexslider-icon.svg#flexslider-icon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* ====================================================================================================================
+ * RESETS
+ * ====================================================================================================================*/
+/* line 28, ../scss/blocks/_flexslider.scss */
+.flex-container a:hover,
+.flex-slider a:hover {
+  outline: none;
+}
+
+/* line 32, ../scss/blocks/_flexslider.scss */
+.slides,
+.slides > li,
+.flex-control-nav,
+.flex-direction-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* line 40, ../scss/blocks/_flexslider.scss */
+.flex-pauseplay span {
+  text-transform: capitalize;
+}
+
+/* ====================================================================================================================
+ * BASE STYLES
+ * ====================================================================================================================*/
+/* line 46, ../scss/blocks/_flexslider.scss */
+.flexslider {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 50, ../scss/blocks/_flexslider.scss */
+.flexslider .slides > li {
+  display: none;
+  -webkit-backface-visibility: hidden;
+}
+
+/* line 54, ../scss/blocks/_flexslider.scss */
+.flexslider .slides img {
+  width: 100%;
+  display: block;
+}
+
+/* line 58, ../scss/blocks/_flexslider.scss */
+.flexslider .slides:after {
+  content: "\0020";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+/* line 66, ../scss/blocks/_flexslider.scss */
+html[xmlns] .flexslider .slides {
+  display: block;
+}
+
+/* line 69, ../scss/blocks/_flexslider.scss */
+* html .flexslider .slides {
+  height: 1%;
+}
+
+/* line 72, ../scss/blocks/_flexslider.scss */
+.no-js .flexslider .slides > li:first-child {
+  display: block;
+}
+
+/* ====================================================================================================================
+ * DEFAULT THEME
+ * ====================================================================================================================*/
+/* line 78, ../scss/blocks/_flexslider.scss */
+.flexslider {
+  margin: 0 0 60px;
+  background: #fff;
+  position: relative;
+  zoom: 1;
+}
+
+/* line 84, ../scss/blocks/_flexslider.scss */
+.flexslider .slides {
+  zoom: 1;
+}
+
+/* line 87, ../scss/blocks/_flexslider.scss */
+.flexslider .slides img {
+  height: auto;
+  -moz-user-select: none;
+}
+
+/* line 91, ../scss/blocks/_flexslider.scss */
+.flex-viewport {
+  max-height: 2000px;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+/* line 99, ../scss/blocks/_flexslider.scss */
+.loading .flex-viewport {
+  max-height: 300px;
+}
+
+/* line 102, ../scss/blocks/_flexslider.scss */
+.carousel li {
+  margin-right: 5px;
+}
+
+/* line 105, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav {
+  *height: 0;
+}
+
+/* line 108, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav a {
+  text-decoration: none;
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  overflow: hidden;
+  opacity: 0;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* line 123, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav a:before {
+  font-family: "flexslider-icon";
+  font-size: 40px;
+  display: inline-block;
+  content: '\f001';
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* line 131, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav a.flex-next:before {
+  content: '\f002';
+}
+
+/* line 134, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav .flex-prev {
+  left: -50px;
+}
+
+/* line 137, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav .flex-next {
+  right: -50px;
+  text-align: right;
+}
+
+/* line 141, ../scss/blocks/_flexslider.scss */
+.flexslider:hover .flex-direction-nav .flex-prev {
+  opacity: 0.7;
+  left: 10px;
+}
+
+/* line 145, ../scss/blocks/_flexslider.scss */
+.flexslider:hover .flex-direction-nav .flex-prev:hover {
+  opacity: 1;
+}
+
+/* line 148, ../scss/blocks/_flexslider.scss */
+.flexslider:hover .flex-direction-nav .flex-next {
+  opacity: 0.7;
+  right: 10px;
+}
+
+/* line 152, ../scss/blocks/_flexslider.scss */
+.flexslider:hover .flex-direction-nav .flex-next:hover {
+  opacity: 1;
+}
+
+/* line 155, ../scss/blocks/_flexslider.scss */
+.flex-direction-nav .flex-disabled {
+  opacity: 0 !important;
+  filter: alpha(opacity=0);
+  cursor: default;
+  z-index: -1;
+}
+
+/* line 161, ../scss/blocks/_flexslider.scss */
+.flex-pauseplay a {
+  display: block;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  opacity: 0.8;
+  z-index: 10;
+  overflow: hidden;
+  cursor: pointer;
+  color: #000;
+}
+
+/* line 174, ../scss/blocks/_flexslider.scss */
+.flex-pauseplay a:before {
+  font-family: "flexslider-icon";
+  font-size: 20px;
+  display: inline-block;
+  content: '\f004';
+}
+
+/* line 180, ../scss/blocks/_flexslider.scss */
+.flex-pauseplay a:hover {
+  opacity: 1;
+}
+
+/* line 183, ../scss/blocks/_flexslider.scss */
+.flex-pauseplay a.flex-play:before {
+  content: '\f003';
+}
+
+/* line 186, ../scss/blocks/_flexslider.scss */
+.flex-control-nav {
+  width: 100%;
+  position: absolute;
+  bottom: -40px;
+  text-align: center;
+}
+
+/* line 192, ../scss/blocks/_flexslider.scss */
+.flex-control-nav li {
+  margin: 0 6px;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 198, ../scss/blocks/_flexslider.scss */
+.flex-control-paging li a {
+  width: 11px;
+  height: 11px;
+  display: block;
+  background: #666;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  text-indent: -9999px;
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  outline: none;
+}
+
+/* line 215, ../scss/blocks/_flexslider.scss */
+.flex-control-paging li a:hover {
+  background: #333;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* line 219, ../scss/blocks/_flexslider.scss */
+.flex-control-paging li a.flex-active {
+  background: #000;
+  background: rgba(0, 0, 0, 0.9);
+  cursor: default;
+}
+
+/* line 224, ../scss/blocks/_flexslider.scss */
+.flex-control-thumbs {
+  margin: 5px 0 0;
+  position: static;
+  overflow: hidden;
+}
+
+/* line 229, ../scss/blocks/_flexslider.scss */
+.flex-control-thumbs li {
+  width: 25%;
+  float: left;
+  margin: 0;
+}
+
+/* line 234, ../scss/blocks/_flexslider.scss */
+.flex-control-thumbs img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: .7;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+/* line 247, ../scss/blocks/_flexslider.scss */
+.flex-control-thumbs img:hover {
+  opacity: 1;
+}
+
+/* line 250, ../scss/blocks/_flexslider.scss */
+.flex-control-thumbs .flex-active {
+  opacity: 1;
+  cursor: default;
+}
+
+/* ====================================================================================================================
+ * RESPONSIVE
+ * ====================================================================================================================*/
+@media screen and (max-width: 860px) {
+  /* line 258, ../scss/blocks/_flexslider.scss */
+  .flex-direction-nav .flex-prev {
+    opacity: 1;
+    left: 10px;
+  }
+
+  /* line 262, ../scss/blocks/_flexslider.scss */
+  .flex-direction-nav .flex-next {
+    opacity: 1;
+    right: 10px;
+  }
+}
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -13354,7 +13720,7 @@ table.json-array-table > tbody > tr > td.json-array-table-move {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -13600,7 +13966,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -13802,7 +14168,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -13917,7 +14283,7 @@ input.notify-changes {
   padding: 10px 0;
   *zoom: 1;
 }
-/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .transaction-list-actions:after {
   content: "";
   display: table;
@@ -13939,12 +14305,12 @@ input.notify-changes {
 
 /* line 81, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
 /* line 84, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 /* line 88, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
@@ -13969,19 +14335,19 @@ input.notify-changes {
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
   vertical-align: middle;
 }
 /* line 120, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -14788,7 +15154,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464095847') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -14798,7 +15164,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464095847') repeat 0 0;
+  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
