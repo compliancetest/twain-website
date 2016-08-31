@@ -202,26 +202,34 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             }
         }
 
-        if($testCase->post_name == 'ca-01-v1-0'){
-            $firstImage = file_exists($this->rootFolder . '/scan_result/image_1.png');
-            $firstImageMetadata = file_exists($this->rootFolder . '/scan_result/image_1.png.json');
-            $secondImage = file_exists($this->rootFolder . '/scan_result/image_2.png');
-            $secondImageMetadata = file_exists($this->rootFolder . '/scan_result/image_2.png.json');
-            $allFilesExists = $secondImage && $firstImage && $firstImageMetadata && $secondImageMetadata;
-            $decodedFirstFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'));
-            $decodedSecondFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'));
-            if($allFilesExists &&
-                (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
-                    ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))){
-                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
-            } else {
-                $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
-                $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
-            }
-        } else {
+
+        if($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
+            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS')) {
+            /*
+             * Ensure that each TWRC_XFERDONE returs code has image
+             */
             if (!$transaction->logs()->where(['return_code' => 'TWRC_XFERDONE', 'scan_results' => '[]'])->get()->isEmpty()) {
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
+            } else {
+                if ($testCase->post_name == 'ca-01-v1-0') {
+                    $firstImage = file_exists($this->rootFolder . '/scan_result/image_1.png');
+                    $firstImageMetadata = file_exists($this->rootFolder . '/scan_result/image_1.png.json');
+                    $secondImage = file_exists($this->rootFolder . '/scan_result/image_2.png');
+                    $secondImageMetadata = file_exists($this->rootFolder . '/scan_result/image_2.png.json');
+                    $allFilesExists = $secondImage && $firstImage && $firstImageMetadata && $secondImageMetadata;
+                    $decodedFirstFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'));
+                    $decodedSecondFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'));
+                    if ($allFilesExists &&
+                        (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
+                            ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))
+                    ) {
+                        $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
+                    } else {
+                        $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
+                        $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
+                    }
+                }
             }
         }
         $transaction->save();
