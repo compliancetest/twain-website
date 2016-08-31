@@ -180,6 +180,7 @@
                                                                                 <div class="modal-body">
                                                                                     <div class="flexslider">
                                                                                         <ul class="slides">
+                                                                                            {{--If both images available use this layout--}}
                                                                                             <li>
                                                                                                 <div class="row">
                                                                                                     <div class="col-md-4">
@@ -195,17 +196,14 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </li>
+                                                                                            {{--If second image is absent use this layout--}}
                                                                                             <li>
                                                                                                 <div class="row">
-                                                                                                    <div class="col-md-4">
+                                                                                                    <div class="col-md-6">
                                                                                                         <h4>Image 1</h4>
                                                                                                         <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
                                                                                                     </div>
-                                                                                                    <div class="col-md-4">
-                                                                                                        <h4>Image 2</h4>
-                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
-                                                                                                    </div>
-                                                                                                    <div class="col-md-4">
+                                                                                                    <div class="col-md-6">
                                                                                                         <h4>Form</h4>
                                                                                                     </div>
                                                                                                 </div>
