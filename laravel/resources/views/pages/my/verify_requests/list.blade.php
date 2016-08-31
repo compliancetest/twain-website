@@ -122,6 +122,9 @@
                                                         <th>Execution ID</th>
                                                         <th>Status</th>
                                                         <th>Date</th>
+                                                        @if($isAdmin)
+                                                            <th>Action</th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -163,6 +166,11 @@
                                                                     @endif
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
+                                                             @if($isAdmin)
+                                                                <td class="text-center">
+                                                                     <button class="btn btn-success">View Images</button>
+                                                                </td>
+                                                            @endif
                                                         </tr>
                                                         <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transactionId }}" data-transaction-id="{{ $transaction->id }}">
                                                             <td colspan="7">
