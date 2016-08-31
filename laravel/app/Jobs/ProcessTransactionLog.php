@@ -227,10 +227,15 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                         $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
                     }
+                } else if($testCase->post_name == 'ca-03-v1-0'){
+                    $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction);
+                    $testCaseValidator->validate();
                 }
             }
+            $transaction->save();
         }
-        $transaction->save();
         File::deleteDirectory($this->rootFolder);
     }
+
+    
 }
