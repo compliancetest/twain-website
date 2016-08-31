@@ -22,7 +22,7 @@ $home_settings = get_option('home-settings');
                     <img src="<?php echo get_stylesheet_directory_uri() ?>/images/temp/video.jpg" alt=""/>
                 <?php endif; */ ?>
                 </div>
-                <img src="<?php echo get_stylesheet_directory_uri() ?>/images/video-twain.png" alt=""/>
+                <img src="<?php echo get_stylesheet_directory_uri() ?>/images/twain-home-image.png" alt=""/>
             </div>
         </div>
         <div class="search-box">
