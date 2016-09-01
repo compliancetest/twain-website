@@ -22,7 +22,7 @@ if($ticket_id)
         exit;
     }
 
-    if (!is_super_admin() && !(doesUserAdminInAnyCommunity($user_id) || doesUserSupportInAnyCommunity($user_id)) && $ticket->customer_id != $user_id) //Permission Denied
+    if (!canEditTicket($ticket, $user_id)) //Permission Denied
     {
         addMessage("Invalid Request!", 'error');
         wp_redirect('/my-support-tickets');

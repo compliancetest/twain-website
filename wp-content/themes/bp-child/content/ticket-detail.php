@@ -25,7 +25,9 @@
 
 <div class="column ticket-detail"> 
     <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
-    <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar"><?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=77&height=77' ); ?></a>
+    <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar">
+        <img src="<?php echo getUserAvatar($ticket->customer_id);?>" class="avatar user-12-avatar avatar-77 photo" width="77" height="77" alt="Profile picture">
+    </a>
     <div class="left">
         <h2>Ticket #<?php echo $ticket_id?> (<?php echo apply_filters('the_title', $ticket->title)?>)</h2>
         <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
@@ -144,8 +146,8 @@
     ?>
         <div class="ticket-message">
             <div class="left width10P">
-                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>">                                    
-                    <?php echo cp_get_user_avatar($message->sender, 'type=thumb' ); ?>                    
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>">
+                    <img src="<?php echo getUserAvatar($message->sender);?>" class="avatar user-12-avatar avatar- photo" width="50" height="50" alt="Profile picture">
                 </a>
             </div>
             <div class="left width90P">
@@ -181,7 +183,7 @@
                 <div class="field-row">
                     <div class="field-cell left width10P">
                         <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                            <?php echo cp_get_user_avatar($user_id, 'type=thumb' ); ?>
+                            <img src="<?php echo getUserAvatar($user_id);?>" class="avatar user-12-avatar avatar- photo" width="50" height="50" alt="Profile picture">
                         </a>
                     </div>
                     <div class="field-cell left width90P">
