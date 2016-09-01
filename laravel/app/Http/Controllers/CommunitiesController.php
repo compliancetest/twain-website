@@ -119,7 +119,7 @@ class CommunitiesController extends Controller
             $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
             $data['links'] = CommunitySurveyResult::all()->keyBy('survey_id');
             $apiResults = $surveyMonkey->getSurveyList();
-            if($apiResults['status']) {
+            if(isset($apiResults['data'])) {
                 foreach ($surveyMonkey->getSurveyList()['data'] as $survey) {
                     $collectors = $surveyMonkey->getCollectorList($survey['id']);
                     if ($collectors['data']) {
