@@ -7599,6 +7599,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     float: right;
 }
 
+#change-term-contr .btn-row .action-btn .simple_tooltip{
+    top: -27px !important;
+}
+
 #ticket-messages-list h2{
     background: url(../images/comments-icon.png) no-repeat left 9px;
     padding: 5px 0 20px 30px;    

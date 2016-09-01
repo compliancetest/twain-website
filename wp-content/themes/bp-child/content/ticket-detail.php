@@ -126,8 +126,8 @@
                 <div class="clear"></div>
             </div>
             <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="t">Cancel</span><span class="simple_tooltip"><span></span>Canel</span></a>                        
-                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="t">Submit</span><span class="simple_tooltip"><span></span>Submit</span></a>                
+                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="t">Cancel</span><span class="simple_tooltip"><span></span>Cancel</span></a>
+                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="t">Submit</span><span class="simple_tooltip"><span></span>Submit</span></a>
                 <div class="clear"></div>
             </div>
             <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
