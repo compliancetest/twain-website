@@ -104,49 +104,50 @@ $home_settings = get_option('home-settings');
                     <?php endfor; ?>
                 </ul>
             </div>
+            <?php if (bp_has_groups()) : ?>
             <div class="our-communities-box">
                 <div class="home-box-title">Our Communities</div>
                 <?php $groups_count = groups_get_total_group_count(); ?>
-                <?php if (bp_has_groups()) : ?>
-                    <ul class="communities-list clearfix">
-                        <?php while (bp_groups()) : bp_the_group(); ?>
-                            <li class="community-item">
-                                <div class="community-avatar">
-                                    <?php
-                                    $args = array(
-                                        'width' => 150
-                                    );
-                                    ?>
-                                    <a href="<?php bp_group_permalink() ?>"><?php bp_group_avatar($args); ?></a>
-                                </div>
-                                <div class="community-content">
-                                    <div class="community-title"><a
-                                            href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
-                                    <div class="community-description"><?php bp_group_description(); ?></div>
-                                    <a href="<?php bp_group_permalink() ?>" class="action-btn red-btn">Community
-                                        Homepage</a>
-                                </div>
-                            </li>
-                        <?php endwhile; ?>
-                    </ul>
-                    <ul class="community-pager">
-                        <?php $pager = 1 ?>
-                        <?php while ($pager <= $groups_count): ?>
-                            <li data-community-index="<?php echo $pager; ?>"><?php echo $pager; ?></li>
-                            <?php $pager++; ?>
-                        <?php endwhile; ?>
-                    </ul>
-                <?php endif; ?>
+                <ul class="communities-list clearfix">
+                    <?php while (bp_groups()) : bp_the_group(); ?>
+                        <li class="community-item">
+                            <div class="community-avatar">
+                                <?php
+                                $args = array(
+                                    'width' => 150
+                                );
+                                ?>
+                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_avatar($args); ?></a>
+                            </div>
+                            <div class="community-content">
+                                <div class="community-title"><a
+                                        href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
+                                <div class="community-description"><?php bp_group_description(); ?></div>
+                                <a href="<?php bp_group_permalink() ?>" class="action-btn red-btn">Community
+                                    Homepage</a>
+                            </div>
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+                <ul class="community-pager">
+                    <?php $pager = 1 ?>
+                    <?php while ($pager <= $groups_count): ?>
+                        <li data-community-index="<?php echo $pager; ?>"><?php echo $pager; ?></li>
+                        <?php $pager++; ?>
+                    <?php endwhile; ?>
+                </ul>
             </div>
+            <?php endif; ?>
         </div>
 
+        <?php
+            $args = array('post_type' => 'customer', 'posts_per_page' => -1);
+            $loop = new WP_Query($args);
+        ?>
+        <?php if($loop->have_posts()): ?>
         <div class="our-customers">
             <div class="wrapper">
                 <div class="home-box-title">Our Customers</div>
-                <?php
-                $args = array('post_type' => 'customer', 'posts_per_page' => -1);
-                $loop = new WP_Query($args);
-                ?>
                 <div class="customers-carousel-container">
                     <div class="customers-carousel">
                         <ul>
@@ -168,5 +169,6 @@ $home_settings = get_option('home-settings');
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 <?php get_footer(); ?>
