@@ -1719,4 +1719,3 @@ function getUserAvatar($userId)
     $s3 = new S3Wrapper();
     return $s3->getAvatar($key);
 }
-getUserAvatar(get_current_user_id());

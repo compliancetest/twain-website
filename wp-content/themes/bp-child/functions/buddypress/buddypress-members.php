@@ -20,10 +20,9 @@ function cp_change_avatar()
         if ( !empty( $_FILES ) ) {
             $s3Wrapper = new S3Wrapper();
             $bucketName = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
-            $bucketName = 'www.integration.twain.gosource.com.au';
-            $s3Key = '/avatars/' . md5(get_current_user_id()) .'.' . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+            $s3Key = 'avatars/' . md5(get_current_user_id()) .'.' . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
             $s3Wrapper->putObject($s3Key, file_get_contents($_FILES['file']['tmp_name']), $_FILES['file']['type'], $bucketName);
-            update_user_meta(get_current_user_id(), 'avatar_s3_path', '/avatars/' .$s3Key);
+            update_user_meta(get_current_user_id(), 'avatar_s3_path', $s3Key);
         }
         addMessage( 'Your new avatar was uploaded successfully.');
         wp_redirect("/my-profile");
