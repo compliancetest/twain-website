@@ -9218,3 +9218,21 @@ input.inactive_s{
     margin: 0 0 0 -130px;
     z-index: 99;
 }
+
+.test-case-samples{
+    padding: 0 10px;
+}
+
+.test-case-sample-item{
+    margin: 10px 5px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    max-width: 175px;
+}
+
+.test-case-sample-item img{
+    max-width: 175px;
+    height: auto;
+    display: block;
+}

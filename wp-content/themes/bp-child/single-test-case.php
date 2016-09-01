@@ -204,21 +204,17 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     <div class="grid_cell width100P toleft">
                         <div class="grid_head lighter_gray_bcg2 related">
                             <div class="grid_row nopaddingbottom nopaddingtop">
-                                <div class="grid_cell width100P size14 normal shadowwhite">Scanned Images</div>
+                                <div class="grid_cell width100P size14 normal shadowwhite">Test Samples</div>
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <div class="grids noradiusbottom">
+                        <div class="grids noradiusbottom test-case-samples">
                             <?php foreach ($case->imagesData as $image): ?>
-                                <div
-                                    style="float: left; margin-right: 20px; margin-top: 20px; display: block; max-width: 150px;"
-                                    class="gallery">
+                                <div class="gallery test-case-sample-item">
                                     <?php $imageUrl = S3Wrapper::getCaseImageUrl($case->id, $image['name']); ?>
                                     <a href="<?php echo $imageUrl; ?>" title="<?php echo $image['description']; ?>">
-                                        <img style="width: 150px; height: 150px;" src="<?php echo $imageUrl; ?>"
-                                             alt="<?php echo $image['description']; ?>">
-
-                                        <p style="text-align: center;"><?php echo $image['description']; ?></p>
+                                        <img src="<?php echo $imageUrl; ?>" alt="<?php echo $image['description']; ?>">
+                                        <span><?php echo $image['description']; ?></span>
                                     </a>
                                 </div>
                             <?php endforeach; ?>

@@ -364,8 +364,7 @@ get_header();
                     <div class="grid-box-body">
                         <div class="column">
                             <div id="case-template-data">
-                                <h6><B>Scanned Images</b></h6>
-
+                                <h6>Test Samples</h6>
                                 <div class="field-row">
                                     <div class="grid-cell width35P">
                                         <label>Image</label>
