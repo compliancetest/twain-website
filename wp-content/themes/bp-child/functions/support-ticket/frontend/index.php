@@ -44,3 +44,11 @@ function ct_process_ticket_frontend_actions()
         }
     }
 }
+
+function canEditTicket($ticket, $userId = false)
+{
+    if(!$userId){
+        $userId = get_current_user_id();
+    }
+    return !(!is_super_admin() && !(doesUserAdminInAnyCommunity($userId) || doesUserSupportInAnyCommunity($userId)) && $ticket->customer_id != $userId);
+}

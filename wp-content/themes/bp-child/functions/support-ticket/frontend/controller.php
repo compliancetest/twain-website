@@ -156,7 +156,7 @@ function createSupportTicket()
                 $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                 $has_attachment = 1;
                 $s3 = new S3Wrapper();
-                $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
+                $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ), 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au');
 
             }
         }
@@ -522,7 +522,7 @@ function acceptTerm()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticket->customer_id != $user_id)
+    if(!canEditTicket($ticket, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
@@ -597,7 +597,7 @@ function changeTicketTerm()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticket->customer_id != $user_id)
+    if(!canEditTicket($ticket, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
@@ -761,7 +761,7 @@ function sendTicketMessage()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticketDetail->customer_id != $user_id)
+    if(!canEditTicket($ticket, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");

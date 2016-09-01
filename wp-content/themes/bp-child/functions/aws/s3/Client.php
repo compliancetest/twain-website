@@ -10,7 +10,7 @@ class S3Wrapper extends BaseAWS
     public function __construct()
     {
 
-        $this->_bucket = get_option('aws_s3_url');
+        $this->_bucket = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
 
         $configs = self::getAWSConfigs();
         $configs['signature'] = 'v4';
@@ -232,7 +232,7 @@ class S3Wrapper extends BaseAWS
     public static function getLink($bucket, $fileName)
     {
         $s3 = new S3Wrapper();
-        return urldecode($s3->_client->getObjectUrl(rtrim(get_option('aws_s3_url') . '/' . $bucket, '/'), $fileName));
+        return urldecode($s3->_client->getObjectUrl(rtrim('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au' . '/' . $bucket, '/'), $fileName));
     }
 
     public static function getDownloadLink($bucket, $fileName, $name = false)
@@ -240,7 +240,7 @@ class S3Wrapper extends BaseAWS
         $s3 = new S3Wrapper();
         $name = $name ? $name : $fileName;
         $command = $s3->_client->getCommand('GetObject', array(
-            'Bucket' => get_option('aws_s3_url'),
+            'Bucket' => 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au',
             'Key' => $bucket . '/' . $fileName,
             'ResponseContentDisposition' => 'attachment; filename="' . $name . '"'
         ));
