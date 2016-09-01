@@ -47,7 +47,7 @@
                                data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
                     @endif
                      <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
-                               data-tooltip="tooltip" title="Remove Test Results">Remove Test Results</a>
+                               data-tooltip="tooltip" title="Delete Test Results">Delete Test Results</a>
                 </div>
                 <div class="pull-right">
                     <div class="form-inline">
