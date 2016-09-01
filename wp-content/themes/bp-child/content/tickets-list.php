@@ -153,7 +153,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                        //Getting Customer Organisation
                        
            ?>
-                        <div class="tr priority-<?php echo sanitize_title($ticket->priority_title) ?> <?php echo $new_messages > 0 ? 'has-new' : ''?>" onclick="document.location.href='/my-support-tickets/<?php echo $ticket->id?>'">
+                        <div class="tr priority-<?php echo sanitize_title($ticket->priority_title) ?> <?php echo $new_messages > 0 ? 'has-new' : ''?>">
                             <div class="td td-ticket-id tocenter">
                                 <?php echo str_pad($ticket->id, 8, 0, STR_PAD_LEFT)?>
                                 <?php

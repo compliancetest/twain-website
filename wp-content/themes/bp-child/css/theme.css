@@ -7483,9 +7483,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_list .has-new .td{
     font-weight: bold !important;
 }
-#tickets_list .tbody .tr{
-    cursor: pointer;
-}
 #tickets_table .ticket-priority{
     width: 10px;
     height: 10px;
