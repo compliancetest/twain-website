@@ -1705,3 +1705,17 @@ function ctE($string)
 {
     return htmlentities($string, ENT_COMPAT, 'UTF-8', false);
 }
+
+/**
+ * @param $userId
+ * @return bool
+ */
+function getUserAvatar($userId)
+{
+    $key = get_user_meta($userId, 'avatar_s3_path', true);
+    if(!$key){
+        return false;
+    }
+    $s3 = new S3Wrapper();
+    return $s3->getAvatar($key);
+}

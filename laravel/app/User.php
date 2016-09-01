@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -87,9 +88,9 @@ class User extends Authenticatable
      */
     public function getAvatar($type = 'bpthumb')
     {
-        $files = glob(__DIR__  . "/../../wp-content/uploads/avatars/".$this->ID."/*-".$type.".*");
-        if(count($files) > 0){
-            return getSiteUrl() . explode('/../..', $files[0])[1];
+        $key = get_user_meta($this->ID, 'avatar_s3_path', true);
+        if (Storage::exists($key)) {
+            return 'https://s3-us-west-2.amazonaws.com/'.config('env.bucket.website').'/' . $key;
         }
         return DEFAULT_AVATAR;
     }

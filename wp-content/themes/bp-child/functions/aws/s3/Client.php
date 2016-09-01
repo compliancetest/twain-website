@@ -102,6 +102,25 @@ class S3Wrapper extends BaseAWS
     }
 
     /**
+     * @param $token - profile token from profiles table
+     * @param bool $returnJson - set this flag to true if you want to get data as JSON
+     * @return array|bool|mixed|null
+     */
+    public static function getAvatar($key)
+    {
+        $s3 = new S3Wrapper();
+        try {
+        $result = $s3->_client->getObjectUrl(
+            'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au',
+            $key
+        );
+        } catch (Exception $e) {
+            return false;
+        }
+        return $result;
+    }
+
+    /**
      * @param $token - profile token
      * @return array|bool|mixed|null
      */
