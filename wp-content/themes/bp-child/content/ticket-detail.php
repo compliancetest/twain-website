@@ -68,9 +68,9 @@
         <span><b>Effort:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
         <span><b>Time to Respond:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
         <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>        
-        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Edit</span><span class="simple_tooltip"><span></span>Edit Term</span></a>
+        <a href="#" class="action-btn edit-btn icon-btn right" id="change-term-link"><span class="p"></span><span class="t">Edit</span></a>
         <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
-        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="t">Accept</span><span class="simple_tooltip"><span></span>Accept Term</span></a>
+        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right"><span class="p"></span><span class="t">Accept</span></a>
         <?php endif; ?>
     </p>
     <div id="change-term-contr" style="display: none;">
@@ -126,8 +126,8 @@
                 <div class="clear"></div>
             </div>
             <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="t">Cancel</span><span class="simple_tooltip"><span></span>Cancel</span></a>
-                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="t">Submit</span><span class="simple_tooltip"><span></span>Submit</span></a>
+                <a href="#" class="action-btn cancel-btn icon-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
+                <a href="#" class="action-btn process-btn submit-btn icon-btn"><span class="p"></span><span class="t">Submit</span></a>
                 <div class="clear"></div>
             </div>
             <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
