@@ -9,7 +9,7 @@ if (!isset($_REQUEST['is_ajax'])) {
 }
 $case = new TestCases(get_the_ID());
 $case->load();
-$test_suite_id = isset($_GET['test_suite_id']) ? $_GET['test_suite_id'] : false;
+$test_suite_id = isset($_GET['test_suite_id']) && in_array($_GET['test_suite_id'], $case->testSuite) && $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE post_type = 'test_suite' AND ID = %d", $test_suite_id)) ? $_GET['test_suite_id'] : false;
 
 ?>
 
