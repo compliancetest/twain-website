@@ -9,6 +9,7 @@ if (!isset($_REQUEST['is_ajax'])) {
 }
 $case = new TestCases(get_the_ID());
 $case->load();
+$test_suite_id = isset($_GET['test_suite_id']) ? $_GET['test_suite_id'] : false;
 
 ?>
 
@@ -31,7 +32,8 @@ $case->load();
                 }
                 ?>
                 <a href="<?php echo addPrintParams(get_permalink(), 'test-case') ?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">Print</span></a>
-                <?php foreach($case->testSuite as $caseTestSuite):?>
+                <?php foreach(array_unique($case->testSuite) as $caseTestSuite):?>
+                    <?php if(($test_suite_id && $test_suite_id != $caseTestSuite) || empty($caseTestSuite) || empty(get_the_title($caseTestSuite))) continue;?>
                     <span class="right nomarginright"> Go to <a href="<?php echo get_permalink($caseTestSuite) ?>"><?php echo get_the_title($caseTestSuite) ?></a></span><br>
                 <?php endforeach;?>
 
