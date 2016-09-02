@@ -16,11 +16,11 @@ $user = get_userdata($profileID);
 <div class="page-title-block column">
     <div id="item-header-avatar" class="profile-avatar">
 	    <a href="<?php bp_displayed_user_link(); ?>">
-		    <?php $userAvatar = get_avatar($user->data->user_email, 150);?>
-            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+		    <?php $userAvatar = getUserAvatar($user->data->ID);?>
+            <?php if(!$userAvatar):?>
                 <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150" height="150">
             <?php else:?>
-                <?php echo get_avatar($user->data->user_email, 150);  ?>
+                <img src="<?php echo $userAvatar;?>" class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150" height="150">
             <?php endif;?>
 	    </a>
     </div><!-- #item-header-avatar -->

@@ -779,6 +779,13 @@ function bp_core_avatar_handle_crop( $args = '' ) {
 	$full_cropped  = wp_crop_image( $original_file, (int) $crop_x, (int) $crop_y, (int) $crop_w, (int) $crop_h, bp_core_avatar_full_width(),  bp_core_avatar_full_height(),  false, $avatar_folder_dir . '/' . $full_filename  );
 	$thumb_cropped = wp_crop_image( $original_file, (int) $crop_x, (int) $crop_y, (int) $crop_w, (int) $crop_h, bp_core_avatar_thumb_width(), bp_core_avatar_thumb_height(), false, $avatar_folder_dir . '/' . $thumb_filename );
 
+	$s3Wrapper = new S3Wrapper();
+	$bucketName = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
+	$s3Key = 'avatars/' . md5(get_current_user_id()) .'.' . pathinfo($full_cropped, PATHINFO_EXTENSION);
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$s3Wrapper->putObject($s3Key, file_get_contents($full_cropped), finfo_file($finfo, $full_cropped), $bucketName);
+	update_user_meta(get_current_user_id(), 'avatar_s3_path', $s3Key);
+
 	// Check for errors
 	if ( empty( $full_cropped ) || empty( $thumb_cropped ) || is_wp_error( $full_cropped ) || is_wp_error( $thumb_cropped ) )
 		return false;
