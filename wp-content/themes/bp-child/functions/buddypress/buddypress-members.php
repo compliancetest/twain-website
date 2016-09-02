@@ -17,16 +17,53 @@ function cp_change_avatar()
             exit;
         }
         
+        $bp = buddypress();
+
+        if ( ! isset( $bp->avatar_admin ) )
+            $bp->avatar_admin = new stdClass();
+
+        $bp->avatar_admin->step = 'upload-image';
+
         if ( !empty( $_FILES ) ) {
-            $s3Wrapper = new S3Wrapper();
-            $bucketName = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
-            $s3Key = 'avatars/' . md5(get_current_user_id()) .'.' . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-            $s3Wrapper->putObject($s3Key, file_get_contents($_FILES['file']['tmp_name']), $_FILES['file']['type'], $bucketName);
-            update_user_meta(get_current_user_id(), 'avatar_s3_path', $s3Key);
+
+            // Check the nonce
+            check_admin_referer( 'bp_avatar_upload' );
+
+            // Pass the file to the avatar upload handler
+            if ( bp_core_avatar_handle_upload( $_FILES, 'xprofile_avatar_upload_dir' ) ) {
+                $bp->avatar_admin->step = 'crop-image';
+
+                // Make sure we include the jQuery jCrop file for image cropping
+                add_action( 'wp_print_scripts', 'bp_core_add_jquery_cropper' );
+            }else{
+//                hook_buddypress_action_messages();
+            }
         }
-        addMessage( 'Your new avatar was uploaded successfully.');
-        wp_redirect("/my-profile");
-        exit;
+
+        // If the image cropping is done, crop the image and save a full/thumb version
+        if ( isset( $_POST['avatar-crop-submit'] ) ) {
+
+            // Check the nonce
+            check_admin_referer( 'bp_avatar_cropstore' );
+
+            $args = array(
+                'item_id'       => bp_loggedin_user_id(),
+                'original_file' => $_POST['image_src'],
+                'crop_x'        => $_POST['x'],
+                'crop_y'        => $_POST['y'],
+                'crop_w'        => $_POST['width'],
+                'crop_h'        => $_POST['height']
+            );
+
+            if ( ! bp_core_avatar_handle_crop( $args ) ) {
+//                addMessage( __( 'There was a problem cropping your avatar.', 'buddypress' ), 'error' );
+            } else {
+                addMessage( __( 'Your new avatar was uploaded successfully.', 'buddypress' ) );
+//                do_action( 'xprofile_avatar_uploaded' );
+            }
+            wp_redirect("/my-profile");
+            exit;
+        }
 
     }
     

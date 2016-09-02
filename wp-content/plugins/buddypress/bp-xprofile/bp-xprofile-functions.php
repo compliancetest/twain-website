@@ -399,6 +399,9 @@ function xprofile_avatar_upload_dir( $directory = false, $user_id = 0 ) {
 	if ( empty( $directory ) )
 		$directory = 'avatars';
 
+	if(!file_exists(bp_core_avatar_upload_path() . '/avatars/')){
+		mkdir(bp_core_avatar_upload_path() . '/avatars/');
+	}
 	$path    = bp_core_avatar_upload_path() . '/avatars/' . $user_id;
 	$newbdir = $path;
 
