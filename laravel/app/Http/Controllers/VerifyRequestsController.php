@@ -341,8 +341,10 @@ class VerifyRequestsController extends Controller
         foreach ($verifyRequestTransactions as $verifyRequestTransaction) {
             if (in_array($verifyRequestTransaction, $request->get('transactions'))) {
                 $transaction = Transaction::find($verifyRequestTransaction);
+                if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')))) {
+                    TransactionChangeLog::addLog($transaction, Auth::user()->ID, strtoupper($request->get('outcome_code')));
+                }
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')));
-                TransactionChangeLog::addLog($transaction, Auth::user()->ID, strtoupper($request->get('outcome_code')));
                 if (boolval($request->get('reason'))) {
                     $transaction->reason = $request->get('reason');
                 }
