@@ -83,6 +83,7 @@
 
                                     @if(is_super_admin())
                                         <li><a data-title="ApiLogs" href="{{ getSiteUrl() }}/api-logs/" class="menu-transactions">ApiLogs</a></li>
+                                        <li><a data-title="Outcome Logs" href="{{ getSiteUrl() }}/test-outcome-logs/" class="menu-transactions">Outcome Logs</a></li>
                                     @endif
                                 </ul>
                             </li>

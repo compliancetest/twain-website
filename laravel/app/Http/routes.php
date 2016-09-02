@@ -222,4 +222,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('api-logs/{logId}/download-request', 'ApiLogsController@downloadRequest');
         Route::get('api-logs/{logId}/download-response', 'ApiLogsController@downloadResponse');
     });
+
+     Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
+        Route::get('test-outcome-logs', 'TransactionChangeLogController@index');
+        Route::get('test-outcome-logs/filters', 'TransactionChangeLogController@filters');
+        Route::get('test-outcome-logs/logs-list', 'TransactionChangeLogController@logsList');
+    });
+
+
+
 });

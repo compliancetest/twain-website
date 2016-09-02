@@ -20,6 +20,7 @@
     <?php if ( ! is_super_admin() ): ?>
         <script type="text/javascript">
             jQuery('.dashboard-tabs .menu-apilogs').remove();
+            jQuery('.dashboard-tabs .menu-outcomelogs').remove();
         </script>
     <?php endif; ?>
     
