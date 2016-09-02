@@ -87,10 +87,15 @@ $test_suite_id = isset($_GET['test_suite_id']) ? $_GET['test_suite_id'] : false;
                             <?php
                             $lArr = array();
                             foreach($case->conformanceLevel as $levelSuiteId => $levelSuiteData) {
+                                if($test_suite_id && $levelSuiteId != $test_suite_id){
+                                    continue;
+                                }
                                 $levelCommunityId = get_post_meta($levelSuiteId, "community_id", true);
                                 foreach ($levelSuiteData as $level) {
                                     if (groups_is_user_admin(get_current_user_id(), $levelCommunityId) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
-                                        $lArr[] = $level;
+                                        if(!in_array($level, $lArr)) {
+                                            $lArr[] = $level;
+                                        }
                                     }
                                 }
                             }
@@ -131,6 +136,9 @@ $test_suite_id = isset($_GET['test_suite_id']) ? $_GET['test_suite_id'] : false;
                         <div class="grid_cell width90P left redactor_editor">
                             <?php
                             foreach($case->scenario as $scenarioSuiteId => $scenarioId) {
+                                if($test_suite_id && $scenarioSuiteId != $test_suite_id){
+                                    continue;
+                                }
                                 $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $scenarioSuiteId));
                                 $temp_test_suite = $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id desc LIMIT 1", $family_mark));
                                 $scenarioDetail = $case->getScenario($temp_test_suite);
