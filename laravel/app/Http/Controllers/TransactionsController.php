@@ -93,8 +93,10 @@ class TransactionsController extends Controller
         }
         foreach ($request->get('transactions') as $transactionToUpdate) {
             $transaction = Transaction::find($transactionToUpdate);
+            if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')))) {
+                TransactionChangeLog::addLog($transaction, Auth::user()->ID, strtoupper($request->get('outcome_code')));
+            }
             $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')));
-            TransactionChangeLog::addLog($transaction, Auth::user()->ID, strtoupper($request->get('outcome_code')));
             if (boolval($request->get('reason'))) {
                 $transaction->reason = $request->get('reason');
             }
