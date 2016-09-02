@@ -18,8 +18,8 @@
                 <li class="transactions-tab"><a href="/my-transaction-log/" data-tooltip="tooltip" title="My Test Results">Test Results</a></li>
                 <li class="support-tab"><a href="/my-support-tickets/" data-tooltip="tooltip" title="My support tickets">Support</a></li>
                 <li class="profile-tab"><a href="/my-profile/" data-tooltip="tooltip" title="My profile">Profile</a></li>
-                <li class="transactions-tab"><a href="/api-logs/" class="active" data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
-                <li class="transactions-tab"><a href="/test-outcome-logs/" data-tooltip="tooltip" title="Outcome Logs">Outcome Logs</a></li>
+                <li class="transactions-tab"><a href="/api-logs/"  data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
+                <li class="transactions-tab"><a href="/test-outcome-logs/" class="active" data-tooltip="tooltip" title="Outcome Logs">Outcome Logs</a></li>
 
             </ul>
         </div>
@@ -29,14 +29,14 @@
                 <div class="transaction-filter-title">Filter By:</div>
                 <div class="transaction-filter-content block-loading-wrapper">
 
-                    @include('pages.api-logs.filters')
+                    @include('pages.transactions-change-logs.filters')
 
                 </div>
             </div>
             <div class="block-loading-wrapper">
 
                 <div id="log-result-table">
-                    @include('pages.api-logs.logs')
+                    @include('pages.transactions-change-logs.logs')
                 </div>
 
                 <div id="loadLogResultsSpinner" class="block-loading">
@@ -49,21 +49,6 @@
             </div>
         </div>
 
-    </div>
-
-    {{-- View ApiLog Modal--}}
-    <div class="modal fade" id="viewLogModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document" style="width: 900px;">
-            <div class="modal-content block-loading-wrapper">
-                <div class="block-loading">
-                    <div class="loading-content"><span class="loader"></span>
-
-                        <div class="loading-text">LOADING DATA</div>
-                        <div class="loading-wait">Please wait...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 @stop
@@ -93,7 +78,7 @@
                 var link = $(this);
                 var form = $('#filterByForm');
                 $.ajax({
-                    url: '/api-logs/logs-list',
+                    url: '/test-outcome-logs/logs-list',
                     type: 'get',
                     data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
                     error: function (jqXHR, status) {
@@ -125,7 +110,7 @@
 
                 var form = $('#filterByForm');
                 $.ajax({
-                    url: '/api-logs/logs-list',
+                    url: '/test-outcome-logs/logs-list',
                     type: 'get',
                     data: form.serialize(),
                     error: function (jqXHR, status) {
@@ -165,7 +150,7 @@
             function getTransactionFilters(data) {
                 $('#filterBySpinner').show();
                 $.ajax({
-                    url: '/api-logs/filters',
+                    url: '/test-outcome-logs/filters',
                     type: 'get',
                     data: data,
                     error: function (jqXHR, status) {

@@ -9,6 +9,7 @@ use App\Post;
 use App\PostMeta;
 use App\TestOutcomeStatus;
 use App\Transaction;
+use App\TransactionChangeLog;
 use App\TransactionsLog;
 use Aws\Laravel\AwsFacade;
 use Illuminate\Queue\SerializesModels;
@@ -116,6 +117,9 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             'test_case_id' => $testCase->ID,
             'customer_id' => $this->userId,
         ]);
+
+        TransactionChangeLog::addLog($transaction, $this->userId, $this->testOutcome);
+
         $transaction->product_id = $product->ID;
         $transaction->test_suite_id = $testSuite->ID;
         $transaction->audit_record = false;
@@ -126,6 +130,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->organisation_id = $organisationMember->organisation_id;
         $transaction->s3_link = $transaction->getZipS3Link($this->fileName);
         $transaction->save();
+        
+        
 
         //execution log
         if(file_exists($this->rootFolder . '/execution_log/execution_log.json')) {
@@ -207,6 +213,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
              * Ensure that each TWRC_XFERDONE returs code has image
              */
             if (!$transaction->logs()->where(['return_code' => 'TWRC_XFERDONE', 'scan_results' => '[]'])->get()->isEmpty()) {
+                TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
@@ -222,8 +229,10 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
                             ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))
                     ) {
+                        TransactionChangeLog::addLog($transaction, $this->userId, 'PENDING', true);
                         $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
                     } else {
+                        TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
                         $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                         $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
                     }

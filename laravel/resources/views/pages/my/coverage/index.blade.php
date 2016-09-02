@@ -21,6 +21,7 @@
 
                  @if(is_super_admin())
                     <li class="transactions-tab"><a href="/api-logs/" data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
+                    <li class="transactions-tab"><a href="/test-outcome-logs/" data-tooltip="tooltip" title="Outcome Logs">Outcome Logs</a></li>
                 @endif
 
             </ul>
