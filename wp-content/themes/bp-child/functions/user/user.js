@@ -555,6 +555,7 @@
         // Organisation - transform divs in inputs at click on edit button
         $('#organisation-container').on('click', '.gbh-btn-edit', function(){
             jQuery('.gbh-btn-edit').hide();
+            jQuery('.grid-row-message').hide();
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             jQuery(thisParentId).find('.message').remove();
@@ -581,11 +582,11 @@
                        var dataType = 'text';
 
                    if(dataType == 'textarea')
-                       $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                       $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea edit-field">' + thisTextVal + '</textarea>');
                    else if(dataType == 'readonly')
-                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
+                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" class="edit-field" />');
                    else
-                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" autocomplete="off"/>');
+                       $(this).after('<input type="' + dataType + '" name="'+thisNameVal+'" value="'+thisTextVal+'" placeholder="' + thisPlaceholderValue + '" autocomplete="off" class="edit-field" />');
 
                    $(this).hide();
                 });        
@@ -641,14 +642,25 @@
                 success: function (rsp) {
                     hideGridBoxLoadingWrapper(form);
                     if (rsp == 'success') {
-                        jQuery('.btn-row a').hide();
-                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
-                        document.location.reload();
+                        jQuery('.btn-row').hide();
+                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success', true);
+                        // document.location.reload();
+                        jQuery('.gbh-btn-edit').show();
+                        var thisParentId = '#'+form.parents('.grid-box').attr('id');
+                        //transform all inputs to divs
+                        $(thisParentId + ' .edit-field').each(function () {
+                            var fieldName = $(this).attr('name');
+                            $('[data-name=' + fieldName + ']').text($(this).val()).attr('data-value', $(this).val()).show();
+                            $(this).remove();
+                        });
+
+                        $(thisParentId+' .btn-row').hide();
+
                     } else {
                         showGridBoxResultMessage(form, rsp, 'error');
                     }
                 }
-            })
+            });
 
             return false;
         });
