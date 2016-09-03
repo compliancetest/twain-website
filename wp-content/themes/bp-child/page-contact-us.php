@@ -24,6 +24,8 @@ get_header();
 
                     $us_company_address_url = urlencode(str_replace(array("\r\n", "\n"), array(" ", " "), $us_company_address));
 
+                    $formID = get_custom_field('contact-form-id');
+
                 ?>
                 <div class="clear"></div>
                 <div class="contact-info-block left">                    
@@ -34,6 +36,9 @@ get_header();
                     <p>Email: <b><a href="mailto:<?php echo $us_company_email?>"> <?php echo $us_company_email?></a></b></p>
                 </div>
                 <div class="clear"></div>
+                <div id="contact-form-wrapper">
+                    <?php echo do_shortcode('[contact-form-7 id="' . $formID . '" title="Contact Us Form"]'); ?>
+                </div>
             </div>
             <?php endwhile; ?>
             
