@@ -661,7 +661,7 @@ Template Name Posts: Test Suite
                                 </div>
 
                                 <div class="grid_cell nopaddingtop toleft width10P" >
-                                    <a href="<?php echo get_permalink($row->ID) ?>?test_suite_id=<?php echo $suite->id;?>"><?php echo get_the_title($row->ID) ?>/</a>
+                                    <a href="<?php echo get_permalink($row->ID) ?>?test_suite_id=<?php echo $suite->id;?>"><?php echo get_the_title($row->ID) ?></a>
                                 </div>
 
                                 <div class="grid_cell nopaddingtop tocenter width8P">
