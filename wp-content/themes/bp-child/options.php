@@ -510,20 +510,10 @@ function optionsframework_options() {
         'desc'  =>  'Phone Number',
         'type'  =>  'text'
     );
-    $options[] = array(
-        'name'  => 'Information in Australia',
-        'id'    =>  'au_company_name',
-        'desc'  =>  'Company Name',
-        'type'  =>  'text'
-    );
-    $options[] = array(
-        'id'    =>  'au_company_address',
-        'desc'  =>  'Company Address',
-        'type'  =>  'textarea'
-    );
-    $options[] = array(
-        'id'    =>  'au_company_phone',
-        'desc'  =>  'Phone Number',
+
+	$options[] = array(
+        'id'    =>  'us_company_email',
+        'desc'  =>  'Email address',
         'type'  =>  'text'
     );
 
