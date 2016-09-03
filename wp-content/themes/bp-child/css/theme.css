@@ -9237,3 +9237,7 @@ input.inactive_s{
     height: auto;
     display: block;
 }
+
+#my_details .grid-row-complex .grid-row{
+    line-height: 24px;
+}
