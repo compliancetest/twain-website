@@ -7675,10 +7675,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .dashboard-tabs {
-    
+
 }
 .dashboard-tabs .tabs {
-    
+
 }
 .dashboard-tabs .tabs li {
     margin: 4px 0 0 5px;
@@ -7697,7 +7697,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding: 7px 3px;
 }
 .dashboard-tabs .tabs li a span.menu-title {
-    font-family: 'Oswald', Arial, Helvetica sans-serif;
+    font-family: 'Oswald', Arial, Helvetica, sans-serif;
     padding: 0 4px 0 0;
     font-size: 14px;
     line-height: 32px;
