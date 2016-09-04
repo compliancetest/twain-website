@@ -122,6 +122,9 @@ class S3Wrapper extends BaseAWS
 
     public static function getCommunityAvatar($communityKey)
     {
+        if(empty($communityKey)){
+            return DEFAULT_AVATAR;
+        }
         $s3 = new S3Wrapper();
         try {
             $result = $s3->_client->getObjectUrl(
