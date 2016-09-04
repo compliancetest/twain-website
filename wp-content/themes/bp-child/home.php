@@ -104,12 +104,11 @@ $home_settings = get_option('home-settings');
                     <?php endfor; ?>
                 </ul>
             </div>
-            <?php if (bp_has_groups()) : ?>
             <div class="our-communities-box">
                 <div class="home-box-title">Our Communities</div>
-                <?php $groups_count = groups_get_total_group_count(); ?>
+                <?php $communitiesList = getCommunities(); ?>
                 <ul class="communities-list clearfix">
-                    <?php while (bp_groups()) : bp_the_group(); ?>
+                    <?php foreach($communitiesList as $community): ?>
                         <li class="community-item">
                             <div class="community-avatar">
                                 <?php
@@ -117,27 +116,28 @@ $home_settings = get_option('home-settings');
                                     'width' => 150
                                 );
                                 ?>
-                                <a href="<?php bp_group_permalink() ?>"><?php bp_group_avatar($args); ?></a>
+                                <a href="/communities/<?php echo $community->slug;?>">
+                                    <img src="<?php echo S3Wrapper::getCommunityAvatar($community->image);?>" class="avatar group-1-avatar avatar-150 photo" width="150" height="150" alt="Community logo of <?php echo $community->title;?>" title="<?php echo $community->title;?>">
+                                </a>
                             </div>
                             <div class="community-content">
-                                <div class="community-title"><a
-                                        href="<?php bp_group_permalink() ?>"><?php bp_group_name() ?></a></div>
-                                <div class="community-description"><?php bp_group_description(); ?></div>
-                                <a href="<?php bp_group_permalink() ?>" class="action-btn red-btn">Community
+                                <div class="community-title">
+                                    <a href="/communities/<?php echo $community->slug;?>"><?php echo $community->title;?></a></div>
+                                <div class="community-description"><?php echo $community->description;?></div>
+                                <a href="/communities/<?php echo $community->slug;?>" class="action-btn red-btn">Community
                                     Homepage</a>
                             </div>
                         </li>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </ul>
                 <ul class="community-pager">
                     <?php $pager = 1 ?>
-                    <?php while ($pager <= $groups_count): ?>
+                    <?php while ($pager <= count($communitiesList)): ?>
                         <li data-community-index="<?php echo $pager; ?>"><?php echo $pager; ?></li>
                         <?php $pager++; ?>
                     <?php endwhile; ?>
                 </ul>
             </div>
-            <?php endif; ?>
         </div>
 
         <?php

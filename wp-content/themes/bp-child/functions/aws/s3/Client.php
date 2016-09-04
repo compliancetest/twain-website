@@ -120,6 +120,20 @@ class S3Wrapper extends BaseAWS
         return $result;
     }
 
+    public static function getCommunityAvatar($communityKey)
+    {
+        $s3 = new S3Wrapper();
+        try {
+            $result = $s3->_client->getObjectUrl(
+                'www.' . getenv('ENVIRONMENT') . '.twain.gosource.com.au',
+                $communityKey
+            );
+        } catch (Exception $e) {
+            return DEFAULT_AVATAR;
+        }
+        return $result;
+    }
+
     /**
      * @param $token - profile token
      * @return array|bool|mixed|null
