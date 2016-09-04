@@ -17,14 +17,14 @@ if($ticket_id)
     $ticket = getTicketById($ticket_id);
     if(!$ticket)    
     {
-        addMessage("Invalid Request!", 'error');
+        addMessage("You do not have access to this ticket!", 'error');
         wp_redirect('/my-support-tickets');
         exit;
     }
 
     if (!canEditTicket($ticket, $user_id)) //Permission Denied
     {
-        addMessage("Invalid Request!", 'error');
+        addMessage("You do not have access to this ticket!", 'error');
         wp_redirect('/my-support-tickets');
         exit;
     }
