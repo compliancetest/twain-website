@@ -5413,6 +5413,12 @@ span.button_sign {
     padding-left: 5px;
     padding-right: 5px;    
 }
+#tickets_list .table-box .thead .td{
+    line-height: 42px;
+}
+#tickets_list .table-box .thead .td-sortable a .sort{
+    top: 26px;
+}
 
 #tickets_list .table-box .thead .td-two-lines,
 #template-variables-box .table-box .thead .td-two-lines,
