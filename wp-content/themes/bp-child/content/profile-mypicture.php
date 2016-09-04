@@ -46,15 +46,9 @@ if (!defined('ABSPATH'))
                         <div class="grid-cell width30P">
                             <a href="<?php bp_loggedin_user_link(); ?>">
                                 <?php $userAvatar = getUserAvatar(get_current_user_id()); ?>
-                                <?php if (!$userAvatar): ?>
-                                    <img src="<?php echo DEFAULT_AVATAR; ?>"
+                                    <img src="<?php echo $userAvatar; ?>"
                                          class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150"
                                          height="150">
-                                <?php else: ?>
-                                     <img src="<?php echo $userAvatar; ?>"
-                                         class="avatar user-1-avatar avatar-150 photo" alt="Avatar" width="150"
-                                         height="150">
-                                <?php endif; ?>
                             </a>
                         </div>
                         <div class="grid-cell width70P">
@@ -67,7 +61,7 @@ if (!defined('ABSPATH'))
                                 <div class="clear"></div>
                                 <br />
                                 <a href="#" class="action-btn submit-btn upload-btn greyed-out-btn subm_send"><span class="p"></span><span class="t">Upload Image</span></a>
-                                <?php if ( $userAvatar ){ ?>
+                                <?php if ( $userAvatar != DEFAULT_AVATAR ){ ?>
                                     <a href="<?php echo get_permalink()?>?cp-action=<?php echo wp_create_nonce('delete-avatar')?>" class="action-btn delete-btn icon-btn left15"><span class="p"></span><span class="t">Delete My Avatar</span></a>
                                 <?php } ?>
                                 <input type="hidden" name="action" id="action" value="bp_avatar_upload" />

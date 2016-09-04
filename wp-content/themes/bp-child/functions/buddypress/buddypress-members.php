@@ -29,6 +29,11 @@ function cp_change_avatar()
             // Check the nonce
             check_admin_referer( 'bp_avatar_upload' );
 
+            if(!in_array(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION), ['jpg', 'jpeg', 'gif', 'png']) || !getimagesize ( $_FILES['file']['tmp_name']) ){
+                addMessage('Invalid image format', 'error');
+                wp_redirect("/my-profile");
+                exit;
+            }
             // Pass the file to the avatar upload handler
             if ( bp_core_avatar_handle_upload( $_FILES, 'xprofile_avatar_upload_dir' ) ) {
                 $bp->avatar_admin->step = 'crop-image';
