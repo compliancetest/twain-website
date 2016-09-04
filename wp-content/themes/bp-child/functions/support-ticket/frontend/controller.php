@@ -204,8 +204,9 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
            . "LEFT JOIN " . $wpdb->prefix . "organisations_members AS m ON m.user_id=t.customer_id "
            . "LEFT JOIN " . $wpdb->prefix . "organisations AS o ON o.id=m.organisation_id "
            . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
-           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
-    
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' "
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um1 ON t.customer_id=um1.user_id AND um1.meta_key='first_name' ";
+
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
     
@@ -244,16 +245,25 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     $orderQuery = "";
     switch($orderBy)
     {
+        case "status_id":
+                $orderQuery = " ORDER BY ts.status $order";
+            break;
+        case "organisation":
+                $orderQuery = " ORDER BY o.organisation_name $order";
+            break;
+        case "customer_name":
+              $orderQuery = " ORDER BY um1.meta_value $order";
+            break;
         case "id":
         case "title":
         case "created_date":
         case "category_id":
-        case "status_id":
+
         case "priority_id":
         case "solved_date":
         case "last_updated":
-        case "customer_name":
-        case "organisation":
+
+
             $orderQuery = " ORDER BY $orderBy $order";
             break;
         default:
