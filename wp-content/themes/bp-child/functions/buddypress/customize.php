@@ -648,7 +648,7 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     $html = '<ul class="dropdown-menu ' . (($level == 0) ? ($menu_class) : ('')) . '">';
 
     foreach ($pages as $page) {
-        if ($page['title'] == 'ApiLogs' && !is_super_admin()) {
+        if (($page['title'] == 'ApiLogs' || $page['title'] == 'Outcome Logs' ) && !is_super_admin()) {
             continue;
         }
         $class = isset($page['class']) ? ($page['class']) : ('');
