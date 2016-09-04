@@ -126,7 +126,7 @@ if (isset($_SESSION['product_data'])) {
                             </div>
                             <div class="field-row">
                                 <div class="grid-cell">
-                                    <label>Organisation:</label>
+                                    <label>Organization:</label>
 
                                     <div class="has-field-tooltip">
                                         <?php
@@ -134,7 +134,7 @@ if (isset($_SESSION['product_data'])) {
                                             $organisations = ct_get_all_organisations();
                                     ?>
                                         <select name="product_owner" style="width: 195px; margin-right: 10px;" id="product_owner" class="select field-tooltip admin_entry_select" data-tooltip-content="The owner of your product or service. It is set to the same as the organisation name from your profile.">
-                                            <option value="">- Select Organisation -</option>
+                                            <option value="">- Select Organization -</option>
                                             <?php foreach($organisations as $org): ?>
                                                  <option value="<?php echo $org->id?>" <?php echo $org->id == $product->organisation_id ? 'selected="selected"' : '' ?>><?php echo $org->organisation_name?></option>
                                             <?php endforeach; ?>

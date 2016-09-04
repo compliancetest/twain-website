@@ -26,7 +26,7 @@ class CT_Organisations_Payments_Table extends WP_List_Table
             "date_added"        => __('Date Added'),
             "amount"            => __('Amount'),
             "reference"         => __("Reference"),
-            "organisation_id"   => __("Organisation"),
+            "organisation_id"   => __("Organization"),
             "payment_method_id" => __("Payment Method ID"),
             "is_paid"           => __("Is Paid?"),
             "date_paid"         => __("Date Paid"),

@@ -149,7 +149,7 @@ class CT_Organisation
             {   //Insert organisation to CT
                 if( $wpdb->insert($wpdb->prefix . "organisations", $data ) === false )
                 {
-                    addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
+                    addMessage('Saving Organization Error: ' . $wpdb->last_error, 'error');
                     return false;
                 }
                     
@@ -159,7 +159,7 @@ class CT_Organisation
             {
                 if( $wpdb->update($wpdb->prefix . "organisations", $data, array('id' => $this->id)) === false )
                 {
-                    addMessage('Saving Organisation Error: ' . $wpdb->last_error, 'error');
+                    addMessage('Saving Organization Error: ' . $wpdb->last_error, 'error');
                     return false;
                 }
             }            

@@ -102,9 +102,9 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-                    <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+                    <div class="popup-box-header radius6 noradiusbottom">Organization Record Required</div>
                     <div class="popup-box-content">
-                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the Organisation section in your Profile tab.
+                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the Organization section in your Profile tab.
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>

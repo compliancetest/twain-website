@@ -21,7 +21,7 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
     function get_columns()
     {
         return $column = array(
-            "organisation_name" => __("Organisation"),
+            "organisation_name" => __("Organization"),
             "suite_title" => __('Test Suite'),
             "subscription_name" => __('Nickname'),
             "user_id" => __("User"),
@@ -65,7 +65,7 @@ class CT_User_Subscriptions_List_Table extends WP_List_Table
               ?>
               <div style="float: left;">              
                   <label style="margin-right: 10px">
-                      Organisations 
+                      Organizations
                       <select name="filter_organisation">
                           <option value="" <?php echo !$_REQUEST['filter_organisation']? 'selected="selected"' : '' ?>>All</option>
                           <?php foreach($organisations as $org): ?>

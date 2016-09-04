@@ -14,7 +14,7 @@
                             <a href="#" class="btn btn-primary btn-dropdown" data-toggle-block="#header-dashboard-menu">Dashboard</a>
                             <ul class="dropdown-menu dashboard-dropdown-menu" id="header-dashboard-menu">
                                 <li class="first">
-                                    <a data-title="Organisation" href="#" class="menu-organisation">Organisation</a>
+                                    <a data-title="Organization" href="#" class="menu-organisation">Organization</a>
                                     <ul class="dropdown-menu">
                                         <li class="first"><a href="#">Users</a></li>
                                         <li><a href="#">Subscriptions</a></li>

@@ -512,7 +512,7 @@ if (!is_user_logged_in()) {
                                 <div class="clear"></div>
 
                                 <div class="field">
-                                    <label for="organisation_id">Organisation Key (optional)</label>
+                                    <label for="organisation_id">Organization Key (optional)</label>
 
                                     <div class="has-field-tooltip" style="width: 165px;">
                                         <input type="text" class="field-tooltip" title="" autocomplete="off"

@@ -31,7 +31,7 @@
 
             <div class="tabs-menu">
                 <ul>
-                    <li class="organisation-tab"><a href="#" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
+                    <li class="organisation-tab"><a href="#" data-tooltip="tooltip" title="My Organization">Organization</a></li>
                     <li class="communities-tab"><a data-tooltip="tooltip" href="my-communities.php" title="My community memberships">Communities</a></li>
                     <li class="test-suites-tab"><a href="#" data-tooltip="tooltip" title="My test suite subscriptions">Test Suites</a></li>
                     <li class="test-data-tab"><a href="#" data-tooltip="tooltip" title="My profile data">Test Data</a></li>

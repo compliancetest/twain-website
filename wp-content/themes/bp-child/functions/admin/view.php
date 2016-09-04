@@ -186,7 +186,7 @@ function ct_process_cc_invoice_via_eway()
           <?php else: ?>
             <tr>
                 <th>ID</th>
-                <th>Organisation</th>
+                <th>Organization</th>
                 <th>Amount</th>
                 <th>Payment Method</th>
                 <th>Created Date</th>
@@ -276,7 +276,7 @@ function ct_cancel_unsubscribed_subscriptions()
             <tr>
                 <th>ID</th>
                 <th>Subscription</th>
-                <th>Organisation</th>
+                <th>Organization</th>
                 <th>Assignee</th>
                 <th>Purchased Date</th>
                 <th>Status</th>

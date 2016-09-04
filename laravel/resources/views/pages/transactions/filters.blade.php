@@ -107,7 +107,7 @@
             </div>
 
             <div class="form-group col-sm-6 col-md-3">
-                <label for="filterOrganisation">Organisation:</label>
+                <label for="filterOrganisation">Organization:</label>
                 <select class="form-control" id="filterOrganisation" name="organisation_id">
                     <option value="">- All -</option>
                     @foreach($filters['organisation_id'] as $organisation)

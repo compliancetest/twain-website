@@ -265,7 +265,7 @@ function create_compliancetest_settings_page()
                             </td>
                         </tr>
                         <tr>
-                            <td><label><b>Site Organisation:</b></label></td>
+                            <td><label><b>Site Organization:</b></label></td>
                             <td><input type="text" name="tw_site_organisation" id="tw_site_organisation" value="<?php echo get_option('tw_site_organisation')?>" size="50" autocomplete="off" /></td>
                         </tr>
                     </table>

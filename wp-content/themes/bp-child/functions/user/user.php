@@ -171,9 +171,9 @@ function display_signup_organisation_box()
     ?>
     <div class="popup-box" style="display: none; width: 500px">
       <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-        <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+        <div class="popup-box-header radius6 noradiusbottom">Organization Record Required</div>
         <div class="popup-box-content">
-            An organisation record needs to be created for your organisation as products are owned by organisations. You can create a record via the Organisation section in your Profile tab.
+            An organization record needs to be created for your organization as products are owned by organizations. You can create a record via the Organization section in your Profile tab.
         </div>
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>

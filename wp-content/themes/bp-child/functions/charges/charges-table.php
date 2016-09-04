@@ -22,7 +22,7 @@ class CT_Organisations_Charge_Table extends WP_List_Table
     {
         return $column = array(
 //            "cb" => "<input type='checkbox' />",            
-            "organisation_id" => __("Organisation ID"),
+            "organisation_id" => __("Organization ID"),
             "payment_id"      => __('Payment ID'),
             "item_code"       => __("Item Code"),
             "start_date"      => __("Start Date"),

@@ -22,14 +22,14 @@ if (!$org_membership) {
 <div class="column left three_fifths nopadding my_organisation_box">
     <div class="grid-box" id="my_org">
         <div class="grid-box-header">
-            <h5 class="left">My Organisation</h5>
+            <h5 class="left">My Organization</h5>
             <?php if($user_status != 3 ){?>
                 <?php if( ! $org_membership ):?>
-                    <a class="gbh-btn right create_organisation gbh-btn-create-join" href="javascript: void(0);">Create Organisation<span class="simple_tooltip radius6" style="width: 130px;margin-left: -60px;">Create Organisation<span></span></span></a>
-                    <a class="gbh-btn right gbh-btn-create-org join_organisation" href="javascript: void(0);">Join Organisation<span class="simple_tooltip radius6">Join Organisation<span></span></span></a>
+                    <a class="gbh-btn right create_organisation gbh-btn-create-join" href="javascript: void(0);">Create Organization<span class="simple_tooltip radius6" style="width: 130px;margin-left: -60px;">Create Organization<span></span></span></a>
+                    <a class="gbh-btn right gbh-btn-create-org join_organisation" href="javascript: void(0);">Join Organization<span class="simple_tooltip radius6">Join Organization<span></span></span></a>
                 <?php else:?>
                     <?php if( ! $org_membership->is_admin ):?>
-                        <a href="<?php echo get_site_url()?>?cp-action=<?php echo wp_create_nonce('leave_organisation')?>" class="gbh-btn gbh-btn-leave right">Leave Organisation<span class="simple_tooltip radius6">Leave Organisation<span></span></span></a>
+                        <a href="<?php echo get_site_url()?>?cp-action=<?php echo wp_create_nonce('leave_organisation')?>" class="gbh-btn gbh-btn-leave right">Leave Organization<span class="simple_tooltip radius6">Leave Organization<span></span></span></a>
                     <?php endif;?>
                 <?php endif;?>
             <?php }?>
@@ -73,7 +73,7 @@ if (!$org_membership) {
 
                 <form action="/" method="get" class="join_org" style="display: none;">
                     <div class="grid-row">
-                        <div class="grid-cell width30P"><label>Organisation Key</label></div>
+                        <div class="grid-cell width30P"><label>Organization Key</label></div>
                         <input type="text" name="user_organisation_key" value="" class="grid-cell in_input width70P user_organisation_key">
                         <div class="has-defined-tooltip">
                             <span class="simple_tooltip" style="width: 370px; bottom: 33px; margin-left: -110px;"><span></span>If your organisation is already registered on <?php echo get_site_title();?>, ask your administrator for your organisation key to immediately become a member of your organisation on <?php echo get_site_title();?>. If not, you will be asked if you'd like to register your organisation when attempting to access the harness details on a test suite summary page.</span>

@@ -115,7 +115,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=customer_name&order=<?php echo $orderBy == 'customer_name' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'customer_name'){ ?>class="<?php echo $order?>"<?php } ?>>Customer<span class="sort"></span></a>
                </div>
                <div class="td td-ticket-org td-sortable tocenter">
-                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organisation<span class="sort"></span></a>
+                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organization<span class="sort"></span></a>
                </div>
                
                <?php endif; ?>
