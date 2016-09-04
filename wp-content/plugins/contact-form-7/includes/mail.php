@@ -81,8 +81,37 @@ class WPCF7_Mail {
 			$headers .= $additional_headers . "\n";
 		}
 
-		if ( $send ) {
-			return wp_mail( $recipient, $subject, $body, $headers, $attachments );
+		if ($send) {
+
+			global $phpmailer;
+
+			if (!is_object($phpmailer) || !is_a($phpmailer, 'PHPMailer')) {
+				require_once ABSPATH . WPINC . '/class-phpmailer.php';
+				require_once ABSPATH . WPINC . '/class-smtp.php';
+				$phpmailer = new PHPMailer(true);
+			}
+
+			$phpmailer->Mailer = 'smtp';
+			$phpmailer->FromName = 'Contact Form';
+			$phpmailer->From = get_option('support_email');
+
+			$phpmailer->Host = getenv('SMTP_HOST');
+			$phpmailer->SMTPAuth = true;
+			$phpmailer->SMTPSecure = "tls";
+			$phpmailer->Port = getenv('SMTP_PORT');
+			$phpmailer->Username = getenv('SMTP_USER');
+			$phpmailer->Password = getenv('SMTP_PASSWORD');
+
+			$phpmailer->Subject = $subject;
+			$phpmailer->Body = $body;
+			$phpmailer->ContentType = 'text/html';
+			$phpmailer->AddAddress($recipient);
+			try {
+				return $phpmailer->Send();
+			} catch (Exception $e) {
+				return error_log($e->getMessage());
+			}
+			return wp_mail($recipient, $subject, $body, $headers, $attachments);
 		}
 
 		$components = compact( 'subject', 'sender', 'body',
