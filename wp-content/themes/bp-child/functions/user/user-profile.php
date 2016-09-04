@@ -7,10 +7,10 @@ add_filter('user_contactmethods', 'cp_user_details');
 function cp_user_details($user_contactmethods, $user = null)
 {
     $user_contactmethods['phone_number'] = 'Phone Number';
-    $user_contactmethods['user_organisation'] = 'Organisation Name';
-    $user_contactmethods['user_organisation_web'] = 'Organisation Website';
-    $user_contactmethods['user_organisation_desc'] = 'Organisation Description';
-    $user_contactmethods['user_organisation_abn'] = 'Organisation ABN';
+    $user_contactmethods['user_organisation'] = 'Organization Name';
+    $user_contactmethods['user_organisation_web'] = 'Organization Website';
+    $user_contactmethods['user_organisation_desc'] = 'Organization Description';
+    $user_contactmethods['user_organisation_abn'] = 'Organization ABN';
 
     return $user_contactmethods;
 }
@@ -623,7 +623,7 @@ function cp_user_organisation_join()
         $org_controller->add_membership($user_id, $organisation->id);
         exit('success');
     }
-    exit('Organisation not found!');
+    exit('Organization not found!');
 }
 
 //Edit organisation
@@ -654,14 +654,14 @@ function cp_user_organisation_edit()
     $message_error = $message_success = false;
     //check that name and ABN for user organisation not empty
     if (empty($user_org) || $user_org == '-') {
-        $message_error = 'Organisation Name must be populated before an Organisation Record can be created';
+        $message_error = 'Organization Name must be populated before an Organization Record can be created';
     }
     if (false === $message_error) {
         $is_name_used_in_xero = false;
         //check that organisation name not used in Xero
         $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
         if ($is_name_used_in_xero) {
-            $message_error = 'A record for an organisation with the same Name has already been created. Your organisation may already be set up on ' . get_site_title() . '.';
+            $message_error = 'A record for an organization with the same Name has already been created. Your organization may already be set up on ' . get_site_title() . '.';
         }
     }
     if (false === $message_error) {

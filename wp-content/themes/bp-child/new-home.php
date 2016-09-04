@@ -54,7 +54,7 @@
             <div class="customer-types-section">
                 <ul class="tabs-header">
                     <li><a href="#software-vendors-panel"><span class="icon"></span>Software Vendors: <em>Certify your Products</em></a></li>
-                    <li><a href="#organisations-panel"><span class="icon"></span>Organisations: <em>Test Your Implementation</em></a></li>
+                    <li><a href="#organisations-panel"><span class="icon"></span>Organizations: <em>Test Your Implementation</em></a></li>
                     <li><a href="#standart-issuers-panel"><span class="icon"></span>Standards Issuers: <em>Create Test Suites</em></a></li>
                 </ul>
                 <div class="tabs-content">

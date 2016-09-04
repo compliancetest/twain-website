@@ -10,7 +10,7 @@
                 <th>Audit<br/>Record</th>
                 <th>
                     @if($supportOrAdmin)
-                        Organisation<br/>
+                        Organization<br/>
                         Subscription Nickname<br/>
                     @endif
                     Execution ID

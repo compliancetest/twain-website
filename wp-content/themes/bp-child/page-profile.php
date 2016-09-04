@@ -78,7 +78,7 @@ get_header();
 			<div class="column left three_fifths nopadding" style="display: none;">
 				<div class="grid-box">
 					<div class="grid-box-header">
-                        <h5 class="left">My Organisation Members</h5>
+                        <h5 class="left">My Organization Members</h5>
                         <?php if($user_status != 3){?>
                             <a class="gbh-btn gbh-btn-add right" href="javascript: void(0);">Add<span class="simple_tooltip radius6">Add User<span></span></span></a>
                         <?php }?>

@@ -302,7 +302,7 @@
                             <div class="table-responsive">
                                 <table class="table invitations_table">
                                 <tr>
-                                    <th>Organisation</th>
+                                    <th>Organization</th>
                                     <th>Contact email</th>
                                     <th>Is approved?</th>
                                 </tr>

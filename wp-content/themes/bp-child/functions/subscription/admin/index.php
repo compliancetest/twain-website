@@ -10,12 +10,12 @@ add_action('admin_menu', 'ct_add_manage_subscriptions_menu');
 
 function ct_add_manage_subscriptions_menu()
 {
-    add_menu_page("Organisation Subscriptions", "Organisation Subscriptions", "manage_options", "organisation-subscriptions", "ct_manage_organisation_subscriptions_list");
-    add_submenu_page("organisation-subscriptions", "All Subscriptions", "All Organisations", "manage_options", "organisation-subscriptions", "ct_manage_organisation_subscriptions_list");
-    add_submenu_page("organisation-subscriptions", "Organisation Subscription", "Add Subscription", "manage_options", "add-organisation-subscription", "ct_add_organisation_subscription");
+    add_menu_page("Organization Subscriptions", "Organization Subscriptions", "manage_options", "organisation-subscriptions", "ct_manage_organisation_subscriptions_list");
+    add_submenu_page("organisation-subscriptions", "All Subscriptions", "All Organizations", "manage_options", "organisation-subscriptions", "ct_manage_organisation_subscriptions_list");
+    add_submenu_page("organisation-subscriptions", "Organization Subscription", "Add Subscription", "manage_options", "add-organisation-subscription", "ct_add_organisation_subscription");
     
     add_menu_page("User Subscriptions", "User Subscriptions", "manage_options", "user-subscriptions", "ct_manage_user_subscriptions_list");
-    add_submenu_page("user-subscriptions", "All Subscriptions", "All Organisations", "manage_options", "user-subscriptions", "ct_manage_user_subscriptions_list");
+    add_submenu_page("user-subscriptions", "All Subscriptions", "All Organizations", "manage_options", "user-subscriptions", "ct_manage_user_subscriptions_list");
     add_submenu_page("user-subscriptions", "User Subscription", "Add Subscription", "manage_options", "add-user-subscription", "ct_add_user_subscription");    
     
     wp_enqueue_style("manage-payments", get_stylesheet_directory_uri() . "/functions/subscription/admin/manage-payments.css");

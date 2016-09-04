@@ -6,8 +6,8 @@ if(DISPLAY_SUBSCRIPTIONS){
     if(!defined('ABSPATH'))
         die('Invalid Request!');
 
-        $organisation_id = getOrganisationID();
-        $organisation = getOrganisationById($organisation_id);
+        $Organization_id = getOrganizationID();
+        $Organization = getOrganisationById($organisation_id);
 
         $organisationClass = new CT_Organisation($organisation_id);
         $cards = $organisationClass->get_payment_methods();

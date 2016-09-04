@@ -9,7 +9,7 @@ function ct_manage_organisation_subscriptions_list()
     ?>
     <div class="wrap">
         <h2>
-            Organisation Subscriptions
+            Organization Subscriptions
             <a href="<?php echo admin_url()?>admin.php?page=add-organisation-subscription" class="add-new-h2">Add New Subscription</a>
         </h2>        
         <?php
@@ -59,7 +59,7 @@ function ct_add_organisation_subscription()
         <form name="adminform" id="organisationform" action="admin.php" method="post">
             <table class="widefat" style="width: auto;">
                 <tr>
-                    <th>Organisation</th>
+                    <th>Organization</th>
                     <td>
                         <select name="organisation_id" id="organisation_id">                          
                           <?php foreach($organisations as $org): ?>
@@ -240,7 +240,7 @@ function ct_add_user_subscription()
         <form name="adminform" id="organisationform" action="admin.php" method="post">
             <table class="widefat" style="width: auto;">
                 <tr>
-                    <th>Organisation</th>
+                    <th>Organization</th>
                     <td>
                         <select name="organisation_id" id="organisation_id">                          
                           <?php foreach($organisations as $org): ?>
@@ -251,7 +251,7 @@ function ct_add_user_subscription()
                     </td>
                 </tr>                
                 <tr>
-                    <th>Organisation Subscriptions</th>
+                    <th>Organization Subscriptions</th>
                     <td>
                         <select name="organisation_subscription_id" id="organisation_subscription_id">                          
                           <?php foreach($org_subscriptions as $s): ?>

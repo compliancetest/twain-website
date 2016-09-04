@@ -16,7 +16,7 @@
 
                                     @if(is_organisation_admin())
                                         <li class="first">
-                                            <a data-title="Organisation" href="{{ getSiteUrl() }}/my-organisation/" class="menu-organisation">Organisation</a>
+                                            <a data-title="Organization" href="{{ getSiteUrl() }}/my-organisation/" class="menu-organisation">Organization</a>
                                             <ul class="dropdown-menu">
                                                 <li class="first"><a href="{{ getSiteUrl() }}/my-organisation/users/">Users</a></li>
                                                 <li><a href="{{ getSiteUrl() }}/my-organisation/test-suites/">Subscriptions</a></li>

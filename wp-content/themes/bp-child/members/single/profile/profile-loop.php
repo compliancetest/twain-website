@@ -23,7 +23,7 @@
     ?>        
     <div class="grid-box" id="my_org">
         <div class="grid-box-header">
-            <h5>Organisation</h5>            
+            <h5>Organization</h5>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">
