@@ -90,7 +90,7 @@ function compliancetest_user_actions()
             // Stop sole admins from abandoning their group
             $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE community_id = %s AND is_admin = 1', $gID));
 
-             if ( 2 > count( $group_admins )) {
+             if ( doesUserCommunityAdmin(get_current_user_id(), $gID) && 2 > count( $group_admins )) {
                  echo __('This community must have at least one admin', 'buddypress');
              } else {
                 $result = $wpdb->delete( 'communities_members',
@@ -323,7 +323,7 @@ function getUserCommunities($user_id)
     global $wpdb;
     return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin FROM communities AS c
                                               JOIN communities_members AS cm ON c.id = cm.community_id
-                                              WHERE cm.user_id = %d", $user_id));
+                                              WHERE cm.user_id = %d AND cm.is_confirmed = 1", $user_id));
 }
 
 function doesUserCommunityAdmin($user_id, $communityId)
