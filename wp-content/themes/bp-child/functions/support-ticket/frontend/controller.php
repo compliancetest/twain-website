@@ -771,7 +771,7 @@ function sendTicketMessage()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!canEditTicket($ticket, $user_id))
+    if(!canEditTicket($ticketDetail, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
