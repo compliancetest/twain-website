@@ -136,7 +136,7 @@ var Page = {
         headerLoginForm: function(){
 
             //Show/hide login popup form
-            $('#headerLoginBtn').click(function(e){
+            $('.header-login-block').hover(function(e){
                 e.preventDefault();
                 $('#headerLoginBlock').toggle();
             });

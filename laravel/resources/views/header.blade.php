@@ -95,7 +95,7 @@
                             <div id="header-dashboard-menu"></div>
                             <div class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></div>
                             <div class="header-login-block">
-                                <a href="#" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
+                                <a href="/login/" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
                                 <div class="header-login-from" id="headerLoginBlock">
                                     <form method="post" action="/wp-login.php" name="header_login_form" id="headerLoginForm">
                                         <div class="form-group login-group">
