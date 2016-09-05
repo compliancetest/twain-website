@@ -15,7 +15,7 @@ class ClaimObserver
 
     public function __construct()
     {
-        $this->_client = $this->getDocumentEndpointCloudSearchClient(\App\WpOptions::where(['option_name' => 'cloudsearch_domain_name'])->first()->option_value);
+        $this->_client = $this->getDocumentEndpointCloudSearchClient();
     }
 
     /**
