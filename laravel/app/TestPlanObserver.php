@@ -24,6 +24,7 @@ class TestPlanObserver
      */
     public function saved(TestPlan $testPlan)
     {
+        error_log('TestPlan observer');
         $product = Post::find($testPlan->product_id);
 
         $productVisibility = $product->getMetaByKey('product_visibility');

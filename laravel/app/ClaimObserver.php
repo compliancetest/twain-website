@@ -24,6 +24,7 @@ class ClaimObserver
      */
     public function saved(Claim $claim)
     {
+        error_log('Claim observer');
         $product = Post::find($claim->product_id);
 
         $productVisibility = $product->getMetaByKey('product_visibility');
