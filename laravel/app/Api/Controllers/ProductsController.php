@@ -196,6 +196,10 @@ class ProductsController extends BaseApiController
                 $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
+                //trigger post observer
+                $this->product->timestamps = false;
+                $this->product->save();
+
                 $response = [
                     'id' => $this->product->post_name,
                     'title' => $this->product->post_title . ' v' . $productVersion,

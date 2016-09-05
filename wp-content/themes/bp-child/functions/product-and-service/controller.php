@@ -240,19 +240,20 @@ function saveProductService()
     }
     update_post_meta($id, 'product_visibility', $product_visibility);
 
-    $full_search = new FulltextSearch();
-    $cloud_search = new CloudSearch();
     /**
      * We need to reload data for existing product because
      * it could contain test plans / claims / services which also should be updated
      */
-    if ($isNew) {
-        $full_search->fullUpload($id);
-    } else {
-        $cloud_search->_initial_upload();
-        $full_search->fullUpload();
-    }
 
+    require ABSPATH . 'laravel/bootstrap/autoload.php';          //the path should match your file path
+    $app = require_once 'laravel/bootstrap/app.php';  //the path should match your file path
+
+    $app->make('Illuminate\Contracts\Http\Kernel')
+    ->handle(Illuminate\Http\Request::capture());
+
+    $post = \App\Post::find($id);
+    $post->timestamps = false;
+    $post->save();
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
