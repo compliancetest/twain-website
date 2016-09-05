@@ -24,13 +24,16 @@ class TestPlanObserver
      */
     public function saved(TestPlan $testPlan)
     {
-        error_log('TestPlan observer');
         $product = Post::find($testPlan->product_id);
-
+        $testSuite = Post::find($testPlan->suite_id);
+        if (!$product || !$testSuite) {
+            return;
+        }
         $productVisibility = $product->getMetaByKey('product_visibility');
 
-        $testSuite = Post::find($testPlan->suite_id);
+
         $testSuiteCommunity = $testSuite->getMetaByKey('community_id');
+
 
         if ($productVisibility == 'Public') {
             $visibility = 1;

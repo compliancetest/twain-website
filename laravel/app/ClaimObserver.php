@@ -24,12 +24,15 @@ class ClaimObserver
      */
     public function saved(Claim $claim)
     {
-        error_log('Claim observer');
         $product = Post::find($claim->product_id);
+        $testSuite = Post::find($claim->test_suite_id);
+        if (!$product || !$testSuite) {
+            return;
+        }
 
         $productVisibility = $product->getMetaByKey('product_visibility');
 
-        $testSuite = Post::find($claim->test_suite_id);
+
         $testSuiteCommunity = $testSuite->getMetaByKey('community_id');
 
         if ($productVisibility == 'Public') {

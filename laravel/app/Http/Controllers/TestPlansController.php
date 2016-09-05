@@ -80,13 +80,12 @@ class TestPlansController extends Controller
             }
         }
 
-        $testPlan = TestPlan::create($request->all());
-        $testPlan->creator_id = Auth::user()->ID;
-
         $organisationSubscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $request->get('suite_id')])->first();
-        $testPlan->organisation_subscription_id = $organisationSubscription->id;
 
-        $testPlan->save();
+        $allData = $request->all();
+        $allData['creator_id'] = Auth::user()->ID;
+        $allData['organisation_subscription_id'] = $organisationSubscription->id;
+        $testPlan = TestPlan::create($allData);
 
         $productFeatures = (array) json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_features'), true);
 
