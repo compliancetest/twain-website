@@ -29,7 +29,6 @@ class UpdateRegistrySearchDomainData extends Migration
         foreach ($results['hits']['hit'] as $row) {
             array_push($data, array('type' => 'delete', 'id' => $row['id']));
         }
-        error_log(count($data));
         if (!empty($data)) {
             $this->_client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
         }
