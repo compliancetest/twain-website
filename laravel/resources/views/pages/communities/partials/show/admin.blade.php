@@ -438,6 +438,28 @@
 
                 {!! Form::close() !!}
 
+                {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+
+                    <div class="colored-box">
+                        <div class="colored-box-header">Certified products visibility</div>
+                        <div class="colored-box-body">
+                            <div class="colored-box-content">
+                                <div class="form-group">
+                                    <label for="articles_enabled">
+                                        {!! Form::checkbox('list_only_certified', 1,  !empty($community->list_only_certified)) !!}
+                                        List only certified products</label>
+                                </div>
+                                <input type="hidden" name="change_list_only_certified" value="1">
+                            </div>
+                            <div class="colored-box-footer">
+                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                            </div>
+                            <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                        </div>
+                    </div>
+
+                {!! Form::close() !!}
+
                 <div class="colored-box">
                     <div class="colored-box-header">Surveys Results Links</div>
                     <div class="colored-box-body">

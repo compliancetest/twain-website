@@ -204,6 +204,16 @@ class CommunitiesController extends Controller
             }
         }
 
+        error_log($request->has('change_list_only_certified'));
+        error_log($request->has('list_only_certified'));
+        if ($request->has('change_list_only_certified')) {
+            if($request->has('list_only_certified')){
+                $community->update(['list_only_certified' => true]);
+            } else {
+                $community->update(['list_only_certified' => false]);
+            }
+        }
+
         return Redirect::to(getSiteUrl() . '/communities/' . $community->slug . '/admin');
     }
 

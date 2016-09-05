@@ -241,17 +241,11 @@ function saveProductService()
     update_post_meta($id, 'product_visibility', $product_visibility);
 
     $full_search = new FulltextSearch();
-    $cloud_search = new CloudSearch();
     /**
      * We need to reload data for existing product because
      * it could contain test plans / claims / services which also should be updated
      */
-    if ($isNew) {
-        $full_search->fullUpload($id);
-    } else {
-        $cloud_search->_initial_upload();
-        $full_search->fullUpload();
-    }
+    $full_search->fullUpload();
 
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));

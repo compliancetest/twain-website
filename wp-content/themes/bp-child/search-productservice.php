@@ -196,8 +196,7 @@ get_header();
                     <thead>
                     <tr>
                         <th class="first">
-                            <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc' ?>">Product
-                                / Service</a>
+                            <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc' ?>">Product</a>
 
                             <div class="sorting-box">
                                 <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=asc"

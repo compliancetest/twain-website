@@ -55,10 +55,10 @@ class CloudSearch extends BaseAWS
                 $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
             } else {
                 //usual user should see only own and community items
-                $groups = groups_get_user_groups(get_current_user_id());
+                $userCommunities = getUserCommunities(get_current_user_id());
                 $groups_str = '';
-                foreach ($groups['groups'] AS $group_id) {
-                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                foreach ($userCommunities AS $userCommunity) {
+                    $groups_str .= " ( term field=community_id '$userCommunity->id' ) ";
                 }
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
@@ -123,8 +123,31 @@ class CloudSearch extends BaseAWS
                 }
             }
         }
+
+        $showCerified = '';
+        if(is_user_logged_in()) {
+            //super admin should see all entries
+            if (!is_super_admin()) {
+                foreach (getUserCommunities(get_current_user_id()) AS $userCommunity) {
+                    if ($userCommunity->list_only_certified) {
+                        $showCerified .= " ( and (term field=community_id '$userCommunity->id' ) (term field=status 'Verified')) ";
+                    } else {
+                        $showCerified .= " ( term field=community_id '$userCommunity->id' ) ";
+                    }
+                }
+            }
+        } else {
+            foreach(getCommunities() as $community) {
+                if($community->list_only_certified) {
+                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
+                } else {
+                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) ) ";
+                }
+
+            }
+        }
         if (!empty($l)) {
-            $str['filterQuery'] = ' ( and ' . $l . ' ) ';
+            $str['filterQuery'] = ' ( and ' . $l . $showCerified . ' ) ';
         }
         if (!isset($str['query'])) {
             $str['query'] = 'matchall';
@@ -133,7 +156,7 @@ class CloudSearch extends BaseAWS
         try {
             $r = $this->_client->search($str);
         } catch (Exception $e) {
-            return false;
+            return _trace($e->getMessage(),1);
         }
         return $r;
     }
