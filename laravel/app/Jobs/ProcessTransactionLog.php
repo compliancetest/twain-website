@@ -210,8 +210,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         }
 
 
-        if($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
-            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS')) {
+        if($testSuite->getMetaByKey('ts_tester_role') != 'Application' && ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
+            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS'))) {
             /*
              * Ensure that each TWRC_XFERDONE returs code has image
              */
