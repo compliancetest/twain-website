@@ -65,17 +65,11 @@ class CloudSearch extends BaseAWS
                 } else {
                     $groups_str = ' ( or ( term field=community_id 1 ) ) ';
                 }
-                $private_where = '';
-                $organisation_members = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM wp_organisations_members WHERE organisation_id = ( SELECT organisation_id FROM wp_organisations_members WHERE user_id = %d ) ", get_current_user_id()));
-                if ($organisation_members) {
-                    foreach ($organisation_members AS $organisation_members) {
-                        $private_where .= '( term field=user_id ' . $organisation_members->user_id . ' )';
-                    }
-                }
-                if (!empty($private_where)) {
-                    $private_where = ' ( or ' . $private_where . ' ) ';
+                $userOrganisation = ct_get_user_organisation(get_current_user_id());
+                if ($userOrganisation) {
+                   $private_where = '( term field=organisation_id ' . $userOrganisation->id . ' )';
                 } else {
-                    $private_where = " ( term field=user_id " . get_current_user_id() . " ) ";
+                    $private_where = " ( term field=organisation_id 0 ) ";
                 }
                 $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 ) " . $private_where . "   ) ( and ( term field=visibility 2 ) " . $groups_str . " ) )";//(  )
             }
@@ -180,10 +174,10 @@ class CloudSearch extends BaseAWS
                 $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
             } else {
                 //usual user should see only own and community items
-                $groups = groups_get_user_groups(get_current_user_id());
+                $userCommunities = getUserCommunities(get_current_user_id());
                 $groups_str = '';
-                foreach ($groups['groups'] AS $group_id) {
-                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                foreach ($userCommunities AS $userCommunity) {
+                    $groups_str .= " ( term field=community_id '$userCommunity->id' ) ";
                 }
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
@@ -208,12 +202,67 @@ class CloudSearch extends BaseAWS
             //non-logged in user should see only public items
             $l .= "  ( term field=visibility 1 )";
         }
-
+        $str['sort'] = 'name asc';
         foreach ($params AS $k => $v) {
             if ($k == 'q') {
                 if (!empty($v)) {
                     $str['query'] = $v;
                 }
+            } else if ($k == 'page') {
+                if ($v != 1) {
+                    $str['start'] = ((--$v * SEARCH_RESULTS_LIMIT));
+                }
+            } else if ($k == 'orderby') {
+                if (in_array($v, $this->_allowedSortFields)) {
+                    $sortOrder = isset($params['order']) ? $params['order'] : 'asc';
+                    if (in_array($sortOrder, $this->_allowedSortOrder)) {
+                        $str['sort'] = $v . " " . $sortOrder;
+                    }
+                }
+            } else if ($k == 'date_from' || $k == 'date_to') {
+                if (!$range_checked) {
+                    if (isset($params['date_from']) && !empty($params['date_from']) && validateDate($params['date_from'])) {
+                        $from = "['" . $params['date_from'] . 'T00:00:00Z' . "'";
+                    } else {
+                        $from = '{';
+                    }
+                    if (isset($params['date_to']) && !empty($params['date_to']) && validateDate($params['date_to'])) {
+                        $to = "'" . $params['date_to'] . 'T23:59:59Z' . "']";
+                    } else {
+                        $to = '}';
+                    }
+                    if ("$from, $to" !== '{, }') {
+                        $l .= "(range field=date $from, $to   ) ";
+                    }
+                    $range_checked = true;
+                }
+            } else {
+                if ($v !== 'All' && $k != 'order' && in_array($k, $this->_allowedFields)) {
+                    $l .= " (term field=" . $k . " '" . str_replace('&ndash;', '&#8211;', htmlentities($v)) . "') ";
+                }
+            }
+        }
+
+        $showCerified = '';
+        if(is_user_logged_in()) {
+            //super admin should see all entries
+            if (!is_super_admin()) {
+                foreach (getUserCommunities(get_current_user_id()) AS $userCommunity) {
+                    if ($userCommunity->list_only_certified) {
+                        $showCerified .= " ( and (term field=community_id '$userCommunity->id' ) (term field=status 'Verified')) ";
+                    } else {
+                        $showCerified .= " ( term field=community_id '$userCommunity->id' ) ";
+                    }
+                }
+            }
+        } else {
+            foreach(getCommunities() as $community) {
+                if($community->list_only_certified) {
+                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
+                } else {
+                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) ) ";
+                }
+
             }
         }
 
@@ -238,6 +287,7 @@ class CloudSearch extends BaseAWS
      */
     public function _initial_upload()
     {
+        return false;
         global $wpdb;
 
         // step 1 - upload test plans
