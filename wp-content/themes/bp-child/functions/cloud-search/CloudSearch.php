@@ -141,7 +141,10 @@ class CloudSearch extends BaseAWS
             }
         }
         if (!empty($l)) {
+
             $str['filterQuery'] = ' ( and ' . $l . $showCerified . ' ) ';
+            var_dump($str['filterQuery']);
+
         }
         if (!isset($str['query'])) {
             $str['query'] = 'matchall';
