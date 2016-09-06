@@ -129,6 +129,7 @@ class CloudSearch extends BaseAWS
                         $showCerified .= " ( term field=community_id '$userCommunity->id' ) ";
                     }
                 }
+                $showCerified  = ' (or '.$showCerified.' ) ';
             }
         } else {
             foreach(getCommunities() as $community) {
@@ -139,11 +140,11 @@ class CloudSearch extends BaseAWS
                 }
 
             }
+            $showCerified  = ' (or ('.$showCerified.')) ';
         }
         if (!empty($l)) {
 
             $str['filterQuery'] = ' ( and ' . $l . $showCerified . ' ) ';
-            var_dump($str['filterQuery']);
 
         }
         if (!isset($str['query'])) {
