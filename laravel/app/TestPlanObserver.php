@@ -49,7 +49,8 @@ class TestPlanObserver
         }
 
         $productVersion = $product->getMetaByKey('product_version');
-        $productOwner = Organisation::find($product->getMetaByKey('product_organisation_id'))->organisation_name;
+        $productOrganisationId = $product->getMetaByKey('product_organisation_id');
+        $productOwner = Organisation::find($productOrganisationId)->organisation_name;
         $productDescription = $product->getMetaByKey('product_description');
         $temp_data = array(
             'name' => $product->post_title,
@@ -68,6 +69,7 @@ class TestPlanObserver
             'visibility' => $visibility,
             'community_id' => $communities,
             'user_id' => $testPlan->creator_id,
+            'organisation_id' => $productOrganisationId,
             'product_id' => $testPlan->product_id,
             'product_name' => $product->post_title,
             'start_date' => date('Y-m-d\TH:i:s', strtotime($testPlan->created_at)) . 'Z',

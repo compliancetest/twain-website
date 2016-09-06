@@ -30,8 +30,8 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
-$results = $cloud_search->search($_GET);
-$allFilters = $cloud_search->getFilters($_GET);
+$results = $allFilters = $cloud_search->search($_GET);
+//$allFilters = $cloud_search->getFilters($_GET);
 if ($is_download) {
     $results = $cloud_search->search($_GET, true);
     generate_and_download($results);
