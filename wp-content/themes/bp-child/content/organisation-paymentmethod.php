@@ -175,7 +175,7 @@ if(DISPLAY_SUBSCRIPTIONS){
 <div class="space25"></div>
 
 <div class="column left four_sixths nopadding">
-    <div class="grid-box table-box" id="my_payment">
+    <div class="grid-box table-box">
         <div class="grid-box-header">
             <h5 class="left">Manufacturer List</h5>
             <div class="clear"></div>
@@ -191,6 +191,7 @@ if(DISPLAY_SUBSCRIPTIONS){
                     </div>
                     <input type="hidden" name="organisation_id" id="organisation_id" value="<?=$organisation_id?>"/>
                     <?php wp_nonce_field('save_products_organisations', 'cp-action'); ?>
+                    <div class="btn-row"></div>
                 </form>
             </div>
         </div>
@@ -210,9 +211,10 @@ if(DISPLAY_SUBSCRIPTIONS){
     jQuery(document).ready(function(){
         jQuery('.submit_org_products').on('click', function(e){
             e.preventDefault();
-            jQuery('#org_products_form').ajaxSubmit({
+            var form = jQuery('#org_products_form');
+            form.ajaxSubmit({
                 success: function(data){
-                    console.log(data)
+                    setTimeout("jQuery('.message').remove(); jQuery('.grid-row-message').remove()", 3000);
                 }
             });
         });
