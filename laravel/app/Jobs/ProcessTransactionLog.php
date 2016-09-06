@@ -204,7 +204,31 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     ));
                     $scanResults = [$transactionLog->getS3Link($logImageKey)];
                 }
+                /**
+                 * Save transactionLog screenshots
+                 */
+                $screenCaptures = [];
+                if (!empty($log['ScreenCaptureFileName'])) {
+                    foreach($log['ScreenCaptureFileName'] AS $screenCapture) {
+                        if(file_exists($this->rootFolder . '/screen_capture/' . $screenCapture)) {
+                            $screenCaptureImageKey = $this->userId . '/' . $this->testCaseId . '/' . $this->executionId . '/' . $transactionLog->id . '/screen_capture/' . $screenCapture;
+
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mime = finfo_file($finfo, $this->rootFolder . '/screen_capture/' . $screenCapture);
+                            finfo_close($finfo);
+
+                            $s3->putObject(array(
+                                'Bucket' => config('env.bucket.transactions'),
+                                'Key' => $screenCaptureImageKey,
+                                'ContentType' => $mime,
+                                'SourceFile' => $this->rootFolder . '/screen_capture/' . $screenCapture,
+                            ));
+                            $screenCaptures[] = $transactionLog->getS3Link($screenCaptureImageKey);
+                        }
+                    }
+                }
                 $transactionLog->scan_results = json_encode($scanResults);
+                $transactionLog->screen_captures = json_encode($screenCaptures);
                 $transactionLog->save();
             }
         }

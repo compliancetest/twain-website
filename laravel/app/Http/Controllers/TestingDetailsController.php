@@ -114,4 +114,15 @@ class TestingDetailsController extends Controller
         $testCase = Post::where(['ID' => $transaction->test_case_id])->first();
         return view('pages.testingdetails.logs', compact('logs', 'testCase'));
     }
+
+    /**
+     * @param $logEntryId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function screenCaptures($logEntryId)
+    {
+        $entry = TransactionsLog::find($logEntryId);
+        $screenCaptures = json_decode($entry->screen_captures, true);
+        return view('pages.testingdetails.screen_captures', compact('screenCaptures'));
+    }
 }
