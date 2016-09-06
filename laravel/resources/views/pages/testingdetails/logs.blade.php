@@ -51,7 +51,16 @@
                         </a>
                     @endif
                 </td>
-                <td>-</td>
+                <td>
+                    @if ($screenCaptures = json_decode($message->screen_captures))
+                        <a href="/testingdetails/{{ $message->id }}/screen-captures" data-toggle="modal" data-remote="true" data-ajax-modal
+                           data-target="#modalScreenCaptures">
+                            View
+                        </a>
+                    @else
+                        -
+                    @endif
+                </td>
                 <td>
                     @if ($scanImages = json_decode($message->scan_results))
                         @foreach ($scanImages as $scanImage)

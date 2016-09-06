@@ -37,6 +37,7 @@ Route::group(['middleware' => ['web']], function () {
         ['only' => ['store',  'index']]);
     Route::get('testingdetails/{transaction}/output/', 'TestingDetailsController@output');
     Route::get('testingdetails/{transaction}/reason/', 'TestingDetailsController@reason');
+    Route::get('testingdetails/{transaction}/screen-captures/', 'TestingDetailsController@screenCaptures');
     Route::get('testingdetails/{transaction}/transaction-reason/', 'TestingDetailsController@transactionReason');
     Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
 

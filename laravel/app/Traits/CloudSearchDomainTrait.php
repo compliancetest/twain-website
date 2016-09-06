@@ -23,7 +23,7 @@ trait CloudSearchDomainTrait
         return CloudSearchDomainClient::factory([
             'region' => 'us-west-2',
             'version' => '2013-01-01',
-            'endpoint' => config('aws.registry_domain.integration'),// . getenv('ENVIRONMENT')),
+            'endpoint' => config('aws.registry_domain.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
