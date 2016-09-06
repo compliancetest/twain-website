@@ -38,14 +38,14 @@ if (!$org_membership) {
         <div class="grid-box-body">
             <?php if( ! $org_membership ):?>
                 <div class="grid-row edit_org_text" data-state="1">
-                    At present you are <b>not part of any organisation</b> known to <?php echo get_site_title();?>.
+                    At present you are <b>not part of any orgazisation</b> known to <?php echo get_site_title();?>.
                     <div style="padding-bottom: 5px;"></div>
-                    If you plan to undertake testing with <?php echo get_site_title();?>, you either need to <a href="#" class="join_organisation">join an existing organisation</a>
-                    or <a href="#" class="create_organisation">create a new organisation</a> and become its administrator.
+                    If you plan to undertake testing with <?php echo get_site_title();?>, you either need to <a href="#" class="join_organisation">join an existing organization</a>
+                    or <a href="#" class="create_organisation">create a new organization</a> and become its administrator.
                     <div style="padding-bottom: 5px;"></div>
-                    To join an existing organisation, you will need to know its organisation key, which your organisation administrator can provide.</br>
+                    To join an existing organization, you will need to know its organization key, which your organization administrator can provide.</br>
                     <div style="padding-bottom: 5px;"></div>
-                    To create a new organisation, you will need its name and ABN as a minimum.
+                    To create a new organization, you will need its name and ABN as a minimum.
                 </div>
                 <form action="/" method="get" class="edit_org" style="display: none;">
                     <div class="grid-row">
