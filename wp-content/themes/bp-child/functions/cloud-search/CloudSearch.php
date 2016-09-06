@@ -140,7 +140,7 @@ class CloudSearch extends BaseAWS
                 }
 
             }
-            $showCerified  = ' (or ('.$showCerified.')) ';
+            $showCerified  = ' (or '.$showCerified.' ) ';
         }
         if (!empty($l)) {
 
