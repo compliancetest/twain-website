@@ -33,13 +33,18 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function (
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::resource('testingdetails', 'TestingDetailsController',
-        ['only' => ['store',  'index']]);
-    Route::get('testingdetails/{transaction}/output/', 'TestingDetailsController@output');
-    Route::get('testingdetails/{transaction}/reason/', 'TestingDetailsController@reason');
-    Route::get('testingdetails/{transaction}/screen-captures/', 'TestingDetailsController@screenCaptures');
-    Route::get('testingdetails/{transaction}/transaction-reason/', 'TestingDetailsController@transactionReason');
-    Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
+    Route::get('contact-us', 'ContactUsController@index');
+    Route::post('contact-us', 'ContactUsController@send');
+
+    Route::group(['middleware' => ['auth']], function () {
+        Route::resource('testingdetails', 'TestingDetailsController',
+            ['only' => ['store', 'index']]);
+        Route::get('testingdetails/{transaction}/output/', 'TestingDetailsController@output');
+        Route::get('testingdetails/{transaction}/reason/', 'TestingDetailsController@reason');
+        Route::get('testingdetails/{transaction}/screen-captures/', 'TestingDetailsController@screenCaptures');
+        Route::get('testingdetails/{transaction}/transaction-reason/', 'TestingDetailsController@transactionReason');
+        Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
+    });
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
 
