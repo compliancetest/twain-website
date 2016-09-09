@@ -12,7 +12,6 @@ class PostObserver
     public function saved(Post $post)
     {
         if($post->post_type == 'product-service'){
-            error_log('Post observer');
             $productTestPlans = TestPlan::where(['product_id' => $post->ID])->get();
             foreach($productTestPlans as $productTestPlan){
                 $productTestPlan->timestamps = false;
