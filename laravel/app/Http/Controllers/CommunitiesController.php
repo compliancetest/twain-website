@@ -14,6 +14,8 @@ use App\Organisation;
 use App\Post;
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -79,6 +81,9 @@ class CommunitiesController extends Controller
      */
     public function show($slug, $action = 'testsuites', $threadSlug = false)
     {
+        if (!View::exists('pages.communities.partials.show.' . $action)) {
+            throw new NotFoundHttpException;
+        }
         $community = Community::findBySlug($slug);
         $data = [
             'community' => $community,
