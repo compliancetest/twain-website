@@ -236,7 +236,7 @@ get_header();
                         <?php foreach ($results->getPath('hits/hit') AS $row): ?>
                             <?php $row_data = $row['fields']; ?>
                                 <tr>
-                                    <td class="first"><a href="<?php echo get_permalink($row_data['post_id'][0]); ?>"
+                                    <td class="first"><a href="<?php echo get_permalink($row_data['product_id'][0]); ?>"
                                                          class="blue_txt"><?php echo $row_data['name'][0] ?></a></td>
                                     <td><?php echo $row_data['version'][0]; ?></td>
                                     <td><?php echo $row_data['owner'][0]; ?></td>
@@ -253,7 +253,7 @@ get_header();
                                     <td><?php if (!empty($row_data['role'])) echo implode(', ', $row_data['role']); ?></td>
                                     <td><?php if (!empty($row_data['level'])) echo implode(', ', $row_data['level']); ?></td>
                                     <td>
-                                        <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM wp_compliance_claims WHERE id = %d ", end(explode('_', $row['id'])))) == '1'): ?>
+                                        <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM claims WHERE id = %s ", end(explode('_', $row['id'])))) == '1'): ?>
                                             <a href="#" class="has-tooltip"
                                                title="Some test cases were excluded/not performed during testing. Please consult the claim certificate on the product summary page for more details."><img
                                                     src="/wp-content/themes/bp-child/images/verify_icon.png"
