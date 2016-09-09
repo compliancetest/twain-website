@@ -51,7 +51,8 @@ function compliancetest_user_actions()
         if(empty($organisationsList)){
             exit('Products organisation list can not be empty');
         }
-        $result = saveProductsOrganisations(intval($_POST['organisation_id']),json_encode($organisationsList));
+        $organisationId = ct_get_user_organisation()->id;
+        $result = saveProductsOrganisations($organisationId,json_encode($organisationsList));
         if($result === true || is_int($result)) {
             echo "success";
         } else

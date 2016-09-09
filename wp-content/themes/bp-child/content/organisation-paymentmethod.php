@@ -4,7 +4,7 @@
 */
 if(DISPLAY_SUBSCRIPTIONS){
     if(!defined('ABSPATH'))
-        die('Invalid Request!');
+        die('Invalid Request!');    
 
         $Organization_id = getOrganizationID();
         $Organization = getOrganisationById($organisation_id);
@@ -211,10 +211,14 @@ if(DISPLAY_SUBSCRIPTIONS){
     jQuery(document).ready(function(){
         jQuery('.submit_org_products').on('click', function(e){
             e.preventDefault();
+            if(jQuery('.edit-cancel-btn').closest('.btn-row').is(':visible')) {
+                console.log('hide')
+                jQuery('.edit-cancel-btn').click();
+            }
             var form = jQuery('#org_products_form');
             form.ajaxSubmit({
                 success: function(data){
-                    setTimeout("jQuery('.message').remove(); jQuery('.grid-row-message').remove()", 3000);
+                    setTimeout("jQuery('#org_products_form .message').remove(); jQuery('.grid-row-message').remove()", 3000);
                 }
             });
         });
