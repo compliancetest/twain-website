@@ -34,17 +34,15 @@ class ClaimObserver
 
 
         $testSuiteCommunity = $testSuite->getMetaByKey('community_id');
+        $communities = [$testSuiteCommunity];
 
         if ($productVisibility == 'Public') {
             $visibility = 1;
-            $communities = Community::all()->pluck('id');
         } else {
             if ($productVisibility == 'Community') {
                 $visibility = 2;
-                $communities = [$testSuiteCommunity];
             } else {
                 $visibility = 3;
-                $communities = [$testSuiteCommunity];
             }
         }
 
