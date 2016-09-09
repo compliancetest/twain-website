@@ -644,11 +644,13 @@ function showGridBoxResultMessage(obj, message, type, separateErrorPlace)
         jQuery(obj).find('.btn-row .message').remove();
     if (separateErrorPlace){
         jQuery(obj).find('.btn-row').before('<div class="grid-row grid-row-message"><div class="message ' + type + '">' + message + '</div><div>');
+        setTimeout("jQuery('.grid-row-message').remove();", 3000);
     } else {
         jQuery(obj).find('.btn-row').prepend('<div class="message ' + type + '">' + message + '</div>');
+        jQuery(obj).find('.btn-row').find('.message').fadeIn('fast');
     }
 
-    jQuery(obj).find('.btn-row').find('.message').fadeIn('fast');
+
 }
 function hideGridBoxResultMessage(obj)
 {
