@@ -45,9 +45,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ||
-            $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException
-        ) {
+        if(getenv('ENVIRONMENT') != 'local') {
+
             global $wp_query;
             $wp_query->set_404();
             status_header(404);
