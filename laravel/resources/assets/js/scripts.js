@@ -384,6 +384,7 @@ var Page = {
             e.preventDefault();
             $('#profileTypeList').hide();
             $('#addNewProfile').show();
+            $('#profile_type_text').focus();
         },
 
         hideAddNewProfileType: function(e){
@@ -410,6 +411,10 @@ var Page = {
                 success: function (rsp) {
                     self.hideAddNewProfileType(e);
                     location.reload();
+                },
+                error: function(rsp){
+                    $('#profileTypesSaving').hide();
+                    $('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">Invalid JSON file.</p>');
                 }
             });
 

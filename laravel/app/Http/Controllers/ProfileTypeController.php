@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Response;
+use Validator;
 use App\Community;
 use App\ProfileType;
 use Carbon\Carbon;
@@ -10,7 +12,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
-use Response;
 
 class ProfileTypeController extends Controller
 {
@@ -42,7 +43,15 @@ class ProfileTypeController extends Controller
         $comnunity = Community::findBySlug($communitySlug);
         $profileType = ProfileType::firstOrNew(['id' => $request->get('type_id')]);
         if($request->file('profile_type_file')){
-            $profileType->schema = base64_encode(file_get_contents($request->file('profile_type_file')));
+            $jsonData = file_get_contents($request->file('profile_type_file'));
+            $validator = Validator::make(['json' => $jsonData], [
+                'json' => 'json'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['message' => 'Invalid JSON file'], 422);
+            }
+            $profileType->schema = base64_encode($jsonData);
         } else {
             $profileType->schema = base64_encode(($request->get('profile_type_text')));
         }
