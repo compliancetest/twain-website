@@ -104,6 +104,7 @@ return [
             'required' => 'Features field is required',
             'array' => 'Features field is required and should be an array',
         ],
+        "recaptcha" => 'The recaptcha field is not correct.',
     ],
 
     /*
