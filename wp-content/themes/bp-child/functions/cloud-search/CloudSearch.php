@@ -49,34 +49,7 @@ class CloudSearch extends BaseAWS
         }
         $l = '';
         $range_checked = false;
-        if (is_user_logged_in()) {
-            if (is_super_admin()) {
-                //super admin should see all items
-                $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
-            } else {
-                //usual user should see only own and community items
-                $userCommunities = getUserCommunities(get_current_user_id());
-                $groups_str = '';
-                foreach ($userCommunities AS $userCommunity) {
-                    $groups_str .= " ( term field=community_id '$userCommunity->id' ) ";
-                }
-                if (!empty($groups_str)) {
-                    $groups_str = ' ( or ' . $groups_str . ' ) ';
-                } else {
-                    $groups_str = ' ( or ( term field=community_id 1 ) ) ';
-                }
-                $userOrganisation = ct_get_user_organisation(get_current_user_id());
-                if ($userOrganisation) {
-                   $private_where = '( term field=organisation_id ' . $userOrganisation->id . ' )';
-                } else {
-                    $private_where = " ( term field=organisation_id 0 ) ";
-                }
-                $l .= "  (or ( term field=visibility 1 ) (  and ( term field=visibility 3 ) " . $private_where . "   ) ( and ( term field=visibility 2 ) " . $groups_str . " ) )";//(  )
-            }
-        } else {
-            //non-logged in user should see only public items
-            $l .= "  ( term field=visibility 1 )";
-        }
+
         $str['sort'] = 'name asc';
         foreach ($params AS $k => $v) {
             if ($k == 'q') {
@@ -118,33 +91,44 @@ class CloudSearch extends BaseAWS
             }
         }
 
-        $showCerified = '';
-        if(is_user_logged_in()) {
-            //super admin should see all entries
-            if (!is_super_admin()) {
-                foreach (getUserCommunities(get_current_user_id()) AS $userCommunity) {
-                    if ($userCommunity->list_only_certified) {
-                        $showCerified .= " ( and (term field=community_id '$userCommunity->id' ) (term field=status 'Verified')) ";
-                    } else {
-                        $showCerified .= " ( term field=community_id '$userCommunity->id' ) ";
-                    }
-                }
-                $showCerified  = ' (or '.$showCerified.' ) ';
-            }
-        } else {
-            foreach(getCommunities() as $community) {
-                if($community->list_only_certified) {
-                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
-                } else {
-                    $showCerified .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) ) ";
-                }
+        $publicWhere = $communityWhere = $organisationWhere = '';
 
+        foreach(getCommunities() as $community) {
+            if($community->list_only_certified) {
+                $publicWhere .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
+            } else {
+                $publicWhere .= " ( and ( term field=visibility 1 ) (term field=community_id '$community->id' ) ) ";
             }
-            $showCerified  = ' (or '.$showCerified.' ) ';
         }
-        if (!empty($l)) {
 
-            $str['filterQuery'] = ' ( and ' . $l . $showCerified . ' ) ';
+        if(is_user_logged_in()) {
+            foreach (getUserCommunities(get_current_user_id()) as $community) {
+                if ($community->list_only_certified) {
+                    $communityWhere .= " ( and ( term field=visibility 2 ) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
+                } else {
+                    $communityWhere .= " ( and ( term field=visibility 2 ) (term field=community_id '$community->id' ) ) ";
+                }
+            }
+
+            if($communityWhere){
+                $communityWhere = ' (or '.$communityWhere.') ';
+            }
+
+            $userOrganisation = ct_get_user_organisation(get_current_user_id());
+            if ($userOrganisation) {
+                $organisationWhere = ' ( and ( term field=visibility 3 ) ( term field=organisation_id ' . $userOrganisation->id . ') ) ';
+            }
+        }
+
+        if (!empty($l) || !empty($publicWhere) || !empty($communityWhere) || !empty($organisationWhere)) {
+
+            if(is_super_admin()){
+                if(!empty($l)) {
+                    $str['filterQuery'] = ' ( and ' . $l . ' ) ';
+                }
+            } else {
+                $str['filterQuery'] = ' ( and ' . $l . ' (or ' . $publicWhere . ' ' . $communityWhere . ' ' . $organisationWhere . ' ) ) ';
+            }
 
         }
         if (!isset($str['query'])) {
@@ -154,7 +138,7 @@ class CloudSearch extends BaseAWS
         try {
             $r = $this->_client->search($str);
         } catch (Exception $e) {
-            return _trace($e->getMessage(),1);
+            return false;
         }
         return $r;
     }
