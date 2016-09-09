@@ -37,7 +37,7 @@ class TestPlanObserver
 
         if ($productVisibility == 'Public') {
             $visibility = 1;
-            $communities = [Community::all()->pluck('id')];
+            $communities = Community::all()->pluck('id');
         } else {
             if ($productVisibility == 'Community') {
                 $visibility = 2;
