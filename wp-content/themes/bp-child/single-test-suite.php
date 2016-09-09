@@ -315,7 +315,7 @@ Template Name Posts: Test Suite
                                                 </a>
                                             <?php endif;?>
                                         <?php else:?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -348,7 +348,7 @@ Template Name Posts: Test Suite
                                     <div class="test-suite-actions">
                                         <?php if( ! empty( $suite->test_suite_plans ) ):?>
                                             <?php if(DISPLAY_SUBSCRIPTIONS):?>
-                                                <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                <a class=" big-red-btn" href="#pricing-plans" data-type="inline">
                                                     <span class="price-b">
                                                         <span class="l"></span>
                                                         <span class="m">View Pricing<br>Plans</span>
@@ -357,7 +357,7 @@ Template Name Posts: Test Suite
                                                 </a>
                                             <?php endif;?>
                                             <?php else:?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -377,7 +377,7 @@ Template Name Posts: Test Suite
                                             $userOrganisation = ct_get_user_organisation(get_current_user_id());
                                             $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $suite->community_id, $userOrganisation->id)) ? true : false;
                                         if(!$hasunallocated):?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -433,7 +433,7 @@ Template Name Posts: Test Suite
                                                 </span>
                             </a>
                         <?php else:?>
-                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -445,7 +445,7 @@ Template Name Posts: Test Suite
                             <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                         </a>
                     <?php else:?>
-                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                        <a class="big-red-btn" href="/contact-us/">
                             <span class="price-b">
                                 <span class="l"></span>
                                 <span class="m">CONTACT US<br>For Pricing</span>
