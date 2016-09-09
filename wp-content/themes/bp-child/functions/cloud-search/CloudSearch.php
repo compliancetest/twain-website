@@ -116,7 +116,16 @@ class CloudSearch extends BaseAWS
 
             $userOrganisation = ct_get_user_organisation(get_current_user_id());
             if ($userOrganisation) {
-                $organisationWhere = ' ( and ( term field=visibility 3 ) ( term field=organisation_id ' . $userOrganisation->id . ') ) ';
+                foreach(getCommunities() as $community) {
+                    if($community->list_only_certified) {
+                        $organisationWhere .= " ( and ( term field=visibility 3 ) ( term field=organisation_id $userOrganisation->id) (term field=community_id '$community->id' ) (term field=status 'Verified')) ";
+                    } else {
+                        $organisationWhere .= " ( and ( term field=visibility 3 ) ( term field=organisation_id $userOrganisation->id) (term field=community_id '$community->id' ) ) ";
+                    }
+                }
+            }
+            if($organisationWhere){
+                $organisationWhere = ' (or '.$organisationWhere.') ';
             }
         }
 
@@ -138,6 +147,7 @@ class CloudSearch extends BaseAWS
         try {
             $r = $this->_client->search($str);
         } catch (Exception $e) {
+            var_dump($e->getMessage());
             return false;
         }
         return $r;
