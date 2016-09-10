@@ -25,8 +25,11 @@ class CommunityMembershipController extends Controller
      */
     public function leave($slug)
     {
-
         $community = Community::findBySlug($slug);
+        $admins = $community->getAdmins();
+        if($community->isAdmin() && count($admins) === 1){
+            return response()->json(array('message' => 'This community must have at least one admin'), 422);
+        }
         $user = get_userdata($this->userId);
         $emailData = array(
             '[community]' => $community->title,
@@ -35,8 +38,6 @@ class CommunityMembershipController extends Controller
             '[email]' => $user->user_email,
             '[username]' => $user->user_login
         );
-
-        $admins = $community->getAdmins();
 
         sendEmails($admins, 'member_leave_community_admin', $emailData);
         $community->getMember(get_current_user_id())->delete();

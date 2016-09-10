@@ -264,12 +264,16 @@ var Page = {
                 },
                 success: function(){
                     location.reload();
+                    $('.modal').modal('hide');
                 },
                 error: function (error, status, exception) {
-                    location.href == '/communities/';
-                },
-                complete: function () {
-                    $('.modal').modal('hide');
+                    $('#confirmCancelMembership' +  communityId + ' .block-loading').hide();
+                    $('#confirmCancelMembershiptwain .modal-footer').prepend('<div class="error-message">' + formatErrorMessage(error, 'error') + '</div>');
+                    setTimeout(function () {
+                        $('#confirmCancelMembershiptwain .modal-footer > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
                 }
             });
 
