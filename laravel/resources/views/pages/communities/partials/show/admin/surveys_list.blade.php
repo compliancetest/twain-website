@@ -44,7 +44,7 @@
 
 @if($surveys)
     <script>
-        jQuery('.btn-confirm').on('click', function(e){
+        jQuery('#modalEditSurveys .btn-confirm').on('click', function(e){
             jQuery('.message').hide();
             e.preventDefault();
             jQuery('#CreateProfileLoading').show();
