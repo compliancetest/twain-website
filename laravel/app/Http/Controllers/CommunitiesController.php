@@ -316,8 +316,10 @@ class CommunitiesController extends Controller
         }
 
         $community = Community::findBySlug($communitySlug);
-        foreach($request->get('links') as $surveyId => $link){
-            CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
+        if ($request->get('links')) {
+            foreach ($request->get('links') as $surveyId => $link) {
+                CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
+            }
         }
         return response()->json(['status' => 'success']);
     }
