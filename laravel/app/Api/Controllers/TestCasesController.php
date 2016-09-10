@@ -217,15 +217,16 @@ class TestCasesController extends BaseApiController
      *     "code": 400
      *   }
      *
-     * @apiError 404 Test Case not configured properly
-     * @apiErrorExample {json} Please stop running case before start:
+     * @apiError 404 Wrong test case configuration
+     * @apiErrorExample {json} Wrong test case configuration:
+     *
      *  {
      *     "errors": {
      *       "message": [
-     *         "Execution profile is required for DataSource products"
+     *         "Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID."
      *       ]
      *     },
-     *     "code": 400
+     *     "code": 404
      *   }
      *
      * @apiSuccessExample {json} Success Response:
@@ -420,6 +421,19 @@ class TestCasesController extends BaseApiController
      *     },
      *     "code": 404
      *   }
+     *
+     * @apiError 404 Wrong test case configuration
+     * @apiErrorExample {json} Wrong test case configuration:
+     *
+     *  {
+     *     "errors": {
+     *       "message": [
+     *         "Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID."
+     *       ]
+     *     },
+     *     "code": 404
+     *   }
+     *
      *
      * @apiSuccessExample {json} Success-Response:
      *   {

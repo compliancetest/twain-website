@@ -716,7 +716,7 @@
           "type": "json"
         },
         {
-          "title": "TetsCase not configured:",
+          "title": "TestCase not configured:",
           "content": "{\n  \"error\": {\n    \"message\": [\n       \"Please set testing details\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
@@ -855,6 +855,11 @@
           "title": "You are not running any test case now:",
           "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
+        },
+        {
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"\n     ]\n   },\n   \"code\": 404\n }",
+          "type": "json"
         }
       ]
     },
@@ -943,7 +948,7 @@
             "group": "Error 4xx",
             "optional": false,
             "field": "404",
-            "description": "<p>Test Case not configured properly</p>"
+            "description": "<p>Wrong test case configuration</p>"
           }
         ]
       },
@@ -964,8 +969,8 @@
           "type": "json"
         },
         {
-          "title": "Please stop running case before start:",
-          "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
