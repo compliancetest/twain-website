@@ -268,9 +268,9 @@ var Page = {
                 },
                 error: function (error, status, exception) {
                     $('#confirmCancelMembership' +  communityId + ' .block-loading').hide();
-                    $('#confirmCancelMembershiptwain .modal-footer').prepend('<div class="error-message">' + formatErrorMessage(error, 'error') + '</div>');
+                    $('.cancelMembershipInCommunity').closest('.modal-footer').prepend('<div class="error-message">' + formatErrorMessage(error, 'error') + '</div>');
                     setTimeout(function () {
-                        $('#confirmCancelMembershiptwain .modal-footer > .error-message').slideUp(function () {
+                        $('.cancelMembershipInCommunity').closest('.modal-footer').find('.error-message').slideUp(function () {
                             $(this).remove();
                         });
                     }, 2000);
