@@ -116,6 +116,7 @@ function createSupportTicket()
         'support_id' => 0,
         'community_id' => $community_id,
         'test_suite_id' => $suite_id,
+        'suite_id' => $suite_id,
         'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
@@ -279,6 +280,7 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
         $totalItems = $wpdb->get_var($tQuery);        
         $query .= " LIMIT " . ($page - 1) * $limit . ", $limit";
     }
+    _trace($query);
     $rows = $wpdb->get_results($query);
     
     if(!isset($totalItems))
@@ -546,11 +548,8 @@ function acceptTerm()
         exit;
     }
     
-    if($is_support)    
-        $message = "<b>" . $user->display_name . "</b> has accepted the term.";
-    else
-        $message = "<b>[customer]</b> has accepted the term.";
-    
+    $message = "<b>" . cp_get_user_fullname($user_id) . "</b> has accepted the term.";
+
     $messageID = ct_send_ticket_message($ticket->id, $user_id, $ticket->customer_id != $user_id ? $ticket->customer_id : $ticket->support_id, $message, 'term');
     
     if($messageID)
@@ -801,7 +800,7 @@ function sendTicketMessage()
     {        
         if(isset($_POST['resolved']) && $_POST['resolved'])
         {
-            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ;
+            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
             $status_changed = true;
             $new_status = TICKET_STATUS_RESOLVED;
             
@@ -813,19 +812,19 @@ function sendTicketMessage()
         {
             if($_POST['status_change'] == 'in_progress' && $ticketDetail->status_id != TICKET_STATUS_IN_PROGRESS)
             {
-                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message;             
+                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_IN_PROGRESS;
             }else if($_POST['status_change'] == 'feedback' && $ticketDetail->status_id != TICKET_STATUS_FEEDBACK){
-                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_FEEDBACK;
             }else if($_POST['status_change'] == 'resolved' && $ticketDetail->status_id != TICKET_STATUS_RESOLVED){
-                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_RESOLVED;
             }else if($_POST['status_change'] == 'closed' && $ticketDetail->status_id != TICKET_STATUS_CLOSED){
-                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_CLOSED;
             }
