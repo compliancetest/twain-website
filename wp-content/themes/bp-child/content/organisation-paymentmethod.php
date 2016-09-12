@@ -175,14 +175,14 @@ if(DISPLAY_SUBSCRIPTIONS){
 <div class="space25"></div>
 
 <div class="column left four_sixths nopadding">
-    <div class="grid-box table-box">
+    <div class="grid-box">
         <div class="grid-box-header">
             <h5 class="left">Manufacturer List</h5>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">
             <div id="edit-produts-form">
-                <form action="#" method="post" id="org_products_form">
+                <form action="#" method="post" id="org_products_form" class="manufacturer-list-form">
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Aliases</label></div>
                         <input type="text" name="product_organisations" id="nickname" value="<?php echo implode(';', $productOrganisations);?>" class="input" autocomplete="off" style="width: 55%; float: left;margin-right: 10px;">

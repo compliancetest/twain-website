@@ -9244,3 +9244,7 @@ input.inactive_s{
 #my_details .grid-row-complex .grid-row{
     line-height: 24px;
 }
+
+.manufacturer-list-form .grid-row label{
+    line-height: 26px;
+}
