@@ -44,7 +44,8 @@ function create_compliancetest_settings_page()
         //Save Options
         update_option('tw_site_title', $_POST['tw_site_title']);
         update_option('tw_site_organisation', $_POST['tw_site_organisation']);
-        
+        update_option('tw_contact_us_email', $_POST['tw_contact_us_email']);
+
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
@@ -267,6 +268,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Site Organization:</b></label></td>
                             <td><input type="text" name="tw_site_organisation" id="tw_site_organisation" value="<?php echo get_option('tw_site_organisation')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Contact email:</b></label></td>
+                            <td><input type="text" name="tw_contact_us_email" id="tw_contact_us_email" value="<?php echo get_option('tw_contact_us_email')?>" size="50" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
