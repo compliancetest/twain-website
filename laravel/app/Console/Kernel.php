@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $periodOption = DB::table('wp_options')->where('option_name', 'transactions_purge_period')->first();
+        $days = $periodOption ? $periodOption->option_value : 30;
+        $schedule->call(function () use ($days) {
+            DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', Carbon::now()->subDays($days))->delete();
+        })->daily();
     }
 }
