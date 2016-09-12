@@ -8809,21 +8809,18 @@ input.inactive_s{
 ----------------------------------------------- */
 
 #organisation_users .td-name{
-    width: 150px;
+    width: 320px;
 }
 #organisation_users .td-email{
-    width: 270px;
+    width: 370px;
 }
 #organisation_users .td-roles{
     width: 100px;
 }
 #organisation_users .td-action{
-    width: 92px;
+    width: 42px;
 }
 
-#organisation_users .td-privilege{
-    width: 200px;
-}
 
 
 /* Search Results Updated */
