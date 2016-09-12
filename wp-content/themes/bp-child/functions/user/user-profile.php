@@ -37,29 +37,50 @@ function cp_user_detail_edit()
     $phoneNumber = trim($_POST['phone_number']);
 
     if (!$first_name && !$last_name && !$email) {
-        echo 'First Name, Last Name and Email should not be empty';
+        sendAjaxErrorResponse('First Name, Last Name and Email should not be empty');
         exit;
     }
     if (!$first_name) {
-        echo 'Please enter your first name';
+        sendAjaxErrorResponse('Please enter your first name');
         exit;
     }
     if (!$last_name) {
-        echo 'Please enter your last name';
+        sendAjaxErrorResponse('Please enter your last name');
         exit;
     }
     if (!$email) {
-        echo 'Please enter your email address.';
+        sendAjaxErrorResponse('Please enter your email address.');
         exit;
     }
+
+    $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/';
+    if (!preg_match($email_regex, $email)) {
+        sendAjaxErrorResponse('Please enter a valid email address');
+        exit;
+    }
+
+    //Check Email Duplication
+    $query = $wpdb->prepare("SELECT ID FROM " . $wpdb->users . " WHERE user_email=%s AND ID != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if ($uID) {
+        sendAjaxErrorResponse('This email address already exists!');
+        exit;
+    }
+    $query = $wpdb->prepare("SELECT user_id FROM " . $wpdb->prefix . "users_changes WHERE email_changed=%s AND user_id != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if ($uID) {
+        sendAjaxErrorResponse('This email address already exists!');
+        exit;
+    }
+
     if (!$phoneNumber) {
-        echo 'Please enter your phone number.';
+        sendAjaxErrorResponse('Please enter your phone number.');
         exit;
     }
 
     if (!preg_match('#[^0-9]#', str_replace(array('+', ' ', '(', ')', '-'), '', $_POST['phone_number'])) != 1)
     {
-        echo "Invalid phone number";
+        sendAjaxErrorResponse("Invalid phone number");
         exit;
     }
 
@@ -80,25 +101,6 @@ function cp_user_detail_edit()
     //$uname = explode(' ', $uname);
     wp_update_user(array('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => $first_name /*. " " . $last_name*/));
 
-    $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/';
-    if (!preg_match($email_regex, $email)) {
-        echo 'Please enter a valid email address';
-        exit;
-    }
-
-    //Check Email Duplication
-    $query = $wpdb->prepare("SELECT ID FROM " . $wpdb->users . " WHERE user_email=%s AND ID != %d", $email, $user_id);
-    $uID = $wpdb->get_var($query);
-    if ($uID) {
-        echo 'This email address already exists!';
-        exit;
-    }
-    $query = $wpdb->prepare("SELECT user_id FROM " . $wpdb->prefix . "users_changes WHERE email_changed=%s AND user_id != %d", $email, $user_id);
-    $uID = $wpdb->get_var($query);
-    if ($uID) {
-        echo 'This email address already exists!';
-        exit;
-    }
 
     //Not Update Email and Save the email address temporary
     $query = $wpdb->prepare("SELECT user_email FROM " . $wpdb->users . " WHERE ID = %d", $user_id);
@@ -126,21 +128,21 @@ function cp_user_detail_edit()
     $confPass = $_POST['conf_pass'];
     if ($newPass || $confPass) {
         if ($newPass != $confPass) {
-            echo 'The passwords do no match!';
+            sendAjaxErrorResponse('The passwords do no match!');
             exit;
         } else {
             if (!\User\User::isPasswordValid($newPass)) {
-                echo 'Invalid password!';
+                sendAjaxErrorResponse('Invalid password!');
                 exit;
             }
 
             if (!wp_check_password($_POST['curr_pass'], $current_user->data->user_pass, $user_id)) {
-                echo 'Your current password is incorrect.';
+                sendAjaxErrorResponse('Your current password is incorrect.');
                 exit;
             }
 
             if ($_POST['curr_pass'] == $newPass) {
-                echo 'New password should be different to old one';
+                sendAjaxErrorResponse('New password should be different to old one');
                 exit;
             }
             //update password
@@ -156,9 +158,22 @@ function cp_user_detail_edit()
         }
     }
 
-    echo 'success';
+    $return = array(
+        'status'	=> 'success'
+    );
+
+    wp_send_json_success($return);
     exit();
 }
+
+function sendAjaxErrorResponse($errorText){
+    $return = array(
+        'status'	=> 'error',
+        'message' => $errorText
+    );
+
+    wp_send_json_success($return);
+};
 
 function cp_user_organisation_detail_edit()
 {

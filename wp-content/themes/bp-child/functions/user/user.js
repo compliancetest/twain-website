@@ -249,7 +249,8 @@
         });
         
        //transform divs in inputs at click on edit button
-       $('#my_profile').on('click', '.gbh-btn-edit', function(){           
+       $('#my_profile').on('click', '.gbh-btn-edit', function(){
+            jQuery('#my_profile .grid-row-message').remove();
             var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
             var findInputs = $(thisParentId+' .grid-row input:visible').size();
             var timezoneText = $(".timezone-text");
@@ -280,13 +281,13 @@
                         var dataTitle = '';
 
                    if(dataType == 'textarea')
-                       $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea">' + thisTextVal + '</textarea>');
+                       $(this).after('<textarea name="'+thisNameVal+'" placeholder="' + thisPlaceholderValue + '" class="textarea edit-field">' + thisTextVal + '</textarea>');
                    else if(dataType == 'readonly')
-                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" />');
+                       $(this).after('<input type="text" value="'+thisTextVal+'" readonly="readonly" disabled="disabled" class="edit-field" />');
                    else {
                        if(dataTitle){
                            $(this).after('<div class="has-field-tooltip">' +
-                               '<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" data-tooltip-content="' + dataTitle + '" class="field-tooltip" autocomplete="off">' +
+                               '<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" data-tooltip-content="' + dataTitle + '" class="field-tooltip edit-field" autocomplete="off">' +
                                '<span class="simple_tooltip" style="width: 380px; margin-left: -115px; bottom: 30px; display: none;">'+dataTitle+'<span></span></span>' +
                            '</div>');
                            $('.field-tooltip').on('focus', function(){
@@ -295,7 +296,7 @@
                                $(this).parent().find('.simple_tooltip').hide();
                            });
                        } else {
-                           $(this).after('<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" placeholder="' + thisPlaceholderValue + '" autocomplete="off"/>');
+                           $(this).after('<input type="' + dataType + '" name="' + thisNameVal + '" value="' + thisTextVal + '" placeholder="' + thisPlaceholderValue + '" class="edit-field" autocomplete="off"/>');
                        }
                    }
 
@@ -338,7 +339,7 @@
             $('#my_profile .gbh-btn-edit').show();
             $('.current_password').hide();
             $(thisParentId+' .btn-row').fadeIn();
-             $(thisParentId).addClass('grid-box-editing');
+             $(thisParentId).removeClass('grid-box-editing');
             //transform all divs in inputs
             $(thisParentId+' .grid-cell.in_input').each(function(){
                 if ($(this).attr('data-type') == 'skip') {
@@ -370,6 +371,9 @@
 
             var form = $(this).parents('form');
             form.find('.errors_msg').hide();
+            var thisParentId = '#'+$(this).parents('.grid-box').attr('id');
+            var timezoneText = $(".timezone-text");
+
             showGridBoxLoadingWrapper(form);
             hideGridBoxResultMessage(form);
             $.ajax({
@@ -379,15 +383,38 @@
                 success: function(rsp)
                 {
                     hideGridBoxLoadingWrapper(form);
-                    if(rsp == 'success') {
-                        $('#my_details .btn-row a').hide();
-                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success');
-                        document.location.reload();
+                    if(rsp.data.status == 'success') {
+                        showGridBoxResultMessage(form, 'Successfully Saved!', 'success', true);
+                        jQuery('.btn-row').hide();
+                        $('#my_profile .gbh-btn-edit').hide();
+                        $('#dashboard-pages').hide();
+                        $(thisParentId).removeClass('grid-box-editing');
+                        jQuery('.gbh-btn-edit').show();
+                        //transform all inputs to divs
+                        $(thisParentId + ' .edit-field').each(function () {
+                            var fieldName = $(this).attr('name');
+                            if ($(this).attr('type') === 'password'){
+                                $('[data-name=' + fieldName + ']').text('*********').show();
+                            } else {
+                                $('[data-name=' + fieldName + ']').text($(this).val()).attr('data-value', $(this).val()).show();
+                            }
+                            $(this).remove();
+                        });
+
+                        if ($(thisParentId).find('#timezone').length > 0) {
+                            timezoneText.text($("#timezone").val()).attr('data-value', $("#timezone").val());
+                            timezoneText.show();
+                            $("#timezone").hide();
+                        }
+
+                        $(thisParentId+' .btn-row').hide();
+                        $(thisParentId).find('.grid-hidden-row').show();
+                        //document.location.reload();
                     }else{
-                        showGridBoxResultMessage(form, rsp, 'error');
+                        showGridBoxResultMessage(form, rsp.data.message, 'error', true);
                     }
                 }
-            })
+            });
             
             return false;
         });
