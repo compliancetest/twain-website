@@ -280,7 +280,6 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
         $totalItems = $wpdb->get_var($tQuery);        
         $query .= " LIMIT " . ($page - 1) * $limit . ", $limit";
     }
-    _trace($query);
     $rows = $wpdb->get_results($query);
     
     if(!isset($totalItems))

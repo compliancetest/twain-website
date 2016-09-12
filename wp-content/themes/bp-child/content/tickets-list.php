@@ -228,13 +228,19 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     <option value="-1" <?php echo $limit == -1 ? 'selected="selected"' : ''?>>All</option>
                 </select>
                 <?php if($filterStatus){ ?>
-                <input type="hidden" name="status" value="<?php echo $filterStatus?>" /> 
+                <input type="hidden" name="status" value="<?php echo $filterStatus?>" />
                 <?php } ?>
                 <?php if($filterCategory){ ?>
-                <input type="hidden" name="category" value="<?php echo $filterCategory?>" /> 
+                <input type="hidden" name="type" value="<?php echo $filterCategory?>" />
                 <?php } ?>
-                <?php if($filterCategory){ ?>
+                <?php if($filterPriority){ ?>
                 <input type="hidden" name="priority" value="<?php echo $filterPriority?>" /> 
+                <?php } ?>
+                <?php if($filterCommunity){ ?>
+                <input type="hidden" name="community" value="<?php echo $filterCommunity?>" />
+                <?php } ?>
+                <?php if($filterTestSuite){ ?>
+                <input type="hidden" name="test_suite" value="<?php echo $filterTestSuite?>" />
                 <?php } ?>
             </form>
         </div>
