@@ -526,6 +526,9 @@ function ct_process_organisation_action()
             
         } else if(wp_verify_nonce($action, 'confirm-organisation-unsubscribe')) {
             global $wpdb;
+            if (!DISPLAY_SUBSCRIPTIONS) {
+                $_POST['delete-now'] = true;
+            }
             $user_id = get_current_user_id();
             $id = $_POST['id'];
             $subscription = ct_get_organisation_subscription_by_id($id);
