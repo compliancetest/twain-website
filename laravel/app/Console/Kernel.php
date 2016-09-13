@@ -26,9 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $periodOption = DB::table('wp_options')->where('option_name', 'transactions_purge_period')->first();
-        $days = $periodOption ? $periodOption->option_value : 30;
-        $schedule->call(function () use ($days) {
+        $schedule->call(function () {
+            $periodOption = DB::table('wp_options')->where('option_name', 'transactions_purge_period')->first();
+            $days = $periodOption ? $periodOption->option_value : 30;
             DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', Carbon::now()->subDays($days))->delete();
         })->daily();
     }
