@@ -48,6 +48,10 @@ class AddForeignKeysToTransactions1 extends Migration
      */
     public function down()
     {
-        //
+        Schema::disableForeignKeyConstraints();
+        Schema::table('transactions_logs', function ($table) {
+            $table->dropForeign('transactions_logs_transaction_id_foreign');
+        });
+        Schema::enableForeignKeyConstraints();
     }
 }
