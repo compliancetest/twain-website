@@ -3,10 +3,8 @@
 
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterExecutionID">Execution Id:</label>
-            <div class="input-group">
-                <input type="text" class="form-control" name="execution_id" id="filterExecutionID"
-                       @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif>
-            </div>
+            <input type="text" class="form-control" name="execution_id" id="filterExecutionID" style="width: "
+                   @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif>
             @if(($request->get('execution_id')) && ($request->get('execution_id') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
