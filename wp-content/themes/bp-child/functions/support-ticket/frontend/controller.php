@@ -635,7 +635,7 @@ function changeTicketTerm()
         //Customer can change only priority
         if($_POST['priority'] != $ticket->priority_id)
         {
-            $message = "<p>" . "Term has been updated by " . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . "</p>";
+            $message = "<p>" . "Term has been updated by " . "<b>{$userData->first_name} {$userData->last_name}</b>" . "</p>";
             $message .= "<blockquote>";
             $message .= "Status: <i>" . $oldPriority->priority . "</i> -&gt; <i>" . $newPriority->priority . "</i> <br />";
             $message .= "Time to pay: " . $ticket->ttpay . " hours <br />";
@@ -702,7 +702,7 @@ function changeTicketTerm()
         }
         
         if($is_changed){
-            $message = "<p>" . "Term has been updated by " . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . "</p>" . 
+            $message = "<p>" . "Term has been updated by " . "<b>{$userData->first_name} {$userData->last_name}</b>" . "</p>" .
                         "<blockquote>" . $message . "</blockquote>";
             if($comment)
                 $message .= "<p>" . $comment . "</p>";
