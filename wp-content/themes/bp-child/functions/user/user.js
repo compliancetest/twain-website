@@ -380,6 +380,7 @@
                 url: '/my-profile/',
                 data: form.serialize(),
                 type: 'POST',
+                dataType: 'json',
                 success: function(rsp)
                 {
                     hideGridBoxLoadingWrapper(form);
@@ -409,7 +410,7 @@
 
                         $(thisParentId+' .btn-row').hide();
                         $(thisParentId).find('.grid-hidden-row').show();
-                        //document.location.reload();
+                        document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp.data.message, 'error', true);
                     }

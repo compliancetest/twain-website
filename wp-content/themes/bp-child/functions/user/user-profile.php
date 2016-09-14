@@ -636,9 +636,9 @@ function cp_user_organisation_join()
     $organisation = ct_get_organisation_by_key($organisation_key);
     if ($organisation) {
         $org_controller->add_membership($user_id, $organisation->id);
-        exit('success');
+        exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
     }
-    exit('Organization not found!');
+    exit((json_encode(['status' => 'success', 'data' => ['status' => 'error', 'message' => 'Organization not found!']])));
 }
 
 //Edit organisation
@@ -706,10 +706,10 @@ function cp_user_organisation_edit()
 
             cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
             cp_send_email(array('email' => $current_user->user_email, 'name' => $full_name), 'send_organisation_signup_request_to_user', $email_data);
-            exit('success');
+            exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
         }
     }
-    exit($message_error);
+    exit((json_encode(['status' => 'error', 'data' => ['status' => 'error', 'message' => $message_error]])));
 }
 
 //Get User Full Name
