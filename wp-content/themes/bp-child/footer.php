@@ -40,7 +40,6 @@
                 </div>
 				<div id="footer-copyright">
                     <p class="copyright"><?php echo of_get_option('copyright'); ?></p>
-                    <a href="https://twitter.com/ComplianceTest2" target="_blank" class="twitter-logo"></a>
                     <div class="clear"></div>
                     <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/logo.png" alt="ComplianceTest Logo" />
 				</div>

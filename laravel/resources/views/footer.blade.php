@@ -3,7 +3,6 @@
         <div class="footer-block footer-company-info">
             <div class="footer-title">Company Information</div>
             <ul>
-                <li><a href="{{ getSiteUrl() }}/training-services/">Training Services</a></li>
                 <li><a href="{{ getSiteUrl() }}/support-services/">Support Services</a></li>
                 <li><a href="{{ getSiteUrl() }}/about-us/">About Us</a></li>
                 <li><a href="{{ getSiteUrl() }}/contact-us/">Contact Us</a></li>
@@ -20,7 +19,6 @@
         </div>
 
         <div class="footer-block footer-copyright">
-            <a class="twitter-logo" target="_blank" href="https://twitter.com/ComplianceTest2" title="Twitter">Twitter</a>
             <p class="copyright">Powered By:</p>
             <img alt="ComplianceTest Logo" src="{{ getSiteUrl() }}/laravel/resources/assets/images/logo.png">
         </div>
