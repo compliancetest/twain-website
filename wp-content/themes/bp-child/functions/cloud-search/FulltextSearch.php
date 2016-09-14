@@ -164,10 +164,10 @@ class FulltextSearch extends BaseAWS
                 $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
             } else {
                 //usual user should see only own and community items
-                $groups = groups_get_user_groups(get_current_user_id());
+                $groups = getUserCommunities(get_current_user_id());
                 $groups_str = '';
-                foreach ($groups['groups'] AS $group_id) {
-                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                foreach ($groups AS $group) {
+                    $groups_str .= " ( term field=community_id '$group->id' ) ";
                 }
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
@@ -229,16 +229,17 @@ class FulltextSearch extends BaseAWS
         }
         if ($posts) {
             foreach ($posts AS $post) {
-                $groups = groups_get_user_groups($post->post_author);
+                $groups = getCommunities();
                 $communityNames = array();
-                if (is_array($groups['groups'])) {
-                    foreach ($groups['groups'] AS $group) {
-                        $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+                if ($groups) {
+                    foreach ($groups AS $group) {
+                        $communityNames[] = $group->title;
+                        $groups['groups'][] = $group->id;
                     }
                 }
                 if (empty($communityNames)) {
-                    $communityNames = array('TWAIN');
-                    $groups['groups'] = array(1);
+                    $communityNames = ['TWAIN'];
+                    $groups['groups'] = [$wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'")];
                 }
                 if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
                     continue;
@@ -251,26 +252,28 @@ class FulltextSearch extends BaseAWS
                 if (in_array($post->post_title, array('add-new-service', 'Edit Test Case', 'Edit Product and Service', 'Edit Test Suite',
                     'Message Envelope', 'View Validation Error', 'My Messages', 'Inbox', 'Sentbox', 'Compose', 'View', 'Members', 'Get Profile', 'View Message Template',
                     'My Organization', 'Test Suites', 'get-profile-meta', 'Users', 'Edit Service', 'Add New Product and Service', 'Reset Password', 'Sitemap',
-                    'Add New Test Case', 'Add New Test Suite', 'Add new service', 'search-registry'))) {
+                    'Add New Test Case', 'Add New Test Suite', 'Add new service', 'search-registry', 'My Test Data', 'Agreements', 'communities_old', 'License Agreement',
+                    'More Reasons', 'Forum', 'login', 'My Organisation', 'My Profile', 'My Test Results', 'Test Suite Coverage', 'My Products', 'My Support Tickets',
+                    'My Test Suites', 'My Communities', 'Search Results'))) {
                     continue;
                 }
                 $post_data = $this->_processPost($post);
                 if (in_array($post->post_type, array('event', 'blog', 'press-release'))) {
                     $community_id = ( integer )get_post_meta($post->ID, 'blog_community_id', true);
                     if ($community_id === 0 || $community_id === 1) {
-                        $groups['groups'] = array(1);
+                        $groups['groups'] = [$wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'")];
                         $post_data['visibility'] = 1;
                     } else {
-                        $communityNames = array($wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $community_id)));
-                        $groups['groups'] = array($community_id);
+                        $communityNames = [$wpdb->get_var($wpdb->prepare("SELECT title FROM communities WHERE id = %s ", $community_id))];
+                        $groups['groups'] = [$community_id];
                         $post_data['visibility'] = 2;
                     }
                 }
 
                 //this pages should be visible only to logged in users
                 if (in_array($post->post_title, array('Add New Product and Service', 'Add New Test Case', 'Add New Test Suite', 'My Profile',
-                    'My Transaction Log', 'Test Suite Coverage', 'My Products', 'My Support Tickets', 'My Test Suites', 'My Test Data', 'My Communities',
-                    'Add new service', 'Agreements', 'Add New Test Case', 'Add New Test Suite'))) {
+                    'My Transaction Log', 'Test Suite Coverage', 'My Products', 'My Support Tickets', 'My Test Suites', 'My Communities',
+                    'Add new service', 'Add New Test Case', 'Add New Test Suite'))) {
                     $post_data['visibility'] = 2;
                 }
                 $temp_data = array(
@@ -298,16 +301,17 @@ class FulltextSearch extends BaseAWS
                 if (!$post || $test_scenario->code == 'Default') {
                     continue;
                 }
-                $groups = groups_get_user_groups($post->post_author);
+                $groups = getCommunities();
                 $communityNames = array();
-                if (is_array($groups['groups'])) {
-                    foreach ($groups['groups'] AS $group) {
-                        $communityNames[] = $wpdb->get_var($wpdb->prepare("SELECT name FROM wp_bp_groups WHERE id = %d ", $group));
+                if ($groups) {
+                    foreach ($groups AS $group) {
+                        $communityNames[] = $group->title;
+                        $groups['groups'][] = $group->id;
                     }
                 }
                 if (empty($communityNames)) {
-                    $communityNames = array('TWAIN');
-                    $groups['groups'] = array(1);
+                    $groups['groups'] = $wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'");
+                    $post_data['visibility'] = 1;
                 }
                 $temp_data = array(
                     'community' => $communityNames,
@@ -340,31 +344,13 @@ class FulltextSearch extends BaseAWS
 
     public function fullDelete($post_id = false)
     {
-        global $wpdb;
+        //Remove All Results
+        $results = $this->search(array(), true);
+
         $data = $response_data = array();
-        if ($post_id) {
-            $posts = $wpdb->get_results($wpdb->prepare("SELECT * FROM wp_posts WHERE post_type IN( '" . implode("', '", $this->_allowed_post_types) . "' ) AND ID = %d ", $post_id));
-        } else {
-            $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type IN( '" . implode("', '", $this->_allowed_post_types) . "' )");
-        }
-        if ($posts) {
-            foreach ($posts AS $post) {
-                if ($post->post_type == 'test-suite' && $post->ID != $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark IN( SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ) ORDER BY suite_id DESC LIMIT 1", $post->ID))) {
-                    continue;
-                }
-                array_push($data, array('type' => 'delete', 'id' => $post->ID));
-            }
-        }
-        //upload test scenarious only on bulk upload action
-        if (!$post_id) {
-            $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
-            foreach ($test_scenarios AS $test_scenario) {
-                $post = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id));
-                if (!$post || $test_scenario->code == 'Default') {
-                    continue;
-                }
-                array_push($data, array('type' => 'delete', 'id' => 'scenario_' . $test_scenario->id));
-            }
+
+        foreach ($results['hits']['hit'] as $row) {
+            array_push($data, array('type' => 'delete', 'id' => $row['id']));
         }
         if (!empty($data)) {
             $data = $this->_client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
@@ -372,6 +358,10 @@ class FulltextSearch extends BaseAWS
                 'Status' => $data->getPath('status'),
                 'Added' => $data->getPath('adds'),
                 'Deleted' => $data->getPath('deletes')
+            );
+        } else {
+            $response_data = array(
+                'Status' => 'Search domain is empty',
             );
         }
         return $response_data;
