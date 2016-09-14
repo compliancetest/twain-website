@@ -7,7 +7,7 @@ global $filterParams;
 ?>
 <form role="search" method="get" id="searchform" action="<?php echo get_permalink() ?>" class="searchform">
     <input type="text" name="q" id="q" class="keyword"
-           value="<?php echo htmlspecialchars(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Search Term"
+           value="<?php echo ctE(trim(isset($_GET['q']) ? $_GET['q'] : '')) ?>" placeholder="Search Term"
            autocomplete="off"/>
 
     <div class="search_select_div" style="display:none;">
@@ -25,7 +25,7 @@ global $filterParams;
     <?php
     foreach ($filterParams as $k => $v) {
         ?>
-        <input type="hidden" name="<?php echo $k ?>" value="<?php echo $v ?>"/>
+        <input type="hidden" name="<?php echo ctE($k) ?>" value="<?php echo ctE($v) ?>"/>
         <?php
     }
     ?>
