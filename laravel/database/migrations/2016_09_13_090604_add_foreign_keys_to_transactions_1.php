@@ -38,7 +38,13 @@ class AddForeignKeysToTransactions1 extends Migration
 
         $periodOption = \Illuminate\Support\Facades\DB::table('wp_options')->where('option_name', 'transactions_purge_period')->first();
         $days = $periodOption ? $periodOption->option_value : 30;
-        \Illuminate\Support\Facades\DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', \Carbon\Carbon::now()->subDays($days))->delete();
+        $transactions = \Illuminate\Support\Facades\DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', \Carbon\Carbon::now()->subDays($days))->get();
+        foreach ($transactions as $transaction) {
+            $verifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $transaction->id . '%')->first();
+            if (!$verifyRequest) {
+                Transaction::find($transaction->id)->delete();
+            }
+        }
     }
 
     /**
