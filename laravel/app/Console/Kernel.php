@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\VerifyRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Scheduling\Schedule;
@@ -21,7 +22,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -29,7 +30,13 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $periodOption = DB::table('wp_options')->where('option_name', 'transactions_purge_period')->first();
             $days = $periodOption ? $periodOption->option_value : 30;
-            DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', Carbon::now()->subDays($days))->delete();
+            $transactions = DB::table('transactions')->where('audit_record', false)->where('created_at', '<=', Carbon::now()->subDays($days))->get();
+            foreach ($transactions as $transaction) {
+                $verifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $transaction->id . '%')->first();
+                if (!$verifyRequest) {
+                    Transaction::find($transaction->id)->delete();
+                }
+            }
         })->daily();
     }
 }
