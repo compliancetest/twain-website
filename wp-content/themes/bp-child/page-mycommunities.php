@@ -43,7 +43,7 @@ get_header();
                    ?>
                         <div class="tr">
                             <div class="td td-name">
-                                <a href="/communities/<?php echo $group->slug?>"><?php echo $group->title ?></a>
+                                <a href="/communities/<?php echo $group->slug?>"><?php echo ctE($group->title) ?></a>
                             </div>
                             <div class="td td-since"><?php echo formatDate($group->membership_date); ?></div>
                             <div class="td td-role">
