@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 
-    $('[data-tooltip]').tooltip({
+    $('body').tooltip({
+        selector: '[data-tooltip]',
         trigger: 'hover'
     });
 
