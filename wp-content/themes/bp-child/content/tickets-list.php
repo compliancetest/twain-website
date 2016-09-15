@@ -172,21 +172,21 @@ $show_community = $is_support || is_super_admin() ? true : false;
                                         echo "<span class='ticket-priority ticket-priority-" . sanitize_title($ticket->priority_title) . "'></span>";
                                     }
                                 ?>
-                                <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo $ticket->title?></a>
+                                <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo ctE($ticket->title)?></a>
                             </div>
                             <?php if($is_support):?>
                             <div class="td td-ticket-customer td-sortable tocenter">
-                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo cp_get_user_fullname($ticket->customer_id); ?></a>
+                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo ctE(cp_get_user_fullname($ticket->customer_id)); ?></a>
                             </div>
                             <div class="td td-ticket-org td-sortable tocenter">
-                                <?php echo $ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation; ?>
+                                <?php echo ctE($ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation); ?>
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
                             <div class="td td-ticket-type td-two-lines tocenter">
                                 <?php echo $ticket->category_title ?>
-                                <br><?php echo $ticket->community_id == 'general' ? 'General' : getCommunity($ticket->community_id)->title;?>
-                                <br><?php echo $ticket->test_suite_id ? get_the_title($ticket->test_suite_id) : '-';?>
+                                <br><?php echo $ticket->community_id == 'general' ? 'General' : ctE(getCommunity($ticket->community_id)->title);?>
+                                <br><?php echo $ticket->test_suite_id ? ctE(get_the_title($ticket->test_suite_id)) : '-';?>
                             </div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">

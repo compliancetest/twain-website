@@ -29,8 +29,8 @@
         <img src="<?php echo getUserAvatar($ticket->customer_id);?>" class="avatar user-12-avatar avatar-77 photo" width="77" height="77" alt="Profile picture">
     </a>
     <div class="left">
-        <h2>Ticket #<?php echo $ticket_id?> (<?php echo apply_filters('the_title', $ticket->title)?>)</h2>
-        <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
+        <h2>Ticket #<?php echo $ticket_id?> (<?php echo ctE(apply_filters('the_title', $ticket->title))?>)</h2>
+        <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo ctE(cp_get_user_display_name(intval($ticket->customer_id)))?></b></a></span>
         <span class="ticket-priorities">
         <?php 
             if($ticket->status_id == TICKET_STATUS_RESOLVED)
@@ -151,7 +151,7 @@
                 </a>
             </div>
             <div class="left width90P">
-                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>" class="left"><b><?php echo cp_get_user_display_name(intval($message->sender)); ?></b></a>                
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>" class="left"><b><?php echo ctE(cp_get_user_display_name(intval($message->sender))); ?></b></a>
                 <span class="right"><b><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></b></span>                
                 <div class="clear"></div>
                 <div class="space7"></div>
