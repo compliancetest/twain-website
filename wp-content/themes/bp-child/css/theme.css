@@ -4787,12 +4787,9 @@ span.button_sign {
     padding-right: 0;
 }
 #my_products .td-action a.action-btn{
+    float: none;
     margin: 0 3px;
     display: inline-block;
-}
-#my_products .tbody .td-action{
-    padding-top: 3px;
-    padding-bottom: 3px;
 }
 #my_products .product-author,
 #my_products .product-author a{
