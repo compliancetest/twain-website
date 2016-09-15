@@ -64,7 +64,7 @@ if (!$org_membership) {
                         <div class="clear"></div>
                     </div>
                     <div class="grid-row btn-row">
-                        <a href="#" class="action-btn process-btn do_not_process"><span class="p"></span><span class="t">Confirm</span></a>
+                        <a href="#" class="action-btn process-btn join_organisation_submit do_not_process"><span class="p"></span><span class="t">Confirm</span></a>
                         <a href="#" class="action-btn cancel-btn left10 create_organisation"><span class="p"></span><span class="t">Cancel</span></a>
                         <?php wp_nonce_field('my_organisation_edit', 'cp-action'); ?>
                         <div class="clear"></div>

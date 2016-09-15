@@ -23,7 +23,7 @@ function remove_special_chars($string)
 function cp_user_detail_edit()
 {
     global $wpdb, $current_user;
-
+    $emailChanged = false;
     if (!is_user_logged_in()) {
         //Goto Homepage
         wp_redirect('/');
@@ -120,7 +120,8 @@ function cp_user_detail_edit()
 
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'email_changed', $data);
         cp_send_email_to_admin('email_changed_admin', $data);
-        addMessage('A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.');
+        $emailChanged = true;
+        //addMessage('A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.');
     }
 
     //Update Password
@@ -159,7 +160,8 @@ function cp_user_detail_edit()
     }
 
     $return = array(
-        'status'	=> 'success'
+        'status'	=> 'success',
+        'email' => $emailChanged
     );
 
     wp_send_json_success($return);
@@ -636,6 +638,7 @@ function cp_user_organisation_join()
     $organisation = ct_get_organisation_by_key($organisation_key);
     if ($organisation) {
         $org_controller->add_membership($user_id, $organisation->id);
+        addMessage('You have joined organisation successfully!');
         exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
     }
     exit((json_encode(['status' => 'success', 'data' => ['status' => 'error', 'message' => 'Organization not found!']])));

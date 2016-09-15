@@ -367,7 +367,7 @@
 
 
         //save my details updates
-        $('#my_profile').on('click', '.process-btn', function(){
+        $('#my_profile').on('click', '.save-my-details-btn', function(){
 
             var form = $(this).parents('form');
             form.find('.errors_msg').hide();
@@ -385,6 +385,9 @@
                 {
                     hideGridBoxLoadingWrapper(form);
                     if(rsp.data.status == 'success') {
+                        if (rsp.data.email){
+                            $('#container').prepend('<div id="messages-wrapper"><div class="message success">A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.</div></div>')
+                        }
                         showGridBoxResultMessage(form, 'Successfully Saved!', 'success', true);
                         jQuery('.btn-row').hide();
                         $('#my_profile .gbh-btn-edit').hide();
@@ -410,13 +413,39 @@
 
                         $(thisParentId+' .btn-row').hide();
                         $(thisParentId).find('.grid-hidden-row').show();
-                        document.location.reload();
                     }else{
                         showGridBoxResultMessage(form, rsp.data.message, 'error', true);
                     }
                 }
             });
             
+            return false;
+        });
+
+        //join or create new organisation
+        $('#my_profile').on('click', '.join_organisation_submit', function(){
+
+            var form = $(this).parents('form');
+            form.find('.errors_msg').hide();
+
+            showGridBoxLoadingWrapper(form);
+            hideGridBoxResultMessage(form);
+            $.ajax({
+                url: '/my-profile/',
+                data: form.serialize(),
+                type: 'POST',
+                dataType: 'json',
+                success: function(rsp)
+                {
+                    hideGridBoxLoadingWrapper(form);
+                    if(rsp.data.status == 'success') {
+                        document.location.reload();
+                    }else{
+                        showGridBoxResultMessage(form, rsp.data.message, 'error', true);
+                    }
+                }
+            });
+
             return false;
         });
 
@@ -770,6 +799,10 @@ function saveVariableDefaults(obj)
             }, 1500);
 
         }
-    })
+    });
     return false;
+}
+
+function showMainMessage() {
+
 }
