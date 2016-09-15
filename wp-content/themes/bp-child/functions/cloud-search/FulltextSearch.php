@@ -8,7 +8,7 @@ class FulltextSearch extends BaseAWS
     private $_domainName = '';
 
     private $_allowed_post_types = array(
-        'press-release', 'blog', 'event', 'page', 'product-service', 'service', 'test-case', 'test-suite'
+        'press-release', 'blog', 'event', 'page', 'product-service', 'service', 'test-case', 'test-suite', 'link'
     );
 
     private $_allowedSortFields = array(
@@ -20,7 +20,7 @@ class FulltextSearch extends BaseAWS
     );
 
     private $_allowedFields = array(
-        'post_type', 'community'
+        'post_type', 'community', '_id'
     );
 
     public function __construct()
@@ -59,10 +59,10 @@ class FulltextSearch extends BaseAWS
                 $l .= "  (or ( term field=visibility 1 ) (  term field=visibility 3   ) ( term field=visibility 2 ) )";
             } else {
                 //usual user should see only own and community items
-                $groups = groups_get_user_groups(get_current_user_id());
+                $groups = getUserCommunities(get_current_user_id());
                 $groups_str = '';
-                foreach ($groups['groups'] AS $group_id) {
-                    $groups_str .= ' ( term field=community_id ' . $group_id . ' ) ';
+                foreach ($groups AS $group) {
+                    $groups_str .= " ( term field=community_id '$group->id' ) ";
                 }
                 if (!empty($groups_str)) {
                     $groups_str = ' ( or ' . $groups_str . ' ) ';
@@ -258,8 +258,8 @@ class FulltextSearch extends BaseAWS
                     continue;
                 }
                 $post_data = $this->_processPost($post);
-                if (in_array($post->post_type, array('event', 'blog', 'press-release'))) {
-                    $community_id = ( integer )get_post_meta($post->ID, 'blog_community_id', true);
+                if (in_array($post->post_type, array('event', 'blog', 'press-release', 'link'))) {
+                    $community_id = get_post_meta($post->ID, 'blog_community_id', true);
                     if ($community_id === 0 || $community_id === 1) {
                         $groups['groups'] = [$wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'")];
                         $post_data['visibility'] = 1;
@@ -278,7 +278,7 @@ class FulltextSearch extends BaseAWS
                 }
                 $temp_data = array(
                     'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', abs(strtotime($post->post_modified))) . 'Z',
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date_gmt)) . 'Z',
                     'post_author_name' => cp_get_user_fullname($post->post_author),
                     'post_author_id' => $post->post_author,
                     'post_content' => $post_data['descr'],
@@ -315,7 +315,7 @@ class FulltextSearch extends BaseAWS
                 }
                 $temp_data = array(
                     'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_modified)) . 'Z',
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date_gmt)) . 'Z',
                     'post_author_name' => cp_get_user_fullname($post->post_author),
                     'post_author_id' => $post->post_author,
                     'post_content' => $test_scenario->description,
@@ -344,14 +344,18 @@ class FulltextSearch extends BaseAWS
 
     public function fullDelete($post_id = false)
     {
-        //Remove All Results
-        $results = $this->search(array(), true);
-
         $data = $response_data = array();
 
+        if($post_id){
+            $results = $this->search(array('_id' => $post_id));
+        } else {
+            //Remove All Results
+            $results = $this->search(array(), true);
+        }
         foreach ($results['hits']['hit'] as $row) {
             array_push($data, array('type' => 'delete', 'id' => $row['id']));
         }
+
         if (!empty($data)) {
             $data = $this->_client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
             $response_data = array(
@@ -419,6 +423,13 @@ class FulltextSearch extends BaseAWS
                 $data = array(
                     'type' => 'Blog',
                     'for_search' => 'Blog',
+                    'descr' => $post->post_content
+                );
+                break;
+            case 'link':
+                $data = array(
+                    'type' => 'Link',
+                    'for_search' => 'Link',
                     'descr' => $post->post_content
                 );
                 break;

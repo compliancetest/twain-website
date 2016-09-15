@@ -29,11 +29,11 @@ $years = ct_get_blog_years($postType);
                 <div class="exp_content">
                     <?php
                     foreach ($communities as $g_id) {
-                        $group = groups_get_group(array('group_id' => $g_id));
+                        $group = getCommunity($g_id);
 
                         ?>
                     <a href="<?php echo $postType ? get_post_type_archive_link($postType) : get_permalink() ?>?<?php echo $year ? "y=$year&" : "" ?>community_id=<?php echo $g_id ?>" <?php if ($community_id == $g_id) { ?> class="current"<?php } ?>>
-                        <?php echo bp_get_group_name($group) ?>
+                        <?php echo ctE($group->title) ?>
                         </a><?php
                     }
                     ?>

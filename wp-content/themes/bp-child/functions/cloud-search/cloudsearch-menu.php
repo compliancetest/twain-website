@@ -242,8 +242,9 @@ function fulltext_search_save_post($post_id, $post = false, $update = false)
     $cloud_search = new FulltextSearch();
     if (isset($post->post_status) && $post->post_status != 'publish') {
         $cloud_search->fullDelete($post_id);
+    } else {
+        $cloud_search->fullUpload($post_id);
     }
-    $cloud_search->fullUpload($post_id);
 }
 
 add_action('delete_post', 'fulltext_search_delete_post', 10, 3);
