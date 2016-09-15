@@ -17,7 +17,7 @@
                         <tr data-thread-id="{{$thread->id}}">
                             <td>
                                 <a href="/communities/{{ $community->slug }}/forum/{{ $thread->slug }}">{{ $thread->title }}</a>
-                                <p>{{ $thread->content }}</p>
+                                <p>{{ \Illuminate\Support\Str::limit($thread->content, 100) }}</p>
                             </td>
                             <td class="text-nowrap text-center">{{ $thread->user->getFullName() }}</td>
                             <td class="text-center">
