@@ -36,15 +36,27 @@ class TestPlansController extends BaseApiController
      *
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     *  @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test plans not found:
@@ -120,15 +132,28 @@ class TestPlansController extends BaseApiController
      * @apiDescription Method used to get test plan's test cases
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     *
      *
      * @apiErrorExample {json} User don't have subscription to test plan's test suite:
      *   {
@@ -146,7 +171,7 @@ class TestPlansController extends BaseApiController
      *     "errors": {
      *       "message":  [
      *          "Test Cases not found"
- *           ]
+     *       ]
      *     },
      *     "code": 404
      *   }

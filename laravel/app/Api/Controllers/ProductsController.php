@@ -133,15 +133,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} No subscription with provided Product Type:
@@ -323,15 +335,27 @@ class ProductsController extends BaseApiController
     *    }
     *
     * @apiError 403 Forbidden
-    * @apiErrorExample {json} Not organisation member
+    * @apiErrorExample {json} Not organization member
     *   {
     *     "errors": {
     *       "message": [
-    *         "Only organisation member can perform testing"
+    *         "Only organization member can perform testing"
     *       ]
     *     },
     *     "code": 403
     *   }
+    *
+    * @apiError 403 Forbidden
+    * @apiErrorExample {json} Organization is not approved yet:
+    *   {
+    *     "errors": {
+    *       "message": [
+    *         "Your organization can't perform testing."
+    *       ]
+    *     },
+    *     "code": 403
+    *   }
+    *
     *
     *
     * @apiError 403 Forbidden
@@ -457,15 +481,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member
+     * @apiErrorExample {json} Not organization member
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Invalid product ID
      * @apiErrorExample {json} Invalid product ID
@@ -682,15 +718,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Products not found
      * @apiErrorExample {json} Products not found error:

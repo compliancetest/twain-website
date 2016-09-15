@@ -231,8 +231,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -308,8 +313,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -419,8 +429,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -505,8 +520,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -572,8 +592,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -637,8 +662,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -706,8 +736,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -779,8 +814,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -847,8 +887,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -954,8 +999,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1046,8 +1096,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1057,7 +1112,7 @@
         },
         {
           "title": "Test Cases not found:",
-          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
@@ -1143,8 +1198,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1230,8 +1290,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1334,8 +1399,13 @@
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1465,8 +1535,13 @@
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
