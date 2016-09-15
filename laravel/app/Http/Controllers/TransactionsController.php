@@ -129,6 +129,31 @@ class TransactionsController extends Controller
         return response()->json(['success']);
     }
 
+    /**
+     * Mark records as Audit
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkAudit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'transactions' => 'array|required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        foreach ($request->get('transactions') as $transactionToDelete) {
+            $transaction = Transaction::find($transactionToDelete);
+            if ($transaction->userHasAccess()) {
+                $transaction->audit_record = true;
+                $transaction->save();
+            }
+        }
+        return response()->json(['success']);
+    }
+
     public function getItemsPerPage($request)
     {
         return in_array($request->get('itemsCount'), [10, 25, 50, 100]) ? $request->get('itemsCount') : 25;

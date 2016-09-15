@@ -192,6 +192,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('/transactions/update-transactions', 'TransactionsController@updateTransactions');
 
         Route::delete('/transactions/batch-delete', 'TransactionsController@batchDelete');
+        Route::post('/transactions/bulk-audit', 'TransactionsController@bulkAudit');
 
         Route::get('verify-requests', 'VerifyRequestsController@index');
         Route::get('verify-requests/update-list', 'VerifyRequestsController@updateList');
