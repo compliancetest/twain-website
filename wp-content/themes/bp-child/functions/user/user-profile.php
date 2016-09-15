@@ -709,6 +709,7 @@ function cp_user_organisation_edit()
 
             cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
             cp_send_email(array('email' => $current_user->user_email, 'name' => $full_name), 'send_organisation_signup_request_to_user', $email_data);
+            addMessage('You have created organisation successfully!');
             exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
         }
     }
