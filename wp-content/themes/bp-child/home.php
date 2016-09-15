@@ -117,13 +117,13 @@ $home_settings = get_option('home-settings');
                                 );
                                 ?>
                                 <a href="/communities/<?php echo $community->slug;?>">
-                                    <img src="<?php echo S3Wrapper::getCommunityAvatar($community->image);?>" class="avatar group-1-avatar avatar-150 photo" width="150" height="150" alt="Community logo of <?php echo $community->title;?>" title="<?php echo $community->title;?>">
+                                    <img src="<?php echo S3Wrapper::getCommunityAvatar($community->image);?>" class="avatar group-1-avatar avatar-150 photo" width="150" height="150" alt="Community logo of <?php echo ctE($community->title);?>" title="<?php echo ctE($community->title);?>">
                                 </a>
                             </div>
                             <div class="community-content">
                                 <div class="community-title">
-                                    <a href="/communities/<?php echo $community->slug;?>"><?php echo $community->title;?></a></div>
-                                <div class="community-description"><?php echo $community->description;?></div>
+                                    <a href="/communities/<?php echo $community->slug;?>"><?php echo ctE($community->title);?></a></div>
+                                <div class="community-description"><?php echo ctE($community->description);?></div>
                                 <a href="/communities/<?php echo $community->slug;?>" class="action-btn red-btn">Community
                                     Homepage</a>
                             </div>
