@@ -39,7 +39,7 @@
                     </tbody>
                 </table>
             </div>
-            @if(Auth::check())
+            @if(is_super_admin())
                 <a href="{{ getSiteUrl() }}/communities/create" class="btn btn-success btn-with-icon btn-add">Add Community</a>
             @endif
         </div>
