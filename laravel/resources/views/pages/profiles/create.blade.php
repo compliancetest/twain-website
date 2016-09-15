@@ -164,7 +164,9 @@
                     if(rsp.status == 'success')
                     {
                         jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
-                        location.reload();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }else{
                         jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.msg + '</p>');
                     }
