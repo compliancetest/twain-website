@@ -24,15 +24,27 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get Execution Profile data
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
@@ -108,15 +120,27 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get all test case profiles
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Test Case not found
      * @apiErrorExample {json} TestCase not found error:
@@ -178,15 +202,27 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to configure testing details
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
@@ -350,15 +386,27 @@ class TestCasesController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Test Case not configured properly
      * @apiErrorExample {json} Please stop running case before start:
@@ -400,15 +448,28 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get testing details
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     *
      *
      * @apiError 404 User didn't use start method yet
      * @apiErrorExample {json} You are not running any test case now:

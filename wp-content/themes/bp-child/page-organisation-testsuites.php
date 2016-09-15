@@ -91,11 +91,12 @@ get_header();
                                         </span>
                                                 </div>
                                                 <div class="td td-action tocenter">
-                                                    <a href="<?php echo get_permalink($row->suite_id) ?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe') ?>&id=<?php echo $row->id ?>&return=<?php echo base64_encode(get_permalink()) ?>"
-                                                       class="action-btn unsubscribe-btn icon-btn left10 has-tooltip"
-                                                       rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span
-                                                            class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
                                                     <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                                        <a href="<?php echo get_permalink($row->suite_id) ?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe') ?>&id=<?php echo $row->id ?>&return=<?php echo base64_encode(get_permalink()) ?>"
+                                                           class="action-btn unsubscribe-btn icon-btn left10 has-tooltip"
+                                                           rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span
+                                                                class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
+
                                                         <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark; ?>&plan_id=<?php echo $row->pricing_plan_id; ?><?php if ($row->voucher): ?>&voucher=<?php echo $row->voucher; ?><?php endif; ?>"
                                                            class="action-btn harness-detail-btn harness-detail-link has-tooltip left10"
                                                            data-id="26" rel="custom-popup" cp-type="ajax"
