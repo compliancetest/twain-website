@@ -30,17 +30,18 @@ class CommunityMembershipController extends Controller
         if($community->isAdmin() && count($admins) === 1){
             return response()->json(array('message' => 'This community must have at least one admin'), 422);
         }
-        $user = get_userdata($this->userId);
+        $userId = Auth::user()->ID;
+        $user = get_userdata($userId);
         $emailData = array(
             '[community]' => $community->title,
             '[community_url]' => $community->getUrl(),
-            '[name]' => cp_get_user_fullname($this->userId),
+            '[name]' => cp_get_user_fullname($userId),
             '[email]' => $user->user_email,
             '[username]' => $user->user_login
         );
 
         sendEmails($admins, 'member_leave_community_admin', $emailData);
-        $community->getMember(get_current_user_id())->delete();
+        $community->getMember($userId)->delete();
 
         addMessage('You successfully left the community. ');
 
@@ -49,7 +50,7 @@ class CommunityMembershipController extends Controller
 
     public function requestMembership($slug)
     {
-        $userId = get_current_user_id();
+        $userId = Auth::user()->ID;
         $community = Community::findBySlug($slug);
         $membershipRecord = CommunityMembers::getUserRecord($community->id, $userId);
         $user = get_userdata($userId);
@@ -58,9 +59,9 @@ class CommunityMembershipController extends Controller
             if ($community->visibility_status == 'private') {
                 $community->members()->create(['user_id' => $userId]);
                 $emailData = array(
-                    '[name]' => cp_get_user_fullname($this->userId),
+                    '[name]' => cp_get_user_fullname($userId),
                     '[community]' => $community->title,
-                    '[organisation]' => $user_organisation,
+                    '[organisation]' => $user_organisation ? $user_organisation : ' - ',
                     '[username]' => $user->data->user_login,
                     '[email]' => $user->data->user_email,
                     '[community_url]' => $community->getUrl()
