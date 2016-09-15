@@ -39,6 +39,8 @@
         <div class="block-loading-wrapper">
             <div class="transaction-list-actions">
                 <div class="pull-left">
+                    <a href="#bulkAuditModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger bulk_audit"
+                           data-tooltip="tooltip" title="Bulk Audit">Bulk Audit</a>
                     @if($supportOrAdmin)
                         <a href="#verifyAsModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass"
                            data-tooltip="tooltip" title="Verify As Pass">Verify As Pass</a>
@@ -135,6 +137,42 @@
     </div>
 </div>
 
+{{-- Bulk Audit Modal--}}
+<div class="modal fade" id="bulkAuditModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content block-loading-wrapper">
+            <div class="modal-header">
+                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                Bulk Audit
+            </div>
+            <div class="modal-body">
+                <div class="bulk_rows_exist">
+                    <div class="alert alert-warning" role="alert">
+                      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                      <span class="sr-only">Error:</span>
+                      Note that entries with 'Pending' status will not be processed
+                    </div>
+                    Please confirm that you want mark selected test results as Audit Records
+                </div>
+                <div class="bulk_no_rows">
+                    Please select a row
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-with-icon btn-confirm confirm_bulk_audit">Confirm</button>
+                <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            <div class="block-loading">
+                <div class="loading-content"><span class="loader"></span>
+
+                    <div class="loading-text">LOADING DATA</div>
+                    <div class="loading-wait">Please wait...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- Screen Captures Modal--}}
 <div class="modal fade" id="modalScreenCaptures" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document" style="width: 500px;">
@@ -198,7 +236,7 @@
         });
 
         $('body').on('change', '.checkAll', function () {
-            $('.checkTransaction').prop('checked', $(this).is(':checked'));
+            $('.checkTransaction').not(':disabled').prop('checked', $(this).is(':checked'));
         });
 
         $('body').on('click', '.change_status', function(){
@@ -219,6 +257,55 @@
                 $('.change_status_no_messages').hide();
                 $('.confirm_change_status').show();
             }
+        });
+
+        $('body').on('click', '.bulk_audit', function(){
+            $.each($('input.checkTransaction:checked'), function(index, checkboxEntry){
+                if($(checkboxEntry).closest('tr').find('.auditRecordCheckbox').is(':disabled')){
+                    $(checkboxEntry).prop('checked', false);
+                }
+            });
+            var checkboxes = $('input.checkTransaction:checked');
+
+            if(checkboxes.length == 0){
+                $('.bulk_rows_exist, .confirm_bulk_audit').hide();
+                $('.bulk_no_rows').show();
+            } else {
+                $('.bulk_rows_exist, .confirm_bulk_audit').show();
+                $('.bulk_no_rows').hide();
+            }
+        });
+
+        $('.confirm_bulk_audit').on('click', function(e){
+            var ids = new Array();
+            jQuery('.checkTransaction:checked').each(function () {
+                ids.push(this.value);
+            });
+
+            jQuery('#bulkAuditModal .block-loading').show();
+
+            jQuery.ajax({
+                url: '/transactions/bulk-audit',
+                data: {
+                    'transactions': ids
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (rsp) {
+                    $('.modal').modal('hide');
+                    $('#bulkAuditModal .block-loading').hide();
+                    $('#filterByForm').submit();
+                },
+                error: function (jqXHR, status) {
+                    jQuery('#bulkAuditModal .block-loading').hide();
+                    $('#bulkAuditModal .modal-body').append('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('#bulkAuditModal .modal-body > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
         });
 
         $('body').on('click', '.delete_transactions', function(){

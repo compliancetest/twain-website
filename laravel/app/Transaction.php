@@ -39,11 +39,20 @@ class Transaction extends Model
     public function canBeDeleted()
     {
         $usedInVerifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $this->id . '%')->first();
-        $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions()) || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
+        $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions())->get() || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
         if (!$usedInVerifyRequest && $hasAccessToTransaction && $this->audit_record == false && $this->usedInClaims->isEmpty()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Ensure that user can update current transaction
+     * @return bool
+     */
+    public function userHasAccess()
+    {
+        return Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions())->get() || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
     }
 
     /**
