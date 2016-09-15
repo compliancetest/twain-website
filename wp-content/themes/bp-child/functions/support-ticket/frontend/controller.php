@@ -561,7 +561,7 @@ function acceptTerm()
         
         /***************** Begin Send Mail ***************************/
         
-        if($is_support)
+        if(ct_is_support($ticket->id))
         {
             //Send to Customer
             ct_send_ticket_email("ticket_updated",'customer', $ticket, $messageID);
@@ -643,7 +643,7 @@ function changeTicketTerm()
             $message .= "Time to resolve:  " . $newPriority->ttresolve . " hours <br />";
             $message .= "</blockquote>";
             if($comment)
-                $message .= "<p>" . $comment . "</p>" ;
+                $message .= "<p>" . ctE($comment) . "</p>" ;
             $message_type = 'term';
             
             $is_changed = true;
@@ -653,7 +653,7 @@ function changeTicketTerm()
             $ttresolve = $newPriority->ttresolve;
             
         }else if($comment){
-            $message =  $comment;
+            $message =  ctE($comment);
             $message_type = 'message';
         }else{
             addMessage('Nothing was changed.', 'notice');
@@ -705,11 +705,11 @@ function changeTicketTerm()
             $message = "<p>" . "Term has been updated by " . "<b>{$userData->first_name} {$userData->last_name}</b>" . "</p>" .
                         "<blockquote>" . $message . "</blockquote>";
             if($comment)
-                $message .= "<p>" . $comment . "</p>";
+                $message .= "<p>" . ctE($comment) . "</p>";
                 
             $message_type = 'term';
         }else if($comment){
-            $message = "<p>" . $comment . "<p>";
+            $message = "<p>" . ctE($comment) . "<p>";
             $message_type = 'message';
         }else{
             addMessage('Nothing was changed.', 'notice');
@@ -778,7 +778,7 @@ function sendTicketMessage()
     
     $userData = get_userdata($user_id);
     
-    $message = stripslashes_deep($_POST['content']);
+    $message = ctE(stripslashes_deep($_POST['content']));
     
     //Save Message
     $messageData = array(
@@ -799,7 +799,7 @@ function sendTicketMessage()
     {        
         if(isset($_POST['resolved']) && $_POST['resolved'])
         {
-            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
+            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
             $status_changed = true;
             $new_status = TICKET_STATUS_RESOLVED;
             
@@ -811,19 +811,19 @@ function sendTicketMessage()
         {
             if($_POST['status_change'] == 'in_progress' && $ticketDetail->status_id != TICKET_STATUS_IN_PROGRESS)
             {
-                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message;
+                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message);
                 $status_changed = true;
                 $new_status = TICKET_STATUS_IN_PROGRESS;
             }else if($_POST['status_change'] == 'feedback' && $ticketDetail->status_id != TICKET_STATUS_FEEDBACK){
-                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
+                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_FEEDBACK;
             }else if($_POST['status_change'] == 'resolved' && $ticketDetail->status_id != TICKET_STATUS_RESOLVED){
-                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
+                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_RESOLVED;
             }else if($_POST['status_change'] == 'closed' && $ticketDetail->status_id != TICKET_STATUS_CLOSED){
-                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . $message ;
+                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_CLOSED;
             }
@@ -896,7 +896,7 @@ function sendTicketMessage()
         {
             //There are separate email templates for Resolved and Closed Tickets
             ///Send Email Notification
-            if($is_support)
+            if(ct_is_support($ticket_id))
             {
                 //Send to Customer
                 ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail, $messageID);            
