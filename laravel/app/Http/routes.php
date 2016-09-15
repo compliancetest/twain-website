@@ -115,11 +115,19 @@ Route::group(['middleware' => ['web']], function () {
 
         //any use can request community membership
         Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
+    });
 
-        //any registered user can create community
+     Route::group(['middleware' => ['auth']], function () {
+        //any use can request community membership
+        Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
+    });
+
+    Route::group(['middleware' => ['wordpress.super_admin']], function () {
+        //only wordpress super admin can create new community
         Route::get('communities/create/', 'CommunitiesController@create');
         Route::post('communities', 'CommunitiesController@store');
     });
+
 
     Route::get('communities/{community}/{action?}/{forumSlug?}', 'CommunitiesController@show');
     //community members routes
