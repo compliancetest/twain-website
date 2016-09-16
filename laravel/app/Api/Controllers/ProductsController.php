@@ -285,6 +285,8 @@ class ProductsController extends BaseApiController
             }
         }
 
+        $this->product->save();
+        
         $response = [
             'id' => $this->product->post_name,
             'title' => $this->product->post_title . ' v' . $productVersion,

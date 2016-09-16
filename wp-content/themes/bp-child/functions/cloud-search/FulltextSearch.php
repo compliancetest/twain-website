@@ -229,7 +229,7 @@ class FulltextSearch extends BaseAWS
         }
         if ($posts) {
             foreach ($posts AS $post) {
-                $groups = getCommunities();
+                $groups = getUserCommunities($post->post_author);
                 $communityNames = array();
                 if ($groups) {
                     foreach ($groups AS $group) {
@@ -278,7 +278,7 @@ class FulltextSearch extends BaseAWS
                 }
                 $temp_data = array(
                     'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date_gmt)) . 'Z',
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date)) . 'Z',
                     'post_author_name' => cp_get_user_fullname($post->post_author),
                     'post_author_id' => $post->post_author,
                     'post_content' => $post_data['descr'],
@@ -315,7 +315,7 @@ class FulltextSearch extends BaseAWS
                 }
                 $temp_data = array(
                     'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date_gmt)) . 'Z',
+                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date)) . 'Z',
                     'post_author_name' => cp_get_user_fullname($post->post_author),
                     'post_author_id' => $post->post_author,
                     'post_content' => $test_scenario->description,
