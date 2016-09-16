@@ -9,7 +9,7 @@ trait CloudSearchDomainTrait
 {
 
     /**
-     * Create CloudSearchDomainClient instance for interaction with CloudSearch domain
+     * Create CloudSearchDomainClient instance for interaction with Registry search CloudSearch domain
      * @return static
      */
     public function getDocumentEndpointCloudSearchClient()
@@ -24,6 +24,26 @@ trait CloudSearchDomainTrait
             'region' => 'us-west-2',
             'version' => '2013-01-01',
             'endpoint' => config('aws.registry_domain.' . getenv('ENVIRONMENT')),
+            'credentials' => $credentials
+        ]);
+    }
+
+    /**
+     * Create CloudSearchDomainClient instance for interaction with Fulltext search CloudSearch domain
+     * @return static
+     */
+    public function getFulltextDocumentEndpointCloudSearchClient()
+    {
+
+        $credentials = [
+            'key' => \App\WpOptions::where(['option_name' => 'aws_s3_key'])->first()->option_value,
+            'secret' => \App\WpOptions::where(['option_name' => 'aws_s3_secret'])->first()->option_value,
+        ];
+
+        return CloudSearchDomainClient::factory([
+            'region' => 'us-west-2',
+            'version' => '2013-01-01',
+            'endpoint' => config('aws.domain.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
