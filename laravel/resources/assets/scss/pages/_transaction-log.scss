@@ -62,6 +62,25 @@
 .transaction-list-actions{
   padding: 10px 0;
   @include pie-clearfix;
+  background: #fff;
+
+  #collapseAllResults{
+    display: none;
+  }
+
+  &.fixed{
+    position: fixed;
+    top: 5px;
+    padding: 10px;
+
+    .pagination-box{
+      display: none;
+    }
+
+    #collapseAllResults{
+      display: inline-block;
+    }
+  }
 }
 
 .log-results-table-wrapper{

@@ -51,8 +51,9 @@
                     @endif
                      <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
                                data-tooltip="tooltip" title="Delete Test Results">Delete Test Results</a>
+                    <button type="button" class="btn btn-default" id="collapseAllResults">Collapse all results</button>
                 </div>
-                <div class="pull-right">
+                <div class="pull-right pagination-box">
                     <div class="form-inline">
                         <div class="form-group">
                             <label for="paginationLimit">Display #</label>
@@ -507,6 +508,31 @@
             $(this).parent().find('input, select').val('');
             var form = $('#filterByForm');
             getTransactionFilters(form.serialize());
+        });
+
+        $('#collapseAllResults').click(function () {
+           $('.logRow').collapse('hide');
+        });
+
+        $(window).bind('scroll', function() {
+            var navHeight = $( window ).height() - 70;
+            if ($(window).scrollTop() > navHeight) {
+                $('.transaction-list-actions').addClass('fixed');
+            }
+            else {
+                $('.transaction-list-actions').removeClass('fixed');
+            }
+        });
+
+        var actionPos = $('.transaction-list-actions').offset();
+        $(window).bind('scroll', function() {
+            var topScroll = $(window).scrollTop();
+            if (topScroll > actionPos.top) {
+                $('.transaction-list-actions').addClass('fixed');
+            }
+            else {
+                $('.transaction-list-actions').removeClass('fixed');
+            }
         });
 
         /**
