@@ -64,10 +64,6 @@
   @include pie-clearfix;
   background: #fff;
 
-  #collapseAllResults{
-    display: none;
-  }
-
   &.fixed{
     position: fixed;
     top: 5px;
@@ -75,10 +71,6 @@
 
     .pagination-box{
       display: none;
-    }
-
-    #collapseAllResults{
-      display: inline-block;
     }
   }
 }
