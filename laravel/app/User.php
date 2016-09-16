@@ -115,7 +115,7 @@ class User extends Authenticatable
                 continue;
             }
             $testPlans = TestPlan::where(['is_claimed' => false, 'organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
-            $suite = Post::find($organisationSubscription->suite_family_mark);
+            $suite = Post::find(TestSuite::getLatestSuiteIdForFamilyMark($organisationSubscription->suite_family_mark));
             if(!isset($response[$suite->post_title] )) {
                 $response[$suite->post_title] = [
                     'testSuite' => $suite,
