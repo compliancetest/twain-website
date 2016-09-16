@@ -637,23 +637,26 @@ function saveSuite()
     //Send Notification Email
     if (!$isNew && isset($_POST['send-notification'])) {
 
-        $group = groups_get_group(array('group_id' => $group_id));
+        $group = getCommunity($group_id);
 
         $emailData = array(
-            '[community]' => bp_get_group_name($group),
-            '[community_url]' => bp_get_group_permalink($group),
+            '[community]' => $group->title,
+            '[community_url]' => home_url() . '/communities/' . $group->slug,
             '[suite_name]' => $_POST['ts_name'],
             '[suite_url]' => get_permalink($id),
             '[editor_name]' => cp_get_user_fullname($user_id)
         );
         //Getting Group Members
-        $members = BP_Groups_Member::get_all_for_group($group_id, false, false, false);
+        $members = $wpdb->get_results($wpdb->prepare("SELECT * from communities_members WHERE community_id = %s", $group_id));
 
-        if ($members && $members['count'] > 0) {
-            foreach ($members['members'] as $member) {
-                if ($member->user_id != $user_id && get_user_meta($member->user_id, 'notify_suite_changes' . $id, true)) {
-                    $emailData['[name]'] = cp_get_user_fullname($member->user_id);
-                    cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+        if ($members) {
+            foreach ($members as $member) {
+                if ($member->user_id != $user_id) {
+                    $userData = get_userdata($member->user_id);
+                    if ($userData !== false) {
+                        $emailData['[name]'] = cp_get_user_fullname($member->user_id);
+                        cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+                    }
                 }
             }
         }
