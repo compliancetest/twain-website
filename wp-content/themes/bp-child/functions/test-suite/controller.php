@@ -653,7 +653,7 @@ function saveSuite()
             foreach ($members as $member) {
                 if ($member->user_id != $user_id) {
                     $userData = get_userdata($member->user_id);
-                    if ($userData !== false) {
+                    if ($userData !== false && get_user_meta($member->user_id, 'notify_suite_changes' . $id, true)) {
                         $emailData['[name]'] = cp_get_user_fullname($member->user_id);
                         cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
                     }

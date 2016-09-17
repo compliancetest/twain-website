@@ -145,8 +145,6 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
 
-        Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
-
         Route::post('membership/{community}/reject', 'CommunityMembershipController@rejectUser');
         Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
 
@@ -156,6 +154,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => ['community.mod']], function () {
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
+        Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
 
         Route::get('communitysurveys/{community}/surveyresults', 'CommunitiesController@surveysList');
         Route::post('communitysurveys/{community}/surveyresults', 'CommunitiesController@saveSurveysLinks');

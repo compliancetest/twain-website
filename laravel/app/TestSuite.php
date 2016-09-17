@@ -12,6 +12,21 @@ class TestSuite extends Model
 
     protected $primaryKey = 'suite_id';
 
+
+    /**
+     * Get Suite family mark
+     * @param $testSuiteId
+     * @return int
+     */
+    public static function getTestSuiteFamilyMark($testSuiteId)
+    {
+        $testSuite = TestSuite::find($testSuiteId);
+        if ($testSuite) {
+            return $testSuite->family_mark;
+        }
+        return 0;
+    }
+    
     /**
      * Get suite's ID for given family mark
      * @param $familyMark

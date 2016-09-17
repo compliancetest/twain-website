@@ -209,6 +209,16 @@ class TestSuitesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      *
      * @apiError 404 Not Found
@@ -276,6 +286,11 @@ class TestSuitesController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($suiteId);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+        
         $suite = Post::where(['post_name' => $suiteId])->first();
         $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
         if (!$subscription) {

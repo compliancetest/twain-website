@@ -50,6 +50,17 @@ class TransactionsController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
@@ -97,6 +108,11 @@ class TransactionsController extends BaseApiController
 
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($request->get('test_suite_id'));
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
         $fileName = \Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id') . '/' . $request->file('file')->getClientOriginalName();

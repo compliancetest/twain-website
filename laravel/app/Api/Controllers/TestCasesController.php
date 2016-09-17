@@ -45,6 +45,17 @@ class TestCasesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
@@ -90,6 +101,11 @@ class TestCasesController extends BaseApiController
         $testingDetails = TestingDetail::where(['is_running' => 1, 'user_id' => \Auth::user()->ID])->first();
         if (!count($testingDetails)) {
             return $this->respondUnprocessableEntity("Please set testing details");
+        }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testingDetails->test_suite_id);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
         $testCase = TestCase::find($testingDetails->test_case_id);
@@ -223,6 +239,17 @@ class TestCasesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
@@ -283,6 +310,12 @@ class TestCasesController extends BaseApiController
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($request->get('test_suite_id'));
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+
         $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
         if ($model) {
             return $this->respondBadRequest('Please stop running case before start');
@@ -407,6 +440,17 @@ class TestCasesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Test Case not configured properly
      * @apiErrorExample {json} Please stop running case before start:
@@ -432,10 +476,17 @@ class TestCasesController extends BaseApiController
 
     public function stop()
     {
-        if (!TestingDetail::where(['user_id' => Auth::user()->ID])->first()) {
+        $testingDetails = TestingDetail::where(['user_id' => Auth::user()->ID])->first();
+        if (!$testingDetails) {
             return $this->respondBadRequest('Please use start method first');
         }
-        TestingDetail::where(['user_id' => Auth::user()->ID])->delete();
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testingDetails->test_suite_id);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+
+        $testingDetails->delete();
         return $this->respondSuccess('Ok');
     }
 
@@ -469,6 +520,16 @@ class TestCasesController extends BaseApiController
      *     "code": 403
      *   }
      *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      *
      * @apiError 404 User didn't use start method yet
@@ -512,6 +573,11 @@ class TestCasesController extends BaseApiController
         $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
         if (!$model) {
             return $this->respondNotFound('You are not running any test case now');
+        }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($model->test_suite_id);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
         $product = Post::find($model->product_id);

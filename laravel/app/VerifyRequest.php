@@ -31,16 +31,6 @@ class VerifyRequest extends Model
             //Community Support users can see all community suites
             if ($community->isModerator() || $community->isAdmin()) {
                 $userTestSuites = Post::getCommunityTestSuites($community->id);
-                array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
-                    $userTestSuites[$key]->suite_family_mark = TestSuite::find($entry->ID)->family_mark;
-                });
-
-                //get only last versions
-                $tempTestSuites = [];
-                foreach($userTestSuites as $userTestSuite){
-                    $tempTestSuites[$userTestSuite->suite_family_mark] = $userTestSuite;
-                }
-                $userTestSuites = $tempTestSuites;
             } else {
                 $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }

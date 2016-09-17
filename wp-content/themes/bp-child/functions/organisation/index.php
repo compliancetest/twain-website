@@ -151,7 +151,7 @@ function ct_process_organisation_action()
                 } else {
                     global $wpdb;
                     $userOrganisation = ct_get_user_organisation(get_current_user_id());
-                    $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $community_id, $userOrganisation->id)) ? true : false;
+                    $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_organisations_approved_test_suites WHERE community_id = %s AND organisation_id = %d AND test_suite_id = %d", $community_id, $userOrganisation->id, $familyMark)) ? true : false;
                 }
                 if($hasunallocated) { //Has unallocated subscriptions
                 ?>

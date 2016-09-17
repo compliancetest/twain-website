@@ -375,7 +375,7 @@ Template Name Posts: Test Suite
                                 <div class="test-suite-actions">
                                         <?php
                                             $userOrganisation = ct_get_user_organisation(get_current_user_id());
-                                            $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $suite->community_id, $userOrganisation->id)) ? true : false;
+                                            $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_organisations_approved_test_suites WHERE community_id = %s AND organisation_id = %d AND test_suite_id = %d", $suite->community_id, $userOrganisation->id, $suite->familyMark)) ? true : false;
                                         if(!$hasunallocated):?>
                                             <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
