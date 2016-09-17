@@ -11,7 +11,7 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function (
 
     Route::post('testcase/start', ['uses' => '\App\Api\Controllers\TestCasesController@start', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
     Route::delete('testcase/stop', ['uses' => '\App\Api\Controllers\TestCasesController@stop', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
-    Route::get('testcase/status', ['uses' => '\App\Api\Controllers\TestCasesController@status', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
+    Route::get('testcase/status', ['uses' => '\App\Api\Controllers\TestCasesController@status', 'middleware' => ['simpleauth', 'organisation.member']]);
 
     Route::get('testsuites', ['uses' => '\App\Api\Controllers\TestSuitesController@index', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
     Route::get('testsuites/{suiteId}/testcases', ['uses' => '\App\Api\Controllers\TestSuitesController@testcases', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
