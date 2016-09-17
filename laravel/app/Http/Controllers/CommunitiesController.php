@@ -7,6 +7,7 @@ use App\CommunityApprovedOrganisation;
 use App\CommunityBackups;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\CommunityOrganisationsApprovedTestSuites;
 use App\CommunitySurveyResult;
 use App\ForumThread;
 use App\ForumThreadRead;
@@ -162,6 +163,7 @@ class CommunitiesController extends Controller
             $data['invitedUsers'] = $community->invitations;
             $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
+            $data['communityTestSuites'] = Post::getCommunityTestSuites($community->id);
             if($community->isModerator()){
                 $data['action'] = 'admin_page_for_support_users';
             }
@@ -242,24 +244,27 @@ class CommunitiesController extends Controller
     public function approveOrganisation($communitySlug, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'organisation_id' => 'exists:wp_organisations,id'
+            'organisation_id' => 'exists:wp_organisations,id',
+            'test_suite_id' => 'exists:wp_posts,ID'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Invalid organisation'], 422);
+            return response()->json(['message' => 'Invalid organisation / test suite id'], 422);
         }
 
         $community = Community::findBySlug($communitySlug);
         if ($request->get('is_checked')) {
-            CommunityApprovedOrganisation::create([
+            CommunityOrganisationsApprovedTestSuites::create([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
+                'test_suite_id' => $request->get('test_suite_id'),
                 'approved_by' => Auth::user()->ID
             ]);
         } else {
-            CommunityApprovedOrganisation::where([
+            CommunityOrganisationsApprovedTestSuites::where([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
+                 'test_suite_id' => $request->get('test_suite_id')
             ])->delete();
         }
         return response()->json(array('success' => true));

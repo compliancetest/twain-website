@@ -300,11 +300,10 @@
                     <div class="colored-box-body">
                         <div class="colored-box-content">
                             <div class="table-responsive">
-                                <table class="table invitations_table">
+                                <table class="table table-striped invitations_table">
                                 <tr>
                                     <th>Organization</th>
                                     <th>Contact email</th>
-                                    <th>Is approved?</th>
                                 </tr>
                                 @if(count($organisations) > 0)
                                     @foreach($organisations as $organisation)
@@ -313,9 +312,27 @@
                                                 {{ $organisation->organisation_name }}
                                             </td>
                                             <td>{{ $organisation->contact_email }}</td>
-                                            <td class="text-center">
-                                                <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation" data-community="{{ $community->slug }}"
-                                                @if(\App\CommunityApprovedOrganisation::where(['organisation_id' => $organisation->id, 'community_id' => $community->id])->first()) checked="checked" @endif>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table class="table table-bordered invitations_table">
+                                                    <tr>
+                                                        <th>Test Suite</th>
+                                                        <th>Is Approved?</th>
+                                                    </tr>
+
+                                                    @foreach($communityTestSuites as $communityTestSuite)
+                                                        <tr>
+                                                            <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
+                                                            <td class="text-center">
+                                                                <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
+                                                                       data-community="{{ $community->slug }}" data-test-suite-id="{{ \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID) }}"
+                                                                       @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $communityTestSuite->ID])->first()) checked="checked" @endif>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
+                                                </table>
                                             </td>
                                         </tr>
                                     @endforeach

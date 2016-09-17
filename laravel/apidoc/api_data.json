@@ -672,6 +672,11 @@
           "type": "json"
         },
         {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Please stop running case before start:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
           "type": "json"
@@ -743,6 +748,11 @@
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -897,6 +907,11 @@
           "type": "json"
         },
         {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "You are not running any test case now:",
           "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
@@ -1009,6 +1024,11 @@
           "type": "json"
         },
         {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
           "title": "Validation error:",
           "content": "{\n  \"errors\": {\n    \"test_suite_id\": [\n      \"The selected test suite id is invalid.\"\n    ],\n    \"test_case_id\": [\n      \"The selected test case id is invalid.\"\n    ],\n    \"product_id\": [\n      \"The selected product id is invalid.\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
@@ -1103,6 +1123,11 @@
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1297,6 +1322,11 @@
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1542,6 +1572,11 @@
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {

@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\CommunityApprovedOrganisation;
+use App\CommunityOrganisationsApprovedTestSuites;
 use Illuminate\Support\Facades\Auth;
 
 class OrganisationCanPerformTesting
@@ -18,7 +18,7 @@ class OrganisationCanPerformTesting
     public function handle($request, Closure $next)
     {
         $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
-        if (!CommunityApprovedOrganisation::where(['organisation_id' => $organisation->organisation_id])->first()) {
+        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id])->first()) {
             return response()->json(['errors' => ['message' => ["Your organisation can't perform testing."]], 'code' => 403], 403);
         }
         return $next($request);

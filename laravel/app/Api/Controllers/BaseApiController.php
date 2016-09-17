@@ -2,10 +2,12 @@
 
 namespace App\Api\Controllers;
 
+use App\CommunityOrganisationsApprovedTestSuites;
 use Illuminate\Http\Response as IlluminateResponse;
 use Illuminate\Pagination\Paginator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ApiController
@@ -207,5 +209,19 @@ class BaseApiController extends Controller
         ]);
 
         return $this->respond($data);
+    }
+
+    /**
+     * Ensure that user's organisation has access to test suite
+     * @param $testSuiteId
+     * @return JsonResponse
+     */
+    public function doesOrganisationHasAccessToTestSuite($testSuiteId)
+    {
+        $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
+        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id, 'test_suite_id' => $testSuiteId])->first()) {
+            return false;
+        }
+        return true;
     }
 }

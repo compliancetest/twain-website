@@ -46,13 +46,25 @@ class Post extends Model
     
     public static function getCommunityTestSuites($communityId)
     {
-        return DB::table('wp_posts')
+        $userTestSuites = DB::table('wp_posts')
             ->join('wp_postmeta', function($join) use ($communityId){
                 $join->on('wp_postmeta.post_id', '=', 'wp_posts.ID')
                      ->where('meta_key', '=', 'community_id')
                     ->where('meta_value', '=', $communityId);
             })
+            ->orderBy('post_title')
             ->get();
+
+        array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
+            $userTestSuites[$key]->suite_family_mark = TestSuite::find($entry->ID)->family_mark;
+        });
+
+        //get only last versions
+        $tempTestSuites = [];
+        foreach($userTestSuites as $userTestSuite){
+            $tempTestSuites[$userTestSuite->suite_family_mark] = $userTestSuite;
+        }
+        return $tempTestSuites;
     }
 
     public function meta()
