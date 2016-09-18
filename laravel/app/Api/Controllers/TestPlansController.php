@@ -225,8 +225,9 @@ class TestPlansController extends BaseApiController
         }
 
         $testPlan = TestPlan::find($testPlanId);
+        $testSuiteData = Post::find($testPlan->suite_id);
 
-        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testPlan->suite_id);
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->post_name);
         if(!$hasAccessToTestSuite){
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
