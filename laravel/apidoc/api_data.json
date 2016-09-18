@@ -667,16 +667,6 @@
           "type": "json"
         },
         {
-          "title": "Organization is not approved yet:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
-          "type": "json"
-        },
-        {
-          "title": "Organization doesn't have access to test suite:",
-          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
-          "type": "json"
-        },
-        {
           "title": "Please stop running case before start:",
           "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
           "type": "json"

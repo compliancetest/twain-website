@@ -103,7 +103,8 @@ class TestCasesController extends BaseApiController
             return $this->respondUnprocessableEntity("Please set testing details");
         }
 
-        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testingDetails->test_suite_id);
+        $testSuiteData = Post::find($testingDetails->test_suite_id);
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->post_name);
         if(!$hasAccessToTestSuite){
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
@@ -429,29 +430,6 @@ class TestCasesController extends BaseApiController
      *     "code": 403
      *   }
      *
-     * @apiError 403 Forbidden
-     * @apiErrorExample {json} Organization is not approved yet:
-     *   {
-     *     "errors": {
-     *       "message": [
-     *         "Your organization can't perform testing."
-     *       ]
-     *     },
-     *     "code": 403
-     *   }
-     *
-     * @apiError 403 Forbidden
-     * @apiErrorExample {json} Organization doesn't have access to test suite:
-     *    {
-     *     "errors": {
-     *       "message": [
-     *         "Your organisation doesn't have access to this test suite."
-     *       ]
-     *     },
-     *     "code": 403
-     *   }
-     *
-     *
      * @apiError 404 Test Case not configured properly
      * @apiErrorExample {json} Please stop running case before start:
      *  {
@@ -479,11 +457,6 @@ class TestCasesController extends BaseApiController
         $testingDetails = TestingDetail::where(['user_id' => Auth::user()->ID])->first();
         if (!$testingDetails) {
             return $this->respondBadRequest('Please use start method first');
-        }
-
-        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testingDetails->test_suite_id);
-        if(!$hasAccessToTestSuite){
-            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
         $testingDetails->delete();

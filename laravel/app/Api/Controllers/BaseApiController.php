@@ -3,6 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\CommunityOrganisationsApprovedTestSuites;
+use App\Post;
 use Illuminate\Http\Response as IlluminateResponse;
 use Illuminate\Pagination\Paginator;
 use App\Http\Controllers\Controller;
@@ -213,13 +214,14 @@ class BaseApiController extends Controller
 
     /**
      * Ensure that user's organisation has access to test suite
-     * @param $testSuiteId
+     * @param $testSuiteId - string suite ID
      * @return JsonResponse
      */
     public function doesOrganisationHasAccessToTestSuite($testSuiteId)
     {
         $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
-        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id, 'test_suite_id' => $testSuiteId])->first()) {
+        $testSuite = Post::where(['post_name' => $testSuiteId])->first();
+        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id, 'test_suite_id' => $testSuite->ID])->first()) {
             return false;
         }
         return true;
