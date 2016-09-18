@@ -573,7 +573,7 @@ function saveSuite()
     $rid = $wpdb->get_var($query);
     if (!$rid) {
         //Calculate Bother Mark
-        if (!$version_updated) {
+        if (!$version_updated || $majorVersionIncreased) {
             $family_mark = $id;
         } else {
             $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $suite->id));
