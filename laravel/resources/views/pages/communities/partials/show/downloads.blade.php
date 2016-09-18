@@ -247,7 +247,6 @@
                         }, 3000);
                         tr.slideUp('slow', function () {
                             $(this).remove();
-                            console.log($('.downloads-list-table tbody tr').length);
                             if ( !$('.downloads-list-table tbody tr').length){
                                 $('.downloads-list-table tbody').html('<tr><td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row">No files uploaded yet</td></tr>');
                             }

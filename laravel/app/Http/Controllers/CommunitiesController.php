@@ -164,9 +164,6 @@ class CommunitiesController extends Controller
             $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
             $data['communityTestSuites'] = Post::getCommunityTestSuites($community->id);
-            if($community->isModerator()){
-                $data['action'] = 'admin_page_for_support_users';
-            }
         }
         return view('pages.communities.show')->with($data);
     }

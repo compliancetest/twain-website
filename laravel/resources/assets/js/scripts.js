@@ -382,6 +382,21 @@ var Page = {
                 self.deleteProfileType($(this), e);
             });
 
+            $('.settings-tabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show')
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.settings-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+            }
+
+            $('.settings-tabs a').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+                window.scrollTo(0, 0);
+            })
+
         },
 
         showAddNewProfileType: function(e){
