@@ -68,8 +68,11 @@
     position: fixed;
     top: 5px;
     padding: 10px;
+    border: 1px solid #1d76c0;
+    border-left: 0;
+    margin-left: 1px;
 
-    .pagination-box{
+    .pagination-box, .change_status{
       display: none;
     }
   }

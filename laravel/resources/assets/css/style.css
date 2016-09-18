@@ -13997,66 +13997,69 @@ input.notify-changes {
   position: fixed;
   top: 5px;
   padding: 10px;
+  border: 1px solid #1d76c0;
+  border-left: 0;
+  margin-left: 1px;
 }
-/* line 72, ../scss/pages/_transaction-log.scss */
-.transaction-list-actions.fixed .pagination-box {
+/* line 75, ../scss/pages/_transaction-log.scss */
+.transaction-list-actions.fixed .pagination-box, .transaction-list-actions.fixed .change_status {
   display: none;
 }
 
-/* line 78, ../scss/pages/_transaction-log.scss */
+/* line 81, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper {
   border-bottom: 1px solid #1d76c0;
 }
-/* line 81, ../scss/pages/_transaction-log.scss */
+/* line 84, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper table {
   margin: 0;
 }
-/* line 85, ../scss/pages/_transaction-log.scss */
+/* line 88, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper .block-loading-wrapper {
   min-height: 90px;
 }
 
-/* line 92, ../scss/pages/_transaction-log.scss */
+/* line 95, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
   background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
-/* line 95, ../scss/pages/_transaction-log.scss */
+/* line 98, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
   background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
-/* line 99, ../scss/pages/_transaction-log.scss */
+/* line 102, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
   border-right: 1px solid #1d76c0;
 }
-/* line 105, ../scss/pages/_transaction-log.scss */
+/* line 108, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-collapse-link {
   float: left;
 }
-/* line 108, ../scss/pages/_transaction-log.scss */
+/* line 111, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-name-link {
   display: block;
   overflow: hidden;
   margin: 0 0 0 15px;
 }
 
-/* line 118, ../scss/pages/_transaction-log.scss */
+/* line 121, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > thead > tr > th {
   padding: 5px;
 }
-/* line 124, ../scss/pages/_transaction-log.scss */
+/* line 127, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
   background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
   vertical-align: middle;
 }
-/* line 131, ../scss/pages/_transaction-log.scss */
+/* line 134, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
   background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
 }
 
-/* line 140, ../scss/pages/_transaction-log.scss */
+/* line 143, ../scss/pages/_transaction-log.scss */
 .details_row .block-loading-wrapper {
   min-height: 90px;
 }
