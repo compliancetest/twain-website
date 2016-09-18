@@ -15,7 +15,7 @@
                                     <span class="member-info">
                                         <span class="member-name">{{ cp_get_user_fullname($membershipRequest->user_id) }}</span>
                                         <span class="member-email">{{ $user->user_email }}</span>
-                                        <span class="member-activity">{{ $community->updated_at->diffForHumans() }}</span>
+                                        <span class="member-activity">{{ $membershipRequest->updated_at->diffForHumans() }}</span>
                                     </span>
                                 </div>
                                 <div class="pull-right action">
