@@ -3,8 +3,8 @@
     <div class="tabs-menu">
         <ul class="settings-tabs" role="tablist">
             @if($community->isAdmin())
-            <li class="active"><a href="#settings-base">Base</a></li>
-            <li><a href="#settings-test-data">Test Data</a></li>
+                <li class="active"><a href="#settings-base">Base</a></li>
+                <li><a href="#settings-test-data">Test Data</a></li>
             @endif
             <li @if($community->isModerator())class="active"@endif><a href="#settings-members">Members</a></li>
             <li><a href="#settings-testing-approved">Testing Approved</a></li>
@@ -21,6 +21,7 @@
                         <div class="colored-box-header">Details</div>
                         <div class="colored-box-body">
                             {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                            <input type="hidden" name="update-community-data" value="1">
                             <div class="colored-box-content">
                                 <div class="form-group">
                                     <label for="communityName">Community Name</label>
@@ -32,7 +33,7 @@
                                 <div class="form-group">
                                     <label for="communityDescription">Community Description</label>
                                     {{ Form::textarea('description', null, ['required' => 'required',
-                                        'class' => 'form-control',
+                                        'class' => 'form-control redactor_editor',
                                         'data-air' => 'true',
                                         'id' => 'communityDescription',
                                         'rows' => '5',
@@ -357,7 +358,7 @@
             </div>
 
 
-            {!! Form::open(['id'=> 'invite-user-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
+            {!! Form::open(['id'=> 'invite-user-form', 'class' => 'standard-form', 'data-save-method' => 'ajax', 'data-reset-form-after-submit' => true, 'method' => 'POST', 'url' => getSiteUrl() . '/membership/'.$community->slug . '/invite']) !!}
             <div class="colored-box">
                 <div class="colored-box-header">Invite User</div>
                 <div class="colored-box-body">
@@ -406,7 +407,7 @@
                             <table class="table invitations_table">
                                 <tr>
                                     <th>Email</th>
-                                    <th>Name</th>
+                                    <th class="text-center">Name</th>
                                     <th class="text-center">Invitation Date</th>
                                     <th class="text-center">Registration Date</th>
                                 </tr>
@@ -419,9 +420,9 @@
                                                     <br> (Registered with {{ $invitedUser->registered_email }})
                                                 @endif
                                             </td>
-                                            <td>{{ $invitedUser->first_name . ' ' . $invitedUser->last_name }}</td>
-                                            <td>{{ $invitedUser->created_at }}</td>
-                                            <td>
+                                            <td class="text-center">{{ $invitedUser->first_name . ' ' . $invitedUser->last_name }}</td>
+                                            <td class="text-center">{{ $invitedUser->created_at }}</td>
+                                            <td class="text-center">
                                                 @if($invitedUser->status == 0)
                                                     {{ $invitedUser->updated_at }}
                                                 @endif
