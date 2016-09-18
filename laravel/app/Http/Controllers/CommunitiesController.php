@@ -183,20 +183,27 @@ class CommunitiesController extends Controller
         if ($request->file('image')) {
             $this->handleImage($request, $community);
         }
-        if ($request->has('title') && $request->has('description')) {
+
+        if ($request->has('update-community-data')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:communities,title,' . $community->id,
+                'description' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 422);
+            }
             $community->update(['title' => $request->get('title'), 'description' => $request->get('description')]);
+            $textFields = ['terms_and_conditions', 'license_agreements', 'obligation_for_claim', 'notification_email_of_changes'];
+            foreach ($textFields as $textField) {
+                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => $textField], ['meta_value' => $request->get($textField)]);
+            }
         }
 
         if ($request->has('status')) {
             $community->update(['status' => $request->get('status')]);
         }
 
-        $textFields = ['terms_and_conditions', 'license_agreements', 'obligation_for_claim', 'notification_email_of_changes'];
-        foreach ($textFields as $textField) {
-            if ($request->has($textField)) {
-                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => $textField], ['meta_value' => $request->get($textField)]);
-            }
-        }
         if($request->has('visibility_status')){
             $community->update(['visibility_status' => $request->get('visibility_status')]);
         }

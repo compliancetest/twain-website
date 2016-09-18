@@ -56,7 +56,7 @@
             @foreach($community->getAdmins() as $admin)
                 <?php $user = \App\User::find($admin->user_id);?>
                 @if($user)
-                    <li class="col-sm-6">
+                    <li class="col-sm-3">
                         <label>
                             <input type="checkbox" value="{{ $admin->user_id }}" name="id[]" @if($admin->user_id == Auth::user()->ID) disabled="disabled" @endif>
                             <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
@@ -81,7 +81,7 @@
         @foreach($community->getModerators() as $mod)
             <?php $user = \App\User::find($mod->user_id);?>
             @if($user)
-                <li class="col-sm-6">
+                <li class="col-sm-3">
                     <label>
                         @if($isAdmin)
                             <input type="checkbox" value="{{ $mod->user_id }}" name="id[]" @if($mod->user_id == Auth::user()->ID) disabled="disabled" @endif>
@@ -106,7 +106,7 @@
         @foreach($community->getMembers() as $member)
             <?php $user = \App\User::find($member->user_id);?>
             @if($user)
-                <li class="col-sm-6">
+                <li class="col-sm-3">
                     <label>
                         <input type="checkbox" value="{{ $user->ID }}" name="id[]">
                         <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
