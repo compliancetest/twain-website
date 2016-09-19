@@ -933,7 +933,7 @@ $xeroItems = ct_get_xero_items();
                 <div class="grid-box-footer nobackground noshadow">
                     <div class="btn-row nopaddingright nopaddingleft">
                         <?php if ($suite->id) { ?>
-                            <div class="left"><label><input type="checkbox" name="send-notification"
+                            <div class="left"><label><input type="checkbox" name="send-notification" disabled="disabled"
                                                             id="send-notification" value="1" autocomplete="off"/> Send
                                     Notification to members</label></div>
                         <?php } ?>
@@ -1205,6 +1205,7 @@ $xeroItems = ct_get_xero_items();
             }
             jQuery(this).before('<a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
             jQuery('.version-cell .action-btn').hide();
+            jQuery('#send-notification').removeAttr('disabled');
             return false;
         })
 
@@ -1218,6 +1219,7 @@ $xeroItems = ct_get_xero_items();
             jQuery('#ts_version_major').val(jQuery('#ts_version_major').attr('data-default'));
             jQuery('#ts_version_minor').val(jQuery('#ts_version_minor').attr('data-default'));
             jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));
+            jQuery('#send-notification').prop('checked', false).attr('disabled', true);
 
             if (majorUpdated)
                 getAvailableTemplates();

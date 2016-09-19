@@ -317,6 +317,12 @@ function saveSuite()
     {
         //Update Test Suite Title and Excerpt
         $id = wp_insert_post(array('post_title' => $post_title, 'post_excerpt' => $_POST['excerpt'], 'post_type' => 'test-suite', 'post_status' => 'publish'), true);
+        if($version_updated){
+            $subscribedUsers = $wpdb->get_results($wpdb->prepare("SELECT * from wp_usermeta WHERE meta_key = 'notify_suite_changes%d'", $suite->id));
+            foreach($subscribedUsers as $subscribedUser){
+                add_user_meta($subscribedUser->user_id, 'notify_suite_changes' . $id, 1);
+            }
+        }
         if (is_wp_error($id)) {
             addMessage($id->get_error_message(), 'error');
             return;
@@ -635,7 +641,7 @@ function saveSuite()
     }
 
     //Send Notification Email
-    if (!$isNew && isset($_POST['send-notification'])) {
+    if (!$isNew && isset($_POST['send-notification']) && $version_updated) {
 
         $group = getCommunity($group_id);
 
@@ -655,7 +661,7 @@ function saveSuite()
                     $userData = get_userdata($member->user_id);
                     if ($userData !== false && get_user_meta($member->user_id, 'notify_suite_changes' . $id, true)) {
                         $emailData['[name]'] = cp_get_user_fullname($member->user_id);
-                        cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user_email), 'suite_changed', $emailData);
+                        cp_send_email(array('name' => $emailData['[name]'], 'email' => $userData->user_email), 'suite_changed', $emailData);
                     }
                 }
             }
