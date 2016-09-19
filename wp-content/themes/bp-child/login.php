@@ -14,16 +14,16 @@ $userIP = \LoginAttempts\LoginAttempts::getUserIP();
 $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
 ?>
 <div class="content container" id="login_page_form">
-    <form method="post" action="/wp-login.php" id="top_access" name="top_access" style="max-width: 300px;">
+    <form method="post" action="/wp-login.php" id="top_access" name="top_access" style="max-width: 302px;">
 
-        <p class="login-username" style="width: 270px;">
+        <p class="login-username" style="width: 257px;">
             <label for="user_login"></label>
-            <input type="text" size="20" style="width: 275px;" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
+            <input type="text" size="20" style="width: 255px;" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
         </p>
 
-        <p class="login-password" style="width: 270px;">
+        <p class="login-password" style="width: 257px;">
             <label for="user_pass"></label>
-            <input type="password" style="width: 275px;" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
+            <input type="password" style="width: 255px;" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
         </p>
          <?php if($attempts > 2):?>
 <!--                --><?php //echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
