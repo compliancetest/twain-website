@@ -447,55 +447,56 @@
                 <div class="colored-box-header">Testing Approved</div>
                 <div class="colored-box-body">
                     <div class="colored-box-content">
-                        <div class="table-responsive">
-                            <table class="table table-striped invitations_table">
-                                <tr>
-                                    <th>Organization</th>
-                                    <th>Contact email</th>
-                                </tr>
-                                @if(count($organisations) > 0)
-                                    @foreach($organisations as $organisation)
-                                        <tr>
-                                            <td>
-                                                {{ $organisation->organisation_name }}
-                                            </td>
-                                            <td>{{ $organisation->contact_email }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <table class="table table-bordered invitations_table">
+                        @if(count($organisations) > 0)
+                            @foreach($organisations as $organisation)
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <dl class="organisation-data-info">
+                                            @if ($organisation->organisation_name)
+                                            <dt>Organization:</dt>
+                                            <dd>{{ $organisation->organisation_name }}</dd>
+                                            @endif
+                                            <dt>Contact email:</dt>
+                                            <dd title="{{ $organisation->contact_email }}">{{ $organisation->contact_email }}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="table-responsive">
+                                            <table class="table colored-table invitations_table">
+                                                <thead>
                                                     <tr>
-                                                        <th>Test Suite</th>
+                                                        <th class="text-left">Test Suite</th>
+                                                        <th>Product Type</th>
                                                         <th>Is Approved?</th>
                                                     </tr>
-
-                                                    @foreach($communityTestSuites as $communityTestSuite)
-                                                        <tr>
-                                                            <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
-                                                            <td class="text-center">
-                                                                <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
-                                                                       data-community="{{ $community->slug }}" data-test-suite-id="{{ \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID) }}"
-                                                                       @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $communityTestSuite->ID])->first()) checked="checked" @endif>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="4" class="text-center">No data yet</td>
-                                    </tr>
-                                @endif
-                            </table>
-                        </div>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($communityTestSuites as $communityTestSuite)
+                                                <tr>
+                                                    <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
+                                                    {{-- @todo: Ivan please add actual data --}}
+                                                    <td class="text-center">DataSource</td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
+                                                               data-community="{{ $community->slug }}" data-test-suite-id="{{ \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID) }}"
+                                                               @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $communityTestSuite->ID])->first()) checked="checked" @endif>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="empty-row">No data yet</div>
+                        @endif
                     </div>
                 </div>
-                <div id="approveOrganisationSaving" class="color-box-loading">
-                    <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
-                </div>
+            </div>
+            <div id="approveOrganisationSaving" class="color-box-loading">
+                <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
             </div>
         </div>
 

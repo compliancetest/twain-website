@@ -13509,6 +13509,17 @@ input.notify-changes {
   padding-right: 5px;
 }
 
+/* line 757, ../scss/pages/_community.scss */
+.organisation-data-info {
+  font-size: 13px;
+}
+/* line 760, ../scss/pages/_community.scss */
+.organisation-data-info dd {
+  display: block;
+  margin: 0 0 10px 0;
+  overflow: hidden;
+}
+
 /* line 1, ../scss/pages/_contact-us.scss */
 .contact-us {
   font-size: 14px;
