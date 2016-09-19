@@ -492,10 +492,10 @@
                             <div class="empty-row">No data yet</div>
                         @endif
                     </div>
+                    <div id="approveOrganisationSaving" class="color-box-loading">
+                        <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
+                    </div>
                 </div>
-            </div>
-            <div id="approveOrganisationSaving" class="color-box-loading">
-                <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
             </div>
         </div>
 
