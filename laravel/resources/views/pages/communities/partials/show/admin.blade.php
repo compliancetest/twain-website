@@ -474,8 +474,7 @@
                                                 @foreach($communityTestSuites as $communityTestSuite)
                                                 <tr>
                                                     <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
-                                                    {{-- @todo: Ivan please add actual data --}}
-                                                    <td class="text-center">DataSource</td>
+                                                    <td class="text-center">{{ \App\Post::find($communityTestSuite->ID)->getMetaByKey('ts_tester_role') }}</td>
                                                     <td class="text-center">
                                                         <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
                                                                data-community="{{ $community->slug }}" data-test-suite-id="{{ \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID) }}"
