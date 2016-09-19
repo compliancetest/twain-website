@@ -9245,3 +9245,7 @@ input.inactive_s{
 .manufacturer-list-form .grid-row label{
     line-height: 26px;
 }
+
+#login_recaptcha{
+    margin-top: 5px;
+}
