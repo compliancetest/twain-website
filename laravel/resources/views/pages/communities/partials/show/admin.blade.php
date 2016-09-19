@@ -86,7 +86,7 @@
 
                     {!! Form::open(['id'=> 'delete-community-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'method' => 'DELETE', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
-                        <div class="colored-box-header">Details</div>
+                        <div class="colored-box-header">Delete Community</div>
                         <div class="colored-box-body">
                             <div class="colored-box-content">
                                 <p><span style="color: #ce1515;">WARNING</span>: Deleting this community will completely
