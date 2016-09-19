@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\CommunityInvitation;
 use App\CommunityMembers;
+use App\Organisation;
+use App\OrganisationMember;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -54,36 +56,31 @@ class CommunityMembershipController extends Controller
         $community = Community::findBySlug($slug);
         $membershipRecord = CommunityMembers::getUserRecord($community->id, $userId);
         $user = get_userdata($userId);
-        $user_organisation = get_user_meta($userId, 'user_organisation', true);
+
         if (!$membershipRecord) {
+            $userOrganisationMembership = OrganisationMember::where('user_id', $userId)->first();
+            $userOrganisation = $userOrganisationMembership ? Organisation::find($userOrganisationMembership->organisation_id)->organisation_name : ' - ';
+            $emailData = array(
+                '[name]' => cp_get_user_fullname($userId),
+                '[community]' => $community->title,
+                '[organisation]' => $userOrganisation,
+                '[username]' => $user->data->user_login,
+                '[email]' => $user->data->user_email,
+                '[community_url]' => $community->getUrl(),
+                '[website_url]' => get_site_url(),
+                '[env]' => get_option('env'),
+            );
+
             if ($community->visibility_status == 'private') {
                 $community->members()->create(['user_id' => $userId]);
-                $emailData = array(
-                    '[name]' => cp_get_user_fullname($userId),
-                    '[community]' => $community->title,
-                    '[organisation]' => $user_organisation ? $user_organisation : ' - ',
-                    '[username]' => $user->data->user_login,
-                    '[email]' => $user->data->user_email,
-                    '[community_url]' => $community->getUrl()
-                );
-
                 $admins = $community->getAdmins();
                 sendEmails($admins, 'membership_request_received_admin', $emailData);
                 addMessage('Your membership request sent successfully. ');
             } else {
-                $emailData = array(
-                    '[community]' => $community->title,
-                    '[community_url]' => $community->getUrl(),
-                    '[name]' => cp_get_user_fullname($userId),
-                    '[email]' => $user->data->user_email,
-                    '[env]' => get_option('env'),
-                    '[website_url]' => get_site_url(),
-                    '[username]' => $user->data->user_login
-                );
                 sendEmails([['user_id' => $userId]], 'membership_request_approved', $emailData);
                 $community->members()->create(['user_id' => $userId, 'is_confirmed' => 1]);
-                addMessage('Your membership request sent successfully. ');
             }
+            addMessage('Your membership request sent successfully. ');
         }
         return Redirect::to(getSiteUrl() . '/communities');
     }
