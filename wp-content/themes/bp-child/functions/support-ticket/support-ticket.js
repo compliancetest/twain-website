@@ -200,7 +200,7 @@ jQuery(document).ready(function(){
             isValid = false;
         }
 
-        var tempTtoresolveValue = jQuery('#changeTermForm #ttresponse').val();
+        var tempTtoresolveValue = jQuery('#changeTermForm #ttresolve').val();
         if(jQuery('#changeTermForm #ttresolve').length > 0 && (!tempTtoresolveValue || isNaN(tempTtoresolveValue) || Math.abs(tempTtoresolveValue) != tempTtoresolveValue))
         {
             jQuery('#changeTermForm #ttresolve').addClass("input-error");
