@@ -364,7 +364,13 @@ class CommunityMembershipController extends Controller
                 sendEmails([['user_id' => $user->ID]], 'membership_existing_member_invited', $emailData);
                 sendEmails($admins, 'membership_existing_member_invited_admin', $emailData);
 
-                return response()->json(array(['message' => 'User was added to community successfully!', 'data' => []]), 201);
+                $data = $request->all();
+                $data['invited_by_user_id'] = Auth::user()->ID;
+                $data['invitation_email'] = $userEmail;
+                $data['status'] = 0;
+                $invitation = $community->invitations()->create($data);
+
+                return response()->json(['message' => 'User was added to community successfully!', 'data' => $invitation], 201);
             }
         }
     }
