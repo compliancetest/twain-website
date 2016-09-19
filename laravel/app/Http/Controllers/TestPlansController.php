@@ -10,6 +10,7 @@ use App\PricingPlan;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
 use App\Transaction;
+use App\UserSubscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,8 @@ class TestPlansController extends Controller
      */
     public function create($suiteId)
     {
-        $subscription = OrganisationSubscription::where(['suite_family_mark' => $suiteId])->first();
+        $userSubscription = UserSubscription::where(['suite_id' => $suiteId])->first();
+        $subscription = OrganisationSubscription::find($userSubscription->parent_id);
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
