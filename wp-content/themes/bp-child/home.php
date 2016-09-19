@@ -123,7 +123,7 @@ $home_settings = get_option('home-settings');
                             <div class="community-content">
                                 <div class="community-title">
                                     <a href="/communities/<?php echo $community->slug;?>"><?php echo ctE($community->title);?></a></div>
-                                <div class="community-description"><?php echo ctE($community->description);?></div>
+                                <div class="community-description"><?php echo ($community->description);?></div>
                                 <a href="/communities/<?php echo $community->slug;?>" class="action-btn red-btn">Community
                                     Homepage</a>
                             </div>
