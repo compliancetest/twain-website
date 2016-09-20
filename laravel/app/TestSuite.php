@@ -34,7 +34,7 @@ class TestSuite extends Model
      */
     public static function getFamilyMarkSuitesIds($familyMark)
     {
-        if (TestSuite::where(['family_mark' => $familyMark])->pluck('suite_id')->isEmpty()) {
+        if (TestSuite::where(['family_mark' => $familyMark])->get()->isEmpty()) {
             return [];
         }
         return array_values(TestSuite::where(['family_mark' => $familyMark])->pluck('suite_id')->toArray());
