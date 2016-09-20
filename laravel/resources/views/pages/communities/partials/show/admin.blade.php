@@ -472,13 +472,14 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach($communityTestSuites as $communityTestSuite)
+                                                <?php $familymark = \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID);?>
                                                 <tr>
                                                     <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
                                                     <td class="text-center">{{ \App\Post::find($communityTestSuite->ID)->getMetaByKey('ts_tester_role') }}</td>
                                                     <td class="text-center">
                                                         <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
-                                                               data-community="{{ $community->slug }}" data-test-suite-id="{{ \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID) }}"
-                                                               @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $communityTestSuite->ID])->first()) checked="checked" @endif>
+                                                               data-community="{{ $community->slug }}" data-test-suite-id="{{ $familymark }}"
+                                                               @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $familymark])->first()) checked="checked" @endif>
                                                     </td>
                                                 </tr>
                                                 @endforeach
