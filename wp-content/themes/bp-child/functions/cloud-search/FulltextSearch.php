@@ -301,14 +301,12 @@ class FulltextSearch extends BaseAWS
                 if (!$post || $test_scenario->code == 'Default') {
                     continue;
                 }
-                $testSuite = get_post($test_scenario->suite_id);
-                $groups = getUserCommunities($testSuite->post_author);
-                $communityNames = array();
-                if ($groups) {
-                    foreach ($groups AS $group) {
-                        $communityNames[] = ctE($group->title);
-                        $groups['groups'][] = $group->id;
-                    }
+                $scenarioCommunity = get_post_meta($test_scenario->suite_id, 'community_id', true);
+                $testSuiteCommunity = getCommunity($scenarioCommunity);
+                $communityNames = $groups = [];
+                if ($testSuiteCommunity) {
+                    $communityNames[] = ctE($testSuiteCommunity->title);
+                    $groups['groups'][] = $testSuiteCommunity->id;
                 }
                 if (empty($communityNames)) {
                     $groups['groups'] = $wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'");
@@ -606,10 +604,10 @@ class FulltextSearch extends BaseAWS
                 'DomainName' => $domainName,
                 'IndexField' => array(
                     'IndexFieldName' => 'community_id',
-                    'IndexFieldType' => 'int-array',
-                    'IntArrayOptions' => array(
+                    'IndexFieldType' => 'literal-array',
+                    'LiteralArrayOptions' => array(
                         'DefaultValue' => 0,
-                        'FacetEnabled' => false,
+                        'FacetEnabled' => true,
                         'SearchEnabled' => true,
                         'ReturnEnabled' => true,
                     )
