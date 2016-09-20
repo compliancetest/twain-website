@@ -50,6 +50,8 @@ get_header();
                                 <?php
                                     if($group->is_admin)
                                         echo '<span class="group-admin">Admin</span>';
+                                    elseif($group->is_mod)
+                                        echo '<span class="group-support">Support</span>';
                                     else
                                         echo '<span class="group-member">Member</span>';
                                 ?>

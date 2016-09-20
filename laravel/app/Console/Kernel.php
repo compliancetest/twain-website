@@ -37,6 +37,6 @@ class Kernel extends ConsoleKernel
                     Transaction::find($transaction->id)->delete();
                 }
             }
-        })->daily();
+        })->hourly();
     }
 }
