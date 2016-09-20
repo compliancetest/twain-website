@@ -44,7 +44,7 @@ class FulltextSearch extends BaseAWS
         global $wpdb;
         $str = array();
         $str['return'] = '_all_fields';
-        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {} }';
+        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {}, "community": {} }';
         if ($full_results) {
             $str['size'] = 10000;
             unset($params['page']);
@@ -154,7 +154,7 @@ class FulltextSearch extends BaseAWS
         global $wpdb;
         $str = array();
         $str['return'] = '_no_fields';
-        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {} }';
+        $str['facet'] = '{ "post_type": {sort:"bucket", size:100}, "community": {}, "community_id": {} }';
         $str['size'] = SEARCH_RESULTS_LIMIT;
         $l = '';
         $range_checked = false;
@@ -233,7 +233,7 @@ class FulltextSearch extends BaseAWS
                 $communityNames = array();
                 if ($groups) {
                     foreach ($groups AS $group) {
-                        $communityNames[] = $group->title;
+                        $communityNames[] = ctE($group->title);
                         $groups['groups'][] = $group->id;
                     }
                 }
@@ -301,11 +301,12 @@ class FulltextSearch extends BaseAWS
                 if (!$post || $test_scenario->code == 'Default') {
                     continue;
                 }
-                $groups = getCommunities();
+                $testSuite = get_post($test_scenario->suite_id);
+                $groups = getUserCommunities($testSuite->post_author);
                 $communityNames = array();
                 if ($groups) {
                     foreach ($groups AS $group) {
-                        $communityNames[] = $group->title;
+                        $communityNames[] = ctE($group->title);
                         $groups['groups'][] = $group->id;
                     }
                 }
