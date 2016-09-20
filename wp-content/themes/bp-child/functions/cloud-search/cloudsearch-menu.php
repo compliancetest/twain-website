@@ -19,58 +19,58 @@ function ct_cloud_search()
     <div class="wrap">
         <h2>AWS CloudSearch</h2>
 
-        <h2>Create Registry Domain(note it takes up to 20 minutes to do this)</h2>
+<!--        <h2>Create Registry Domain(note it takes up to 20 minutes to do this)</h2>-->
 
-        <div>
-            <form action="" method="post">
-                <input type="hidden" name="action" value="<?php echo wp_create_nonce('registry_domain_create') ?>"/>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="submit" class="button button-primary" value="Create"/>
-                        </td>
-                    </tr>
-                    <?php if (wp_verify_nonce($action, 'registry_domain_create')): ?>
-                        <tr>
-                            <td>
-                                <i>
-                                    <?php
-                                    _trace(CloudSearch::createDomain());
-                                    ?>
-                                </i>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </table>
-            </form>
-        </div>
-
-        <h2>Populate index fields</h2>
-
-        <div>
-            <form action="" method="post">
-                <input type="hidden" name="action"
-                       value="<?php echo wp_create_nonce('registry_domain_populate_indexes') ?>"/>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="submit" class="button button-primary" value="Create"/>
-                        </td>
-                    </tr>
-                    <?php if (wp_verify_nonce($action, 'registry_domain_populate_indexes')): ?>
-                        <tr>
-                            <td>
-                                <i>
-                                    <?php
-                                    _trace(CloudSearch::configureFields());
-                                    ?>
-                                </i>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </table>
-            </form>
-        </div>
+<!--        <div>-->
+<!--            <form action="" method="post">-->
+<!--                <input type="hidden" name="action" value="--><?php //echo wp_create_nonce('registry_domain_create') ?><!--"/>-->
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <input type="submit" class="button button-primary" value="Create"/>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    --><?php //if (wp_verify_nonce($action, 'registry_domain_create')): ?>
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <i>-->
+<!--                                    --><?php
+//                                    _trace(CloudSearch::createDomain());
+//                                    ?>
+<!--                                </i>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    --><?php //endif; ?>
+<!--                </table>-->
+<!--            </form>-->
+<!--        </div>-->
+<!---->
+<!--        <h2>Populate index fields</h2>-->
+<!---->
+<!--        <div>-->
+<!--            <form action="" method="post">-->
+<!--                <input type="hidden" name="action"-->
+<!--                       value="--><?php //echo wp_create_nonce('registry_domain_populate_indexes') ?><!--"/>-->
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <input type="submit" class="button button-primary" value="Create"/>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    --><?php //if (wp_verify_nonce($action, 'registry_domain_populate_indexes')): ?>
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <i>-->
+<!--                                    --><?php
+//                                    _trace(CloudSearch::configureFields());
+//                                    ?>
+<!--                                </i>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    --><?php //endif; ?>
+<!--                </table>-->
+<!--            </form>-->
+<!--        </div>-->
 
         <h2>Upload Registry Data</h2>
 
@@ -126,58 +126,58 @@ function ct_cloud_search()
             </form>
         </div>
 
-        <h2>Create FullText Domain(note it takes up to 20 minutes to do this)</h2>
-
-        <div>
-            <form action="" method="post">
-                <input type="hidden" name="action" value="<?php echo wp_create_nonce('fulltext_domain_create') ?>"/>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="submit" class="button button-primary" value="Create"/>
-                        </td>
-                    </tr>
-                    <?php if (wp_verify_nonce($action, 'fulltext_domain_create')): ?>
-                        <tr>
-                            <td>
-                                <i>
-                                    <?php
-                                    _trace(FulltextSearch::createDomain());
-                                    ?>
-                                </i>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </table>
-            </form>
-        </div>
-
-        <h2>Populate Fulltext search domain index fields</h2>
-
-        <div>
-            <form action="" method="post">
-                <input type="hidden" name="action"
-                       value="<?php echo wp_create_nonce('fulltext_domain_populate_indexes') ?>"/>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="submit" class="button button-primary" value="Create"/>
-                        </td>
-                    </tr>
-                    <?php if (wp_verify_nonce($action, 'fulltext_domain_populate_indexes')): ?>
-                        <tr>
-                            <td>
-                                <i>
-                                    <?php
-                                    _trace(FulltextSearch::configureFields());
-                                    ?>
-                                </i>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </table>
-            </form>
-        </div>
+<!--        <h2>Create FullText Domain(note it takes up to 20 minutes to do this)</h2>-->
+<!---->
+<!--        <div>-->
+<!--            <form action="" method="post">-->
+<!--                <input type="hidden" name="action" value="--><?php //echo wp_create_nonce('fulltext_domain_create') ?><!--"/>-->
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <input type="submit" class="button button-primary" value="Create"/>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    --><?php //if (wp_verify_nonce($action, 'fulltext_domain_create')): ?>
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <i>-->
+<!--                                    --><?php
+//                                    _trace(FulltextSearch::createDomain());
+//                                    ?>
+<!--                                </i>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    --><?php //endif; ?>
+<!--                </table>-->
+<!--            </form>-->
+<!--        </div>-->
+<!---->
+<!--        <h2>Populate Fulltext search domain index fields</h2>-->
+<!---->
+<!--        <div>-->
+<!--            <form action="" method="post">-->
+<!--                <input type="hidden" name="action"-->
+<!--                       value="--><?php //echo wp_create_nonce('fulltext_domain_populate_indexes') ?><!--"/>-->
+<!--                <table>-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <input type="submit" class="button button-primary" value="Create"/>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    --><?php //if (wp_verify_nonce($action, 'fulltext_domain_populate_indexes')): ?>
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <i>-->
+<!--                                    --><?php
+//                                    _trace(FulltextSearch::configureFields());
+//                                    ?>
+<!--                                </i>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    --><?php //endif; ?>
+<!--                </table>-->
+<!--            </form>-->
+<!--        </div>-->
 
         <h2>Upload Static Data</h2>
 
