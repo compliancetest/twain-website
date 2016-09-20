@@ -20,7 +20,7 @@ class FulltextSearch extends BaseAWS
     );
 
     private $_allowedFields = array(
-        'post_type', 'community', '_id'
+        'post_type', 'community', '_id', 'community_id'
     );
 
     public function __construct()
