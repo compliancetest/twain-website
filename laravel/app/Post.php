@@ -146,7 +146,7 @@ class Post extends Model
         $testSuiteEntry = TestSuite::where(['suite_id' => $this->ID])->first();
         $userSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->suiteSubscriptions[0]->organisation_id, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
         foreach ($userSubscriptions as $userSubscription) {
-            $suitesWithSameFamilyMark = array_values(TestSuite::where(['family_mark' => $testSuiteEntry->suite_family_mark])->pluck('suite_id')->toArray());
+            $suitesWithSameFamilyMark = TestSuite::getFamilyMarkSuitesIds($userSubscription->suite_family_mark);
             $productsWithPendingTransactions = Transaction::where([
                 'subscription_id' => $userSubscription->id,
                 'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
