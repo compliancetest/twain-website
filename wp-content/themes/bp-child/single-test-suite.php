@@ -64,7 +64,7 @@ Template Name Posts: Test Suite
 								    Protocol Versions: <span><?php echo ctE(implode(', ', $suite->protocol_versions)); ?></span>
                                 <?php endif;?>
 
-                                 <?php if(!empty($suite->testTool) && is_user_logged_in() && ct_get_assigned_organisation_subscription(get_current_user_id(), $suite->familyMark)):?>
+                                <?php if (!empty($suite->testTool) && is_user_logged_in() && (ct_get_assigned_organisation_subscription(get_current_user_id(), $suite->familyMark) || is_super_admin() || doesUserCommunityAdmin(is_super_admin(), $suite->community_id) || doesUserCommunitySupport(is_super_admin(), $suite->community_id))): ?>
 								    Test Tool:
                                      <?php if(!empty($suite->testTool->license)):?>
                                          <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" class="test-tool-link<?php if(!empty($suite->testTool->description)): ?> has-tooltip<?php endif; ?>">

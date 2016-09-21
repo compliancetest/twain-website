@@ -26,7 +26,7 @@
                                 </td>
                                 <td class="community-name">
                                     <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}">{{ $community->title }}</a>
-                                    <p>{{ $community->description }}</p>
+                                    <p>{!! $community->description !!}</p>
                                 </td>
                                 <td class="text-center">{{ count(\App\Post::getCommunityTestSuites($community->id)) }}</td>
                                 <td class="text-center">{{ count($community->activeMembers()) }}</td>

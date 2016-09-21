@@ -8,13 +8,12 @@
                 <li><a href="{{ getSiteUrl() }}/contact-us/">Contact Us</a></li>
             </ul>
         </div>
-        <div class="footer-block footer-site-info">
+        <div class="footer-block footer-site-info pull-left">
             <div class="footer-title">Site Information</div>
             <ul>
                 <li><a href="{{ getSiteUrl() }}/terms-conditions/">Website T &amp; C</a></li>
                 <li><a href="{{ getSiteUrl() }}/customer-tc/">Customer T &amp; C</a></li>
                 <li><a href="{{ getSiteUrl() }}/privacy/">Privacy</a></li>
-                <li><a href="{{ getSiteUrl() }}/sitemap/">Sitemap</a></li>
             </ul>
         </div>
 
