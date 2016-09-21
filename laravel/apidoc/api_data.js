@@ -897,11 +897,6 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Organization doesn't have access to test suite:",
-          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
-          "type": "json"
-        },
-        {
           "title": "You are not running any test case now:",
           "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
