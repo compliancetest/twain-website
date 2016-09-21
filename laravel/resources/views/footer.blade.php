@@ -18,9 +18,5 @@
             </ul>
         </div>
 
-        <div class="footer-block footer-copyright">
-            <p class="copyright">Powered By:</p>
-            <img alt="ComplianceTest Logo" src="{{ getSiteUrl() }}/laravel/resources/assets/images/logo.png">
-        </div>
     </div>
 </footer>

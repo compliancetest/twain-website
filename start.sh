@@ -15,5 +15,9 @@ nohup php /var/www/html/laravel/artisan queue:listen --timeout=1800 > /dev/null 
 
 cd /var/www/html/laravel && php artisan migrate --force
 
+crontab /etc/cron.d/upworkcron
+sed -i '/pam_loginuid.so/d' /etc/pam.d/cron
+/etc/init.d/cron start
 
 /usr/sbin/apache2ctl -D FOREGROUND
+

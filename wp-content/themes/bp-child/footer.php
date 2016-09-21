@@ -38,11 +38,7 @@
                     <div class="clear"></div>
                     <div class="space10"></div>
                 </div>
-				<div id="footer-copyright">
-                    <p class="copyright"><?php echo of_get_option('copyright'); ?></p>
-                    <div class="clear"></div>
-                    <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/logo.png" alt="ComplianceTest Logo" />
-				</div>
+				
                 <div class="clear"></div>
                  <div class="space25"></div>
 			</div>
