@@ -160,7 +160,7 @@ class BatchJob
                     );
                 }
             }
-            $logs['Push Organisation details from website to Xero'] = 'Updated ' . $counter . ' organisations';
+            $logs['Push Organization details from website to Xero'] = 'Updated ' . $counter . ' organisations';
         }
         /**
          * Second: we should generate charges

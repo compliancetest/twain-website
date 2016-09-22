@@ -4,10 +4,10 @@
 */
 if(DISPLAY_SUBSCRIPTIONS){
     if(!defined('ABSPATH'))
-        die('Invalid Request!');
+        die('Invalid Request!');    
 
-        $organisation_id = getOrganisationID();
-        $organisation = getOrganisationById($organisation_id);
+        $Organization_id = getOrganizationID();
+        $Organization = getOrganisationById($organisation_id);
 
         $organisationClass = new CT_Organisation($organisation_id);
         $cards = $organisationClass->get_payment_methods();
@@ -175,14 +175,14 @@ if(DISPLAY_SUBSCRIPTIONS){
 <div class="space25"></div>
 
 <div class="column left four_sixths nopadding">
-    <div class="grid-box table-box" id="my_payment">
+    <div class="grid-box">
         <div class="grid-box-header">
             <h5 class="left">Manufacturer List</h5>
             <div class="clear"></div>
         </div>
         <div class="grid-box-body">
             <div id="edit-produts-form">
-                <form action="#" method="post" id="org_products_form">
+                <form action="#" method="post" id="org_products_form" class="manufacturer-list-form">
                     <div class="grid-row">
                         <div class="grid-cell width30P"><label>Aliases</label></div>
                         <input type="text" name="product_organisations" id="nickname" value="<?php echo implode(';', $productOrganisations);?>" class="input" autocomplete="off" style="width: 55%; float: left;margin-right: 10px;">
@@ -191,6 +191,7 @@ if(DISPLAY_SUBSCRIPTIONS){
                     </div>
                     <input type="hidden" name="organisation_id" id="organisation_id" value="<?=$organisation_id?>"/>
                     <?php wp_nonce_field('save_products_organisations', 'cp-action'); ?>
+                    <div class="btn-row"></div>
                 </form>
             </div>
         </div>
@@ -210,9 +211,14 @@ if(DISPLAY_SUBSCRIPTIONS){
     jQuery(document).ready(function(){
         jQuery('.submit_org_products').on('click', function(e){
             e.preventDefault();
-            jQuery('#org_products_form').ajaxSubmit({
+            if(jQuery('.edit-cancel-btn').closest('.btn-row').is(':visible')) {
+                console.log('hide')
+                jQuery('.edit-cancel-btn').click();
+            }
+            var form = jQuery('#org_products_form');
+            form.ajaxSubmit({
                 success: function(data){
-                    console.log(data)
+                    setTimeout("jQuery('#org_products_form .message').remove(); jQuery('.grid-row-message').remove()", 3000);
                 }
             });
         });

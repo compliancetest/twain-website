@@ -2,6 +2,7 @@
 
 namespace App\Api\Controllers;
 
+use App\CommunityOrganisationsApprovedTestSuites;
 use App\Jobs\ProcessTransactionLog;
 use App\Organisation;
 use App\OrganisationMember;
@@ -11,6 +12,7 @@ use App\PostMeta;
 use App\PricingPlan;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
+use App\TestSuite;
 use Aws\Laravel\AwsFacade as AWS;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -133,15 +135,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} No subscription with provided Product Type:
@@ -196,6 +210,10 @@ class ProductsController extends BaseApiController
                 $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
 
+                //trigger post observer
+                $this->product->timestamps = false;
+                $this->product->save();
+
                 $response = [
                     'id' => $this->product->post_name,
                     'title' => $this->product->post_title . ' v' . $productVersion,
@@ -238,7 +256,8 @@ class ProductsController extends BaseApiController
         if ($request->get('product_type') == 'DataSource') {
             foreach ($user->getUserTestPlans() as $suiteName => $suite) {
                 $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-                if ($type != $request->get('product_type')) {
+                $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'test_suite_id' => TestSuite::getTestSuiteFamilyMark($suite['testSuite']->ID)])->first();
+                if ($type != $request->get('product_type') || !$aprovementEntry) {
                     continue;
                 }
                 $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
@@ -269,6 +288,8 @@ class ProductsController extends BaseApiController
             }
         }
 
+        $this->product->save();
+        
         $response = [
             'id' => $this->product->post_name,
             'title' => $this->product->post_title . ' v' . $productVersion,
@@ -319,15 +340,27 @@ class ProductsController extends BaseApiController
     *    }
     *
     * @apiError 403 Forbidden
-    * @apiErrorExample {json} Not organisation member
+    * @apiErrorExample {json} Not organization member
     *   {
     *     "errors": {
     *       "message": [
-    *         "Only organisation member can perform testing"
+    *         "Only organization member can perform testing"
     *       ]
     *     },
     *     "code": 403
     *   }
+    *
+    * @apiError 403 Forbidden
+    * @apiErrorExample {json} Organization is not approved yet:
+    *   {
+    *     "errors": {
+    *       "message": [
+    *         "Your organization can't perform testing."
+    *       ]
+    *     },
+    *     "code": 403
+    *   }
+    *
     *
     *
     * @apiError 403 Forbidden
@@ -453,15 +486,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member
+     * @apiErrorExample {json} Not organization member
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Invalid product ID
      * @apiErrorExample {json} Invalid product ID
@@ -678,15 +723,27 @@ class ProductsController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Products not found
      * @apiErrorExample {json} Products not found error:

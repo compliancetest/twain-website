@@ -4787,12 +4787,9 @@ span.button_sign {
     padding-right: 0;
 }
 #my_products .td-action a.action-btn{
+    float: none;
     margin: 0 3px;
     display: inline-block;
-}
-#my_products .tbody .td-action{
-    padding-top: 3px;
-    padding-bottom: 3px;
 }
 #my_products .product-author,
 #my_products .product-author a{
@@ -5412,6 +5409,12 @@ span.button_sign {
 #my_transaction_log .table-box .thead .td-sortable a{
     padding-left: 5px;
     padding-right: 5px;    
+}
+#tickets_list .table-box .thead .td{
+    line-height: 42px;
+}
+#tickets_list .table-box .thead .td-sortable a .sort{
+    top: 26px;
 }
 
 #tickets_list .table-box .thead .td-two-lines,
@@ -6308,7 +6311,7 @@ a.suite-subscript-link:hover{
 * Contact Us Page
 */
 .contact-info-block{
-    width: 470px;
+    width: 960px;
 }
 .contact-info-block h3{
     color: #d02f27;
@@ -7483,9 +7486,6 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 #tickets_list .has-new .td{
     font-weight: bold !important;
 }
-#tickets_list .tbody .tr{
-    cursor: pointer;
-}
 #tickets_table .ticket-priority{
     width: 10px;
     height: 10px;
@@ -7602,6 +7602,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     float: right;
 }
 
+#change-term-contr .btn-row .action-btn .simple_tooltip{
+    top: -27px !important;
+}
+
 #ticket-messages-list h2{
     background: url(../images/comments-icon.png) no-repeat left 9px;
     padding: 5px 0 20px 30px;    
@@ -7674,10 +7678,10 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 
 .dashboard-tabs {
-    
+
 }
 .dashboard-tabs .tabs {
-    
+
 }
 .dashboard-tabs .tabs li {
     margin: 4px 0 0 5px;
@@ -7696,7 +7700,7 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
     padding: 7px 3px;
 }
 .dashboard-tabs .tabs li a span.menu-title {
-    font-family: 'Oswald', Arial, Helvetica sans-serif;
+    font-family: 'Oswald', Arial, Helvetica, sans-serif;
     padding: 0 4px 0 0;
     font-size: 14px;
     line-height: 32px;
@@ -8802,21 +8806,18 @@ input.inactive_s{
 ----------------------------------------------- */
 
 #organisation_users .td-name{
-    width: 150px;
+    width: 320px;
 }
 #organisation_users .td-email{
-    width: 270px;
+    width: 370px;
 }
 #organisation_users .td-roles{
     width: 100px;
 }
 #organisation_users .td-action{
-    width: 92px;
+    width: 42px;
 }
 
-#organisation_users .td-privilege{
-    width: 200px;
-}
 
 
 /* Search Results Updated */
@@ -9217,4 +9218,34 @@ input.inactive_s{
     left: 50%;
     margin: 0 0 0 -130px;
     z-index: 99;
+}
+
+.test-case-samples{
+    padding: 0 10px;
+}
+
+.test-case-sample-item{
+    margin: 10px 5px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    max-width: 175px;
+}
+
+.test-case-sample-item img{
+    max-width: 175px;
+    height: auto;
+    display: block;
+}
+
+#my_details .grid-row-complex .grid-row{
+    line-height: 24px;
+}
+
+.manufacturer-list-form .grid-row label{
+    line-height: 26px;
+}
+
+#login_recaptcha{
+    margin-top: 5px;
 }

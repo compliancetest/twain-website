@@ -64,7 +64,7 @@ Template Name Posts: Test Suite
 								    Protocol Versions: <span><?php echo ctE(implode(', ', $suite->protocol_versions)); ?></span>
                                 <?php endif;?>
 
-                                 <?php if(!empty($suite->testTool)):?>
+                                <?php if (!empty($suite->testTool) && is_user_logged_in() && (ct_get_assigned_organisation_subscription(get_current_user_id(), $suite->familyMark) || is_super_admin() || doesUserCommunityAdmin(get_current_user_id(), $suite->community_id) || doesUserCommunitySupport(get_current_user_id(), $suite->community_id))): ?>
 								    Test Tool:
                                      <?php if(!empty($suite->testTool->license)):?>
                                          <a href="<?php echo get_site_url()?>?td-action=<?php echo wp_create_nonce('view_test_tool_agreement')?>&id=<?php echo $suite->testTool->id?>" rel="custom-popup" cp-type="ajax" class="test-tool-link<?php if(!empty($suite->testTool->description)): ?> has-tooltip<?php endif; ?>">
@@ -315,7 +315,7 @@ Template Name Posts: Test Suite
                                                 </a>
                                             <?php endif;?>
                                         <?php else:?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -348,7 +348,7 @@ Template Name Posts: Test Suite
                                     <div class="test-suite-actions">
                                         <?php if( ! empty( $suite->test_suite_plans ) ):?>
                                             <?php if(DISPLAY_SUBSCRIPTIONS):?>
-                                                <a class="pricing-plans-link big-red-btn" href="#pricing-plans" data-type="inline">
+                                                <a class=" big-red-btn" href="#pricing-plans" data-type="inline">
                                                     <span class="price-b">
                                                         <span class="l"></span>
                                                         <span class="m">View Pricing<br>Plans</span>
@@ -357,7 +357,7 @@ Template Name Posts: Test Suite
                                                 </a>
                                             <?php endif;?>
                                             <?php else:?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -375,9 +375,9 @@ Template Name Posts: Test Suite
                                 <div class="test-suite-actions">
                                         <?php
                                             $userOrganisation = ct_get_user_organisation(get_current_user_id());
-                                            $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $suite->community_id, $userOrganisation->id)) ? true : false;
+                                            $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_organisations_approved_test_suites WHERE community_id = %s AND organisation_id = %d AND test_suite_id = %d", $suite->community_id, $userOrganisation->id, $suite->familyMark)) ? true : false;
                                         if(!$hasunallocated):?>
-                                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -433,7 +433,7 @@ Template Name Posts: Test Suite
                                                 </span>
                             </a>
                         <?php else:?>
-                            <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                            <a class="big-red-btn" href="/contact-us/">
                                                 <span class="price-b">
                                                     <span class="l"></span>
                                                     <span class="m">CONTACT US<br>For Pricing</span>
@@ -445,7 +445,7 @@ Template Name Posts: Test Suite
                             <span class="text-b"><b>ACCESS</b><br />Test Harness</span>
                         </a>
                     <?php else:?>
-                        <a class="pricing-plans-link big-red-btn" href="/contact-us/">
+                        <a class="big-red-btn" href="/contact-us/">
                             <span class="price-b">
                                 <span class="l"></span>
                                 <span class="m">CONTACT US<br>For Pricing</span>
@@ -540,10 +540,9 @@ Template Name Posts: Test Suite
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Tester<br/>Role</div>
 						<div class="grid_cell nopaddingtop width5P toleft tocenter">Conf<br/>Levels</div>
 						<div class="grid_cell nopaddingtop width8P toleft tocenter">Outcome<br/>Type</div>
-						<div class="grid_cell nopaddingtop width5P toleft tocenter">Test<br/>Pattern</div>
+						<div class="grid_cell nopaddingtop width11P toleft tocenter">Test<br/>Pattern</div>
 <!--						<div class="grid_cell nopaddingtop width5P toleft tocenter single_line">Bulk</div>-->
-						<div class="grid_cell nopaddingtop width18P toleft tocenter">Operational<br>Triplet</div>
-						<div class="grid_cell nopaddingtop toleft width20P single_line">Test Intent Description</div>
+						<div class="grid_cell nopaddingtop toleft width33P single_line">Test Intent Description</div>
                         <?php if(can_edit_suite($suite->id)){ ?>
 						<div class="grid_cell nopaddingtop width4P toleft single_line">Actions</div>
                         <?php } ?>
@@ -662,7 +661,7 @@ Template Name Posts: Test Suite
                                 </div>
 
                                 <div class="grid_cell nopaddingtop toleft width10P" >
-                                    <a href="<?php echo get_permalink($row->ID) ?>"><?php echo get_the_title($row->ID) ?></a>
+                                    <a href="<?php echo get_permalink($row->ID) ?>?test_suite_id=<?php echo $suite->id;?>"><?php echo get_the_title($row->ID) ?></a>
                                 </div>
 
                                 <div class="grid_cell nopaddingtop tocenter width8P">
@@ -686,19 +685,15 @@ Template Name Posts: Test Suite
                                 <div class="grid_cell nopaddingtop toleft tocenter width8P">
                                     <?php echo get_post_meta($row->ID ,'outcome_type', true)?>
                                 </div>
-                                <div class="grid_cell nopaddingtop toleft tocenter width8P">
+                                <div class="grid_cell nopaddingtop toleft tocenter width14P">
                                     <?php $test_pattern_number = get_post_meta($row->ID ,'message_count', true) ?>
                                     <?php $test_patterns_description = get_test_patterns_description($test_pattern_number); ?>
                                     <a href="<?php echo get_site_url() ?>/help-faq/test-patterns/" class="test-pattern-icon test-pattern-<?php echo $test_pattern_number; ?> has-tooltip">
                                         <span class="simple_tooltip"><?php echo $test_patterns_description ;?><span></span></span>
                                     </a>
                                 </div>
-                                <!--<div class="grid_cell nopaddingtop width5P toleft tocenter ">
-                                </div>-->
-                                <div class="grid_cell nopaddingtop tocenter width22P">
-                                    <?php echo get_post_meta($row->ID ,'choose_init_messages', true)?>
-                                </div>
-                                <div class="grid_cell nopaddingtop width23P toleft">
+
+                                <div class="grid_cell nopaddingtop width40P toleft">
                                     <div class="right10">
                                         <?php 
 

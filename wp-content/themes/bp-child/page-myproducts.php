@@ -52,7 +52,7 @@ get_header();
             <?php foreach($allProducts as $productType => $products):?>
 
                <?php foreach($products as $product){ ?>
-                   <div class="grid-box grid-box-expandable table-box grid-box-opened">
+                   <div class="grid-box grid-box-expandable table-box grid-box-opened fix-table-height">
                        <div class="grid-box-header">
                            <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
                            <h5 class="left">Product: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true ) . ' ('.get_post_meta( $product->ID, 'protocol_version', true ).')' ?></b></a></h5>
@@ -79,7 +79,7 @@ get_header();
                                <div class="td td-action">Action</div>
                                <div class="clear"></div>
                            </div>
-                           <div class="tbody">
+                           <div class="tbody fix-table-height">
                            <?php
                                $claims = getClaimsByProductId($product->ID);
                                if(!$claims){
@@ -160,25 +160,9 @@ get_header();
                     $('#delete-claim-box .process-btn').attr('href', link);
                 }
             })
-        })
+        });
         $('#delete-claim-box .process-btn').click(function(){
             $('#delete-claim-box .loading').show();
-        })
-        
-        $('#my_products .grid-box-body .tbody').each(function(){
-            $(this).find('.tr').each(function(){
-                var h = Math.max(
-                    $(this).find('.td:eq(0)').outerHeight(),
-                    $(this).find('.td:eq(1)').outerHeight(),
-                    $(this).find('.td:eq(2)').outerHeight(),
-                    $(this).find('.td:eq(3)').outerHeight(),
-                    $(this).find('.td:eq(4)').outerHeight(),
-                    $(this).find('.td:eq(5)').outerHeight(),
-                    $(this).find('.td:eq(6)').outerHeight()
-                );
-                $(this).find('.td:lt(7)').height(h - 16);
-                $(this).find('.td:eq(7)').height(h - 6);
-            })
         });
     })
 })(jQuery)

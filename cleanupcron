@@ -1,0 +1,1 @@
+* * * * * root source $HOME/.profile; php /var/www/html/laravel/artisan schedule:run >> /dev/null 2>&1

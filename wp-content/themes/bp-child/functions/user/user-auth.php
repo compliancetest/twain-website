@@ -14,13 +14,18 @@ function compliancetest_login()
     $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
     \LoginAttempts\LoginAttempts::setAttempts($userIP);
 
-    if ($attempts > 2 && isset($_POST["recaptcha_challenge_field"])) {
-        $resp = recaptcha_check_answer(RECAPTCHA_PRIVATE_KEY,
-            $_SERVER["REMOTE_ADDR"],
-            $_POST["recaptcha_challenge_field"],
-            $_POST["recaptcha_response_field"]);
-
-        if (!$resp->is_valid) {
+    if ($attempts > 2 && isset($_POST["g-recaptcha-response"])) {
+        $recaptchaBase = ABSPATH . 'wp-content/themes/bp-child/functions/recaptcha2/ReCaptcha';
+        require_once $recaptchaBase . '/ReCaptcha.php';
+        require_once $recaptchaBase . '/RequestMethod.php';
+        require_once $recaptchaBase . '/RequestParameters.php';
+        require_once $recaptchaBase . '/Response.php';
+        require_once $recaptchaBase . '/RequestMethod/Post.php';
+        require_once $recaptchaBase . '/RequestMethod/Socket.php';
+        require_once $recaptchaBase . '/RequestMethod/SocketPost.php';
+        $recaptcha = new \ReCaptcha\ReCaptcha('6Lc-ERcTAAAAAIAdo9AVjdktZ_LsroDxMlBfwqwT');
+        $resp = $recaptcha->verify($_POST["g-recaptcha-response"], $_SERVER['REMOTE_ADDR']);
+        if (!$resp->isSuccess()) {
             $result['status'] = 'fail';
             $result['message'] = 'FAILED_CAPTCHA';
             exit(json_encode($result));
@@ -49,7 +54,7 @@ function compliancetest_login()
         }
     }
 
-    if ($attempts > 2 && (strpos($_SERVER['HTTP_REFERER'], 'login') === false || !isset($_POST['recaptcha_challenge_field']))) {
+    if ($attempts > 2 && (strpos($_SERVER['HTTP_REFERER'], 'login') === false || !isset($_POST['g-recaptcha-response']))) {
         wp_logout();
         $result['status'] = 'fail';
         $result['message'] = 'Attempts limit has been reached';
@@ -512,7 +517,7 @@ if (!is_user_logged_in()) {
                                 <div class="clear"></div>
 
                                 <div class="field">
-                                    <label for="organisation_id">Organisation Key (optional)</label>
+                                    <label for="organisation_id">Organization Key (optional)</label>
 
                                     <div class="has-field-tooltip" style="width: 165px;">
                                         <input type="text" class="field-tooltip" title="" autocomplete="off"

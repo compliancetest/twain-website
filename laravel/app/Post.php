@@ -46,13 +46,25 @@ class Post extends Model
     
     public static function getCommunityTestSuites($communityId)
     {
-        return DB::table('wp_posts')
+        $userTestSuites = DB::table('wp_posts')
             ->join('wp_postmeta', function($join) use ($communityId){
                 $join->on('wp_postmeta.post_id', '=', 'wp_posts.ID')
                      ->where('meta_key', '=', 'community_id')
                     ->where('meta_value', '=', $communityId);
             })
+            ->orderBy('post_title')
             ->get();
+
+        array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
+            $userTestSuites[$key]->suite_family_mark = TestSuite::find($entry->ID)->family_mark;
+        });
+
+        //get only last versions
+        $tempTestSuites = [];
+        foreach($userTestSuites as $userTestSuite){
+            $tempTestSuites[$userTestSuite->suite_family_mark] = $userTestSuite;
+        }
+        return $tempTestSuites;
     }
 
     public function meta()
@@ -134,11 +146,11 @@ class Post extends Model
         $testSuiteEntry = TestSuite::where(['suite_id' => $this->ID])->first();
         $userSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->suiteSubscriptions[0]->organisation_id, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
         foreach ($userSubscriptions as $userSubscription) {
+            $suitesWithSameFamilyMark = TestSuite::getFamilyMarkSuitesIds($userSubscription->suite_family_mark);
             $productsWithPendingTransactions = Transaction::where([
                 'subscription_id' => $userSubscription->id,
-                'test_suite_id' => $testSuiteEntry->family_mark,
                 'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
-            ])->groupBy('product_id')->get();
+            ])->whereIn('test_suite_id',  $suitesWithSameFamilyMark)->groupBy('product_id')->get();
             if ($productsWithPendingTransactions) {
                 foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
                     $product = Post::find($productWithPendingTransactions->product_id);

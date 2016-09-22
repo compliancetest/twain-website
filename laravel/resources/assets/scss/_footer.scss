@@ -61,6 +61,7 @@
     display: inline-block;
     float: none;
     text-align: left;
+    margin-left: 100px;
 
     @media (max-width: $screen-xs-min) {
       width: 100%;

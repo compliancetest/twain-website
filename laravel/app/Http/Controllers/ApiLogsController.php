@@ -14,7 +14,8 @@ class ApiLogsController extends Controller
     {
         $logs = ApiLog::getLogs($request->all());
         $filters = ApiLog::getFilters($request->all());
-        return view('pages.api-logs.index', compact('logs', 'filters', 'request'));
+        $pageTitle = 'API Logs';
+        return view('pages.api-logs.index', compact('logs', 'filters', 'request', 'pageTitle'));
     }
 
     /**

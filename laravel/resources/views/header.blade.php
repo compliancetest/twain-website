@@ -16,7 +16,7 @@
 
                                     @if(is_organisation_admin())
                                         <li class="first">
-                                            <a data-title="Organisation" href="{{ getSiteUrl() }}/my-organisation/" class="menu-organisation">Organisation</a>
+                                            <a data-title="Organization" href="{{ getSiteUrl() }}/my-organisation/" class="menu-organisation">Organization</a>
                                             <ul class="dropdown-menu">
                                                 <li class="first"><a href="{{ getSiteUrl() }}/my-organisation/users/">Users</a></li>
                                                 <li><a href="{{ getSiteUrl() }}/my-organisation/test-suites/">Subscriptions</a></li>
@@ -83,6 +83,7 @@
 
                                     @if(is_super_admin())
                                         <li><a data-title="ApiLogs" href="{{ getSiteUrl() }}/api-logs/" class="menu-transactions">ApiLogs</a></li>
+                                        <li><a data-title="Outcome Logs" href="{{ getSiteUrl() }}/test-outcome-logs/" class="menu-transactions">Outcome Logs</a></li>
                                     @endif
                                 </ul>
                             </li>
@@ -94,7 +95,7 @@
                             <div id="header-dashboard-menu"></div>
                             <div class="hidden-mobile"><span id="mobile-search" data-toggle-block="#header-search" class="btn btn-default">Search</span></div>
                             <div class="header-login-block">
-                                <a href="#" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
+                                <a href="/login/" class="btn btn-primary btn-login" id="headerLoginBtn">Login</a>
                                 <div class="header-login-from" id="headerLoginBlock">
                                     <form method="post" action="/wp-login.php" name="header_login_form" id="headerLoginForm">
                                         <div class="form-group login-group">

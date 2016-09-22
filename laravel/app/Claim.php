@@ -10,6 +10,8 @@ class Claim extends Model
 
     use UuidTrait;
 
+    public $incrementing = false;
+    
     protected $fillable = [
         'product_id',
         'organisation_id',

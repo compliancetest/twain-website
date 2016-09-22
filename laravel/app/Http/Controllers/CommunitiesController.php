@@ -7,6 +7,7 @@ use App\CommunityApprovedOrganisation;
 use App\CommunityBackups;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\CommunityOrganisationsApprovedTestSuites;
 use App\CommunitySurveyResult;
 use App\ForumThread;
 use App\ForumThreadRead;
@@ -14,6 +15,8 @@ use App\Organisation;
 use App\Post;
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -79,6 +82,9 @@ class CommunitiesController extends Controller
      */
     public function show($slug, $action = 'testsuites', $threadSlug = false)
     {
+        if (!View::exists('pages.communities.partials.show.' . $action)) {
+            throw new NotFoundHttpException;
+        }
         $community = Community::findBySlug($slug);
         $data = [
             'community' => $community,
@@ -118,27 +124,30 @@ class CommunitiesController extends Controller
             $surveys = [];
             $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
             $data['links'] = CommunitySurveyResult::all()->keyBy('survey_id');
-            foreach($surveyMonkey->getSurveyList()['data'] as $survey){
-                $collectors = $surveyMonkey->getCollectorList($survey['id']);
-                if($collectors['data']){
-                    foreach($collectors['data'] as $col) {
-                        if($col['name'] != $community->title){
-                            continue;
-                        }
-                        $collector = $surveyMonkey->getCollector($col['id']);
-                        if($collector['data']['type'] == 'weblink') {
-                            $collectorCounter = $surveyMonkey->getCollectorResponses($col['id']);
-                            $userResponse = $surveyMonkey->getCollectorResponses($col['id'], ['ip' => getClientIP()]);
-                            $surveys[] = [
-                                'title' => $survey['title'],
-                                'id' => $survey['id'],
-                                'url' => $collector['data']['url'],
-                                'date_created' => date('Y-m-d', strtotime($collector['data']['date_created'])),
-                                'date_close' => isset($collector['data']['status']) && $collector['data']['status'] == 'closed' ? date('Y-m-d', strtotime($collector['data']['date_modified'])) : false,
-                                'is_active' => strtotime($collector['data']['close_date']) < mktime(),
-                                'responses_number' => $collectorCounter['total'],
-                                'user_responded' => $userResponse['total'] > 0 ? true : false,
-                            ];
+            $apiResults = $surveyMonkey->getSurveyList();
+            if(isset($apiResults['data'])) {
+                foreach ($surveyMonkey->getSurveyList()['data'] as $survey) {
+                    $collectors = $surveyMonkey->getCollectorList($survey['id']);
+                    if ($collectors['data']) {
+                        foreach ($collectors['data'] as $col) {
+                            if ($col['name'] != $community->title) {
+                                continue;
+                            }
+                            $collector = $surveyMonkey->getCollector($col['id']);
+                            if ($collector['data']['type'] == 'weblink') {
+                                $collectorCounter = $surveyMonkey->getCollectorResponses($col['id']);
+                                $userResponse = $surveyMonkey->getCollectorResponses($col['id'], ['ip' => getClientIP()]);
+                                $surveys[] = [
+                                    'title' => $survey['title'],
+                                    'id' => $survey['id'],
+                                    'url' => $collector['data']['url'],
+                                    'date_created' => date('Y-m-d', strtotime($collector['data']['date_created'])),
+                                    'date_close' => isset($collector['data']['status']) && $collector['data']['status'] == 'closed' ? date('Y-m-d', strtotime($collector['data']['date_modified'])) : false,
+                                    'is_active' => strtotime($collector['data']['close_date']) < mktime(),
+                                    'responses_number' => $collectorCounter['total'],
+                                    'user_responded' => $userResponse['total'] > 0 ? true : false,
+                                ];
+                            }
                         }
                     }
                 }
@@ -154,9 +163,7 @@ class CommunitiesController extends Controller
             $data['invitedUsers'] = $community->invitations;
             $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
-            if($community->isModerator()){
-                $data['action'] = 'admin_page_for_support_users';
-            }
+            $data['communityTestSuites'] = Post::getCommunityTestSuites($community->id);
         }
         return view('pages.communities.show')->with($data);
     }
@@ -176,20 +183,27 @@ class CommunitiesController extends Controller
         if ($request->file('image')) {
             $this->handleImage($request, $community);
         }
-        if ($request->has('title') && $request->has('description')) {
+
+        if ($request->has('update-community-data')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:communities,title,' . $community->id,
+                'description' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 422);
+            }
             $community->update(['title' => $request->get('title'), 'description' => $request->get('description')]);
+            $textFields = ['terms_and_conditions', 'license_agreements', 'obligation_for_claim', 'notification_email_of_changes'];
+            foreach ($textFields as $textField) {
+                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => $textField], ['meta_value' => $request->get($textField)]);
+            }
         }
 
         if ($request->has('status')) {
             $community->update(['status' => $request->get('status')]);
         }
 
-        $textFields = ['terms_and_conditions', 'license_agreements', 'obligation_for_claim', 'notification_email_of_changes'];
-        foreach ($textFields as $textField) {
-            if ($request->has($textField)) {
-                CommunityMeta::updateOrCreate(['community_id' => $community->id, 'meta_key' => $textField], ['meta_value' => $request->get($textField)]);
-            }
-        }
         if($request->has('visibility_status')){
             $community->update(['visibility_status' => $request->get('visibility_status')]);
         }
@@ -198,6 +212,14 @@ class CommunitiesController extends Controller
                 $community->update(['articles_status' => true]);
             } else {
                 $community->update(['articles_status' => false]);
+            }
+        }
+
+        if ($request->has('change_list_only_certified')) {
+            if($request->has('list_only_certified')){
+                $community->update(['list_only_certified' => true]);
+            } else {
+                $community->update(['list_only_certified' => false]);
             }
         }
 
@@ -226,24 +248,27 @@ class CommunitiesController extends Controller
     public function approveOrganisation($communitySlug, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'organisation_id' => 'exists:wp_organisations,id'
+            'organisation_id' => 'exists:wp_organisations,id',
+            'test_suite_id' => 'exists:wp_posts,ID'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Invalid organisation'], 422);
+            return response()->json(['message' => 'Invalid organisation / test suite id'], 422);
         }
 
         $community = Community::findBySlug($communitySlug);
         if ($request->get('is_checked')) {
-            CommunityApprovedOrganisation::create([
+            CommunityOrganisationsApprovedTestSuites::create([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
+                'test_suite_id' => $request->get('test_suite_id'),
                 'approved_by' => Auth::user()->ID
             ]);
         } else {
-            CommunityApprovedOrganisation::where([
+            CommunityOrganisationsApprovedTestSuites::where([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
+                 'test_suite_id' => $request->get('test_suite_id')
             ])->delete();
         }
         return response()->json(array('success' => true));
@@ -300,8 +325,10 @@ class CommunitiesController extends Controller
         }
 
         $community = Community::findBySlug($communitySlug);
-        foreach($request->get('links') as $surveyId => $link){
-            CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
+        if ($request->get('links')) {
+            foreach ($request->get('links') as $surveyId => $link) {
+                CommunitySurveyResult::updateOrCreate(['community_id' => $community->id, 'survey_id' => $surveyId], ['link' => $link, 'author_id' => Auth::user()->ID]);
+            }
         }
         return response()->json(['status' => 'success']);
     }

@@ -30,8 +30,8 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 $page = get_query_var('paged') ? get_query_var('paged') : 1;
 $_GET['page'] = $page;
-$results = $cloud_search->search($_GET);
-$allFilters = $cloud_search->getFilters($_GET);
+$results = $allFilters = $cloud_search->search($_GET);
+//$allFilters = $cloud_search->getFilters($_GET);
 if ($is_download) {
     $results = $cloud_search->search($_GET, true);
     generate_and_download($results);
@@ -196,8 +196,7 @@ get_header();
                     <thead>
                     <tr>
                         <th class="first">
-                            <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc' ?>">Product
-                                / Service</a>
+                            <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=<?php echo $orderby == 'name' && $order == 'asc' ? 'desc' : 'asc' ?>">Product</a>
 
                             <div class="sorting-box">
                                 <a href="<?php echo get_permalink() ?>?<?php echo implode("&", $params) ?>&orderby=name&order=asc"
@@ -236,82 +235,13 @@ get_header();
                     <?php if ($results->getPath('hits/found') > 0): ?>
                         <?php foreach ($results->getPath('hits/hit') AS $row): ?>
                             <?php $row_data = $row['fields']; ?>
-                            <?php if ($row_data['type'][0] == 'Agreement'): ?>
-                                <?php
-                                $agreement_id = str_replace('agreement_', '', $row['id']);
-                                $agreement = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_e2e_agreement WHERE id = %d ", $agreement_id));
-                                $requester_service = new Service($agreement->requester_service_id);
-                                $requester_service->load();
-                                $responder_service = new Service($agreement->responder_service_id);
-                                $responder_service->load();
-                                ?>
                                 <tr>
-                                    <td class="first">
-                                        <div class="agreement-row"><a
-                                                href="<?php echo get_permalink($agreement->requester_service_id); ?>"
-                                                class="blue_txt"><?php echo $requester_service->service_name; ?></a>
-                                        </div>
-                                        <a href="<?php echo get_permalink($agreement->responder_service_id); ?>"
-                                           class="blue_txt"><?php echo $responder_service->service_name; ?></a>
-                                    </td>
-                                    <td>
-                                        <div
-                                            class="agreement-row"><?php echo $requester_service->service_version; ?></div>
-                                        <?php echo $responder_service->service_version; ?>
-                                    </td>
-                                    <td>
-                                        <div
-                                            class="agreement-row"><?php echo $requester_service->service_owner; ?></div>
-                                        <?php echo $responder_service->service_owner; ?>
-                                    </td>
-                                    <td>Agreement</td>
-                                    <td class="test-suite-column">
-                                        <div class="agreement-row"><a
-                                                href="<?php echo get_permalink($requester_service->service_suite_id); ?>"><?php echo get_the_title($requester_service->service_suite_id); ?></a>
-                                        </div>
-                                        <a href="<?php echo get_permalink($responder_service->service_suite_id); ?>"><?php echo get_the_title($responder_service->service_suite_id); ?></a>
-                                    </td>
-                                    <td>
-                                        <div
-                                            class="agreement-row"><?php if (!empty($requester_service->service_roles)) echo implode(', ', $requester_service->service_roles); ?></div>
-                                        <?php if (!empty($responder_service->service_roles)) echo implode(', ', $responder_service->service_roles); ?>
-                                    </td>
-                                    <td>
-                                        <div
-                                            class="agreement-row"><?php if (!empty($requester_service->service_levels)) echo implode(', ', $requester_service->service_levels); ?></div>
-                                        <?php if (!empty($responder_service->service_levels)) echo implode(', ', $responder_service->service_levels); ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM wp_compliance_claims WHERE id = %d ", end(explode('_', $row['id'])))) == '1'): ?>
-                                            <a href="#" class="has-tooltip"
-                                               title="Some test cases were excluded/not performed during testing. Please consult the claim certificate on the product summary page for more details."><img
-                                                    src="/wp-content/themes/bp-child/images/verify_icon.png"
-                                                    style="float:left;"/></a><?php echo $row_data['status'][0]; ?>
-                                        <?php else: ?>
-                                            <?php echo $row_data['status'][0]; ?>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo $row_data['test_type'][0]; ?></td>
-                                    <?php $claim_date = date('Y-m-d', strtotime($row_data['date'][0])); ?>
-                                    <td class="last"><?php if ($claim_date != '1970-01-01') echo $claim_date; ?></td>
-                                    <?php if (is_super_admin()): ?>
-                                        <td class="remove_entry"><a
-                                                href="/?_psnonce=<?php echo wp_create_nonce('get-delete-search-entry'); ?>&id=<?php echo $row['id']; ?>"
-                                                rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1
-                                                class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span
-                                                    class="simple_tooltip radius6"
-                                                    style="margin-left: -90px; width: 170px;">Delete <?php echo $row_data['name'][0]; ?>
-                                                    <span></span></span><span class="p"></span></a></td>
-                                    <?php endif; ?>
-                                </tr>
-                            <?php else: ?>
-                                <tr>
-                                    <td class="first"><a href="<?php echo get_permalink($row_data['post_id'][0]); ?>"
+                                    <td class="first"><a href="<?php echo get_permalink($row_data['product_id'][0]); ?>"
                                                          class="blue_txt"><?php echo $row_data['name'][0] ?></a></td>
                                     <td><?php echo $row_data['version'][0]; ?></td>
                                     <td><?php echo $row_data['owner'][0]; ?></td>
                                     <td>
-                                        <?php if ($row_data['type'][0] == 'Software Product'): ?>
+                                        <?php if ($row_data['type'][0] == 'Product'): ?>
                                             Product
                                         <?php else: ?>
                                             Service
@@ -323,7 +253,7 @@ get_header();
                                     <td><?php if (!empty($row_data['role'])) echo implode(', ', $row_data['role']); ?></td>
                                     <td><?php if (!empty($row_data['level'])) echo implode(', ', $row_data['level']); ?></td>
                                     <td>
-                                        <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM wp_compliance_claims WHERE id = %d ", end(explode('_', $row['id'])))) == '1'): ?>
+                                        <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM claims WHERE id = %s ", end(explode('_', $row['id'])))) == '1'): ?>
                                             <a href="#" class="has-tooltip"
                                                title="Some test cases were excluded/not performed during testing. Please consult the claim certificate on the product summary page for more details."><img
                                                     src="/wp-content/themes/bp-child/images/verify_icon.png"
@@ -345,7 +275,6 @@ get_header();
                                                     <span></span></span><span class="p"></span></a></td>
                                     <?php endif; ?>
                                 </tr>
-                            <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     </tbody>

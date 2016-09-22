@@ -22,9 +22,9 @@ class CT_Organisations_List_Table extends WP_List_Table
     {
         return $column = array(
 //            "cb" => "<input type='checkbox' />",            
-            "organisation_name" => __("Organisation Name"),
-            "organisation_key" => __('Organisation Key'),
-            "organisation_admin" => __('Organisation Admin'),
+            "organisation_name" => __("Organization Name"),
+            "organisation_key" => __('Organization Key'),
+            "organisation_admin" => __('Organization Admin'),
             "organisation_website" => __('Website'),
             "invoice_me" => __("Invoice Me"),                                    
             "contact_first_name" => __("First Name"),                        

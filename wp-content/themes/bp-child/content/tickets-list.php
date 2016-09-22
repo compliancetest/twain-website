@@ -115,7 +115,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=customer_name&order=<?php echo $orderBy == 'customer_name' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'customer_name'){ ?>class="<?php echo $order?>"<?php } ?>>Customer<span class="sort"></span></a>
                </div>
                <div class="td td-ticket-org td-sortable tocenter">
-                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organisation<span class="sort"></span></a>
+                    <a href="<?php echo get_permalink()?>?<?php echo implode("&", $params)?>&orderby=organisation&order=<?php echo $orderBy == 'organisation' && $order == 'asc' ? 'desc' : 'asc'?>" <?php if($orderBy == 'organisation'){ ?>class="<?php echo $order?>"<?php } ?>>Organization<span class="sort"></span></a>
                </div>
                
                <?php endif; ?>
@@ -153,7 +153,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                        //Getting Customer Organisation
                        
            ?>
-                        <div class="tr priority-<?php echo sanitize_title($ticket->priority_title) ?> <?php echo $new_messages > 0 ? 'has-new' : ''?>" onclick="document.location.href='/my-support-tickets/<?php echo $ticket->id?>'">
+                        <div class="tr priority-<?php echo sanitize_title($ticket->priority_title) ?> <?php echo $new_messages > 0 ? 'has-new' : ''?>">
                             <div class="td td-ticket-id tocenter">
                                 <?php echo str_pad($ticket->id, 8, 0, STR_PAD_LEFT)?>
                                 <?php
@@ -172,21 +172,21 @@ $show_community = $is_support || is_super_admin() ? true : false;
                                         echo "<span class='ticket-priority ticket-priority-" . sanitize_title($ticket->priority_title) . "'></span>";
                                     }
                                 ?>
-                                <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo $ticket->title?></a>
+                                <a href="/my-support-tickets/<?php echo $ticket->id?>"><?php echo ctE($ticket->title)?></a>
                             </div>
                             <?php if($is_support):?>
                             <div class="td td-ticket-customer td-sortable tocenter">
-                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo cp_get_user_fullname($ticket->customer_id); ?></a>
+                                <a href="<?php echo bp_core_get_user_domain($ticket->customer_id) ?>"><?php echo ctE(cp_get_user_fullname($ticket->customer_id)); ?></a>
                             </div>
                             <div class="td td-ticket-org td-sortable tocenter">
-                                <?php echo $ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation; ?>
+                                <?php echo ctE($ticket->organisation1 ? $ticket->organisation1 : $ticket->organisation); ?>
                             </div>                            
                             <?php endif; ?>
                             <div class="td td-ticket-requested"><?php echo formatDate($ticket->created_date, 'Y-m-d H:i') ?></div>
                             <div class="td td-ticket-type td-two-lines tocenter">
                                 <?php echo $ticket->category_title ?>
-                                <br><?php echo $ticket->community_id == 'general' ? 'General' : getCommunity($ticket->community_id)->title;?>
-                                <br><?php echo $ticket->test_suite_id ? get_the_title($ticket->test_suite_id) : '-';?>
+                                <br><?php echo $ticket->community_id == 'general' ? 'General' : ctE(getCommunity($ticket->community_id)->title);?>
+                                <br><?php echo $ticket->test_suite_id ? ctE(get_the_title($ticket->test_suite_id)) : '-';?>
                             </div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">
@@ -228,13 +228,19 @@ $show_community = $is_support || is_super_admin() ? true : false;
                     <option value="-1" <?php echo $limit == -1 ? 'selected="selected"' : ''?>>All</option>
                 </select>
                 <?php if($filterStatus){ ?>
-                <input type="hidden" name="status" value="<?php echo $filterStatus?>" /> 
+                <input type="hidden" name="status" value="<?php echo $filterStatus?>" />
                 <?php } ?>
                 <?php if($filterCategory){ ?>
-                <input type="hidden" name="category" value="<?php echo $filterCategory?>" /> 
+                <input type="hidden" name="type" value="<?php echo $filterCategory?>" />
                 <?php } ?>
-                <?php if($filterCategory){ ?>
+                <?php if($filterPriority){ ?>
                 <input type="hidden" name="priority" value="<?php echo $filterPriority?>" /> 
+                <?php } ?>
+                <?php if($filterCommunity){ ?>
+                <input type="hidden" name="community" value="<?php echo $filterCommunity?>" />
+                <?php } ?>
+                <?php if($filterTestSuite){ ?>
+                <input type="hidden" name="test_suite" value="<?php echo $filterTestSuite?>" />
                 <?php } ?>
             </form>
         </div>

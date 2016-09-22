@@ -6,39 +6,45 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function (
 
     Route::get('version', ['uses' => '\App\Api\Controllers\VersionController@index', 'middleware' => ['simpleauth']]);
 
-    Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => ['simpleauth', 'organisation.member']]);
-    Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testcase', ['uses' => '\App\Api\Controllers\TestCasesController@show', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
+    Route::get('testcases/{testcaseid}/profiles/', ['uses' => '\App\Api\Controllers\TestCasesController@profiles', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
 
-    Route::post('testcase/start', ['uses' => '\App\Api\Controllers\TestCasesController@start', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::post('testcase/start', ['uses' => '\App\Api\Controllers\TestCasesController@start', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
     Route::delete('testcase/stop', ['uses' => '\App\Api\Controllers\TestCasesController@stop', 'middleware' => ['simpleauth', 'organisation.member']]);
     Route::get('testcase/status', ['uses' => '\App\Api\Controllers\TestCasesController@status', 'middleware' => ['simpleauth', 'organisation.member']]);
 
-    Route::get('testsuites', ['uses' => '\App\Api\Controllers\TestSuitesController@index', 'middleware' => ['simpleauth', 'organisation.member']]);
-    Route::get('testsuites/{suiteId}/testcases', ['uses' => '\App\Api\Controllers\TestSuitesController@testcases', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testsuites', ['uses' => '\App\Api\Controllers\TestSuitesController@index', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
+    Route::get('testsuites/{suiteId}/testcases', ['uses' => '\App\Api\Controllers\TestSuitesController@testcases', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
 
-    Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('profiles/{profile}', ['uses' => '\App\Api\Controllers\ProfilesController@show', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
 
-    Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::post('transactions', ['uses' => '\App\Api\Controllers\TransactionsController@create', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
 
-    Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.subscriptions.product_type']]);
-    Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => ['simpleauth', 'organisation.member']]);
-    Route::get('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@listFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'post.product.exist']]);
-    Route::post('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@saveFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'post.product.exist']]);
+    Route::post('products', ['uses' => '\App\Api\Controllers\ProductsController@create', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test', 'organisation.subscriptions.product_type']]);
+    Route::get('products', ['uses' => '\App\Api\Controllers\ProductsController@get', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
+    Route::get('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@listFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test', 'post.product.exist']]);
+    Route::post('products/{productId}/features', ['uses' => '\App\Api\Controllers\ProductsController@saveFeatures', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test', 'post.product.exist']]);
 
     //test plans
-    Route::get('testplans', ['uses' => '\App\Api\Controllers\TestPlansController@index', 'middleware' => ['simpleauth', 'organisation.member']]);
-    Route::get('testplans/{testPlanId}/testcases', ['uses' => '\App\Api\Controllers\TestPlansController@testcases', 'middleware' => ['simpleauth', 'organisation.member']]);
+    Route::get('testplans', ['uses' => '\App\Api\Controllers\TestPlansController@index', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
+    Route::get('testplans/{testPlanId}/testcases', ['uses' => '\App\Api\Controllers\TestPlansController@testcases', 'middleware' => ['simpleauth', 'organisation.member', 'organisation.can_test']]);
 
 });
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::resource('testingdetails', 'TestingDetailsController',
-        ['only' => ['store',  'index']]);
-    Route::get('testingdetails/{transaction}/output/', 'TestingDetailsController@output');
-    Route::get('testingdetails/{transaction}/reason/', 'TestingDetailsController@reason');
-    Route::get('testingdetails/{transaction}/transaction-reason/', 'TestingDetailsController@transactionReason');
-    Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
+    Route::get('contact-us', 'ContactUsController@index');
+    Route::post('contact-us', 'ContactUsController@send');
+
+    Route::group(['middleware' => ['auth']], function () {
+        Route::resource('testingdetails', 'TestingDetailsController',
+            ['only' => ['store', 'index']]);
+        Route::get('testingdetails/{transaction}/output/', 'TestingDetailsController@output');
+        Route::get('testingdetails/{transaction}/reason/', 'TestingDetailsController@reason');
+        Route::get('testingdetails/{transaction}/screen-captures/', 'TestingDetailsController@screenCaptures');
+        Route::get('testingdetails/{transaction}/transaction-reason/', 'TestingDetailsController@transactionReason');
+        Route::get('testingdetails/{transaction}/logs', 'TestingDetailsController@logs');
+    });
 
     Route::get('sso/{key}', '\App\Http\Controllers\Auth\AuthController@sso');
 
@@ -109,11 +115,19 @@ Route::group(['middleware' => ['web']], function () {
 
         //any use can request community membership
         Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
+    });
 
-        //any registered user can create community
+     Route::group(['middleware' => ['auth']], function () {
+        //any use can request community membership
+        Route::post('membership/{community}/request', 'CommunityMembershipController@requestMembership');
+    });
+
+    Route::group(['middleware' => ['wordpress.super_admin']], function () {
+        //only wordpress super admin can create new community
         Route::get('communities/create/', 'CommunitiesController@create');
         Route::post('communities', 'CommunitiesController@store');
     });
+
 
     Route::get('communities/{community}/{action?}/{forumSlug?}', 'CommunitiesController@show');
     //community members routes
@@ -131,8 +145,6 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::post('communities/{community}/getjson', 'CommunitiesController@generateJson');
 
-        Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
-
         Route::post('membership/{community}/reject', 'CommunityMembershipController@rejectUser');
         Route::post('membership/{community}/accept', 'CommunityMembershipController@acceptUser');
 
@@ -142,6 +154,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => ['community.mod']], function () {
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
+        Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
 
         Route::get('communitysurveys/{community}/surveyresults', 'CommunitiesController@surveysList');
         Route::post('communitysurveys/{community}/surveyresults', 'CommunitiesController@saveSurveysLinks');
@@ -186,6 +199,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('/transactions/update-transactions', 'TransactionsController@updateTransactions');
 
         Route::delete('/transactions/batch-delete', 'TransactionsController@batchDelete');
+        Route::post('/transactions/bulk-audit', 'TransactionsController@bulkAudit');
 
         Route::get('verify-requests', 'VerifyRequestsController@index');
         Route::get('verify-requests/update-list', 'VerifyRequestsController@updateList');
@@ -222,4 +236,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('api-logs/{logId}/download-request', 'ApiLogsController@downloadRequest');
         Route::get('api-logs/{logId}/download-response', 'ApiLogsController@downloadResponse');
     });
+
+     Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
+        Route::get('test-outcome-logs', 'TransactionChangeLogController@index');
+        Route::get('test-outcome-logs/filters', 'TransactionChangeLogController@filters');
+        Route::get('test-outcome-logs/logs-list', 'TransactionChangeLogController@logsList');
+    });
+
+
+
 });

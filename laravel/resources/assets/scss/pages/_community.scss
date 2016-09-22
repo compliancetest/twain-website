@@ -300,12 +300,6 @@
 }
 
 .community-admin{
-  padding: 10px 15px;
-
-  @media only screen and (max-width: $mobile-size) {
-    padding: 10px 0;
-  }
-
 
   .profile-type-list{
     width: 100%;
@@ -558,7 +552,6 @@
 
       img{
         width: 100px;
-        height: 100px;
         border: 1px solid #959595;
         @include box-shadow(0 0 10px 1px #999);
       }
@@ -663,12 +656,6 @@
 
 }
 
-.edit-profile-modal{
-  .modal-body{
-    padding: 0 0 20px 0;
-  }
-}
-
 .edit-profile-form-wrapper{
   overflow: auto;
 
@@ -765,4 +752,14 @@ input.notify-changes{
 
   }
 
+}
+
+.organisation-data-info{
+  font-size: 13px;
+
+  dd{
+    display: block;
+    margin: 0 0 10px 0;
+    overflow: hidden;
+  }
 }

@@ -43,13 +43,15 @@ get_header();
                    ?>
                         <div class="tr">
                             <div class="td td-name">
-                                <a href="/communities/<?php echo $group->slug?>"><?php echo $group->title ?></a>
+                                <a href="/communities/<?php echo $group->slug?>"><?php echo ctE($group->title) ?></a>
                             </div>
                             <div class="td td-since"><?php echo formatDate($group->membership_date); ?></div>
                             <div class="td td-role">
                                 <?php
                                     if($group->is_admin)
                                         echo '<span class="group-admin">Admin</span>';
+                                    elseif($group->is_mod)
+                                        echo '<span class="group-support">Support</span>';
                                     else
                                         echo '<span class="group-member">Member</span>';
                                 ?>

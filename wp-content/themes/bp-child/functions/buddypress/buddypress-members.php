@@ -29,6 +29,11 @@ function cp_change_avatar()
             // Check the nonce
             check_admin_referer( 'bp_avatar_upload' );
 
+            if(!in_array(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION), ['jpg', 'jpeg', 'gif', 'png']) || !getimagesize ( $_FILES['file']['tmp_name']) ){
+                addMessage('Invalid image format', 'error');
+                wp_redirect("/my-profile");
+                exit;
+            }
             // Pass the file to the avatar upload handler
             if ( bp_core_avatar_handle_upload( $_FILES, 'xprofile_avatar_upload_dir' ) ) {
                 $bp->avatar_admin->step = 'crop-image';
@@ -64,7 +69,7 @@ function cp_change_avatar()
             wp_redirect("/my-profile");
             exit;
         }
-        
+
     }
     
 }
@@ -81,10 +86,8 @@ function cp_xprofile_action_delete_avatar() {
     
     if(is_user_logged_in() &&  wp_verify_nonce($_REQUEST['cp-action'], 'delete-avatar'))
     {
-        if ( bp_core_delete_existing_avatar( array( 'item_id' => bp_loggedin_user_id() ) ) )
-            addMessage( __( 'Your avatar was deleted successfully!', 'buddypress' ) );
-        else
-            addMessage( __( 'There was a problem deleting that avatar, please try again.', 'buddypress' ), 'error' );
+        delete_user_meta(get_current_user_id(), 'avatar_s3_path');
+        addMessage( __( 'Your avatar was deleted successfully!', 'buddypress' ) );
 
         wp_redirect( wp_get_referer() );    
         exit;

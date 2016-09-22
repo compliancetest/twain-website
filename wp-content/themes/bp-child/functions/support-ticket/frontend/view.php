@@ -106,12 +106,13 @@ function showSumitTicketBox()
                         <div class="clear"></div>
                     </div>
 
-                    <div class="field-row" id="ticket-price-row" style="display: none;">
-                        <label>Price:</label>                    
-                        <span id="ticket-price"></span>
+<!--                    <div class="field-row" id="ticket-price-row" style="display: none;">-->
+<!--                        <label>Price:</label>                    -->
+<!--                        <span id="ticket-price"></span>-->
 <!--                        <span class="left10">(1 Token = $--><?php //echo get_option('token_price')?><!--)</span>-->
-                        <div class="clear"></div>
-                    </div>
+<!--                        <div class="clear"></div>-->
+<!--                    </div>-->
+<!--                    <br>-->
                     <div class="field-row add-ticket-attachment-row">
                         <div class="attachments-wrap"></div>
                         <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>

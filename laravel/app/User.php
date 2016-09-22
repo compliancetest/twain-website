@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -87,9 +88,9 @@ class User extends Authenticatable
      */
     public function getAvatar($type = 'bpthumb')
     {
-        $files = glob(__DIR__  . "/../../wp-content/uploads/avatars/".$this->ID."/*-".$type.".*");
-        if(count($files) > 0){
-            return getSiteUrl() . explode('/../..', $files[0])[1];
+        $key = get_user_meta($this->ID, 'avatar_s3_path', true);
+        if (Storage::exists($key)) {
+            return 'https://s3-us-west-2.amazonaws.com/'.config('env.bucket.website').'/' . $key;
         }
         return DEFAULT_AVATAR;
     }
@@ -109,12 +110,14 @@ class User extends Authenticatable
         $organisationSubscriptions = OrganisationSubscription::where(['organisation_id' => $this->organisation[0]->id])->get();
 
         foreach($organisationSubscriptions as $organisationSubscription){
-            //user shouldn't see test plans for a test suite if he is not subscribed to test suite
-            if (!OrganisationSubscription::where(['user_id' => $this->ID, 'suite_family_mark' => $organisationSubscription->suite_family_mark])->first()) {
+
+            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $this->organisation[0]->id, 'test_suite_id' => $organisationSubscription->suite_family_mark])->first();
+            //user shouldn't see test plans for a test suite if he is not subscribed to test suite or if organisation doesn't have approvement for this suite
+            if (!OrganisationSubscription::where(['user_id' => $this->ID, 'suite_family_mark' => $organisationSubscription->suite_family_mark])->first() || !$aprovementEntry) {
                 continue;
             }
             $testPlans = TestPlan::where(['is_claimed' => false, 'organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
-            $suite = Post::find($organisationSubscription->suite_family_mark);
+            $suite = Post::find(TestSuite::getLatestSuiteIdForFamilyMark($organisationSubscription->suite_family_mark));
             if(!isset($response[$suite->post_title] )) {
                 $response[$suite->post_title] = [
                     'testSuite' => $suite,

@@ -225,10 +225,10 @@ $ct_email_templates = array(
             )
         ),
     ),
-    'Organisation Section' => array(
+    'Organization Section' => array(
         array(
-            'menu' => 'Organisation Record Created',
-            'title' => 'Organisation Record Created',
+            'menu' => 'Organization Record Created',
+            'title' => 'Organization Record Created',
             'shortcodes' => '[requester_name], [requester_email], [organisation], [organisation_website], [organisation_description], [organisation_abn], [website_url], [env], [site_title], [site_org]',
             'fields' => array(
                 array(
@@ -242,12 +242,12 @@ $ct_email_templates = array(
             )
         ),
         array(
-            'menu' => 'Request a Subscription<br />to Organisation Admin',
-            'title' => 'Send a Request to Organisation Admin',
+            'menu' => 'Request a Subscription<br />to Organization Admin',
+            'title' => 'Send a Request to Organization Admin',
             'shortcodes' => '[requester_name], [requester_email], [website_url], [env], [suite_name], [suite_url], [admin_name], [admin_email], [organisation_name], [site_title], [site_org]',
             'fields' => array(
                 array(
-                    'title' => 'For Organisation Admin',
+                    'title' => 'For Organization Admin',
                     'id' => 'request_subscription_to_admin'
                 )
             )
@@ -256,8 +256,8 @@ $ct_email_templates = array(
     ),
     'Subscription Section' => array(
         array(
-            'menu' => 'Organisation Subscription<br /> Purchased',
-            'title' => 'Organisation Subscription Purchased',
+            'menu' => 'Organization Subscription<br /> Purchased',
+            'title' => 'Organization Subscription Purchased',
             'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [paid_amount],[community_url], [site_title], [site_org]',
             'fields' => array(
                 array(
@@ -286,8 +286,8 @@ $ct_email_templates = array(
             )
         ),
         array(
-            'menu' => 'Organisation Subscription<br /> Cancelled',
-            'title' => 'Organisation Subscription Cancelled',
+            'menu' => 'Organization Subscription<br /> Cancelled',
+            'title' => 'Organization Subscription Cancelled',
             'shortcodes' => '[name], [email], [website_url], [env], [suite_name], [site_title], [site_org]',
             'fields' => array(
                 array(
@@ -689,123 +689,6 @@ $ct_email_templates = array(
             )
         ),
     ),
-    'E2E Section' => array(
-        array(
-            'menu' => 'E2E Test request',
-            'title' => 'E2E Test request',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_request_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_request_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_request_admin',
-                )
-            )
-        ),
-        array(
-            'menu' => 'E2E test request accepted',
-            'title' => 'E2E test request accepted',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_request_accepted_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_request_accepted_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_request_accepted_admin',
-                )
-            )
-        ),
-        array(
-            'menu' => 'E2E test request rejected',
-            'title' => 'E2E test request rejected',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_request_rejected_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_request_rejected_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_request_rejected_admin',
-                )
-            )
-        ),
-        array(
-            'menu' => 'E2E test claim made',
-            'title' => 'E2E test claim made',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_claim_made_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_claim_made_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_claim_made_admin',
-                )
-            )
-        ),
-        array(
-            'menu' => 'E2E test claim failed',
-            'title' => 'E2E test claim failed',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_claim_failed_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_claim_failed_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_claim_failed_admin',
-                )
-            )
-        ),
-        array(
-            'menu' => 'E2E test claim confirmed',
-            'title' => 'E2E test claim confirmed',
-            'shortcodes' => '[test_suite], [env], [sender_owner], [sender_service], [sender_name], [receiver_owner], [receiver_service], [receiver_name], [agreement_url], [message_text], [email_receiver_name], [site_title], [site_org]',
-            'fields' => array(
-                array(
-                    'title' => 'For Sender',
-                    'id' => 'e2e_claim_confirmed_sender',
-                ),
-                array(
-                    'title' => 'For Receiver',
-                    'id' => 'e2e_claim_confirmed_receiver',
-                ),
-                array(
-                    'title' => 'For Admin',
-                    'id' => 'e2e_claim_confirmed_admin',
-                )
-            )
-        ),
-    )
-
 );
 
 //Add New Menu

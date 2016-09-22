@@ -1,0 +1,62 @@
+.contact-us{
+  font-size: 14px;
+  line-height: normal;
+
+  .control-label{
+    font-weight: 400;
+    margin-bottom: 2px;
+
+    &.required:after {
+      content: "*";
+      color: red;
+      padding-left: 4px;
+    }
+  }
+
+  .contact-us-description{
+    margin: 20px 0 10px 0;
+  }
+
+  .contact-us-subtitle{
+    border-bottom: 1px solid #d02f27;
+    color: #d02f27;
+    line-height: 28px;
+    font-size: 18px;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+  }
+
+  .contact-us-info-block{
+    font-size: 14px;
+    line-height: 20px;
+    color: #666666;
+
+    address{
+      margin: 0;
+      line-height: 20px;
+    }
+
+    strong{
+      font-weight: 600;
+      color: #111;
+    }
+
+    a{
+      font-weight: 600;
+      color: #2c80e8;
+
+      &:hover{
+        color: #2c80e8;
+      }
+    }
+  }
+
+  .contact-us-form-description{
+    margin: 20px 0;
+  }
+
+  .has-error .rc-anchor-light{
+    border-color: #a94442;
+  }
+
+}

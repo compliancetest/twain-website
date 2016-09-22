@@ -14,21 +14,33 @@ $userIP = \LoginAttempts\LoginAttempts::getUserIP();
 $attempts = \LoginAttempts\LoginAttempts::getAttempts($userIP);
 ?>
 <div class="content container" id="login_page_form">
-    <form method="post" action="/wp-login.php" id="top_access" name="top_access" style="max-width: 300px;">
+    <form method="post" action="/wp-login.php" id="top_access" name="top_access" style="max-width: 302px;">
 
-        <p class="login-username" style="width: 270px;">
+        <p class="login-username" style="width: 257px;">
             <label for="user_login"></label>
-            <input type="text" size="20" style="width: 275px;" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
+            <input type="text" size="20" style="width: 255px;" value="" class="input" id="user_login" name="log" placeholder="E-mail or User" autocomplete="off">
         </p>
 
-        <p class="login-password" style="width: 270px;">
+        <p class="login-password" style="width: 257px;">
             <label for="user_pass"></label>
-            <input type="password" style="width: 275px;" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
+            <input type="password" style="width: 255px;" size="20" value="" autocomplete="off" class="input" id="user_pass" name="pwd" placeholder="********">
         </p>
-        <div class="login_recaptcha">
-            <?php if($attempts > 2):?>
-                <?php echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
+         <?php if($attempts > 2):?>
+<!--                --><?php //echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY, null, true); ?>
+                <script src="https://www.google.com/recaptcha/api.js?onload=myCallBack&render=explicit"></script>
+                <script>
+                  var login_recaptcha;
+                  var myCallBack = function() {
+                    //Render the recaptcha1 on the element with ID "recaptcha1"
+                    login_recaptcha = grecaptcha.render('login_recaptcha', {
+                      'sitekey' : '<?php echo RECAPTCHA_PUBLIC_KEY;?>'
+                    });
+                   };
+
+                </script>
             <?php endif;?>
+        <div class="login_recaptcha" id="login_recaptcha">
+
         </div>
         <span style="display:none;" class="header-login-error" id="header_login_error_msg">Wrong username or password, please try again!</span>
 

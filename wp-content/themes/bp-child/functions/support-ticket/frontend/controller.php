@@ -116,6 +116,7 @@ function createSupportTicket()
         'support_id' => 0,
         'community_id' => $community_id,
         'test_suite_id' => $suite_id,
+        'suite_id' => $suite_id,
         'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
@@ -156,7 +157,7 @@ function createSupportTicket()
                 $wpdb->insert(TABLE_TICKET_ATTACHMENTS, array('ticket_id' => $tID, 'file_name' => $name, 'created_date' => date("Y-m-d H:i:s"), 'token' => $token ) );
                 $has_attachment = 1;
                 $s3 = new S3Wrapper();
-                $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ));
+                $s3->putObject('/attachments/tickets/' . $token . '/'. $name, file_get_contents( $_FILES['attachments']['tmp_name'][$i] ), 'application/'.end( explode( '.', $name ) ), 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au');
 
             }
         }
@@ -204,8 +205,9 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
            . "LEFT JOIN " . $wpdb->prefix . "organisations_members AS m ON m.user_id=t.customer_id "
            . "LEFT JOIN " . $wpdb->prefix . "organisations AS o ON o.id=m.organisation_id "
            . "LEFT JOIN " . $wpdb->users . " AS u ON t.customer_id=u.ID "
-           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' ";
-    
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' "
+           . "LEFT JOIN " . $wpdb->usermeta . " AS um1 ON t.customer_id=um1.user_id AND um1.meta_key='first_name' ";
+
     $customer_ids[] = $user_id;
     $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
     
@@ -244,16 +246,25 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     $orderQuery = "";
     switch($orderBy)
     {
+        case "status_id":
+                $orderQuery = " ORDER BY ts.status $order";
+            break;
+        case "organisation":
+                $orderQuery = " ORDER BY o.organisation_name $order";
+            break;
+        case "customer_name":
+              $orderQuery = " ORDER BY um1.meta_value $order";
+            break;
         case "id":
         case "title":
         case "created_date":
         case "category_id":
-        case "status_id":
+
         case "priority_id":
         case "solved_date":
         case "last_updated":
-        case "customer_name":
-        case "organisation":
+
+
             $orderQuery = " ORDER BY $orderBy $order";
             break;
         default:
@@ -522,7 +533,7 @@ function acceptTerm()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticket->customer_id != $user_id)
+    if(!canEditTicket($ticket, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
@@ -536,11 +547,8 @@ function acceptTerm()
         exit;
     }
     
-    if($is_support)    
-        $message = "<b>" . $user->display_name . "</b> has accepted the term.";
-    else
-        $message = "<b>[customer]</b> has accepted the term.";
-    
+    $message = "<b>" . cp_get_user_fullname($user_id) . "</b> has accepted the term.";
+
     $messageID = ct_send_ticket_message($ticket->id, $user_id, $ticket->customer_id != $user_id ? $ticket->customer_id : $ticket->support_id, $message, 'term');
     
     if($messageID)
@@ -553,7 +561,7 @@ function acceptTerm()
         
         /***************** Begin Send Mail ***************************/
         
-        if($is_support)
+        if(ct_is_support($ticket->id))
         {
             //Send to Customer
             ct_send_ticket_email("ticket_updated",'customer', $ticket, $messageID);
@@ -597,7 +605,7 @@ function changeTicketTerm()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticket->customer_id != $user_id)
+    if(!canEditTicket($ticket, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
@@ -627,7 +635,7 @@ function changeTicketTerm()
         //Customer can change only priority
         if($_POST['priority'] != $ticket->priority_id)
         {
-            $message = "<p>" . "Term has been updated by " . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . "</p>";
+            $message = "<p>" . "Term has been updated by " . "<b>{$userData->first_name} {$userData->last_name}</b>" . "</p>";
             $message .= "<blockquote>";
             $message .= "Status: <i>" . $oldPriority->priority . "</i> -&gt; <i>" . $newPriority->priority . "</i> <br />";
             $message .= "Time to pay: " . $ticket->ttpay . " hours <br />";
@@ -635,7 +643,7 @@ function changeTicketTerm()
             $message .= "Time to resolve:  " . $newPriority->ttresolve . " hours <br />";
             $message .= "</blockquote>";
             if($comment)
-                $message .= "<p>" . $comment . "</p>" ;
+                $message .= "<p>" . ctE($comment) . "</p>" ;
             $message_type = 'term';
             
             $is_changed = true;
@@ -645,7 +653,7 @@ function changeTicketTerm()
             $ttresolve = $newPriority->ttresolve;
             
         }else if($comment){
-            $message =  $comment;
+            $message =  ctE($comment);
             $message_type = 'message';
         }else{
             addMessage('Nothing was changed.', 'notice');
@@ -694,14 +702,14 @@ function changeTicketTerm()
         }
         
         if($is_changed){
-            $message = "<p>" . "Term has been updated by " . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . "</p>" . 
+            $message = "<p>" . "Term has been updated by " . "<b>{$userData->first_name} {$userData->last_name}</b>" . "</p>" .
                         "<blockquote>" . $message . "</blockquote>";
             if($comment)
-                $message .= "<p>" . $comment . "</p>";
+                $message .= "<p>" . ctE($comment) . "</p>";
                 
             $message_type = 'term';
         }else if($comment){
-            $message = "<p>" . $comment . "<p>";
+            $message = "<p>" . ctE($comment) . "<p>";
             $message_type = 'message';
         }else{
             addMessage('Nothing was changed.', 'notice');
@@ -761,7 +769,7 @@ function sendTicketMessage()
         wp_redirect("/my-support-tickets");
     }
     
-    if(!($is_support = ct_is_support($ticket_id)) && $ticketDetail->customer_id != $user_id)
+    if(!canEditTicket($ticketDetail, $user_id))
     {
         addMessage('Invalid Request!', 'error');
         wp_redirect("/my-support-tickets");
@@ -770,7 +778,7 @@ function sendTicketMessage()
     
     $userData = get_userdata($user_id);
     
-    $message = stripslashes_deep($_POST['content']);
+    $message = ctE(stripslashes_deep($_POST['content']));
     
     //Save Message
     $messageData = array(
@@ -791,7 +799,7 @@ function sendTicketMessage()
     {        
         if(isset($_POST['resolved']) && $_POST['resolved'])
         {
-            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ;
+            $messageData['message'] = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
             $status_changed = true;
             $new_status = TICKET_STATUS_RESOLVED;
             
@@ -803,19 +811,19 @@ function sendTicketMessage()
         {
             if($_POST['status_change'] == 'in_progress' && $ticketDetail->status_id != TICKET_STATUS_IN_PROGRESS)
             {
-                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message;             
+                $message = '<i>Ticket status been updated to <b>In Progress</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message);
                 $status_changed = true;
                 $new_status = TICKET_STATUS_IN_PROGRESS;
             }else if($_POST['status_change'] == 'feedback' && $ticketDetail->status_id != TICKET_STATUS_FEEDBACK){
-                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>Feedback</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_FEEDBACK;
             }else if($_POST['status_change'] == 'resolved' && $ticketDetail->status_id != TICKET_STATUS_RESOLVED){
-                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>Resolved</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_RESOLVED;
             }else if($_POST['status_change'] == 'closed' && $ticketDetail->status_id != TICKET_STATUS_CLOSED){
-                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ($is_support ? "<b>{$userData->first_name} {$userData->last_name}</b>" : "[customer]") . '</i>' . "<br /><br />" . $message ; 
+                $message  = '<i>Ticket status been updated to <b>closed</b> by ' . ("<b>{$userData->first_name} {$userData->last_name}</b>") . '</i>' . "<br /><br />" . ctE($message) ;
                 $status_changed = true;
                 $new_status = TICKET_STATUS_CLOSED;
             }
@@ -888,7 +896,7 @@ function sendTicketMessage()
         {
             //There are separate email templates for Resolved and Closed Tickets
             ///Send Email Notification
-            if($is_support)
+            if(ct_is_support($ticket_id))
             {
                 //Send to Customer
                 ct_send_ticket_email("ticket_updated", 'customer', $ticketDetail, $messageID);            

@@ -24,15 +24,38 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get Execution Profile data
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} TestCase not found error:
@@ -80,6 +103,12 @@ class TestCasesController extends BaseApiController
             return $this->respondUnprocessableEntity("Please set testing details");
         }
 
+        $testSuiteData = Post::find($testingDetails->test_suite_id);
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->post_name);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+
         $testCase = TestCase::find($testingDetails->test_case_id);
         if (!$testCase) {
             return $this->respondNotFound("Test Case not found");
@@ -108,15 +137,27 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get all test case profiles
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 Test Case not found
      * @apiErrorExample {json} TestCase not found error:
@@ -178,15 +219,38 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to configure testing details
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "errors": {
+     *       "message": [
+     *         "Your organisation doesn't have access to this test suite."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 422 Required field missed
      * @apiErrorExample {json} Validation error:
@@ -217,15 +281,16 @@ class TestCasesController extends BaseApiController
      *     "code": 400
      *   }
      *
-     * @apiError 404 Test Case not configured properly
-     * @apiErrorExample {json} Please stop running case before start:
+     * @apiError 404 Wrong test case configuration
+     * @apiErrorExample {json} Wrong test case configuration:
+     *
      *  {
      *     "errors": {
      *       "message": [
-     *         "Execution profile is required for DataSource products"
+     *         "Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID."
      *       ]
      *     },
-     *     "code": 400
+     *     "code": 404
      *   }
      *
      * @apiSuccessExample {json} Success Response:
@@ -246,6 +311,12 @@ class TestCasesController extends BaseApiController
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($request->get('test_suite_id'));
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+
         $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
         if ($model) {
             return $this->respondBadRequest('Please stop running case before start');
@@ -349,11 +420,11 @@ class TestCasesController extends BaseApiController
      *   }
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
@@ -383,10 +454,12 @@ class TestCasesController extends BaseApiController
 
     public function stop()
     {
-        if (!TestingDetail::where(['user_id' => Auth::user()->ID])->first()) {
+        $testingDetails = TestingDetail::where(['user_id' => Auth::user()->ID])->first();
+        if (!$testingDetails) {
             return $this->respondBadRequest('Please use start method first');
         }
-        TestingDetail::where(['user_id' => Auth::user()->ID])->delete();
+
+        $testingDetails->delete();
         return $this->respondSuccess('Ok');
     }
 
@@ -399,15 +472,27 @@ class TestCasesController extends BaseApiController
      * @apiDescription Method used to get testing details
      *
      * @apiError 403 Forbidden
-     * @apiErrorExample {json} Not organisation member:
+     * @apiErrorExample {json} Not organization member:
      *   {
      *     "errors": {
      *       "message": [
-     *         "Only organisation member can perform testing"
+     *         "Only organization member can perform testing"
      *       ]
      *     },
      *     "code": 403
      *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
      *
      * @apiError 404 User didn't use start method yet
      * @apiErrorExample {json} You are not running any test case now:
@@ -420,6 +505,19 @@ class TestCasesController extends BaseApiController
      *     },
      *     "code": 404
      *   }
+     *
+     * @apiError 404 Wrong test case configuration
+     * @apiErrorExample {json} Wrong test case configuration:
+     *
+     *  {
+     *     "errors": {
+     *       "message": [
+     *         "Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID."
+     *       ]
+     *     },
+     *     "code": 404
+     *   }
+     *
      *
      * @apiSuccessExample {json} Success-Response:
      *   {

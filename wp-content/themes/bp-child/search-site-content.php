@@ -72,13 +72,13 @@ get_header();
                         </li>
                         <li>
                             <label for="community-filter">Community</label>
-                            <select name="community" id="community-filter" class="select">
+                            <select name="community_id" id="community-filter" class="select">
                                 <option>All</option>
-                                <?php if (is_array($allFacets['facets']['community']['buckets'])): ?>
-                                    <?php foreach ($allFacets['facets']['community']['buckets'] AS $v): ?>
+                                <?php if (is_array($allFacets['facets']['community_id']['buckets'])): ?>
+                                    <?php foreach ($allFacets['facets']['community_id']['buckets'] AS $v): ?>
                                         <?php if ($v['value'] == 'All') continue; ?>
                                         <option
-                                            value="<?php echo $v['value']; ?>" <?php if (isset($_GET['community']) && $_GET['community'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo $v['value']; ?></option>
+                                            value="<?php echo $v['value']; ?>" <?php if (isset($_GET['community_id']) && $_GET['community_id'] == $v['value']): ?> selected="selected" <?php endif; ?>><?php echo ctE(getCommunity($v['value'])->title); ?></option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
@@ -209,8 +209,12 @@ get_header();
                                 </td>
                                 <td><?php echo $row['post_type'][0]; ?></td>
                                 <td>
-                                    <?php if (!empty($row['community']) && is_array($row['community'])): ?>
-                                        <?php echo implode('<br>', $row['community']); ?>
+                                    <?php $communitiesList = [];?>
+                                    <?php if (!empty($row['community_id']) && is_array($row['community_id'])): ?>
+                                        <?php foreach($row['community_id'] as $entryCommunityId):?>
+                                            <?php $communitiesList[] = ctE(getCommunity($entryCommunityId)->title);?>
+                                        <?php endforeach;?>
+                                        <?php echo implode('<br>', $communitiesList); ?>
                                     <?php endif; ?>
                                 </td>
                                 <td class="last"><?php echo date('Y-m-d', strtotime($row['last_updated_date'][0])); ?></td>

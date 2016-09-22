@@ -231,8 +231,13 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -308,8 +313,13 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -419,8 +429,13 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -505,8 +520,13 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -572,8 +592,13 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -637,8 +662,8 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -706,8 +731,18 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -716,7 +751,7 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "TetsCase not configured:",
+          "title": "TestCase not configured:",
           "content": "{\n  \"error\": {\n    \"message\": [\n       \"Please set testing details\"\n    ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
@@ -779,8 +814,13 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -847,13 +887,23 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
           "title": "You are not running any test case now:",
           "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"You are not running any test case now\"\n     ]\n   },\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -943,14 +993,24 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "404",
-            "description": "<p>Test Case not configured properly</p>"
+            "description": "<p>Wrong test case configuration</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -964,8 +1024,8 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Please stop running case before start:",
-          "content": "{\n   \"errors\": {\n     \"message\": [\n       \"Execution profile is required for DataSource products\"\n     ]\n   },\n   \"code\": 400\n }",
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"errors\": {\n     \"message\": [\n       \"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"\n     ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         }
       ]
@@ -1041,8 +1101,18 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1052,7 +1122,7 @@ define({ "api": [
         },
         {
           "title": "Test Cases not found:",
-          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n        ]\n  },\n  \"code\": 404\n}",
+          "content": "{\n  \"errors\": {\n    \"message\":  [\n       \"Test Cases not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"
         },
         {
@@ -1138,8 +1208,13 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1225,8 +1300,18 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1329,8 +1414,13 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -1460,8 +1550,18 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Not organisation member:",
-          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organisation member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "title": "Not organization member:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Only organization member can perform testing\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"errors\": {\n    \"message\": [\n      \"Your organisation doesn't have access to this test suite.\"\n    ]\n  },\n  \"code\": 403\n}",
           "type": "json"
         },
         {

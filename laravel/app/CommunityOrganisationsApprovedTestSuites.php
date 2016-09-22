@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CommunityApprovedOrganisation extends Model
+class CommunityOrganisationsApprovedTestSuites extends Model
 {
     use UuidTrait;
 
-    protected $table = 'communities_approved_organisations';
+    protected $table = 'communities_organisations_approved_test_suites';
 
     public $incrementing = false;
 
     protected $fillable = [
-        'organisation_id', 'approved_by', 'community_id'
+        'organisation_id', 'approved_by', 'community_id', 'test_suite_id'
     ];
 
     /**

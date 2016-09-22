@@ -7,10 +7,10 @@ add_filter('user_contactmethods', 'cp_user_details');
 function cp_user_details($user_contactmethods, $user = null)
 {
     $user_contactmethods['phone_number'] = 'Phone Number';
-    $user_contactmethods['user_organisation'] = 'Organisation Name';
-    $user_contactmethods['user_organisation_web'] = 'Organisation Website';
-    $user_contactmethods['user_organisation_desc'] = 'Organisation Description';
-    $user_contactmethods['user_organisation_abn'] = 'Organisation ABN';
+    $user_contactmethods['user_organisation'] = 'Organization Name';
+    $user_contactmethods['user_organisation_web'] = 'Organization Website';
+    $user_contactmethods['user_organisation_desc'] = 'Organization Description';
+    $user_contactmethods['user_organisation_abn'] = 'Organization ABN';
 
     return $user_contactmethods;
 }
@@ -23,7 +23,7 @@ function remove_special_chars($string)
 function cp_user_detail_edit()
 {
     global $wpdb, $current_user;
-
+    $emailChanged = false;
     if (!is_user_logged_in()) {
         //Goto Homepage
         wp_redirect('/');
@@ -37,29 +37,50 @@ function cp_user_detail_edit()
     $phoneNumber = trim($_POST['phone_number']);
 
     if (!$first_name && !$last_name && !$email) {
-        echo 'First Name, Last Name and Email should not be empty';
+        sendAjaxErrorResponse('First Name, Last Name and Email should not be empty');
         exit;
     }
     if (!$first_name) {
-        echo 'Please enter your first name';
+        sendAjaxErrorResponse('Please enter your first name');
         exit;
     }
     if (!$last_name) {
-        echo 'Please enter your last name';
+        sendAjaxErrorResponse('Please enter your last name');
         exit;
     }
     if (!$email) {
-        echo 'Please enter your email address.';
+        sendAjaxErrorResponse('Please enter your email address.');
         exit;
     }
+
+    $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/';
+    if (!preg_match($email_regex, $email)) {
+        sendAjaxErrorResponse('Please enter a valid email address');
+        exit;
+    }
+
+    //Check Email Duplication
+    $query = $wpdb->prepare("SELECT ID FROM " . $wpdb->users . " WHERE user_email=%s AND ID != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if ($uID) {
+        sendAjaxErrorResponse('This email address already exists!');
+        exit;
+    }
+    $query = $wpdb->prepare("SELECT user_id FROM " . $wpdb->prefix . "users_changes WHERE email_changed=%s AND user_id != %d", $email, $user_id);
+    $uID = $wpdb->get_var($query);
+    if ($uID) {
+        sendAjaxErrorResponse('This email address already exists!');
+        exit;
+    }
+
     if (!$phoneNumber) {
-        echo 'Please enter your phone number.';
+        sendAjaxErrorResponse('Please enter your phone number.');
         exit;
     }
 
     if (!preg_match('#[^0-9]#', str_replace(array('+', ' ', '(', ')', '-'), '', $_POST['phone_number'])) != 1)
     {
-        echo "Invalid phone number";
+        sendAjaxErrorResponse("Invalid phone number");
         exit;
     }
 
@@ -80,25 +101,6 @@ function cp_user_detail_edit()
     //$uname = explode(' ', $uname);
     wp_update_user(array('ID' => $user_id, 'first_name' => $first_name, 'last_name' => $last_name, 'display_name' => $first_name /*. " " . $last_name*/));
 
-    $email_regex = '/^[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-z]{2,3})$/';
-    if (!preg_match($email_regex, $email)) {
-        echo 'Please enter a valid email address';
-        exit;
-    }
-
-    //Check Email Duplication
-    $query = $wpdb->prepare("SELECT ID FROM " . $wpdb->users . " WHERE user_email=%s AND ID != %d", $email, $user_id);
-    $uID = $wpdb->get_var($query);
-    if ($uID) {
-        echo 'This email address already exists!';
-        exit;
-    }
-    $query = $wpdb->prepare("SELECT user_id FROM " . $wpdb->prefix . "users_changes WHERE email_changed=%s AND user_id != %d", $email, $user_id);
-    $uID = $wpdb->get_var($query);
-    if ($uID) {
-        echo 'This email address already exists!';
-        exit;
-    }
 
     //Not Update Email and Save the email address temporary
     $query = $wpdb->prepare("SELECT user_email FROM " . $wpdb->users . " WHERE ID = %d", $user_id);
@@ -118,7 +120,8 @@ function cp_user_detail_edit()
 
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'email_changed', $data);
         cp_send_email_to_admin('email_changed_admin', $data);
-        addMessage('A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.');
+        $emailChanged = true;
+        //addMessage('A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.');
     }
 
     //Update Password
@@ -126,21 +129,21 @@ function cp_user_detail_edit()
     $confPass = $_POST['conf_pass'];
     if ($newPass || $confPass) {
         if ($newPass != $confPass) {
-            echo 'The passwords do no match!';
+            sendAjaxErrorResponse('The passwords do no match!');
             exit;
         } else {
             if (!\User\User::isPasswordValid($newPass)) {
-                echo 'Invalid password!';
+                sendAjaxErrorResponse('Invalid password!');
                 exit;
             }
 
             if (!wp_check_password($_POST['curr_pass'], $current_user->data->user_pass, $user_id)) {
-                echo 'Your current password is incorrect.';
+                sendAjaxErrorResponse('Your current password is incorrect.');
                 exit;
             }
 
             if ($_POST['curr_pass'] == $newPass) {
-                echo 'New password should be different to old one';
+                sendAjaxErrorResponse('New password should be different to old one');
                 exit;
             }
             //update password
@@ -156,9 +159,23 @@ function cp_user_detail_edit()
         }
     }
 
-    echo 'success';
+    $return = array(
+        'status'	=> 'success',
+        'email' => $emailChanged
+    );
+
+    wp_send_json_success($return);
     exit();
 }
+
+function sendAjaxErrorResponse($errorText){
+    $return = array(
+        'status'	=> 'error',
+        'message' => $errorText
+    );
+
+    wp_send_json_success($return);
+};
 
 function cp_user_organisation_detail_edit()
 {
@@ -621,9 +638,10 @@ function cp_user_organisation_join()
     $organisation = ct_get_organisation_by_key($organisation_key);
     if ($organisation) {
         $org_controller->add_membership($user_id, $organisation->id);
-        exit('success');
+        addMessage('You have joined organisation successfully!');
+        exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
     }
-    exit('Organisation not found!');
+    exit((json_encode(['status' => 'success', 'data' => ['status' => 'error', 'message' => 'Organization not found!']])));
 }
 
 //Edit organisation
@@ -654,14 +672,14 @@ function cp_user_organisation_edit()
     $message_error = $message_success = false;
     //check that name and ABN for user organisation not empty
     if (empty($user_org) || $user_org == '-') {
-        $message_error = 'Organisation Name must be populated before an Organisation Record can be created';
+        $message_error = 'Organization Name must be populated before an Organization Record can be created';
     }
     if (false === $message_error) {
         $is_name_used_in_xero = false;
         //check that organisation name not used in Xero
         $is_name_used_in_xero = (boolean)$wpdb->get_results($wpdb->prepare("SELECT * FROM wp_organisations WHERE organisation_name = %s ", $user_org));
         if ($is_name_used_in_xero) {
-            $message_error = 'A record for an organisation with the same Name has already been created. Your organisation may already be set up on ' . get_site_title() . '.';
+            $message_error = 'A record for an organization with the same Name has already been created. Your organization may already be set up on ' . get_site_title() . '.';
         }
     }
     if (false === $message_error) {
@@ -691,10 +709,11 @@ function cp_user_organisation_edit()
 
             cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
             cp_send_email(array('email' => $current_user->user_email, 'name' => $full_name), 'send_organisation_signup_request_to_user', $email_data);
-            exit('success');
+            addMessage('You have created organisation successfully!');
+            exit((json_encode(['status' => 'success', 'data' => ['status' => 'success', 'message' => '']])));
         }
     }
-    exit($message_error);
+    exit((json_encode(['status' => 'error', 'data' => ['status' => 'error', 'message' => $message_error]])));
 }
 
 //Get User Full Name

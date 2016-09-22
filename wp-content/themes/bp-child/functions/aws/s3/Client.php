@@ -10,7 +10,7 @@ class S3Wrapper extends BaseAWS
     public function __construct()
     {
 
-        $this->_bucket = get_option('aws_s3_url');
+        $this->_bucket = 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au';
 
         $configs = self::getAWSConfigs();
         $configs['signature'] = 'v4';
@@ -99,6 +99,42 @@ class S3Wrapper extends BaseAWS
         $s3 = new S3Wrapper();
         if ($returnJson) return $s3->getObject('profiles/user/' . $token . '.json');
         return json_decode($s3->getObject('profiles/user/' . $token . '.json'));
+    }
+
+    /**
+     * @param $token - profile token from profiles table
+     * @param bool $returnJson - set this flag to true if you want to get data as JSON
+     * @return array|bool|mixed|null
+     */
+    public static function getAvatar($key)
+    {
+        $s3 = new S3Wrapper();
+        try {
+        $result = $s3->_client->getObjectUrl(
+            'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au',
+            $key
+        );
+        } catch (Exception $e) {
+            return false;
+        }
+        return $result;
+    }
+
+    public static function getCommunityAvatar($communityKey)
+    {
+        if(empty($communityKey)){
+            return DEFAULT_AVATAR;
+        }
+        $s3 = new S3Wrapper();
+        try {
+            $result = $s3->_client->getObjectUrl(
+                'www.' . getenv('ENVIRONMENT') . '.twain.gosource.com.au',
+                $communityKey
+            );
+        } catch (Exception $e) {
+            return DEFAULT_AVATAR;
+        }
+        return $result;
     }
 
     /**
@@ -213,7 +249,7 @@ class S3Wrapper extends BaseAWS
     public static function getLink($bucket, $fileName)
     {
         $s3 = new S3Wrapper();
-        return urldecode($s3->_client->getObjectUrl(rtrim(get_option('aws_s3_url') . '/' . $bucket, '/'), $fileName));
+        return urldecode($s3->_client->getObjectUrl(rtrim('www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au' . '/' . $bucket, '/'), $fileName));
     }
 
     public static function getDownloadLink($bucket, $fileName, $name = false)
@@ -221,7 +257,7 @@ class S3Wrapper extends BaseAWS
         $s3 = new S3Wrapper();
         $name = $name ? $name : $fileName;
         $command = $s3->_client->getCommand('GetObject', array(
-            'Bucket' => get_option('aws_s3_url'),
+            'Bucket' => 'www.'.getenv('ENVIRONMENT').'.twain.gosource.com.au',
             'Key' => $bucket . '/' . $fileName,
             'ResponseContentDisposition' => 'attachment; filename="' . $name . '"'
         ));

@@ -39,11 +39,20 @@ class Transaction extends Model
     public function canBeDeleted()
     {
         $usedInVerifyRequest = VerifyRequest::where('transactions', 'LIKE', '%' . $this->id . '%')->first();
-        $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions()) || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
+        $hasAccessToTransaction = Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions())->get() || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
         if (!$usedInVerifyRequest && $hasAccessToTransaction && $this->audit_record == false && $this->usedInClaims->isEmpty()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Ensure that user can update current transaction
+     * @return bool
+     */
+    public function userHasAccess()
+    {
+        return Transaction::where('id', $this->id)->whereIn('subscription_id', $this->getUserSubscriptions())->get() || doesUserAdminInAnyCommunity() || doesUserSupportInAnyCommunity() || is_super_admin();
     }
 
     /**
@@ -117,7 +126,7 @@ class Transaction extends Model
             $this->whereModel->where('subscription_id', $filters['subscription_id']);
         }
         if ($filters['date']) {
-            $this->whereModel->whereRaw(" ( updated_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND updated_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
+            $this->whereModel->whereRaw(" ( created_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND created_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
         }
         if ($filters['execution_id']) {
             $this->whereModel->where('execution_id', $filters['execution_id']);

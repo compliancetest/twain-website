@@ -1373,11 +1373,6 @@ function generate_and_download( $data ){
         'Claim Date',
         'Certificate Number',
         'Certificate URL',
-        'Service ID',
-        'Service Name',
-        'Entity ID',
-        'Entity ID Type',
-        'E2E Partner Service ID'
     ));
     if (is_array($data['hits']['hit'])) {
         foreach( $data['hits']['hit'] as $row ){
@@ -1408,11 +1403,6 @@ function generate_and_download( $data ){
                     $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
                     $row_data['cert_number'][0],
                     $row_data['status'][0] == 'Verified' ? $row_data['cert_url'][0] : '',
-                    $row_data['service_id'][0],
-                    $row_data['service_name'][0],
-                    $row_data['entity_id'][0],
-                    $row_data['entity_id_type'][0],
-                    $row_data['e2e_partner_service_id'][0]
                 );
                 fputcsv( $outstream, $tempArray );
                 //responder entry
@@ -1432,11 +1422,6 @@ function generate_and_download( $data ){
                     $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
                     $row_data['cert_number'][0],
                     $row_data['status'][0] == 'Verified' ? $s3->getAgreementClaimLink( $agreement->responder_token ) : '',
-                    $responder_service->id,
-                    $responder_service->service_name,
-                    $responder_service->service_id,
-                    $responder_service->service_type,
-                    $requester_service->id
                 );
                 fputcsv( $outstream, $tempArray );
             } else{
@@ -1457,11 +1442,6 @@ function generate_and_download( $data ){
                     $claim_date != '1970-01-01' && $row_data['status'][0] == 'Verified' ? $claim_date : '',
                     isset( $row_data['cert_number'][0] ) ? $row_data['cert_number'][0] : '',
                     isset( $row_data['cert_url'][0] ) ? $row_data['cert_url'][0] : '',
-                    isset( $row_data['service_id'][0] ) ? $row_data['service_id'][0] : '',
-                    isset( $row_data['service_name'][0] ) ? $row_data['service_name'][0] : '',
-                    isset( $row_data['entity_id'][0] ) ? $row_data['entity_id'][0] : '',
-                    isset( $row_data['entity_id_type'][0] ) ? $row_data['entity_id_type'][0] : '',
-                    isset( $row_data['e2e_partner_service_id'][0] ) ? $row_data['e2e_partner_service_id'][0] : ''
                 );
                 fputcsv( $outstream, $tempArray );
             }
@@ -1704,4 +1684,18 @@ function getCommunityUrl($communityId){
 function ctE($string)
 {
     return htmlentities($string, ENT_COMPAT, 'UTF-8', false);
+}
+
+/**
+ * @param $userId
+ * @return bool
+ */
+function getUserAvatar($userId)
+{
+    $key = get_user_meta($userId, 'avatar_s3_path', true);
+    if(!$key){
+        return DEFAULT_AVATAR;
+    }
+    $s3 = new S3Wrapper();
+    return $s3->getAvatar($key);
 }

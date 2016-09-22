@@ -7,7 +7,7 @@
         <div class="tabs-menu">
             <ul>
                 @if(is_organisation_admin())
-                    <li class="organisation-tab"><a href="/my-organisation/" data-tooltip="tooltip" title="My Organisation">Organisation</a></li>
+                    <li class="organisation-tab"><a href="/my-organisation/" data-tooltip="tooltip" title="My Organization">Organization</a></li>
                 @endif
 
                 <li class="communities-tab"><a data-tooltip="tooltip" href="/my-communities/" title="My community memberships">Communities</a></li>
@@ -19,6 +19,7 @@
                 <li class="support-tab"><a href="/my-support-tickets/" data-tooltip="tooltip" title="My support tickets">Support</a></li>
                 <li class="profile-tab"><a href="/my-profile/" data-tooltip="tooltip" title="My profile">Profile</a></li>
                 <li class="transactions-tab"><a href="/api-logs/" class="active" data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
+                <li class="transactions-tab"><a href="/test-outcome-logs/" data-tooltip="tooltip" title="Outcome Logs">Outcome Logs</a></li>
 
             </ul>
         </div>

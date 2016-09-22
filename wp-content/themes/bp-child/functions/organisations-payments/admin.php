@@ -9,7 +9,7 @@ require_once (THE_FUNCTION . "/organisations-payments/class.payments.php");
 add_action("admin_menu", "ct_add_manage_xero_payments_menu");
 function ct_add_manage_xero_payments_menu()
 {
-    add_menu_page("Manage Organisation Payments", "Organisation Payments", "manage_options", "manage-organisations-payments", "ct_show_xero_payments_list");
+    add_menu_page("Manage Organization Payments", "Organization Payments", "manage_options", "manage-organisations-payments", "ct_show_xero_payments_list");
 }
 
 function ct_show_xero_payments_list()
@@ -18,7 +18,7 @@ function ct_show_xero_payments_list()
     $listTable->prepare_items();
     ?>
     <div class="wrap">
-        <h2>Organisations Payments</h2>
+        <h2>Organizations Payments</h2>
         <?php flushMessages(); ?>
         <form name="adminform" action="users.php?page=processing" method="post">
         <?php

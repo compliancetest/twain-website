@@ -31,9 +31,6 @@ class VerifyRequest extends Model
             //Community Support users can see all community suites
             if ($community->isModerator() || $community->isAdmin()) {
                 $userTestSuites = Post::getCommunityTestSuites($community->id);
-                array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
-                    $userTestSuites[$key]->suite_family_mark = $entry->ID;
-                });
             } else {
                 $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }
@@ -41,16 +38,15 @@ class VerifyRequest extends Model
             foreach ($userTestSuites as $userTestSuite) {
                 if (!isset($result[$userTestSuite->suite_family_mark])) {
                     $result[$userTestSuite->suite_family_mark] = [
-                        'testSuite' => Post::find($userTestSuite->suite_family_mark),
+                        'testSuite' => Post::find(TestSuite::getLatestSuiteIdForFamilyMark($userTestSuite->suite_family_mark)),
                         'data' => [],
                     ];
                 }
 
                 if ($userCommunity->is_admin || $userCommunity->is_mod) {
                     $query = VerifyRequest::where([
-                        'community_id' => $userCommunity->community_id,
-                        'test_suite_id' => $userTestSuite->suite_family_mark,
-                    ]);
+                        'community_id' => $userCommunity->community_id
+                    ])->whereIn('test_suite_id',TestSuite::getFamilyMarkSuitesIds($userTestSuite->suite_family_mark));
                     if ($hideResolved) {
                         $query->where('status', '<>', 'Resolved');
                     }
@@ -61,9 +57,8 @@ class VerifyRequest extends Model
                 } else {
                     $requests = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
-                        'test_suite_id' => $userTestSuite->suite_family_mark,
                         'organisation_id' => Auth::user()->organisation[0]['id'],
-                    ])->get();
+                    ])->whereIn('test_suite_id', TestSuite::getFamilyMarkSuitesIds($userTestSuite->suite_family_mark))->get();
                 }
                 if (is_object($requests) && !$requests->isEmpty()) {
                     foreach ($requests as $request) {

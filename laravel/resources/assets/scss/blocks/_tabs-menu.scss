@@ -25,6 +25,7 @@
                 &:hover, &:focus{
                     text-decoration: none;
                     background: #fff;
+                    outline: none;
                 }
 
                 &.active{
@@ -162,6 +163,27 @@
                 @include dashboardIconsSprite(surveys-active);
             }
 
+            &.active{
+                a{
+                    @include box-shadow(0 0 30px -7px #002747 inset);
+                    @include text-shadow(0 1px 0 #002747);
+                    background: #2d85cf;
+                    color: #fff;
+                    border: 1px solid #3577ad;
+                    margin-top: 0;
+                    padding-top: 7px;
+                    padding-bottom: 7px;
+                    outline: none;
+                }
+            }
+
+
+        }
+    }
+
+    .settings-tabs{
+        li a{
+           padding: 5px 10px;
         }
     }
 

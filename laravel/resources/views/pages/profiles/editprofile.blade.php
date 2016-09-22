@@ -131,13 +131,14 @@
                     if(rsp.status == 'success')
                     {
                         jQuery('#profile-type-id').after('<p class="message success-message">Successfully saved!</p>');
-                        location.reload();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }else{
                         jQuery('#profile-type-id').after('<p class="message error-message">' + jQuery(rsp).find('msg').text() + '</p>');
                     }
                 },
                 error: function(rsp){
-                    console.log(rsp);
                     jQuery('#profile-type-id').after('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
                 },
                 complete: function(rsp){
@@ -160,7 +161,9 @@
                     if(rsp.status == 'success')
                     {
                         jQuery('#modalEditProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
-                        location.reload();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     }else{
                         jQuery('#modalEditProfile .modal-footer').prepend('<p class="message error-message">' + rsp.message + '</p>');
                     }

@@ -35,13 +35,13 @@ $args = array(
 );
 
 //Getting Search Query
-$term = trim(isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '');
+$term = trim(isset($_GET['test_suite_q']) ? ctE($_GET['test_suite_q']) : '');
 
-if ($term)
+
+if ($term) {
+    $params[] = 'test_suite_q=' . $term;
     $args['s'] = $term;
-
-if ($term)
-    $params[] = 'q=' . $term;
+}
 
 //Getting Filter Params
 $filterType = getFilterParam('type');
@@ -116,7 +116,32 @@ $testsuites = $get_posts->get_posts();
 ?>
     <div class="content container" id="search">
         <div id="search_title_block" class="page-title-block column noshadow">
-            <?php get_sidebar('search') ?>
+
+            <form role="search" method="get" id="searchform" action="/test-suites/" class="searchform">
+                <input type="text" name="test_suite_q" id="q" class="keyword"
+                       value="<?php echo ctE(trim(isset($_GET['test_suite_q']) ? $_GET['test_suite_q'] : '')) ?>" placeholder="Search Term"
+                       autocomplete="off"/>
+                <input type="submit" id="search_test_suite_submit" class="search-button" value=""/>
+            </form>
+            <script>
+                // Search autofocus
+                jQuery(document).ready(function () {
+                    jQuery('#searchform').on('submit', function(e){
+                        e.preventDefault();
+                        jQuery('#searchString').val(jQuery('#q').val());
+                        jQuery('#form_filter').submit();
+
+                    });
+                    var inputSearch = jQuery('#q');
+                    var searchTerm = inputSearch.val();
+                    if (searchTerm != '') {
+                        inputSearch.focus().val('').val(searchTerm);
+                    } else {
+                        inputSearch.focus();
+                    }
+                });
+            </script>
+
             <p class="search_result_label">
                 <?php if (count($testsuites) > 0) { ?>
                     <?php $start = (($page - 1) * $posts_per_page + 1);?>
@@ -160,7 +185,7 @@ $testsuites = $get_posts->get_posts();
                                     <div class="grid_row grid_row_border">
                                         <div class="grid_cell width25P">
                                             <h5><a href="/communities/<?php echo $group->slug;?>"
-                                                   class="blue_txt"><?php echo $group->title ?></a>
+                                                   class="blue_txt"><?php echo ctE($group->title) ?></a>
                                             </h5>
                                         </div>
                                         <div class="grid_cell width25P">
@@ -170,7 +195,7 @@ $testsuites = $get_posts->get_posts();
                                             <?php echo apply_filters('the_excerpt', $row->post_excerpt) ?>
                                         </div>
                                         <div class="grid_cell width15P tocenter">
-                                            <a href="<?php echo get_permalink( $post->ID ); ?>?issuer[]=<?php echo $issuer ?>"><?php echo $issuer ?></a>
+                                            <a href="<?php echo get_permalink( $post->ID ); ?>?issuer[]=<?php echo ctE($issuer) ?>"><?php echo ctE($issuer) ?></a>
                                         </div>
                                         <div class="grid_cell width20P tocenter">
                                             <?php
@@ -179,7 +204,7 @@ $testsuites = $get_posts->get_posts();
                                         </div>
                                         <div class="grid_cell width15P tocenter">
                                             <?php
-                                            echo '<span class="status_btn status_' . sanitize_title($issueStatus) . '">' . $issueStatus . '</span>';
+                                            echo '<span class="status_btn status_' . sanitize_title($issueStatus) . '">' . ctE($issueStatus) . '</span>';
                                             ?>
                                         </div>
                                         <div class="clear"></div>
@@ -217,10 +242,8 @@ $testsuites = $get_posts->get_posts();
                 </div>
                 <div class="fifth left expandable">
                     <div class="column">
-                        <form name="form_filter" id="form_filter" action="<?php echo get_permalink() ?>" method="get">
-                            <?php if ($term) { ?>
-                                <input type="hidden" name="q" value="<?php echo $term ?>"/>
-                            <?php } ?>
+                        <form name="form_filter" id="form_filter" action="/test-suites/" method="get">
+                            <input type="hidden" name="test_suite_q" value="<?php echo ctE($term) ?>" id="searchString"/>
                             <div class="expandable">
                                 <h6 class="exp_title">Type</h6>
 

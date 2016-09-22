@@ -55,7 +55,7 @@
                     </div>
                     <?php if( $can_view ):?>
                         <ul class="product-attributes">
-                            <li>Organisation: <strong><?php echo ctE($product->owner); ?></strong>
+                            <li>Organization: <strong><?php echo ctE($product->owner); ?></strong>
                             <li>Manufacturer: <strong><?php echo ctE($product->manufacturer); ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                             <li>Version: <strong><?php echo ctE($product->version); ?></strong></li>

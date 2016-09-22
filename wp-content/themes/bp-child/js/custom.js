@@ -628,15 +628,29 @@ function hideGridBoxLoadingWrapper(obj)
         jQuery(obj).find('.loading').hide();
 }
 
-function showGridBoxResultMessage(obj, message, type)
+/**
+ *
+ * @param obj {jQuery}
+ * @param message {string} Message text
+ * @param type {string} Message type
+ * @param separateErrorPlace {boolean} If true place error outside btn-row, when form submitted without reloading
+ */
+function showGridBoxResultMessage(obj, message, type, separateErrorPlace)
 {
     if(typeof obj == 'string')
         obj = jQuery(obj);
     
     if(jQuery(obj).find('.btn-row .message').length > 0)
         jQuery(obj).find('.btn-row .message').remove();
-    jQuery(obj).find('.btn-row').prepend('<div class="message ' + type + '">' + message + '</div>');
-    jQuery(obj).find('.btn-row').find('.message').fadeIn('fast');
+    if (separateErrorPlace){
+        jQuery(obj).find('.btn-row').before('<div class="grid-row grid-row-message"><div class="message ' + type + '">' + message + '</div><div>');
+        setTimeout("jQuery('.grid-row-message').remove();", 3000);
+    } else {
+        jQuery(obj).find('.btn-row').prepend('<div class="message ' + type + '">' + message + '</div>');
+        jQuery(obj).find('.btn-row').find('.message').fadeIn('fast');
+    }
+
+
 }
 function hideGridBoxResultMessage(obj)
 {

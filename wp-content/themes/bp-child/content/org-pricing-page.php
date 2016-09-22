@@ -177,7 +177,7 @@
                type: 'post',
                 url: '/',
                 dataType: 'json',
-                data: { '_organisation_nonce' : 'apply_voucher', 'voucher_name' : v_name },
+                data: { '_Organization_nonce' : 'apply_voucher', 'voucher_name' : v_name },
                 success: function( data ){
                     if( data.error ){
                         $('.discount').hide();

@@ -82,7 +82,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row ">No file uploaded yet</td>
+                        <td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row">No files uploaded yet</td>
                     </tr>
                 @endif
                 </tbody>
@@ -175,7 +175,7 @@
     jQuery(document).ready(function ($) {
         Page.communityDownloads.init();
 
-        jQuery('.downloadLicenseModal .btn-confirm').on('click', function (e) {
+        jQuery('.downloadLicenseModal .btn-confirm').on('click', function () {
 
             var modal = jQuery(this).closest('.downloadLicenseModal');
             modal.find('.error-message').addClass("hide");
@@ -228,11 +228,12 @@
                 });
 
             }
-        })
+        });
 
         jQuery('.btn-delete').on('click', function (e) {
             e.preventDefault();
             var elem = jQuery(this);
+            var tr = $(elem).closest('tr');
             if (confirm('Are you sure?')) {
                 $.ajax({
                     url: '/downloads/{{ $community->slug }}/' + elem.attr('data-id'),
@@ -244,8 +245,11 @@
                         setTimeout(function () {
                             jQuery('.success-message').addClass('hide');
                         }, 3000);
-                        $(elem).closest('tr').slideUp('slow', function () {
-                            $(elem).remove();
+                        tr.slideUp('slow', function () {
+                            $(this).remove();
+                            if ( !$('.downloads-list-table tbody tr').length){
+                                $('.downloads-list-table tbody').html('<tr><td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row">No files uploaded yet</td></tr>');
+                            }
                         });
                     }
                 });

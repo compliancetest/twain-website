@@ -59,7 +59,7 @@ $xeroItems = ct_get_xero_items();
                                     <!--<option></option>-->
                                     <?php foreach ($groups as $row) { ?>
                                         <option
-                                            value="<?php echo $row->id ?>" <?php echo cp_selected($row->id, $suite->community_id) ?>><?php echo $row->title; ?></option>
+                                            value="<?php echo $row->id ?>" <?php echo cp_selected($row->id, $suite->community_id) ?>><?php echo ctE($row->title); ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -217,28 +217,28 @@ $xeroItems = ct_get_xero_items();
                 </div>
             </div>
             <div class="space20"></div>
-            <div class="grid-box grid-box-expandable grid-box-opened">
-                <div class="grid-box-header">
-                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                    <h5 class="left">Operational Triplet</h5>
-
-                    <div class="clear"></div>
-                </div>
-                <div class="grid-box-body">
-                    <div class="column">
-                        <div class="field-row">
-                            <div class="grid-cell">
-                                <textarea cols="" rows="" class="textarea" name="init_message"
-                                          id="init_message"><?php echo $suite->initiatingMessage ?></textarea>
-                            </div>
-                            <div class="grid-cell">
-                                <label class="light-desc"><i>Type Operational Triplet (comma separated)</i></label>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="grid-box grid-box-expandable grid-box-opened">-->
+<!--                <div class="grid-box-header">-->
+<!--                    <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>-->
+<!--                    <h5 class="left">Operational Triplet</h5>-->
+<!---->
+<!--                    <div class="clear"></div>-->
+<!--                </div>-->
+<!--                <div class="grid-box-body">-->
+<!--                    <div class="column">-->
+<!--                        <div class="field-row">-->
+<!--                            <div class="grid-cell">-->
+<!--                                <textarea cols="" rows="" class="textarea" name="init_message"-->
+<!--                                          id="init_message">--><?php //echo $suite->initiatingMessage ?><!--</textarea>-->
+<!--                            </div>-->
+<!--                            <div class="grid-cell">-->
+<!--                                <label class="light-desc"><i>Type Operational Triplet (comma separated)</i></label>-->
+<!--                            </div>-->
+<!--                            <div class="clear"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <?php if(DISPLAY_SUBSCRIPTIONS):?>
                 <div class="space20"></div>
@@ -933,7 +933,7 @@ $xeroItems = ct_get_xero_items();
                 <div class="grid-box-footer nobackground noshadow">
                     <div class="btn-row nopaddingright nopaddingleft">
                         <?php if ($suite->id) { ?>
-                            <div class="left"><label><input type="checkbox" name="send-notification"
+                            <div class="left"><label><input type="checkbox" name="send-notification" disabled="disabled"
                                                             id="send-notification" value="1" autocomplete="off"/> Send
                                     Notification to members</label></div>
                         <?php } ?>
@@ -1205,6 +1205,7 @@ $xeroItems = ct_get_xero_items();
             }
             jQuery(this).before('<a href="#" class="version-cancel has-tooltip"><span class="simple_tooltip"><span></span>Undo</span></a>');
             jQuery('.version-cell .action-btn').hide();
+            jQuery('#send-notification').removeAttr('disabled');
             return false;
         })
 
@@ -1218,6 +1219,7 @@ $xeroItems = ct_get_xero_items();
             jQuery('#ts_version_major').val(jQuery('#ts_version_major').attr('data-default'));
             jQuery('#ts_version_minor').val(jQuery('#ts_version_minor').attr('data-default'));
             jQuery('#ts_version_patch').val(jQuery('#ts_version_patch').attr('data-default'));
+            jQuery('#send-notification').prop('checked', false).attr('disabled', true);
 
             if (majorUpdated)
                 getAvailableTemplates();

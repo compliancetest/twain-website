@@ -24,7 +24,7 @@ if(!defined('ABSPATH')) {
                 <input type="hidden" name="organisation_id" value="<?php echo $organisation->id;?>">
                 <div class="grid-row grid-row-complex">
                     <div class="grid-cell width30P">
-                        <label>Organisation</label>
+                        <label>Organization</label>
                     </div>
                     <div class="grid-cell width70P">
                         <div class="grid-row">
@@ -189,7 +189,7 @@ if(!defined('ABSPATH')) {
     <script>
         var clipboard = new Clipboard('.copyProfileLink');
         clipboard.on('success', function(e) {
-           jQuery('#orgKey').append( '<div class="message success copiedMessage">Organisation Key has been copied to clipboard.</div>');
+           jQuery('#orgKey').append( '<div class="message success copiedMessage">Organization Key has been copied to clipboard.</div>');
             var messageTimeoutHandler = setTimeout(function() {
                 jQuery('.copiedMessage').slideUp().remove();
             }, 2000);

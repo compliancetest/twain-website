@@ -34,7 +34,7 @@ class CPPDF extends TCPDF {
         $this->Write(10, home_url(), home_url(), false, 'L', true);
 
         // Right logo
-        $image_file = K_PATH_IMAGES . "header-logo.png";
-        $this->Image($image_file, 180, 283, 38, 0, 'PNG', '', 'N', false, $dpi = 300, 'R', false, false, 0, false, false, false, false);
+//        $image_file = K_PATH_IMAGES . "header-logo.png";
+//        $this->Image($image_file, 180, 283, 38, 0, 'PNG', '', 'N', false, $dpi = 300, 'R', false, false, 0, false, false, false, false);
     }
 }

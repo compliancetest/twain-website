@@ -10,6 +10,7 @@ use App\PricingPlan;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
 use App\Transaction;
+use App\UserSubscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,8 @@ class TestPlansController extends Controller
      */
     public function create($suiteId)
     {
-        $subscription = OrganisationSubscription::where(['suite_family_mark' => $suiteId])->first();
+        $userSubscription = UserSubscription::where(['suite_id' => $suiteId])->first();
+        $subscription = OrganisationSubscription::find($userSubscription->parent_id);
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
@@ -74,19 +76,18 @@ class TestPlansController extends Controller
         }
 
         if ($request->get('role') == 'Application') {
-            $configuredTestSuites = json_decode(Post::find($request->get('product_id'))->getMetaByKey('product_suites'));
+            $configuredTestSuites =  (array) json_decode(Post::find($request->get('product_id'))->getMetaByKey('product_suites1'));
             if (!in_array($request->get('suite_id'), $configuredTestSuites)) {
                 return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool.'], 422);
             }
         }
 
-        $testPlan = TestPlan::create($request->all());
-        $testPlan->creator_id = Auth::user()->ID;
-
         $organisationSubscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $request->get('suite_id')])->first();
-        $testPlan->organisation_subscription_id = $organisationSubscription->id;
 
-        $testPlan->save();
+        $allData = $request->all();
+        $allData['creator_id'] = Auth::user()->ID;
+        $allData['organisation_subscription_id'] = $organisationSubscription->id;
+        $testPlan = TestPlan::create($allData);
 
         $productFeatures = (array) json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_features'), true);
 

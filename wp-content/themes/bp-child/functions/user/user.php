@@ -51,10 +51,10 @@ function compliancetest_user_actions()
         if(empty($organisationsList)){
             exit('Products organisation list can not be empty');
         }
-        $result = saveProductsOrganisations(intval($_POST['organisation_id']),json_encode($organisationsList));
+        $organisationId = ct_get_user_organisation()->id;
+        $result = saveProductsOrganisations($organisationId,json_encode($organisationsList));
         if($result === true || is_int($result)) {
             echo "success";
-            addMessage('Manufacturer list was saved successfully!');
         } else
             echo $result;
         exit;
@@ -90,7 +90,7 @@ function compliancetest_user_actions()
             // Stop sole admins from abandoning their group
             $group_admins = $wpdb->get_results($wpdb->prepare('SELECT * FROM communities_members WHERE community_id = %s AND is_admin = 1', $gID));
 
-             if ( 2 > count( $group_admins )) {
+             if ( doesUserCommunityAdmin(get_current_user_id(), $gID) && 2 > count( $group_admins )) {
                  echo __('This community must have at least one admin', 'buddypress');
              } else {
                 $result = $wpdb->delete( 'communities_members',
@@ -171,9 +171,9 @@ function display_signup_organisation_box()
     ?>
     <div class="popup-box" style="display: none; width: 500px">
       <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-        <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+        <div class="popup-box-header radius6 noradiusbottom">Organization Record Required</div>
         <div class="popup-box-content">
-            An organisation record needs to be created for your organisation as products are owned by organisations. You can create a record via the Organisation section in your Profile tab.
+            An organization record needs to be created for your organization as products are owned by organizations. You can create a record via the Organization section in your Profile tab.
         </div>
         <div class="popup-box-footer radius6 noradiustop">
             <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
@@ -321,9 +321,9 @@ function getUserAdminGroups($user_id)
 function getUserCommunities($user_id)
 {
     global $wpdb;
-    return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin FROM communities AS c
+    return $wpdb->get_results($wpdb->prepare("SELECT c.*, cm.created_at as membership_date, cm.is_admin, cm.is_mod FROM communities AS c
                                               JOIN communities_members AS cm ON c.id = cm.community_id
-                                              WHERE cm.user_id = %d", $user_id));
+                                              WHERE cm.user_id = %d AND cm.is_confirmed = 1", $user_id));
 }
 
 function doesUserCommunityAdmin($user_id, $communityId)

@@ -8,20 +8,22 @@
                 <ul class="member-list" id="request-list">
                     @foreach($membershipRequests as $membershipRequest)
                         <?php $user = \App\User::find($membershipRequest->user_id);?>
-                        <li>
-                            <div class="pull-left">
-                                <img width="50" height="50" alt="" class="avatar" src="{{ $user->getAvatar() }}">
-                                <span class="member-info">
-                                    <span class="member-name">{{ cp_get_user_fullname($membershipRequest->user_id) }}</span>
-                                    <span class="member-email">{{ $user->user_email }}</span>
-                                    <span class="member-activity">{{ $community->updated_at->diffForHumans() }}</span>
-                                </span>
-                            </div>
-                            <div class="pull-right action">
-                                <a class="btn btn-success btn-with-icon btn-confirm acceptRequest" href="#" data-tooltip="tooltip" title="Accept" data-id="{{ $user->ID }}" data-community="{{ $community->slug }}">Accept</a>
-                                <a class="btn btn-default btn-with-icon btn-cancel rejectRequest" href="#" data-tooltip="tooltip" title="Reject" data-id="{{ $user->ID }}" data-community="{{ $community->slug }}">Reject</a>
-                            </div>
-                        </li>
+                        @if($user)
+                            <li>
+                                <div class="pull-left">
+                                    <img width="50" height="50" alt="" class="avatar" src="{{ $user->getAvatar() }}">
+                                    <span class="member-info">
+                                        <span class="member-name">{{ cp_get_user_fullname($membershipRequest->user_id) }}</span>
+                                        <span class="member-email">{{ $user->user_email }}</span>
+                                        <span class="member-activity">{{ $membershipRequest->updated_at->diffForHumans() }}</span>
+                                    </span>
+                                </div>
+                                <div class="pull-right action">
+                                    <a class="btn btn-success btn-with-icon btn-confirm acceptRequest" href="#" data-tooltip="tooltip" title="Accept" data-id="{{ $user->ID }}" data-community="{{ $community->slug }}">Accept</a>
+                                    <a class="btn btn-default btn-with-icon btn-cancel rejectRequest" href="#" data-tooltip="tooltip" title="Reject" data-id="{{ $user->ID }}" data-community="{{ $community->slug }}">Reject</a>
+                                </div>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             @endif
@@ -53,19 +55,21 @@
 
             @foreach($community->getAdmins() as $admin)
                 <?php $user = \App\User::find($admin->user_id);?>
-                <li class="col-sm-6">
-                    <label>
-                        <input type="checkbox" value="{{ $admin->user_id }}" name="id[]" @if($admin->user_id == Auth::user()->ID) disabled="disabled" @endif>
-                        <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
-                    </label>
-                    <span class="member-info">
-                        <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
-                        <span class="member-email">{{ $user->user_email }}</span>
-                        @if($admin->user_id != Auth::user()->ID)
-                            <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $admin->user_id }}">Demote to Member</button>
-                        @endif
-                    </span>
-                </li>
+                @if($user)
+                    <li class="col-sm-3">
+                        <label>
+                            <input type="checkbox" value="{{ $admin->user_id }}" name="id[]" @if($admin->user_id == Auth::user()->ID) disabled="disabled" @endif>
+                            <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
+                        </label>
+                        <span class="member-info">
+                            <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
+                            <span class="member-email">{{ $user->user_email }}</span>
+                            @if($admin->user_id != Auth::user()->ID)
+                                <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $admin->user_id }}">Demote to Member</button>
+                            @endif
+                        </span>
+                    </li>
+                @endif
             @endforeach
 
         </ul>
@@ -76,21 +80,23 @@
 
         @foreach($community->getModerators() as $mod)
             <?php $user = \App\User::find($mod->user_id);?>
-            <li class="col-sm-6">
-                <label>
-                    @if($isAdmin)
-                        <input type="checkbox" value="{{ $mod->user_id }}" name="id[]" @if($mod->user_id == Auth::user()->ID) disabled="disabled" @endif>
-                    @endif
-                    <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
-                </label>
-                <span class="member-info">
-                    <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
-                    <span class="member-email">{{ $user->user_email }}</span>
-                    @if($isAdmin)
-                        <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $mod->user_id }}">Demote to Member</button>
-                    @endif
-                </span>
-            </li>
+            @if($user)
+                <li class="col-sm-3">
+                    <label>
+                        @if($isAdmin)
+                            <input type="checkbox" value="{{ $mod->user_id }}" name="id[]" @if($mod->user_id == Auth::user()->ID) disabled="disabled" @endif>
+                        @endif
+                        <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
+                    </label>
+                    <span class="member-info">
+                        <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
+                        <span class="member-email">{{ $user->user_email }}</span>
+                        @if($isAdmin)
+                            <button type="button" class="btn btn-success btn-sm demoteToMember" data-user-id="{{ $mod->user_id }}">Demote to Member</button>
+                        @endif
+                    </span>
+                </li>
+            @endif
         @endforeach
 
     </ul>
@@ -99,16 +105,18 @@
     <ul class="row member-list" id="mods-list">
         @foreach($community->getMembers() as $member)
             <?php $user = \App\User::find($member->user_id);?>
-            <li class="col-sm-6">
-                <label>
-                    <input type="checkbox" value="{{ $user->ID }}" name="id[]">
-                    <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
-                </label>
-                <span class="member-info">
-                    <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
-                    <span class="member-email">{{ $user->user_email }}</span>
-                </span>
-            </li>
+            @if($user)
+                <li class="col-sm-3">
+                    <label>
+                        <input type="checkbox" value="{{ $user->ID }}" name="id[]">
+                        <img width="28" height="28" alt="" class="avatar" src="{{ $user->getAvatar() }}">
+                    </label>
+                    <span class="member-info">
+                        <span class="member-name">{{ cp_get_user_fullname($user->ID) }}</span>
+                        <span class="member-email">{{ $user->user_email }}</span>
+                    </span>
+                </li>
+            @endif
         @endforeach
     </ul>
     <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div></div>

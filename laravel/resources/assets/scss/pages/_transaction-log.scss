@@ -62,6 +62,20 @@
 .transaction-list-actions{
   padding: 10px 0;
   @include pie-clearfix;
+  background: #fff;
+
+  &.fixed{
+    position: fixed;
+    top: 5px;
+    padding: 10px;
+    border: 1px solid #1d76c0;
+    border-left: 0;
+    margin-left: 1px;
+
+    .pagination-box{
+      display: none;
+    }
+  }
 }
 
 .log-results-table-wrapper{
@@ -120,6 +134,14 @@
     &:nth-child(2n+1) > td{
       background: #eee image-url('separate-bg/table-tr-bg-odd.png') repeat 0 0;
     }
+  }
+
+}
+
+.details_row{
+
+  .block-loading-wrapper{
+    min-height: 90px;
   }
 
 }

@@ -12,6 +12,43 @@ class TestSuite extends Model
 
     protected $primaryKey = 'suite_id';
 
+
+    /**
+     * Get Suite family mark
+     * @param $testSuiteId
+     * @return int
+     */
+    public static function getTestSuiteFamilyMark($testSuiteId)
+    {
+        $testSuite = TestSuite::find($testSuiteId);
+        if ($testSuite) {
+            return $testSuite->family_mark;
+        }
+        return 0;
+    }
+    
+    /**
+     * Get suite's ID for given family mark
+     * @param $familyMark
+     * @return array
+     */
+    public static function getFamilyMarkSuitesIds($familyMark)
+    {
+        if (TestSuite::where(['family_mark' => $familyMark])->get()->isEmpty()) {
+            return [];
+        }
+        return array_values(TestSuite::where(['family_mark' => $familyMark])->pluck('suite_id')->toArray());
+    }
+
+    /**
+     * Get latest test suite id for family mark
+     * @param $familyMark
+     * @return mixed
+     */
+    public static function getLatestSuiteIdForFamilyMark($familyMark)
+    {
+        return TestSuite::where(['family_mark' => $familyMark])->orderBy('suite_id', 'DESC')->first()->suite_id;
+    }
     /**
      * get test suite's test cases list
      * @return mixed

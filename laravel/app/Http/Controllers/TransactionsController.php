@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\TransactionChangeLog;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Transaction;
 use App\Http\Requests;
@@ -91,6 +93,9 @@ class TransactionsController extends Controller
         }
         foreach ($request->get('transactions') as $transactionToUpdate) {
             $transaction = Transaction::find($transactionToUpdate);
+            if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')))) {
+                TransactionChangeLog::addLog($transaction, Auth::user()->ID, strtoupper($request->get('outcome_code')));
+            }
             $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode(strtoupper($request->get('outcome_code')));
             if (boolval($request->get('reason'))) {
                 $transaction->reason = $request->get('reason');
@@ -119,6 +124,31 @@ class TransactionsController extends Controller
             $transaction = Transaction::find($transactionToDelete);
             if ($transaction->canBeDeleted()) {
                 $transaction->delete();
+            }
+        }
+        return response()->json(['success']);
+    }
+
+    /**
+     * Mark records as Audit
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkAudit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'transactions' => 'array|required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        foreach ($request->get('transactions') as $transactionToDelete) {
+            $transaction = Transaction::find($transactionToDelete);
+            if ($transaction->userHasAccess()) {
+                $transaction->audit_record = true;
+                $transaction->save();
             }
         }
         return response()->json(['success']);

@@ -10,7 +10,7 @@ require_once(THE_FUNCTION . "/organisation/class.organisation.php");
 add_action("admin_menu", "ct_add_manage_organisation_menu");
 function ct_add_manage_organisation_menu()
 {
-    add_menu_page("Manage Organsations", "Organisations", "manage_options", "manage-organisations", "ct_show_organisations_list");
+    add_menu_page("Manage Organzations", "Organizations", "manage_options", "manage-organisations", "ct_show_organisations_list");
     add_submenu_page("manage-organisations", "Add Organsation", "Add New", "manage_options", "add-organisation", "ct_show_new_organisation");
     
 }
@@ -21,7 +21,7 @@ function ct_show_organisations_list()
     $listTable->prepare_items();
     ?>
     <div class="wrap">
-        <h2>Organisations</h2>        
+        <h2>Organizations</h2>
         <?php flushMessages(); ?>        
         <form name="adminform" action="users.php?page=processing" method="post">
         <?php
@@ -30,9 +30,9 @@ function ct_show_organisations_list()
         </form>
     </div>
     <div class="wrap">
-        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-from' );?>">Update Organisations From Xero</a>
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-from' );?>">Update Organizations From Xero</a>
         <div class="clear"></div>
-        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-to' );?>">Load Organisations List To Xero</a>
+        <a href="<?php echo admin_url()?>admin.php?page=add-organisation&org-action=<?php echo wp_create_nonce( 'reload-organisation-to' );?>">Load Organizations List To Xero</a>
     </div>
     <?php       
 }
@@ -65,7 +65,7 @@ function ct_show_new_organisation()
     }
     ?>
     <div class="wrap">
-        <h2><?php echo $id ? 'Edit' : 'New'?> Organisation</h2>
+        <h2><?php echo $id ? 'Edit' : 'New'?> Organization</h2>
         <?php flushMessages(); ?>
         <br clear="all" />
         <form name="adminform" action="<?php echo admin_url()?>admin.php?page=add-organisation<?php echo $id ? ('&id=' . $id) : ''?>" method="post">
@@ -75,17 +75,17 @@ function ct_show_new_organisation()
                     <td><input type="text" name="contact_id" id="contact_id" value="<?php echo $data['contact_id']?>" size="40" <?php if ($id){?> readonly="readonly" <?php } ?> /></td>
                 </tr>
                 <tr>
-                    <th>Organisation Name</th>
+                    <th>Organization Name</th>
                     <td><input type="text" name="organisation_name" id="organisation_name" value="<?php echo $data['organisation_name']?>"/></td>
                 </tr>
                 <?php if($id){ ?>
                 <tr>    
-                    <th>Organisation Key</th>
+                    <th>Organization Key</th>
                     <td><input type="text" name="organisation_key" id="organisation_key" size="40" value="<?php echo $data['organisation_key']?>" readonly="readonly" disabled="disabled" /></td>
                 </tr>
                 <?php } ?>
                 <tr>    
-                    <th valign="top">Organisation Description</th>
+                    <th valign="top">Organization Description</th>
                     <td>
                         <?php
 //                            echo wp_editor($data['organisation_description'], 'organisation_description', array('height' => 100));
@@ -106,7 +106,7 @@ function ct_show_new_organisation()
                     <td><input type="checkbox" name="no_billing" id="no_billing" value="1" <?php echo $data['no_billing'] == '1' ? 'checked="checked"' : ''?> /></td>
                 </tr>
                 <tr>
-                    <th>Organisation Administrator</th>
+                    <th>Organization Administrator</th>
                     <td>
                         <?php
                             //Getting All Active users
@@ -201,7 +201,7 @@ function ct_show_new_organisation()
                         <input type="text" name="phonenumber" id="phonenumber" size="15" placeholder="Phonenumber" value="<?php echo $data['phonenumber']?>" />
                     </td>
                 </tr>
-                <tr><td colspan="2"><input type="submit" value="Save Organisation" class="button button-primary" /></td></tr>  
+                <tr><td colspan="2"><input type="submit" value="Save Organization" class="button button-primary" /></td></tr>
             </table>
             <input type="hidden" name="id" value="<?php echo $id?>" />
             <input type="hidden" name="org-action" value="save-organisation" />
@@ -234,7 +234,7 @@ function ct_process_organisation_admin_actions()
                 //Save Organisation Admin
                 $organisationClass->save_organisation_admin($organisationClass->id, $_POST['admin_id']);
                 
-                addMessage('Organisation saved!', 'success');
+                addMessage('Organization saved!', 'success');
                 wp_redirect('admin.php?page=manage-organisations');
                 exit;
             }else{                                

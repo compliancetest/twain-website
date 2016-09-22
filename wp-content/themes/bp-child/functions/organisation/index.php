@@ -102,9 +102,9 @@ function ct_process_organisation_action()
                 ?>
                 <div class="popup-box" style="display: none; width: 500px">
                   <form name="" action="<?php echo site_url() ?>/index.php" method="post">
-                    <div class="popup-box-header radius6 noradiusbottom">Organisation Record Required</div>
+                    <div class="popup-box-header radius6 noradiusbottom">Organization Record Required</div>
                     <div class="popup-box-content">
-                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the Organisation section in your Profile tab.
+                        An organisation record needs to be created for your organisation as test suite subscriptions are owned by organisations. You can create a record via the Organization section in your Profile tab.
                     </div>                    
                     <div class="popup-box-footer radius6 noradiustop">
                         <a href="#" class="action-btn cancel-btn close-popup-btn"><span class="p"></span><span class="t">Close</span></a>
@@ -151,7 +151,7 @@ function ct_process_organisation_action()
                 } else {
                     global $wpdb;
                     $userOrganisation = ct_get_user_organisation(get_current_user_id());
-                    $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_approved_organisations WHERE community_id = %s AND organisation_id = %d", $community_id, $userOrganisation->id)) ? true : false;
+                    $hasunallocated = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_organisations_approved_test_suites WHERE community_id = %s AND organisation_id = %d AND test_suite_id = %d", $community_id, $userOrganisation->id, $familyMark)) ? true : false;
                 }
                 if($hasunallocated) { //Has unallocated subscriptions
                 ?>
@@ -526,6 +526,9 @@ function ct_process_organisation_action()
             
         } else if(wp_verify_nonce($action, 'confirm-organisation-unsubscribe')) {
             global $wpdb;
+            if (!DISPLAY_SUBSCRIPTIONS) {
+                $_POST['delete-now'] = true;
+            }
             $user_id = get_current_user_id();
             $id = $_POST['id'];
             $subscription = ct_get_organisation_subscription_by_id($id);

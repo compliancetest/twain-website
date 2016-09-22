@@ -576,7 +576,7 @@ function getDashboardPages($type = 'page')
             if (count($groups) > 0) {
                 foreach ($groups as $community) {
                     $community_url = '/communities/' . $community->slug . '/';
-                    $item1 = array('title' => $community->title, 'url' => $community_url);
+                    $item1 = array('title' => ctE($community->title), 'url' => $community_url);
                     $item2 = array();
                     $item2[] = array('title' => 'Test Suites', 'url' => $community_url);
                     $item2[] = array('title' => 'Test Data', 'url' => $community_url . 'testdata');
@@ -648,7 +648,7 @@ function getDashboardMenuHTML($pages = array(), $menu_class = '', $path = '', $l
     $html = '<ul class="dropdown-menu ' . (($level == 0) ? ($menu_class) : ('')) . '">';
 
     foreach ($pages as $page) {
-        if ($page['title'] == 'ApiLogs' && !is_super_admin()) {
+        if (($page['title'] == 'ApiLogs' || $page['title'] == 'Outcome Logs' ) && !is_super_admin()) {
             continue;
         }
         $class = isset($page['class']) ? ($page['class']) : ('');

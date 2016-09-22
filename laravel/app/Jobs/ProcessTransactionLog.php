@@ -9,6 +9,7 @@ use App\Post;
 use App\PostMeta;
 use App\TestOutcomeStatus;
 use App\Transaction;
+use App\TransactionChangeLog;
 use App\TransactionsLog;
 use Aws\Laravel\AwsFacade;
 use Illuminate\Queue\SerializesModels;
@@ -116,6 +117,12 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             'test_case_id' => $testCase->ID,
             'customer_id' => $this->userId,
         ]);
+
+        if (!$transaction->test_outcome_status_id ||
+            ($transaction->test_outcome_status_id && TestOutcomeStatus::find($transaction->test_outcome_status_id)->code != strtoupper($this->testOutcome))) {
+            TransactionChangeLog::addLog($transaction, $this->userId, $this->testOutcome);
+        }
+
         $transaction->product_id = $product->ID;
         $transaction->test_suite_id = $testSuite->ID;
         $transaction->audit_record = false;
@@ -126,6 +133,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->organisation_id = $organisationMember->organisation_id;
         $transaction->s3_link = $transaction->getZipS3Link($this->fileName);
         $transaction->save();
+        
+        
 
         //execution log
         if(file_exists($this->rootFolder . '/execution_log/execution_log.json')) {
@@ -195,18 +204,47 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     ));
                     $scanResults = [$transactionLog->getS3Link($logImageKey)];
                 }
+                /**
+                 * Save transactionLog screenshots
+                 */
+                $screenCaptures = [];
+                if (!empty($log['ScreenCaptureFileName'])) {
+                    foreach($log['ScreenCaptureFileName'] AS $screenCapture) {
+                        if(file_exists($this->rootFolder . '/screen_capture/' . $screenCapture)) {
+                            $screenCaptureImageKey = $this->userId . '/' . $this->testCaseId . '/' . $this->executionId . '/' . $transactionLog->id . '/screen_capture/' . $screenCapture;
+
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                            $mime = finfo_file($finfo, $this->rootFolder . '/screen_capture/' . $screenCapture);
+                            finfo_close($finfo);
+
+                            $s3->putObject(array(
+                                'Bucket' => config('env.bucket.transactions'),
+                                'Key' => $screenCaptureImageKey,
+                                'ContentType' => $mime,
+                                'SourceFile' => $this->rootFolder . '/screen_capture/' . $screenCapture,
+                            ));
+                            $screenCaptures[] = $transactionLog->getS3Link($screenCaptureImageKey);
+                        }
+                    }
+                }
                 $transactionLog->scan_results = json_encode($scanResults);
+                $transactionLog->screen_captures = json_encode($screenCaptures);
                 $transactionLog->save();
             }
         }
 
 
-        if($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
-            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS')) {
+        if($testSuite->getMetaByKey('ts_tester_role') != 'Application' && ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
+            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS'))) {
             /*
              * Ensure that each TWRC_XFERDONE returs code has image
              */
+            $isUpdated = false;
             if (!$transaction->logs()->where(['return_code' => 'TWRC_XFERDONE', 'scan_results' => '[]'])->get()->isEmpty()) {
+                if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('FAIL')) {
+                    TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
+                }
+                $isUpdated = true;
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
@@ -222,20 +260,28 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
                             ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))
                     ) {
-                        $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
+                        if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('PENDING')) {
+                            TransactionChangeLog::addLog($transaction, $this->userId, 'PENDING', true);
+                            $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
+                            $isUpdated = true;
+                        }
                     } else {
+                        if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('FAIL')) {
+                            TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
+                        }
                         $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                         $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
+                        $isUpdated = true;
                     }
                 } else if($testCase->post_name == 'ca-03-v1-0'){
                     $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction);
                     $testCaseValidator->validate();
                 }
             }
-            $transaction->save();
+            if ($isUpdated) {
+                $transaction->save();
+            }
         }
         File::deleteDirectory($this->rootFolder);
     }
-
-    
 }

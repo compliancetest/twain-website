@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 
-    $('[data-tooltip]').tooltip({
+    $('body').tooltip({
+        selector: '[data-tooltip]',
         trigger: 'hover'
     });
 
@@ -136,7 +137,7 @@ var Page = {
         headerLoginForm: function(){
 
             //Show/hide login popup form
-            $('#headerLoginBtn').click(function(e){
+            $('.header-login-block').hover(function(e){
                 e.preventDefault();
                 $('#headerLoginBlock').toggle();
             });
@@ -264,12 +265,16 @@ var Page = {
                 },
                 success: function(){
                     location.reload();
+                    $('.modal').modal('hide');
                 },
                 error: function (error, status, exception) {
-                    location.href == '/communities/';
-                },
-                complete: function () {
-                    $('.modal').modal('hide');
+                    $('#confirmCancelMembership' +  communityId + ' .block-loading').hide();
+                    $('.cancelMembershipInCommunity').closest('.modal-footer').prepend('<div class="error-message">' + formatErrorMessage(error, 'error') + '</div>');
+                    setTimeout(function () {
+                        $('.cancelMembershipInCommunity').closest('.modal-footer').find('.error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
                 }
             });
 
@@ -377,6 +382,21 @@ var Page = {
                 self.deleteProfileType($(this), e);
             });
 
+            $('.settings-tabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show')
+            });
+
+            var url = document.location.toString();
+            if (url.match('#')) {
+                $('.settings-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+            }
+
+            $('.settings-tabs a').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+                window.scrollTo(0, 0);
+            })
+
         },
 
         showAddNewProfileType: function(e){
@@ -384,6 +404,7 @@ var Page = {
             e.preventDefault();
             $('#profileTypeList').hide();
             $('#addNewProfile').show();
+            $('#profile_type_text').focus();
         },
 
         hideAddNewProfileType: function(e){
@@ -410,6 +431,10 @@ var Page = {
                 success: function (rsp) {
                     self.hideAddNewProfileType(e);
                     location.reload();
+                },
+                error: function(rsp){
+                    $('#profileTypesSaving').hide();
+                    $('#profileTypeForm .colored-box-footer').prepend('<p class="error-message">Invalid JSON file.</p>');
                 }
             });
 
@@ -425,6 +450,7 @@ var Page = {
                 url: '/communities/' + elem.data('community') + '/approve_organisation',
                 data: {
                     'organisation_id' : elem.val(),
+                    'test_suite_id' : elem.data('test-suite-id'),
                     'is_checked' : elem.is(":checked") ? 1 : 0,
                 },
                 success: function (rsp) {
@@ -588,16 +614,19 @@ var Page = {
                 },
                 success: function(rsp, status, jqXHR){
                     if(form.attr('id') == 'invite-user-form'){
-                        $('.invitations_table').append('<tr><td>' + rsp.data.invitation_email+ '</td>' +
-                                            '<td>' +rsp.data.first_name+ ' ' +rsp.data.last_name+'</td>' +
-                                            '<td>' + rsp.data.created_at +'</td>' +
-                                            '<td></td>' +
+                        $('#settings-members .invitations_table').append('<tr><td>' + rsp.data.invitation_email+ '</td>' +
+                                            '<td class="text-center">' +rsp.data.first_name+ ' ' +rsp.data.last_name+'</td>' +
+                                            '<td class="text-center">' + rsp.data.created_at +'</td>' +
+                                            '<td class="text-center"></td>' +
                                         '</tr>');
                     }
                     if(jqXHR.status == 201){
                         form.find('.colored-box-footer').prepend('<div class="message success-message">'+rsp.message+'</div>');
                     } else {
                         form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
+                    }
+                    if(form.data('reset-form-after-submit')){
+                        $(form)[0].reset();
                     }
                 },
                 complete: function(){

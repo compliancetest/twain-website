@@ -44,7 +44,8 @@ function create_compliancetest_settings_page()
         //Save Options
         update_option('tw_site_title', $_POST['tw_site_title']);
         update_option('tw_site_organisation', $_POST['tw_site_organisation']);
-        
+        update_option('tw_contact_us_email', $_POST['tw_contact_us_email']);
+
     }
     else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-xml-size-limit')){
         //Save Options
@@ -147,8 +148,10 @@ function create_compliancetest_settings_page()
         update_option('surveymonkey_key', $_POST['surveymonkey_key']);
         update_option('surveymonkey_secret', $_POST['surveymonkey_secret']);
         update_option('surveymonkey_token', $_POST['surveymonkey_token']);
+    } else if(isset($_POST) && wp_verify_nonce($_POST['_wpnonce'], 'save-transaction-settings')){
+        update_option('transactions_purge_period', $_POST['transactions_purge_period']);
     }
-    
+
 ?>
 <script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/js/jquery-ui-1.10.3.custom.js"></script>
 <link href="<?php echo dirname(get_bloginfo('stylesheet_url'))?>/css/jquery-ui-1.10.3.custom.css"  type="text/css" rel="stylesheet" />
@@ -251,6 +254,7 @@ function create_compliancetest_settings_page()
                 <li><a href="#ct-s3-xml-max-size">AWS</a></li>
                 <li><a href="#ct-surveys">SurveyMonkey Settings</a></li>
                 <li><a href="#ct-cloudsearch-settings">CloudSearch Settings</a></li>
+                <li><a href="#ct-transactions">Transactions</a></li>
             </ul>
         </div>
         <div id="compliancetest-settings-wrapper">
@@ -265,8 +269,12 @@ function create_compliancetest_settings_page()
                             </td>
                         </tr>
                         <tr>
-                            <td><label><b>Site Organisation:</b></label></td>
+                            <td><label><b>Site Organization:</b></label></td>
                             <td><input type="text" name="tw_site_organisation" id="tw_site_organisation" value="<?php echo get_option('tw_site_organisation')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Contact email:</b></label></td>
+                            <td><input type="text" name="tw_contact_us_email" id="tw_contact_us_email" value="<?php echo get_option('tw_contact_us_email')?>" size="50" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
@@ -631,6 +639,21 @@ function create_compliancetest_settings_page()
                     </table>
                     <?php submit_button()   ?>
                     <?php wp_nonce_field('save-surveys-settings'); ?>
+                    <input type="hidden" name="tab_index" value="9">
+                </form>
+            </div>
+
+            <div id="ct-transactions">
+                <h3>Transactions Settings</h3>
+                <form method="post" action="" enctype="multipart/form-data">
+                    <table class="widefat">
+                        <tr>
+                            <th><label><b>Purge period(days):</b></label></th>
+                            <td><input type="text" name="transactions_purge_period" id="transactions_purge_period" value="<?php echo get_option('transactions_purge_period')?>" size="50" autocomplete="off" /></td>
+                        </tr>
+                    </table>
+                    <?php submit_button()   ?>
+                    <?php wp_nonce_field('save-transaction-settings'); ?>
                     <input type="hidden" name="tab_index" value="9">
                 </form>
             </div>

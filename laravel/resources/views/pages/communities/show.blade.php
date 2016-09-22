@@ -14,7 +14,7 @@
                 <div class="community-short-description">
                     <h3>{{ $community->title }}</h3>
 
-                    <p>{{ $community->description }}</p>
+                    <p>{!! $community->description !!}</p>
                 </div>
 
 

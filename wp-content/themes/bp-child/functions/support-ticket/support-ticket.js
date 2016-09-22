@@ -193,19 +193,22 @@ jQuery(document).ready(function(){
         jQuery('#changeTermForm .input-error').removeClass('input-error');
         
         //Validate the input values
-        if( jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttpay').val() || isNaN(jQuery('#changeTermForm #ttpay').val())) )
+        var tempTtpayValue = jQuery('#changeTermForm #ttpay').val();
+        if( jQuery('#changeTermForm #ttpay').length > 0 && (!tempTtpayValue || isNaN(tempTtpayValue) || Math.abs(tempTtpayValue) != tempTtpayValue) )
         {
             jQuery('#changeTermForm #ttpay').addClass("input-error");
             isValid = false;
         }
-        
-        if(jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttresolve').val() || isNaN(jQuery('#changeTermForm #ttresolve').val())))
+
+        var tempTtoresolveValue = jQuery('#changeTermForm #ttresolve').val();
+        if(jQuery('#changeTermForm #ttresolve').length > 0 && (!tempTtoresolveValue || isNaN(tempTtoresolveValue) || Math.abs(tempTtoresolveValue) != tempTtoresolveValue))
         {
             jQuery('#changeTermForm #ttresolve').addClass("input-error");
             isValid = false;
         }
-        
-        if(jQuery('#changeTermForm #ttpay').length > 0 && (!jQuery('#changeTermForm #ttresponse').val() || isNaN(jQuery('#changeTermForm #ttresponse').val())))
+
+        var tempTimeToRespondValue = jQuery('#changeTermForm #ttresponse').val();
+        if(jQuery('#changeTermForm #ttresponse').length > 0 && (!tempTimeToRespondValue || isNaN(tempTimeToRespondValue) || Math.abs(tempTimeToRespondValue) != tempTimeToRespondValue))
         {
             jQuery('#changeTermForm #ttresponse').addClass("input-error");
             isValid = false;

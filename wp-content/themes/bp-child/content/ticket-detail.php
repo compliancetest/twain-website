@@ -25,10 +25,12 @@
 
 <div class="column ticket-detail"> 
     <a href="/my-support-tickets" class="back-to-supports">Back to <b>My Support Tickets</b></a>
-    <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar"><?php echo cp_get_user_avatar($ticket->customer_id, 'type=thumb&width=77&height=77' ); ?></a>
+    <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>" class="ticket-creator-avatar">
+        <img src="<?php echo getUserAvatar($ticket->customer_id);?>" class="avatar user-12-avatar avatar-77 photo" width="77" height="77" alt="Profile picture">
+    </a>
     <div class="left">
-        <h2>Ticket #<?php echo $ticket_id?> (<?php echo apply_filters('the_title', $ticket->title)?>)</h2>
-        <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo cp_get_user_display_name(intval($ticket->customer_id))?></b></a></span>
+        <h2>Ticket #<?php echo $ticket_id?> (<?php echo ctE(apply_filters('the_title', $ticket->title))?>)</h2>
+        <span class="ticket-creator">Raised by: <a href="<?php echo bp_core_get_user_domain($ticket->customer_id); ?>"><b><?php echo ctE(cp_get_user_display_name(intval($ticket->customer_id)))?></b></a></span>
         <span class="ticket-priorities">
         <?php 
             if($ticket->status_id == TICKET_STATUS_RESOLVED)
@@ -62,13 +64,13 @@
 </div>
 <div class="ticket-term-detail">
     <p class="ticket-info" id="ticket-term-info">
-        <span><b>Price/hr:</b> <?php echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?></span>
+<!--        <span><b>Price/hr:</b> --><?php //echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?><!--</span>-->
         <span><b>Effort:</b> <?php echo $ticket->ttpay?> hour<?php echo $ticket->ttpay > 1 ? 's' : ''?></span>
         <span><b>Time to Respond:</b> <?php echo $ticket->ttresponse?> hour<?php echo $ticket->ttresponse > 1 ? 's' : ''?></span>
         <span><b>Time to Resolve:</b> <?php echo $ticket->ttresolve?> hour<?php echo $ticket->ttresolve > 1 ? 's' : ''?></span>        
-        <a href="#" class="action-btn edit-btn icon-btn right has-tooltip" id="change-term-link"><span class="p"></span><span class="t">Edit</span><span class="simple_tooltip"><span></span>Edit Term</span></a>
+        <a href="#" class="action-btn edit-btn icon-btn right" id="change-term-link"><span class="p"></span><span class="t">Edit</span></a>
         <?php if(!$ticket->term_accepted && $ticket->term_creator_id != $user_id): ?>
-        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right has-tooltip"><span class="p"></span><span class="t">Accept</span><span class="simple_tooltip"><span></span>Accept Term</span></a>
+        <a href="/?ct-ticket-action=<?php echo wp_create_nonce('accept-term') ?>&id=<?php echo $ticket->id?>" class="action-btn process-btn icon-btn right"><span class="p"></span><span class="t">Accept</span></a>
         <?php endif; ?>
     </p>
     <div id="change-term-contr" style="display: none;">
@@ -88,10 +90,10 @@
                         echo $ct_ticket_priority->getPrioritiesSelectboxHTML('priority', 'ticket-priority', $ticket->priority_id, null);
                     ?>
                 </span>                   
-                <span class="item" id="term_price">
-                    <b>Price/hr:</b> 
-                    <span><?php echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?></span>
-                </span>
+<!--                <span class="item" id="term_price">-->
+<!--                    <b>Price/hr:</b> -->
+<!--                    <span>--><?php //echo $ticket->price > 0 ? '$'.$ticket->price : 'Free'?><!--</span>-->
+<!--                </span>-->
                 <span class="item" id="term_ttpay">
                     <b>Effort:</b>
                     <?php if($is_support): ?>
@@ -124,8 +126,8 @@
                 <div class="clear"></div>
             </div>
             <div class="btn-row">
-                <a href="#" class="action-btn cancel-btn icon-btn has-tooltip left10"><span class="p"></span><span class="t">Cancel</span><span class="simple_tooltip"><span></span>Canel</span></a>                        
-                <a href="#" class="action-btn process-btn submit-btn icon-btn has-tooltip"><span class="p"></span><span class="t">Submit</span><span class="simple_tooltip"><span></span>Submit</span></a>                
+                <a href="#" class="action-btn cancel-btn icon-btn left10"><span class="p"></span><span class="t">Cancel</span></a>
+                <a href="#" class="action-btn process-btn submit-btn icon-btn"><span class="p"></span><span class="t">Submit</span></a>
                 <div class="clear"></div>
             </div>
             <input type="hidden" name="ct-ticket-action" value="<?php echo wp_create_nonce('change-ticket-term')?>" />
@@ -144,12 +146,12 @@
     ?>
         <div class="ticket-message">
             <div class="left width10P">
-                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>">                                    
-                    <?php echo cp_get_user_avatar($message->sender, 'type=thumb' ); ?>                    
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>">
+                    <img src="<?php echo getUserAvatar($message->sender);?>" class="avatar user-12-avatar avatar- photo" width="50" height="50" alt="Profile picture">
                 </a>
             </div>
             <div class="left width90P">
-                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>" class="left"><b><?php echo cp_get_user_display_name(intval($message->sender)); ?></b></a>                
+                <a href="<?php echo bp_core_get_user_domain($message->sender); ?>" class="left"><b><?php echo ctE(cp_get_user_display_name(intval($message->sender))); ?></b></a>
                 <span class="right"><b><?php echo formatDate($message->created_date, "Y-m-d h:i A"); ?></b></span>                
                 <div class="clear"></div>
                 <div class="space7"></div>
@@ -181,7 +183,7 @@
                 <div class="field-row">
                     <div class="field-cell left width10P">
                         <a href="<?php bp_loggedin_user_link(); ?>">                                    
-                            <?php echo cp_get_user_avatar($user_id, 'type=thumb' ); ?>
+                            <img src="<?php echo getUserAvatar($user_id);?>" class="avatar user-12-avatar avatar- photo" width="50" height="50" alt="Profile picture">
                         </a>
                     </div>
                     <div class="field-cell left width90P">

@@ -209,12 +209,6 @@ function saveProductService()
         update_post_meta($id, 'product_owner', $user_organisation->organisation_admin);
     }
 
-    if($_POST['product_type'] != 'DataSource'){
-        update_post_meta($id, 'product_suites', json_encode($_POST['product_suites']));
-        update_post_meta($id, 'product_features', json_encode($_POST['product_features']));
-    }
-
-
     update_post_meta($id, 'product_release_date', !$_POST['product_release_date'] ? date("Y-m-d H:i:s") : date('Y-m-d H:i:s', getUTCTimeStamp(htmlspecialchars($_POST['product_release_date']))));
     update_post_meta($id, 'product_url', htmlspecialchars($_POST['product_url']));
     update_post_meta($id, 'product_description', stripslashes_deep($_POST['product_description']));
@@ -240,19 +234,20 @@ function saveProductService()
     }
     update_post_meta($id, 'product_visibility', $product_visibility);
 
-    $full_search = new FulltextSearch();
-    $cloud_search = new CloudSearch();
     /**
      * We need to reload data for existing product because
      * it could contain test plans / claims / services which also should be updated
      */
-    if ($isNew) {
-        $full_search->fullUpload($id);
-    } else {
-        $cloud_search->_initial_upload();
-        $full_search->fullUpload();
-    }
 
+    require ABSPATH . 'laravel/bootstrap/autoload.php';          //the path should match your file path
+    $app = require_once 'laravel/bootstrap/app.php';  //the path should match your file path
+
+    $app->make('Illuminate\Contracts\Http\Kernel')
+    ->handle(Illuminate\Http\Request::capture());
+
+    $post = \App\Post::find($id);
+    $post->timestamps = false;
+    $post->save();
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;

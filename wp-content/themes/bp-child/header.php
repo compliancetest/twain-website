@@ -6,7 +6,9 @@
         <?php if ( current_theme_supports( 'bp-default-responsive' ) ) : ?><meta name="viewport" content="width=device-width, initial-scale=1.0" /><?php endif; ?>
         <title><?php wp_title( '|', true, 'right' ); bloginfo( 'name' ); ?></title>
         <?php do_action( 'bp_head' ) ?>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Oswald:400,300,700' rel='stylesheet' type='text/css'>
+        <style>
+            @import 'https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i|Oswald';
+        </style>
         <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
         
         <link rel="pingback" href="<?php bloginfo( 'pingback_url' ) ?>" />
@@ -55,11 +57,14 @@
                         </div>
 
                         <div class="header-user-info">
-                            <?php $userAvatar = get_avatar($current_user->user_email, 32);?>
-                            <?php if(strpos($userAvatar, 'mystery-man') !== false):?>
+                            <?php
+                                $key = get_user_meta(get_current_user_id(), 'avatar_s3_path', true);
+                                $avatarLink = getUserAvatar(get_current_user_id());
+                            ?>
+                            <?php if(!$avatarLink):?>
                                 <img src="<?php echo DEFAULT_AVATAR;?>" class="avatar user-1-avatar avatar-32 photo" alt="Avatar" width="32" height="32">
                             <?php else:?>
-                                <?php echo get_avatar($current_user->user_email, 32);  ?>
+                                <img src="<?php echo $avatarLink;?>" class="avatar user-12-avatar avatar-32 photo" width="32" height="32" alt="Avatar">
                             <?php endif;?>
                             <div class="header-welcome">
                                 Welcome

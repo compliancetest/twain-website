@@ -26,7 +26,7 @@
                                 </td>
                                 <td class="community-name">
                                     <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}">{{ $community->title }}</a>
-                                    <p>{{ $community->description }}</p>
+                                    <p>{!! $community->description !!}</p>
                                 </td>
                                 <td class="text-center">{{ count(\App\Post::getCommunityTestSuites($community->id)) }}</td>
                                 <td class="text-center">{{ count($community->activeMembers()) }}</td>
@@ -39,7 +39,7 @@
                     </tbody>
                 </table>
             </div>
-            @if(Auth::check())
+            @if(is_super_admin())
                 <a href="{{ getSiteUrl() }}/communities/create" class="btn btn-success btn-with-icon btn-add">Add Community</a>
             @endif
         </div>

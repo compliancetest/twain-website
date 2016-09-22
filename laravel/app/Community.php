@@ -17,7 +17,7 @@ class Community extends Model
 
     protected $table = 'communities';
 
-    protected $fillable = array('title', 'description', 'slug', 'creator_id', 'visibility_status', 'articles_status');
+    protected $fillable = array('title', 'description', 'slug', 'creator_id', 'visibility_status', 'articles_status', 'list_only_certified');
 
 
     /**

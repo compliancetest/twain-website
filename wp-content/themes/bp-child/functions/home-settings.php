@@ -173,12 +173,13 @@ function create_home_settings_page() {
                                         <?php wp_editor($home_settings['top_banner_description'], 'top_banner_description', array('media_buttons' => false,  'editor_height' => 150)) ?>
                                     </td>
                                 </tr>
-                                <tr>
+                                <?php /*<tr>
                                     <td class="tdlabel"><b>Video</b></td>
                                     <td>
                                         <input type="text" size="50" name="top_banner_video" id="top_banner_video" value="<?php echo htmlspecialchars($home_settings['top_banner_video']); ?>" />
                                     </td>
                                 </tr>
+                                */ ?>
                             </tbody>
                         </table>
                     </div>
@@ -261,44 +262,6 @@ function create_home_settings_page() {
                                             <input type="text" size="50" name="tab_2_image" id="tab_2_image" value="<?php echo $home_settings['tab_2_image']; ?>" />
                                             <span class="add_media">
                                                 <a title="Add Media" class="button insert-media" id="tab_2_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2">Tab 3</th>
-                                </tr>
-                                <tr>
-                                    <td class="tdlabel"><b>Title</b></td>
-                                    <td>
-                                        <input type="text" size="50" name="tab_3_title" id="tab_3_title" value="<?php echo $home_settings['tab_3_title']; ?>" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="tdlabel"><b>SubTitle</b></td>
-                                    <td>
-                                        <input type="text" size="50" name="tab_3_subtitle" id="tab_3_subtitle" value="<?php echo $home_settings['tab_3_subtitle']; ?>" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="tdlabel"><b>Content</b></td>
-                                    <td>
-                                        <?php wp_editor($home_settings['tab_3_content'], 'tab_3_content', array('media_buttons' => true,  'editor_height' => 150)) ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="tdlabel"><b>Button link</b></td>
-                                    <td>
-                                        <input type="text" size="50" name="tab_3_button_link" id="tab_3_button_link" value="<?php echo $home_settings['tab_3_button_link']; ?>" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="tdlabel"><b>Image</b></td>
-                                    <td>
-                                        <div class="uploader wp-media-buttons">
-                                            <input type="text" size="50" name="tab_3_image" id="tab_3_image" value="<?php echo $home_settings['tab_3_image']; ?>" />
-                                            <span class="add_media">
-                                                <a title="Add Media" class="button insert-media" id="tab_3_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
                                             </span>
                                         </div>
                                     </td>

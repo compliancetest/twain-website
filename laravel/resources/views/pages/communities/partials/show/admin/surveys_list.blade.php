@@ -14,14 +14,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($surveys as $survey)
-                    <tr>
-                        <td class="v-middle col-sm-5">{{ $survey['title'] }}</td>
-                        <td class="col-sm-7">
-                            <input class="form-control" type="text" name="links[{{ $survey['id'] }}]" @if(isset($links[$survey['id']])) value="{{ $links[$survey['id']]->link }}" @endif >
-                        </td>
-                    </tr>
-                @endforeach
+                    @if($surveys)
+                        @foreach($surveys as $survey)
+                            <tr>
+                                <td class="v-middle col-sm-5">{{ $survey['title'] }}</td>
+                                <td class="col-sm-7">
+                                    <input class="form-control" type="text" name="links[{{ $survey['id'] }}]" @if(isset($links[$survey['id']])) value="{{ $links[$survey['id']]->link }}" @endif >
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td class="v-middle col-sm-12 text-center" colspan="2">No surveys yet</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </form>
@@ -29,32 +35,41 @@
 
 </div>
 <div class="modal-footer">
-    <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+    @if($surveys)
+        <a href="#" class="btn btn-success btn-with-icon btn-confirm">Save</a>
+    @endif
     <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
 </div>
 <div class="block-loading" id="CreateProfileLoading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING</div><div class="loading-wait">Please wait...</div></div></div>
 
-<script>
-    jQuery('.btn-confirm').on('click', function(e){
-        jQuery('.message').hide();
-        e.preventDefault();
-        jQuery('#CreateProfileLoading').show();
-        jQuery('#linksForm').ajaxSubmit({
-            success: function(rsp)
-            {
-                if(rsp.status == 'success')
+@if($surveys)
+    <script>
+        jQuery('#modalEditSurveys .btn-confirm').on('click', function(e){
+            jQuery('.message').hide();
+            e.preventDefault();
+            jQuery('#CreateProfileLoading').show();
+            jQuery('#linksForm').ajaxSubmit({
+                success: function(rsp)
                 {
-                    jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
-                }else{
-                    jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message error-message">' + rsp.message + '</p>');
+                    if(rsp.status == 'success')
+                    {
+                        jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
+                        setTimeout(function () {
+                            $('#modalEditSurveys .success-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 2000);
+                    }else{
+                        jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message error-message">' + rsp.message + '</p>');
+                    }
+                },
+                error: function(rsp){
+                    jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
+                },
+                complete: function(rsp){
+                    jQuery('#CreateProfileLoading').hide();
                 }
-            },
-            error: function(rsp){
-                jQuery('#modalEditSurveys .modal-footer').prepend('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
-            },
-            complete: function(rsp){
-                jQuery('#CreateProfileLoading').hide();
-            }
-        })
-    });
-</script>
+            })
+        });
+    </script>
+@endif

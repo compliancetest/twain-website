@@ -4,7 +4,7 @@
         <input type="hidden" name="itemsCount" value="{{ $perPage }}" id="perPage">
 
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterProduct">Product:</label>
+            <label for="filterProduct">Product Name:</label>
             <select class="form-control" id="filterProduct" name="product_id">
                 <option value="">- All -</option>
                 @foreach($filters['product_id'] as $product)
@@ -95,7 +95,7 @@
 
         <div class="row">
             <div class="form-group col-sm-6 col-md-3">
-                <label for="filterSubscription">Subscription:</label>
+                <label for="filterSubscription">Subscription Nickname:</label>
                 <select class="form-control" id="filterSubscription" name="subscription_id">
                     <option value="">- All -</option>
                     @foreach($filters['subscription_id'] as $subscription)
@@ -107,7 +107,7 @@
             </div>
 
             <div class="form-group col-sm-6 col-md-3">
-                <label for="filterOrganisation">Organisation:</label>
+                <label for="filterOrganisation">Organization:</label>
                 <select class="form-control" id="filterOrganisation" name="organisation_id">
                     <option value="">- All -</option>
                     @foreach($filters['organisation_id'] as $organisation)

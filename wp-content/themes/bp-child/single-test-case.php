@@ -9,8 +9,7 @@ if (!isset($_REQUEST['is_ajax'])) {
 }
 $case = new TestCases(get_the_ID());
 $case->load();
-$test_suite_id = isset($_SESSION['test_suite_id']) ? $_SESSION['test_suite_id'] : $case->testSuite[0];
-$community_id = get_post_meta($test_suite_id, "community_id", true);
+$test_suite_id = isset($_GET['test_suite_id']) && in_array($_GET['test_suite_id'], $case->testSuite) && $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE post_type = 'test-suite' AND ID = %d", $_GET['test_suite_id'])) ? $_GET['test_suite_id'] : false;
 
 ?>
 
@@ -33,7 +32,10 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                 }
                 ?>
                 <a href="<?php echo addPrintParams(get_permalink(), 'test-case') ?>" class="action-btn print-btn print-page-btn" id="print-case-btn"><span class="p"></span><span class="t">Print</span></a>
-                <span class="right nomarginright"> Back to <a href="<?php echo get_permalink($test_suite_id) ?>"><?php echo get_the_title($test_suite_id) ?></a></span>
+                <?php foreach(array_unique($case->testSuite) as $caseTestSuite):?>
+                    <?php if(($test_suite_id && $test_suite_id != $caseTestSuite) || empty($caseTestSuite) || empty(get_the_title($caseTestSuite))) continue;?>
+                    <span class="right nomarginright"> Go to <a href="<?php echo get_permalink($caseTestSuite) ?>"><?php echo get_the_title($caseTestSuite) ?></a></span><br>
+                <?php endforeach;?>
 
                 <div class="clear"></div>
                 <div class="dark_gray_txt redactor_editor"><?php echo $case->testIntentDescription; ?></div>
@@ -84,11 +86,16 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                             <p>Conformance Levels: <span>
                             <?php
                             $lArr = array();
-                            if (isset($case->conformanceLevel[$test_suite_id]) && is_iterable($case->conformanceLevel[$test_suite_id])) {
-                                foreach ($case->conformanceLevel[$test_suite_id] as $level) {
-
-                                    if (groups_is_user_admin(get_current_user_id(), $community_id) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
-                                        $lArr[] = $level;
+                            foreach($case->conformanceLevel as $levelSuiteId => $levelSuiteData) {
+                                if($test_suite_id && $levelSuiteId != $test_suite_id){
+                                    continue;
+                                }
+                                $levelCommunityId = get_post_meta($levelSuiteId, "community_id", true);
+                                foreach ($levelSuiteData as $level) {
+                                    if (groups_is_user_admin(get_current_user_id(), $levelCommunityId) || $level != TEST_SUITE_DEFAULT_CONFORMANCE_LEVEL_CODE) {
+                                        if(!in_array($level, $lArr)) {
+                                            $lArr[] = $level;
+                                        }
                                     }
                                 }
                             }
@@ -128,11 +135,16 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                         <div class="grid_cell width10P left size13 bold dark_blue_txt">Scenario:</div>
                         <div class="grid_cell width90P left redactor_editor">
                             <?php
-                            $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $test_suite_id));
-                            $temp_test_suite = $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id desc LIMIT 1", $family_mark));
-                            $scenarioDetail = $case->getScenario($temp_test_suite);
-                            echo '<p class="bottom8"><b>' . $scenarioDetail->code . '</b></p>';
-                            echo $scenarioDetail->description;
+                            foreach($case->scenario as $scenarioSuiteId => $scenarioId) {
+                                if($test_suite_id && $scenarioSuiteId != $test_suite_id){
+                                    continue;
+                                }
+                                $family_mark = $wpdb->get_var($wpdb->prepare("SELECT family_mark FROM wp_test_suites WHERE suite_id = %d ", $scenarioSuiteId));
+                                $temp_test_suite = $wpdb->get_var($wpdb->prepare("SELECT suite_id FROM wp_test_suites WHERE family_mark = %d ORDER BY suite_id desc LIMIT 1", $family_mark));
+                                $scenarioDetail = $case->getScenario($temp_test_suite);
+                                echo '<p class="bottom8"><b>' . $scenarioDetail->code . '</b></p>';
+                                echo $scenarioDetail->description;
+                            }
                             ?>
                         </div>
                         <div class="clear"></div>
@@ -204,21 +216,17 @@ $community_id = get_post_meta($test_suite_id, "community_id", true);
                     <div class="grid_cell width100P toleft">
                         <div class="grid_head lighter_gray_bcg2 related">
                             <div class="grid_row nopaddingbottom nopaddingtop">
-                                <div class="grid_cell width100P size14 normal shadowwhite">Scanned Images</div>
+                                <div class="grid_cell width100P size14 normal shadowwhite">Test Samples</div>
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <div class="grids noradiusbottom">
+                        <div class="grids noradiusbottom test-case-samples">
                             <?php foreach ($case->imagesData as $image): ?>
-                                <div
-                                    style="float: left; margin-right: 20px; margin-top: 20px; display: block; max-width: 150px;"
-                                    class="gallery">
+                                <div class="gallery test-case-sample-item">
                                     <?php $imageUrl = S3Wrapper::getCaseImageUrl($case->id, $image['name']); ?>
                                     <a href="<?php echo $imageUrl; ?>" title="<?php echo $image['description']; ?>">
-                                        <img style="width: 150px; height: 150px;" src="<?php echo $imageUrl; ?>"
-                                             alt="<?php echo $image['description']; ?>">
-
-                                        <p style="text-align: center;"><?php echo $image['description']; ?></p>
+                                        <img src="<?php echo $imageUrl; ?>" alt="<?php echo $image['description']; ?>">
+                                        <span><?php echo $image['description']; ?></span>
                                     </a>
                                 </div>
                             <?php endforeach; ?>
