@@ -19,5 +19,7 @@ crontab /etc/cron.d/upworkcron
 sed -i '/pam_loginuid.so/d' /etc/pam.d/cron
 /etc/init.d/cron start
 
+printenv | sed 's/^\(.*\)\=\(.*\)$/export \1\="\2"/g' > /root/project_env.sh
+
 /usr/sbin/apache2ctl -D FOREGROUND
 

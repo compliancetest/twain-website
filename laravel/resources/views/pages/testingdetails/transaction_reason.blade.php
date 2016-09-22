@@ -3,7 +3,7 @@
     Reason
 </div>
 <div class="modal-body">
-    {{ $reason }}
+    {!! $reason !!}
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
