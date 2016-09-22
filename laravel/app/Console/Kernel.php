@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Transaction;
 use App\VerifyRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
+         Commands\Inspire::class,
     ];
 
     /**
@@ -37,6 +38,9 @@ class Kernel extends ConsoleKernel
                     Transaction::find($transaction->id)->delete();
                 }
             }
-        })->hourly();
+        })
+        ->sendOutputTo(storage_path('logs/cronjob-logs.txt'))
+        ->everyFiveMinutes()
+        ->emailOutputTo(['ivansolowjew@gmail.com']);
     }
 }
