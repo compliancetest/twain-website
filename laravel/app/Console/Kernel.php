@@ -39,8 +39,6 @@ class Kernel extends ConsoleKernel
                 }
             }
         })
-        ->sendOutputTo(storage_path('logs/cronjob-logs.txt'))
-        ->everyFiveMinutes()
-        ->emailOutputTo(['ivansolowjew@gmail.com']);
+        ->everyTenMinutes();
     }
 }
