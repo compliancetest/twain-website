@@ -38,7 +38,7 @@ abstract class TestCaseValidationAbstract
     {
         if ($this->filesCount > 0) {
             for ($i = 1; $i <= $this->filesCount; $i++) {
-                $this->jsonFilesContent[$i] = json_decode($this->rootFolder . '/scan_result/image_' . $i . '.png.json');
+                $this->jsonFilesContent[$i] = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_' . $i . '.png.json'));
             }
         }
     }
@@ -77,5 +77,16 @@ abstract class TestCaseValidationAbstract
             $imagesCount++;
         }
         return $imagesCount;
+    }
+
+    /**
+     * Calculate diff between 2 images
+     * @param $firstNumber
+     * @param $secondNumber
+     * @return number
+     */
+    public function getTwoNumbersDiffInPercents($firstNumber, $secondNumber)
+    {
+        return abs(number_format((1 - $firstNumber / $secondNumber) * 100, 2));
     }
 }

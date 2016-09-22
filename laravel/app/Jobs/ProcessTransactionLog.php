@@ -63,6 +63,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         } catch(\Exception $e){
             error_log($e->getMessage());
             error_log($e->getLine());
+            error_log($e->getFile());
             File::deleteDirectory($this->rootFolder);
             $organisationMember = OrganisationMember::where(['user_id' => $this->userId])->first();
             $organisationSubscription = OrganisationSubscription::where(
@@ -239,12 +240,10 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             /*
              * Ensure that each TWRC_XFERDONE returs code has image
              */
-            $isUpdated = false;
             if (!$transaction->logs()->where(['return_code' => 'TWRC_XFERDONE', 'scan_results' => '[]'])->get()->isEmpty()) {
                 if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('FAIL')) {
                     TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
                 }
-                $isUpdated = true;
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
@@ -263,7 +262,6 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('PENDING')) {
                             TransactionChangeLog::addLog($transaction, $this->userId, 'PENDING', true);
                             $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
-                            $isUpdated = true;
                         }
                     } else {
                         if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('FAIL')) {
@@ -271,16 +269,13 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         }
                         $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                         $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
-                        $isUpdated = true;
                     }
                 } else if($testCase->post_name == 'ca-03-v1-0'){
                     $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction);
                     $testCaseValidator->validate();
                 }
             }
-            if ($isUpdated) {
-                $transaction->save();
-            }
+            $transaction->save();
         }
         File::deleteDirectory($this->rootFolder);
     }
