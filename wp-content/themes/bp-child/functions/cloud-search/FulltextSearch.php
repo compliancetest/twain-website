@@ -260,7 +260,7 @@ class FulltextSearch extends BaseAWS
                 $post_data = $this->_processPost($post);
                 if (in_array($post->post_type, array('event', 'blog', 'press-release', 'link'))) {
                     $community_id = get_post_meta($post->ID, 'blog_community_id', true);
-                    if ($community_id === 0 || $community_id === 1) {
+                    if (!$community_id) {
                         $groups['groups'] = [$wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'")];
                         $post_data['visibility'] = 1;
                     } else {

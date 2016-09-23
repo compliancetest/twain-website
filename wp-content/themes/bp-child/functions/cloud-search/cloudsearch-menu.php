@@ -236,7 +236,7 @@ function ct_cloud_search()
     <?php
 }
 
-add_action('save_post', 'fulltext_search_save_post', 10, 3);
+add_action('save_post', 'fulltext_search_save_post', 100, 3);
 function fulltext_search_save_post($post_id, $post = false, $update = false)
 {
     $cloud_search = new FulltextSearch();
