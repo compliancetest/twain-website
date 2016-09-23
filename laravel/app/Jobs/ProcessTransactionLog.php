@@ -34,6 +34,10 @@ class ProcessTransactionLog extends Job implements ShouldQueue
     public $testOutcome;
     public $reason;
 
+    private $testCasesWithServerValidation = [
+        'ca-01-v1-0', 'ca-03-v1-0', 'ca-05-v1-0'
+    ];
+
     /**
      * ProcessTransactionLog constructor.
      * @param $fileName
@@ -248,30 +252,16 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
                 if ($testCase->post_name == 'ca-01-v1-0') {
-                    $firstImage = file_exists($this->rootFolder . '/scan_result/image_1.png');
-                    $firstImageMetadata = file_exists($this->rootFolder . '/scan_result/image_1.png.json');
-                    $secondImage = file_exists($this->rootFolder . '/scan_result/image_2.png');
-                    $secondImageMetadata = file_exists($this->rootFolder . '/scan_result/image_2.png.json');
-                    $allFilesExists = $secondImage && $firstImage && $firstImageMetadata && $secondImageMetadata;
-                    $decodedFirstFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_1.png.json'));
-                    $decodedSecondFile = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_2.png.json'));
-                    if ($allFilesExists &&
-                        (($decodedFirstFile->ImageWidth + $decodedFirstFile->ImageLength) >
-                            ($decodedSecondFile->ImageWidth + $decodedSecondFile->ImageLength))
-                    ) {
-                        if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('PENDING')) {
-                            TransactionChangeLog::addLog($transaction, $this->userId, 'PENDING', true);
-                            $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('PENDING');
-                        }
-                    } else {
-                        if ($transaction->test_outcome_status_id != TestOutcomeStatus::getIdByCode('FAIL')) {
-                            TransactionChangeLog::addLog($transaction, $this->userId, 'FAIL', true);
-                        }
-                        $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
-                        $transaction->reason = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
-                    }
+                    $testCaseValidator = new \App\CA01($this->rootFolder, 2, $transaction, $this->userId);
+                    $testCaseValidator->validate();
                 } else if($testCase->post_name == 'ca-03-v1-0'){
-                    $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction);
+                    $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction, $this->userId);
+                    $testCaseValidator->validate();
+                } else if($testCase->post_name == 'ca-05-v1-0'){
+                    $testCaseValidator = new \App\CA05($this->rootFolder, 4, $transaction, $this->userId);
+                    $testCaseValidator->validate();
+                } else if ($testCase->post_name == 'ca-07-v1-0') {
+                    $testCaseValidator = new \App\CA07($this->rootFolder, 2, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 }
             }
