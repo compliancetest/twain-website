@@ -10,7 +10,7 @@ class CA07 extends TestCaseValidationAbstract
      */
     public function testCaseRules()
     {
-        if (($this->jsonFilesContent[1]->ImageWidth + $this->jsonFilesContent[1]->ImageLength) >
+        if (($this->jsonFilesContent[1]->ImageWidth + $this->jsonFilesContent[1]->ImageLength) <=
             ($this->jsonFilesContent[2]->ImageWidth + $this->jsonFilesContent[2]->ImageLength)
         ) {
             $this->reasons[] = 'Condition "The dimensions of the first image are bigger than the dimensions of the second one." was not met.';
