@@ -225,7 +225,7 @@ class CT_Organisation_Controller
             '[paid_amount]' => $paymentAmount,
             '[nickname]'        => $nickname,
             '[organisation]'    => $organisation->organisation_name,
-            '[community_url]' => bp_get_group_permalink($group),
+            '[community_url]' => home_url() . '/communities/' . getCommunity($suite->community_id)->slug,
             '[payment_email]' => $card->email
         );
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'purchase_subscription', $emailData);
@@ -456,7 +456,7 @@ class CT_Organisation_Controller
             '[suite_name]'      => $suite->name,
             '[nickname]'        => $subscription->nickname,
             '[organisation]'    => $organisation->organisation_name,
-            '[community_url]'   => bp_get_group_permalink($group)
+            '[community_url]'   => home_url() . '/communities/' . getCommunity($suite->community_id)->slug
         );
         
         cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'allocate_subscription_to_user', $emailData);
