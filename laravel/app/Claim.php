@@ -150,8 +150,8 @@ class Claim extends Model
             'testSuite' => Post::find($this->test_suite_id),
             'claim' => $this,
             'passCount' => $countPassCases,
-            'excludeCount' => $countSkipCases,
-            'skipCount' => $countExcludeCases,
+            'excludeCount' => $countExcludeCases,
+            'skipCount' => $countSkipCases,
             'totalCount' => $countPassCases + $countSkipCases + $countExcludeCases,
         ])->render(), 0, 1, 0, true, '', true);
 
@@ -178,14 +178,14 @@ class Claim extends Model
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._general_cases')->with(['generalCases' => $generalCases])->render(), 0, 1, 0, true, '', true);
         }
         if (count($skippedCases)) {
-            if (count($skippedCases) > 0) {
+            if (count($generalCases) > 0) {
                 $pdf->AddPage();
             }
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $skippedCases, 'message' => 'Skipped Test Cases'])->render(), 0, 1, 0, true, '', true);
         }
 
         if (count($excludedCases)) {
-            if (count($generalCases) > 0) {
+            if (count($generalCases) > 0 || count($skippedCases) > 0) {
                 $pdf->AddPage();
             }
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $excludedCases, 'message' => 'Excluded Test Cases'])->render(), 0, 1, 0, true, '', true);
