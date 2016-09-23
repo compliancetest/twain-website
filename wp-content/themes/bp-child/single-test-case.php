@@ -1,9 +1,8 @@
-<link rel="stylesheet" href="/wp-content/themes/bp-child/css/magnific-popup.css">
 <?php
 /*
 Template Name Posts: Test Case
 */
-
+wp_enqueue_style( 'home', get_stylesheet_directory_uri() . '/css/magnific-popup.css', '', '0.1');
 if (!isset($_REQUEST['is_ajax'])) {
     get_header();
 }
