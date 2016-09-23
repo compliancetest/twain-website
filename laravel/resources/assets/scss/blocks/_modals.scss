@@ -98,3 +98,14 @@
     width: 700px;
   }
 }
+
+.modal-dialog.modal-fluid {
+  width: auto;
+  max-width: 95%;
+  min-width: 500px;
+
+  @media screen and (max-width: 768px) {
+    min-width: 1px;
+  }
+
+}

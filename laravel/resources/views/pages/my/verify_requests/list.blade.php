@@ -122,6 +122,9 @@
                                                         <th>Execution ID</th>
                                                         <th>Status</th>
                                                         <th>Date</th>
+                                                        @if($isAdmin)
+                                                            <th>Action</th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -163,6 +166,59 @@
                                                                     @endif
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
+                                                             @if($isAdmin)
+                                                                <td class="text-center">
+                                                                    <button class="btn btn-success" data-toggle="modal" data-target="#viewImagesModal-{{ $transaction->id }}">View Images</button>
+                                                                    <!-- Change Status Modal-->
+                                                                    <div class="modal fade" id="viewImagesModal-{{ $transaction->id }}" tabindex="-1" role="dialog">
+                                                                        <div class="modal-dialog modal-fluid" role="document">
+                                                                            <div class="modal-content block-loading-wrapper">
+                                                                                <div class="modal-header">
+                                                                                    <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                                                                    Image gallery
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <div class="flexslider">
+                                                                                        <ul class="slides">
+                                                                                            {{--If both images available use this layout--}}
+                                                                                            <li>
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-4">
+                                                                                                        <h4>Image 1</h4>
+                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-4">
+                                                                                                        <h4>Image 2</h4>
+                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-4">
+                                                                                                        <h4>Form</h4>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                            {{--If second image is absent use this layout--}}
+                                                                                            <li>
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-6">
+                                                                                                        <h4>Image 1</h4>
+                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-6">
+                                                                                                        <h4>Form</h4>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Close</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            @endif
                                                         </tr>
                                                         <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transactionId }}" data-transaction-id="{{ $transaction->id }}">
                                                             <td colspan="7">
@@ -199,3 +255,15 @@
     @endif
 
 @endforeach
+
+@section('page-scripts')
+    <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/jquery.flexslider-min.js"></script>
+    <script>
+        jQuery(document).ready(function($) {
+            $('.flexslider').flexslider({
+                slideshow: false,
+                multipleKeyboard: true
+            });
+        });
+    </script>
+@stop
