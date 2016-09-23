@@ -221,7 +221,7 @@ function create_home_settings_page() {
                                     <td class="tdlabel"><b>Image</b></td>
                                     <td>
                                         <div class="uploader wp-media-buttons">
-                                            <input type="text" size="50" name="tab_1_image" id="tab_1_image" value="<?php echo $home_settings['tab_3_image']; ?>" />
+                                            <input type="text" size="50" name="tab_1_image" id="tab_1_image" value="<?php echo $home_settings['tab_1_image']; ?>" />
                                             <span class="add_media">
                                                 <a title="Add Media" class="button insert-media" id="tab_1_image_button" href="#"><span class="wp-media-buttons-icon"></span> Upload Image</a>
                                             </span>
