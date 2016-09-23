@@ -19,7 +19,7 @@
                 TX 78750, USA<br>
                 </address>
                 Phone: <b>+1 817-294-7339</b><br>
-                Email: <a href="mailto:info2@drummondgroup.com">info2@drummondgroup.com</a><br>
+                Email: <a href="mailto:infotwain@drummondgroup.com">infotwain@drummondgroup.com</a><br>
             </div>
 
 
