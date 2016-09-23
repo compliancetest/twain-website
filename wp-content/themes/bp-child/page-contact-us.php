@@ -36,9 +36,6 @@ get_header();
                     <p>Email: <b><a href="mailto:<?php echo $us_company_email?>"> <?php echo $us_company_email?></a></b></p>
                 </div>
                 <div class="clear"></div>
-                <div id="contact-form-wrapper">
-                    <?php echo do_shortcode('[contact-form-7 id="' . $formID . '" title="Contact Us Form"]'); ?>
-                </div>
             </div>
             <?php endwhile; ?>
             
