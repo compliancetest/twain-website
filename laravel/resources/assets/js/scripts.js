@@ -680,6 +680,11 @@ var Page = {
                     },
                     success: function (rsp) {
                         $('#verifyRequestsListContent').html(rsp.html);
+                        $('.flexslider').removeData("flexslider");
+                        $('.flexslider').flexslider({
+                            slideshow: false,
+                            multipleKeyboard: true
+                        });
                     },
                     complete: function () {
                     }
