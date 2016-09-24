@@ -16,20 +16,17 @@ abstract class TestCaseValidationAbstract
      * @var array
      */
     protected $reasons = [];
-    /**
-     * Expected number of images in scans folder
-     * @var
-     */
-    protected $filesCount;
 
-    public function __construct($transactionFilesFolder, $filesNumber, Transaction &$transaction, $userId)
+    public function __construct($transactionFilesFolder, Transaction &$transaction, $userId)
     {
         $this->rootFolder = $transactionFilesFolder;
         $this->transaction = $transaction;
-        $this->filesCount = $filesNumber;
         $this->userId = $userId;
     }
 
+    /**
+     * Validate scanned files
+     */
     public function validate()
     {
         $this->validateFilesExistence();
@@ -47,6 +44,11 @@ abstract class TestCaseValidationAbstract
     abstract function testCaseRules();
 
     /**
+     * Get expected number of files
+     * @return mixed
+     */
+    abstract function getFilesNumber();
+    /**
      * Check that all needed files exist.
      * Set error message if any file is missed
      */
@@ -54,9 +56,9 @@ abstract class TestCaseValidationAbstract
     {
         $missingMetaFile = $this->getMissingMetaFile();
         if (!$this->allScanFilesExists()) {
-            $this->reasons[] = sprintf('Scan result is missing, expected to be 4, but actual %d images have been scanned.', $this->countImages());
+            $this->reasons[] = sprintf('Scan result is missing, expected to be %s, but actual %d images have been scanned.', $this->getFilesNumber(), $this->countImages());
         } else if ($missingMetaFile) {
-            $this->reasons[] = sprintf('A metadata file is missing for the following scan result: image_%s.png.json.', $missingMetaFile);
+            $this->reasons[] = sprintf('A metadata file is missing for the following scan result: image_%s.*.json.', $missingMetaFile);
         }
     }
 
@@ -79,10 +81,9 @@ abstract class TestCaseValidationAbstract
      */
     public function getJsonFilesContent()
     {
-        if ($this->filesCount > 0) {
-            for ($i = 1; $i <= $this->filesCount; $i++) {
-                $this->jsonFilesContent[$i] = json_decode(file_get_contents($this->rootFolder . '/scan_result/image_' . $i . '.png.json'));
-            }
+        for ($i = 1; $i <= $this->getFilesNumber(); $i++) {
+            $file = glob($this->rootFolder . '/scan_result/image_' . $i . '.*.json')[0];
+            $this->jsonFilesContent[$i] = json_decode(file_get_contents($file));
         }
     }
 
@@ -92,12 +93,9 @@ abstract class TestCaseValidationAbstract
      */
     public function allScanFilesExists()
     {
-        if ($this->filesCount > 0) {
-            for ($i = 1; $i <= $this->filesCount; $i++) {
-                if (!file_exists($this->rootFolder . '/scan_result/image_' . $i . '.png')
-                ) {
-                    return $i;
-                }
+        for ($i = 1; $i <= $this->getFilesNumber(); $i++) {
+            if (!glob($this->rootFolder . '/scan_result/image_' . $i . '.*')) {
+                return $i;
             }
         }
         return true;
@@ -109,11 +107,9 @@ abstract class TestCaseValidationAbstract
      */
     public function getMissingMetaFile()
     {
-        if ($this->filesCount > 0) {
-            for ($i = 1; $i <= $this->filesCount; $i++) {
-                if (!file_exists($this->rootFolder . '/scan_result/image_' . $i . '.png.json')) {
-                    return $i;
-                }
+        for ($i = 1; $i <= $this->getFilesNumber(); $i++) {
+            if (!glob($this->rootFolder . '/scan_result/image_' . $i . '.*.json')) {
+                return $i;
             }
         }
         return false;
@@ -126,8 +122,8 @@ abstract class TestCaseValidationAbstract
     protected function countImages()
     {
         $imagesCount = 0;
-        for ($i = 1; $i <= $this->filesCount; $i++) {
-            if (!file_exists($this->rootFolder . '/scan_result/image_' . $i . '.png')) {
+        for ($i = 1; $i <= $this->getFilesNumber(); $i++) {
+            if (!glob($this->rootFolder . '/scan_result/image_' . $i . '.*')) {
                 return false;
             }
             $imagesCount++;
@@ -136,7 +132,7 @@ abstract class TestCaseValidationAbstract
     }
 
     /**
-     * Calculate diff between 2 images
+     * Calculate diff between 2 numbers
      * @param $firstNumber
      * @param $secondNumber
      * @return number

@@ -16,4 +16,9 @@ class CA01 extends TestCaseValidationAbstract
             $this->reasons[] = 'Condition "The dimensions of the first image bigger than the dimensions of the second one." was not met.';
         }
     }
+
+    public function getFilesNumber()
+    {
+        return 2;
+    }
 }

@@ -29,4 +29,9 @@ class CA05 extends TestCaseValidationAbstract
             $this->reasons[] = 'The fourth image color mode should be Black & White.';
         }
     }
+
+    public function getFilesNumber()
+    {
+        return 4;
+    }
 }

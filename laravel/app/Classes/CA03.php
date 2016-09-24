@@ -26,4 +26,9 @@ class CA03 extends TestCaseValidationAbstract
             $this->reasons[] = 'Either the a4 sample was rotated during the first scanning or was not during the second scanning.';
         }
     }
+
+    public function getFilesNumber()
+    {
+        return 4;
+    }
 }

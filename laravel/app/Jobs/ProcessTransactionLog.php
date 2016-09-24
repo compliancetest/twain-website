@@ -252,16 +252,16 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
                 if ($testCase->post_name == 'ca-01-v1-0') {
-                    $testCaseValidator = new \App\CA01($this->rootFolder, 2, $transaction, $this->userId);
+                    $testCaseValidator = new \App\CA01($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 } else if($testCase->post_name == 'ca-03-v1-0'){
-                    $testCaseValidator = new \App\CA03($this->rootFolder, 4, $transaction, $this->userId);
+                    $testCaseValidator = new \App\CA03($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 } else if($testCase->post_name == 'ca-05-v1-0'){
-                    $testCaseValidator = new \App\CA05($this->rootFolder, 4, $transaction, $this->userId);
+                    $testCaseValidator = new \App\CA05($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 } else if ($testCase->post_name == 'ca-07-v1-0') {
-                    $testCaseValidator = new \App\CA07($this->rootFolder, 2, $transaction, $this->userId);
+                    $testCaseValidator = new \App\CA07($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 }
             }
