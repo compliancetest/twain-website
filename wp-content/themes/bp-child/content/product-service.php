@@ -175,7 +175,7 @@
                             <td class="centered"><?php echo $product_claim->conformance_level; ?></td>
                             <td class="centered"><?php echo $product_claim->role; ?></td>
                             <td class="centered"><span class="status-unverified">Verified</span></td>
-                            <td class="centered"><?php echo isset( $product_claim->last_updated ) ? formatDate( $product_claim->last_updated ) : formatDate($product_claim->created_date); ?></td>
+                            <td class="centered"><?php echo isset( $product_claim->created_at ) ? formatDate( $product_claim->created_at ) : formatDate($product_claim->created_at); ?></td>
                             <td class="centered row-actions">
                                 <a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->id );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $product_claim->id );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $product_claim->id, true );?>">Download</a>
                             </td>
