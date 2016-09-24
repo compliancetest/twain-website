@@ -9,6 +9,8 @@ chmod -R 777 /var/www/html/laravel/storage/app/
 mkdir /var/www/html/wp-content/uploads/wpcf7_captcha
 chmod -R 777 /var/www/html/wp-content/uploads/wpcf7_captcha
 chmod -R 777 /var/www/html/wp-content/uploads
+touch /var/www/html/laravel/storage/logs/laravel.log
+chmod 666 /var/www/html/laravel/storage/logs/laravel.log
 
 #this command used to run queue listener in background
 nohup php /var/www/html/laravel/artisan queue:listen --timeout=1800 > /dev/null 2>&1 &

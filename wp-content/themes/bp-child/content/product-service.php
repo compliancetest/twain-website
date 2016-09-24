@@ -211,7 +211,7 @@
                             <td class="centered"><?php echo $testPlan->level; ?></td>
                             <td class="centered"><?php echo $testPlan->role; ?></td>
                             <td class="centered"><span class="status-unverified">In Progress</span></td>
-                            <td class="centered"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date); ?></td>
+                            <td class="centered"><?php echo isset( $claim->created_at ) ? formatDate( $claim->created_at ) : formatDate($testPlan->created_at); ?></td>
                             <td></td>
                         </tr>
                         <?php $testPlansHtml .= ob_get_clean();?>
@@ -230,7 +230,7 @@
                                     <span class="status-unverified">In Progress</span>
                                 <?php } ?>
                             </td>
-                            <td class="centered"><?php echo isset( $claim->last_updated ) ? formatDate( $claim->last_updated ) : formatDate($testPlan->created_date); ?></td>
+                            <td class="centered"><?php echo isset( $claim->created_at ) ? formatDate( $claim->created_at ) : formatDate($testPlan->created_at); ?></td>
                             <td class="centered row-actions">
                                 <?php if( isset( $claim->claim_id ) ): ?>
                                     <a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token );?>" onclick="window.open('<?php echo S3Wrapper::getProductClaimLink( $claim->token );;?>', '', 'height=600');return false;">View</a>&nbsp;|&nbsp;<a href="<?php echo S3Wrapper::getProductClaimLink( $claim->token, true );?>">Download</a>
