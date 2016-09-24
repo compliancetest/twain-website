@@ -27,7 +27,7 @@
                             <td class="text-center">
                                 @if($survey['date_close'])
                                     This survey is closed
-                                @elseif($survey['user_responded'] || $community->isAdmin() || $community->isSupport() || is_super_admin())
+                                @elseif($survey['user_responded'] || $community->isAdmin() || $community->isModerator() || is_super_admin())
 
                                     <a data-toggle="modal" href="#viewResults{{ $survey['id'] }}">View results</a>
 

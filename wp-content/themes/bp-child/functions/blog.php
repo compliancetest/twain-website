@@ -171,7 +171,7 @@ function ct_blog_community_metabox($post)
                 </li>
                 <?php foreach ($groups as $group) { ?>
                     <li><label class="selectit"><input type="radio" name="blog_community" value="<?php echo $group->id ?>"
-                                                       <?php if ($community_id == $group->id){ ?>checked="checked" <?php } ?> /> <?php echo $group->title ?></label></li>
+                                                       <?php if ($community_id == $group->id){ ?>checked="checked" <?php } ?> /> <?php echo ctE($group->title) ?></label></li>
                 <?php } ?>
             </ul>
             <input type="hidden" name="blog_community_id_nonce" value="<?php echo wp_create_nonce('save_blog_community_id') ?>"/>
