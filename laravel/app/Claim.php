@@ -174,18 +174,18 @@ class Claim extends Model
 
         $pdf->SetFont('opensans', '', 13, '', true);
 
-        if (count($generalCases)) {
+        if ($countPassCases) {
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._general_cases')->with(['generalCases' => $generalCases])->render(), 0, 1, 0, true, '', true);
         }
-        if (count($skippedCases)) {
-            if (count($generalCases) > 0) {
+        if ($countSkipCases) {
+            if ($countPassCases) {
                 $pdf->AddPage();
             }
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $skippedCases, 'message' => 'Skipped Test Cases'])->render(), 0, 1, 0, true, '', true);
         }
 
-        if (count($excludedCases)) {
-            if (count($generalCases) > 0 || count($skippedCases) > 0) {
+        if ($countExcludeCases) {
+            if ($countPassCases || $countSkipCases) {
                 $pdf->AddPage();
             }
             $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._excluded_cases')->with(['cases' => $excludedCases, 'message' => 'Excluded Test Cases'])->render(), 0, 1, 0, true, '', true);

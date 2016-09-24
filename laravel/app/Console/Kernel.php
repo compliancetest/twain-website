@@ -39,6 +39,6 @@ class Kernel extends ConsoleKernel
                 }
             }
         })
-        ->everyTenMinutes();
+        ->daily();
     }
 }
