@@ -38,9 +38,10 @@
                                             <label for="community-desc">Community Description (required): </label>
 
                                             {!! Form::textarea('description', false,  [
-                                                'class' => 'form-control',
+                                                'class' => 'form-control redactor_editor',
                                                 'id' => 'community-desc',
                                                 'rows' => '5',
+                                                'data-air' => "true",
                                                 'required' => 'required',
                                                 'data-msg-required' => 'Please fill this field',
                                             ]) !!}
