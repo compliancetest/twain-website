@@ -122,7 +122,7 @@
                                                         <th>Execution ID</th>
                                                         <th>Status</th>
                                                         <th>Date</th>
-                                                        @if($isAdmin)
+                                                        @if($isAdmin && isImageViewerEnabled())
                                                             <th>Action</th>
                                                         @endif
                                                     </tr>
@@ -166,7 +166,7 @@
                                                                     @endif
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
-                                                             @if($isAdmin)
+                                                             @if($isAdmin && isImageViewerEnabled())
                                                                 <td class="text-center">
                                                                     <button class="btn btn-success" data-toggle="modal" data-target="#viewImagesModal-{{ $transaction->id }}">View Images</button>
                                                                     <!-- Change Status Modal-->
@@ -180,34 +180,39 @@
                                                                                 <div class="modal-body">
                                                                                     <div class="flexslider">
                                                                                         <ul class="slides">
-                                                                                            {{--If both images available use this layout--}}
-                                                                                            <li>
-                                                                                                <div class="row">
-                                                                                                    <div class="col-md-4">
-                                                                                                        <h4>Image 1</h4>
-                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
-                                                                                                    </div>
-                                                                                                    <div class="col-md-4">
-                                                                                                        <h4>Image 2</h4>
-                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
-                                                                                                    </div>
-                                                                                                    <div class="col-md-4">
-                                                                                                        <h4>Form</h4>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </li>
-                                                                                            {{--If second image is absent use this layout--}}
-                                                                                            <li>
-                                                                                                <div class="row">
-                                                                                                    <div class="col-md-6">
-                                                                                                        <h4>Image 1</h4>
-                                                                                                        <a target="_blank" href="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png"><img src="https://s3-us-west-2.amazonaws.com/www.preproduction.twain.gosource.com.au/preproduction/case_images/5867/58ac7ef5c2ad9c55c589ef04df1361ff.png" /></a>
-                                                                                                    </div>
-                                                                                                    <div class="col-md-6">
-                                                                                                        <h4>Form</h4>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </li>
+                                                                                            @foreach($transaction->getScannedImagesData() AS $scannedImageData)
+                                                                                                {{--If both images available use this layout--}}
+                                                                                                <li>
+                                                                                                    @if($scannedImageData['expectedImage'])
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-md-4">
+                                                                                                                <h4>Scanned Image</h4>
+                                                                                                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
+                                                                                                                    <img src="{{ $scannedImageData['image'] }}" /></a>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-4">
+                                                                                                                <h4>ExpectedImage</h4>
+                                                                                                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}" />
+                                                                                                                    <img src="{{ $scannedImageData['expectedImage'] }}" />
+                                                                                                                </a>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-4">
+                                                                                                                <h4>Form</h4>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @else
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-md-6">
+                                                                                                                <h4>Scanned Image</h4>
+                                                                                                                <a target="_blank" href="{{ $scannedImageData['image'] }}" /></a>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-6">
+                                                                                                                <h4>Form</h4>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @endif
+                                                                                                </li>
+                                                                                            @endforeach
                                                                                         </ul>
                                                                                     </div>
                                                                                 </div>

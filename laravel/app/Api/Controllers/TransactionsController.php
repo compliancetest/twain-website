@@ -131,6 +131,8 @@ class TransactionsController extends BaseApiController
             'product_id' => $request->get('product_id'),
             'test_outcome' => strtoupper($request->get('test_outcome')),
             'reason' => $request->get('reason'),
+            'transaction_key' => \Auth::user()->ID . '/' . $request->get('test_case_id') . '/' . $request->get('execution_id'),
+            'user_id' => \Auth::user()->ID,
         ];
         //adding entry to sqs. it will be processed in background
         $this->dispatch(new ProcessTransactionLog($fileName, $data));
