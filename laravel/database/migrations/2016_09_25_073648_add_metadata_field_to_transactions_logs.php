@@ -13,10 +13,19 @@ class AddMetadataFieldToTransactionsLogs extends Migration
     public function up()
     {
         Schema::table('transactions_logs', function(Blueprint $table) {
-            $table->integer('metadata');
+            $table->text('scan_results_meta')->after('scan_results');
         });
-        update_option('server_validation', 'yes');
-        update_option('image_viewer', 'yes');
+        Schema::table('transactions', function(Blueprint $table) {
+            $table->text('execution_config');
+        });
+        App\WpOptions::create([
+            'option_name' => 'server_validation',
+            'option_value' => 'yes',
+        ]);
+        App\WpOptions::create([
+            'option_name' => 'image_viewer',
+            'option_value' => 'yes',
+        ]);
     }
 
     /**

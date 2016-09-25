@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Aws\Laravel\AwsFacade;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -83,6 +85,49 @@ class Transaction extends Model
             $processedTransactions[$transaction->test_case_id][] = $transaction;
         }
         return $processedTransactions;
+    }
+
+    public function getScannedImagesData()
+    {
+        $executionData = false;
+        $executionConfig = $this->getExecutionConfig();
+        if($executionConfig){
+            if(isset($executionConfig['data']['ExecutionProfile']['UserValidation'])){
+                $executionData = $executionConfig['data']['ExecutionProfile']['UserValidation'];
+            }
+        }
+        $result = [];
+        $logs = $this->logs()->where('return_code', 'TWRC_XFERDONE')->get();
+        foreach($logs as $log){
+            $meta = json_decode($log->scan_results_meta, true);
+            foreach(json_decode($log->scan_results, true) as $key => $image){
+                $result[] = [
+                    'image' => $image,
+                    'imageMeta' => $meta,
+                    'expectedImage' => isset($executionData[$key]['ExpectedResult']) ? $executionData[$key]['ExpectedResult'] : false,
+                    'passConditions' => isset($executionData[$key]['PassConditions']) ? $executionData[$key]['PassConditions'] : false,
+                    'skipConditions' => isset($executionData[$key]['SkipConditions']) ? $executionData[$key]['SkipConditions'] : false,
+                ];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get transaction execution config file
+     * @return array|bool|mixed
+     */
+    public function getExecutionConfig()
+    {
+        $s3 = App::make('aws')->createClient('s3');
+        if (!empty($this->execution_config) && $s3->doesObjectExist(config('env.bucket.transactions'), $this->execution_config)) {
+            return json_decode((string)$s3->getObject(array(
+                'Bucket' => config('env.bucket.transactions'),
+                'Key' => $this->execution_config,
+                'ResponseContentType' => 'application/json',
+            ))['Body'], true);
+        }
+        return false;
     }
 
     /**

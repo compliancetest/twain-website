@@ -33,10 +33,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
     public $rootFolder;
     public $testOutcome;
     public $reason;
-
-    private $testCasesWithServerValidation = [
-        'ca-01-v1-0', 'ca-03-v1-0', 'ca-05-v1-0'
-    ];
+    public $transactionKey;
 
     /**
      * ProcessTransactionLog constructor.
@@ -51,7 +48,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $this->productId = $data['product_id'];
         $this->testOutcome = $data['test_outcome'];
         $this->reason = @$data['reason'];
-        $this->userId = Auth::user()->ID;
+        $this->userId = $data['user_id'];
+        $this->transactionKey = $data['transaction_key'];
         $this->rootFolder = base_path() . '/storage/app/public/transactions/' . $this->executionId;
     }
 
@@ -137,9 +135,18 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $transaction->subscription_id = $organisationSubscription->id;
         $transaction->organisation_id = $organisationMember->organisation_id;
         $transaction->s3_link = $transaction->getZipS3Link($this->fileName);
+
+        if(file_exists($this->rootFolder . '/execution_config/execution_config.json')) {
+            $s3 = Aws::createClient('s3');
+            $s3->putObject(array(
+                'Bucket' => config('env.bucket.transactions'),
+                'Key' => $this->transactionKey . '/execution_config.json',
+                'Body' => file_get_contents($this->rootFolder . '/execution_config/execution_config.json'),
+                'ContentType' => 'application/json',
+            ));
+            $transaction->execution_config = $this->transactionKey . '/execution_config.json';
+        }
         $transaction->save();
-        
-        
 
         //execution log
         if(file_exists($this->rootFolder . '/execution_log/execution_log.json')) {
@@ -190,7 +197,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transactionLog->screen_captures = json_encode([]);
                 $transactionLog->reason = @$log['Reason'];
                 //process and save images
-                $scanResults = [];
+                $scanResults = $scanResultsMeta = [];
                 /**
                  * Save transactionLog entry image
                  */
@@ -207,6 +214,15 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         'ContentType' => $mime,
                         'SourceFile' => $this->rootFolder . '/scan_result/' . $log['ImageFileName'],
                     ));
+                    if(glob($this->rootFolder . '/scan_result/' . $log['ImageFileName'] . '.json')){
+                        $s3->putObject(array(
+                            'Bucket' => config('env.bucket.transactions'),
+                            'Key' => file_get_contents($this->rootFolder . '/scan_result/' . $log['ImageFileName'] . '.json'),
+                            'ContentType' => 'application/json',
+                            'SourceFile' => $this->rootFolder . '/scan_result/' . $log['ImageFileName'] . '.json',
+                        ));
+                        $scanResultsMeta = $transactionLog->getS3Link($logImageKey) . '.json';
+                    }
                     $scanResults = [$transactionLog->getS3Link($logImageKey)];
                 }
                 /**
@@ -233,6 +249,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                     }
                 }
                 $transactionLog->scan_results = json_encode($scanResults);
+                $transactionLog->scan_results_meta = json_encode($scanResultsMeta);
                 $transactionLog->screen_captures = json_encode($screenCaptures);
                 $transactionLog->save();
             }
@@ -240,7 +257,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
 
 
         if($testSuite->getMetaByKey('ts_tester_role') != 'Application' && ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
-            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS'))) {
+            $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS')) && isServerValidationEnabled()) {
             /*
              * Ensure that each TWRC_XFERDONE returs code has image
              */

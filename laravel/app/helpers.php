@@ -77,3 +77,21 @@ function getPostMeta($postId, $metaKey)
     }
     return false;
 }
+
+function isServerValidationEnabled()
+{
+    $option = \App\WpOptions::where(['option_name' => 'server_validation'])->first();
+    if ($option && $option->option_value == 'yes') {
+        return true;
+    }
+    return false;
+}
+
+function isImageViewerEnabled()
+{
+    $option = \App\WpOptions::where(['option_name' => 'image_viewer'])->first();
+    if ($option && $option->option_value == 'yes') {
+        return true;
+    }
+    return false;
+}
