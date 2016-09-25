@@ -12,5 +12,7 @@ class WpOptions extends Model
         'option_name', 'option_value'
     ];
 
+    protected $primaryKey = 'option_id';
+
     public $timestamps = [];
 }

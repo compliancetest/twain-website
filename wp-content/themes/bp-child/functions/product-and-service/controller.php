@@ -234,20 +234,11 @@ function saveProductService()
     }
     update_post_meta($id, 'product_visibility', $product_visibility);
 
-    /**
-     * We need to reload data for existing product because
-     * it could contain test plans / claims / services which also should be updated
-     */
+    $optionName = md5(get_current_user_id() . $id . microtime());
+    update_option($optionName, $id);
 
-    require ABSPATH . 'laravel/bootstrap/autoload.php';          //the path should match your file path
-    $app = require_once 'laravel/bootstrap/app.php';  //the path should match your file path
+    get_headers(home_url().'/savepost/' . $optionName);
 
-    $app->make('Illuminate\Contracts\Http\Kernel')
-    ->handle(Illuminate\Http\Request::capture());
-
-    $post = \App\Post::find($id);
-    $post->timestamps = false;
-    $post->save();
     addMessage('Product was saved successfully');
     wp_redirect(get_permalink($id));
     exit;
