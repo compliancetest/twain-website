@@ -12,7 +12,7 @@
             <select name="product_id" id="availableProducts" class="form-control">
                 <option value="">Select a Product</option>
                 @foreach($products as $product)
-                    <option value="{{ $product->ID }}">{{ $product->post_title . ' V' .$product->version }}</option>
+                    <option value="{{ $product->ID }}">{{ $product->post_title . ' V' .$product->getMetaByKey('product_version') }}</option>
                 @endforeach
             </select>
         </div>

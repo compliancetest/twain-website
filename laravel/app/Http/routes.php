@@ -35,6 +35,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('contact-us', 'ContactUsController@index');
     Route::post('contact-us', 'ContactUsController@send');
+    Route::get('savepost/{optionId}', 'PostController@save');
 
     Route::group(['middleware' => ['auth']], function () {
         Route::resource('testingdetails', 'TestingDetailsController',
