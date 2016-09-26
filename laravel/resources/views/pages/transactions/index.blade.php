@@ -514,24 +514,16 @@
            $('.logRow').collapse('hide');
         });
 
-        $(window).bind('scroll', function() {
-            var navHeight = $( window ).height() - 70;
-            if ($(window).scrollTop() > navHeight) {
-                $('.transaction-list-actions').addClass('fixed');
-            }
-            else {
-                $('.transaction-list-actions').removeClass('fixed');
-            }
-        });
-
         var actionPos = $('.transaction-list-actions').offset();
         $(window).bind('scroll', function() {
             var topScroll = $(window).scrollTop();
             if (topScroll > actionPos.top) {
                 $('.transaction-list-actions').addClass('fixed');
+                $('.transaction-list-actions .btn').removeAttr('data-tooltip');
             }
             else {
                 $('.transaction-list-actions').removeClass('fixed');
+                $('.transaction-list-actions .btn').attr('data-tooltip', 'tooltip');
             }
         });
 
