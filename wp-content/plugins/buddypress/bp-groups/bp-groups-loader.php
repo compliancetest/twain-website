@@ -271,11 +271,11 @@ class BP_Groups_Component extends BP_Component {
 
 					// Off-limits to this user. Throw an error and redirect to the group's home page
 					if ( is_user_logged_in() ) {
-						bp_core_no_access( array(
-							'message'  => __( 'You do not have access to this group.', 'buddypress' ),
-							'root'     => bp_get_group_permalink( $bp->groups->current_group ) . 'home/',
-							'redirect' => false
-						) );
+//						bp_core_no_access( array(
+//							'message'  => __( 'You do not have access to this group.', 'buddypress' ),
+//							'root'     => bp_get_group_permalink( $bp->groups->current_group ) . 'home/',
+//							'redirect' => false
+//						) );
 
 					// User does not have access, and does not get a message
 					} else {

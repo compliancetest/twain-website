@@ -848,9 +848,9 @@ class BP_Group_Extension {
 				'group_id' => $this->group_id,
 			) );
 
-			$no_access_args['message'] = __( 'You do not have access to this content.', 'buddypress' );
-			$no_access_args['root'] = bp_get_group_permalink( $current_group ) . 'home/';
-			$no_access_args['redirect'] = false;
+//			$no_access_args['message'] = __( 'You do not have access to this content.', 'buddypress' );
+//			$no_access_args['root'] = bp_get_group_permalink( $current_group ) . 'home/';
+//			$no_access_args['redirect'] = false;
 		}
 
 		return $user_can_visit;
