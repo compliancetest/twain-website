@@ -12,6 +12,8 @@ use App\Post;
 use App\PostObserver;
 use App\TestPlan;
 use App\TestPlanObserver;
+use App\Transaction;
+use App\TransactionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         TestPlan::observe(TestPlanObserver::class);
         Claim::observe(ClaimObserver::class);
         Post::observe(PostObserver::class);
+        Transaction::observe(TransactionObserver::class);
     }
 
     /**
