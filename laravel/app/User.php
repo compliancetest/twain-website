@@ -126,18 +126,6 @@ class User extends Authenticatable
             }
             foreach($testPlans as $testPlan){
 
-                foreach($testPlan->getSkippedTransactions($testPlan->product_id) as $skippedCase){
-                    $testPlan->excludedCases()->updateOrCreate(
-                        [
-                            'test_case_id' => $skippedCase,
-                        ],
-                        [
-                            'reason' => 'Test execution was skipped.',
-                            'excluded_by_user_id' => $this->ID,
-                            'is_skipped' => true
-                        ]
-                    );
-                }
                  $response[$suite->post_title]['testPlans'][] = [
                      'product' => Post::find($testPlan->product_id),
                      'testPlan' => $testPlan,

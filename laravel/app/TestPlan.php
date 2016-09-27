@@ -111,7 +111,7 @@ class TestPlan extends Model
      * Get test cases list with SKIP status from transactions table
      * @return mixed
      */
-    public function getSkippedTransactions($productId)
+    public function getSkippedTransactions()
     {
         $suiteId = $this->suite_id;
         return DB::table('transactions')
@@ -120,7 +120,7 @@ class TestPlan extends Model
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
                     ->where('TO.code', '=', 'SKIP');
             })
-            ->where('product_id', $productId)
+            ->where('product_id', $this->product_id)
             ->where('audit_record', true)
             ->lists('test_case_id');
     }
