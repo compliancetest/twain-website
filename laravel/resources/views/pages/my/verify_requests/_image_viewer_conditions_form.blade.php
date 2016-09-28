@@ -1,7 +1,7 @@
 <form>
     <fieldset>
-        <legend>Confirm that all pass conditions are met:</legend>
         @if($scannedImageData['passConditions'])
+            <legend>Confirm that all pass conditions are met:</legend>
             @foreach($scannedImageData['passConditions'] as $passCondition)
                 <div class="checkbox">
                     <label>
@@ -13,8 +13,8 @@
     </fieldset>
 
     <fieldset>
-        <legend>Or choose any of skip condition if it is met:</legend>
         @if($scannedImageData['skipConditions'])
+            <legend>Or choose any of skip condition if it is met:</legend>
             @foreach($scannedImageData['skipConditions'] as $skipCondition)
                 <div class="checkbox">
                     <label>

@@ -70,29 +70,34 @@
 
 <script>
     jQuery(document).ready(function($) {
-         $('.skipConditions').on('change', function(){
-                if($('.skipConditions[data-image="'+$(this).data('image')+'"]:checked').length > 0){
-                    $('.passConditions[data-image="'+$(this).data('image')+'"]').prop('checked', false).attr('disabled', 'disabled');
-                } else {
-                    $('.passConditions[data-image="'+$(this).data('image')+'"]').removeAttr('disabled');
-                }
-                $('.skipConditions[data-image="'+$(this).data('image')+'"][value="'+$(this).val()+'"]').prop('checked', $(this).is(':checked'));
-                checkButtons();
-            });
-            $('.passConditions').on('change', function(){
-                 if($('.passConditions[data-image="'+$(this).data('image')+'"]:checked').length > 0){
-                    $('.skipConditions[data-image="'+$(this).data('image')+'"]').prop('checked', false).attr('disabled', 'disabled');
-                     $('.reason[data-image="'+$(this).data('image')+'"]').val('').attr('disabled', 'disabled');
-                } else {
-                    $('.skipConditions[data-image="'+$(this).data('image')+'"]').removeAttr('disabled');
-                     $('.reason[data-image="'+$(this).data('image')+'"]').removeAttr('disabled');
-                }
-                $('.passConditions[data-image="'+$(this).data('image')+'"][value="'+$(this).val()+'"]').prop('checked', $(this).is(':checked'));
-                checkButtons();
-            });
-            $('.reason').on('change', function(){
-                $('.reason[data-image="'+$(this).data('image')+'"]').val($(this).val());
-            });
+         $('.flexslider').flexslider({
+            slideshow: false,
+            multipleKeyboard: true
+        });
+
+        $('.skipConditions').on('change', function (e) {
+            if ($('.skipConditions[data-image="' + $(this).data('image') + '"]:checked').length > 0) {
+                $('.passConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).attr('disabled', 'disabled');
+            } else {
+                $('.passConditions[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
+            }
+            $('.skipConditions[data-image="' + $(this).data('image') + '"][value="' + $(this).val() + '"]').prop('checked', $(this).is(':checked'));
+            checkButtons();
+        });
+        $('.passConditions').on('change', function (e) {
+            if ($('.passConditions[data-image="' + $(this).data('image') + '"]:checked').length > 0) {
+                $('.skipConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).attr('disabled', 'disabled');
+                $('.reason[data-image="' + $(this).data('image') + '"]').val('').attr('disabled', 'disabled');
+            } else {
+                $('.skipConditions[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
+                $('.reason[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
+            }
+            $('.passConditions[data-image="' + $(this).data('image') + '"][value="' + $(this).val() + '"]').prop('checked', $(this).is(':checked'));
+            checkButtons();
+        });
+        $('.reason').on('change', function () {
+            $('.reason[data-image="' + $(this).data('image') + '"]').val($(this).val());
+        });
 
         function checkButtons(){
             if($('.passConditions:checked').length == $('.passConditions').length){
@@ -107,9 +112,6 @@
             }
         }
 
-        $('.flexslider').flexslider({
-            slideshow: false,
-            multipleKeyboard: true
-        });
+
     });
 </script>
