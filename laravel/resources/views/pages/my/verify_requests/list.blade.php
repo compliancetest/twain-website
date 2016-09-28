@@ -168,60 +168,7 @@
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                              @if($isAdmin && isImageViewerEnabled())
                                                                 <td class="text-center">
-                                                                    <button class="btn btn-success" data-toggle="modal" data-target="#viewImagesModal-{{ $transaction->id }}">View Images</button>
-                                                                    <!-- Change Status Modal-->
-                                                                    <div class="modal fade" id="viewImagesModal-{{ $transaction->id }}" tabindex="-1" role="dialog">
-                                                                        <div class="modal-dialog modal-fluid" role="document">
-                                                                            <div class="modal-content block-loading-wrapper">
-                                                                                <div class="modal-header">
-                                                                                    <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                                                                                    Image gallery
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <div class="flexslider">
-                                                                                        <ul class="slides">
-                                                                                            @foreach($transaction->getScannedImagesData() AS $scannedImageData)
-                                                                                                {{--If both images available use this layout--}}
-                                                                                                <li>
-                                                                                                    @if($scannedImageData['expectedImage'])
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-md-4">
-                                                                                                                <h4>Scanned Image</h4>
-                                                                                                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                                                                                                    <img src="{{ $scannedImageData['image'] }}" /></a>
-                                                                                                            </div>
-                                                                                                            <div class="col-md-4">
-                                                                                                                <h4>ExpectedImage</h4>
-                                                                                                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}" />
-                                                                                                                    <img src="{{ $scannedImageData['expectedImage'] }}" />
-                                                                                                                </a>
-                                                                                                            </div>
-                                                                                                            <div class="col-md-4">
-                                                                                                                <h4>Form</h4>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    @else
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-md-6">
-                                                                                                                <h4>Scanned Image</h4>
-                                                                                                                <a target="_blank" href="{{ $scannedImageData['image'] }}" /></a>
-                                                                                                            </div>
-                                                                                                            <div class="col-md-6">
-                                                                                                                <h4>Form</h4>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    @endif
-                                                                                                </li>
-                                                                                            @endforeach
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Close</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                   <a class="btn btn-success showImageViewer" href="/verify-requests/{{ $userSuite['testSuite']->getMetaByKey('community_id') }}/image-viewer/{{ $transactionId }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                                                                 </td>
                                                             @endif
                                                         </tr>
@@ -264,11 +211,6 @@
 @section('page-scripts')
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/jquery.flexslider-min.js"></script>
     <script>
-        jQuery(document).ready(function($) {
-            $('.flexslider').flexslider({
-                slideshow: false,
-                multipleKeyboard: true
-            });
-        });
+
     </script>
 @stop

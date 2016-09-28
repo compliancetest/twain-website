@@ -358,4 +358,9 @@ class VerifyRequestsController extends Controller
         ];
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
+
+    public function imageViewerPopup($communityId, $transactionId)
+    {
+        return view('pages.my.verify_requests.image_viewer_popup')->with(['transaction' => Transaction::find($transactionId)]);
+    }
 }
