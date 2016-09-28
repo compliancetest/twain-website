@@ -166,7 +166,7 @@
                                                                     @endif
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
-                                                             @if($isAdmin && isImageViewerEnabled())
+                                                             @if($canModerate && isImageViewerEnabled())
                                                                 <td class="text-center">
                                                                    <a class="btn btn-success showImageViewer" href="/verify-requests/{{ $userSuite['testSuite']->getMetaByKey('community_id') }}/image-viewer/{{ $transactionId }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                                                                 </td>

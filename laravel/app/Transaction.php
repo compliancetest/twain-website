@@ -98,15 +98,15 @@ class Transaction extends Model
         }
         $result = [];
         $logs = $this->logs()->where('return_code', 'TWRC_XFERDONE')->get();
-        foreach($logs as $log){
+        foreach($logs as $kk => $log){
             $meta = json_decode($log->scan_results_meta, true);
             foreach(json_decode($log->scan_results, true) as $key => $image){
                 $result[] = [
                     'image' => $image,
                     'imageMeta' => $meta,
-                    'expectedImage' => isset($executionData[$key]['ExpectedResult']) ? $executionData[$key]['ExpectedResult'] : false,
-                    'passConditions' => isset($executionData[$key]['PassConditions']) ? $executionData[$key]['PassConditions'] : false,
-                    'skipConditions' => isset($executionData[$key]['SkipConditions']) ? $executionData[$key]['SkipConditions'] : false,
+                    'expectedImage' => isset($executionData[$kk]['ExpectedResult']) ? $executionData[$key]['ExpectedResult'] : false,
+                    'passConditions' => isset($executionData[$kk]['PassConditions']) ? $executionData[$key]['PassConditions'] : false,
+                    'skipConditions' => isset($executionData[$kk]['SkipConditions']) ? $executionData[$key]['SkipConditions'] : false,
                 ];
             }
         }
