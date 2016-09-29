@@ -47,7 +47,7 @@
                                                 {{ \App\Post::find($testCase)->post_title }}
                                                 @if(!\App\Transaction::where(['test_case_id' => $testCase, 'product_id' => $caseTransactions[0]->product_id, 'test_suite_id' => $caseTransactions[0]->test_suite_id])->get()->isEmpty())
                                                     <a href="/my-transaction-log/?test_case_id={{ $testCase }}&product_id={{ $caseTransactions[0]->product_id }}&test_suite_id={{ $caseTransactions[0]->test_suite_id }}" target="_blank" style="float: right;">View Log</a>
-                                                @endif;
+                                                @endif
                                             </td>
                                         </tr>
                                         @foreach($caseTransactions as $transaction)
