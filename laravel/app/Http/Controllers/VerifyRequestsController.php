@@ -359,8 +359,46 @@ class VerifyRequestsController extends Controller
         return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
     }
 
-    public function imageViewerPopup($communityId, $transactionId)
+    /**
+     * Render ImageViwer popup
+     * @param $communitySlug
+     * @param $verifyRequestId
+     * @param $transactionId
+     * @return $this
+     */
+    public function imageViewerPopup($communitySlug, $verifyRequestId, $transactionId)
     {
-        return view('pages.my.verify_requests.image_viewer_popup')->with(['transaction' => Transaction::find($transactionId)]);
+        return view('pages.my.verify_requests.image_viewer_popup')->with([
+            'transaction' => Transaction::find($transactionId),
+            'verifyRequest' => VerifyRequest::find($verifyRequestId),
+            'communitySlug' => $communitySlug,
+        ]);
+    }
+
+    /**
+     * Update VerifyRequest transaction. Only assigned admin / support can perform this action
+     * @param $communitySlug
+     * @param $verifyRequestId
+     * @param $transactionId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateTransaction($communitySlug, $verifyRequestId, $transactionId, Request $request)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $verifyRequest = VerifyRequest::find($verifyRequestId);
+        $userID = Auth::user()->ID;
+        if (($community->isAdmin() || $community->isModerator()) && $verifyRequest->is_accepted && $verifyRequest->assignee_id == $userID) {
+            $transaction = Transaction::find($transactionId);
+            $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode($request->get('test_outcome_code'));
+            $transaction->reason = $request->get('reason');
+            $transaction->save();
+            $data = [
+                'userSuites' => VerifyRequest::getUserRequests($request->get('hideResolved'), $request->get('hideOthers')),
+                'isAdmin' => doesUserSupportInAnyCommunity($userID) || doesUserAdminInAnyCommunity($userID),
+            ];
+            return response()->json(['html' => view('pages.my.verify_requests.list')->with($data)->render()]);
+        }
+        return response()->json(['Permissions error'], 422);
     }
 }
