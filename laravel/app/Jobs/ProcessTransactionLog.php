@@ -280,6 +280,9 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 } else if ($testCase->post_name == 'ca-07-v1-0') {
                     $testCaseValidator = new \App\CA07($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
+                } else if ($testCase->post_name == 'ip-01-v1-0') {
+                    $testCaseValidator = new \App\IP01($this->rootFolder, $transaction, $this->userId);
+                    $testCaseValidator->validate();
                 }
             }
             $transaction->save();
