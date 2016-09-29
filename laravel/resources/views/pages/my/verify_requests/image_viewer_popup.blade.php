@@ -49,8 +49,13 @@
                                 @include('pages.my.verify_requests._image_viewer_conditions_form', ['readonly' => true, 'imageNumber' => $k])
                             </div>
                         @endforeach
+                        <div class="alert alert-warning">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+
+                            Please check Pass and Skip conditions on the previous page(s) or provide a reason for Fail / Skip if none of them is met.
+                        </div>
                         <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass" style="display: none;">Verify As Pass</button>
-                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail">Verify As Fail</button>
+                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail" style="display: none;">Verify As Fail</button>
                         <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip" style="display: none;">Verify As Skip</button>
                     </div>
                 </div>
@@ -82,9 +87,9 @@
                 $(this).removeClass('checked');
             }
             if ($('.skipConditions[data-image="' + $(this).data('image') + '"].checked').length > 0) {
-                $('.passConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).attr('disabled', 'disabled').removeClass('checked');
+                $('.passConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).removeClass('checked');
             } else {
-                $(this).closest('form').find('.passConditions[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
+                $(this).closest('form').find('.passConditions[data-image="' + $(this).data('image') + '"]');
             }
             $('.skipConditions[data-image="' + $(this).data('image') + '"][value="' + $(this).val() + '"]').prop('checked', $(this).is(':checked'));
             checkButtons();
@@ -96,10 +101,10 @@
                 $(this).removeClass('checked');
             }
             if ($('.passConditions[data-image="' + $(this).data('image') + '"].checked').length > 0) {
-                $('.skipConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).attr('disabled', 'disabled').removeClass('checked');
+                $('.skipConditions[data-image="' + $(this).data('image') + '"]').prop('checked', false).removeClass('checked');
                 $('.reason[data-image="' + $(this).data('image') + '"]').val('').attr('disabled', 'disabled');
             } else {
-                $(this).closest('form').find('.skipConditions[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
+                $(this).closest('form').find('.skipConditions[data-image="' + $(this).data('image') + '"]');
                 $('.reason[data-image="' + $(this).data('image') + '"]').removeAttr('disabled');
             }
             $('.passConditions[data-image="' + $(this).data('image') + '"][value="' + $(this).val() + '"]').prop('checked', $(this).is(':checked'));
@@ -107,18 +112,27 @@
         });
         $('.reason').on('change', function () {
             $('.reason[data-image="' + $(this).data('image') + '"]').val($(this).val());
+            checkButtons();
         });
 
         function checkButtons() {
+             var notEmptyReason = $('.reason').filter(function () {
+                return this.value.length !== 0;
+            });
             if ($('.passConditions:checked').length == $('.passConditions').length) {
                 $('.viewImagesModal .verify_as_pass').show();
             } else {
                 $('.viewImagesModal .verify_as_pass').hide();
             }
-            if ($('.skipConditions:checked').length > 0) {
+            if ($('.skipConditions:checked').length > 0 || notEmptyReason.length > 0) {
                 $('.viewImagesModal .verify_as_skip').show();
             } else {
                 $('.viewImagesModal .verify_as_skip').hide();
+            }
+            if (notEmptyReason.length > 0) {
+                $('.viewImagesModal .verify_as_fail').show();
+            } else {
+                $('.viewImagesModal .verify_as_fail').hide();
             }
         }
 
