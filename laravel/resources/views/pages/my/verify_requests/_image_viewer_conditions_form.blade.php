@@ -16,9 +16,9 @@
         @if($scannedImageData['skipConditions'])
             <legend>Or choose any of skip condition if it is met:</legend>
             @foreach($scannedImageData['skipConditions'] as $skipCondition)
-                <div class="checkbox">
+                <div class="radio">
                     <label>
-                        <input type="checkbox" value="{{ $skipCondition }}"  data-image="{{ $k }}" class="skipConditions" @if($readonly) disabled="disabled" @endif> {{ $skipCondition }}
+                        <input type="radio" name="skip_{{ $k }}" value="{{ $skipCondition }}"  data-image="{{ $k }}" class="skipConditions" @if($readonly) disabled="disabled" @endif> {{ $skipCondition }}
                     </label>
                 </div>
             @endforeach
