@@ -81,8 +81,6 @@ $home_settings = get_option('home-settings');
             <div class="getting-started-box">
                 <div class="home-box-title">Getting Started</div>
                 <div class="getting-started-description clearfix">
-                    <a href="<?php echo $home_settings['user_guide_link']; ?>" class="action-btn red-btn">View User
-                        Guide</a>
                     <?php echo $home_settings['getting_started_steps_description']; ?>
                 </div>
                 <ul class="getting-started-steps clearfix">
