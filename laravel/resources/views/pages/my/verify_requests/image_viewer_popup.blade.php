@@ -130,9 +130,9 @@
                 return this.value.length !== 0;
             });
             if (outcomeType == 'Skip') {
-                reason = notEmptyReason.length ? notEmptyReason.val() : $('.skipConditions.checked:first').first().val();
+                reason = notEmptyReason.length ? notEmptyReason.val() : 'Skip condition "'+$('.skipConditions.checked:first').val()+'" for the image #'+(parseInt($('.skipConditions.checked:first').data('image')) + 1)+' was not met.';
             } else if (outcomeType == 'Fail') {
-                reason = notEmptyReason.length ? notEmptyReason.val() : $('.passConditions:not(.checked):first').val();
+                reason = notEmptyReason.length ? notEmptyReason.val() : 'Pass condition "'+$('.passConditions:not(.checked):first').val()+'" for the image #'+(parseInt($('.passConditions:not(.checked):first').data('image')) + 1)+' was not met.';
             }
 
             jQuery.ajax({
