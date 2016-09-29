@@ -14,12 +14,13 @@
                             <div class="col-md-4">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                    <img src="{{ $scannedImageData['image'] }}"/></a>
+                                    <img src="{{ $scannedImageData['image'] }}"/>
+                                </a>
                             </div>
                             <div class="col-md-4">
                                 <h4>Expected Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}"/>
-                                <img src="{{ $scannedImageData['expectedImage'] }}"/>
+                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
+                                    <img src="{{ $scannedImageData['expectedImage'] }}"/>
                                 </a>
                             </div>
                             <div class="col-md-4">
