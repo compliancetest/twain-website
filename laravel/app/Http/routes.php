@@ -224,7 +224,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('verify-requests/{requestId}', 'VerifyRequestsController@delete');
 
         Route::get('my-transaction-log', 'TransactionsController@index');
-        Route::get('verify-requests/{community}/image-viewer/{transactionId}', 'VerifyRequestsController@imageViewerPopup');
+        Route::get('verify-requests/{communitySlug}/image-viewer/{verifyRequestId}/{transactionId}', 'VerifyRequestsController@imageViewerPopup');
+        Route::post('verify-requests/{communitySlug}/update-image-transaction/{verifyRequestId}/{transactionId}', 'VerifyRequestsController@updateTransaction');
     });
 
 

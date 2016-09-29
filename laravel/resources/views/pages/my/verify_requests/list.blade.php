@@ -166,11 +166,17 @@
                                                                     @endif
                                                             </td>
                                                             <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
-                                                             @if($canModerate && isImageViewerEnabled())
-                                                                <td class="text-center">
-                                                                   <a class="btn btn-success showImageViewer" href="/verify-requests/{{ $userSuite['testSuite']->getMetaByKey('community_id') }}/image-viewer/{{ $transactionId }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
-                                                                </td>
-                                                            @endif
+                                                                @if($isAdmin && isImageViewerEnabled())
+                                                                    <td class="text-center">
+                                                                        @if($testOutcomeStatus == 'Pending' && $canModerate)
+                                                                            <a class="btn btn-success showImageViewer"
+                                                                               href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->getMetaByKey('community_id'))->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
+                                                                               data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                                                                        @else
+                                                                            &nbsp;
+                                                                        @endif
+                                                                    </td>
+                                                                @endif
                                                         </tr>
                                                         <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transactionId }}" data-transaction-id="{{ $transaction->id }}">
                                                             <td colspan="7">
