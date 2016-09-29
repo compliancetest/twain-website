@@ -104,9 +104,9 @@ class Transaction extends Model
                 $result[] = [
                     'image' => $image,
                     'imageMeta' => $meta,
-                    'expectedImage' => isset($executionData[$kk]['ExpectedResult']) ? $executionData[$key]['ExpectedResult'] : false,
-                    'passConditions' => isset($executionData[$kk]['PassConditions']) ? $executionData[$key]['PassConditions'] : false,
-                    'skipConditions' => isset($executionData[$kk]['SkipConditions']) ? $executionData[$key]['SkipConditions'] : false,
+                    'expectedImage' => isset($executionData[$kk]['ExpectedResult']) ? $executionData[$kk]['ExpectedResult'] : false,
+                    'passConditions' => isset($executionData[$kk]['PassConditions']) ? $executionData[$kk]['PassConditions'] : false,
+                    'skipConditions' => isset($executionData[$kk]['SkipConditions']) ? $executionData[$kk]['SkipConditions'] : false,
                 ];
             }
         }
