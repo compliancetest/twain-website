@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Auth;
-
 class TransactionObserver
 {
     /**
@@ -13,8 +11,9 @@ class TransactionObserver
     public function saved(Transaction $transaction)
     {
         if ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('SKIP')) {
-
-            $organisationSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->organisation[0]->id])->get();
+            $organisationSubscriptions = OrganisationSubscription::where([
+                'organisation_id' => User::find($transaction->customer_id)->organisation[0]->id
+            ])->get();
             foreach ($organisationSubscriptions as $organisationSubscription) {
                 $testPlans = TestPlan::where([
                     'is_claimed' => false,
