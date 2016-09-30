@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Aws\Laravel\AwsFacade;
 use Illuminate\Database\Eloquent\Model;
 
 class TransactionsLog extends Model
@@ -22,5 +23,18 @@ class TransactionsLog extends Model
     public function transaction()
     {
         return $this->belongsTo('App\Transaction');
+    }
+
+    /**
+     * Get output data from s3
+     * @return array
+     */
+    public function getOutput()
+    {
+        $s3 = AwsFacade::createClient('s3');
+        return (array) json_decode((string)$s3->getObject(array(
+            'Bucket' => config('env.bucket.transactions'),
+            'Key' => $this->log_output,
+        ))['Body'], true);
     }
 }
