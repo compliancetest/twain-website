@@ -49,7 +49,7 @@
                     <td class="text-center">
                         <a href="/test-suite/{{ $testSuite->post_name }}/" target="_blank">{{ $testSuite->post_title }}</a>
                         <br/>
-                        <a href="/test-case/{{ $testCase->post_name }}/" target="_blank">{{ $testCase->post_title }}</a>
+                        <a href="/test-case/{{ $testCase->post_name }}/?test_suite_id={{ $testSuite->ID }}" target="_blank">{{ $testCase->post_title }}</a>
                     </td>
                     <td>
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>

@@ -147,7 +147,7 @@
                                                                     <span class="collapse-icon"></span>
                                                                 </a>
                                                                 <?php $testCaseData = \App\Post::find($transaction->test_case_id);?>
-                                                                <a href="/test-case/{{ $testCaseData->post_name }}" target="_blank">{{ $testCaseData->post_title }}</a>
+                                                                <a href="/test-case/{{ $testCaseData->post_name }}/?test_suite_id={{ $transaction->test_suite_id }}" target="_blank">{{ $testCaseData->post_title }}</a>
                                                             </td>
                                                             <td class="text-center">
                                                                 @if($transaction->s3_link)
