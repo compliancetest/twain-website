@@ -20,7 +20,7 @@ class TransactionsController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = 25;
+        $perPage = Auth::user()->getTransactionsPerPage();
         $transactions = Transaction::getUserTransactionLog($request, $perPage);
         $filters = Transaction::getFilters($request);
         $pageTitle = 'My Test Results';
@@ -156,6 +156,8 @@ class TransactionsController extends Controller
 
     public function getItemsPerPage($request)
     {
-        return in_array($request->get('itemsCount'), [10, 25, 50, 100]) ? $request->get('itemsCount') : 25;
+        $itemsPerPage = in_array($request->get('itemsCount'), [10, 25, 50, 100]) ? $request->get('itemsCount') : 25;
+        Auth::user()->meta()->updateOrCreate(['meta_key' => 'transactions_per_page'], ['meta_value' => $itemsPerPage]);
+        return $itemsPerPage;
     }
 }

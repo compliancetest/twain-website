@@ -53,6 +53,15 @@ class User extends Authenticatable
         return $this->hasMany('\App\ForumThread', 'ID');
     }
 
+    /**
+     * Relation with wp_usermeta table
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function meta()
+    {
+        return $this->hasMany('\App\UserMeta', 'user_id');
+    }
+
     public function forumPosts()
     {
         return $this->hasMany('\App\ForumThreadPost', 'ID');
@@ -199,5 +208,31 @@ class User extends Authenticatable
         }
 
         return $results;
+    }
+
+    public function getMetaByKey($metaKey)
+    {
+        $meta = $this->meta()->where('meta_key', $metaKey)->first();
+        if ($meta) {
+            return $meta->meta_value;
+        }
+        return false;
+    }
+
+    /**
+     * Get user's transactions per page number
+     * @return bool|int
+     */
+    public function getTransactionsPerPage()
+    {
+        $count = $this->getMetaByKey('transactions_per_page');
+        if($count){
+            return $count;
+        }
+        $this->meta()->create([
+            'meta_key' => 'transactions_per_page',
+            'meta_value' => 25,
+        ]);
+        return 25;
     }
 }

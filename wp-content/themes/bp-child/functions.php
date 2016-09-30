@@ -37,7 +37,7 @@ if(!defined('DEFAULT_MAILCHIMP_LIST_ID'))
     define('DEFAULT_MAILCHIMP_LIST_ID', get_option('mailchimp_all_list_id'));
     
 define('MESSAGE_WARNING_ANONYMOUS', 'You must be a registered member of the site to view this content. Registration is free - just go to the '.get_site_title().' home page and click on the Signup button.');
-define('MESSAGE_WARNING_REGISTERED', 'You need to join the community to access this content. Community membership is free but applications must be approved by the community owner - just visit the community home page and click the "Join Community" button.');
+define('MESSAGE_WARNING_REGISTERED', 'You must be an approved member of the community to get access to complete test suite details and the community forum. Registration is free - just click on the Join Community button. Access to community information will be available after approval by the community owner.');
 define('MESSAGE_WARNING_COMMUNITY_MEMBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
 define('MESSAGE_WARNING_COMMUNITY_ADMIN', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
 define('MESSAGE_WARNING_COMMUNITY_SUBSCRIBER', 'You must subscribe to at least one test suite in the community to access this content. To subscribe once you are a community member, just select the desired suite from the community home page, and click on the "Access" bar.');
