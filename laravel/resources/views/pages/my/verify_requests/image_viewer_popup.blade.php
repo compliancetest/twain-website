@@ -163,7 +163,7 @@
                 success: function (rsp) {
                     jQuery('.viewImagesModal .block-loading').hide();
                     $('#verifyRequestsListContent').html(rsp.html);
-                    $('.viewImagesModal .modal-body').prepend('<div class="success-message">Transaction was updated successfully!</div>');
+                    $('.viewImagesModal .modal-body').prepend('<div class="success-message">Test result was updated successfully!</div>');
                     setTimeout(function () {
                         $('.modal').modal('hide');
                     }, 3000);
