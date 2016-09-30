@@ -390,7 +390,7 @@ class VerifyRequestsController extends Controller
         $userID = Auth::user()->ID;
         if (($community->isAdmin() || $community->isModerator()) && $verifyRequest->is_accepted && $verifyRequest->assignee_id == $userID) {
             $transaction = Transaction::find($transactionId);
-            $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode($request->get('test_outcome_code'));
+            $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode($request->get('outcome_code'));
             $transaction->reason = $request->get('reason');
             $transaction->save();
             $data = [
