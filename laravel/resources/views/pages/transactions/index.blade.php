@@ -58,10 +58,10 @@
                         <div class="form-group">
                             <label for="paginationLimit">Display #</label>
                             <select class="form-control" id="paginationLimit" name="limit">
-                                <option value="10">10</option>
-                                <option value="25" selected="selected">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
+                                <option value="10" @if($perPage == 10) selected="selected" @endif>10</option>
+                                <option value="25" @if($perPage == 25) selected="selected" @endif>25</option>
+                                <option value="50" @if($perPage == 50) selected="selected" @endif>50</option>
+                                <option value="100" @if($perPage == 100) selected="selected" @endif>100</option>
                             </select>
                         </div>
                     </div>
