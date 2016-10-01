@@ -516,7 +516,7 @@ function getCommunityTestSuites($community_id)
         )
     );
 
-    if (!groups_is_user_admin(get_current_user_id(), $community_id)) {
+    if (!(doesUserCommunityAdmin(get_current_user_id(), $community_id) || is_super_admin())) {
         $args['meta_query'][] = array(
             'key' => 'hide_suite',
             'value' => 0,
