@@ -44,7 +44,7 @@ class Post extends Model
     }
 
     
-    public static function getCommunityTestSuites($communityId)
+    public static function getCommunityTestSuites($communityId, $showOnlyLastSuitePerFamilyMark = true)
     {
         $userTestSuites = DB::table('wp_posts')
             ->join('wp_postmeta', function($join) use ($communityId){
@@ -58,6 +58,11 @@ class Post extends Model
         array_walk($userTestSuites, function ($entry, $key) use ($userTestSuites) {
             $userTestSuites[$key]->suite_family_mark = TestSuite::find($entry->ID)->family_mark;
         });
+
+        //show all suites versions for wp / community admins
+        if(!$showOnlyLastSuitePerFamilyMark) {
+            return $userTestSuites;
+        }
 
         //get only last versions
         $tempTestSuites = [];
