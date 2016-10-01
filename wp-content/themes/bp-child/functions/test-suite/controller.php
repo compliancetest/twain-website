@@ -238,10 +238,18 @@ function getBrotherSuitesAndProfileTypes()
 
     $profileTypes = getCommunityProfileTypes($groupID);
     foreach ($profileTypes as $row) {
-
+        $version = '';
+        $pJSON = json_decode(base64_decode($row->schema));
+        if ($pJSON->Version) {
+            $version = array();
+            foreach (get_object_vars($pJSON->Version) as $k => $v) {
+                $version[] = $v;
+            }
+            $version = " v" . implode(".", $version);
+        }
         $typesHtml .= '<div class="grid-cell width50P nopadding">' .
             ' <input type="checkbox" class="checkbox-input" name="ts_profile_types[]" value="' . $row->id . '" />' .
-            ' <a href="' . get_site_url() . '?td-action=' . wp_create_nonce("view-profile-type") . '&id=' . $row->id . '" rel="custom-popup" cp-type="ajax">' . $row->title . '</a>' .
+            ' <a href="' . get_site_url() . '?td-action=' . wp_create_nonce("view-profile-type") . '&id=' . $row->id . '" rel="custom-popup" cp-type="ajax">' . $row->title . $version . '</a>' .
             '</div>';
     }
     header('application/xml');

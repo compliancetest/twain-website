@@ -92,7 +92,11 @@ class CommunitiesController extends Controller
             'isAdmin' => $community->isAdmin(),
         ];
         if ($action == 'testsuites') {
-            $data['testSuites'] = Post::getCommunityTestSuites($community->id);
+            $showOnlyLastSuitePerFamilyMark = true;
+            if(is_super_admin() || $community->isAdmin()){
+                $showOnlyLastSuitePerFamilyMark = false;
+            }
+            $data['testSuites'] = Post::getCommunityTestSuites($community->id, $showOnlyLastSuitePerFamilyMark);
         }
         if ($action == 'forum') {
             $data['threads'] = $community->threads()->with('user')->get();
