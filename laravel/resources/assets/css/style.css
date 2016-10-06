@@ -13860,28 +13860,33 @@ html[xmlns] .flexslider .slides {
 }
 
 /* line 742, ../scss/pages/_community.scss */
+.create-profile-form {
+  overflow: auto;
+}
+
+/* line 746, ../scss/pages/_community.scss */
 input.notify-changes {
   margin-top: 5px;
 }
 
-/* line 748, ../scss/pages/_community.scss */
+/* line 752, ../scss/pages/_community.scss */
 .invitations_table > tbody > tr > td {
   padding-left: 5px;
   padding-right: 5px;
 }
 
-/* line 756, ../scss/pages/_community.scss */
+/* line 760, ../scss/pages/_community.scss */
 .organisation-data-info {
   font-size: 13px;
 }
-/* line 759, ../scss/pages/_community.scss */
+/* line 763, ../scss/pages/_community.scss */
 .organisation-data-info dd {
   display: block;
   margin: 0 0 10px 0;
   overflow: hidden;
 }
 
-/* line 768, ../scss/pages/_community.scss */
+/* line 772, ../scss/pages/_community.scss */
 .community-downloads textarea,
 .community-forums textarea {
   resize: none;
