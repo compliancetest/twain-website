@@ -40,18 +40,18 @@
             <div class="transaction-list-actions">
                 <div class="pull-left">
                     <a href="#bulkAuditModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger bulk_audit"
-                           data-tooltip="tooltip" title="Bulk Audit">Bulk Audit</a>
+                           data-tooltip="tooltip" title="Select multiple Test Results as Audit Records">Bulk Audit</a>
                     @if($supportOrAdmin)
                         <a href="#verifyAsModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass"
-                           data-tooltip="tooltip" title="Verify As Pass">Verify As Pass</a>
+                           data-tooltip="tooltip" title="Change Test Results to Pass (after verification)">Verify As Pass</a>
                         <a href="#verifyAsModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail"
-                               data-tooltip="tooltip" title="Verify As Fail">Verify As Fail</a>
+                               data-tooltip="tooltip" title="Change Test Results to Fail (after verification)">Verify As Fail</a>
                         <a href="#verifyAsModal" data-toggle="modal" class="btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip"
-                               data-tooltip="tooltip" title="Verify As Skip">Verify As Skip</a>
+                               data-tooltip="tooltip" title="Change Test Results to Skip">Verify As Skip</a>
                     @endif
                      <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
-                               data-tooltip="tooltip" title="Delete Test Results">Delete Test Results</a>
-                    <button type="button" class="btn btn-default" id="collapseAllResults">Collapse All Results</button>
+                               data-tooltip="tooltip" title="Permanently remove Test Results (this cannot be undone!)">Delete Test Results</a>
+                    <button type="button" class="btn btn-default" id="collapseAllResults" data-tooltip="tooltip" title="Close all Test Result details and return to Test Result list">Collapse All Results</button>
                 </div>
                 <div class="pull-right pagination-box">
                     <div class="form-inline">
