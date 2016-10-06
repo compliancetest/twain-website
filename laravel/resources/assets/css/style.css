@@ -13870,15 +13870,21 @@ input.notify-changes {
   padding-right: 5px;
 }
 
-/* line 757, ../scss/pages/_community.scss */
+/* line 756, ../scss/pages/_community.scss */
 .organisation-data-info {
   font-size: 13px;
 }
-/* line 760, ../scss/pages/_community.scss */
+/* line 759, ../scss/pages/_community.scss */
 .organisation-data-info dd {
   display: block;
   margin: 0 0 10px 0;
   overflow: hidden;
+}
+
+/* line 768, ../scss/pages/_community.scss */
+.community-downloads textarea,
+.community-forums textarea {
+  resize: none;
 }
 
 /* line 1, ../scss/pages/_contact-us.scss */

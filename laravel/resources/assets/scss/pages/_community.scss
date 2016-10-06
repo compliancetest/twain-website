@@ -751,7 +751,6 @@ input.notify-changes{
     }
 
   }
-
 }
 
 .organisation-data-info{
@@ -761,5 +760,12 @@ input.notify-changes{
     display: block;
     margin: 0 0 10px 0;
     overflow: hidden;
+  }
+}
+
+.community-downloads,
+.community-forums{
+  textarea{
+    resize: none;
   }
 }
