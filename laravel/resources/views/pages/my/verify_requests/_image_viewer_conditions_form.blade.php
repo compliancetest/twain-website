@@ -31,4 +31,28 @@
             <input type="text" class="form-control reason" data-image="{{ $k }}" placeholder="Reason" @if($readonly) readonly="readonly" @endif>
         </div>
     </fieldset>
+    <div class="row">
+         @if($scannedImageData['imageInfo'])
+            <fieldset class="col-md-6">
+                <legend>Image information:</legend>
+                <div id="imageInfoData{{ $k }}"></div>
+                <script>
+                    var t_data1 = Jsonary.create({!! json_encode($scannedImageData['imageInfo']->getOutput()['pImageInfo']) !!}).readOnlyCopy();
+                    var t_element1 = document.getElementById('imageInfoData{{ $k }}');
+                    Jsonary.render(t_element1, t_data1);
+                </script>
+            </fieldset>
+        @endif
+        @if($scannedImageData['extImageInfo'])
+            <fieldset class="col-md-6">
+                <legend>Extended image information:</legend>
+                <div id="extImageInfoData{{ $k }}"></div>
+                <script>
+                    var t_data = Jsonary.create({!! json_encode($scannedImageData['extImageInfo']->getOutput()['pExtImageInfo']) !!}).readOnlyCopy();
+                    var t_element = document.getElementById('extImageInfoData{{ $k }}');
+                    Jsonary.render(t_element, t_data);
+                </script>
+            </fieldset>
+        @endif
+    </div>
 </form>

@@ -52,7 +52,6 @@
                         @endforeach
                         <div class="alert alert-warning">
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-
                             Please check Pass and Skip conditions on the previous page(s) or provide a reason for Fail / Skip if none of them is met.
                         </div>
                         <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass" style="display: none;">Verify As Pass</button>

@@ -107,6 +107,9 @@ class Transaction extends Model
                     'expectedImage' => isset($executionData[$kk]['ExpectedResult']) ? $executionData[$kk]['ExpectedResult'] : false,
                     'passConditions' => isset($executionData[$kk]['PassConditions']) ? $executionData[$kk]['PassConditions'] : false,
                     'skipConditions' => isset($executionData[$kk]['SkipConditions']) ? $executionData[$kk]['SkipConditions'] : false,
+                    'log' => $log,
+                    'extImageInfo' => $this->logs()->where(['execution_order' => ($log->execution_order + 1), 'data_argument_type' => 'DAT_EXTIMAGEINFO'])->first(),
+                    'imageInfo' => $this->logs()->where(['execution_order' => ($log->execution_order + 2), 'data_argument_type' =>  'DAT_IMAGEINFO'])->first(),
                 ];
             }
         }
