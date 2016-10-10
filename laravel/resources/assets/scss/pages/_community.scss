@@ -427,8 +427,22 @@
 
     .member-list{
       li{
-        margin: 0 0 7px 0;
+        margin: 0 -4px 7px 0;
+        padding: 0 15px;
         overflow: hidden;
+        display: inline-block;
+        width: 25%;
+        vertical-align: top;
+
+        @media only screen and (max-width: $screen-md) {
+          width: 33.3%;
+        }
+        @media only screen and (max-width: $screen-sm) {
+          width: 50%;
+        }
+        @media only screen and (max-width: $mobile-size) {
+          width: 100%;
+        }
 
         &.clearfix{
           margin: 0;
@@ -487,6 +501,8 @@
         margin: 0 0 12px 0;
         border-bottom: 1px solid #959595;
         overflow: hidden;
+        width: 100%;
+        display: block;
 
         .avatar{
           float: left;
