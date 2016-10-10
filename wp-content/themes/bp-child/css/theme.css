@@ -8994,6 +8994,14 @@ input.inactive_s{
     text-decoration: underline;
 }
 
+.search-result-list a.tooltip-link {
+    float: left;
+}
+
+.search-result-list a.tooltip-link .simple_tooltip{
+    margin-left: -48px;
+}
+
 .search-result-list a:hover{
     text-decoration: none;
 }
@@ -9058,9 +9066,6 @@ input.inactive_s{
 }
 .search-result-list-wrapper .pagination-wrapper{
     margin: 20px 0 0 0;
-}
-.search-result-list-wrapper{
-    overflow: auto;
 }
 .radio-checkbox-holder{
     line-height: 24px;

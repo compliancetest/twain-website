@@ -254,10 +254,10 @@ get_header();
                                     <td><?php if (!empty($row_data['level'])) echo implode(', ', $row_data['level']); ?></td>
                                     <td>
                                         <?php if ($row_data['test_type'][0] == 'Certification' && $row_data['status'][0] == 'Verified' && $wpdb->get_var($wpdb->prepare("SELECT has_exclusions FROM claims WHERE id = %s ", end(explode('_', $row['id'])))) == '1'): ?>
-                                            <a href="#" class="has-tooltip"
+                                            <a href="#" class="tooltip-link has-tooltip"
                                                title="Some test cases were excluded/not performed during testing. Please consult the claim certificate on the product summary page for more details."><img
                                                     src="/wp-content/themes/bp-child/images/verify_icon.png"
-                                                    style="float:left;"/></a><?php echo $row_data['status'][0]; ?>
+                                                    /></a><?php echo $row_data['status'][0]; ?>
                                         <?php else: ?>
                                             <?php echo $row_data['status'][0]; ?>
                                         <?php endif; ?>
@@ -271,7 +271,7 @@ get_header();
                                                 rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1
                                                 class="action-btn delete-btn icon-btn delete_search_entry has-tooltip"><span
                                                     class="simple_tooltip radius6"
-                                                    style="margin-left: -90px; width: 170px;">Delete <?php echo $row_data['name'][0]; ?>
+                                                    style="margin-left: -80px; width: 170px;">Delete <?php echo $row_data['name'][0]; ?>
                                                     <span></span></span><span class="p"></span></a></td>
                                     <?php endif; ?>
                                 </tr>
