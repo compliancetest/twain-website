@@ -15,7 +15,7 @@ class CA03 extends TestCaseValidationAbstract
         if ($this->getTwoNumbersDiffInPercents($this->jsonFilesContent[1]->ImageLength, $this->jsonFilesContent[2]->ImageWidth) > 5 ||
             $this->getTwoNumbersDiffInPercents($this->jsonFilesContent[1]->ImageWidth, $this->jsonFilesContent[2]->ImageLength) > 5
         ) {
-            $this->reasons[] = 'Either the a5 sample was rotated during the first scanning or was not during the second scanning.';
+            $this->reasons[] = 'Either the Statement sample was rotated during the first scanning or was not during the second scanning.';
         }
 
         //The length of the third image = the width of the fourth image with 5% error.
@@ -23,7 +23,7 @@ class CA03 extends TestCaseValidationAbstract
         if ($this->getTwoNumbersDiffInPercents($this->jsonFilesContent[3]->ImageLength, $this->jsonFilesContent[4]->ImageWidth) > 5 ||
             $this->getTwoNumbersDiffInPercents($this->jsonFilesContent[3]->ImageWidth, $this->jsonFilesContent[4]->ImageLength) > 5
         ) {
-            $this->reasons[] = 'Either the a4 sample was rotated during the first scanning or was not during the second scanning.';
+            $this->reasons[] = 'Either the Letter sample was rotated during the first scanning or was not during the second scanning.';
         }
     }
 
