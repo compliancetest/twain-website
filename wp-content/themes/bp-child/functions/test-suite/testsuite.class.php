@@ -86,7 +86,9 @@ class TestSuite
     var $messageTemplates = array();
 
     public $testTool;
-    
+
+    public $testToolX64;
+
     public function __construct($id = null)
     {        
         if($id !== null)   
@@ -176,6 +178,9 @@ class TestSuite
 
         if($this->ts_tester_role){
             $this->testTool = $wpdb->get_row($wpdb->prepare("SELECT * FROM communities_downloads WHERE product_type = %s AND is_installer = 1 ORDER BY created_at DESC", $this->ts_tester_role));
+        }
+        if($this->ts_tester_role && $this->ts_tester_role == 'DataSource'){
+            $this->testToolX64 = $wpdb->get_row("SELECT * FROM communities_downloads WHERE product_type = 'DataSourceX64' AND is_installer = 1 ORDER BY created_at DESC");
         }
 
         $this->isRevision = intval($this->loadSingleValue('hide_suite')) == 1 ? true : false;

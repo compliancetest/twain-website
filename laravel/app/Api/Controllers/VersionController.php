@@ -11,7 +11,7 @@ class VersionController extends BaseApiController
 
     /**
     * @api {get} /v1/version Get latest version
-    * @apiParam {string} test_tool_for  Mandatory - either 'Application' or 'DataSource'.
+    * @apiParam {string} test_tool_for  Mandatory - 'Application' / 'DataSource' / 'DataSourceX64'.
     * @apiParam {boolean} [installer]  Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.
     *
     * @apiName Latest version
@@ -60,7 +60,7 @@ class VersionController extends BaseApiController
     public function index(\Illuminate\Http\Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'test_tool_for' => 'required|in:Application,DataSource'
+            'test_tool_for' => 'required|in:Application,DataSource,DataSourceX64'
         ]);
 
         if ($validator->fails()) {

@@ -11,7 +11,7 @@
             "type": "string",
             "optional": false,
             "field": "test_tool_for",
-            "description": "<p>Mandatory - either 'Application' or 'DataSource'.</p>"
+            "description": "<p>Mandatory - 'Application' / 'DataSource' / 'DataSourceX64'.</p>"
           },
           {
             "group": "Parameter",
