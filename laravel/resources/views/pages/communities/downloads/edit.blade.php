@@ -20,9 +20,9 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">Product Type ('DataSource' / 'Application'):</label>
+                <label class="col-sm-3 control-label">Product Type:</label>
                 <div class="col-sm-9">
-                    {!! Form::text('product_type', null, ['class' => 'form-control']) !!}
+                    {!! Form::select('product_type', ['Application' => 'Application', 'DataSource' => 'DataSource', 'DataSourceX64' => 'DataSourceX64'], $download->product_type, ['class' => 'form-control']) !!}
                  </div>
             </div>
 

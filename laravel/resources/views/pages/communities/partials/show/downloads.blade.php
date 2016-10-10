@@ -108,9 +108,14 @@
                     <div class="file-description-fields">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Product Type ('DataSource' / 'Application'):</label>
+                                <label class="col-sm-3 control-label">Product Type:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="product_type" value=""/>
+                                    <select name="product_type" class="form-control">
+                                        <option>Select Product Type</option>
+                                        <option value="Application">Application</option>
+                                        <option value="DataSource">DataSource</option>
+                                        <option value="DataSourceX64">DataSourceX64</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">

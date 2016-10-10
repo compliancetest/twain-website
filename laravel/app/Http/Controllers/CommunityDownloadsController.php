@@ -84,7 +84,7 @@ class CommunityDownloadsController extends Controller
     public function update(Request $request, $slug, $id)
     {
         $validator = Validator::make($request->all(), [
-            'product_type' => 'required|in:Application,DataSource'
+            'product_type' => 'required|in:Application,DataSource,DataSourceX64'
         ]);
 
         if ($validator->fails()) {
