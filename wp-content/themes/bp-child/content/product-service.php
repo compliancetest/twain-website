@@ -48,7 +48,7 @@
                                 <?php endif;?>
                             <?php } ?>
                         </div>
-                        <div class="product-name">Name: <strong><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?></strong></div>
+                        <div class="product-name">Name: <strong><?php echo $product->name.' v'.get_post_meta( $product->id, 'product_version', true ); ?><?php if($product->model): echo ' for ' . $product->model . ' '; endif;?></strong></div>
                         <?php if( $can_view ):?>
                             <div class="product-id">(ID: <strong><?php echo $product->product_id; ?>)</strong></div>
                         <?php endif;?>
@@ -59,6 +59,9 @@
                             <li>Manufacturer: <strong><?php echo ctE($product->manufacturer); ?></strong>
                             <li>Release Date: <strong><?php echo formatDate($product->release_date, "M Y"); ?></strong></li>
                             <li>Version: <strong><?php echo ctE($product->version); ?></strong></li>
+                            <?php if($product->model): ?>
+                                <li>Model: <strong><?php echo ctE($product->model); ?></strong></li>
+                            <?php endif; ?>
                             <?php if($product->accessURL): ?>
                                 <li>Access URL: <strong><a href="<?php echo get_valid_full_url($product->accessURL)?>" target="_blank"><?php echo $product->accessURL; ?></a></strong></li>
                             <?php endif; ?>

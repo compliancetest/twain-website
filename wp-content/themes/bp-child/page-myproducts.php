@@ -55,7 +55,11 @@ get_header();
                    <div class="grid-box grid-box-expandable table-box grid-box-opened fix-table-height">
                        <div class="grid-box-header">
                            <a class="gbh-btn gbh-btn-expandable left" href="javascript: void(0);">Ex</a>
-                           <h5 class="left">Product: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true ) . ' ('.get_post_meta( $product->ID, 'protocol_version', true ).')' ?></b></a></h5>
+                           <?php
+                                $productModel = get_post_meta($product->ID, 'model', true);
+                                $modelName = $productModel ? ' for ' . $productModel . ' ' : '';
+                           ?>
+                           <h5 class="left">Product: <a href="<?php echo get_permalink($product->ID)?>" class="view-product"><b><?php echo get_the_title($product).' v'.get_post_meta( $product->ID, 'product_version', true ) . $modelName . ' ('.get_post_meta( $product->ID, 'protocol_version', true ).')' ?></b></a></h5>
 
                            <?php if(is_super_admin() || can_maintain_product_and_service($current_user->ID, $product->ID)): ?>
 
