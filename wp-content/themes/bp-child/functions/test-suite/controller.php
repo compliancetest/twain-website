@@ -128,7 +128,7 @@ function process_testsuite_actions()
 
                     }
 
-                    addMessage('The test suite was removed successfully.');
+                    addMessage('The test suite was deleted successfully.');
                 }
 
             }
