@@ -9262,4 +9262,12 @@ input.inactive_s{
 .product-features-row label{
     float: left;
     clear: left;
+    margin-top: 4px;
+}
+
+.product-features-row label input{
+    padding: 0;
+    margin-top: -1px;
+    margin-right: 3px;
+    vertical-align: middle;
 }
