@@ -89,12 +89,12 @@ class ProductsController extends BaseApiController
      *               "Country": "TWCY_USA",
      *               "Info": "2.1.3 sample debug 32bit"
      *           },
+     *          "SupportedGroups": ["DG_CONTROL",
+     *              "DG_IMAGE",
+     *              "DF_DS2"]
+     *       },
      *       "ProductType": "Application",
-     *       "Model": "TEST_MODEL2",
-     *        "SupportedGroups": ["DG_CONTROL",
-     *           "DG_IMAGE",
-     *           "DF_DS2"]
-     *       }
+     *       "Model": "TEST_MODEL2"
      *   }
      * @apiName createProduct
      * @apiGroup Products
