@@ -198,8 +198,12 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = $entity['ProductName'];
+        $productModel = isset($entity['Model']) ? $entity['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
         $productId = $request->get('organisation_id') . '_' .$this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
+        if($productModel){
+            $productId .= '_' . $this->cleanSlug($productModel);
+        }
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
             if ($this->product->post_author == \Auth::user()->ID) {
@@ -209,6 +213,7 @@ class ProductsController extends BaseApiController
                 $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
                 $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
+                $this->product->meta()->updateOrCreate(['meta_key' => 'model'], ['meta_value' => $productModel]);
 
                 //trigger post observer
                 $this->product->timestamps = false;
@@ -218,6 +223,7 @@ class ProductsController extends BaseApiController
                     'id' => $this->product->post_name,
                     'title' => $this->product->post_title . ' v' . $productVersion,
                     'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+                    'model' => $productModel,
                 ];
                 return $this->respondWithData($response);
             } else {
@@ -247,6 +253,7 @@ class ProductsController extends BaseApiController
         $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
         $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
         $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
+        $this->product->meta()->create(['meta_key' => 'model', 'meta_value' => $productModel]);
         
         $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
 
@@ -294,6 +301,7 @@ class ProductsController extends BaseApiController
             'id' => $this->product->post_name,
             'title' => $this->product->post_title . ' v' . $productVersion,
             'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+            'model' => $productModel,
         ];
         return $this->setStatusCode(201)->respondWithData($response);
     }
@@ -829,10 +837,12 @@ class ProductsController extends BaseApiController
 
         $response = [];
         foreach ($products as $product) {
+            $model = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'model'])->first();
             $response[] = [
                 'id' => $product->post_name,
                 'title' => $product->post_title . ' v' . $product->meta_value,
                 'link' => getSiteUrl() . '/product/' . $product->post_name,
+                'model' => $model ? $model->meta_value : null,
             ];
         }
         return $this->respondWithData($response);

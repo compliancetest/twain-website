@@ -13,7 +13,9 @@ class ProductAndService
     var $type = '';
     
     var $version = '';
-    
+
+    var $model = '';
+
     var $accessURL = '';
     
     var $owner = '';
@@ -90,6 +92,8 @@ class ProductAndService
         $this->product_features = json_decode($this->loadSingleValue('product_features'), 1);
         $this->product_type = $this->loadSingleValue('product_type');
         $this->protocol_version = $this->loadSingleValue('protocol_version');
+
+        $this->model = $this->loadSingleValue('model');
 
 
         $this->loadRelatedProducts();

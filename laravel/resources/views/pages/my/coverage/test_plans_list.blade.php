@@ -20,8 +20,7 @@
                             <tr id="coverage-plan-{{ $userPlan['testPlan']->id }}">
                                 <td class="text-nowrap">
                                     <a href="/product/{{ $userPlan['product']->post_name }}" target="_blank">
-                                        {{ $userPlan['product']->post_title }}
-                                        @if($userPlan['product']) {{ ' v' . $userPlan['product']->getMetaByKey('product_version') }}@endif
+                                        {{ $userPlan['product']->getProductFullName() }}
                                     </a>
                                 </td>
                                 <td class="text-center">{{ $userPlan['testPlan']->level }}</td>

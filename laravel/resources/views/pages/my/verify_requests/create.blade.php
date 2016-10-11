@@ -13,7 +13,7 @@
                 <select name="product_id" id="availableProducts" class="form-control">
                     <option value="">Select a Product</option>
                     @foreach($products as $product)
-                        <option @if($product->ID == $selectedProductId) selected="selected" @endif value="{{ $product->ID }}">{{ $product->post_title . ' V' . $product->getMetaByKey('product_version')}}</option>
+                        <option @if($product->ID == $selectedProductId) selected="selected" @endif value="{{ $product->ID }}">{{ $product->getProductFullName() }}</option>
                     @endforeach
                 </select>
             </div>

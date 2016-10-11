@@ -24,7 +24,7 @@
                                     <td class="text-left">
                                         <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse">
                                             <span class="collapse-icon"></span></a>
-                                        <a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->post_title . ' v' . $verifyRequest['product']->getMetaByKey('product_version') }} </a>
+                                        <a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->getProductFullName() }} </a>
                                     </td>
                                     <td class="col-sm-1 text-center" >{{ $verifyRequest['testPlan']->level }}</td>
                                     <td>

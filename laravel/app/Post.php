@@ -166,4 +166,18 @@ class Post extends Model
         ksort($response);
         return $response;
     }
+
+    /**
+     * Generate full product name with version and model
+     * @return string
+     */
+    public function getProductFullName()
+    {
+        $fullProductName = $this->post_title . ' v' . $this->getMetaByKey('product_version');
+        $model = $this->getMetaByKey('model');
+        if ($model) {
+            $fullProductName .= ' for ' . $model;
+        }
+        return $fullProductName;
+    }
 }
