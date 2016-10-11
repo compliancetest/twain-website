@@ -369,22 +369,29 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "integre",
+            "type": "integer",
             "optional": false,
             "field": "organisation_id",
             "description": "<p>Mandatory - User's organisation ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_id",
+            "description": "<p>Optional - Product with this ID will be updated</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "DataSource example",
-          "content": "\n{\n  \"Identity\": {\n    \"ProtocolMajor\": 2,\n    \"ProtocolMinor\": 1,\n    \"Manufacturer\": \"TWAIN Working Group\",\n    \"ProductName\": \"TWAIN2 FreeImage Software Scanner\",\n    \"ProductFamily\": \"Software Scan\",\n    \"Version\": {\n      \"MajorNum\": 2,\n      \"MinorNum\": 1,\n      \"Language\": \"TWLG_ENGLISH\",\n      \"Country\": \"TWCY_USA\",\n      \"Info\": \"2.1.3 sample debug 32bit\"\n    },\n    \"SupportedGroups\": [\n      \"DG_CONTROL\",\n      \"DG_IMAGE\",\n      \"DF_DS2\"\n    ]\n  },\n  \"Capabilities\": [\n    \"CAP_DEVICEONLINE\",\n    \"CAP_SUPPORTEDCAPS\",\n    \"CAP_UICONTROLLABLE\",\n    \"CAP_XFERCOUNT\",\n    \"ICAP_BITDEPTH\",\n    \"ICAP_BITORDER\",\n    \"ICAP_COMPRESSION\",\n    \"ICAP_PHYSICALHEIGHT\",\n    \"ICAP_PHYSICALWIDTH\",\n    \"ICAP_PIXELFLAVOR\",\n    \"ICAP_PIXELTYPE\",\n    \"ICAP_PLANARCHUNKY\",\n    \"ICAP_UNITS\",\n    \"ICAP_XFERMECH\",\n    \"ICAP_XNATIVERESOLUTION\",\n    \"ICAP_XRESOLUTION\",\n    \"ICAP_YNATIVERESOLUTION\",\n    \"ICAP_YRESOLUTION\"\n  ]\n}",
+          "content": "\n{\n     \"Identity\": {\n         \"ProtocolMajor\": 2,\n         \"ProtocolMinor\": 322,\n         \"Manufacturer\": \"TEST!!\",\n         \"ProductName\": \"1111\",\n         \"ProductFamily\": \"Software Scan\",\n         \"Version\": {\n             \"MajorNum\": 2,\n             \"MinorNum\": 201,\n             \"Language\": \"TWLG_ENGLISH\",\n             \"Country\": \"TWCY_USA\",\n             \"Info\": \"2.1.3 sample debug 32bit\"\n         },\n         \"SupportedGroups\": [\"DG_CONTROL\",\n         \"DG_IMAGE\",\n         \"DF_DS2\"]\n     },\n     \"ProductType\": \"DataSource\",\n     \"Model\": \"TEST_MODEL1\",\n     \"Capabilities\": [\"CAP_SUPPORTEDCAPS\",\n     \"CAP_XFERCOUNT\",\n     \"ICAP_BITDEPTH\",\n     \"ICAP_BITORDER\",\n     \"ICAP_COMPRESSION\",\n     \"ICAP_PHYSICALHEIGHT\",\n     \"ICAP_PHYSICALWIDTH\",\n     \"ICAP_PIXELFLAVOR\",\n     \"ICAP_PIXELTYPE\",\n     \"ICAP_PLANARCHUNKY\",\n     \"ICAP_UNITS\",\n     \"ICAP_XFERMECH\",\n     \"ICAP_XNATIVERESOLUTION\",\n     \"ICAP_XRESOLUTION\",\n     \"ICAP_YNATIVERESOLUTION\",\n     \"ICAP_YRESOLUTION\"]\n }",
           "type": "json"
         },
         {
           "title": "Application example",
-          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n        \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    }\n}",
+          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n    \"ProductType\": \"Application\",\n    \"Model\": \"TEST_MODEL2\",\n     \"SupportedGroups\": [\"DG_CONTROL\",\n        \"DG_IMAGE\",\n        \"DF_DS2\"]\n    }\n}",
           "type": "json"
         }
       ]
@@ -395,12 +402,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Product created:",
-          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 201\n }",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\",\n     \"model\": \"TEST_MODEL\"\n   },\n   \"code\": 201\n }",
           "type": "json"
         },
         {
           "title": "Product exist:",
-          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\"\n   },\n   \"code\": 200\n }",
+          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\",\n     \"model\": null\n   },\n   \"code\": 200\n }",
           "type": "json"
         }
       ]
@@ -425,7 +432,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Validation error:",
-          "content": "{\n  \"errors\": {\n    \"identity\": [\n      \"The identity field is required.\"\n    ],\n    \"product_type\": [\n      \"The product type field is required.\"\n    ]\n  },\n  \"code\": 422\n}",
+          "content": "{\n  \"errors\": {\n    \"identity\": [\n      \"The identity field is required.\"\n    ],\n    \"product_type\": [\n      \"The product type field is required.\"\n    ],\n    \"product_id\": [\n       \"The selected product id is invalid.\"\n     ]\n  },\n  \"code\": 422\n}",
           "type": "json"
         },
         {
@@ -490,7 +497,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Products list:",
-          "content": "{\n   \"data\": [\n     {\n       \"id\": \"cn-01a-ds\",\n       \"title\": \"CN-01a DS\",\n       \"link\": \"http://twain.my/product/cn-01a-ds\"\n     },\n     {\n       \"id\": \"cn-01a-ds\",\n       \"title\": \"CN-01a DS\",\n       \"link\": \"http://twain.my/product/cn-01a-ds\"\n     },\n     {\n       \"id\": \"cn-02a-ds\",\n       \"title\": \"CN-02a DS\",\n       \"link\": \"http://twain.my/product/cn-02a-ds\"\n     }\n   ],\n   \"code\": 200\n }",
+          "content": "{\n \"data\": [{\n     \"id\": \"kv-s1026c-twain-driver\",\n     \"title\": \"KV-S1026C twain driver v15.0\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver\",\n     \"model\": null\n }, {\n     \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n     \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n     \"model\": null\n }, {\n     \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n     \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n     \"model\": \"KV-S1026C\"\n }],\n \"code\": 200\n}",
           "type": "json"
         }
       ]

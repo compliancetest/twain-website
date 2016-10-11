@@ -32,33 +32,31 @@ class ProductsController extends BaseApiController
      *
      * @apiParam {JSON} identity  Mandatory - product identity json.
      * @apiParam {string} product_type  Mandatory - product type (either 'DataSource' or 'Application')
-     * @apiParam {integre} organisation_id  Mandatory - User's organisation ID
+     * @apiParam {integer} organisation_id  Mandatory - User's organisation ID
+     * @apiParam {string} [product_id]  Optional - Product with this ID will be updated
      * @apiParamExample {json} DataSource example
      *
-     *   {
-     *     "Identity": {
-     *       "ProtocolMajor": 2,
-     *       "ProtocolMinor": 1,
-     *       "Manufacturer": "TWAIN Working Group",
-     *       "ProductName": "TWAIN2 FreeImage Software Scanner",
-     *       "ProductFamily": "Software Scan",
-     *       "Version": {
-     *         "MajorNum": 2,
-     *         "MinorNum": 1,
-     *         "Language": "TWLG_ENGLISH",
-     *         "Country": "TWCY_USA",
-     *         "Info": "2.1.3 sample debug 32bit"
+     *  {
+     *       "Identity": {
+     *           "ProtocolMajor": 2,
+     *           "ProtocolMinor": 322,
+     *           "Manufacturer": "TEST!!",
+     *           "ProductName": "1111",
+     *           "ProductFamily": "Software Scan",
+     *           "Version": {
+     *               "MajorNum": 2,
+     *               "MinorNum": 201,
+     *               "Language": "TWLG_ENGLISH",
+     *               "Country": "TWCY_USA",
+     *               "Info": "2.1.3 sample debug 32bit"
+     *           },
+     *           "SupportedGroups": ["DG_CONTROL",
+     *           "DG_IMAGE",
+     *           "DF_DS2"]
      *       },
-     *       "SupportedGroups": [
-     *         "DG_CONTROL",
-     *         "DG_IMAGE",
-     *         "DF_DS2"
-     *       ]
-     *     },
-     *     "Capabilities": [
-     *       "CAP_DEVICEONLINE",
-     *       "CAP_SUPPORTEDCAPS",
-     *       "CAP_UICONTROLLABLE",
+     *       "ProductType": "DataSource",
+     *       "Model": "TEST_MODEL1",
+     *       "Capabilities": ["CAP_SUPPORTEDCAPS",
      *       "CAP_XFERCOUNT",
      *       "ICAP_BITDEPTH",
      *       "ICAP_BITORDER",
@@ -73,8 +71,7 @@ class ProductsController extends BaseApiController
      *       "ICAP_XNATIVERESOLUTION",
      *       "ICAP_XRESOLUTION",
      *       "ICAP_YNATIVERESOLUTION",
-     *       "ICAP_YRESOLUTION"
-     *     ]
+     *       "ICAP_YRESOLUTION"]
      *   }
      *
      * @apiParamExample {json} Application example
@@ -92,7 +89,9 @@ class ProductsController extends BaseApiController
      *               "Country": "TWCY_USA",
      *               "Info": "2.1.3 sample debug 32bit"
      *           },
-     *           "SupportedGroups": ["DG_CONTROL",
+     *       "ProductType": "Application",
+     *       "Model": "TEST_MODEL2",
+     *        "SupportedGroups": ["DG_CONTROL",
      *           "DG_IMAGE",
      *           "DF_DS2"]
      *       }
@@ -105,7 +104,8 @@ class ProductsController extends BaseApiController
      *     "data": {
      *       "id": "twain2-freeimage-software-scanner-v-2-1",
      *       "title": "TWAIN2 FreeImage Software Scanner",
-     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1",
+     *       "model": "TEST_MODEL"
      *     },
      *     "code": 201
      *   }
@@ -115,7 +115,8 @@ class ProductsController extends BaseApiController
      *     "data": {
      *       "id": "twain2-freeimage-software-scanner-v-2-1",
      *       "title": "TWAIN2 FreeImage Software Scanner",
-     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1"
+     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1",
+     *       "model": null
      *     },
      *     "code": 200
      *   }
@@ -129,7 +130,10 @@ class ProductsController extends BaseApiController
      *       ],
      *       "product_type": [
      *         "The product type field is required."
-     *       ]
+     *       ],
+     *       "product_id": [
+     *          "The selected product id is invalid."
+     *        ]
      *     },
      *     "code": 422
      *   }
@@ -189,6 +193,7 @@ class ProductsController extends BaseApiController
             'identity' => 'required|json',
             'product_type' => 'required|in:DataSource,Application',
             'organisation_id' => 'required|exists:wp_organisations,id',
+            'product_id' => 'exists:wp_posts,post_name',
         ]);
 
         $user = \Auth::user();
@@ -200,9 +205,13 @@ class ProductsController extends BaseApiController
         $productName = $entity['ProductName'];
         $productModel = isset($jsonEntry['Model']) ? $jsonEntry['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
-        $productId = $request->get('organisation_id') . '_' .$this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
-        if($productModel){
-            $productId .= '_' . $this->cleanSlug($productModel);
+        if(!empty($request->get('product_id'))){
+            $productId = $request->get('product_id');
+        } else {
+            $productId = $request->get('organisation_id') . '_' . $this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
+            if ($productModel) {
+                $productId .= '_' . $this->cleanSlug($productModel);
+            }
         }
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
@@ -709,27 +718,25 @@ class ProductsController extends BaseApiController
      * @apiGroup Products
      *
      * @apiSuccessExample {json} Products list:
-     *  {
-     *     "data": [
-     *       {
-     *         "id": "cn-01a-ds",
-     *         "title": "CN-01a DS",
-     *         "link": "http://twain.my/product/cn-01a-ds"
-     *       },
-     *       {
-     *         "id": "cn-01a-ds",
-     *         "title": "CN-01a DS",
-     *         "link": "http://twain.my/product/cn-01a-ds"
-     *       },
-     *       {
-     *         "id": "cn-02a-ds",
-     *         "title": "CN-02a DS",
-     *         "link": "http://twain.my/product/cn-02a-ds"
-     *       }
-     *     ],
-     *     "code": 200
-     *   }
-     *
+       {
+        "data": [{
+            "id": "kv-s1026c-twain-driver",
+            "title": "KV-S1026C twain driver v15.0",
+            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
+            "model": null
+        }, {
+            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+            "title": "Panasonic KV-S1026C KV-S1015C v15.0",
+            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+            "model": null
+        }, {
+            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+            "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
+            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+            "model": "KV-S1026C"
+        }],
+        "code": 200
+       }
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
