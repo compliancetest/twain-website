@@ -9259,7 +9259,7 @@ input.inactive_s{
     margin-left: -139px !important;
 }
 
-.product-features-row .label{
+.product-features-row label{
     float: left;
     clear: left;
 }
