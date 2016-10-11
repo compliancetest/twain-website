@@ -9258,3 +9258,8 @@ input.inactive_s{
 .product_owner_tooltip .simple_tooltip{
     margin-left: -139px !important;
 }
+
+.product-features-row .label{
+    float: left;
+    clear: left;
+}
