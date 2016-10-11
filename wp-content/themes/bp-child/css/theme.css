@@ -9254,3 +9254,7 @@ input.inactive_s{
 #login_recaptcha{
     margin-top: 5px;
 }
+
+.product_owner_tooltip .simple_tooltip{
+    margin-left: -139px !important;
+}

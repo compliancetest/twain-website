@@ -128,7 +128,7 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell">
                                     <label>Organization:</label>
 
-                                    <div class="has-field-tooltip">
+                                    <div class="has-field-tooltip product_owner_tooltip">
                                         <?php
                                         if(is_super_admin()) {
                                             $organisations = ct_get_all_organisations();
