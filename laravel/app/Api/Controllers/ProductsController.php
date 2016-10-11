@@ -198,7 +198,7 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = $entity['ProductName'];
-        $productModel = isset($entity['Model']) ? $entity['Model'] : null;
+        $productModel = isset($jsonEntry['Model']) ? $jsonEntry['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
         $productId = $request->get('organisation_id') . '_' .$this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
         if($productModel){
