@@ -583,6 +583,7 @@ get_header();
                                     <input type="radio" name="outcome_type"
                                            value="Positive" <?php echo $case->outcomeType == 'Positive' ? 'checked="checked"' : '' ?> />
                                     Positive
+                                    &nbsp;
                                     <input type="radio" name="outcome_type"
                                            value="Negative" <?php echo $case->outcomeType == 'Negative' ? 'checked="checked"' : '' ?> />
                                     Negative
@@ -593,6 +594,7 @@ get_header();
                                     <input type="radio" name="optional"
                                            value="Yes" <?php echo $case->optional == 'Yes' ? 'checked="checked"' : '' ?> />
                                     Yes
+                                    &nbsp;
                                     <input type="radio" name="optional"
                                            value="No" <?php echo $case->optional == 'No' || empty($case->optional) ? 'checked="checked"' : '' ?> />
                                     No
@@ -602,6 +604,7 @@ get_header();
                                     <input type="radio" name="no_message_sample"
                                            value="Yes" <?php echo $case->no_message_sample == 'Yes' ? 'checked="checked"' : '' ?> />
                                     Yes
+                                    &nbsp;
                                     <input type="radio" name="no_message_sample"
                                            value="No" <?php echo $case->no_message_sample == 'No' || empty($case->no_message_sample) ? 'checked="checked"' : '' ?> />
                                     No
