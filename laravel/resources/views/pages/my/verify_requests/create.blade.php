@@ -41,7 +41,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $canBeCreated = false;?>
                                 @foreach($transactions as $testCase => $caseTransactions)
+                                        <?php $canBeAdded = checkTransactionsCanBeAddedToRequest($caseTransactions[0]->test_suite_id, $caseTransactions[0]->test_case_id, $selectedProductId);?>
                                         <tr>
                                             <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}">
                                                 {{ \App\Post::find($testCase)->post_title }}
@@ -52,10 +54,15 @@
                                         </tr>
                                         @foreach($caseTransactions as $transaction)
                                             <tr>
-                                                @if(count($caseTransactions) > 1)
-                                                    <td class="text-center"><input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                @if($canBeAdded)
+                                                    <?php $canBeCreated = true;?>
+                                                    @if(count($caseTransactions) > 1)
+                                                        <td class="text-center"><input type="checkbox" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                    @else
+                                                        <td class="text-center"><input type="checkbox" checked="checked" disabled="disabled" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                    @endif
                                                 @else
-                                                    <td class="text-center"><input type="checkbox" checked="checked" disabled="disabled" name="transaction" class="transaction" value="{{ $transaction->id }}" data-case="{{ $testCase }}"></td>
+                                                   <td class="text-center"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="This test case is included into another active Verify Request already."></span></td>
                                                 @endif
 
                                                 <td class="text-center">
@@ -77,7 +84,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+        @if($canBeCreated)
+            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+        @endif
         <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
     </div>
     <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
@@ -87,4 +96,5 @@
      Page.verifyRequest.updateVerifyRequestDetailsForm();
      Page.verifyRequest.validateVerifyRequestDetailsForm();
      Page.verifyRequest.selectTransactionWithMultipleValues();
+    $('[data-toggle="tooltip"]').tooltip();
 </script>

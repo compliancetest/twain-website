@@ -60,9 +60,7 @@ class VerifyRequestsController extends Controller
         $products = $testSuite->getProductsForNewVerifyRequest();
         $transactions = $testPlans = [];
         if($productId){
-            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_id' => $testSuiteId])
-                ->whereNotIn('id', VerifyRequest::where(['test_suite_id' => $testSuiteId, 'product_id' => $productId])->get()
-                ->pluck('test_plan_id'))->get();
+            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_id' => $testSuiteId])->get();
         }
         if($testPlanId){
             $transactions = Transaction::getTransactionsForVerifyRequest($productId, $testSuiteId);
