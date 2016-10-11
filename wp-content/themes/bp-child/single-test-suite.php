@@ -63,7 +63,7 @@ Template Name Posts: Test Suite
                                 <?php if(!empty($suite->protocol_versions)):?>
 								    Protocol Versions: <span><?php echo ctE(implode(', ', $suite->protocol_versions)); ?></span>
                                 <?php endif;?>
-
+                                <br/>
                                 <?php if (!empty($suite->testTool) && is_user_logged_in() && (ct_get_assigned_organisation_subscription(get_current_user_id(), $suite->familyMark) || is_super_admin() || doesUserCommunityAdmin(get_current_user_id(), $suite->community_id) || doesUserCommunitySupport(get_current_user_id(), $suite->community_id))): ?>
 								    Test Tool:
                                     <span>
