@@ -38,7 +38,9 @@
                 <label class="col-sm-3 control-label">Installer:</label>
 
                 <div class="col-sm-9">
-                    {!! Form::checkbox('is_installer', 1,  !empty($download->is_installer)) !!}
+                    <div class="checkbox">
+                        <label>{!! Form::checkbox('is_installer', 1,  !empty($download->is_installer)) !!}</label>
+                    </div>
                 </div>
             </div>
 
@@ -46,7 +48,9 @@
                 <label class="col-sm-3 control-label">Show to members:</label>
 
                 <div class="col-sm-9">
-                    {!! Form::checkbox('show_to_members', 1,  !empty($download->show_to_members)) !!}
+                    <div class="checkbox">
+                        <label>{!! Form::checkbox('show_to_members', 1,  !empty($download->show_to_members)) !!}</label>
+                    </div>
                 </div>
             </div>
 
