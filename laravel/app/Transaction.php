@@ -108,8 +108,8 @@ class Transaction extends Model
                     'passConditions' => isset($executionData[$kk]['PassConditions']) ? $executionData[$kk]['PassConditions'] : false,
                     'skipConditions' => isset($executionData[$kk]['SkipConditions']) ? $executionData[$kk]['SkipConditions'] : false,
                     'log' => $log,
-                    'extImageInfo' => $this->logs()->where(['execution_order' => ($log->execution_order + 1), 'data_argument_type' => 'DAT_EXTIMAGEINFO'])->first(),
-                    'imageInfo' => $this->logs()->where(['execution_order' => ($log->execution_order + 2), 'data_argument_type' =>  'DAT_IMAGEINFO'])->first(),
+                    'extImageInfo' => $this->logs()->whereIn('execution_order', [$log->execution_order+1, $log->execution_order+2])->where('data_argument_type', 'DAT_EXTIMAGEINFO')->first(),
+                    'imageInfo' => $this->logs()->whereIn('execution_order', [$log->execution_order+1, $log->execution_order+2])->where('data_argument_type', 'DAT_IMAGEINFO')->first(),
                 ];
             }
         }
