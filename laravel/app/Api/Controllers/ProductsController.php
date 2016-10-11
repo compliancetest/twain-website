@@ -730,7 +730,7 @@ class ProductsController extends BaseApiController
             "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
             "model": null
         }, {
-            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
             "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
             "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
             "model": "KV-S1026C"

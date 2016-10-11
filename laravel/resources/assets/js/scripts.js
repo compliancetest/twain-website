@@ -748,9 +748,11 @@ var Page = {
 
                 var isValid = true;
                 $('.caseIdList').each(function(index, element){
-                    if($('input[data-case="' + $(element).attr('data-id') + '"]:checked').length == 0 || $('input[data-case="' + $(element).attr('data-id') + '"]:checked').length > 1){
-                        form.find('.modal-body').append('<div class="message error-message">Please select transaction for ' + $(element).text() + ' test case</div>');
-                        isValid = false;
+                    if($('input[data-case="' + $(element).attr('data-id') + '"]').length > 0) {
+                        if ($('input[data-case="' + $(element).attr('data-id') + '"]:checked').length == 0 || $('input[data-case="' + $(element).attr('data-id') + '"]:checked').length > 1) {
+                            form.find('.modal-body').append('<div class="message error-message">Please select transaction for ' + $(element).text() + ' test case</div>');
+                            isValid = false;
+                        }
                     }
                 });
                 if(isValid === false){

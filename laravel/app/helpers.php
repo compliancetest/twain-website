@@ -95,3 +95,27 @@ function isImageViewerEnabled()
     }
     return false;
 }
+
+/**
+ * Ensure that test case's transactions with 'Pending' status not used in another verify requests
+ * @param $testSuiteId
+ * @param $testCaseId
+ * @param $productId
+ * @return bool
+ */
+function checkTransactionsCanBeAddedToRequest($testSuiteId, $testCaseId, $productId)
+{
+    $transactions = [];
+    $verifyRequests = \App\VerifyRequest::where(['test_suite_id' => $testSuiteId, 'product_id' => $productId])->get();
+    foreach ($verifyRequests as $verifyRequest) {
+        $transactions = array_merge($transactions, json_decode($verifyRequest->transactions, true));
+    }
+    if (\App\Transaction::whereIn('id', $transactions)
+        ->where('test_outcome_status_id', \App\TestOutcomeStatus::getIdByCode('PENDING'))
+        ->where('test_case_id', $testCaseId)
+        ->get()->isEmpty()
+    ) {
+        return true;
+    }
+    return false;
+}
