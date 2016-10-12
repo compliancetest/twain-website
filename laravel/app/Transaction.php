@@ -29,6 +29,15 @@ class Transaction extends Model
         return $this->hasMany('App\TransactionsLog')->orderBy('execution_order');
     }
 
+    /**
+     * Transaction explanation logs relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function explanationLogs()
+    {
+        return $this->hasMany('App\TransactionExplanationLogs')->orderBy('created_at');
+    }
+
     public function usedInClaims()
     {
         return $this->hasMany('App\ClaimTransactions');

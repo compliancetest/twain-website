@@ -61,6 +61,9 @@
                                             @else
                                                 <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
                                             @endif
+                        <a href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">
+                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" title="Request status explanation"></span>
+                        </a>
 
                     </td>
                     <td class="text-center">

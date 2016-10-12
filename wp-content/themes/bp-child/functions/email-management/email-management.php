@@ -689,6 +689,23 @@ $ct_email_templates = array(
             )
         ),
     ),
+      'Explain Outcome Section' => array(
+        array(
+            'menu' => 'New message',
+            'title' => 'New message',
+            'shortcodes' => '[name], [transaction_url], [env], [message_author_name], [message], [community], [website_url]',
+            'fields' => array(
+                array(
+                    'title' => 'For User',
+                    'id' => 'send_explain_message_to_user'
+                ),
+                array(
+                    'title' => 'For Admins & Support',
+                    'id' => 'send_explain_message_to_admin'
+                )
+            )
+        ),
+      )
 );
 
 //Add New Menu

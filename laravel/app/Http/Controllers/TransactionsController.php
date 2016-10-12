@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Community;
+use App\Post;
 use App\TransactionChangeLog;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -159,5 +161,67 @@ class TransactionsController extends Controller
         $itemsPerPage = in_array($request->get('itemsCount'), [10, 25, 50, 100]) ? $request->get('itemsCount') : 25;
         Auth::user()->meta()->updateOrCreate(['meta_key' => 'transactions_per_page'], ['meta_value' => $itemsPerPage]);
         return $itemsPerPage;
+    }
+
+    /**
+     * Show messages logs
+     * @param $transactionId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function explanationLogs($transactionId)
+    {
+        $transaction = Transaction::find($transactionId);
+        $logs = $transaction->explanationLogs;
+        $community = Community::find(Post::find($transaction->test_suite_id)->getMetaByKey('community_id'));
+        $isSupport = $community->isModerator() || $community->isAdmin() ? true : false;
+        return view('pages.transactions.popups.explanation-logs', compact('logs', 'transactionId', 'isSupport'));
+    }
+
+    /**
+     * Add new message and send email to users
+     * @param $transactionId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function addExplanationLog($transactionId, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'message' => 'string|required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        $transaction = Transaction::find($transactionId);
+        $community = Community::find(Post::find($transaction->test_suite_id)->getMetaByKey('community_id'));
+        $isSupport = $community->isModerator() || $community->isAdmin() ? true : false;
+        $transaction->explanationLogs()->create([
+            'message' => $request->get('message'),
+            'user_id' => Auth::user()->ID,
+            'is_support' => $isSupport,
+        ]);
+
+        $logs = Transaction::find($transactionId)->explanationLogs;
+
+        $userId = Auth::user()->ID;
+        $emailData = [
+            '[name]' => cp_get_user_fullname($logs[0]->user_id),
+            '[transaction_url]' => getSiteUrl() . '/my-transaction-log/?execution_id=' . $transaction->execution_id,
+            '[env]' => get_option('env'),
+            '[message_author_name]' => cp_get_user_fullname($userId),
+            '[message]' => $request->get('message'),
+            '[community]' => $community->title,
+            '[website_url]' => getSiteUrl()
+        ];
+
+        if (!$isSupport) {
+            sendEmails($community->getAdminsAndModerators(), 'send_explain_message_to_admin', $emailData);
+        } else {
+            sendEmails([['user_id' => $userId]], 'send_explain_message_to_user', $emailData);
+        }
+        return response()->json(['html' => view('pages.transactions.popups.explanation-logs', compact('logs', 'transactionId'))->render()]);
     }
 }
