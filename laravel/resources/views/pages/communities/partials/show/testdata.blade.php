@@ -186,7 +186,7 @@
                 <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+                <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
                 <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
             </div>
         </div>
@@ -205,7 +205,7 @@
                 <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+                <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
                 <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
             </div>
         </div>

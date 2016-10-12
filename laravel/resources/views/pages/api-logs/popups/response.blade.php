@@ -6,7 +6,7 @@
     <div id="data"></div>
 </div>
 <div class="modal-footer">
-    <a href="/api-logs/{{ $apiLog->id }}/download-response" target="_blank" class="btn btn-success btn-with-icon btn-confirm">Download</a>
+    <a href="/api-logs/{{ $apiLog->id }}/download-response" target="_blank" class="btn btn-success btn-with-icon btn-download">Download</a>
     <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default btn-with-icon btn-cancel">Close</button>
 </div>
 <script type="text/javascript">

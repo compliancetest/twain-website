@@ -128,7 +128,7 @@ if (isset($_SESSION['product_data'])) {
                                 <div class="grid-cell">
                                     <label>Organization:</label>
 
-                                    <div class="has-field-tooltip">
+                                    <div class="has-field-tooltip product_owner_tooltip">
                                         <?php
                                         if(is_super_admin()) {
                                             $organisations = ct_get_all_organisations();
@@ -212,7 +212,7 @@ if (isset($_SESSION['product_data'])) {
 
                                 </div>
                                 <div class="grid-cell width60P div_type_app">
-                                   <div class="field-row div_type_app" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
+                                   <div class="field-row div_type_app product-features-row" <?php if(!$product->id || $product->product_type != 'Application'):?>style="display: none;" <?php endif;?>>
                                      <label>Product Features:</label>
                                         <?php foreach(getUserSubscribedSuites() as $suite):?>
                                             <?php
@@ -229,13 +229,15 @@ if (isset($_SESSION['product_data'])) {
 
                                                 foreach($suite->featuresList as $feature):
                                             ?>
-                                                    <label class="tooltip-label has-tooltip">
+                                                    <label class="tooltip-label <?php if (!empty($feature['description'])): ?>has-tooltip<?php endif; ?>">
                                                         <input type="checkbox" name="product_features[]" class="product_features" readonly="readonly" disabled="disabled"
                                                                data-suiteid="<?php echo $suite->id;?>" <?php echo isset($product->product_features) && in_array($feature['name'], $product->product_features) ? 'checked="checked"' : '' ?>
                                                                value="<?php echo $feature['name'];?>"
                                                         />
                                                             <?php echo $feature['name'];?>
+                                                    <?php if (!empty($feature['description'])): ?>
                                                         <span class="simple_tooltip radius6"><?php echo $feature['description'];?><span></span></span>
+                                                    <?php endif; ?>
                                                     </label>
                                                 <?php endforeach;?>
                                         <?php endforeach;?>

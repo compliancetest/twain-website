@@ -62,14 +62,17 @@ class VerifyRequest extends Model
                 }
                 if (is_object($requests) && !$requests->isEmpty()) {
                     foreach ($requests as $request) {
+                        $testCases = Transaction::find(json_decode($request->transactions, true))->map(function ($item, $key) {
+                            return Post::find($item->test_case_id);
+                        });
                         $result[$userTestSuite->suite_family_mark]['data'][] = [
                             'verifyRequest' => $request,
                             'requestor' => User::find($request->requestor_id),
                             'assignee' => $request->assignee_id ? User::find($request->assignee_id) : false,
                             'product' => Post::find($request->product_id),
                             'testPlan' => TestPlan::find($request->test_plan_id),
-                            'testCases' => Transaction::find(json_decode($request->transactions, true))->map(function ($item, $key) {
-                                return Post::find($item->test_case_id);
+                            'testCases' => $testCases->sortBy(function($item){
+                                return $item->post_title;
                             }),
                         ];
                     }

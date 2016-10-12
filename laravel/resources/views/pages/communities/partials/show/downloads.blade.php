@@ -63,7 +63,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a href="{{ getSiteUrl() }}/downloads/{{ $community->slug }}/getfile/{{ $download->id }}" class="btn btn-success btn-with-icon btn-confirm">DOWNLOAD</a>
+                                                    <a href="{{ getSiteUrl() }}/downloads/{{ $community->slug }}/getfile/{{ $download->id }}" class="btn btn-success btn-with-icon btn-download">DOWNLOAD</a>
                                                     <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                                                 </div>
                                             </div>
@@ -122,14 +122,18 @@
                                 <label class="col-sm-3 control-label">Installer:</label>
 
                                 <div class="col-sm-9">
-                                    <input type="checkbox" name="is_installer" value="1"/>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="is_installer" value="1"/></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Show to members:</label>
 
                                 <div class="col-sm-9">
-                                    <input type="checkbox" name="show_to_members" value="1"/>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="show_to_members" value="1"/></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">

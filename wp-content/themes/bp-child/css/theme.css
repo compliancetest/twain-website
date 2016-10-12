@@ -9254,3 +9254,20 @@ input.inactive_s{
 #login_recaptcha{
     margin-top: 5px;
 }
+
+.product_owner_tooltip .simple_tooltip{
+    margin-left: -139px !important;
+}
+
+.product-features-row label{
+    float: left;
+    clear: left;
+    margin-top: 4px;
+}
+
+.product-features-row label input{
+    padding: 0;
+    margin-top: -1px;
+    margin-right: 3px;
+    vertical-align: middle;
+}
