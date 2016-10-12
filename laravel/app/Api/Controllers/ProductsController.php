@@ -277,6 +277,9 @@ class ProductsController extends BaseApiController
                     continue;
                 }
                 $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+                 if(!$organisationSubscription){
+                    continue;
+                }
                 $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
                 $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
