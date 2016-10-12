@@ -214,13 +214,13 @@ class TransactionsController extends Controller
             '[message_author_name]' => cp_get_user_fullname($userId),
             '[message]' => $request->get('message'),
             '[community]' => $community->title,
-            '[website_url]' => getSiteUrl()
+            '[website_url]' => getSiteUrl(),
+            '[test_suite]' => Post::find($transaction->test_suite_id)->post_title,
         ];
-
         if (!$isSupport) {
             sendEmails($community->getAdminsAndModerators(), 'send_explain_message_to_admin', $emailData);
         } else {
-            sendEmails([['user_id' => $userId]], 'send_explain_message_to_user', $emailData);
+            sendEmails([['user_id' => $logs[0]->user_id]], 'send_explain_message_to_user', $emailData);
         }
         return response()->json(['html' => view('pages.transactions.popups.explanation-logs', compact('logs', 'transactionId'))->render()]);
     }
