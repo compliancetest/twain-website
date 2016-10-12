@@ -338,11 +338,7 @@ function can_maintain_product_and_service($user_id = null, $product_id = null)
         return false; 
     }
     
-    //Check User Privilege
-    if ( ! ct_check_user_privilege($user_id, $user_membership->organisation_id, "MAINTAIN_PRODUCTS" ) ) {
-        return false;
-    }
-    
+
     if ($product_id) {
         //Getting Product Organisation
         $product_org_id = get_post_meta($product_id, "product_organisation_id", true);

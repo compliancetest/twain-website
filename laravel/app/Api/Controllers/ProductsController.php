@@ -177,7 +177,7 @@ class ProductsController extends BaseApiController
      * {
      *    "errors": {
      *      "message": [
-     *          "This product was created by another user!"
+     *          "This product was created by another organisation!"
      *      ]
      *    },
      *    "code": 403
@@ -215,8 +215,8 @@ class ProductsController extends BaseApiController
         }
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
-            if ($this->product->post_author == \Auth::user()->ID) {
-
+            //any organisation member can update product
+            if (isset($user->organisation[0]->id) && OrganisationMember::where(['organisation_id' => $user->organisation[0]->id, 'user_id' => $this->product->post_author])->first()) {
                 $this->_setProductVisibility($request, $entity);
                 $this->_setProductTypeFields($request, $jsonEntry, false);
                 $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
@@ -236,7 +236,7 @@ class ProductsController extends BaseApiController
                 ];
                 return $this->respondWithData($response);
             } else {
-                return $this->respondForbiddenError('This product was created by another user!');
+                return $this->respondForbiddenError('This product was created by another organisation!');
             }
         }
 
