@@ -219,6 +219,22 @@
     </div>
 </div>
 
+{{-- Explanation Modal--}}
+<div class="modal fade" id="viewExplanationLogs" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content block-loading-wrapper">
+            <div class="modal-header">
+                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                Messages
+            </div>
+            <div class="modal-body">
+                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @include('pages.popups.transaction_reason')
 
 @stop
@@ -302,6 +318,38 @@
                     $('#bulkAuditModal .modal-body').append('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     setTimeout(function () {
                         $('#bulkAuditModal .modal-body > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
+        });
+
+        $('body').on('click', '.submit-new-message', function(e){
+            jQuery('#viewExplanationLogs .block-loading').show();
+
+            jQuery.ajax({
+                url: '/transactions/'+$('#transactionId').val()+'/explanation-logs/create',
+                data: {
+                    'message': jQuery('#explanationMessage').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (message) {
+                     $('#viewExplanationLogs .modal-content').html(message.html);
+                     $('#viewExplanationLogs .modal-body').append('<div class="success-message">Your message has been sent!</div>');
+                    setTimeout(function () {
+                        $('#viewExplanationLogs .modal-body > .success-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+
+                },
+                error: function (jqXHR, status) {
+                    jQuery('#viewExplanationLogs .block-loading').hide();
+                    $('#viewExplanationLogs .modal-body').append('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('#viewExplanationLogs .modal-body > .error-message').slideUp(function () {
                             $(this).remove();
                         });
                     }, 3000);
