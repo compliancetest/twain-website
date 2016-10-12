@@ -31,10 +31,13 @@ class TransactionsLog extends Model
      */
     public function getOutput()
     {
-        $s3 = AwsFacade::createClient('s3');
-        return (array) json_decode((string)$s3->getObject(array(
-            'Bucket' => config('env.bucket.transactions'),
-            'Key' => $this->log_output,
-        ))['Body'], true);
+        if(!empty($this->log_output)) {
+            $s3 = AwsFacade::createClient('s3');
+            return (array)json_decode((string)$s3->getObject(array(
+                'Bucket' => config('env.bucket.transactions'),
+                'Key' => $this->log_output,
+            ))['Body'], true);
+        }
+        return [];
     }
 }

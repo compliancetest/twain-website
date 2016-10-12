@@ -14,13 +14,21 @@
                             <div class="col-md-4">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                    <img src="{{ $scannedImageData['image'] }}"/>
+                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                        <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
+                                    @else
+                                        <img src="{{ $scannedImageData['image'] }}"/>
+                                    @endif
                                 </a>
                             </div>
                             <div class="col-md-4">
                                 <h4>Expected Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
-                                    <img src="{{ $scannedImageData['expectedImage'] }}"/>
+                                    @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                        <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
+                                    @else
+                                        <img src="{{ $scannedImageData['expectedImage'] }}"/>
+                                    @endif
                                 </a>
                             </div>
                             <div class="col-md-4">
@@ -32,7 +40,12 @@
                             <div class="col-md-6">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                    <img src="{{ $scannedImageData['image'] }}"/></a>
+                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                        <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
+                                    @else
+                                        <img src="{{ $scannedImageData['image'] }}"/>
+                                    @endif
+                                </a>
                             </div>
                             <div class="col-md-6">
                                 @include('pages.my.verify_requests._image_viewer_conditions_form')
