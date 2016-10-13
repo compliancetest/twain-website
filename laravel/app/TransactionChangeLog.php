@@ -16,6 +16,7 @@ class TransactionChangeLog extends Model
         'user_id',
         'test_outcome_status_id',
         'changed_by_server_validation',
+        'deleted_by'
     ];
 
     /**
@@ -25,13 +26,14 @@ class TransactionChangeLog extends Model
      * @param bool $newOutcomeStatusId
      * @param bool $changedByServerValidation
      */
-    public static function addLog(Transaction $transaction, $userId, $newOutcomeStatusId = false, $changedByServerValidation = false)
+    public static function addLog(Transaction $transaction, $userId, $newOutcomeStatusId = false, $changedByServerValidation = false, $deletedBy = 0)
     {
         TransactionChangeLog::create([
             'execution_id' => $transaction->execution_id,
             'user_id' => $userId,
             'test_outcome_status_id' => $newOutcomeStatusId ? TestOutcomeStatus::getIdByCode($newOutcomeStatusId) : TestOutcomeStatus::getSuccessId(),
             'changed_by_server_validation' => $changedByServerValidation,
+            'deleted_by' => $deletedBy,
         ]);
     }
 

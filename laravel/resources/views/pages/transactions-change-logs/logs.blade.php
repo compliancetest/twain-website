@@ -7,6 +7,7 @@
                 <th>User</th>
                 <th>Test Outcome</th>
                 <th>Changed By Server Validation</th>
+                <th>Deleted By</th>
                 <th>Date<br/>Time</th>
             </tr>
             </thead>
@@ -30,6 +31,17 @@
                     </td>
                     <td class="text-center">
                         {{ $log->changed_by_server_validation ? 'Yes' : 'No' }}
+                    </td>
+                    <td class="text-center">
+                        @if($outcomeStatus->code == 'DELETED')
+                            @if(!$log->deleted_by)
+                                Cron
+                            @else
+                                <a href="/members/{{ \App\User::find($log->deleted_by)->user_nicename }}" target="_blank">{{ cp_get_user_fullname($log->deleted_by) }}</a>
+                            @endif
+                        @else
+                            -
+                        @endif
                     </td>
                     <td class="text-center">
                         {{ formatDate($log->updated_at, 'Y-m-d') }}

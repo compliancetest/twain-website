@@ -49,4 +49,9 @@ class TransactionObserver
             }
         }
     }
+
+    public function deleting(Transaction $transaction)
+    {
+        TransactionChangeLog::addLog($transaction, Auth::user() ? Auth::user()->ID : 0, 'DELETED', false, Auth::user() ? Auth::user()->ID : 0);
+    }
 }
