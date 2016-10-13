@@ -17,7 +17,7 @@ class DoesUserHasSubscriptionToProductType
      */
     public function handle($request, Closure $next)
     {
-        if (!in_array($request->get('product_type'), ['DataSource'])) {
+        if (!in_array($request->get('product_type'), ['DataSource', 'Application'])) {
             return response()->json(['errors' => ['message' => ['The product type field is required.']], 'code' => 422], 422);
         }
         $suiteSubscriptions = \App\OrganisationSubscription::where(['user_id' => Auth::user()->ID])->get();
