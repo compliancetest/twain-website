@@ -7,7 +7,7 @@
         <ul class="coverage-test-details">
             <li>
                 <label>Identifier:</label>
-                <a href="/{{ $testCase->post_name }}" target="_blank">{{ $testCase->post_title }}</a>
+                <a href="/{{ $testCase->post_name }}/?test_suite_id={{ $testPlan->suite_id }}" target="_blank">{{ $testCase->post_title }}</a>
             </li>
             @if(!$hasTransactions->isEmpty())
                 <li>
