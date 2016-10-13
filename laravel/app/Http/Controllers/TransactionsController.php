@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\Post;
 use App\TransactionChangeLog;
+use App\WpOptions;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Transaction;
@@ -25,8 +26,9 @@ class TransactionsController extends Controller
         $perPage = Auth::user()->getTransactionsPerPage();
         $transactions = Transaction::getUserTransactionLog($request, $perPage);
         $filters = Transaction::getFilters($request);
+        $explainRequestsEnabled = WpOptions::where(['option_name' => 'explain_requests', 'option_value' => 'yes'])->first();
         $pageTitle = 'My Test Results';
-        return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle', 'perPage'));
+        return view('pages.transactions.index', compact('transactions', 'filters', 'request', 'pageTitle', 'perPage', 'explainRequestsEnabled'));
     }
 
     /**
@@ -56,7 +58,8 @@ class TransactionsController extends Controller
         $data = [
             'transactions' => Transaction::getUserTransactionLog($request, $perPage),
             'request' => $request,
-            'perPage' => $perPage
+            'perPage' => $perPage,
+            'explainRequestsEnabled' => WpOptions::where(['option_name' => 'explain_requests', 'option_value' => 'yes'])->first(),
         ];
         return response()->json(['html' => view('pages.transactions.transactions')->with($data)->render()]);
     }

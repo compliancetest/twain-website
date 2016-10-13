@@ -54,6 +54,11 @@ function create_compliancetest_settings_page()
         } else {
             update_option('image_viewer', 'no');
         }
+        if(!empty($_POST['explain_requests'])) {
+            update_option('explain_requests', 'yes');
+        } else {
+            update_option('explain_requests', 'no');
+        }
     }
 
 ?>
@@ -302,6 +307,10 @@ function create_compliancetest_settings_page()
                          <tr>
                             <td><label><b>Enable Image Viewer:</b></label></td>
                             <td><input type="checkbox" name="image_viewer" id="image_viewer" size="50" <?php if( get_option('image_viewer') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>Enable Explain Requests:</b></label></td>
+                            <td><input type="checkbox" name="explain_requests" id="explain_requests" size="50" <?php if( get_option('explain_requests') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
