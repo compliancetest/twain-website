@@ -1533,7 +1533,7 @@
       "examples": [
         {
           "title": "Success Response:",
-          "content": "{\n  \"data\": {\n    \"status\": \"File Uploaded\",\n    \"url\": \"https://s3-us-west-2.amazonaws.com/captures.integration.twain.gosource.com.au/20/ca-02-v1-0/aff8f0fa-e201-432e-a086-397875dd5219/2_fujitsu_paperstream-ip-fi-7160_v1-42_2016-10-11_000147.zip\"\n  },\n  \"code\": 200\n}",
+          "content": "{\n  \"data\": {\n    \"status\": \"File Uploaded\",\n    \"url\": \"https://s3-us-west-2.amazonaws.com/captures.integration.twain.gosource.com.au/20/ca-02-v1-0/aff8f0fa-e201-432e-a086-397875dd5219/2_fujitsu_paperstream-ip-fi-7160_v1-42_2016-10-11_000147.zip\"\n  },\n  \"code\": 201\n}",
           "type": "json"
         }
       ]
