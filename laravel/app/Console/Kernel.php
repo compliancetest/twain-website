@@ -39,6 +39,8 @@ class Kernel extends ConsoleKernel
                 }
             }
         })
-        ->daily();
+        ->daily()
+        ->timezone('America/Los_Angeles')
+        ->at('03:00');
     }
 }
