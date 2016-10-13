@@ -54,7 +54,6 @@ class ProductsController extends BaseApiController
      *           "DG_IMAGE",
      *           "DF_DS2"]
      *       },
-     *       "ProductType": "DataSource",
      *       "Model": "TEST_MODEL1",
      *       "Capabilities": ["CAP_SUPPORTEDCAPS",
      *       "CAP_XFERCOUNT",
@@ -93,7 +92,6 @@ class ProductsController extends BaseApiController
      *              "DG_IMAGE",
      *              "DF_DS2"]
      *       },
-     *       "ProductType": "Application",
      *       "Model": "TEST_MODEL2"
      *   }
      * @apiName createProduct
