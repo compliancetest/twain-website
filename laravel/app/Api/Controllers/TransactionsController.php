@@ -24,8 +24,11 @@ class TransactionsController extends BaseApiController
      *
      * @apiSuccessExample {json} Success Response:
      *   {
-     *       "message": "File Uploaded",
-     *       "code": 201
+     *     "data": {
+     *       "status": "File Uploaded",
+     *       "url": "https://s3-us-west-2.amazonaws.com/captures.integration.twain.gosource.com.au/20/ca-02-v1-0/aff8f0fa-e201-432e-a086-397875dd5219/2_fujitsu_paperstream-ip-fi-7160_v1-42_2016-10-11_000147.zip"
+     *     },
+     *     "code": 200
      *   }
      *
      * @apiError 403 Forbidden
@@ -137,6 +140,9 @@ class TransactionsController extends BaseApiController
         //adding entry to sqs. it will be processed in background
         $this->dispatch(new ProcessTransactionLog($fileName, $data));
 
-        return $this->respondCreated('File Uploaded');
+         return $this->respondWithData([
+            'status' => 'File Uploaded',
+            'url' => 'https://s3-'.config('env.bucket.region').'.amazonaws.com/'.config('env.bucket.transactions').'/' . $fileName
+        ]);
     }
 }

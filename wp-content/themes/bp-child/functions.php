@@ -1688,3 +1688,12 @@ function getUserAvatar($userId)
     $s3 = new S3Wrapper();
     return $s3->getAvatar($key);
 }
+
+add_action('admin_init', 'no_mo_dashboard');
+function no_mo_dashboard()
+{
+    if (!is_super_admin() && $_SERVER['DOING_AJAX'] != '/wp-admin/admin-ajax.php') {
+        wp_redirect(home_url());
+        exit;
+    }
+}
