@@ -14,7 +14,7 @@
                             <div class="col-md-4">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>
@@ -24,7 +24,7 @@
                             <div class="col-md-4">
                                 <h4>Expected Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
-                                    @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                    @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['expectedImage'] }}"/>
@@ -40,7 +40,7 @@
                             <div class="col-md-6">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
-                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), ['raw', 'tif']))
+                                    @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>

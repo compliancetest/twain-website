@@ -119,3 +119,12 @@ function checkTransactionsCanBeAddedToRequest($testSuiteId, $testCaseId, $produc
     }
     return false;
 }
+
+/**
+ * Get list of image formats with no preview
+ * @return array
+ */
+function getImageViewerNotSupportedFormats()
+{
+    return ['raw', 'tif', 'djvu', 'exif', 'fpx', 'jp2', 'pdf', 'jpx', 'pic', 'xbm'];
+}
