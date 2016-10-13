@@ -221,7 +221,7 @@
 
 {{-- Explanation Modal--}}
 <div class="modal fade" id="viewExplanationLogs" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 500px;">
+    <div class="modal-dialog" role="document" style="width: 600px;">
         <div class="modal-content block-loading-wrapper">
             <div class="modal-header">
                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>

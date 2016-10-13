@@ -4,6 +4,10 @@
 </div>
 <div class="modal-body">
     <div class="row">
+        <div class="alert alert-success text-center" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              Please feel free to ask a question about the test result, we will be happy to help you.
+        </div>
         @if(!$logs->isEmpty())
             @foreach($logs as $log)
                 <div class="col-md-12 @if($log->is_support) text-right @endif">
