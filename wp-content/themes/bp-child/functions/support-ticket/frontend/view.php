@@ -114,8 +114,11 @@ function showSumitTicketBox()
 <!--                    </div>-->
 <!--                    <br>-->
                     <div class="field-row add-ticket-attachment-row">
-                        <div class="attachments-wrap"></div>
-                        <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>
+                        <label>Attachments:</label>
+                        <div class="field-attachments-content">
+                            <div class="attachments-wrap"></div>
+                            <a href="#" id="add-attachment-link" class="small-plus-link">Add attachment</a>
+                        </div>
                     </div>
                 </div>
 

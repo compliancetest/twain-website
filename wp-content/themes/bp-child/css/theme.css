@@ -9271,3 +9271,18 @@ input.inactive_s{
     margin-right: 3px;
     vertical-align: middle;
 }
+
+.field-attachments-content{
+    display: inline-block;
+}
+
+.field-attachments-content .custom-file-tag .file-value{
+    width: 150px;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+#add-attachment-link{
+    margin: 5px 0 0 0;
+    display: inline-block;
+}
