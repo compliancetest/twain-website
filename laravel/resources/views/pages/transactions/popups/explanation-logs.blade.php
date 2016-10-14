@@ -7,37 +7,36 @@
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           Please feel free to ask a question about the test result, we will be happy to help you.
     </div>
+    <div class="chat-box">
+        @if(!$logs->isEmpty())
+            <ul class="chat-list">
+            @foreach($logs as $log)
+                <li class="{{ ($log->is_support) ? 'support-answer' : 'customer-question' }}">
+                    <div class="message-author"><a href="/members/{{ \App\User::find($log->user_id)->user_nicename }}" target="_blank">{{ cp_get_user_fullname($log->user_id) }}</a></div>
+                    <div class="message-body">
+                        {{ $log->message }}
+                    </div>
+                    <div class="message-date">{{ dateDiffForHumans($log->created_at, 'Y-m-d H:i') }}</div>
+                </li>
+            @endforeach
+            </ul>
+        @else
+             <div class="no-messages">
+                No messages yet
+            </div>
+        @endif
 
-    @if(!$logs->isEmpty())
-        <ul class="chat-list">
-        @foreach($logs as $log)
-            <li class="{{ ($log->is_support) ? 'support-answer' : 'customer-question' }}">
-                <div class="message-author"><a href="/members/{{ \App\User::find($log->user_id)->user_nicename }}" target="_blank">{{ cp_get_user_fullname($log->user_id) }}</a></div>
-                <div class="message-body">
-                    {{ $log->message }}
-                </div>
-                <div class="message-date">{{ dateDiffForHumans($log->created_at, 'Y-m-d H:i') }}</div>
-            </li>
-        @endforeach
-        </ul>
-    @else
-         <div class="text-center">
-            No messages yet
-        </div>
-    @endif
-
-    <form>
-        <div class="form-group">
+        <form>
             <input type="hidden" id="transactionId" value="{{ $transactionId }}">
             <textarea class="form-control" id="explanationMessage" name="explanationMessage"></textarea>
-        </div>
-    </form>
+        </form>
+    </div>
 
 
 </div>
 <div class="modal-footer">
     @if(!($isSupport && $logs->isEmpty()))
-        <button type="submit" class="btn btn-success submit-new-message">Submit</button>
+        <button type="submit" class="btn btn-success btn-with-icon btn-confirm submit-new-message">Submit</button>
     @endif
     <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
 </div>

@@ -8973,33 +8973,55 @@ body.modal-open,
   width: 11px;
 }
 
-/* line 200, ../scss/_common.scss */
+/* line 199, ../scss/_common.scss */
+.chat-box textarea {
+  resize: none;
+}
+/* line 203, ../scss/_common.scss */
+.chat-box .no-messages {
+  padding: 10px 0 25px 0;
+  text-align: center;
+}
+
+/* line 209, ../scss/_common.scss */
+.chat-list {
+  margin: 0 0 10px 0;
+}
+/* line 14, ../scss/bootstrap/mixins/_clearfix.scss */
+.chat-list:before, .chat-list:after {
+  content: " ";
+  display: table;
+}
+/* line 19, ../scss/bootstrap/mixins/_clearfix.scss */
+.chat-list:after {
+  clear: both;
+}
+/* line 213, ../scss/_common.scss */
 .chat-list li {
   margin: 0 0 10px 0;
   clear: both;
   float: left;
   width: 45%;
 }
-/* line 206, ../scss/_common.scss */
+/* line 219, ../scss/_common.scss */
 .chat-list li .message-author {
   color: #288ce1;
   font-size: 14px;
   font-weight: 700;
 }
-/* line 212, ../scss/_common.scss */
+/* line 225, ../scss/_common.scss */
 .chat-list li .message-body {
   -moz-border-radius: 0 5px 5px 5px;
-  -webkit-border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0;
   border-radius: 0 5px 5px 5px;
   padding: 8px 9px;
-  margin: 8px 0 0 0;
+  margin: 10px 0 0 0;
   position: relative;
-  box-sizing: border-box;
   text-align: left;
   line-height: 13px;
   background: #ebebeb;
 }
-/* line 224, ../scss/_common.scss */
+/* line 234, ../scss/_common.scss */
 .chat-list li .message-body:before {
   content: '';
   top: -9px;
@@ -9011,30 +9033,30 @@ body.modal-open,
   height: 9px;
   width: 9px;
 }
-/* line 233, ../scss/_common.scss */
+/* line 243, ../scss/_common.scss */
 .chat-list li .message-date {
   font-style: italic;
   padding: 5px 0 6px 9px;
   box-sizing: border-box;
   text-align: left;
 }
-/* line 240, ../scss/_common.scss */
+/* line 250, ../scss/_common.scss */
 .chat-list li.support-answer {
   float: right;
 }
-/* line 243, ../scss/_common.scss */
+/* line 253, ../scss/_common.scss */
 .chat-list li.support-answer .message-author {
   text-align: right;
 }
-/* line 247, ../scss/_common.scss */
+/* line 257, ../scss/_common.scss */
 .chat-list li.support-answer .message-body {
-  background: #5089d0;
+  background: #5699ec;
   color: #fff;
   -moz-border-radius: 5px 0 5px 5px;
   -webkit-border-radius: 5px 0 5px 5px;
   border-radius: 5px 0 5px 5px;
 }
-/* line 254, ../scss/_common.scss */
+/* line 264, ../scss/_common.scss */
 .chat-list li.support-answer .message-body:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -9043,6 +9065,7 @@ body.modal-open,
   width: 9px;
   content: '';
   right: 0;
+  left: auto;
 }
 
 /* line 1, ../scss/blocks/_forms.scss */
@@ -14480,66 +14503,67 @@ input.notify-changes {
   border: 1px solid #1d76c0;
   border-left: 0;
   margin-left: 1px;
+  z-index: 2;
 }
-/* line 75, ../scss/pages/_transaction-log.scss */
+/* line 76, ../scss/pages/_transaction-log.scss */
 .transaction-list-actions.fixed .pagination-box {
   display: none;
 }
 
-/* line 81, ../scss/pages/_transaction-log.scss */
+/* line 82, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper {
   border-bottom: 1px solid #1d76c0;
 }
-/* line 84, ../scss/pages/_transaction-log.scss */
+/* line 85, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper table {
   margin: 0;
 }
-/* line 88, ../scss/pages/_transaction-log.scss */
+/* line 89, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper .block-loading-wrapper {
   min-height: 90px;
 }
 
-/* line 95, ../scss/pages/_transaction-log.scss */
+/* line 96, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
 }
-/* line 98, ../scss/pages/_transaction-log.scss */
+/* line 99, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
   background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
-/* line 102, ../scss/pages/_transaction-log.scss */
+/* line 103, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
   border-right: 1px solid #1d76c0;
 }
-/* line 108, ../scss/pages/_transaction-log.scss */
+/* line 109, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-collapse-link {
   float: left;
 }
-/* line 111, ../scss/pages/_transaction-log.scss */
+/* line 112, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-name-link {
   display: block;
   overflow: hidden;
   margin: 0 0 0 15px;
 }
 
-/* line 121, ../scss/pages/_transaction-log.scss */
+/* line 122, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > thead > tr > th {
   padding: 5px;
 }
-/* line 127, ../scss/pages/_transaction-log.scss */
+/* line 128, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
   background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464095847') repeat 0 0;
   vertical-align: middle;
 }
-/* line 134, ../scss/pages/_transaction-log.scss */
+/* line 135, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
   background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464095847') repeat 0 0;
 }
 
-/* line 143, ../scss/pages/_transaction-log.scss */
+/* line 144, ../scss/pages/_transaction-log.scss */
 .details_row .block-loading-wrapper {
   min-height: 90px;
 }
