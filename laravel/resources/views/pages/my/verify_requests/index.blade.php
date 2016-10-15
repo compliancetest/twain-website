@@ -29,7 +29,7 @@
 
         <div class="main-content">
 
-            @if($isAdmin)
+            @if($isAdmin && $userSuites)
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-lg-4">
                         <input type="checkbox" id="hideResolved" value="1" checked="checked">Hide Resolved
