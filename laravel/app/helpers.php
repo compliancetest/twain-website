@@ -128,3 +128,9 @@ function getImageViewerNotSupportedFormats()
 {
     return ['raw', 'tif', 'djvu', 'exif', 'fpx', 'jp2', 'pdf', 'jpx', 'pic', 'xbm'];
 }
+
+function getProductFullName($productId)
+{
+    $product = \App\Post::find($productId);
+    return $product->getProductFullName();
+}

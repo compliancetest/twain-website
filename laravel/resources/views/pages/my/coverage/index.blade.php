@@ -122,7 +122,11 @@
                                     $('.modal').modal('hide');
                                     if (data.status == 'success') {
                                         $('#coverage-plan-' + testCoveragePlan.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                                            var table = $('#coverage-plan-' + testCoveragePlan.id).closest('table');
                                             $(this).remove();
+                                            if (table.find('tbody tr').length == 0) {
+                                                table.find('tbody').html('<tr><td class="text-center" colspan="7">No Verify Requests yet</td></tr>')
+                                            }
                                             $('#testCoveragePlanList').prepend('<div class="success-message">Plan has been removed</div>');
                                             setTimeout(function () {
                                                 $('#testCoveragePlanList > .success-message').slideUp(function () {
