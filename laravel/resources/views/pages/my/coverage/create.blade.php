@@ -12,7 +12,7 @@
             <select name="product_id" id="availableProducts" class="form-control">
                 <option value="">Select a Product</option>
                 @foreach($products as $product)
-                    <option value="{{ $product->ID }}">{{ $product->getProductFullName() }}</option>
+                    <option value="{{ $product->ID }}">{{ getProductFullName($product->ID) }}</option>
                 @endforeach
             </select>
         </div>
