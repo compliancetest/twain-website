@@ -7,6 +7,7 @@ use App\CommunityInvitation;
 use App\CommunityMembers;
 use App\Organisation;
 use App\OrganisationMember;
+use App\OrganisationSubscription;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -41,6 +42,8 @@ class CommunityMembershipController extends Controller
             '[email]' => $user->user_email,
             '[username]' => $user->user_login
         );
+
+        OrganisationSubscription::where('user_id', $userId)->update(['user_id' => 0]);
 
         sendEmails($admins, 'member_leave_community_admin', $emailData);
         $community->getMember($userId)->delete();
@@ -193,6 +196,8 @@ class CommunityMembershipController extends Controller
                     ->where(['is_confirmed' => 1, 'community_id' => $community->id])
                     ->where('user_id', '!=', Auth::user()->ID)
                     ->delete();
+
+                OrganisationSubscription::whereIn('user_id', $request->get('users'))->update(['user_id' => 0]);
             }
         } else {
             if ($request->get('role') == 'admin') {
