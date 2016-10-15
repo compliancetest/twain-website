@@ -131,46 +131,51 @@ $group = groups_get_group( array( 'group_id' => $current_group_id ) );
         </div>
         <div class="clear"></div>
     </div>
-    <div class="block">
-        <h5 style="float: left; width: 33%;">Scenarios:</h5>
-        <div style="margin: 0 0 0 33%;">
-            <?php
-            foreach($suite->scenarios as $row){
-                $scenario_name = $row['code'];
-                $scenario_desc = $row['description'];
-                ?>
-                <?php if ($scenario_name != 'Default'): ?>
-                <div class="scenario-row" style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px; overflow: hidden;">
-                    <div style="float: left; width: 20%;"><b><?php echo $scenario_name; ?></b></div>
-                    <div style="float: left; width: 80%;" class="scenario-description">
-                        <?php echo $scenario_desc;?>
-                    </div>
-                    <br class="clear" />
-                </div>
-                <?php endif; ?>
-            <?php
-            }
-            ?>
-        </div>
-        <div class="clear"></div>
-    </div>
 
-    <div class="block">
-        <h5 style="float: left; width: 33%;">Related Compliance Suites:</h5>
-        <div style="float: left; width: 67%;">
-            <?php                         
-                foreach($suite->relatedSuites as $row){
-            ?>
-            <p style="margin: 0 0 5px;">
-                <a href="<?php echo get_permalink($row['id'])?>"><?php echo get_the_title($row['id'])?></a><br />
-                <?php echo $row['desc']?>
-            </p>    
-            <?php
-                } 
-            ?>
+    <?php if (count($suite->scenarios) > 1): ?>
+        <div class="block">
+            <h5 style="float: left; width: 33%;">Scenarios:</h5>
+            <div style="margin: 0 0 0 33%;">
+                <?php
+                foreach ($suite->scenarios as $row) {
+                    $scenario_name = $row['code'];
+                    $scenario_desc = $row['description'];
+                    ?>
+                    <?php if ($scenario_name != 'Default'): ?>
+                        <div class="scenario-row" style="margin: 0 0 5px; border-bottom: dotted 1px #999; padding-bottom: 10px; overflow: hidden;">
+                            <div style="float: left; width: 20%;"><b><?php echo $scenario_name; ?></b></div>
+                            <div style="float: left; width: 80%;" class="scenario-description">
+                                <?php echo $scenario_desc; ?>
+                            </div>
+                            <br class="clear"/>
+                        </div>
+                    <?php endif; ?>
+                    <?php
+                }
+                ?>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($suite->relatedSuites)): ?>
+        <div class="block">
+            <h5 style="float: left; width: 33%;">Related Compliance Suites:</h5>
+            <div style="float: left; width: 67%;">
+                <?php
+                foreach ($suite->relatedSuites as $row) {
+                    ?>
+                    <p style="margin: 0 0 5px;">
+                        <a href="<?php echo get_permalink($row['id']) ?>"><?php echo get_the_title($row['id']) ?></a><br/>
+                        <?php echo $row['desc'] ?>
+                    </p>
+                    <?php
+                }
+                ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <?php endif; ?>
 
     <h4 style="border-top: solid 1px #999; padding: 20px 0 10px;">Test Cases</h4>
     <table width="100%">

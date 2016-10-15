@@ -381,7 +381,9 @@ class TestSuite
         {
             foreach($suiteIDs as $i=>$sid)
             {
-                $result[] = array('id' => $sid, 'desc' => $suiteDescs[$i]);
+                if(!empty($sid)) {
+                    $result[] = array('id' => $sid, 'desc' => $suiteDescs[$i]);
+                }
             }
         }
         
