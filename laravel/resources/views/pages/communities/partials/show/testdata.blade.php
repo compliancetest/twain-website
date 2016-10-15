@@ -13,63 +13,81 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach( $instances AS $instance )
-                <tr id="test-data-row-{{ $instance->id }}">
-                    <td>
-                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl" data-toggle="modal" data-remote="true" data-ajax-modal>
-                            {{ $instance->profile_name }}
-                        </a>
-                        <p>{{ $instance->profile_description }}</p>
-                    </td>
-                    <td>{{ $instance->purpose }}</td>
-                    <td class="text-center">
-                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
-                    </td>
-                    <td class="text-center">{{ formatDate($instance->created_date) }}</td>
-                    <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>
-                    <td class="text-center text-nowrap">
-                        @if($community->isAdmin())
-                            <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}" class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile" data-tooltip="tooltip" title="Edit Profile"></a>
-                            <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip" title="Delete Profile"></a>
+                @if($instances)
+                    @foreach( $instances AS $instance )
+                        <tr id="test-data-row-{{ $instance->id }}">
+                            <td>
+                                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/viewprofile/{{ $instance->id }}" data-target="#modalCopyProfileUrl"
+                                   data-toggle="modal" data-remote="true" data-ajax-modal>
+                                    {{ $instance->profile_name }}
+                                </a>
+                                <p>{{ $instance->profile_description }}</p>
+                            </td>
+                            <td>{{ $instance->purpose }}</td>
+                            <td class="text-center">
+                                <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $instance->type_id }}" data-toggle="modal" data-remote="true"
+                                   data-ajax-modal data-target="#modalViewProfile">{{ $instance->type_name }}</a>
+                            </td>
+                            <td class="text-center">{{ formatDate($instance->created_date) }}</td>
+                            <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>
+                            <td class="text-center text-nowrap">
+                                @if($community->isAdmin())
+                                    <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}"
+                                       class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile"
+                                       data-tooltip="tooltip" title="Edit Profile"></a>
+                                    <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip"
+                                       title="Delete Profile"></a>
 
-                            {{-- Remove profile Confirmation Modal--}}
-                            <div class="modal fade profile-modal" id="modalRemoveProfile_{{ $instance->id }}" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
-                                            Confirm Profile Deletion
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure that you want to delete {{ $instance->profile_name }}?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal" href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/{{ $instance->id }}" class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
-                                            <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                    {{-- Remove profile Confirmation Modal--}}
+                                    <div class="modal fade profile-modal" id="modalRemoveProfile_{{ $instance->id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal"
+                                                            aria-label="Close">Close
+                                                    </button>
+                                                    Confirm Profile Deletion
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure that you want to delete {{ $instance->profile_name }}?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal"
+                                                       href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/{{ $instance->id }}"
+                                                       class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
+                                                    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="6" class="text-center">No test data yet</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>
     </div>
 
-     @if($isAdmin)
+    @if($isAdmin)
         <div class="col-md-2">
             <div class="page-title-actions">
-                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalCreateProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
+                <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add" data-toggle="modal" data-remote="true"
+                   data-ajax-modal data-target="#modalCreateProfile" data-tooltip="tooltip" title="Add Profile">Add New Test Data</a>
             </div>
         </div>
         @if(count($instances))
             <div class="col-md-3">
                 <div class="page-title-actions">
-                    <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal" data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" data-backdrop="static" data-keyboard="false" title="Create Test Data Backup">Create Test Data Backup</a>
+                    <a href="{{ getSiteUrl() }}/backups/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add pull-left" data-toggle="modal"
+                       data-remote="true" data-target="#modalCreateBackup" data-tooltip="tooltip" data-backdrop="static" data-keyboard="false" title="Create Test Data Backup">Create
+                        Test Data Backup</a>
                 </div>
             </div>
         @endif
@@ -77,17 +95,22 @@
 
     @endif
 </div>
-<div class="block-loading page-loader" id="communityTestDataListLoading"><div class="loading-content"><span class="loader"></span><div class="loading-text">COPYING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
+<div class="block-loading page-loader" id="communityTestDataListLoading">
+    <div class="loading-content"><span class="loader"></span>
+        <div class="loading-text">COPYING PROFILE</div>
+        <div class="loading-wait">Please wait...</div>
+    </div>
+</div>
 <script>
     var clipboard = new Clipboard('.copyProfileLink');
-    clipboard.on('success', function(e) {
-        jQuery(e.trigger).parents('.form-group').before( '<div class="success-message">The profile url has been copied to clipboard.</div>');
-        var messageTimeoutHandler = setTimeout(function() {
+    clipboard.on('success', function (e) {
+        jQuery(e.trigger).parents('.form-group').before('<div class="success-message">The profile url has been copied to clipboard.</div>');
+        var messageTimeoutHandler = setTimeout(function () {
             $('.success-message').slideUp();
         }, 2000);
     });
 
-    jQuery(document).ready(function($) {
+    jQuery(document).ready(function ($) {
         jQuery('.removingProfile').on('click', function (e) {
             e.preventDefault();
             var elem = jQuery(this);
@@ -96,7 +119,7 @@
                 name: elem.data('profile-name')
             };
 
-            if (!profile.name.length){
+            if (!profile.name.length) {
                 profile.name = 'Profile';
             }
 
@@ -183,7 +206,12 @@
                 Profile Instance Type Detail
             </div>
             <div class="modal-body">
-                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
+                <div class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING PROFILE</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
@@ -202,7 +230,12 @@
                 Profile Instance Detail
             </div>
             <div class="modal-body">
-                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING PROFILE</div><div class="loading-wait">Please wait...</div></div></div>
+                <div class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING PROFILE</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
@@ -221,7 +254,12 @@
                 Edit Profile Instance
             </div>
             <div class="modal-body">
-                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                <div class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING DATA</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
@@ -240,7 +278,12 @@
                 Create Profile Instance
             </div>
             <div class="modal-body">
-                <div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                <div class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING DATA</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
@@ -265,7 +308,12 @@
                 <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}/backup" class="btn btn-success btn-with-icon btn-confirm confirmBackup">Confirm</a>
                 <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
             </div>
-            <div class="block-loading"><div class="loading-content"><br /><span class="loader"></span><div class="loading-text">SAVING DATA</div><div class="loading-wait">Please wait...</div></div></div>
+            <div class="block-loading">
+                <div class="loading-content"><br/><span class="loader"></span>
+                    <div class="loading-text">SAVING DATA</div>
+                    <div class="loading-wait">Please wait...</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

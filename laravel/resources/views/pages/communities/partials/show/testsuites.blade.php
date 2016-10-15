@@ -22,46 +22,52 @@
                 </thead>
                 <tbody>
 
-                @foreach($testSuites as $testSuite)
-                    <?php $suiteMeta = \App\Post::find($testSuite->ID)->postmeta->keyBy('meta_key');?>
-                    @if(!is_admin() && isset($suiteMeta->hide_suite) && $suiteMeta->hide_suite == 1) <?php continue;?> @endif
-                    <tr>
-                        <td>
-                            <a href="{!! get_permalink($testSuite->ID) !!}"
-                               class="test-suite-name">{{ $testSuite->post_title }}</a>
+                @if($testSuites)
+                    @foreach($testSuites as $testSuite)
+                        <?php $suiteMeta = \App\Post::find($testSuite->ID)->postmeta->keyBy('meta_key');?>
+                        @if(!is_admin() && isset($suiteMeta->hide_suite) && $suiteMeta->hide_suite == 1) <?php continue;?> @endif
+                        <tr>
+                            <td>
+                                <a href="{!! get_permalink($testSuite->ID) !!}"
+                                   class="test-suite-name">{{ $testSuite->post_title }}</a>
 
-                            <p class="test-suite-description">{{ $testSuite->post_excerpt }}</p>
-                        </td>
-                        <td class="text-center">{{ formatDate($suiteMeta->get('ts_issue_date')->meta_value) }}</td>
-                        <td class="text-center"><span class="status status-{{ strtolower($suiteMeta->get('ts_status')->meta_value) }}">{{ $suiteMeta->get('ts_status')->meta_value }}</span></td>
-                        <td class="text-center">
-                            <input class="notify-changes" type="checkbox" value="{{ $testSuite->ID }}" name="notify_changes{{ $testSuite->ID }}" @if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $testSuite->ID, true)) checked="checked" @endif >
-                            <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt="" style="display: none;"/>
-                        </td>
-                        @if($isAdmin)
-                            <td class="text-center td-actions">
+                                <p class="test-suite-description">{{ $testSuite->post_excerpt }}</p>
+                            </td>
+                            <td class="text-center">{{ formatDate($suiteMeta->get('ts_issue_date')->meta_value) }}</td>
+                            <td class="text-center"><span
+                                        class="status status-{{ strtolower($suiteMeta->get('ts_status')->meta_value) }}">{{ $suiteMeta->get('ts_status')->meta_value }}</span></td>
+                            <td class="text-center">
+                                <input class="notify-changes" type="checkbox" value="{{ $testSuite->ID }}" name="notify_changes{{ $testSuite->ID }}"
+                                       @if (get_user_meta(get_current_user_id(), 'notify_suite_changes' . $testSuite->ID, true)) checked="checked" @endif >
+                                <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt="" style="display: none;"/>
+                            </td>
+                            @if($isAdmin)
+                                <td class="text-center td-actions">
 
                                     <a href="{{ getSiteUrl() }}/edit-test-suite?id={{ $testSuite->ID }}"
                                        class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                                        title="Edit Suite"></a>
-                                    <a href="{{ getSiteUrl() }}/?suite_id={{ $testSuite->ID }}&_wpnonce={{ wp_create_nonce('delete-suite') }}&laravel=1&return=<?php echo base64_encode('/communities/' . $community->slug.'/') ?>"
+                                    <a href="{{ getSiteUrl() }}/?suite_id={{ $testSuite->ID }}&_wpnonce={{ wp_create_nonce('delete-suite') }}&laravel=1&return=<?php echo base64_encode('/communities/' . $community->slug . '/') ?>"
                                        class="btn btn-icon btn-danger btn-delete"
                                        onclick="return confirm('Are you sure to delete this test suite?')"
                                        data-tooltip="tooltip" title="Delete Suite"></a>
-                            </td>
-                        @endif
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="4" class="text-center">No test suites yet</td>
                     </tr>
-
-                @endforeach
-
+                @endif
                 </tbody>
             </table>
         </div>
 
         @if($isAdmin)
-             <div class="col-md-3">
+            <div class="col-md-3">
                 <div class="page-title-actions">
-                     <a href="{{ getSiteUrl() }}/edit-test-suite/" class="btn btn-success btn-with-icon btn-add">Add new Test Suite</a>
+                    <a href="{{ getSiteUrl() }}/edit-test-suite/" class="btn btn-success btn-with-icon btn-add">Add new Test Suite</a>
                 </div>
             </div>
         @endif
