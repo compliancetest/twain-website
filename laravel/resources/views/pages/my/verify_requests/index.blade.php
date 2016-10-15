@@ -352,8 +352,12 @@
                                     $('.modal').modal('hide');
                                     if (data.status == 'success') {
                                         $('#verify-request-' + testCoveragePlan.id).addClass('removing').fadeTo("slow", 0.3, function () {
+                                            var table = $('#verify-request-' + testCoveragePlan.id).closest('table');
                                             $(this).next('tr').remove();
                                             $(this).remove();
+                                            if (table.find('tbody tr').length == 0) {
+                                                table.find('tbody').html('<tr><td class="text-center" colspan="7">No Verify Requests yet</td></tr>')
+                                            }
                                             $('#verifyRequestsList').prepend('<div class="success-message">Verify Request has been removed</div>');
                                             setTimeout(function () {
                                                 $('#verifyRequestsList > .success-message').slideUp(function () {
