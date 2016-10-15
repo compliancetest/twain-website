@@ -12,8 +12,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @if(count($articles))
-                        @foreach($articles as $article)
+                @if(count($articles))
+                    @foreach($articles as $article)
                         <tr>
                             <td>
                                 <div class="attachment-cell @if(count($article->attachments)) has-attachment @endif">
@@ -30,14 +30,20 @@
                             <td class="text-center">{{ $article->created_at }}</td>
                             <td class="text-center">{{ $article->updated_at }}</td>
                             <td class="text-center text-nowrap">
-                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip" title="View Article"></a>
+                                <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}" class="btn btn-icon btn-primary btn-view" data-tooltip="tooltip"
+                                   title="View Article"></a>
                                 @if($isAdmin)
-                                    <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip" title="Edit Article"></a>
+                                    <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
+                                       title="Edit Article"></a>
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
-                    @endif
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" class="text-center">No articles yet</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>
@@ -48,7 +54,7 @@
     @if($isAdmin)
         <div class="col-md-3">
             <div class="page-title-actions">
-                 <a href="{{ getSiteUrl() }}/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
+                <a href="{{ getSiteUrl() }}/articles/{{ $community->slug }}/create" class="btn btn-success btn-with-icon btn-add">Add new article</a>
             </div>
         </div>
     @endif
