@@ -181,7 +181,22 @@ Route::group(['middleware' => ['web']], function () {
          Route::patch('/forums/{community}/post/{postId}', 'CommunityForumController@updateThreadPost');
          Route::post('forums/{community}/{threadSlug}', 'CommunityForumController@addThreadPost');
      });
-    
+
+    Route::get('search-results', 'SiteSearchController@index');
+    Route::get('search-results/logs-list', 'SiteSearchController@entries');
+    Route::get('search-results/download', 'SiteSearchController@download');
+    Route::get('search-results/filters', 'SiteSearchController@filters');
+
+    Route::get('products-and-services', 'RegistrySearchController@index');
+    Route::get('products-and-services/logs-list', 'RegistrySearchController@entries');
+    Route::get('products-and-services/download', 'RegistrySearchController@download');
+    Route::get('products-and-services/filters', 'RegistrySearchController@filters');
+
+     Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
+        Route::delete('search-results/{entryId}', 'SiteSearchController@delete');
+        Route::delete('products-and-services/{entryId}', 'RegistrySearchController@delete');
+    });
+
     Route::group(['middleware' => ['auth']], function () {
         Route::get('test-suite-coverage', 'TestPlansController@index');
         Route::get('/testplan/create/{suiteId}', 'TestPlansController@create');
@@ -247,7 +262,4 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('test-outcome-logs/filters', 'TransactionChangeLogController@filters');
         Route::get('test-outcome-logs/logs-list', 'TransactionChangeLogController@logsList');
     });
-
-
-
 });

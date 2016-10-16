@@ -12,7 +12,7 @@ trait CloudSearchDomainTrait
      * Create CloudSearchDomainClient instance for interaction with Registry search CloudSearch domain
      * @return static
      */
-    public function getDocumentEndpointCloudSearchClient()
+    public function getRegistryEndpointCloudSearchClient($documentEndpoint = true)
     {
 
         $credentials = [
@@ -23,7 +23,7 @@ trait CloudSearchDomainTrait
         return CloudSearchDomainClient::factory([
             'region' => 'us-west-2',
             'version' => '2013-01-01',
-            'endpoint' => config('aws.registry_domain.' . getenv('ENVIRONMENT')),
+            'endpoint' => $documentEndpoint ? config('aws.registry_domain.' . getenv('ENVIRONMENT')) : config('aws.registry_domain_search.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
@@ -32,7 +32,7 @@ trait CloudSearchDomainTrait
      * Create CloudSearchDomainClient instance for interaction with Fulltext search CloudSearch domain
      * @return static
      */
-    public function getFulltextDocumentEndpointCloudSearchClient()
+    public function getFulltextEndpointCloudSearchClient($documentEndpoint = true)
     {
 
         $credentials = [
@@ -43,7 +43,7 @@ trait CloudSearchDomainTrait
         return CloudSearchDomainClient::factory([
             'region' => 'us-west-2',
             'version' => '2013-01-01',
-            'endpoint' => config('aws.domain.' . getenv('ENVIRONMENT')),
+            'endpoint' => $documentEndpoint ? config('aws.domain.' . getenv('ENVIRONMENT')) : config('aws.domain.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
