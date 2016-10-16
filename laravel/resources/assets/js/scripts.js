@@ -614,6 +614,7 @@ var Page = {
                 },
                 success: function(rsp, status, jqXHR){
                     if(form.attr('id') == 'invite-user-form'){
+                        $('#settings-members .invitations_table tr:contains("No invited users yet")').remove();
                         $('#settings-members .invitations_table').append('<tr><td>' + rsp.data.invitation_email+ '</td>' +
                                             '<td class="text-center">' +rsp.data.first_name+ ' ' +rsp.data.last_name+'</td>' +
                                             '<td class="text-center">' + rsp.data.created_at +'</td>' +
