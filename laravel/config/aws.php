@@ -19,6 +19,12 @@ $data = [
         'integration' => 'https://doc-twain-integration-mhy6scda6vp2hs6gihngnz62ga.us-west-2.cloudsearch.amazonaws.com',
         'preproduction' => 'https://doc-twain-preproduction-rhpc5u7fdutht2tjttatk26nrm.us-west-2.cloudsearch.amazonaws.com',
         'production' => 'https://doc-twain-production-zpmnyg4p54cfe57qbxhuogt6yq.us-west-2.cloudsearch.amazonaws.com',
+    ],
+    'registry_domain_search' => [
+        'local' => 'https://search-twain-integration-mhy6scda6vp2hs6gihngnz62ga.us-west-2.cloudsearch.amazonaws.com',
+        'integration' => 'https://search-twain-integration-mhy6scda6vp2hs6gihngnz62ga.us-west-2.cloudsearch.amazonaws.com',
+        'preproduction' => 'https://search-twain-preproduction-rhpc5u7fdutht2tjttatk26nrm.us-west-2.cloudsearch.amazonaws.com',
+        'production' => 'https://search-twain-production-zpmnyg4p54cfe57qbxhuogt6yq.us-west-2.cloudsearch.amazonaws.com',
     ]
 ];
 if(env('APP_ENV') == 'local' || getenv('ENVIRONMENT') == 'local'){

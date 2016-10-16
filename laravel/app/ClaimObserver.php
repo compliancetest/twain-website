@@ -15,7 +15,7 @@ class ClaimObserver
 
     public function __construct()
     {
-        $this->_client = $this->getDocumentEndpointCloudSearchClient();
+        $this->_client = $this->getRegistryEndpointCloudSearchClient();
     }
 
     /**

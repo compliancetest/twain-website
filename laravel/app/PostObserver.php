@@ -25,7 +25,7 @@ class PostObserver
             }
 
             //save product data to Fulltext search domain
-            $cloudSearchClient = $this->getFulltextDocumentEndpointCloudSearchClient();
+            $cloudSearchClient = $this->getFulltextEndpointCloudSearchClient();
 
             $productDescription = $post->getMetaByKey('product_description');
             $productVisibility = $post->getMetaByKey('product_visibility');
