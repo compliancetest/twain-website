@@ -204,9 +204,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 if (!empty($log['ImageFileName']) && file_exists($this->rootFolder . '/scan_result/' . $log['ImageFileName'])) {
                     $logImageKey = $this->userId . '/' . $this->testCaseId . '/' . $this->executionId . '/' . $transactionLog->id . '/' . $log['ImageFileName'];
 
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mime = finfo_file($finfo, $this->rootFolder . '/scan_result/' . $log['ImageFileName']);
-                    finfo_close($finfo);
+                    $mime = handleMimeTypeForImage($this->rootFolder . '/scan_result/' . $log['ImageFileName']);
 
                     $s3->putObject(array(
                         'Bucket' => config('env.bucket.transactions'),
@@ -234,9 +232,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                         if(file_exists($this->rootFolder . '/screen_capture/' . $screenCapture)) {
                             $screenCaptureImageKey = $this->userId . '/' . $this->testCaseId . '/' . $this->executionId . '/' . $transactionLog->id . '/screen_capture/' . $screenCapture;
 
-                            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                            $mime = finfo_file($finfo, $this->rootFolder . '/screen_capture/' . $screenCapture);
-                            finfo_close($finfo);
+                            $mime = handleMimeTypeForImage($this->rootFolder . '/screen_capture/' . $screenCapture);
 
                             $s3->putObject(array(
                                 'Bucket' => config('env.bucket.transactions'),

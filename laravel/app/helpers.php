@@ -129,6 +129,22 @@ function getImageViewerNotSupportedFormats()
     return ['raw', 'tif', 'djvu', 'exif', 'fpx', 'jp2', 'pdf', 'jpx', 'pic', 'xbm'];
 }
 
+/**
+ * Handle image mimetype to ensure that bmp files can be viewed in browser
+ * @param $imagePath
+ * @return mixed|string
+ */
+function handleMimeTypeForImage($imagePath)
+{
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeInfo = finfo_file($finfo, $imagePath);
+    finfo_close($finfo);
+    if ($mimeInfo == 'image/x-ms-bmp') {
+        $mimeInfo = 'image/bmp';
+    }
+    return $mimeInfo;
+}
+
 function getProductFullName($productId)
 {
     $product = \App\Post::find($productId);

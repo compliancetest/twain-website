@@ -1,36 +1,62 @@
 <form>
     <fieldset>
         @if($scannedImageData['passConditions'])
-            <legend>Confirm that all pass conditions are met:</legend>
+            @if($canModerate)
+                <legend>Confirm that all pass conditions are met:</legend>
+            @else
+                <legend>Pass conditions:</legend>
+            @endif
+            @if(!$canModerate) <ul style="list-style-type: square;"> @endif
             @foreach($scannedImageData['passConditions'] as $passCondition)
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="{{ $passCondition }}"  data-image="{{ $k }}" class="passConditions" @if($readonly) disabled="disabled" @endif> {{ $passCondition }}
-                    </label>
-                </div>
+                 @if($canModerate)
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="{{ $passCondition }}"  data-image="{{ $k }}" class="passConditions" @if($readonly) disabled="disabled" @endif> {{ $passCondition }}
+                        </label>
+                    </div>
+                 @else
+                     <li>{{ $passCondition }}</li>
+                 @endif
             @endforeach
+            @if(!$canModerate) </ul> @endif
         @endif
     </fieldset>
 
     <fieldset>
         @if($scannedImageData['skipConditions'])
-            <legend>Or choose any of skip condition if it is met:</legend>
+            @if($canModerate)
+                <legend>Or choose any of skip condition if it is met:</legend>
+            @else
+                <legend>Skip conditions:</legend>
+            @endif
+            @if(!$canModerate) <ul style="list-style-type: square;"> @endif
             @foreach($scannedImageData['skipConditions'] as $skipCondition)
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="skip_{{ $k }}" value="{{ $skipCondition }}"  data-image="{{ $k }}" class="skipConditions" @if($readonly) disabled="disabled" @endif> {{ $skipCondition }}
-                    </label>
-                </div>
+                @if($canModerate)
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="skip_{{ $k }}" value="{{ $skipCondition }}"  data-image="{{ $k }}" class="skipConditions" @if($readonly) disabled="disabled" @endif> {{ $skipCondition }}
+                        </label>
+                    </div>
+                 @else
+                     <li>{{ $skipCondition }}</li>
+                @endif
             @endforeach
+            @if(!$canModerate) </ul> @endif
         @endif
     </fieldset>
 
-    <fieldset>
-        <legend>Or provide a reason for skip or fail:</legend>
-        <div class="form-group">
-            <input type="text" class="form-control reason" data-image="{{ $k }}" placeholder="Reason" @if($readonly) readonly="readonly" @endif>
-        </div>
-    </fieldset>
+    @if($canModerate)
+        <fieldset>
+            @if($scannedImageData['skipConditions'] || $scannedImageData['passConditions'])
+                <legend>Or provide a reason for skip or fail:</legend>
+            @else
+                <legend>Provide a reason for skip or fail if needed:</legend>
+            @endif
+            <div class="form-group">
+                <input type="text" class="form-control reason" data-image="{{ $k }}" placeholder="Reason" @if($readonly) readonly="readonly" @endif>
+            </div>
+        </fieldset>
+    @endif
 
     @if(!$readonly)
         <div class="row">
