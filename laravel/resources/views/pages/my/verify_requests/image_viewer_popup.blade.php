@@ -15,22 +15,32 @@
                             <?php $colsNumber = $showDetails ? 4 : 6;?>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Expected Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
                                     @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['expectedImage'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                                 @if($showDetails)
@@ -44,12 +54,17 @@
                         <div class="row">
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                                 @if($showDetails)
@@ -201,5 +216,13 @@
                 }
             });
         });
+
+        $('.scanned-image img').each(function() {
+            var img = $(this);
+            $(this).load(function () {
+                img.parent().removeClass('is-loading');
+            });
+        });
+
     });
 </script>
