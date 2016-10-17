@@ -211,13 +211,22 @@ class ProductsController extends BaseApiController
                 $productId .= '_' . $this->cleanSlug($productModel);
             }
         }
+        $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
             //any organisation member can update product
             if (isset($user->organisation[0]->id) && OrganisationMember::where(['organisation_id' => $user->organisation[0]->id, 'user_id' => $this->product->post_author])->first()) {
                 $this->_setProductVisibility($request, $entity);
                 $this->_setProductTypeFields($request, $jsonEntry, false);
-                $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
+
+                 /**
+                 * Recreate test plans for DataSource product.
+                 * Test plans for Application product will be regenerated once user update supported features
+                 */
+                if ($request->get('product_type') == 'DataSource') {
+                    $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
+                }
+
                 $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
                 $this->product->meta()->updateOrCreate(['meta_key' => 'model'], ['meta_value' => $productModel]);
@@ -252,7 +261,6 @@ class ProductsController extends BaseApiController
         $this->_setProductVisibility($request, $entity);
         $this->_setProductTypeFields($request, $jsonEntry);
 
-        $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
         $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
         $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $protocolVersion]);
         $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
@@ -265,44 +273,11 @@ class ProductsController extends BaseApiController
         $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
 
         /**
-         * Create test plans for product
+         * Create test plans for DataSource product.
+         * Test plans for application product will be generated once user set supported features
          */
         if ($request->get('product_type') == 'DataSource') {
-            foreach ($user->getUserTestPlans() as $suiteName => $suite) {
-                $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-                $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'test_suite_id' => TestSuite::getTestSuiteFamilyMark($suite['testSuite']->ID)])->first();
-                if ($type != $request->get('product_type') || !$aprovementEntry) {
-                    continue;
-                }
-                $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
-                 if(!$organisationSubscription){
-                    continue;
-                }
-                $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
-                $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
-
-                /**
-                 * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
-                 */
-                $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
-
-                if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
-                    continue;
-                }
-                foreach (explode(',', $attributes->value) as $level) {
-                    $testPlan = TestPlan::create([
-                        'organisation_subscription_id' => $organisationSubscription->id,
-                        'product_id' => $this->product->ID,
-                        'suite_id' => $suite['testSuite']->ID,
-                        'creator_id' => $user->ID,
-                        'level' => $level,
-                        'role' => $request->get('product_type'),
-                    ]);
-                    if ($request->get('product_type') == 'DataSource') {
-                        $testPlan->excludeTestCases();
-                    }
-                }
-            }
+            $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
         }
 
         $this->product->save();
@@ -314,6 +289,53 @@ class ProductsController extends BaseApiController
             'model' => $productModel,
         ];
         return $this->setStatusCode(201)->respondWithData($response);
+    }
+
+    /**
+     * generate test plans for product. old test plans will be deleted
+     * @param $productId
+     * @param Request $request
+     * @param $protocolVersion
+     */
+    public function generateTestPlans($productId, Request $request, $protocolVersion)
+    {
+        $user = Auth::user();
+        TestPlan::where('product_id', $productId)->delete();
+        foreach ($user->getUserTestPlans() as $suiteName => $suite) {
+            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'test_suite_id' => TestSuite::getTestSuiteFamilyMark($suite['testSuite']->ID)])->first();
+            if ($type != $request->get('product_type') || !$aprovementEntry) {
+                continue;
+            }
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            if (!$organisationSubscription) {
+                continue;
+            }
+            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
+            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+
+            /**
+             * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
+             */
+            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+
+            if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+                continue;
+            }
+            foreach (explode(',', $attributes->value) as $level) {
+                $testPlan = TestPlan::create([
+                    'organisation_subscription_id' => $organisationSubscription->id,
+                    'product_id' => $this->product->ID,
+                    'suite_id' => $suite['testSuite']->ID,
+                    'creator_id' => $user->ID,
+                    'level' => $level,
+                    'role' => $request->get('product_type'),
+                ]);
+                if ($request->get('product_type') == 'DataSource') {
+                    $testPlan->excludeTestCases();
+                }
+            }
+        }
     }
 
     /**
