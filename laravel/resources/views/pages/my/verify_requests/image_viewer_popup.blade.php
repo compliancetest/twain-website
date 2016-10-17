@@ -7,11 +7,13 @@
         <ul class="slides">
             <?php $scannedImagesData = $transaction->getScannedImagesData();?>
             @foreach($scannedImagesData AS $k => $scannedImageData)
+                <?php $showDetails = $canModerate || $scannedImageData['skipConditions'] || $scannedImageData['passConditions'];?>
                 {{--If both images available use this layout--}}
                 <li>
                     @if($scannedImageData['expectedImage'])
                         <div class="row">
-                            <div class="col-md-4">
+                            <?php $colsNumber = $showDetails ? 4 : 6;?>
+                            <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
@@ -21,7 +23,7 @@
                                     @endif
                                 </a>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-{{ $colsNumber }}">
                                 <h4>Expected Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
                                     @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
@@ -31,13 +33,16 @@
                                     @endif
                                 </a>
                             </div>
-                            <div class="col-md-4">
-                                @include('pages.my.verify_requests._image_viewer_conditions_form', ['imageNumber' => $k])
-                            </div>
+                                @if($showDetails)
+                                    <div class="col-md-4">
+                                        @include('pages.my.verify_requests._image_viewer_conditions_form', ['imageNumber' => $k])
+                                    </div>
+                                @endif
                         </div>
                     @else
+                        <?php $colsNumber = $showDetails ? 6 : 12;?>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
                                 <a target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
@@ -47,32 +52,36 @@
                                     @endif
                                 </a>
                             </div>
-                            <div class="col-md-6">
-                                @include('pages.my.verify_requests._image_viewer_conditions_form')
-                            </div>
+                                @if($showDetails)
+                                    <div class="col-md-6">
+                                        @include('pages.my.verify_requests._image_viewer_conditions_form')
+                                    </div>
+                                @endif
                         </div>
                     @endif
                 </li>
             @endforeach
-            <li>
-                <div class="row">
-                    <div class="col-md-12">
-                        @foreach($scannedImagesData as $k => $scannedImageData)
-                            <h3>Image #{{ $k+1 }}:</h3>
-                            <div class="form-group">
-                                @include('pages.my.verify_requests._image_viewer_conditions_form', ['readonly' => true, 'imageNumber' => $k])
+            @if($canModerate)
+                <li>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @foreach($scannedImagesData as $k => $scannedImageData)
+                                <h3>Image #{{ $k+1 }}:</h3>
+                                <div class="form-group">
+                                    @include('pages.my.verify_requests._image_viewer_conditions_form', ['readonly' => true, 'imageNumber' => $k])
+                                </div>
+                            @endforeach
+                            <div class="alert alert-warning">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                Please check Pass and Skip conditions on the previous page(s) or provide a reason for Fail / Skip if none of them is met.
                             </div>
-                        @endforeach
-                        <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            Please check Pass and Skip conditions on the previous page(s) or provide a reason for Fail / Skip if none of them is met.
+                            <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass" style="display: none;">Verify As Pass</button>
+                            <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail" style="display: none;">Verify As Fail</button>
+                            <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip" style="display: none;">Verify As Skip</button>
                         </div>
-                        <button class="verify_as_pass btn btn-success btn-with-icon btn-trigger change_status" data-outcome="Pass" style="display: none;">Verify As Pass</button>
-                        <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail" style="display: none;">Verify As Fail</button>
-                        <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip" style="display: none;">Verify As Skip</button>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
         </ul>
     </div>
 </div>
