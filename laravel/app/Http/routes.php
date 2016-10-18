@@ -33,6 +33,17 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function (
 
 Route::group(['middleware' => ['web']], function () {
 
+    Route::get('laravel-product/{productId}', 'ProductsController@view');
+    Route::get('laravel-product/{productId}/edit', 'ProductsController@edit');
+
+    Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
+    Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
+
+    Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');
+    Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');
+
+    Route::get('contact-us', 'ContactUsController@index');
+
     Route::get('contact-us', 'ContactUsController@index');
     Route::post('contact-us', 'ContactUsController@send');
     Route::get('savepost/{optionId}', 'PostController@save');
