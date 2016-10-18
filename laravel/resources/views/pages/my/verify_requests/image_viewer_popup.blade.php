@@ -6,6 +6,7 @@
     <div class="flexslider">
         <ul class="slides">
             <?php $scannedImagesData = $transaction->getScannedImagesData();?>
+            @if($scannedImagesData)
             @foreach($scannedImagesData AS $k => $scannedImageData)
                 <?php $showDetails = $canModerate || $scannedImageData['skipConditions'] || $scannedImageData['passConditions'];?>
                 {{--If both images available use this layout--}}
@@ -96,6 +97,9 @@
                         </div>
                     </div>
                 </li>
+            @endif
+            @else
+                <div class="alert alert-warning text-center">This test result doesn't have any scan results.</div>
             @endif
         </ul>
     </div>
