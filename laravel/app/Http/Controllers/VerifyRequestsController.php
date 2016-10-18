@@ -375,6 +375,15 @@ class VerifyRequestsController extends Controller
         ]);
     }
 
+    public function transactionsImageViewerPopup($communitySlug, $transactionId)
+    {
+        return view('pages.my.verify_requests.image_viewer_popup')->with([
+            'transaction' => Transaction::find($transactionId),
+            'communitySlug' => $communitySlug,
+            'canModerate' => false,
+        ]);
+    }
+
     /**
      * Update VerifyRequest transaction. Only assigned admin / support can perform this action
      * @param $communitySlug

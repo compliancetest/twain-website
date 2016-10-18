@@ -242,6 +242,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('my-transaction-log', 'TransactionsController@index');
         Route::get('verify-requests/{communitySlug}/image-viewer/{verifyRequestId}/{transactionId}', 'VerifyRequestsController@imageViewerPopup');
+        Route::get('verify-requests/{communitySlug}/transactions-image-viewer/{transactionId}', 'VerifyRequestsController@transactionsImageViewerPopup');
         Route::post('verify-requests/{communitySlug}/update-image-transaction/{verifyRequestId}/{transactionId}', 'VerifyRequestsController@updateTransaction');
     });
 

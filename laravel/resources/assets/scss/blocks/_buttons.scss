@@ -12,6 +12,13 @@
     color: #fff;
     outline: none;
   }
+
+  &:active {
+    &:focus {
+      outline: none;
+    }
+  }
+
 }
 
 .btn-default {
@@ -177,6 +184,14 @@
   @include btnIconsSprite(btn-download);
 }
 
+.btn-view{
+  @include btnIconsSprite(btn-view);
+}
+
+.btn-question{
+  @include btnIconsSprite(btn-question);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
@@ -238,6 +253,9 @@
   }
   &.btn-confirm{
     @include btnIconsSprite(btn-icon-confirm);
+  }
+  &.btn-question{
+    @include btnIconsSprite(btn-icon-question);
   }
 
 }

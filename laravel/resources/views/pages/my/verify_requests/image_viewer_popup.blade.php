@@ -6,6 +6,7 @@
     <div class="flexslider">
         <ul class="slides">
             <?php $scannedImagesData = $transaction->getScannedImagesData();?>
+            @if($scannedImagesData)
             @foreach($scannedImagesData AS $k => $scannedImageData)
                 <?php $showDetails = $canModerate || $scannedImageData['skipConditions'] || $scannedImageData['passConditions'];?>
                 {{--If both images available use this layout--}}
@@ -15,22 +16,32 @@
                             <?php $colsNumber = $showDetails ? 4 : 6;?>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Expected Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['expectedImage'] }}">
                                     @if(in_array(pathinfo($scannedImageData['expectedImage'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['expectedImage'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                                 @if($showDetails)
@@ -44,12 +55,17 @@
                         <div class="row">
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
-                                <a target="_blank" href="{{ $scannedImageData['image'] }}">
+                                <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['image'] }}">
                                     @if(in_array(pathinfo($scannedImageData['image'], PATHINFO_EXTENSION), getImageViewerNotSupportedFormats()))
                                         <img src="/wp-content/themes/bp-child/images/no-preview.png"/>
                                     @else
                                         <img src="{{ $scannedImageData['image'] }}"/>
                                     @endif
+                                    <span class="img-loader-box">
+                                        <span class="img-loader"></span>
+                                        <span class="img-loading-text">Loading image...</span>
+                                        <span class="img-loading-wait">Please wait...</span>
+                                    </span>
                                 </a>
                             </div>
                                 @if($showDetails)
@@ -81,6 +97,9 @@
                         </div>
                     </div>
                 </li>
+            @endif
+            @else
+                <div class="alert alert-warning text-center">This test result doesn't have any scan results.</div>
             @endif
         </ul>
     </div>
@@ -171,35 +190,45 @@
                 reason = notEmptyReason.length ? notEmptyReason.val() : 'Pass condition "'+$('.passConditions:not(.checked):first').val()+'" for the image #'+(parseInt($('.passConditions:not(.checked):first').data('image')) + 1)+' was not met.';
             }
 
-            jQuery.ajax({
-                url: '/verify-requests/{{ $communitySlug }}/update-image-transaction/{{ $verifyRequest->id }}/{{ $transaction->id }}',
-                data: {
-                    'outcome_code': outcomeType,
-                    'reason': reason,
-                    'hideResolved': $('#hideResolved:checked').length,
-                    'hideOthers': $('#hideOthers:checked').length,
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function (rsp) {
-                    jQuery('.viewImagesModal .block-loading').hide();
-                    $('#verifyRequestsListContent').html(rsp.html);
-                    $('.viewImagesModal .modal-body').prepend('<div class="success-message">Test result was updated successfully!</div>');
-                    setTimeout(function () {
-                        $('.modal').modal('hide');
-                    }, 3000);
+            @if($verifyRequest)
+                jQuery.ajax({
+                    url: '/verify-requests/{{ $communitySlug }}/update-image-transaction/{{ $verifyRequest->id }}/{{ $transaction->id }}',
+                    data: {
+                        'outcome_code': outcomeType,
+                        'reason': reason,
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (rsp) {
+                        jQuery('.viewImagesModal .block-loading').hide();
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        $('.viewImagesModal .modal-body').prepend('<div class="success-message">Test result was updated successfully!</div>');
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 3000);
 
-                },
-                error: function (jqXHR, status) {
-                    jQuery('.viewImagesModal .block-loading').hide();
-                    $('.viewImagesModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
-                    setTimeout(function () {
-                        $('.viewImagesModal .modal-body > .error-message').slideUp(function () {
-                            $(this).remove();
-                        });
-                    }, 3000);
-                }
+                    },
+                    error: function (jqXHR, status) {
+                        jQuery('.viewImagesModal .block-loading').hide();
+                        $('.viewImagesModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('.viewImagesModal .modal-body > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+                    }
+                });
+            @endif
+        });
+
+        $('.scanned-image img').each(function() {
+            var img = $(this);
+            $(this).load(function () {
+                img.parent().removeClass('is-loading');
             });
         });
+
     });
 </script>

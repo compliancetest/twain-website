@@ -57,7 +57,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="4" class="text-center">No test suites yet</td>
+                        <td colspan="{{ $isAdmin ? 5 : 4 }}" class="text-center">No test suites yet</td>
                     </tr>
                 @endif
                 </tbody>
