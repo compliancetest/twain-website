@@ -88,9 +88,9 @@
                     </td>
                     <td class="text-center">
                         @if($explainRequestsEnabled)
-                            {{-- @todo-Ivan: Use "btn-default" if log doesn't have message in status explanation otherwise use "btn-success"  --}}
+                            <?php $imageClass = count($eloquentTransaction->explanationLogs) > 0 ? 'btn-success' : 'btn-default';?>
                             <span class="tooltip-wrapper" data-toggle="tooltip" title="Request Status Explanation">
-                                <a class="btn btn-success btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
+                                <a class="btn {{ $imageClass }} btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
                             </span>
                         @endif
                         @if(isImageViewerEnabled())
