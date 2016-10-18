@@ -7,7 +7,6 @@
                 <th class="text-left">Product Name</th>
                 <th>Test Suite<br/>Test Case</th>
                 <th>Test<br/>Outcome</th>
-                <th>Action</th>
                 <th>Audit<br/>Record</th>
                 <th>
                     @if($supportOrAdmin)
@@ -17,6 +16,7 @@
                     Execution ID
                 </th>
                 <th>Date<br/>Time</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -64,18 +64,6 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        @if($explainRequestsEnabled)
-                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Request Status Explanation">
-                                <a class="btn btn-success btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
-                            </span>
-                        @endif
-                        @if(isImageViewerEnabled())
-                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Image Viewer">
-                                <a class="btn btn-success btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
-                            </span>
-                        @endif
-                    </td>
-                    <td class="text-center">
                         <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"
                                @if(\App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING') disabled="disabled" @endif
                                data-id="{{ $transaction->id }}">
@@ -97,6 +85,19 @@
                         {{ formatDate($transaction->created_at, 'Y-m-d') }}
                         <br>
                         {{ formatDate($transaction->created_at, 'H:i:s') }}
+                    </td>
+                    <td class="text-center">
+                        @if($explainRequestsEnabled)
+                            {{-- @todo-Ivan: Use "btn-default" if log doesn't have message in status explanation otherwise use "btn-success"  --}}
+                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Request Status Explanation">
+                                <a class="btn btn-success btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
+                            </span>
+                        @endif
+                        @if(isImageViewerEnabled())
+                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Image Viewer">
+                                <a class="btn btn-primary btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                            </span>
+                        @endif
                     </td>
                 </tr>
 
