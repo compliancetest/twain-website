@@ -186,35 +186,37 @@
                 reason = notEmptyReason.length ? notEmptyReason.val() : 'Pass condition "'+$('.passConditions:not(.checked):first').val()+'" for the image #'+(parseInt($('.passConditions:not(.checked):first').data('image')) + 1)+' was not met.';
             }
 
-            jQuery.ajax({
-                url: '/verify-requests/{{ $communitySlug }}/update-image-transaction/{{ $verifyRequest->id }}/{{ $transaction->id }}',
-                data: {
-                    'outcome_code': outcomeType,
-                    'reason': reason,
-                    'hideResolved': $('#hideResolved:checked').length,
-                    'hideOthers': $('#hideOthers:checked').length,
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function (rsp) {
-                    jQuery('.viewImagesModal .block-loading').hide();
-                    $('#verifyRequestsListContent').html(rsp.html);
-                    $('.viewImagesModal .modal-body').prepend('<div class="success-message">Test result was updated successfully!</div>');
-                    setTimeout(function () {
-                        $('.modal').modal('hide');
-                    }, 3000);
+            @if($verifyRequest)
+                jQuery.ajax({
+                    url: '/verify-requests/{{ $communitySlug }}/update-image-transaction/{{ $verifyRequest->id }}/{{ $transaction->id }}',
+                    data: {
+                        'outcome_code': outcomeType,
+                        'reason': reason,
+                        'hideResolved': $('#hideResolved:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length,
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (rsp) {
+                        jQuery('.viewImagesModal .block-loading').hide();
+                        $('#verifyRequestsListContent').html(rsp.html);
+                        $('.viewImagesModal .modal-body').prepend('<div class="success-message">Test result was updated successfully!</div>');
+                        setTimeout(function () {
+                            $('.modal').modal('hide');
+                        }, 3000);
 
-                },
-                error: function (jqXHR, status) {
-                    jQuery('.viewImagesModal .block-loading').hide();
-                    $('.viewImagesModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
-                    setTimeout(function () {
-                        $('.viewImagesModal .modal-body > .error-message').slideUp(function () {
-                            $(this).remove();
-                        });
-                    }, 3000);
-                }
-            });
+                    },
+                    error: function (jqXHR, status) {
+                        jQuery('.viewImagesModal .block-loading').hide();
+                        $('.viewImagesModal .modal-body').prepend('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('.viewImagesModal .modal-body > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+                    }
+                });
+            @endif
         });
 
         $('.scanned-image img').each(function() {

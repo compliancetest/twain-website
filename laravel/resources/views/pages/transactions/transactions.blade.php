@@ -66,6 +66,12 @@
                                 <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" title="Request status explanation"></span>
                             </a>
                         @endif
+                        <br>
+                        @if(isImageViewerEnabled())
+                            <a class="btn btn-success showImageViewer"
+                               href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}"
+                               data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                        @endif
 
                     </td>
                     <td class="text-center">
