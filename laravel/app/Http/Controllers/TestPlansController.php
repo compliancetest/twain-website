@@ -40,7 +40,7 @@ class TestPlansController extends Controller
      */
     public function create($suiteId)
     {
-        $userSubscription = UserSubscription::where(['suite_id' => $suiteId])->first();
+        $userSubscription = UserSubscription::where(['suite_id' => $suiteId, 'user_id' => Auth::user()->ID])->first();
         $subscription = OrganisationSubscription::find($userSubscription->parent_id);
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
@@ -82,7 +82,8 @@ class TestPlansController extends Controller
             }
         }
 
-        $organisationSubscription = OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $request->get('suite_id')])->first();
+        $userSubscription = UserSubscription::where(['suite_id' => $request->get('suite_id'), 'user_id' => Auth::user()->ID])->first();
+        $organisationSubscription = OrganisationSubscription::find($userSubscription->parent_id);
 
         $allData = $request->all();
         $allData['creator_id'] = Auth::user()->ID;
