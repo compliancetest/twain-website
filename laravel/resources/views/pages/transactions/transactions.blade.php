@@ -7,6 +7,7 @@
                 <th class="text-left">Product Name</th>
                 <th>Test Suite<br/>Test Case</th>
                 <th>Test<br/>Outcome</th>
+                <th>Action</th>
                 <th>Audit<br/>Record</th>
                 <th>
                     @if($supportOrAdmin)
@@ -53,26 +54,26 @@
                     </td>
                     <td>
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                                            @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
-                                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal"
-                                                   data-tooltip="tooltip" title="Reason" class="text-status-{{ $status }}">
-                                                    {{ $outcomeStatus->name }}
-                                                </a>
-                                            @else
-                                                <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
-                                            @endif
-                        @if($explainRequestsEnabled)
-                            <a href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">
-                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" title="Request status explanation"></span>
+                        @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
+                            <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal"
+                               data-tooltip="tooltip" title="Reason" class="text-status-{{ $status }}">
+                                {{ $outcomeStatus->name }}
                             </a>
+                        @else
+                            <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
                         @endif
-                        <br>
+                    </td>
+                    <td class="text-center">
+                        @if($explainRequestsEnabled)
+                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Request Status Explanation">
+                                <a class="btn btn-success btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
+                            </span>
+                        @endif
                         @if(isImageViewerEnabled())
-                            <a class="btn btn-success showImageViewer"
-                               href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}"
-                               data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                            <span class="tooltip-wrapper" data-toggle="tooltip" title="Image Viewer">
+                                <a class="btn btn-success btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                            </span>
                         @endif
-
                     </td>
                     <td class="text-center">
                         <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"
@@ -100,7 +101,7 @@
                 </tr>
 
                 <tr id="product-{{ $transaction->id }}" data-transaction-id="{{ $transaction->id }}" class="logRow collapse">
-                    <td colspan="7">
+                    <td colspan="8">
                         <div class="block-loading-wrapper">
                             <div class="block-loading loading-shown">
                                 <div class="loading-content"><span class="loader"></span>
