@@ -23,7 +23,7 @@ class CA04 extends TestCaseValidationAbstract
          */
         $status = false;
         foreach ($data['pExtImageInfo']['Items'] as $item) {
-            if ($item['InfoID'] == 'TWEI_BARCODECOUNT' && $item['NumItems'] == 0) {
+            if ($item['InfoID'] == 'TWEI_BARCODECOUNT' && ($item['NumItems'] == 0 || ($item['NumItems'] == 1 && is_array($item['Item']) && in_array(0, $item['Item'])))) {
                 $status = true;
             }
         }
