@@ -277,3 +277,9 @@ body.modal-open,
     display: inline-block;
     outline: none;
 }
+
+.calendar-icon{
+    @include iconsSprite(calendar);
+    vertical-align: middle;
+    cursor: pointer;
+}

@@ -1,0 +1,32 @@
+.products{
+  h1{
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  .edit-product{
+    .organization-group{
+      .checkbox{
+        margin-bottom: 0;
+      }
+    }
+
+    textarea{
+      height: 90px;
+    }
+
+    #productReleaseDate[readonly]{
+      background: #fff;
+    }
+
+    .product-release-calendar{
+      cursor: pointer;
+    }
+
+    .product-owner-override{
+      margin-top: 15px;
+    }
+
+  }
+}
