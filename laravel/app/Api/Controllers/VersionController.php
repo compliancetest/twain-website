@@ -3,6 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\CommunityDownloads;
+use App\WpOptions;
 use Symfony\Component\HttpKernel;
 use Validator;
 
@@ -85,5 +86,32 @@ class VersionController extends BaseApiController
         }
 
         return $this->respondNotFound('Downloads not found');
+    }
+
+    /**
+    * @api {get} /v1/apiversion Get REST API version
+    *
+    * @apiName Latest API version
+    * @apiGroup Helpers
+    *
+    * @apiSuccessExample {json} Success-Response:
+    *   {
+    *     "data": {
+    *       "version": "v1"
+    *     },
+    *     "code": 200
+    *   }
+     *
+    * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+    *
+    * @apiVersion 1.0.0
+    */
+    public function apiversion()
+    {
+        $latestVersion = WpOptions::where('option_name', 'rest_api_version')->first();
+
+        return $this->respondWithData([
+            'version' => $latestVersion ? $latestVersion->option_value : 'v1'
+        ]);
     }
 }

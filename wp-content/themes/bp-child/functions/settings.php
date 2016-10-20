@@ -59,6 +59,7 @@ function create_compliancetest_settings_page()
         } else {
             update_option('explain_requests', 'no');
         }
+        update_option('rest_api_version', $_POST['rest_api_version']);
     }
 
 ?>
@@ -311,6 +312,10 @@ function create_compliancetest_settings_page()
                         <tr>
                             <td><label><b>Enable Explain Requests:</b></label></td>
                             <td><input type="checkbox" name="explain_requests" id="explain_requests" size="50" <?php if( get_option('explain_requests') == 'yes' ):?> checked="checked" <?php endif;?> autocomplete="off" /></td>
+                        </tr>
+                        <tr>
+                            <td><label><b>REST API version:</b></label></td>
+                            <td><input type="text" name="rest_api_version" id="rest_api_version" size="50" value="<?php echo get_option('rest_api_version');?>" autocomplete="off" /></td>
                         </tr>
                     </table>
                     <?php submit_button()   ?>
