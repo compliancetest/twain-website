@@ -8819,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8891,7 +8891,7 @@ body.modal-open,
 }
 /* line 125, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -8935,7 +8935,7 @@ body.modal-open,
 #messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -485px;
+  background-position: 0 -509px;
   height: 24px;
   width: 24px;
 }
@@ -8948,7 +8948,7 @@ body.modal-open,
 #messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -509px;
+  background-position: 0 -485px;
   height: 24px;
   width: 24px;
 }
@@ -8968,7 +8968,7 @@ body.modal-open,
 .collapsed .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -13px -109px;
+  background-position: 0 -131px;
   height: 11px;
   width: 11px;
 }
@@ -9178,7 +9178,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -485px;
+  background-position: 0 -509px;
   height: 24px;
   width: 24px;
 }
@@ -9192,7 +9192,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -178px;
+  background-position: 0 -166px;
   height: 12px;
   width: 12px;
 }
@@ -9200,7 +9200,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -509px;
+  background-position: 0 -485px;
   height: 24px;
   width: 24px;
 }
@@ -9362,7 +9362,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9564,7 +9564,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -677px;
+  background-position: 0 -557px;
   height: 24px;
   width: 18px;
 }
@@ -9580,7 +9580,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -605px;
+  background-position: 0 -821px;
   height: 24px;
   width: 18px;
 }
@@ -9588,7 +9588,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -629px;
+  background-position: 0 -725px;
   height: 24px;
   width: 18px;
 }
@@ -9596,7 +9596,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -533px;
+  background-position: 0 -629px;
   height: 24px;
   width: 18px;
 }
@@ -9604,7 +9604,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -653px;
+  background-position: 0 -701px;
   height: 24px;
   width: 18px;
 }
@@ -9612,7 +9612,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -749px;
+  background-position: 0 -581px;
   height: 24px;
   width: 18px;
 }
@@ -9620,7 +9620,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -581px;
+  background-position: 0 -797px;
   height: 24px;
   width: 18px;
 }
@@ -9628,7 +9628,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -797px;
+  background-position: 0 -653px;
   height: 24px;
   width: 18px;
 }
@@ -9636,7 +9636,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-clear:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -821px;
+  background-position: 0 -869px;
   height: 24px;
   width: 18px;
 }
@@ -9644,7 +9644,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -701px;
+  background-position: 0 -749px;
   height: 24px;
   width: 18px;
 }
@@ -9652,7 +9652,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-view:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -557px;
+  background-position: 0 -605px;
   height: 24px;
   width: 18px;
 }
@@ -9660,19 +9660,35 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -725px;
+  background-position: 0 -677px;
   height: 24px;
   width: 18px;
 }
 
-/* line 195, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-print:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -845px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 29, ../scss/_mixins.scss */
+.btn-edit:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -533px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 203, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 201, ../scss/blocks/_buttons.scss */
+/* line 209, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9686,14 +9702,14 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -98px;
+  background-position: 0 -98px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -98px;
+  background-position: -12px -98px;
   height: 11px;
   width: 12px;
 }
@@ -9714,7 +9730,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -166px;
+  background-position: -12px -166px;
   height: 12px;
   width: 12px;
 }
@@ -9725,7 +9741,7 @@ input[type="checkbox"] {
   height: 9px;
   width: 12px;
 }
-/* line 229, ../scss/blocks/_buttons.scss */
+/* line 237, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
@@ -9753,7 +9769,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: -11px -120px;
+  background-position: -13px -109px;
   height: 11px;
   width: 11px;
 }
@@ -9767,7 +9783,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -204px;
+  background-position: -12px -178px;
   height: 12px;
   width: 12px;
 }
@@ -9781,19 +9797,19 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -131px;
+  background-position: -11px -120px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -166px;
+  background-position: 0 -204px;
   height: 12px;
   width: 12px;
 }
 
-/* line 263, ../scss/blocks/_buttons.scss */
+/* line 271, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9818,7 +9834,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 280, ../scss/blocks/_buttons.scss */
+/* line 288, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9830,25 +9846,25 @@ input[type="checkbox"] {
   left: 6px;
   top: 7px;
 }
-/* line 288, ../scss/blocks/_buttons.scss */
+/* line 296, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 294, ../scss/blocks/_buttons.scss */
+/* line 302, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 298, ../scss/blocks/_buttons.scss */
+/* line 306, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 305, ../scss/blocks/_buttons.scss */
+/* line 313, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9860,18 +9876,18 @@ input[type="checkbox"] {
   cursor: pointer;
   width: 76px;
 }
-/* line 316, ../scss/blocks/_buttons.scss */
+/* line 324, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 318, ../scss/blocks/_buttons.scss */
+/* line 326, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 324, ../scss/blocks/_buttons.scss */
+/* line 332, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9879,44 +9895,44 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
 }
-/* line 332, ../scss/blocks/_buttons.scss */
+/* line 340, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 338, ../scss/blocks/_buttons.scss */
+/* line 346, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 343, ../scss/blocks/_buttons.scss */
+/* line 351, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -895px;
+  background-position: 0 -999px;
   height: 28px;
   width: 21px;
 }
-/* line 349, ../scss/blocks/_buttons.scss */
+/* line 357, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -951px;
+  background-position: 0 -971px;
   height: 28px;
   width: 21px;
 }
-/* line 355, ../scss/blocks/_buttons.scss */
+/* line 363, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -923px;
+  background-position: 0 -943px;
   height: 28px;
   width: 21px;
 }
-/* line 360, ../scss/blocks/_buttons.scss */
+/* line 368, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 366, ../scss/blocks/_buttons.scss */
+/* line 374, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -10210,7 +10226,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10237,7 +10253,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10268,7 +10284,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -10277,7 +10293,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10303,7 +10319,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -10334,7 +10350,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10538,7 +10554,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10607,7 +10623,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -11847,7 +11863,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:first-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -845px;
+  background-position: 0 -918px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -11859,7 +11875,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:last-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -870px;
+  background-position: 0 -893px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -13894,7 +13910,7 @@ html[xmlns] .flexslider .slides {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -14150,7 +14166,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -979px;
+  background-position: 0 -1027px;
   height: 29px;
   width: 29px;
   content: '';
@@ -14220,7 +14236,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -14244,7 +14260,7 @@ input.notify-changes {
 .community-downloads .form-actions .add-new-download-link:before, .community-forums .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -1008px;
+  background-position: 0 -1056px;
   height: 15px;
   width: 15px;
   content: '';
@@ -14271,7 +14287,7 @@ input.notify-changes {
 .community-downloads .download-license-red:before, .community-forums .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -373px;
+  background-position: 0 -394px;
   height: 21px;
   width: 18px;
 }
@@ -14283,7 +14299,7 @@ input.notify-changes {
 .community-downloads .download-license-green:before, .community-forums .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -394px;
+  background-position: 0 -373px;
   height: 21px;
   width: 18px;
 }
@@ -14431,7 +14447,7 @@ input.notify-changes {
 }
 /* line 106, ../scss/pages/_test-coverage.scss */
 .scanned-image .img-loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -14477,7 +14493,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -14583,7 +14599,7 @@ input.notify-changes {
   *zoom: 1;
   background: #fff;
 }
-/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .transaction-list-actions:after {
   content: "";
   display: table;
@@ -14619,12 +14635,12 @@ input.notify-changes {
 
 /* line 90, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 /* line 93, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 97, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
@@ -14649,12 +14665,12 @@ input.notify-changes {
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
   vertical-align: middle;
 }
 /* line 129, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 
 /* line 138, ../scss/pages/_transaction-log.scss */
@@ -14689,11 +14705,53 @@ input.notify-changes {
   margin-top: 15px;
 }
 
+/* line 35, ../scss/pages/_products.scss */
+.product-page .product-page-header {
+  border-bottom: 1px solid #e7e7e7;
+  margin: 0 -15px 20px -15px;
+  padding: 0 15px 10px 15px;
+}
+/* line 40, ../scss/pages/_products.scss */
+.product-page .product-page-header h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+}
+/* line 46, ../scss/pages/_products.scss */
+.product-page .product-page-header h1 .btn {
+  margin-left: 10px;
+}
+/* line 52, ../scss/pages/_products.scss */
+.product-page .product-identifiers {
+  margin: 0 0 15px 0;
+  padding: 0 0 15px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+/* line 57, ../scss/pages/_products.scss */
+.product-page .product-identifiers .btn {
+  margin-left: 5px;
+}
+/* line 62, ../scss/pages/_products.scss */
+.product-page .product-name {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+/* line 67, ../scss/pages/_products.scss */
+.product-page .product-attributes {
+  font-size: 12px;
+}
+/* line 70, ../scss/pages/_products.scss */
+.product-page .product-attributes li {
+  display: inline-block;
+  padding: 0 19px 4px 0;
+}
+
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -15347,7 +15405,7 @@ input.notify-changes {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -258px;
+  background-position: 0 -218px;
   height: 24px;
   width: 12px;
 }
@@ -15359,7 +15417,7 @@ input.notify-changes {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -218px;
+  background-position: 0 -258px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -15442,7 +15500,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -461px;
+  background-position: 0 -437px;
   height: 24px;
   width: 28px;
 }
@@ -15457,7 +15515,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -437px;
+  background-position: 0 -461px;
   height: 24px;
   width: 28px;
 }
@@ -15500,7 +15558,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -15510,7 +15568,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
