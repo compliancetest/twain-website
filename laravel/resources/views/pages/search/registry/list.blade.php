@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <div class="log-results-table-wrapper">
+    <div class="blue-colored-table-wrapper">
         <div class="transaction-list-actions">
             <div class="col-md-9" style="font-size: larger;">
                 @if($results->getPath('hits/found'))
@@ -13,7 +13,7 @@
                 <a href="#" class="btn btn-success btn-with-icon btn-download download-site">Download Results</a>
             </div>
         </div>
-        <table class="table colored-parent-table log-results-table">
+        <table class="table blue-colored-table">
             <thead>
             <tr>
                 <th>Product</th>
