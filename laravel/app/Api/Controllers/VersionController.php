@@ -89,7 +89,7 @@ class VersionController extends BaseApiController
     }
 
     /**
-    * @api {get} /v1/apiversion Get REST API version
+    * @api {get} /apiversion Get REST API version
     *
     * @apiName Latest API version
     * @apiGroup Helpers
