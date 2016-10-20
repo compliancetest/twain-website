@@ -367,11 +367,12 @@ class VerifyRequestsController extends Controller
     public function imageViewerPopup($communitySlug, $verifyRequestId, $transactionId)
     {
         $verifyRequest = VerifyRequest::find($verifyRequestId);
+        $transaction = Transaction::find($transactionId);
         return view('pages.my.verify_requests.image_viewer_popup')->with([
-            'transaction' => Transaction::find($transactionId),
+            'transaction' => $transaction,
             'verifyRequest' => $verifyRequest,
             'communitySlug' => $communitySlug,
-            'canModerate' => $verifyRequest->assignee_id == Auth::user()->ID,
+            'canModerate' => $verifyRequest->assignee_id == Auth::user()->ID && TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING',
         ]);
     }
 
