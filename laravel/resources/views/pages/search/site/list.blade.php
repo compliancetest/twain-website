@@ -62,7 +62,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="5" class="text-center">No data found</td>
+                    <td colspan="{{ is_super_admin() ? 6 : 5 }}" class="text-center">No data found</td>
                 </tr>
             @endif
             </tbody>
