@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "/v1/apiversion",
+    "url": "/apiversion",
     "title": "Get REST API version",
     "name": "Latest_API_version",
     "group": "Helpers",
