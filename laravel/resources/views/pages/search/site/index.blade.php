@@ -70,6 +70,14 @@
                 $('#filterDate2').datepicker('show');
             });
 
+            $('body').on('focus', '#q', function(){
+                $('.btn-confirm').prop('disabled', 'disabled');
+            });
+
+             $('body').on('blur', '#q', function(){
+                $('.btn-confirm').removeAttr('disabled');
+            });
+
             $('body').on('click', '.delete_search_entry', function(){
                 $('#entry_id').val($('.delete_search_entry').data('id'));
             });

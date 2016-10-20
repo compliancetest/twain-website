@@ -145,6 +145,14 @@
                 getTransactionFilters(form.serialize());
             });
 
+            $('body').on('focus', '#q', function(){
+                $('.btn-confirm').prop('disabled', 'disabled');
+            });
+
+             $('body').on('blur', '#q', function(){
+                $('.btn-confirm').removeAttr('disabled');
+            });
+
 
             $('body').on('submit', '#filterByForm', function (e) {
                 e.preventDefault();
