@@ -101,3 +101,10 @@ input[type="radio"],
 input[type="checkbox"]{
   margin-top: 0;
 }
+
+.radio-group,
+.checkboxes-group{
+  .radio, .checkbox{
+    margin-top: 0;
+  }
+}

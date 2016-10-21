@@ -4,7 +4,7 @@
 
 <div class="container main-container">
     <div class="main-content product-page">
-        <div class="product-page-header clearfix">
+        <div class="page-title">
             <a href="#" onclick="window.print();" class="btn btn-primary btn-with-icon btn-print pull-right">Print</a>
             <h1 class="pull-left">Product Details <a href="/my-products/" class="btn btn-default btn-with-icon btn-back" data-tooltip="tooltip" title="Back to My Products">Back</a></h1>
         </div>
