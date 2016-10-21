@@ -163,6 +163,13 @@
                 })
             });
 
+            $('body').on('click', '.sortby', function (e) {
+                e.preventDefault();
+                $('#orderby').val($(this).data('type'));
+                $('#order').val($(this).data('order'));
+                $('#filterByForm').submit();
+            });
+
 
             $('body').on('click', '#filterByForm .clear-filter', function (e) {
                 $(this).parent().find('input, select').val('');

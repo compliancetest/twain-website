@@ -53,6 +53,8 @@
             @if($request->get('date_to') && $request->get('date_to') !== '')<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
     </div>
+    <input type="hidden" name="orderby" id="orderby">
+    <input type="hidden" name="order" id="order">
 
     <div class="filter-box-footer">
         <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>

@@ -53,7 +53,7 @@
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterLevel">Role:</label>
+            <label for="filterLevel">Level:</label>
             <select class="form-control" id="filterLevel" name="level">
                 <option value="">- All -</option>
                 @foreach($results->getPath('facets/level/buckets') as $postType)
@@ -94,6 +94,8 @@
             </div>
             @if($request->get('date_to') && $request->get('date_to') !== '')<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
+        <input type="hidden" name="orderby" id="orderby">
+        <input type="hidden" name="order" id="order">
     </div>
 
     <div class="filter-box-footer">

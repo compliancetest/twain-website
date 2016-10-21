@@ -127,7 +127,7 @@
                                 <div class="header-search-type-inner">
                                     <select class="header-search-type-field">
                                         <option value="site">Site</option>
-                                        <option value="registry">Registry</option>
+                                        <option value="registry" @if($registrySearch) selected="selected" @endif>Registry</option>
                                     </select>
                                 </div>
                             </div>
