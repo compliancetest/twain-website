@@ -41,6 +41,11 @@
     background: #f0f0f0;
     @include box-shadow(0 12px 10px -10px rgba(0, 0, 0, 0.2) inset);
     padding: 15px;
+
+    .btn{
+      margin-right: 5px;
+    }
+
   }
 
   .color-box-loading{
