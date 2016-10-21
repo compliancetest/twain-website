@@ -4,9 +4,9 @@
 
 <div class="container main-container">
     <div class="main-content product-page">
-        <div class="product-page-header clearfix">
-            <a href="/my-products/" class="btn btn-primary btn-with-icon btn-print pull-right">Print</a>
-            <h1 class="pull-left">Product Details <a href="#" class="btn btn-default btn-with-icon btn-back" data-tooltip="tooltip" title="Back to My Products">Back</a></h1>
+        <div class="page-title">
+            <a href="#" onclick="window.print();" class="btn btn-primary btn-with-icon btn-print pull-right">Print</a>
+            <h1 class="pull-left">Product Details <a href="/my-products/" class="btn btn-default btn-with-icon btn-back" data-tooltip="tooltip" title="Back to My Products">Back</a></h1>
         </div>
         <div class="product-info">
             <div class="product-identifiers clearfix">
@@ -32,16 +32,14 @@
         </div>
 
 
-        <div class="claims-list-wrapper">
-            <div class="claims-list-title">
-                <h4>Test Plans and Compliance Claims</h4>
-            </div>
-            <table class="claims-list">
+        <h2 class="product-subtitle">Test Plans and Compliance Claims</h2>
+        <div class="blue-colored-table-wrapper table-responsive">
+            <table class="table blue-colored-table">
                 <thead>
                     <tr>
-                        <th>Claim ID</th>
-                        <th>Issuer</th>
-                        <th>Suite</th>
+                        <th class="text-left">Claim ID</th>
+                        <th class="text-left">Issuer</th>
+                        <th class="text-left">Suite</th>
                         <th>Level</th>
                         <th>Role</th>
                         <th>Status</th>
@@ -54,11 +52,53 @@
                         <td>6bdb04a5-5048-47ab-b52e-61ac798023ad</td>
                         <td><a href="#">twain.org</a></td>
                         <td><a href="#">Scanning Operations – Data Sources v1.0</a></td>
-                        <td>A</td>
-                        <td>DataSource</td>
-                        <td>Verified</td>
-                        <td>2016-09-06</td>
-                        <td><a href="#">View</a>&nbsp;|&nbsp;<a href="">Download</a></td>
+                        <td class="text-center">A</td>
+                        <td class="text-center">DataSource</td>
+                        <td class="text-center">Verified</td>
+                        <td class="text-center">2016-09-06</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-primary btn-with-icon btn-view">View</a>
+                            <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6bdb04a5-5048-47ab-b52e-61ac798023ad</td>
+                        <td><a href="#">twain.org</a></td>
+                        <td><a href="#">Scanning Operations – Data Sources v1.0</a></td>
+                        <td class="text-center">A</td>
+                        <td class="text-center">DataSource</td>
+                        <td class="text-center">Verified</td>
+                        <td class="text-center">2016-09-06</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-primary btn-with-icon btn-view">View</a>
+                            <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6bdb04a5-5048-47ab-b52e-61ac798023ad</td>
+                        <td><a href="#">twain.org</a></td>
+                        <td><a href="#">Scanning Operations – Data Sources v1.0</a></td>
+                        <td class="text-center">A</td>
+                        <td class="text-center">DataSource</td>
+                        <td class="text-center">Verified</td>
+                        <td class="text-center">2016-09-06</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-primary btn-with-icon btn-view">View</a>
+                            <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6bdb04a5-5048-47ab-b52e-61ac798023ad</td>
+                        <td><a href="#">twain.org</a></td>
+                        <td><a href="#">Scanning Operations – Data Sources v1.0</a></td>
+                        <td class="text-center">A</td>
+                        <td class="text-center">DataSource</td>
+                        <td class="text-center">Verified</td>
+                        <td class="text-center">2016-09-06</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-primary btn-with-icon btn-view">View</a>
+                            <a href="#" class="btn btn-success btn-with-icon btn-download">Download</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

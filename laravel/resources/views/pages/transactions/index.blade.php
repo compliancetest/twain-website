@@ -28,16 +28,16 @@
     </div>
 
     <div class="main-content">
-        <div class="transaction-filter">
-            <div class="transaction-filter-title">Filter By:</div>
-            <div class="transaction-filter-content block-loading-wrapper">
+        <div class="filter-box">
+            <div class="filter-box-title">Filter By:</div>
+            <div class="filter-box-content block-loading-wrapper">
 
                 @include('pages.transactions.filters')
 
             </div>
         </div>
         <div class="block-loading-wrapper">
-            <div class="transaction-list-actions">
+            <div class="filter-list-actions transaction-list-actions">
                 <div class="pull-left">
                     <a href="#bulkAuditModal" data-toggle="modal" class="btn btn-success btn-with-icon btn-trigger bulk_audit"
                            data-tooltip="tooltip" title="Select multiple Test Results as Audit Records">Bulk Audit</a>
@@ -459,23 +459,11 @@
             });
         });
 
-        /**
-         * Extract GET param value from URL
-         * @param url
-         * @param key
-         * @returns {Array|{index: number, input: string}|string}
-         */
-        function getUrlVar(url, key){
-            var result = new RegExp(key + "=([^&]*)", "i").exec(url);
-            return result && unescape(result[1]) || "";
-        }
-
         $('body').on('click', '.pagination a', function(e){
             e.preventDefault();
             $('#filterBySpinner, #loadLogResultsSpinner').show();
             var link = $(this);
             var form = $('#filterByForm');
-            console.log(getUrlVar(link.attr('href'), 'page'));
             $.ajax({
                 url: '/transactions/transactions-list',
                 type: 'get',
@@ -493,13 +481,13 @@
 
         $('body').on('click', '.btn-clear', function () {
             $('#filterByForm')[0].reset();
-            getTransactionFilters();
+            getBoxFilters('','/transactions/filters');
         });
 
         $('body').on('change', '#filterByForm .form-control', function () {
             $('#filterBySpinner').show();
             var form = $('#filterByForm');
-            getTransactionFilters(form.serialize());
+            getBoxFilters(form.serialize(),'/transactions/filters');
         });
 
         $('body').on('change', '.auditRecordCheckbox', function (e) {
@@ -580,7 +568,7 @@
         $('body').on('click', '#filterByForm .clear-filter', function (e) {
             $(this).parent().find('input, select').val('');
             var form = $('#filterByForm');
-            getTransactionFilters(form.serialize());
+            getBoxFilters(form.serialize(),'/transactions/filters');
         });
 
         $('#collapseAllResults').click(function () {
@@ -599,29 +587,7 @@
                 $('.transaction-list-actions .btn').attr('data-tooltip', 'tooltip');
             }
         });
-
-        /**
-         * Load actual filters data
-         * @param data Serialised form data
-         */
-        function getTransactionFilters(data){
-            $('#filterBySpinner').show();
-            $.ajax({
-                url: '/transactions/filters',
-                type: 'get',
-                data: data,
-                error: function (jqXHR, status) {
-                },
-                success: function (rsp) {
-                    $('.transaction-filter-content').html(rsp.html);
-                },
-                complete: function () {
-                    $('#filterBySpinner').hide();
-                }
-            })
-        }
-
-
+        
     });
 </script>
 @stop

@@ -5,9 +5,9 @@
     <div class="container main-container">
 
         <div class="main-content">
-            <div class="transaction-filter">
-                <div class="transaction-filter-title">Filter By:</div>
-                <div class="transaction-filter-content block-loading-wrapper">
+            <div class="filter-box">
+                <div class="filter-box-title">Filter By:</div>
+                <div class="filter-box-content block-loading-wrapper">
 
                     @include('pages.search.site.filters')
 
@@ -15,11 +15,11 @@
             </div>
             <div class="block-loading-wrapper">
 
-                <div id="log-result-table">
+                <div id="site-search-results-table">
                     @include('pages.search.site.list')
                 </div>
 
-                <div id="loadLogResultsSpinner" class="block-loading">
+                <div id="loadSiteSearchResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -62,8 +62,20 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-            $('body').on('click', '.filterCalendar', function () {
-                $('#filterDate').datepicker('show');
+            $('body').on('click', '.filterCalendar1', function () {
+                $('#filterDate1').datepicker('show');
+            });
+
+            $('body').on('click', '.filterCalendar2', function () {
+                $('#filterDate2').datepicker('show');
+            });
+
+            $('body').on('focus', '#q', function(){
+                $('.btn-confirm').prop('disabled', 'disabled');
+            });
+
+             $('body').on('blur', '#q', function(){
+                $('.btn-confirm').removeAttr('disabled');
             });
 
             $('body').on('click', '.delete_search_entry', function(){
@@ -94,20 +106,9 @@
                 });
             });
 
-            /**
-             * Extract GET param value from URL
-             * @param url
-             * @param key
-             * @returns {Array|{index: number, input: string}|string}
-             */
-            function getUrlVar(url, key) {
-                var result = new RegExp(key + "=([^&]*)", "i").exec(url);
-                return result && unescape(result[1]) || "";
-            }
-
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadSiteSearchResultsSpinner').show();
                 var link = $(this);
                 var form = $('#filterByForm');
                 $.ajax({
@@ -117,17 +118,17 @@
                     error: function (jqXHR, status) {
                     },
                     success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
+                        $('#site-search-results-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadSiteSearchResultsSpinner').hide();
                     }
                 });
             });
 
             $('body').on('click', '.btn-clear', function () {
                 $('#filterByForm')[0].reset();
-                getTransactionFilters();
+                getBoxFilters('', '/search-results/filters');
             });
 
             $('body').on('click', '.download-site', function (e) {
@@ -138,13 +139,13 @@
             $('body').on('change', '#filterByForm .form-control', function () {
                 $('#filterBySpinner').show();
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(), '/search-results/filters');
             });
 
 
             $('body').on('submit', '#filterByForm', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadSiteSearchResultsSpinner').show();
 
                 var form = $('#filterByForm');
                 $.ajax({
@@ -154,10 +155,10 @@
                     error: function (jqXHR, status) {
                     },
                     success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
+                        $('#site-search-results-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadSiteSearchResultsSpinner').hide();
                     }
                 })
             });
@@ -166,29 +167,9 @@
             $('body').on('click', '#filterByForm .clear-filter', function (e) {
                 $(this).parent().find('input, select').val('');
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(), '/search-results/filters');
             });
 
-            /**
-             * Load actual filters data
-             * @param data Serialised form data
-             */
-            function getTransactionFilters(data) {
-                $('#filterBySpinner').show();
-                $.ajax({
-                    url: '/search-results/filters',
-                    type: 'get',
-                    data: data,
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-            }
         });
     </script>
 @stop

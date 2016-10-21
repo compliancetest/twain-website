@@ -1,6 +1,38 @@
 [
   {
     "type": "get",
+    "url": "/apiversion",
+    "title": "Get REST API version",
+    "name": "Latest_API_version",
+    "group": "Helpers",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": {\n    \"version\": \"v1\"\n  },\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "version": "1.0.0",
+    "filename": "app/Api/Controllers/VersionController.php",
+    "groupTitle": "Helpers"
+  },
+  {
+    "type": "get",
     "url": "/v1/version",
     "title": "Get latest version",
     "parameter": {

@@ -11,7 +11,7 @@ class TransactionExplanationLogs extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'message', 'user_id', 'is_support'
+        'message', 'user_id', 'is_support', 'created_at', 'updated_at'
     ];
 
     /**

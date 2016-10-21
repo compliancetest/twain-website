@@ -1,6 +1,6 @@
 <div class="table-responsive">
-    <div class="log-results-table-wrapper">
-        <table class="table colored-parent-table log-results-table">
+    <div class="blue-colored-table-wrapper">
+        <table class="table blue-colored-table">
             <thead>
             <tr>
                 <th>Execution Id</th>

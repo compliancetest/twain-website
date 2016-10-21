@@ -1107,3 +1107,36 @@ function formatErrorMessage(jqXHR, exception) {
         return ('Uncaught Error.\n' + jqXHR.responseText);
     }
 }
+
+/**
+ * Extract GET param value from URL
+ * @param url
+ * @param key
+ * @returns {Array|{index: number, input: string}|string}
+ */
+function getUrlVar(url, key) {
+    var result = new RegExp(key + "=([^&]*)", "i").exec(url);
+    return result && unescape(result[1]) || "";
+}
+
+/**
+ * Load actual filters data
+ * @param data Serialised form data
+ * @param url Request URL
+ */
+function getBoxFilters(data, url) {
+    $('#filterBySpinner').show();
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: data,
+        error: function (jqXHR, status) {
+        },
+        success: function (rsp) {
+            $('.filter-box-content').html(rsp.html);
+        },
+        complete: function () {
+            $('#filterBySpinner').hide();
+        }
+    })
+}

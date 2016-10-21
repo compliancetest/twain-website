@@ -1,0 +1,68 @@
+.filter-box{
+
+  .filter-box-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  .filter-box-content{
+    border: 1px solid #d7d7d7;
+    padding: 11px 20px 0 20px;
+
+    .calendar-icon{
+      @include iconsSprite(calendar);
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    label{
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 1px 0;
+      line-height: normal;
+    }
+
+    select{
+      option{
+        padding: 3px 5px;
+      }
+    }
+
+    .clear-filter{
+      position: absolute;
+      color: #e33f3f;
+      text-shadow:0 1px 1px rgba(0,0,0, 0.5);
+      font-size: 10px;
+      font-weight: bold;
+      right: -4px;
+      top: 18px;
+      line-height: 28px;
+      display: block;
+      padding: 0 4px;
+      cursor: pointer;
+    }
+
+  }
+
+  .filter-box-footer{
+    margin: 15px -20px 0 -20px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #d7d7d7;
+    padding: 9px 20px;
+    overflow: hidden;
+  }
+
+}
+
+.filter-list-actions{
+  padding: 10px 0;
+  @include pie-clearfix;
+  background: #fff;
+
+  .filter-results-count{
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+}

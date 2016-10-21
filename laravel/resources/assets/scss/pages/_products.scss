@@ -1,9 +1,4 @@
 .products{
-  h1{
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-  }
 
   .edit-product{
     .organization-group{
@@ -32,20 +27,15 @@
 }
 
 .product-page{
-  .product-page-header{
-    border-bottom: 1px solid #e7e7e7;
-    margin: 0 -15px 20px -15px;
-    padding: 0 15px 10px 15px;
 
-    h1{
-      margin: 0;
-      font-size: 18px;
-      line-height: 22px;
-      font-weight: 600;
+  h1{
+    margin: 0;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
 
-      .btn{
-        margin-left: 10px;
-      }
+    .btn{
+      margin-left: 10px;
     }
   }
 
@@ -72,5 +62,18 @@
       padding: 0 19px 4px 0;
     }
   }
+
+  .product-info{
+    border-bottom: 1px solid #e7e7e7;
+    margin: 0 0 20px;
+    padding: 0 0 10px;
+  }
+
+  .product-subtitle{
+    font-size: 17px;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+  }
+
 }
 

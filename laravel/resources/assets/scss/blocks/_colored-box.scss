@@ -20,6 +20,43 @@
         text-decoration: none;
       }
     }
+
+    .collapse-arrow{
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 30px;
+      text-align: center;
+      padding: 6px 0;
+      line-height: 16px;
+      border-right: 1px solid #145489;
+      background: rgba(0,0,0,0.1);
+      font-size: 11px;
+      @include border-radius(4px 0 0 0);
+
+      .glyphicon-triangle-right{
+        display: none;
+      }
+
+      &.collapsed{
+        .glyphicon-triangle-bottom{
+          display: none;
+        }
+        .glyphicon-triangle-right{
+          display: inline-block;
+        }
+
+      }
+    }
+
+  }
+
+  &.collapsible-box{
+    .colored-box-header{
+      padding-left: 45px;
+      position: relative;
+    }
   }
 
   .colored-box-body{
@@ -41,6 +78,11 @@
     background: #f0f0f0;
     @include box-shadow(0 12px 10px -10px rgba(0, 0, 0, 0.2) inset);
     padding: 15px;
+
+    .btn{
+      margin-right: 5px;
+    }
+
   }
 
   .color-box-loading{

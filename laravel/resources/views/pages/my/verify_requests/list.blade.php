@@ -181,13 +181,9 @@
                                                         <td class="text-center">{{ formatDate($transaction->created_at, 'Y-m-d H:i:s') }}</td>
                                                         @if(isImageViewerEnabled())
                                                             <td class="text-center">
-                                                                @if($testOutcomeStatus == 'Pending')
-                                                                    <a class="btn btn-success showImageViewer"
-                                                                       href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->getMetaByKey('community_id'))->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
-                                                                       data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
-                                                                @else
-                                                                    &nbsp;
-                                                                @endif
+                                                                <a class="btn btn-success showImageViewer"
+                                                                   href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->getMetaByKey('community_id'))->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
+                                                                   data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                                                             </td>
                                                         @endif
                                                     </tr>

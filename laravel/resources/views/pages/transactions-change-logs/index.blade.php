@@ -25,14 +25,15 @@
         </div>
 
         <div class="main-content">
-            <div class="transaction-filter">
-                <div class="transaction-filter-title">Filter By:</div>
-                <div class="transaction-filter-content block-loading-wrapper">
+            <div class="filter-box">
+                <div class="filter-box-title">Filter By:</div>
+                <div class="filter-box-content block-loading-wrapper">
 
                     @include('pages.transactions-change-logs.filters')
 
                 </div>
             </div>
+            <br/>
             <div class="block-loading-wrapper">
 
                 <div id="log-result-table">
@@ -61,17 +62,6 @@
                 $('#filterDate').datepicker('show');
             });
 
-            /**
-             * Extract GET param value from URL
-             * @param url
-             * @param key
-             * @returns {Array|{index: number, input: string}|string}
-             */
-            function getUrlVar(url, key) {
-                var result = new RegExp(key + "=([^&]*)", "i").exec(url);
-                return result && unescape(result[1]) || "";
-            }
-
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
                 $('#filterBySpinner, #loadLogResultsSpinner').show();
@@ -94,13 +84,13 @@
 
             $('body').on('click', '.btn-clear', function () {
                 $('#filterByForm')[0].reset();
-                getTransactionFilters();
+                getBoxFilters('','/test-outcome-logs/filters');
             });
 
             $('body').on('change', '#filterByForm .form-control', function () {
                 $('#filterBySpinner').show();
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(),'/test-outcome-logs/filters');
             });
 
 
@@ -140,29 +130,9 @@
             $('body').on('click', '#filterByForm .clear-filter', function (e) {
                 $(this).parent().find('input, select').val('');
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(),'/test-outcome-logs/filters');
             });
 
-            /**
-             * Load actual filters data
-             * @param data Serialised form data
-             */
-            function getTransactionFilters(data) {
-                $('#filterBySpinner').show();
-                $.ajax({
-                    url: '/test-outcome-logs/filters',
-                    type: 'get',
-                    data: data,
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-            }
         });
     </script>
 @stop

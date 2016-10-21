@@ -4,7 +4,9 @@
 
     <div class="container main-container">
         <div class="main-content products">
-            <h1>Add/Edit product page</h1>
+            <div class="page-title">
+                <h1>Add/Edit product page</h1>
+            </div>
             <div class="edit-product">
                 <div class="colored-box">
                     <div class="colored-box-header">Information</div>
