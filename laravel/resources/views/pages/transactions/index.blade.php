@@ -51,7 +51,7 @@
                     @endif
                      <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
                                data-tooltip="tooltip" title="Permanently remove Test Results (this cannot be undone!)">Delete Test Results</a>
-                    <button type="button" class="btn btn-default" id="collapseAllResults" data-tooltip="tooltip" title="Close all Test Result details and return to Test Result list">Collapse All Results</button>
+                    <button type="button" class="btn btn-default btn-with-icon btn-collapse" id="collapseAllResults" data-tooltip="tooltip" title="Close all Test Result details and return to Test Result list">Collapse All Results</button>
                 </div>
                 <div class="pull-right pagination-box">
                     <div class="form-inline">

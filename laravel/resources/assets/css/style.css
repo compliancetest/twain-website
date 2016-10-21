@@ -8935,7 +8935,7 @@ body.modal-open,
 #messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -485px;
+  background-position: 0 -477px;
   height: 24px;
   width: 24px;
 }
@@ -8948,7 +8948,7 @@ body.modal-open,
 #messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -509px;
+  background-position: 0 -453px;
   height: 24px;
   width: 24px;
 }
@@ -8957,7 +8957,7 @@ body.modal-open,
 .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -120px;
+  background-position: -11px -122px;
   height: 11px;
   width: 11px;
   padding: 0 3px 0 0;
@@ -8968,7 +8968,7 @@ body.modal-open,
 .collapsed .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -13px -109px;
+  background-position: 0 -133px;
   height: 11px;
   width: 11px;
 }
@@ -9029,7 +9029,7 @@ body.modal-open,
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -78px;
+  background-position: -8px 0;
   height: 9px;
   width: 9px;
 }
@@ -9060,7 +9060,7 @@ body.modal-open,
 .chat-list li.support-answer .message-body:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -13px 0;
+  background-position: -11px -80px;
   height: 9px;
   width: 9px;
   content: '';
@@ -9154,7 +9154,7 @@ select.form-control {
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -190px;
+  background-position: -14px -192px;
   height: 14px;
   width: 14px;
 }
@@ -9162,7 +9162,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -485px;
+  background-position: 0 -477px;
   height: 24px;
   width: 24px;
 }
@@ -9176,7 +9176,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -178px;
+  background-position: -10px -156px;
   height: 12px;
   width: 12px;
 }
@@ -9184,7 +9184,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -509px;
+  background-position: 0 -453px;
   height: 24px;
   width: 24px;
 }
@@ -9234,7 +9234,7 @@ input[type="checkbox"] {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -415px;
+  background-position: 0 -383px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9464,7 +9464,7 @@ input[type="checkbox"] {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -14px -142px;
+  background-position: -14px -144px;
   height: 12px;
   width: 13px;
   content: '';
@@ -9482,7 +9482,7 @@ input[type="checkbox"] {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -78px;
+  background-position: 0 -80px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9548,7 +9548,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -677px;
+  background-position: 0 -525px;
   height: 24px;
   width: 18px;
 }
@@ -9556,7 +9556,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -773px;
+  background-position: 0 -693px;
   height: 24px;
   width: 18px;
 }
@@ -9564,7 +9564,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -605px;
+  background-position: 0 -597px;
   height: 24px;
   width: 18px;
 }
@@ -9572,7 +9572,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -629px;
+  background-position: 0 -765px;
   height: 24px;
   width: 18px;
 }
@@ -9580,7 +9580,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -533px;
+  background-position: 0 -501px;
   height: 24px;
   width: 18px;
 }
@@ -9588,7 +9588,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -653px;
+  background-position: 0 -621px;
   height: 24px;
   width: 18px;
 }
@@ -9596,7 +9596,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -749px;
+  background-position: 0 -789px;
   height: 24px;
   width: 18px;
 }
@@ -9604,7 +9604,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -581px;
+  background-position: 0 -549px;
   height: 24px;
   width: 18px;
 }
@@ -9612,7 +9612,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -797px;
+  background-position: 0 -645px;
   height: 24px;
   width: 18px;
 }
@@ -9620,7 +9620,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-clear:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -821px;
+  background-position: 0 -813px;
   height: 24px;
   width: 18px;
 }
@@ -9628,7 +9628,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -701px;
+  background-position: 0 -717px;
   height: 24px;
   width: 18px;
 }
@@ -9636,7 +9636,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-view:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -557px;
+  background-position: 0 -573px;
   height: 24px;
   width: 18px;
 }
@@ -9644,19 +9644,27 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -725px;
+  background-position: 0 -669px;
   height: 24px;
   width: 18px;
 }
 
-/* line 195, ../scss/blocks/_buttons.scss */
+/* line 29, ../scss/_mixins.scss */
+.btn-collapse:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 -741px;
+  height: 24px;
+  width: 18px;
+}
+
+/* line 199, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 201, ../scss/blocks/_buttons.scss */
+/* line 205, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9670,114 +9678,114 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -98px;
+  background-position: -12px -100px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -98px;
+  background-position: 0 -100px;
   height: 11px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-copy:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -154px;
+  background-position: 0 -156px;
   height: 11px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -154px;
+  background-position: 0 -180px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -166px;
+  background-position: 0 -168px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   background-image: url('../images/icons.png');
-  background-position: -1px 0;
+  background-position: -17px 0;
   height: 9px;
   width: 12px;
 }
-/* line 229, ../scss/blocks/_buttons.scss */
+/* line 233, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -190px;
+  background-position: 0 -206px;
   height: 13px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -87px;
+  background-position: -10px -89px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-filter:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -242px;
+  background-position: 0 -221px;
   height: 10px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: -11px -120px;
+  background-position: 0 -122px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -109px;
+  background-position: 0 -111px;
   height: 11px;
   width: 13px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -204px;
+  background-position: -12px -180px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-logout:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -142px;
+  background-position: 0 -144px;
   height: 12px;
   width: 14px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -131px;
+  background-position: -13px -111px;
   height: 11px;
   width: 11px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -166px;
-  height: 12px;
-  width: 12px;
+  background-position: 0 0;
+  height: 11px;
+  width: 8px;
 }
 
-/* line 263, ../scss/blocks/_buttons.scss */
+/* line 267, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9802,37 +9810,37 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 280, ../scss/blocks/_buttons.scss */
+/* line 284, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -87px;
+  background-position: 0 -89px;
   height: 7px;
   width: 10px;
   position: absolute;
   left: 6px;
   top: 7px;
 }
-/* line 288, ../scss/blocks/_buttons.scss */
+/* line 292, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 294, ../scss/blocks/_buttons.scss */
+/* line 298, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 298, ../scss/blocks/_buttons.scss */
+/* line 302, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 305, ../scss/blocks/_buttons.scss */
+/* line 309, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9844,18 +9852,18 @@ input[type="checkbox"] {
   cursor: pointer;
   width: 76px;
 }
-/* line 316, ../scss/blocks/_buttons.scss */
+/* line 320, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 318, ../scss/blocks/_buttons.scss */
+/* line 322, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 324, ../scss/blocks/_buttons.scss */
+/* line 328, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9863,44 +9871,44 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
 }
-/* line 332, ../scss/blocks/_buttons.scss */
+/* line 336, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 338, ../scss/blocks/_buttons.scss */
+/* line 342, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 343, ../scss/blocks/_buttons.scss */
+/* line 347, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -895px;
+  background-position: 0 -922px;
   height: 28px;
   width: 21px;
 }
-/* line 349, ../scss/blocks/_buttons.scss */
+/* line 353, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -951px;
+  background-position: 0 -978px;
   height: 28px;
   width: 21px;
 }
-/* line 355, ../scss/blocks/_buttons.scss */
+/* line 359, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -923px;
+  background-position: 0 -950px;
   height: 28px;
   width: 21px;
 }
-/* line 360, ../scss/blocks/_buttons.scss */
+/* line 364, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 366, ../scss/blocks/_buttons.scss */
+/* line 370, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -10538,7 +10546,7 @@ input[type="checkbox"] {
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -311px;
+  background-position: 0 -279px;
   height: 20px;
   width: 20px;
 }
@@ -10547,7 +10555,7 @@ input[type="checkbox"] {
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -331px;
+  background-position: 0 -299px;
   height: 21px;
   width: 21px;
 }
@@ -10556,7 +10564,7 @@ input[type="checkbox"] {
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -352px;
+  background-position: 0 -320px;
   height: 21px;
   width: 21px;
 }
@@ -11927,7 +11935,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:first-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -845px;
+  background-position: 0 -872px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -11939,7 +11947,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:last-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -870px;
+  background-position: 0 -897px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -13339,7 +13347,7 @@ html[xmlns] .flexslider .slides {
 .filter-box .filter-box-content .calendar-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -204px;
+  background-position: 0 -192px;
   height: 14px;
   width: 14px;
   vertical-align: middle;
@@ -13587,7 +13595,7 @@ html[xmlns] .flexslider .slides {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -218px;
+  background-position: 0 -837px;
   height: 16px;
   width: 16px;
 }
@@ -13595,7 +13603,7 @@ html[xmlns] .flexslider .slides {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -10px -242px;
+  background-position: -10px -221px;
   height: 16px;
   width: 16px;
 }
@@ -13613,7 +13621,7 @@ html[xmlns] .flexslider .slides {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -258px;
+  background-position: -16px -837px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -13684,7 +13692,7 @@ html[xmlns] .flexslider .slides {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -293px;
+  background-position: 0 -261px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -13798,7 +13806,7 @@ html[xmlns] .flexslider .slides {
   content: '';
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 0;
+  background-position: -22px -11px;
   height: 24px;
   width: 1px;
   position: absolute;
@@ -14307,7 +14315,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -979px;
+  background-position: 0 -1006px;
   height: 29px;
   width: 29px;
   content: '';
@@ -14401,7 +14409,7 @@ input.notify-changes {
 .community-downloads .form-actions .add-new-download-link:before, .community-forums .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -1008px;
+  background-position: -12px -206px;
   height: 15px;
   width: 15px;
   content: '';
@@ -14428,7 +14436,7 @@ input.notify-changes {
 .community-downloads .download-license-red:before, .community-forums .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -373px;
+  background-position: 0 -362px;
   height: 21px;
   width: 18px;
 }
@@ -14440,7 +14448,7 @@ input.notify-changes {
 .community-downloads .download-license-green:before, .community-forums .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -394px;
+  background-position: 0 -341px;
   height: 21px;
   width: 18px;
 }
@@ -14479,7 +14487,7 @@ input.notify-changes {
 .coverage-test-case-item {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -51px;
+  background-position: 0 -53px;
   height: 9px;
   width: 22px;
   float: left;
@@ -14491,7 +14499,7 @@ input.notify-changes {
 .coverage-test-case-item.test-excluded {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -42px;
+  background-position: 0 -44px;
   height: 9px;
   width: 22px;
 }
@@ -14499,7 +14507,7 @@ input.notify-changes {
 .coverage-test-case-item.test-failed {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -60px;
+  background-position: 0 -62px;
   height: 9px;
   width: 22px;
 }
@@ -14507,7 +14515,7 @@ input.notify-changes {
 .coverage-test-case-item.test-optional {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -24px;
+  background-position: 0 -11px;
   height: 9px;
   width: 22px;
 }
@@ -14515,7 +14523,7 @@ input.notify-changes {
 .coverage-test-case-item.test-passed {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -33px;
+  background-position: 0 -35px;
   height: 9px;
   width: 22px;
 }
@@ -14523,7 +14531,7 @@ input.notify-changes {
 .coverage-test-case-item.test-skipped {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -69px;
+  background-position: 0 -71px;
   height: 9px;
   width: 22px;
 }
@@ -15416,7 +15424,7 @@ input.notify-changes {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -258px;
+  background-position: 0 -237px;
   height: 24px;
   width: 12px;
 }
@@ -15428,7 +15436,7 @@ input.notify-changes {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -218px;
+  background-position: -12px -237px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -15511,7 +15519,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -461px;
+  background-position: 0 -429px;
   height: 24px;
   width: 28px;
 }
@@ -15526,7 +15534,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -437px;
+  background-position: 0 -405px;
   height: 24px;
   width: 28px;
 }
