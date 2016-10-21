@@ -192,6 +192,14 @@
   @include btnIconsSprite(btn-question);
 }
 
+.btn-print{
+  @include btnIconsSprite(btn-print);
+}
+
+.btn-edit{
+  @include btnIconsSprite(btn-edit);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
