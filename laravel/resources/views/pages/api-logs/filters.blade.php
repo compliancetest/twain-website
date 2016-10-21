@@ -26,16 +26,15 @@
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterDate">Date:</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="filterDate" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date"
+                <input type="text" class="form-control datepicker-form-control" id="filterDate" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date"
                        @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
                 <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
             </div>
             @if(($request->get('date')) && ($request->get('date') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
     </div>
-
-
-    <div class="transaction-filter-footer">
+    
+    <div class="filter-box-footer">
         <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
         &nbsp;&nbsp;
         <button type="button" class="btn btn-default btn-with-icon btn-clear">Clear</button>

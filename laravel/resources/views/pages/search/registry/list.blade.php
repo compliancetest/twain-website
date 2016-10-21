@@ -1,30 +1,32 @@
 <div class="table-responsive">
-    <div class="log-results-table-wrapper">
-        <div class="transaction-list-actions">
-            <div class="col-md-9" style="font-size: larger;">
+    <div class="blue-colored-table-wrapper">
+        <div class="filter-list-actions">
+            <div class="col-md-9">
                 @if($results->getPath('hits/found'))
-                    <?php $page = $request->get('page') ? $request->get('page') : 1;?>
-                    Showing <strong>{{ (($page -1) * 25) + 1 }}</strong> -
-                    <strong>{{ $page * 25 > $results->getPath('hits/found') ? $results->getPath('hits/found') : $page * 25 }}</strong>
-                    of <strong>{{ $results->getPath('hits/found') }}</strong> Results
+                    <div class="filter-results-count">
+                        <?php $page = $request->get('page') ? $request->get('page') : 1;?>
+                        Showing <strong>{{ (($page -1) * 25) + 1 }}</strong> -
+                        <strong>{{ $page * 25 > $results->getPath('hits/found') ? $results->getPath('hits/found') : $page * 25 }}</strong>
+                        of <strong>{{ $results->getPath('hits/found') }}</strong> Results
+                    </div>
                 @endif
             </div>
             <div class="col-md-3 text-right">
                 <a href="#" class="btn btn-success btn-with-icon btn-download download-site">Download Results</a>
             </div>
         </div>
-        <table class="table colored-parent-table log-results-table">
+        <table class="table blue-colored-table sort-table">
             <thead>
             <tr>
-                <th>Product</th>
-                <th>Version</th>
+                <th><a href="#">Product <span class="glyphicon glyphicon-sort-by-attributes"></span></a></th>
+                <th>Version </th>
                 <th>Owner</th>
-                <th>Type</th>
+                <th><a href="#">Type <span class="glyphicon glyphicon-sort"></span></a></th>
                 <th>Test Suite</th>
                 <th>Role</th>
                 <th>Level</th>
                 <th>Status</th>
-                <th>Date</th>
+                <th><a href="#">Date <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></th>
                 @if(is_super_admin())
                     <th>Action</th>
                 @endif
@@ -85,7 +87,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="5" class="text-center">No data found</td>
+                    <td colspan="{{ is_super_admin() ? 10 : 9 }}" class="text-center">No data found</td>
                 </tr>
             @endif
             </tbody>

@@ -1,5 +1,7 @@
 <?php
-
+Route::group(array('prefix' => 'api', 'middleware' => 'api.logs'), function () {
+    Route::get('apiversion', ['uses' => '\App\Api\Controllers\VersionController@apiversion', 'middleware' => ['simpleauth']]);
+});
 Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function () {
 
     Route::post('echo', ['uses' => '\App\Api\Controllers\EchoController@index']);

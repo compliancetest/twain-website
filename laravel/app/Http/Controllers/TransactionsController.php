@@ -205,6 +205,8 @@ class TransactionsController extends Controller
             'message' => $request->get('message'),
             'user_id' => Auth::user()->ID,
             'is_support' => $isSupport,
+            'created_at' => getUTCTimeStamp(date('Y-m-d H:i:s')),
+            'updated_at' => getUTCTimeStamp(date('Y-m-d H:i:s')),
         ]);
 
         $logs = Transaction::find($transactionId)->explanationLogs;
