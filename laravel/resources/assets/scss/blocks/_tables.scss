@@ -219,6 +219,14 @@
                 border-top: solid 1px #1d76c0;
                 padding: 8px 10px;
 
+                a{
+                    color: #ececec;
+
+                    &:hover{
+                        text-decoration: none;
+                    }
+                }
+
                 &:first-child{
                     border-left: 1px solid #1d76c0;
                 }
@@ -270,4 +278,28 @@
         }
     }
 
+}
+
+.sort-table{
+    th{
+        a{
+            display: block;
+            position: relative;
+            color: #fff;
+            padding: 0 15px 0 0;
+
+            &:hover{
+                @include opacity(0.7);
+            }
+
+            .glyphicon{
+                position: absolute;
+                right: 0;
+                top: 4px;
+                text-shadow: none;
+                font-size: 12px;
+            }
+
+        }
+    }
 }

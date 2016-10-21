@@ -8819,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 0 -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8891,7 +8891,7 @@ body.modal-open,
 }
 /* line 125, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -9346,7 +9346,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -10194,7 +10194,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10221,7 +10221,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10252,7 +10252,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -10261,7 +10261,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10287,7 +10287,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -10318,7 +10318,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 197, ../scss/blocks/_tables.scss */
@@ -10340,31 +10340,39 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
   padding: 8px 10px;
 }
 /* line 222, ../scss/blocks/_tables.scss */
+.blue-colored-table > thead > tr > th a {
+  color: #ececec;
+}
+/* line 225, ../scss/blocks/_tables.scss */
+.blue-colored-table > thead > tr > th a:hover {
+  text-decoration: none;
+}
+/* line 230, ../scss/blocks/_tables.scss */
 .blue-colored-table > thead > tr > th:first-child {
   border-left: 1px solid #1d76c0;
 }
-/* line 235, ../scss/blocks/_tables.scss */
+/* line 243, ../scss/blocks/_tables.scss */
 .blue-colored-table > caption + thead > tr:first-child > th,
 .blue-colored-table > colgroup + thead > tr:first-child > th,
 .blue-colored-table > thead:first-child > tr:first-child > th {
   border-top: solid 1px #1d76c0;
 }
-/* line 241, ../scss/blocks/_tables.scss */
+/* line 249, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody {
   border-right: 1px solid #1d76c0;
 }
-/* line 244, ../scss/blocks/_tables.scss */
+/* line 252, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
-/* line 247, ../scss/blocks/_tables.scss */
+/* line 255, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr > td {
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -10375,17 +10383,38 @@ input[type="checkbox"] {
   font-weight: 600;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
 }
-/* line 257, ../scss/blocks/_tables.scss */
+/* line 265, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr > td:first-child {
   border-left: 1px solid #1d76c0;
 }
-/* line 260, ../scss/blocks/_tables.scss */
+/* line 268, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr > td:last-child {
   border-right: 1px solid #1d76c0;
 }
-/* line 268, ../scss/blocks/_tables.scss */
+/* line 276, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
+}
+
+/* line 285, ../scss/blocks/_tables.scss */
+.sort-table th a {
+  display: block;
+  position: relative;
+  color: #fff;
+  padding: 0 15px 0 0;
+}
+/* line 291, ../scss/blocks/_tables.scss */
+.sort-table th a:hover {
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+}
+/* line 295, ../scss/blocks/_tables.scss */
+.sort-table th a .glyphicon {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  text-shadow: none;
+  font-size: 12px;
 }
 
 /* line 1, ../scss/blocks/_statuses.scss */
@@ -10589,7 +10618,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10658,7 +10687,7 @@ input[type="checkbox"] {
 }
 /* line 65, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13295,6 +13324,83 @@ html[xmlns] .flexslider .slides {
     right: 10px;
   }
 }
+/* line 3, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+/* line 9, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content {
+  border: 1px solid #d7d7d7;
+  padding: 11px 20px 0 20px;
+}
+/* line 13, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content .calendar-icon {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: -12px -204px;
+  height: 14px;
+  width: 14px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+/* line 19, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content label {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 1px 0;
+  line-height: normal;
+}
+/* line 27, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content select option {
+  padding: 3px 5px;
+}
+/* line 32, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content .datepicker-form-control[readonly] {
+  background: #fff;
+}
+/* line 36, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-content .clear-filter {
+  position: absolute;
+  color: #e33f3f;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  font-size: 10px;
+  font-weight: bold;
+  right: -4px;
+  top: 18px;
+  line-height: 28px;
+  display: block;
+  padding: 0 4px;
+  cursor: pointer;
+}
+/* line 52, ../scss/blocks/_filters.scss */
+.filter-box .filter-box-footer {
+  margin: 15px -20px 0 -20px;
+  background-color: #f0f0f0;
+  border-top: 1px solid #d7d7d7;
+  padding: 9px 20px;
+  overflow: hidden;
+}
+
+/* line 62, ../scss/blocks/_filters.scss */
+.filter-list-actions {
+  padding: 10px 0;
+  *zoom: 1;
+  background: #fff;
+}
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+.filter-list-actions:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* line 67, ../scss/blocks/_filters.scss */
+.filter-list-actions .filter-results-count {
+  font-size: 14px;
+  line-height: 22px;
+}
+
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -13945,7 +14051,7 @@ html[xmlns] .flexslider .slides {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -14271,7 +14377,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -14482,7 +14588,7 @@ input.notify-changes {
 }
 /* line 106, ../scss/pages/_test-coverage.scss */
 .scanned-image .img-loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -14528,7 +14634,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -14579,78 +14685,7 @@ input.notify-changes {
   margin: 0 0 20px 0;
 }
 
-/* line 3, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-}
-/* line 9, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content {
-  border: 1px solid #d7d7d7;
-  padding: 11px 20px 0 20px;
-}
-/* line 13, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content .calendar-icon {
-  display: inline-block;
-  background-image: url('../images/icons.png');
-  background-position: -12px -204px;
-  height: 14px;
-  width: 14px;
-  vertical-align: middle;
-  cursor: pointer;
-}
-/* line 19, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content label {
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0 0 1px 0;
-  line-height: normal;
-}
-/* line 27, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content select option {
-  padding: 3px 5px;
-}
-/* line 32, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content #filterDate[readonly] {
-  background: #fff;
-}
-/* line 36, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-content .clear-filter {
-  position: absolute;
-  color: #e33f3f;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  font-size: 10px;
-  font-weight: bold;
-  right: -4px;
-  top: 18px;
-  line-height: 28px;
-  display: block;
-  padding: 0 4px;
-  cursor: pointer;
-}
-/* line 52, ../scss/pages/_transaction-log.scss */
-.transaction-filter .transaction-filter-footer {
-  margin: 15px -20px 0 -20px;
-  background-color: #f0f0f0;
-  border-top: 1px solid #d7d7d7;
-  padding: 9px 20px;
-  overflow: hidden;
-}
-
-/* line 62, ../scss/pages/_transaction-log.scss */
-.transaction-list-actions {
-  padding: 10px 0;
-  *zoom: 1;
-  background: #fff;
-}
-/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
-.transaction-list-actions:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-/* line 67, ../scss/pages/_transaction-log.scss */
+/* line 1, ../scss/pages/_transaction-log.scss */
 .transaction-list-actions.fixed {
   position: fixed;
   top: 5px;
@@ -14660,65 +14695,65 @@ input.notify-changes {
   margin-left: 1px;
   z-index: 2;
 }
-/* line 76, ../scss/pages/_transaction-log.scss */
+/* line 10, ../scss/pages/_transaction-log.scss */
 .transaction-list-actions.fixed .pagination-box {
   display: none;
 }
 
-/* line 82, ../scss/pages/_transaction-log.scss */
+/* line 16, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper {
   border-bottom: 1px solid #1d76c0;
 }
-/* line 85, ../scss/pages/_transaction-log.scss */
+/* line 19, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper table {
   margin: 0;
 }
-/* line 89, ../scss/pages/_transaction-log.scss */
+/* line 23, ../scss/pages/_transaction-log.scss */
 .log-results-table-wrapper .block-loading-wrapper {
   min-height: 90px;
 }
 
-/* line 96, ../scss/pages/_transaction-log.scss */
+/* line 30, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
-/* line 99, ../scss/pages/_transaction-log.scss */
+/* line 33, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
-/* line 103, ../scss/pages/_transaction-log.scss */
+/* line 37, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
   border-right: 1px solid #1d76c0;
 }
-/* line 109, ../scss/pages/_transaction-log.scss */
+/* line 43, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-collapse-link {
   float: left;
 }
-/* line 112, ../scss/pages/_transaction-log.scss */
+/* line 46, ../scss/pages/_transaction-log.scss */
 .log-results-table .product-name .product-name-link {
   display: block;
   overflow: hidden;
   margin: 0 0 0 15px;
 }
 
-/* line 122, ../scss/pages/_transaction-log.scss */
+/* line 56, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > thead > tr > th {
   padding: 5px;
 }
-/* line 128, ../scss/pages/_transaction-log.scss */
+/* line 62, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
   vertical-align: middle;
 }
-/* line 135, ../scss/pages/_transaction-log.scss */
+/* line 69, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 
-/* line 144, ../scss/pages/_transaction-log.scss */
+/* line 78, ../scss/pages/_transaction-log.scss */
 .details_row .block-loading-wrapper {
   min-height: 90px;
 }
@@ -14727,7 +14762,7 @@ input.notify-changes {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -15534,7 +15569,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -15544,7 +15579,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

@@ -25,21 +25,22 @@
         </div>
 
         <div class="main-content">
-            <div class="transaction-filter">
-                <div class="transaction-filter-title">Filter By:</div>
-                <div class="transaction-filter-content block-loading-wrapper">
+            <div class="filter-box">
+                <div class="filter-box-title">Filter By:</div>
+                <div class="filter-box-content block-loading-wrapper">
 
                     @include('pages.api-logs.filters')
 
                 </div>
             </div>
+            <br/>
             <div class="block-loading-wrapper">
 
-                <div id="log-result-table">
+                <div class="filter-results-table">
                     @include('pages.api-logs.logs')
                 </div>
 
-                <div id="loadLogResultsSpinner" class="block-loading">
+                <div id="loadApiLogsResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -89,7 +90,7 @@
 
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadApiLogsResultsSpinner').show();
                 var link = $(this);
                 var form = $('#filterByForm');
                 $.ajax({
@@ -99,29 +100,29 @@
                     error: function (jqXHR, status) {
                     },
                     success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
+                        $('.filter-results-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadApiLogsResultsSpinner').hide();
                     }
                 });
             });
 
             $('body').on('click', '.btn-clear', function () {
                 $('#filterByForm')[0].reset();
-                getTransactionFilters();
+                getBoxFilters('','/api-logs/filters');
             });
 
             $('body').on('change', '#filterByForm .form-control', function () {
                 $('#filterBySpinner').show();
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(),'/api-logs/filters');
             });
 
 
             $('body').on('submit', '#filterByForm', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadApiLogsResultsSpinner').show();
 
                 var form = $('#filterByForm');
                 $.ajax({
@@ -131,10 +132,10 @@
                     error: function (jqXHR, status) {
                     },
                     success: function (rsp) {
-                        $('#log-result-table').html(rsp.html);
+                        $('.filter-results-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadApiLogsResultsSpinner').hide();
                     }
                 })
             });
@@ -155,29 +156,9 @@
             $('body').on('click', '#filterByForm .clear-filter', function (e) {
                 $(this).parent().find('input, select').val('');
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(),'/api-logs/filters');
             });
 
-            /**
-             * Load actual filters data
-             * @param data Serialised form data
-             */
-            function getTransactionFilters(data) {
-                $('#filterBySpinner').show();
-                $.ajax({
-                    url: '/api-logs/filters',
-                    type: 'get',
-                    data: data,
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-            }
         });
     </script>
 @stop

@@ -5,9 +5,9 @@
     <div class="container main-container">
 
         <div class="main-content">
-            <div class="transaction-filter">
-                <div class="transaction-filter-title">Filter By:</div>
-                <div class="transaction-filter-content block-loading-wrapper">
+            <div class="filter-box">
+                <div class="filter-box-title">Filter By:</div>
+                <div class="filter-box-content block-loading-wrapper">
 
                     @include('pages.search.registry.filters')
 
@@ -19,7 +19,7 @@
                     @include('pages.search.registry.list')
                 </div>
 
-                <div id="loadLogResultsSpinner" class="block-loading">
+                <div id="loadRegistrySearchResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -98,20 +98,9 @@
                 });
             });
 
-            /**
-             * Extract GET param value from URL
-             * @param url
-             * @param key
-             * @returns {Array|{index: number, input: string}|string}
-             */
-            function getUrlVar(url, key) {
-                var result = new RegExp(key + "=([^&]*)", "i").exec(url);
-                return result && unescape(result[1]) || "";
-            }
-
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadRegistrySearchResultsSpinner').show();
                 var link = $(this);
                 var form = $('#filterByForm');
                 $.ajax({
@@ -124,14 +113,14 @@
                         $('#log-result-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadRegistrySearchResultsSpinner').hide();
                     }
                 });
             });
 
             $('body').on('click', '.btn-clear', function () {
                 $('#filterByForm')[0].reset();
-                getTransactionFilters();
+                getBoxFilters('', '/products-and-services/filters');
             });
 
             $('body').on('click', '.download-site', function (e) {
@@ -142,7 +131,7 @@
             $('body').on('change', '#filterByForm .form-control', function () {
                 $('#filterBySpinner').show();
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(), '/products-and-services/filters');
             });
 
             $('body').on('focus', '#q', function(){
@@ -156,7 +145,7 @@
 
             $('body').on('submit', '#filterByForm', function (e) {
                 e.preventDefault();
-                $('#filterBySpinner, #loadLogResultsSpinner').show();
+                $('#filterBySpinner, #loadRegistrySearchResultsSpinner').show();
 
                 var form = $('#filterByForm');
                 $.ajax({
@@ -169,7 +158,7 @@
                         $('#log-result-table').html(rsp.html);
                     },
                     complete: function () {
-                        $('#filterBySpinner, #loadLogResultsSpinner').hide();
+                        $('#filterBySpinner, #loadRegistrySearchResultsSpinner').hide();
                     }
                 })
             });
@@ -178,29 +167,9 @@
             $('body').on('click', '#filterByForm .clear-filter', function (e) {
                 $(this).parent().find('input, select').val('');
                 var form = $('#filterByForm');
-                getTransactionFilters(form.serialize());
+                getBoxFilters(form.serialize(), '/products-and-services/filters');
             });
 
-            /**
-             * Load actual filters data
-             * @param data Serialised form data
-             */
-            function getTransactionFilters(data) {
-                $('#filterBySpinner').show();
-                $.ajax({
-                    url: '/products-and-services/filters',
-                    type: 'get',
-                    data: data,
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.transaction-filter-content').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner').hide();
-                    }
-                })
-            }
         });
     </script>
 @stop
