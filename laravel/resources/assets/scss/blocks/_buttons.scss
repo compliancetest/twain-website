@@ -200,6 +200,10 @@
   @include btnIconsSprite(btn-edit);
 }
 
+.btn-collapse{
+  @include btnIconsSprite(btn-collapse);
+}
+
 .btn-icon {
   width: 24px;
   height: 24px;
