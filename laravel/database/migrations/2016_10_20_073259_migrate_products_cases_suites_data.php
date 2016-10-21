@@ -177,6 +177,61 @@ class MigrateProductsCasesSuitesData extends Migration
             //todo - pricing plans
         }
 
+       $testCases = \App\Post::where(['post_type' => 'test-case'])->get();
+        foreach ($testCases as $testCase) {
+            $testCaseFullName = $testCase->post_title . ' v' . $testCase->getMetaByKey('version_major') . '.' . $testCase->getMetaByKey('version_minor');
+            $patch = $testCase->getMetaByKey('version_patch');
+            if ($patch) {
+                $testCaseFullName .= '.' . $patch;
+            }
+            $laravelTestCase = \App\LaravelTestCase::create([
+                'slug' => $testCase->post_name,
+                'name' => $testCase->post_title,
+                'version_major' => (integer) $testCase->getMetaByKey('version_major'),
+                'version_minor' => (integer) $testCase->getMetaByKey('version_minor'),
+                'version_patch' => (integer) $testCase->getMetaByKey('version_patch'),
+                'description' => (string) $testCase->getMetaByKey('test_intent_description'),
+                'full_name' => $testCaseFullName,
+                'tester_role' => $testCase->getMetaByKey('choose_tester_role'),
+                'harness_role' => $testCase->getMetaByKey('choose_harness_role'),
+                'initiator' => $testCase->getMetaByKey('choose_initiator'),
+                'test_execution_profile_id' => (integer) $testCase->getMetaByKey('test_execution'),
+                'configuration_profile_id' => (integer) $testCase->getMetaByKey('test_data_profile'),
+                'outcome_type' => (string) $testCase->getMetaByKey('outcome_type'),
+                'is_optional' => $testCase->getMetaByKey('testcase_status') == 'Yes' ? true : false,
+                'test_pattern' => (string) $testCase->getMetaByKey('message_count'),
+                'wp_id' => $testCase->ID,
+                'published_at' => $testCase->getMetaByKey('published'),
+                'created_at' => $testCase->post_date,
+                'updated_at' => $testCase->post_date,
+            ]);
+
+            //conformance levels
+            $testCaseSuite = \App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'test_suite'])->get();
+            if($testCaseSuite) {
+                foreach($testCaseSuite as $caseSuite){
+                    $conformanceLevels = \App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'conformance_level_' . $caseSuite->meta_value])->get();
+                    if($conformanceLevels){
+                        foreach($conformanceLevels as $conformanceLevel){
+                            $laravelSuite = \App\LaravelTestSuite::where('wp_id', $caseSuite->meta_value)->first();
+                            if($laravelSuite ) {
+                                $suiteLevel = $laravelSuite->conformanceLevels()->where('code', $conformanceLevel->meta_value)->first();
+                                if($suiteLevel) {
+                                    $laravelTestCase->conformanceLevels()->create([
+                                        'test_suite_id' => $laravelSuite->id,
+                                        'conformance_level_id' => $suiteLevel->id
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //test cases scenarios
+
+        }
+
     }
 
     /**
@@ -195,6 +250,7 @@ class MigrateProductsCasesSuitesData extends Migration
         \Illuminate\Support\Facades\DB::statement("truncate products_features");
         \Illuminate\Support\Facades\DB::statement("truncate products_capabilities");
         \Illuminate\Support\Facades\DB::statement("truncate products");
+
         \Illuminate\Support\Facades\DB::statement("truncate test_suites");
         \Illuminate\Support\Facades\DB::statement("truncate test_suites_conformance_levels");
         \Illuminate\Support\Facades\DB::statement("truncate test_suites_profile_types");
@@ -204,6 +260,8 @@ class MigrateProductsCasesSuitesData extends Migration
         \Illuminate\Support\Facades\DB::statement("truncate test_suites_scenarios");
         \Illuminate\Support\Facades\DB::statement("truncate test_suites_features");
         \Illuminate\Support\Facades\DB::statement("truncate test_suites_types");
+
+        \Illuminate\Support\Facades\DB::statement("truncate test_cases");
         Schema::enableForeignKeyConstraints();
     }
 }

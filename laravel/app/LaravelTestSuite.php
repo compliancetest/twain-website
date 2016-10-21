@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LaravelTestSuite extends Model
 {
-     use UuidTrait;
+    use UuidTrait;
 
     protected $table = 'test_suites';
 
@@ -15,7 +15,7 @@ class LaravelTestSuite extends Model
     protected $fillable = [
         'community_id', 'slug', 'name', 'full_name', 'description', 'version_major', 'version_minor', 'version_patch',
         'short_name', 'issuer', 'revision_description', 'status', 'product_type', 'excerpt', 'minor_family_mark',
-        'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark'
+        'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark', 'updated_at', 'created_at'
     ];
 
     public function types()
