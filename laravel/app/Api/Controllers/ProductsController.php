@@ -2,6 +2,7 @@
 
 namespace App\Api\Controllers;
 
+use App\CommunityOrganisationsApprovedProducts;
 use App\CommunityOrganisationsApprovedTestSuites;
 use App\Jobs\ProcessTransactionLog;
 use App\Organisation;
@@ -97,28 +98,21 @@ class ProductsController extends BaseApiController
      * @apiName createProduct
      * @apiGroup Products
      *
-     * @apiSuccessExample {json} Product created:
+     * @apiSuccessExample {json} Product exist (approved):
      *  {
-     *     "data": {
-     *       "id": "twain2-freeimage-software-scanner-v-2-1",
-     *       "title": "TWAIN2 FreeImage Software Scanner",
-     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1",
-     *       "model": "TEST_MODEL"
-     *     },
-     *     "code": 201
-     *   }
-     *
-     *  @apiSuccessExample {json} Product exist:
-     *  {
-     *     "data": {
-     *       "id": "twain2-freeimage-software-scanner-v-2-1",
-     *       "title": "TWAIN2 FreeImage Software Scanner",
-     *       "link": "http://twain.my/product/twain2-freeimage-software-scanner-v-2-1",
-     *       "model": null
-     *     },
+     *     "message": "The product has been updated successfully",
      *     "code": 200
      *   }
      *
+     * @apiSuccessExample {json} Product exist (not approved) / product created:
+     * {
+     *     "errors": {
+     *       "message": [
+     *         "This product registration will require approval"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
      *   {
@@ -203,7 +197,7 @@ class ProductsController extends BaseApiController
         $productName = $entity['ProductName'];
         $productModel = isset($jsonEntry['Model']) ? $jsonEntry['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
-        if(!empty($request->get('product_id'))){
+        if (!empty($request->get('product_id'))) {
             $productId = $request->get('product_id');
         } else {
             $productId = $request->get('organisation_id') . '_' . $this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
@@ -211,7 +205,7 @@ class ProductsController extends BaseApiController
                 $productId .= '_' . $this->cleanSlug($productModel);
             }
         }
-        $protocolVersion = $entity['ProtocolMajor']. '.' . $entity['ProtocolMinor'];
+        $protocolVersion = $entity['ProtocolMajor'] . '.' . $entity['ProtocolMinor'];
         $this->product = Post::where(['post_name' => $productId])->first();
         if ($this->product) {
             //any organisation member can update product
@@ -219,7 +213,7 @@ class ProductsController extends BaseApiController
                 $this->_setProductVisibility($request, $entity);
                 $this->_setProductTypeFields($request, $jsonEntry, false);
 
-                 /**
+                /**
                  * Recreate test plans for DataSource product.
                  * Test plans for Application product will be regenerated once user update supported features
                  */
@@ -235,13 +229,11 @@ class ProductsController extends BaseApiController
                 $this->product->timestamps = false;
                 $this->product->save();
 
-                $response = [
-                    'id' => $this->product->post_name,
-                    'title' => $this->product->post_title . ' v' . $productVersion,
-                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
-                    'model' => $productModel,
-                ];
-                return $this->respondWithData($response);
+                if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
+                    return $this->respondSuccess('The product has been updated successfully');
+                } else {
+                    return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+                }
             } else {
                 return $this->respondForbiddenError('This product was created by another organisation!');
             }
@@ -269,7 +261,7 @@ class ProductsController extends BaseApiController
         $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
         $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
         $this->product->meta()->create(['meta_key' => 'model', 'meta_value' => $productModel]);
-        
+
         $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
 
         /**
@@ -281,14 +273,8 @@ class ProductsController extends BaseApiController
         }
 
         $this->product->save();
-        
-        $response = [
-            'id' => $this->product->post_name,
-            'title' => $this->product->post_title . ' v' . $productVersion,
-            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
-            'model' => $productModel,
-        ];
-        return $this->setStatusCode(201)->respondWithData($response);
+
+        return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
     }
 
     /**
@@ -339,85 +325,85 @@ class ProductsController extends BaseApiController
     }
 
     /**
-    * @api {get} /v1/products/{productId}/features Get product features
-    *
-    * @apiName Supported features
-    * @apiGroup Products
-    *
-    * @apiSuccessExample {json} Product's features list
-    *
-    *   {
-    *      "data": [
-    *        {
-    *          "id": "twain-v2-3-compliance-applications-v1-0",
-    *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
-    *          "status": true,
-    *          "features": [
-    *            {
-    *              "title": "UI image transfer",
-    *              "description": "UI image transfer",
-    *              "status": true
-    *            },
-    *            {
-    *              "title": "Non-UI image transfer",
-    *              "description": "Non-UI image transfer",
-    *              "status": false
-    *            }
-    *          ]
-    *        }
-    *      ],
-    *      "code": 200
-    *    }
-    *
-    *
-    * @apiError 404 Invalid product ID
-    * @apiErrorExample {json} Invalid product ID
-    *   {
-    *      "errors": {
-    *        "message": "Product id is invalid"
-    *      },
-    *      "code": 404
-    *    }
-    *
-    * @apiError 403 Forbidden
-    * @apiErrorExample {json} Not organization member
-    *   {
-    *     "errors": {
-    *       "message": [
-    *         "Only organization member can perform testing"
-    *       ]
-    *     },
-    *     "code": 403
-    *   }
-    *
-    * @apiError 403 Forbidden
-    * @apiErrorExample {json} Organization is not approved yet:
-    *   {
-    *     "errors": {
-    *       "message": [
-    *         "Your organization can't perform testing."
-    *       ]
-    *     },
-    *     "code": 403
-    *   }
-    *
-    *
-    *
-    * @apiError 403 Forbidden
-    * @apiErrorExample {json} Invalid product type
-    *  {
-    *      "errors": {
-    *        "message": [
-    *          "This product has incorrect type"
-    *        ]
-    *      },
-    *      "code": 403
-    *    }
-    *
-    * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
-    *
-    * @apiVersion 1.0.0
-    */
+     * @api {get} /v1/products/{productId}/features Get product features
+     *
+     * @apiName Supported features
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Product's features list
+     *
+     *   {
+     *      "data": [
+     *        {
+     *          "id": "twain-v2-3-compliance-applications-v1-0",
+     *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
+     *          "status": true,
+     *          "features": [
+     *            {
+     *              "title": "UI image transfer",
+     *              "description": "UI image transfer",
+     *              "status": true
+     *            },
+     *            {
+     *              "title": "Non-UI image transfer",
+     *              "description": "Non-UI image transfer",
+     *              "status": false
+     *            }
+     *          ]
+     *        }
+     *      ],
+     *      "code": 200
+     *    }
+     *
+     *
+     * @apiError 404 Invalid product ID
+     * @apiErrorExample {json} Invalid product ID
+     *   {
+     *      "errors": {
+     *        "message": "Product id is invalid"
+     *      },
+     *      "code": 404
+     *    }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Only organization member can perform testing"
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "errors": {
+     *       "message": [
+     *         "Your organization can't perform testing."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
+     *
+     *
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Invalid product type
+     *  {
+     *      "errors": {
+     *        "message": [
+     *          "This product has incorrect type"
+     *        ]
+     *      },
+     *      "code": 403
+     *    }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     * @apiVersion 1.0.0
+     */
 
     public function listFeatures($productId)
     {
@@ -429,8 +415,8 @@ class ProductsController extends BaseApiController
             return $this->respondForbiddenError('This product has incorrect type');
         }
 
-        $productSuites = (array) json_decode($product->getMetaByKey('product_suites'), true);
-        $productFeatures = (array) json_decode($product->getMetaByKey('product_features'), true);
+        $productSuites = (array)json_decode($product->getMetaByKey('product_suites'), true);
+        $productFeatures = (array)json_decode($product->getMetaByKey('product_features'), true);
         $result = [];
         foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
             $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
@@ -733,6 +719,7 @@ class ProductsController extends BaseApiController
             $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
         }
     }
+
     /**
      * @api {get} /v1/products Get user organisation's products
      ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
@@ -741,25 +728,28 @@ class ProductsController extends BaseApiController
      * @apiGroup Products
      *
      * @apiSuccessExample {json} Products list:
-       {
-        "data": [{
-            "id": "kv-s1026c-twain-driver",
-            "title": "KV-S1026C twain driver v15.0",
-            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
-            "model": null
-        }, {
-            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
-            "title": "Panasonic KV-S1026C KV-S1015C v15.0",
-            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
-            "model": null
-        }, {
-            "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
-            "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
-            "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
-            "model": "KV-S1026C"
-        }],
-        "code": 200
-       }
+     * {
+     * "data": [{
+     * "id": "kv-s1026c-twain-driver",
+     * "title": "KV-S1026C twain driver v15.0",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
+     * "model": null,
+     * "approved": false
+     * }, {
+     * "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+     * "title": "Panasonic KV-S1026C KV-S1015C v15.0",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+     * "model": null,
+     * "approved": true
+     * }, {
+     * "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+     * "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+     * "model": "KV-S1026C",
+     * "approved": false
+     * }],
+     * "code": 200
+     * }
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
@@ -789,7 +779,7 @@ class ProductsController extends BaseApiController
      *     "errors": {
      *       "message": [
      *          "No products were found for this user!"
-*             ]
+     *             ]
      *     },
      *     "code": 404
      *   }
@@ -815,13 +805,13 @@ class ProductsController extends BaseApiController
             'product_type' => 'in:DataSource,Application'
         ]);
 
-         if ($validator->fails()) {
+        if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
         $userOrganisationId = \Auth::user()->organisation[0]->id;
 
-        if($request->has('product_type')){
+        if ($request->has('product_type')) {
             $type = $request->get('product_type');
 
             $products = DB::table('wp_posts')
@@ -843,8 +833,8 @@ class ProductsController extends BaseApiController
                 ->groupBy('wp_posts.ID')
                 ->get();
 
-            if(empty($products)){
-                 return $this->respondNotFound('No products were found with '.$type.' type for this user!');
+            if (empty($products)) {
+                return $this->respondNotFound('No products were found with ' . $type . ' type for this user!');
             }
         } else {
             $products = DB::table('wp_posts')
@@ -873,6 +863,7 @@ class ProductsController extends BaseApiController
                 'title' => $product->post_title . ' v' . $product->meta_value,
                 'link' => getSiteUrl() . '/product/' . $product->post_name,
                 'model' => $model ? $model->meta_value : null,
+                'approved' => CommunityOrganisationsApprovedProducts::where('product_id', $product->ID)->first() ? true : false,
             ];
         }
         return $this->respondWithData($response);
