@@ -1257,6 +1257,11 @@ define({ "api": [
           "type": "json"
         },
         {
+          "title": "The product registration has been not approved yet:",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"The product registration has been not approved yet.\"\n      ]\n    },\n    \"code\": 403\n  }",
+          "type": "json"
+        },
+        {
           "title": "Test plans not found:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n       \"Test plans not found\"\n    ]\n  },\n  \"code\": 404\n}",
           "type": "json"

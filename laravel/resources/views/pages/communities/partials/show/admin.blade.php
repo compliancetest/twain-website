@@ -535,7 +535,8 @@
                                                 @if($products)
                                                     @foreach($organisation->getProducts() as $product)
                                                     <tr>
-                                                        <td style="width: 60%"><a href="/product/{{ $product->post_name }}" target="_blank"> {{ $product->post_title }}</a></td>
+                                                        <?php $eloquentProduct = \App\Post::find($product->ID);?>
+                                                        <td style="width: 60%"><a href="/product/{{ $product->post_name }}" target="_blank"> {{ $eloquentProduct->getProductFullName() }}</a></td>
                                                         <td style="width: 20%" class="text-center">{{ $product->product_type }}</td>
                                                         <td style="width: 20%" class="text-center">
                                                             <input type="checkbox" value="{{ $organisation->id }}" class="approveProduct"
