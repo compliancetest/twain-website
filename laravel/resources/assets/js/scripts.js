@@ -1037,8 +1037,21 @@ var Page = {
             });
         }
 
-    }
+    },
 
+    helpers: {
+
+        /**
+         * Insert HTML from template
+         * @param tpl Template ID
+         * @param container ID of container where template will be append
+         */
+        addRow: function (tpl, container) {
+            var template = jQuery(tpl).html();
+            jQuery(container).append(template);
+        }
+
+    }
 
 };
 
