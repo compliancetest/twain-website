@@ -2,6 +2,7 @@
 
 namespace App\Api\Controllers;
 
+use App\CommunityOrganisationsApprovedProducts;
 use App\Post;
 use App\TestPlan;
 use Validator;
@@ -57,6 +58,15 @@ class TestPlansController extends BaseApiController
      *     "code": 403
      *   }
      *
+     *  @apiErrorExample {json} The product registration has been not approved yet:
+     * {
+     *     "errors": {
+     *       "message": [
+     *         "The product registration has been not approved yet."
+     *       ]
+     *     },
+     *     "code": 403
+     *   }
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test plans not found:
@@ -114,6 +124,9 @@ class TestPlansController extends BaseApiController
             return $this->respondForbiddenError("You do not have any active subscription");
         }
 
+        if(!CommunityOrganisationsApprovedProducts::where('product_id', Post::where('post_name', $request->get('product_id'))->first()->ID)->first()){
+            return $this->respondForbiddenError("The product registration has been not approved yet.");
+        }
         $organisationPlans = \Auth::user()->organisation[0]->getTestPlans($request->get('product_id'));
         if (empty($organisationPlans)) {
             return $this->respondNotFound("Test plans not found");

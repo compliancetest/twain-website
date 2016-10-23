@@ -96,6 +96,7 @@ class Organisation extends Model
             ->whereIn('pm.meta_value', ['DataSource', 'Application'])
             ->where('wp_posts.post_type', '=', 'product-service')
             ->groupBy('wp_posts.ID')
+            ->orderBy('product_type')
             ->orderBy('wp_posts.post_title')
             ->get();
         return $products;
