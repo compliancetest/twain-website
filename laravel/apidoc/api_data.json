@@ -433,13 +433,13 @@
     "success": {
       "examples": [
         {
-          "title": "Product created:",
-          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\",\n     \"model\": \"TEST_MODEL\"\n   },\n   \"code\": 201\n }",
+          "title": "Product exist (approved):",
+          "content": "{\n   \"message\": \"The product has been updated successfully\",\n   \"code\": 200\n }",
           "type": "json"
         },
         {
-          "title": "Product exist:",
-          "content": "{\n   \"data\": {\n     \"id\": \"twain2-freeimage-software-scanner-v-2-1\",\n     \"title\": \"TWAIN2 FreeImage Software Scanner\",\n     \"link\": \"http://twain.my/product/twain2-freeimage-software-scanner-v-2-1\",\n     \"model\": null\n   },\n   \"code\": 200\n }",
+          "title": "Product exist (not approved) / product created:",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product registration will require approval\"\n      ]\n    },\n    \"code\": 403\n  }",
           "type": "json"
         }
       ]
@@ -529,7 +529,7 @@
       "examples": [
         {
           "title": "Products list:",
-          "content": "{\n \"data\": [{\n     \"id\": \"kv-s1026c-twain-driver\",\n     \"title\": \"KV-S1026C twain driver v15.0\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver\",\n     \"model\": null\n }, {\n     \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n     \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n     \"model\": null\n }, {\n     \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n     \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C\",\n     \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n     \"model\": \"KV-S1026C\"\n }],\n \"code\": 200\n}",
+          "content": "{\n\"data\": [{\n\"id\": \"kv-s1026c-twain-driver\",\n\"title\": \"KV-S1026C twain driver v15.0\",\n\"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver\",\n\"model\": null,\n\"approved\": false\n}, {\n\"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n\"title\": \"Panasonic KV-S1026C KV-S1015C v15.0\",\n\"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n\"model\": null,\n\"approved\": true\n}, {\n\"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n\"title\": \"Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C\",\n\"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n\"model\": \"KV-S1026C\",\n\"approved\": false\n}],\n\"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -1254,6 +1254,11 @@
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "The product registration has been not approved yet:",
+          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"The product registration has been not approved yet.\"\n      ]\n    },\n    \"code\": 403\n  }",
           "type": "json"
         },
         {

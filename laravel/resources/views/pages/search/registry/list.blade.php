@@ -18,15 +18,14 @@
         <table class="table blue-colored-table sort-table">
             <thead>
             <tr>
-                <th><a href="#">Product <span class="glyphicon glyphicon-sort-by-attributes"></span></a></th>
+                <th><a href="#" class="sortby" data-type="name" data-order="{{ getSortingOrder($request, 'name') }}">Product <span class="glyphicon {{ getSortingCssClass($request, 'name') }}"></span></a></th>
                 <th>Version </th>
                 <th>Owner</th>
-                <th><a href="#">Type <span class="glyphicon glyphicon-sort"></span></a></th>
                 <th>Test Suite</th>
                 <th>Role</th>
                 <th>Level</th>
                 <th>Status</th>
-                <th><a href="#">Date <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></a></th>
+                <th><a href="#" class="sortby" data-type="date" data-order="{{ getSortingOrder($request, 'date') }}">Date <span class="glyphicon {{ getSortingCssClass($request, 'date') }}"></span></a></th>
                 @if(is_super_admin())
                     <th>Action</th>
                 @endif
@@ -48,7 +47,6 @@
                         <td class="text-center">
                             {{ $entry['owner'][0] }}
                         </td>
-                        <td class="text-center">Product</td>
                         <td class="text-center">
                             <a href="/test-suite/{{ \App\Post::find($entry['suite_id'][0])->post_name }}" target="_blank">
                                 {{ $entry['test_suite'][0] }}

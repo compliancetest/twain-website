@@ -20,7 +20,8 @@ class RegistrySearchController extends Controller
         $results = (new RegistrySearch())->search($request->toArray());
         $paginator = new Paginator($results->getPath('hits/hit'), $results->getPath('hits/found'), 25, $request->get('page') ? $request->get('page') : 1);
         $pageTitle = 'Registry Search Results';
-        return view('pages.search.registry.index', compact('results', 'request', 'pageTitle', 'paginator'));
+        $registrySearch = true;
+        return view('pages.search.registry.index', compact('results', 'request', 'pageTitle', 'paginator', 'registrySearch'));
     }
 
     /**

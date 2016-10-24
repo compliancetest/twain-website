@@ -106,6 +106,13 @@
                 });
             });
 
+            $('body').on('click', '.sortby', function (e) {
+                e.preventDefault();
+                $('#orderby').val($(this).data('type'));
+                $('#order').val($(this).data('order'));
+                $('#filterByForm').submit();
+            });
+
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
                 $('#filterBySpinner, #loadSiteSearchResultsSpinner').show();
