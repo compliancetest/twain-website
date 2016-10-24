@@ -22,4 +22,9 @@ class LaravelTestCase extends Model
     {
         return $this->hasMany('\App\TestCaseConformanceLevel', 'test_case_id');
     }
+
+    public function scenarios()
+    {
+        return $this->hasMany('\App\TestCaseScenario', 'test_case_id');
+    }
 }

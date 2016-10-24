@@ -229,6 +229,51 @@ class MigrateProductsCasesSuitesData extends Migration
             }
 
             //test cases scenarios
+            $testCaseSuite = \App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'test_suite'])->get();
+            if($testCaseSuite) {
+                foreach($testCaseSuite as $caseSuite){
+                    $scenarios = \App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'scenario_' . $caseSuite->meta_value])->get();
+                    if($scenarios){
+                        foreach($scenarios as $scenario){
+                            $laravelSuite = \App\LaravelTestSuite::where('wp_id', $caseSuite->meta_value)->first();
+                            if($laravelSuite ) {
+                                $wpScenario = DB::select("SELECT * FROM wp_test_suites_scenarios WHERE suite_id = ? AND id = ? ORDER BY sequence", [$caseSuite->meta_value, $scenario->meta_value]);
+                                if(isset($wpScenario[0]->code)) {
+                                    $suiteScenario = $laravelSuite->scenarios()->where('code', $wpScenario[0]->code)->first();
+                                    if ($suiteScenario) {
+                                        $laravelTestCase->scenarios()->create([
+                                            'test_suites_scenario_id' => $suiteScenario->id,
+                                        ]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+             //test case roles
+            $testCaseSuite = \App\PostMeta::where(['post_id' => $laravelTestCase->wp_id, 'meta_key' => 'test_suite'])->get();
+            if ($testCaseSuite) {
+                foreach ($testCaseSuite as $caseSuite) {
+                    $roles = \App\PostMeta::where(['post_id' => $caseSuite->post_id, 'meta_key' => 'choose_tester_role'])->first();
+                    dump($roles);
+                    if ($roles) {
+                        $roles = explode('|', $roles->meta_value);
+                        if ($roles) {
+                            dump($roles);
+                            foreach ($roles as $i => $role) {
+                                if (!empty($role)) {
+                                    $laravelSuite = \App\LaravelTestSuite::where('wp_id', $caseSuite->meta_value)->first();
+                                    $suiteRole = $laravelSuite->roles()->where('name', $role)->first();
+                                    dump($suiteRole);
+                                    $laravelTestCase->roles()->create(['test_suites_role_id' => $suiteRole->id]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         }
 
