@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v2\Controllers;
 
 use App\CommunityDownloads;
 use App\WpOptions;
@@ -11,7 +11,8 @@ class VersionController extends BaseApiController
 {
 
     /**
-    * @api {get} /v1/version Get latest version
+    * @api {get} /v2/version Get latest version
+     * @apiVersion 2.0.0
     * @apiParam {string} test_tool_for  Mandatory - 'Application' / 'DataSource' / 'DataSourceX64'.
     * @apiParam {boolean} [installer]  Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.
     *
@@ -30,33 +31,27 @@ class VersionController extends BaseApiController
     *       "last_updated": "2016-07-11 16:38:11",
     *       "s3_link": "https://s3-us-west-2.amazonaws.com"
     *     },
+    *     "status": "success",
     *     "code": 200
     *   }
     * @apiError 422 Validation error
     * @apiErrorExample {json} Validation error
     *  {
-    *     "errors": {
-    *       "test_tool_for": [
-    *         "The test tool for field is required."
-    *       ]
-    *     },
+    *     "messages": ["The test tool for field is required."],
+    *     "status": "error",
     *     "code": 422
     *  }
     *
     * @apiError 404 Not found
     * @apiErrorExample {json} Not found
     *  {
-    *     "errors": {
-    *       "message": [
-    *          "Downloads not found"
-    *       ]
-    *     },
+    *     "messages": ["Downloads not found"],
+    *     "status": "error",
     *     "code": 404
     *  }
     **
     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
     *
-    * @apiVersion 1.0.0
     */
     public function index(\Illuminate\Http\Request $request)
     {
@@ -86,32 +81,5 @@ class VersionController extends BaseApiController
         }
 
         return $this->respondNotFound('Downloads not found');
-    }
-
-    /**
-    * @api {get} /apiversion Get REST API version
-    *
-    * @apiName Latest API version
-    * @apiGroup Helpers
-    *
-    * @apiSuccessExample {json} Success-Response:
-    *   {
-    *     "data": {
-    *       "version": "v1"
-    *     },
-    *     "code": 200
-    *   }
-     *
-    * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
-    *
-    * @apiVersion 1.0.0
-    */
-    public function apiversion()
-    {
-        $latestVersion = WpOptions::where('option_name', 'rest_api_version')->first();
-
-        return $this->respondWithData([
-            'version' => $latestVersion ? $latestVersion->option_value : 'v1'
-        ]);
     }
 }

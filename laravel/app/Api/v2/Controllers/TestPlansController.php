@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v2\Controllers;
 
 use App\CommunityOrganisationsApprovedProducts;
 use App\Post;
@@ -16,7 +16,9 @@ class TestPlansController extends BaseApiController
 {
 
     /**
-     * @api {get} /v1/testplans Request Organisation Test Plans
+     * @api {get} /v2/testplans Request Organisation Test Plans
+     * @apiVersion 2.0.0
+     *
      * @apiParam {string} product_id  Required - get test plans, associated with a product
      *
      * @apiName getTestPlans
@@ -27,11 +29,8 @@ class TestPlansController extends BaseApiController
      * @apiError 403 Forbidden
      * @apiErrorExample {json} No subscription:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "You do not have any active subscription"
-     *       ]
-     *     },
+     *     "messages": ["You do not have any active subscription"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
@@ -39,54 +38,41 @@ class TestPlansController extends BaseApiController
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Only organization member can perform testing"
-     *       ]
-     *     },
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      *  @apiError 403 Forbidden
      * @apiErrorExample {json} Organization is not approved yet:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Your organization can't perform testing."
-     *       ]
-     *     },
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      *  @apiErrorExample {json} The product registration has been not approved yet:
      * {
-     *     "errors": {
-     *       "message": [
-     *         "The product registration has been not approved yet."
-     *       ]
-     *     },
+     *     "messages": ["The product registration has been not approved yet."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test plans not found:
      *   {
-     *     "errors": {
-     *       "message": [
-     *          "Test plans not found"
-     *       ]
-     *     },
+     *     "messages": ["Test plans not found"],
+     *     "status": "error",
      *     "code": 404
      *   }
      *
      * @apiError 422 Unprocessable entity
      * @apiErrorExample {json} Validation error:
      *   {
-     *     "errors": {
-     *       "product_id": [
-     *         "The selected product id is invalid."
-     *       ]
-     *     },
+     *     "messages": [
+     *         "The selected product id is invalid.",
+     *     ],
+     *     "status": "error",
      *     "code": 422
      *   }
      *
@@ -102,12 +88,12 @@ class TestPlansController extends BaseApiController
      *         "conformance_level": "A"
      *       }
      *     ],
+     *     "status": "success",
      *     "code": 200
      *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
-     * @apiVersion 1.0.0
      */
     public function index(Request $request)
     {
@@ -136,7 +122,9 @@ class TestPlansController extends BaseApiController
     }
 
     /**
-     * @api {get} /v1/testplans/{TEST_PLAN_ID}/testcases Request Test plan's Test Cases
+     * @api {get} /v2/testplans/{TEST_PLAN_ID}/testcases Request Test plan's Test Cases
+     * @apiVersion 2.0.0
+     * 
      * @apiParam {string} [execution_mode]  Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')
      *
      * @apiName getTestCases
@@ -147,66 +135,48 @@ class TestPlansController extends BaseApiController
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Only organization member can perform testing"
-     *       ]
-     *     },
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization is not approved yet:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Your organization can't perform testing."
-     *       ]
-     *     },
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization doesn't have access to test suite:
      *    {
-     *     "errors": {
-     *       "message": [
-     *         "Your organisation doesn't have access to this test suite."
-     *       ]
-     *     },
+     *     "messages": ["Your organisation doesn't have access to this test suite."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      *
      * @apiErrorExample {json} User don't have subscription to test plan's test suite:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "You don't have subscription to test plan's test suite"
-     *       ]
-     *     },
+     *     "messages": ["You don't have subscription to test plan's test suite"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test Cases not found:
      *   {
-     *     "errors": {
-     *       "message":  [
-     *          "Test Cases not found"
-     *       ]
-     *     },
+     *     "messages":  ["Test Cases not found"],
+     *     "status": "error",
      *     "code": 404
      *   }
      *
      * @apiError 422 Unprocessable entity
      * @apiErrorExample {json} Validation error:
      *   {
-     *     "errors": {
-     *       "execution_mode": [
-     *         "The selected execution mode is invalid."
-     *       ]
-     *     },
+     *     "messages": ["The selected execution mode is invalid."],
+     *     "status": "error",
      *     "code": 422
      *   }
      *
@@ -219,12 +189,12 @@ class TestPlansController extends BaseApiController
      *         "description": "Confirm Basic Negotiation with CAP_SUPPORTEDCAPS."
      *       }
      *     ],
+     *     "status": "success",
      *     "code": 200
      *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
-     * @apiVersion 1.0.0
      */
 
     public function testcases($testPlanId, Request $request)

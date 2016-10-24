@@ -18,7 +18,7 @@ class PostExists
     {
         $product = Post::where(['post_name' => $request->route()->parameters()['productId'], 'post_type' => 'product-service'])->first();
         if (!$product) {
-            return response()->json(['errors' => ['message' => 'Product id is invalid'], 'code' => 404], 404);
+            return response()->json(['messages' => ['Product id is invalid'], "status" => "error", 'code' => 404], 404);
         }
         return $next($request);
     }

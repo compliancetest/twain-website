@@ -28,7 +28,89 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/VersionController.php",
+    "filename": "app/Api/v1/Controllers/VersionController.php",
+    "groupTitle": "Helpers"
+  },
+  {
+    "type": "get",
+    "url": "/v2/version",
+    "title": "Get latest version",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_tool_for",
+            "description": "<p>Mandatory - 'Application' / 'DataSource' / 'DataSourceX64'.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "boolean",
+            "optional": true,
+            "field": "installer",
+            "description": "<p>Optional - A flag indicates either an installer (true) or an archive (false) should be returned. By default - false.</p>"
+          }
+        ]
+      }
+    },
+    "name": "Latest_version",
+    "group": "Helpers",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": {\n    \"file_name\": \"file.zip\",\n    \"product_type\": \"Application\",\n    \"version\": \"v1\",\n    \"description\": \"description\",\n    \"size\": 106876,\n    \"license_agreement\": \"License agreement\",\n    \"last_updated\": \"2016-07-11 16:38:11\",\n    \"s3_link\": \"https://s3-us-west-2.amazonaws.com\"\n  },\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error",
+          "content": "{\n   \"messages\": [\"The test tool for field is required.\"],\n   \"status\": \"error\",\n   \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not found",
+          "content": " {\n    \"messages\": [\"Downloads not found\"],\n    \"status\": \"error\",\n    \"code\": 404\n }\n*",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/VersionController.php",
     "groupTitle": "Helpers"
   },
   {
@@ -110,7 +192,87 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/VersionController.php",
+    "filename": "app/Api/v1/Controllers/VersionController.php",
+    "groupTitle": "Helpers"
+  },
+  {
+    "type": "post",
+    "url": "/v2/echo",
+    "title": "Validate credentials",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Mandatory - username / email.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mandatory - password.</p>"
+          }
+        ]
+      }
+    },
+    "name": "validateCredentials",
+    "group": "Helpers",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": {\n    \"organisation_id\": 4\n  },\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\n    \"The username field is required.\",\n    \"The password field is required.\"\n  ],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Unauthorized:",
+          "content": "{\n   \"messages\": [\"Unauthorized!\"],\n   \"status\": \"error\",\n   \"code\": 401\n }",
+          "type": "json"
+        },
+        {
+          "title": "Forbidden:",
+          "content": "{\n  \"messages\": [\n    \"Only organisation member can perform testing\"\n  ],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/Api/v2/Controllers/EchoController.php",
     "groupTitle": "Helpers"
   },
   {
@@ -190,8 +352,121 @@
       ]
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/EchoController.php",
+    "filename": "app/Api/v1/Controllers/EchoController.php",
     "groupTitle": "Helpers"
+  },
+  {
+    "type": "post",
+    "url": "/v2/products/{productId}/features",
+    "title": "Set product features",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "features",
+            "description": "<p>Mandatory - features json.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Features JSON example",
+          "content": "\n[{\n    \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n    \"features\": [\"UI image transfer\"]\n}]",
+          "type": "json"
+        }
+      ]
+    },
+    "name": "Set_Features_List",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Features saved",
+          "content": "{\n   \"data\": [\n     {\n       \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n       \"title\": \"TWAIN v2.3 Compliance - Applications v1.0\",\n       \"status\": true,\n       \"features\": [\n         {\n           \"title\": \"UI image transfer\",\n           \"description\": \"UI image transfer\",\n           \"status\": true\n         },\n         {\n           \"title\": \"Non-UI image transfer\",\n           \"description\": \"Non-UI image transfer\",\n           \"status\": false\n         }\n       ]\n     }\n   ],\n   \"status\": \"success\",\n   \"code\": 200\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Invalid product ID</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error",
+          "content": "{\n  \"message\": [\"The features field is required.\"],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error",
+          "content": "{\n    \"messages\": [\n        \"Test suite id is invalid. Feature index - 0.\",\n        \"Test suite id is invalid. Feature index - 1.\",\n        \"Features field should be an array. Feature index - 1.\"\n      ],\n    \"status\": \"error\",\n    \"code\": 422\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member",
+          "content": "{\n  \"messagse\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product ID",
+          "content": "{\n   \"messages\": [\"Product id is invalid\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid test suite ID",
+          "content": "{\n  \"messages\": [\"Test suite ID is invalid\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product type",
+          "content": "{\n    \"message\": [\"This product has incorrect type\"],\n    \"status\": \"error\",\n    \"code\": 403\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/ProductsController.php",
+    "groupTitle": "Products"
   },
   {
     "type": "post",
@@ -303,7 +578,79 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/ProductsController.php",
+    "filename": "app/Api/v1/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "get",
+    "url": "/v2/products/{productId}/features",
+    "title": "Get product features",
+    "version": "2.0.0",
+    "name": "Supported_features",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Product's features list",
+          "content": "\n{\n   \"data\": [\n     {\n       \"id\": \"twain-v2-3-compliance-applications-v1-0\",\n       \"title\": \"TWAIN v2.3 Compliance - Applications v1.0\",\n       \"status\": true,\n       \"features\": [\n         {\n           \"title\": \"UI image transfer\",\n           \"description\": \"UI image transfer\",\n           \"status\": true\n         },\n         {\n           \"title\": \"Non-UI image transfer\",\n           \"description\": \"Non-UI image transfer\",\n           \"status\": false\n         }\n       ]\n     }\n   ],\n   \"status\": \"success\",\n   \"code\": 200\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Invalid product ID</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid product ID",
+          "content": "{\n   \"messages\": [\"Product id is invalid\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product type",
+          "content": "{\n    \"messages\": [\"This product has incorrect type\"],\n    \"status\": \"error\",\n    \"code\": 403\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/ProductsController.php",
     "groupTitle": "Products"
   },
   {
@@ -375,7 +722,140 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/ProductsController.php",
+    "filename": "app/Api/v1/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "post",
+    "url": "/v2/products",
+    "title": "Create product",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "identity",
+            "description": "<p>Mandatory - product identity json.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_type",
+            "description": "<p>Mandatory - product type (either 'DataSource' or 'Application')</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "integer",
+            "optional": false,
+            "field": "organisation_id",
+            "description": "<p>Mandatory - User's organisation ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_id",
+            "description": "<p>Optional - Product with this ID will be updated</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "DataSource example",
+          "content": "\n{\n     \"Identity\": {\n         \"ProtocolMajor\": 2,\n         \"ProtocolMinor\": 322,\n         \"Manufacturer\": \"TEST!!\",\n         \"ProductName\": \"1111\",\n         \"ProductFamily\": \"Software Scan\",\n         \"Version\": {\n             \"MajorNum\": 2,\n             \"MinorNum\": 201,\n             \"Language\": \"TWLG_ENGLISH\",\n             \"Country\": \"TWCY_USA\",\n             \"Info\": \"2.1.3 sample debug 32bit\"\n         },\n         \"SupportedGroups\": [\"DG_CONTROL\",\n         \"DG_IMAGE\",\n         \"DF_DS2\"]\n     },\n     \"Model\": \"TEST_MODEL1\",\n     \"Capabilities\": [\"CAP_SUPPORTEDCAPS\",\n     \"CAP_XFERCOUNT\",\n     \"ICAP_BITDEPTH\",\n     \"ICAP_BITORDER\",\n     \"ICAP_COMPRESSION\",\n     \"ICAP_PHYSICALHEIGHT\",\n     \"ICAP_PHYSICALWIDTH\",\n     \"ICAP_PIXELFLAVOR\",\n     \"ICAP_PIXELTYPE\",\n     \"ICAP_PLANARCHUNKY\",\n     \"ICAP_UNITS\",\n     \"ICAP_XFERMECH\",\n     \"ICAP_XNATIVERESOLUTION\",\n     \"ICAP_XRESOLUTION\",\n     \"ICAP_YNATIVERESOLUTION\",\n     \"ICAP_YRESOLUTION\"]\n }",
+          "type": "json"
+        },
+        {
+          "title": "Application example",
+          "content": "{\n    \"Identity\": {\n        \"ProtocolMajor\": 2,\n        \"ProtocolMinor\": 1,\n        \"Manufacturer\": \"TWAIN Working Group\",\n        \"ProductName\": \"TWAIN2 FreeImage EHR Software\",\n        \"ProductFamily\": \"EHR Software\",\n        \"Version\": {\n            \"MajorNum\": 2,\n            \"MinorNum\": 1,\n            \"Language\": \"TWLG_ENGLISH\",\n            \"Country\": \"TWCY_USA\",\n            \"Info\": \"2.1.3 sample debug 32bit\"\n        },\n       \"SupportedGroups\": [\"DG_CONTROL\",\n           \"DG_IMAGE\",\n           \"DF_DS2\"]\n    },\n    \"Model\": \"TEST_MODEL2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "name": "createProduct",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Product exist (approved):",
+          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Product exist (not approved) / product created:",
+          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 403\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Validation error</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Validation error:",
+          "content": "{\n         \"messages\": [The product type field is required.\"],\n         \"status\": \"error\",\n         \"code\": 422\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n         \"messages\": [\n           \"The identity field is required.\",\n           \"The organisation id field is required.\"\n         ],\n         \"status\": \"error\",\n         \"code\": 422\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member:",
+          "content": "{\n         \"messages\": [\n           \"Only organization member can perform testing\"\n         ],\n         \"status\": \"error\",\n         \"code\": 403\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "\n{\n          \"messages\": [\n            \"Your organization can't perform testing.\"\n          ],\n          \"status\": \"error\",\n          \"code\": 403\n        }",
+          "type": "json"
+        },
+        {
+          "title": "No subscription with provided Product Type:",
+          "content": "\n{\n         \"messages\": [\n           \"Please subscribe to Test Suite with '{Application|DataSource}' Product Type\"\n         ],\n         \"status\": \"error\",\n         \"code\": 403\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Permissions error:",
+          "content": "\n{\n          \"messages\": [\n            \"This product was created by another organisation!\"\n          ],\n          \"status\": \"error\",\n          \"code\": 403\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/ProductsController.php",
     "groupTitle": "Products"
   },
   {
@@ -503,7 +983,98 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/ProductsController.php",
+    "filename": "app/Api/v1/Controllers/ProductsController.php",
+    "groupTitle": "Products"
+  },
+  {
+    "type": "get",
+    "url": "/v2/products",
+    "title": "Get user organisation's products",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - product type (either 'Application' or 'DataSource').</p>"
+          }
+        ]
+      }
+    },
+    "name": "getProducts",
+    "group": "Products",
+    "success": {
+      "examples": [
+        {
+          "title": "Products list:",
+          "content": "{\n          \"data\": [{\n              \"id\": \"kv-s1026c-twain-driver\",\n              \"title\": \"KV-S1026C twain driver v15.0\",\n              \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver\",\n              \"model\": null,\n              \"approved\": false\n          }, {\n              \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n              \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0\",\n              \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0\",\n              \"model\": null,\n              \"approved\": true\n          }, {\n              \"id\": \"6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n              \"title\": \"Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C\",\n              \"link\": \"https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c\",\n              \"model\": \"KV-S1026C\",\n              \"approved\": false\n          }],\n          \"status\": \"success\",\n          \"code\": 200\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Products not found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Invalid product_type value</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Products not found error:",
+          "content": "{\n   \"messages\": [\"No products were found for this user!\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Invalid product_type value:",
+          "content": "{\n  \"messages\": [\"The selected product type is invalid.\"],\n  \"status\": \"error\",\n  \"code\": 422,\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/ProductsController.php",
     "groupTitle": "Products"
   },
   {
@@ -594,8 +1165,75 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/ProductsController.php",
+    "filename": "app/Api/v1/Controllers/ProductsController.php",
     "groupTitle": "Products"
+  },
+  {
+    "type": "get",
+    "url": "/v2/profiles/:profile_id",
+    "title": "Request Profile Content",
+    "version": "2.0.0",
+    "name": "getProfile",
+    "group": "Profiles",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": {\n    \"Profile\": {\n      \"Type\": \"TCEF\",\n      \"Purpose\": \"TCEF for Application test case\",\n      \"Title\": \"CAP-01a_v1.0 TEFC\",\n      \"Description\": \"Test Case Execution Flow for CAP-01a test case\",\n      \"Version\": {\n        \"Major\": 1,\n        \"Minor\": 0\n      }\n    },\n    \"Meta\": {\n      \"SystemUnderTest\": \"Application\",\n      \"Capabilities\": [\n        {\n          \"Cap\": \"CAP_SUPPORTEDCAPS\"\n        }\n      ],\n      \"InitialState\": 4\n    },\n    \"TestSteps\": [\n      [\n        {\n          \"Optional\": false,\n          \"Triplet\": {\n            \"From\": \"APP\",\n            \"To\": \"DS\",\n            \"DataGroup\": \"DG_CONTROL\",\n            \"DataArgumentType\": \"DAT_USERINTERFACE\",\n            \"Messages\": \"MSG_ENABLEDS\",\n            \"pUserinterface\": {\n              \"ShowUI\": true\n            }\n          },\n          \"PassConditions\": [\n            {\n              \"ItemType\": \"ReturnCode\",\n              \"Operator\": \"EQ\",\n              \"Value\": \"TWRC_SUCCESS\",\n              \"Step\": 1\n            }\n          ]\n        }\n      ]\n    ]\n  },\n  \"status\": \"success\",\n  \"code\": 200,\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Profile not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not Found error:",
+          "content": "\n{\n    \"messages\": [\"Profile not found\"],\n    \"status\": \"error\",\n    \"code\": 404\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/ProfilesController.php",
+    "groupTitle": "Profiles"
   },
   {
     "type": "get",
@@ -661,8 +1299,82 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/ProfilesController.php",
+    "filename": "app/Api/v1/Controllers/ProfilesController.php",
     "groupTitle": "Profiles"
+  },
+  {
+    "type": "delete",
+    "url": "/v2/testcase/stop",
+    "title": "Delete testing details",
+    "version": "2.0.0",
+    "name": "deleteTestingDetails",
+    "group": "Test_Cases",
+    "description": "<p>Method used to configure reset testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>User didn't use start method yet</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Test Case not configured properly</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Please use start method first:",
+          "content": "{\n  \"messages\": [\"Please use start method first\"],\n  \"status\": \"error\",\n  \"code\": 400\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Please stop running case before start:",
+          "content": "{\n   \"messages\": [\"Execution profile is required for DataSource products\"],\n   \"status\": \"error\",\n   \"code\": 400\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"messages\": [\"Ok\"],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestCasesController.php",
+    "groupTitle": "Test_Cases"
   },
   {
     "type": "delete",
@@ -735,7 +1447,96 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestCasesController.php",
+    "filename": "app/Api/v1/Controllers/TestCasesController.php",
+    "groupTitle": "Test_Cases"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testcase",
+    "title": "Request Test Execution profile",
+    "version": "2.0.0",
+    "name": "getExecutionProfile",
+    "group": "Test_Cases",
+    "description": "<p>Method used to get Execution Profile data</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"messages\": [\"Your organisation doesn't have access to this test suite.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "TestCase not found error:",
+          "content": "{\n  \"messages\": [\"Test Case not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "TestCase not configured:",
+          "content": "{\n  \"messages\": [\"Please set testing details\"],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "No profile error response:",
+          "content": "{\n  \"message\": [\"Test Case doesn't have any profiles\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"data\":{\"test_case_id\":\"SC-01 v1.0\",\"test_suite_id\":\"TWAINDS v1.0\",\"product_id\":\"123 v123\",\"profile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for Application test case\",\"Title\":\"CN-01a_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for CN-01a test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"Application\",\"Capabilities\":[{\"Cap\":\"ICAP_AUTOSIZE\"}],\"InitialState\":2},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DSM\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_PARENT\",\"Messages\":\"MSG_OPENDSM\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":1}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DSM\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_IDENTITY\",\"Messages\":\"MSG_USERSELECT\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":1}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DSM\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_IDENTITY\",\"Messages\":\"MSG_OPENDS\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":1}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_SET\",\"pCapability\":{\"Cap\":\"ICAP_AUTOSIZE\",\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT32\",\"Item\":\"TWAS_AUTO\"}}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_USERINTERFACE\",\"Messages\":\"MSG_ENABLEDS\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":4}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"DS\",\"To\":\"APP\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_NULL\",\"Messages\":\"MSG_XFERREADY\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":4}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_IMAGE\",\"DataArgumentType\":\"DAT_IMAGEMEMXFER\",\"Messages\":\"MSG_GET\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_XFERDONE\",\"Step\":4}]},{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_IMAGE\",\"DataArgumentType\":\"DAT_IMAGEMEMFILEXFER\",\"Messages\":\"MSG_GET\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_XFERDONE\",\"Step\":4}]},{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_IMAGE\",\"DataArgumentType\":\"DAT_IMAGENATIVEXFER\",\"Messages\":\"MSG_GET\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_XFERDONE\",\"Step\":4}]},{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_IMAGE\",\"DataArgumentType\":\"DAT_IMAGEFILEXFER\",\"Messages\":\"MSG_GET\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_XFERDONE\",\"Step\":4}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_PENDINGXFERS\",\"Messages\":\"MSG_ENDXFER\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":4}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_USERINTERFACE\",\"Messages\":\"MSG_DISABLEDS\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DSM\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_IDENTITY\",\"Messages\":\"MSG_CLOSEDS\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DSM\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_PARENT\",\"Messages\":\"MSG_CLOSEDSM\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\"}]}]]}},\"code\":200, \"status\":\"success\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestCasesController.php",
     "groupTitle": "Test_Cases"
   },
   {
@@ -824,7 +1625,80 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestCasesController.php",
+    "filename": "app/Api/v1/Controllers/TestCasesController.php",
+    "groupTitle": "Test_Cases"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testcases/:test_case_id/profiles",
+    "title": "Request Test Case profiles",
+    "version": "2.0.0",
+    "name": "getProfiles",
+    "group": "Test_Cases",
+    "description": "<p>Method used to get all test case profiles</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Test Case not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "TestCase not found error:",
+          "content": "{\n  \"messages\": [\"Test Case not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "No profiles error response:",
+          "content": "{\n  \"messages\": [\"Test Case doesn't have any profiles\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"status\": \"success\", \"data\":[{\"Capabilities\":[{\"Cap\":\"CAP_SUPPORTEDCAPS\",\"AllowedValues\":{\"ConType\":\"TWON_ARRAY\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"ArrayItemList\":[\"CAP_SUPPORTEDCAPS\",\"CAP_UICONTROLLABLE\",\"CAP_XFERCOUNT\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ARRAY\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"ArrayItemList\":[\"CAP_SUPPORTEDCAPS\",\"CAP_UICONTROLLABLE\",\"CAP_XFERCOUNT\"]}},\"DefaultValue\":{\"ConType\":\"TWON_ARRAY\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"ArrayItemList\":[\"CAP_SUPPORTEDCAPS\",\"CAP_UICONTROLLABLE\",\"CAP_XFERCOUNT\"]}},\"Operations\":[\"GET\",\"GETCURRENT\",\"GETDEFAULT\"]},{\"Cap\":\"CAP_UICONTROLLABLE\",\"AllowedValues\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_BOOL\",\"Item\":\"TRUE\"}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_BOOL\",\"Item\":\"TRUE\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_BOOL\",\"Item\":\"TRUE\"}},\"Operations\":[\"GET\",\"GETCURRENT\",\"GETDEFAULT\"]},{\"Cap\":\"CAP_XFERCOUNT\",\"AllowedValues\":{\"ConType\":\"TWON_RANGE\",\"hContainer\":{\"ItemType\":\"TWTY_INT16\",\"MinValue\":-1,\"MaxValue\":32767,\"StepSize\":1,\"CurrentValue\":-1,\"DefaultValue\":-1}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_INT16\",\"Item\":\"-1\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_INT16\",\"Item\":\"-1\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_COMPRESSION\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWCP_NONE\",\"TWCP_PACKBITS\",\"TWCP_GROUP31D\",\"TWCP_GROUP31DEOL\",\"TWCP_GROUP32D\",\"TWCP_GROUP4\",\"TWCP_JPEG\",\"TWCP_LZW\",\"TWCP_JBIG\",\"TWCP_PNG\",\"TWCP_RLE4\",\"TWCP_RLE8\",\"TWCP_BITFIELDS\",\"TWCP_ZIP\",\"TWCP_JPEG2000\"],\"CurrentItem\":\"TWCP_NONE\",\"DefaultItem\":\"TWCP_NONE\"}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWCP_NONE\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWCP_NONE\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_BITORDER\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWBO_LSBFIRST\",\"TWBO_MSBFIRST\"],\"CurrentItem\":\"TWBO_MSBFIRST\",\"DefaultItem\":\"TWBO_MSBFIRST\"}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWBO_MSBFIRST\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWBO_MSBFIRST\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_PLANARCHUNKY\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWPC_CHUNKY\",\"TWPC_PLANAR\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPC_PLANAR\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPC_PLANAR\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_PHYSICALHEIGHT\",\"AllowedValues\":{\"ConType\":\"TWON_RANGE\",\"hContainer\":{\"ItemType\":\"TWTY_FIX32\",\"MinValue\":0,\"MaxValue\":65535,\"StepSize\":1,\"CurrentValue\":0}},\"Operations\":[\"GET\",\"GETCURRENT\",\"GETDEFAULT\"]},{\"Cap\":\"ICAP_PHYSICALWIDTH\",\"AllowedValues\":{\"ConType\":\"TWON_RANGE\",\"hContainer\":{\"ItemType\":\"TWTY_FIX32\",\"MinValue\":0,\"MaxValue\":65535,\"StepSize\":1,\"CurrentValue\":0}},\"Operations\":[\"GET\",\"GETCURRENT\",\"GETDEFAULT\"]},{\"Cap\":\"ICAP_PIXELFLAVOR\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWPF_CHOCOLATE\",\"TWPF_VANILLA\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPF_CHOCOLATE\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPF_CHOCOLATE\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_PIXELTYPE\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWPT_BW\",\"TWPT_GRAY\",\"TWPT_RGB\",\"TWPT_PALETTE\",\"TWPT_CMY\",\"TWPT_CMYK\",\"TWPT_YUV\",\"TWPT_YUVK\",\"TWPT_CIEXYZ\",\"TWPT_LAB\",\"TWPT_SRGB\",\"TWPT_SRGB64\",\"TWPT_BGR\",\"TWPT_CIELAB\",\"TWPT_CIELUV\",\"TWPT_YCBCR\",\"TWPT_INFRARED\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPT_BW\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWPT_BW\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_UNITS\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWUN_INCHES\",\"TWUN_CENTIMETERS\",\"TWUN_PICAS\",\"TWUN_POINTS\",\"TWUN_TWIPS\",\"TWUN_PIXELS\",\"TWUN_MILLIMETERS\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWUN_INCHES\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWUN_INCHES\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_XFERMECH\",\"AllowedValues\":{\"ConType\":\"TWON_ENUMERATION\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"EnumerationItemList\":[\"TWSX_NATIVE\",\"TWSX_FILE\",\"TWSX_MEMORY\",\"TWSX_MEMFILE\"]}},\"CurrentValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWSX_NATIVE\"}},\"DefaultValue\":{\"ConType\":\"TWON_ONEVALUE\",\"hContainer\":{\"ItemType\":\"TWTY_UINT16\",\"Item\":\"TWSX_NATIVE\"}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_XRESOLUTION\",\"AllowedValues\":{\"ConType\":\"TWON_RANGE\",\"hContainer\":{\"ItemType\":\"TWTY_FIX32\",\"MinValue\":1,\"MaxValue\":65536,\"StepSize\":1,\"CurrentValue\":0}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"ICAP_YRESOLUTION\",\"AllowedValues\":{\"ConType\":\"TWON_RANGE\",\"hContainer\":{\"ItemType\":\"TWTY_FIX32\",\"MinValue\":1,\"MaxValue\":65536,\"StepSize\":1,\"CurrentValue\":0}},\"Operations\":[\"GET\",\"SET\",\"GETCURRENT\",\"GETDEFAULT\",\"RESET\",\"SETCONSTRAINT\"]},{\"Cap\":\"CAP_SUPPORTEDDATS\",\"AllowedValues\":{\"ConType\":\"TWON_ARRAY\",\"hContainer\":{\"ItemType\":\"TWTY_UINT32\",\"ArrayItemList\":[\"DAT_NULL\",\"DAT_CUSTOMBASE\",\"DAT_CAPABILITY\",\"DAT_EVENT\",\"DAT_IDENTITY\",\"DAT_PARENT\",\"DAT_PENDINGXFERS\",\"DAT_SETUPMEMXFER\",\"DAT_SETUPFILEXFER\",\"DAT_STATUS\",\"DAT_USERINTERFACE\",\"DAT_XFERGROUP\",\"DAT_CUSTOMDSDATA\",\"DAT_DEVICEEVENT\",\"DAT_FILESYSTEM\",\"DAT_PASSTHRU\",\"DAT_CALLBACK\",\"DAT_STATUSUTF8\",\"DAT_CALLBACK2\",\"DAT_ENTRYPOINT\",\"DAT_IMAGEINFO\",\"DAT_IMAGELAYOUT\",\"DAT_IMAGEMEMXFER\",\"DAT_IMAGENATIVEXFER\",\"DAT_IMAGEFILEXFER\",\"DAT_CIECOLOR\",\"DAT_GRAYRESPONSE\",\"DAT_RGBRESPONSE\",\"DAT_JPEGCOMPRESSION\",\"DAT_PALETTE8\",\"DAT_EXTIMAGEINFO\",\"DAT_FILTER\",\"DAT_AUDIOFILEXFER\",\"DAT_AUDIOINFO\",\"DAT_AUDIONATIVEXFER\",\"DAT_ICCPROFILE\",\"DAT_IMAGEMEMFILEXFER\"]}}}],\"Identity\":{\"Version\":\"CN-01a_v1.0\",\"Protocol\":{\"Major\":2,\"Minor\":3},\"Manufacturer\":\"Drummond Group\",\"Product\":{\"Name\":\"CN-01a DS\",\"Family\":\"Virtual Data Source\"},\"SupportedGroups\":\"DF_DSM2\"},\"Profile\":{\"Type\":\"DataSource\",\"Purpose\":\"Virtual Data Source\",\"Title\":\"CN-01a DS\",\"Description\":\"Virtual Data Source configuration for CN-01a test case.\",\"Version\":{\"Major\":1,\"Minor\":0}}},{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for Application test case\",\"Title\":\"CAP-01a_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for CAP-01a test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"Application\",\"Capabilities\":[{\"Cap\":\"CAP_SUPPORTEDCAPS\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_USERINTERFACE\",\"Messages\":\"MSG_ENABLEDS\",\"pUserinterface\":{\"ShowUI\":true}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":1}]}]]}],\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestCasesController.php",
     "groupTitle": "Test_Cases"
   },
   {
@@ -897,7 +1771,80 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestCasesController.php",
+    "filename": "app/Api/v1/Controllers/TestCasesController.php",
+    "groupTitle": "Test_Cases"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testcase/status",
+    "title": "Get testing details",
+    "version": "2.0.0",
+    "name": "getTestingDetails",
+    "group": "Test_Cases",
+    "description": "<p>Method used to get testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>User didn't use start method yet</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "You are not running any test case now:",
+          "content": "\n{\n   \"messages\": [\"You are not running any test case now\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        },
+        {
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"messages\": [\"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"messages\": [\"Ok\"],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestCasesController.php",
     "groupTitle": "Test_Cases"
   },
   {
@@ -970,7 +1917,129 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestCasesController.php",
+    "filename": "app/Api/v1/Controllers/TestCasesController.php",
+    "groupTitle": "Test_Cases"
+  },
+  {
+    "type": "post",
+    "url": "/v2/testcase/start",
+    "title": "Set testing details",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_suite_id",
+            "description": "<p>Mandatory - test suite string ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_case_id",
+            "description": "<p>Mandatory - test case string ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Mandatory - product string ID.</p>"
+          }
+        ]
+      }
+    },
+    "name": "setTestingDetails",
+    "group": "Test_Cases",
+    "description": "<p>Method used to configure testing details</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Required field missed</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>User already has running test case</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Wrong test case configuration</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"messages\": [\"Your organisation doesn't have access to this test suite.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\n      \"The selected test suite id is invalid.\"\n      \"The selected test case id is invalid.\"\n      \"The selected product id is invalid.\"\n  ],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        },
+        {
+          "title": "Please stop running case before start:",
+          "content": "{\n  \"messages\": [\"Please stop running case before start\"],\n  \"status\": \"error\",\n  \"code\": 400\n}",
+          "type": "json"
+        },
+        {
+          "title": "Wrong test case configuration:",
+          "content": "\n{\n   \"messages\": [\"Wrong test case configuration. Please contact support quoting test case id: TEST_CASE_ID.\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "{\"status\":\"success\", \"data\":{\"ExecutionId\":\"026d9d68-eb09-41be-af73-ab3e0db971c9\",\"TestSuite\":{\"id\":\"twain-compliance-technical-app-v1-0\",\"title\":\"TWAIN Compliance Technical - App v1.0\"},\"TestCase\":{\"id\":\"vv-01-v1-0\",\"title\":\"VV-01 v1.0\"},\"Product\":{\"id\":\"test\",\"title\":\"Test\"},\"ExecutionProfile\":{\"Profile\":{\"Type\":\"TCEF\",\"Purpose\":\"TCEF for DS test case\",\"Title\":\"VV-01_v1.0 TEFC\",\"Description\":\"Test Case Execution Flow for VV-01 test case\",\"Version\":{\"Major\":1,\"Minor\":0}},\"Meta\":{\"SystemUnderTest\":\"DataSource\",\"Capabilities\":[{\"Cap\":\"ACAP_XFERMECH\"}],\"InitialState\":4},\"TestSteps\":[[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESETALL\"},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":2}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_GETCURRENT\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":3},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":3,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":4,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":5},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":6}],\"SkipConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"NOT_EQ\",\"Value\":\"TWRC_SUCCESS\"}]}],[{\"Optional\":false,\"Triplet\":{\"From\":\"APP\",\"To\":\"DS\",\"DataGroup\":\"DG_CONTROL\",\"DataArgumentType\":\"DAT_CAPABILITY\",\"Messages\":\"MSG_RESET\",\"pCapability\":{\"Cap\":\"ACAP_XFERMECH\"}},\"PassConditions\":[{\"ItemType\":\"ReturnCode\",\"Operator\":\"EQ\",\"Value\":\"TWRC_SUCCESS\",\"Step\":7},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"ACAP_XFERMECH\",\"Step\":7,\"Path\":\"pCapability.Cap\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWON_ONEVALUE\",\"Step\":8,\"Path\":\"pCapability.ConType\"},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWTY_UINT16\",\"Path\":\"pCapability.hContainer.ItemType\",\"Step\":9},{\"ItemType\":\"Property\",\"Operator\":\"EQ\",\"Value\":\"TWSX_NATIVE\",\"Path\":\"pCapability.hContainer.Item\",\"Step\":10}]}]]}},\"code\":200}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestCasesController.php",
     "groupTitle": "Test_Cases"
   },
   {
@@ -1092,8 +2161,110 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestCasesController.php",
+    "filename": "app/Api/v1/Controllers/TestCasesController.php",
     "groupTitle": "Test_Cases"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testplans/{TEST_PLAN_ID}/testcases",
+    "title": "Request Test plan's Test Cases",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "execution_mode",
+            "description": "<p>Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')</p>"
+          }
+        ]
+      }
+    },
+    "name": "getTestCases",
+    "group": "Test_Plans",
+    "description": "<p>Method used to get test plan's test cases</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"messages\": [\"Your organisation doesn't have access to this test suite.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "User don't have subscription to test plan's test suite:",
+          "content": "{\n  \"messages\": [\"You don't have subscription to test plan's test suite\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Test Cases not found:",
+          "content": "{\n  \"messages\":  [\"Test Cases not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\"The selected execution mode is invalid.\"],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"sc-01-v1-0\",\n      \"title\": \"SC-01 v1.0\",\n      \"description\": \"Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.\"\n    }\n  ],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestPlansController.php",
+    "groupTitle": "Test_Plans"
   },
   {
     "type": "get",
@@ -1194,7 +2365,109 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestPlansController.php",
+    "filename": "app/Api/v1/Controllers/TestPlansController.php",
+    "groupTitle": "Test_Plans"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testplans",
+    "title": "Request Organisation Test Plans",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Required - get test plans, associated with a product</p>"
+          }
+        ]
+      }
+    },
+    "name": "getTestPlans",
+    "group": "Test_Plans",
+    "description": "<p>Method used to get organisation's list of test plans, associated with provided product ID</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "No subscription:",
+          "content": "{\n  \"messages\": [\"You do not have any active subscription\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "The product registration has been not approved yet:",
+          "content": "{\n    \"messages\": [\"The product registration has been not approved yet.\"],\n    \"status\": \"error\",\n    \"code\": 403\n  }",
+          "type": "json"
+        },
+        {
+          "title": "Test plans not found:",
+          "content": "{\n  \"messages\": [\"Test plans not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\n      \"The selected product id is invalid.\",\n  ],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"a1b2a99c-bbb0-4a55-80c2-2ad3d600dde5\",\n      \"test_suite_id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n      \"test_suite_title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\",\n      \"product_id\": \"4_twain2-freeimage-software-scanner_v2-201\",\n      \"product_title\": \"TWAIN2 FreeImage Software Scanner\",\n      \"conformance_level\": \"A\"\n    }\n  ],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestPlansController.php",
     "groupTitle": "Test_Plans"
   },
   {
@@ -1296,8 +2569,110 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestPlansController.php",
+    "filename": "app/Api/v1/Controllers/TestPlansController.php",
     "groupTitle": "Test_Plans"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testsuites/{SUITE_ID}/testcases",
+    "title": "Request Test Suite's Test Case",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "execution_mode",
+            "description": "<p>Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')</p>"
+          }
+        ]
+      }
+    },
+    "name": "getTestCases",
+    "group": "Test_Suites",
+    "description": "<p>Method used to get test suite's active test cases</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"messages\": [\"Your organisation doesn't have access to this test suite.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Subscriptions not found:",
+          "content": "{\n  \"messages\": [\"Subscriptions not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Test Cases not found:",
+          "content": "{\n  \"messages\":  [\"Test Cases not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\"The selected execution mode is invalid.\"],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"dsm-01-v1-0-1\",\n      \"title\": \"DSM-01 v1.0.1\",\n      \"description\": \"Test successful open the data source manager. Transition the session state from 1 to 2.\"\n    },\n    {\n      \"id\": \"ixf-01-v1-0\",\n      \"title\": \"IXF-01 v1.0\",\n      \"description\": \"Image transfer in the Native mode\"\n    }\n  ],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestSuitesController.php",
+    "groupTitle": "Test_Suites"
   },
   {
     "type": "get",
@@ -1398,7 +2773,111 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestSuitesController.php",
+    "filename": "app/Api/v1/Controllers/TestSuitesController.php",
+    "groupTitle": "Test_Suites"
+  },
+  {
+    "type": "get",
+    "url": "/v2/testsuites",
+    "title": "Request Test Suites list",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_type",
+            "description": "<p>Optional - get test suites by product type (either 'DataSource' or 'Application')</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "product_id",
+            "description": "<p>Optional - get test suites, associated with a product</p>"
+          }
+        ]
+      }
+    },
+    "name": "getTestSuites",
+    "group": "Test_Suites",
+    "description": "<p>Method used to get test suites list</p>",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Not Found</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Unprocessable entity</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "No subscription:",
+          "content": "{\n  \"messages\": [\"You do not have any active subscription\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Subscriptions not found:",
+          "content": "{\n  \"messages\": [\"Suites not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "{\n  \"messages\": [\n       \"The selected tester role is invalid.\",\n      \"The selected product id is invalid.\"\n   ],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "{\n  \"data\": [\n    {\n      \"id\": \"twain-compliance-technical-app-v1-0\",\n      \"title\": \"TWAIN Compliance Technical - App v1.0\"\n    },\n    {\n      \"id\": \"twain-compliance-technical-ds-v1-0\",\n      \"title\": \"TWAIN Compliance Technical - DS v1.0\"\n    }\n  ],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TestSuitesController.php",
     "groupTitle": "Test_Suites"
   },
   {
@@ -1502,8 +2981,135 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TestSuitesController.php",
+    "filename": "app/Api/v1/Controllers/TestSuitesController.php",
     "groupTitle": "Test_Suites"
+  },
+  {
+    "type": "post",
+    "url": "/v2/transactions",
+    "title": "Create transaction",
+    "version": "2.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "file",
+            "optional": false,
+            "field": "file",
+            "description": "<p>Mandatory - zip file.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_case_id",
+            "description": "<p>Mandatory - test case id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Mandatory - product id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_suite_id",
+            "description": "<p>Mandatory - test suite id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "execution_id",
+            "description": "<p>Mandatory - execution id string.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "test_outcome",
+            "description": "<p>Optional - allowed values: Fail, Pass, Skip, Pending.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "reason",
+            "description": "<p>Optional - a reason of fail or skip.</p>"
+          }
+        ]
+      }
+    },
+    "name": "createTansaction",
+    "group": "Transactions",
+    "success": {
+      "examples": [
+        {
+          "title": "Success Response:",
+          "content": "{\n  \"data\": {\n    \"status\": \"File Uploaded\",\n    \"url\": \"https://s3-us-west-2.amazonaws.com/captures.integration.twain.gosource.com.au/20/ca-02-v1-0/aff8f0fa-e201-432e-a086-397875dd5219/2_fujitsu_paperstream-ip-fi-7160_v1-42_2016-10-11_000147.zip\"\n  },\n  \"status\": \"success\",\n  \"code\": 201\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "403",
+            "description": "<p>Forbidden</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "422",
+            "description": "<p>Required field missed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Not organization member:",
+          "content": "{\n  \"messages\": [\"Only organization member can perform testing\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization is not approved yet:",
+          "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Organization doesn't have access to test suite:",
+          "content": " {\n  \"messages\": [\"Your organisation doesn't have access to this test suite.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "type": "json"
+        },
+        {
+          "title": "Validation error:",
+          "content": "\n{\n  \"messages\": [\n      \"The file field is required.\"\n      \"The test case id field is required.\"\n      \"The test suite id field is required.\"\n      \"The execution id field is required.\"\n      \"The product id field is required.\"\n      \"The selected test outcome is invalid.\"\n  ],\n  \"status\": \"error\",\n  \"code\": 422\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "header": {
+      "fields": {
+        "Headers": [
+          {
+            "group": "Headers",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Api/v2/Controllers/TransactionsController.php",
+    "groupTitle": "Transactions"
   },
   {
     "type": "post",
@@ -1629,7 +3235,7 @@
       }
     },
     "version": "1.0.0",
-    "filename": "app/Api/Controllers/TransactionsController.php",
+    "filename": "app/Api/v1/Controllers/TransactionsController.php",
     "groupTitle": "Transactions"
   }
 ]
