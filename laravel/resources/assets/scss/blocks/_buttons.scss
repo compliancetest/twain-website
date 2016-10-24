@@ -19,6 +19,20 @@
     }
   }
 
+  &:disabled{
+    border-color: #9f9f9f;
+    background: #8a8a8a;
+    color: #fff;
+    @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
+    @include box-shadow(0 1px 0 0 #b8b8b8 inset);
+
+    &:hover{
+      border-color: #9f9f9f;
+      background: #8a8a8a;
+      @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
+    }
+  }
+
 }
 
 .btn-default {
@@ -268,6 +282,9 @@
   }
   &.btn-question{
     @include btnIconsSprite(btn-icon-question);
+  }
+  &.btn-add{
+    @include btnIconsSprite(btn-icon-add);
   }
 
 }

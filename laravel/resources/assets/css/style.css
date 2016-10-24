@@ -8819,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 20px -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8892,7 +8892,7 @@ body.modal-open,
 }
 /* line 126, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -8936,7 +8936,7 @@ body.modal-open,
 #messages-wrapper .message.error:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -477px;
+  background-position: 0 -493px;
   height: 24px;
   width: 24px;
 }
@@ -8949,7 +8949,7 @@ body.modal-open,
 #messages-wrapper .message.success:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -453px;
+  background-position: 0 -517px;
   height: 24px;
   width: 24px;
 }
@@ -8958,7 +8958,7 @@ body.modal-open,
 .collapse-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -13px -111px;
+  background-position: 0 -122px;
   height: 11px;
   width: 11px;
   padding: 0 3px 0 0;
@@ -9030,7 +9030,7 @@ body.modal-open,
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -11px -80px;
+  background-position: -8px -78px;
   height: 9px;
   width: 9px;
 }
@@ -9079,7 +9079,7 @@ body.modal-open,
 .calendar-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -192px;
+  background-position: -12px -204px;
   height: 14px;
   width: 14px;
   vertical-align: middle;
@@ -9089,6 +9089,13 @@ body.modal-open,
 /* line 288, ../scss/_common.scss */
 .datepicker-form-control[readonly] {
   background: #fff;
+}
+
+/* line 292, ../scss/_common.scss */
+.field-light-description {
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 /* line 1, ../scss/blocks/_forms.scss */
@@ -9176,7 +9183,7 @@ select.form-control {
 .error-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -14px -192px;
+  background-position: 0 -1088px;
   height: 14px;
   width: 14px;
 }
@@ -9184,7 +9191,7 @@ select.form-control {
 .error-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -477px;
+  background-position: 0 -493px;
   height: 24px;
   width: 24px;
 }
@@ -9198,7 +9205,7 @@ select.form-control {
 .success-message:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -180px;
+  background-position: 0 -167px;
   height: 12px;
   width: 12px;
 }
@@ -9206,7 +9213,7 @@ select.form-control {
 .success-message.lg:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -453px;
+  background-position: 0 -517px;
   height: 24px;
   width: 24px;
 }
@@ -9222,6 +9229,44 @@ input[type="checkbox"] {
 .checkboxes-group .radio,
 .checkboxes-group .checkbox {
   margin-top: 0;
+}
+
+/* line 115, ../scss/blocks/_forms.scss */
+.manage-version-box .manage-version-group {
+  display: inline-block;
+  padding-right: 5px;
+  white-space: nowrap;
+  width: 100px;
+}
+/* line 122, ../scss/blocks/_forms.scss */
+.manage-version-box .form-control {
+  width: 30px;
+  padding: 4px 0;
+  line-height: 17px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 132, ../scss/blocks/_forms.scss */
+.manage-version-box.version-updated .btn-add {
+  display: none;
+}
+/* line 137, ../scss/blocks/_forms.scss */
+.manage-version-box .version-cancel {
+  height: 22px;
+  width: 22px;
+  border: 0;
+  background: none;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 145, ../scss/blocks/_forms.scss */
+.manage-version-box .version-cancel .cancel-icon {
+  display: inline-block;
+  background-image: url('../images/icons.png');
+  background-position: 0 -144px;
+  height: 11px;
+  width: 10px;
 }
 
 /* line 1, ../scss/blocks/_modals.scss */
@@ -9263,7 +9308,7 @@ input[type="checkbox"] {
   background-color: transparent;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -383px;
+  background-position: 0 -423px;
   height: 22px;
   width: 22px;
   text-indent: -999999px;
@@ -9375,7 +9420,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -9403,8 +9448,33 @@ input[type="checkbox"] {
 .btn:active:focus {
   outline: none;
 }
+/* line 22, ../scss/blocks/_buttons.scss */
+.btn:disabled {
+  border-color: #9f9f9f;
+  background: #8a8a8a;
+  color: #fff;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YTVhNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdhNzk3OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a5a5a5), color-stop(100%, #7a7979));
+  background-image: -moz-linear-gradient(top, #a5a5a5, #7a7979);
+  background-image: -webkit-linear-gradient(top, #a5a5a5, #7a7979);
+  background-image: linear-gradient(to bottom, #a5a5a5, #7a7979);
+  -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
+  box-shadow: 0 1px 0 0 #b8b8b8 inset;
+}
+/* line 29, ../scss/blocks/_buttons.scss */
+.btn:disabled:hover {
+  border-color: #9f9f9f;
+  background: #8a8a8a;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YTVhNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdhNzk3OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a5a5a5), color-stop(100%, #7a7979));
+  background-image: -moz-linear-gradient(top, #a5a5a5, #7a7979);
+  background-image: -webkit-linear-gradient(top, #a5a5a5, #7a7979);
+  background-image: linear-gradient(to bottom, #a5a5a5, #7a7979);
+}
 
-/* line 24, ../scss/blocks/_buttons.scss */
+/* line 38, ../scss/blocks/_buttons.scss */
 .btn-default {
   border-color: #9f9f9f;
   background: #8a8a8a;
@@ -9418,12 +9488,12 @@ input[type="checkbox"] {
   -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
   box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
-/* line 31, ../scss/blocks/_buttons.scss */
+/* line 45, ../scss/blocks/_buttons.scss */
 .btn-default:hover, .btn-default:active, .btn-default:focus {
   background: #a0a0a0;
 }
 
-/* line 36, ../scss/blocks/_buttons.scss */
+/* line 50, ../scss/blocks/_buttons.scss */
 .btn-primary {
   border-color: #3577ad;
   background: #2d83cd;
@@ -9439,13 +9509,13 @@ input[type="checkbox"] {
   text-shadow: 0 -1px 0 #777778;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 45, ../scss/blocks/_buttons.scss */
+/* line 59, ../scss/blocks/_buttons.scss */
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
   background: #288ce2;
   border-color: #3577ad;
 }
 
-/* line 51, ../scss/blocks/_buttons.scss */
+/* line 65, ../scss/blocks/_buttons.scss */
 .btn-success {
   border-color: #369817;
   background: #39a517;
@@ -9458,13 +9528,13 @@ input[type="checkbox"] {
   -webkit-box-shadow: 0 1px 0 0 #95d780 inset;
   box-shadow: 0 1px 0 0 #95d780 inset;
 }
-/* line 57, ../scss/blocks/_buttons.scss */
+/* line 71, ../scss/blocks/_buttons.scss */
 .btn-success:hover, .btn-success:active, .btn-success:focus {
   background: #3eb518;
   border-color: #369817;
 }
 
-/* line 63, ../scss/blocks/_buttons.scss */
+/* line 77, ../scss/blocks/_buttons.scss */
 .btn-danger {
   border-color: #c33a3a;
   background: #f47273;
@@ -9477,23 +9547,23 @@ input[type="checkbox"] {
   -webkit-box-shadow: 0 1px 0 0 #e68080 inset;
   box-shadow: 0 1px 0 0 #e68080 inset;
 }
-/* line 69, ../scss/blocks/_buttons.scss */
+/* line 83, ../scss/blocks/_buttons.scss */
 .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
   background: #d84f4f;
   border-color: #c33a3a;
 }
 
-/* line 75, ../scss/blocks/_buttons.scss */
+/* line 89, ../scss/blocks/_buttons.scss */
 .btn-logout {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 79, ../scss/blocks/_buttons.scss */
+/* line 93, ../scss/blocks/_buttons.scss */
 .btn-logout:before {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -14px -144px;
+  background-position: 0 -179px;
   height: 12px;
   width: 13px;
   content: '';
@@ -9501,17 +9571,17 @@ input[type="checkbox"] {
   top: 7px;
 }
 
-/* line 88, ../scss/blocks/_buttons.scss */
+/* line 102, ../scss/blocks/_buttons.scss */
 .btn-dropdown {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 92, ../scss/blocks/_buttons.scss */
+/* line 106, ../scss/blocks/_buttons.scss */
 .btn-dropdown:before {
   position: absolute;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -80px;
+  background-position: 0 -156px;
   height: 5px;
   width: 11px;
   content: '';
@@ -9519,7 +9589,7 @@ input[type="checkbox"] {
   top: 11px;
 }
 
-/* line 101, ../scss/blocks/_buttons.scss */
+/* line 115, ../scss/blocks/_buttons.scss */
 .btn-lg, .btn-group-lg > .btn {
   font-size: 16px;
   font-weight: 700;
@@ -9527,7 +9597,7 @@ input[type="checkbox"] {
   height: 40px;
   line-height: 1;
 }
-/* line 108, ../scss/blocks/_buttons.scss */
+/* line 122, ../scss/blocks/_buttons.scss */
 .btn-lg.btn-danger, .btn-group-lg > .btn-danger.btn {
   color: #fff;
   background-color: #aa221e;
@@ -9541,7 +9611,7 @@ input[type="checkbox"] {
   box-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) inset;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 115, ../scss/blocks/_buttons.scss */
+/* line 129, ../scss/blocks/_buttons.scss */
 .btn-lg.btn-danger:hover, .btn-group-lg > .btn-danger.btn:hover {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzk4MTcxNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NjMmUyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -9551,7 +9621,7 @@ input[type="checkbox"] {
   background-image: linear-gradient(to bottom, #981716, #cc2e27);
 }
 
-/* line 121, ../scss/blocks/_buttons.scss */
+/* line 135, ../scss/blocks/_buttons.scss */
 .btn-sm, .btn-group-sm > .btn {
   font-size: 10px;
   height: 18px;
@@ -9560,12 +9630,12 @@ input[type="checkbox"] {
   line-height: 16px;
 }
 
-/* line 130, ../scss/blocks/_buttons.scss */
+/* line 144, ../scss/blocks/_buttons.scss */
 .btn-with-icon {
   padding-left: 30px;
   padding-right: 6px;
 }
-/* line 134, ../scss/blocks/_buttons.scss */
+/* line 148, ../scss/blocks/_buttons.scss */
 .btn-with-icon:before {
   display: block;
   content: '';
@@ -9577,7 +9647,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-confirm:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -861px;
+  background-position: 0 -733px;
   height: 24px;
   width: 18px;
 }
@@ -9585,7 +9655,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-cancel:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -717px;
+  background-position: 0 -685px;
   height: 24px;
   width: 18px;
 }
@@ -9593,7 +9663,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-add:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -549px;
+  background-position: 0 -829px;
   height: 24px;
   width: 18px;
 }
@@ -9601,7 +9671,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-delete:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -765px;
+  background-position: 0 -541px;
   height: 24px;
   width: 18px;
 }
@@ -9609,7 +9679,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -597px;
+  background-position: 0 -613px;
   height: 24px;
   width: 18px;
 }
@@ -9617,7 +9687,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-browse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -669px;
+  background-position: 0 -805px;
   height: 24px;
   width: 18px;
 }
@@ -9625,7 +9695,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-history:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -501px;
+  background-position: 0 -781px;
   height: 24px;
   width: 18px;
 }
@@ -9633,7 +9703,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-back:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -741px;
+  background-position: 0 -901px;
   height: 24px;
   width: 18px;
 }
@@ -9641,7 +9711,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -621px;
+  background-position: 0 -637px;
   height: 24px;
   width: 18px;
 }
@@ -9649,7 +9719,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-clear:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -525px;
+  background-position: 0 -565px;
   height: 24px;
   width: 18px;
 }
@@ -9657,7 +9727,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -837px;
+  background-position: 0 -853px;
   height: 24px;
   width: 18px;
 }
@@ -9665,7 +9735,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-view:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -573px;
+  background-position: 0 -589px;
   height: 24px;
   width: 18px;
 }
@@ -9673,7 +9743,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -645px;
+  background-position: 0 -661px;
   height: 24px;
   width: 18px;
 }
@@ -9681,7 +9751,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -693px;
+  background-position: 0 -709px;
   height: 24px;
   width: 18px;
 }
@@ -9689,7 +9759,7 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-edit:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -789px;
+  background-position: 0 -877px;
   height: 24px;
   width: 18px;
 }
@@ -9697,19 +9767,19 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-collapse:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -813px;
+  background-position: 0 -757px;
   height: 24px;
   width: 18px;
 }
 
-/* line 207, ../scss/blocks/_buttons.scss */
+/* line 221, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 213, ../scss/blocks/_buttons.scss */
+/* line 227, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -9744,14 +9814,14 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-download:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -168px;
+  background-position: 0 -204px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-upload:before {
   background-image: url('../images/icons.png');
-  background-position: -10px -156px;
+  background-position: 0 -191px;
   height: 12px;
   width: 12px;
 }
@@ -9762,14 +9832,14 @@ input[type="checkbox"] {
   height: 9px;
   width: 12px;
 }
-/* line 241, ../scss/blocks/_buttons.scss */
+/* line 255, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-print:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -206px;
+  background-position: -12px -191px;
   height: 13px;
   width: 12px;
 }
@@ -9783,14 +9853,14 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-filter:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -221px;
+  background-position: -17px -78px;
   height: 10px;
   width: 10px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-trigger:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -122px;
+  background-position: -13px -111px;
   height: 11px;
   width: 11px;
 }
@@ -9804,14 +9874,14 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-settings:before {
   background-image: url('../images/icons.png');
-  background-position: -12px -180px;
+  background-position: -13px -179px;
   height: 12px;
   width: 12px;
 }
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-logout:before {
   background-image: url('../images/icons.png');
-  background-position: 0 -144px;
+  background-position: -10px -144px;
   height: 12px;
   width: 14px;
 }
@@ -9825,12 +9895,19 @@ input[type="checkbox"] {
 /* line 29, ../scss/_mixins.scss */
 .btn-icon.btn-question:before {
   background-image: url('../images/icons.png');
-  background-position: 0 0;
+  background-position: 0 -78px;
   height: 11px;
   width: 8px;
 }
+/* line 29, ../scss/_mixins.scss */
+.btn-icon.btn-add:before {
+  background-image: url('../images/icons.png');
+  background-position: 0 0;
+  height: 9px;
+  width: 8px;
+}
 
-/* line 275, ../scss/blocks/_buttons.scss */
+/* line 292, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -9855,7 +9932,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 292, ../scss/blocks/_buttons.scss */
+/* line 309, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -9867,25 +9944,25 @@ input[type="checkbox"] {
   left: 6px;
   top: 7px;
 }
-/* line 300, ../scss/blocks/_buttons.scss */
+/* line 317, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 306, ../scss/blocks/_buttons.scss */
+/* line 323, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 310, ../scss/blocks/_buttons.scss */
+/* line 327, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 317, ../scss/blocks/_buttons.scss */
+/* line 334, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -9897,18 +9974,18 @@ input[type="checkbox"] {
   cursor: pointer;
   width: 76px;
 }
-/* line 328, ../scss/blocks/_buttons.scss */
+/* line 345, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 330, ../scss/blocks/_buttons.scss */
+/* line 347, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 336, ../scss/blocks/_buttons.scss */
+/* line 353, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -9916,44 +9993,44 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
 }
-/* line 344, ../scss/blocks/_buttons.scss */
+/* line 361, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 350, ../scss/blocks/_buttons.scss */
+/* line 367, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 355, ../scss/blocks/_buttons.scss */
+/* line 372, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -970px;
+  background-position: 0 -975px;
   height: 28px;
   width: 21px;
 }
-/* line 361, ../scss/blocks/_buttons.scss */
+/* line 378, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -998px;
+  background-position: 0 -1003px;
   height: 28px;
   width: 21px;
 }
-/* line 367, ../scss/blocks/_buttons.scss */
+/* line 384, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -1026px;
+  background-position: 0 -1031px;
   height: 28px;
   width: 21px;
 }
-/* line 372, ../scss/blocks/_buttons.scss */
+/* line 389, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 378, ../scss/blocks/_buttons.scss */
+/* line 395, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
@@ -10247,7 +10324,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10274,7 +10351,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10305,7 +10382,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -10314,7 +10391,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10340,7 +10417,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -10371,7 +10448,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 197, ../scss/blocks/_tables.scss */
@@ -10393,7 +10470,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10423,7 +10500,7 @@ input[type="checkbox"] {
 }
 /* line 252, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 255, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr > td {
@@ -10451,7 +10528,7 @@ input[type="checkbox"] {
 }
 /* line 281, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 290, ../scss/blocks/_tables.scss */
@@ -10502,6 +10579,21 @@ input[type="checkbox"] {
   line-height: 1;
 }
 /* line 23, ../scss/blocks/_statuses.scss */
+.status.status-circle {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  font-size: 8px;
+  min-width: 12px;
+  line-height: 11px;
+  padding: 0;
+  border: 0;
+  margin: 0 3px 0 0;
+}
+/* line 36, ../scss/blocks/_statuses.scss */
 .status.status-active {
   border-color: #47a518;
   background: #48a719;
@@ -10512,7 +10604,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #55c21f, #47a518);
   background-image: linear-gradient(to bottom, #55c21f, #47a518);
 }
-/* line 28, ../scss/blocks/_statuses.scss */
+/* line 41, ../scss/blocks/_statuses.scss */
 .status.status-build {
   border-color: #6527a4;
   background: #7536b5;
@@ -10523,7 +10615,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #8950c2, #6122a1);
   background-image: linear-gradient(to bottom, #8950c2, #6122a1);
 }
-/* line 33, ../scss/blocks/_statuses.scss */
+/* line 46, ../scss/blocks/_statuses.scss */
 .status.status-draft {
   border-color: #a0a0a0;
   background: #8f8f8f;
@@ -10534,7 +10626,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #ababab, #7b7b7b);
   background-image: linear-gradient(to bottom, #ababab, #7b7b7b);
 }
-/* line 38, ../scss/blocks/_statuses.scss */
+/* line 51, ../scss/blocks/_statuses.scss */
 .status.status-suspended, .status.status-sent, .status.status-inarrears, .status.status-deprecated {
   border-color: #e96208;
   background: #f36f16;
@@ -10545,7 +10637,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fb7821, #e96208);
   background-image: linear-gradient(to bottom, #fb7821, #e96208);
 }
-/* line 46, ../scss/blocks/_statuses.scss */
+/* line 59, ../scss/blocks/_statuses.scss */
 .status.status-obsolete {
   border-color: #9d1d1c;
   background: #b92621;
@@ -10556,7 +10648,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #c32d27, #991817);
   background-image: linear-gradient(to bottom, #c32d27, #991817);
 }
-/* line 51, ../scss/blocks/_statuses.scss */
+/* line 64, ../scss/blocks/_statuses.scss */
 .status.status-partial {
   border-color: #3c7db3;
   background: #2c85d0;
@@ -10567,7 +10659,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #469ce6, #3577ae);
   background-image: linear-gradient(to bottom, #469ce6, #3577ae);
 }
-/* line 56, ../scss/blocks/_statuses.scss */
+/* line 69, ../scss/blocks/_statuses.scss */
 .status.status-frozen {
   border-color: #c51e1e;
   background: #dc1515;
@@ -10578,7 +10670,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #f20c0c, #c51e1e);
   background-image: linear-gradient(to bottom, #f20c0c, #c51e1e);
 }
-/* line 61, ../scss/blocks/_statuses.scss */
+/* line 74, ../scss/blocks/_statuses.scss */
 .status.status-unsubscribing {
   border-color: #9f9f9f;
   background: #8a8a8a;
@@ -10592,79 +10684,79 @@ input[type="checkbox"] {
   box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
 
-/* line 70, ../scss/blocks/_statuses.scss */
+/* line 83, ../scss/blocks/_statuses.scss */
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -279px;
+  background-position: 0 -319px;
   height: 20px;
   width: 20px;
 }
 
-/* line 73, ../scss/blocks/_statuses.scss */
+/* line 86, ../scss/blocks/_statuses.scss */
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -320px;
+  background-position: 0 -339px;
   height: 21px;
   width: 21px;
 }
 
-/* line 76, ../scss/blocks/_statuses.scss */
+/* line 89, ../scss/blocks/_statuses.scss */
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -299px;
+  background-position: 0 -360px;
   height: 21px;
   width: 21px;
 }
 
-/* line 80, ../scss/blocks/_statuses.scss */
+/* line 93, ../scss/blocks/_statuses.scss */
 .text-status-active {
   color: #47a518;
 }
 
-/* line 83, ../scss/blocks/_statuses.scss */
+/* line 96, ../scss/blocks/_statuses.scss */
 .text-status-in-progress {
   color: blue;
 }
 
-/* line 86, ../scss/blocks/_statuses.scss */
+/* line 99, ../scss/blocks/_statuses.scss */
 .text-status-assigned {
   color: orange;
 }
 
-/* line 89, ../scss/blocks/_statuses.scss */
+/* line 102, ../scss/blocks/_statuses.scss */
 .text-status-suspended {
   color: #d9231f;
 }
 
-/* line 92, ../scss/blocks/_statuses.scss */
+/* line 105, ../scss/blocks/_statuses.scss */
 .text-status-success,
 .text-status-pass,
 .text-status-certified {
   color: #4aa31e;
 }
 
-/* line 97, ../scss/blocks/_statuses.scss */
+/* line 110, ../scss/blocks/_statuses.scss */
 .text-status-fail,
 .text-status-testing,
 .text-status-failure {
   color: #e33f3f;
 }
 
-/* line 102, ../scss/blocks/_statuses.scss */
+/* line 115, ../scss/blocks/_statuses.scss */
 .text-status-not_performed,
 .text-status-unverified {
   color: #666;
 }
 
-/* line 106, ../scss/blocks/_statuses.scss */
+/* line 119, ../scss/blocks/_statuses.scss */
 .text-status-warning {
   color: #CC6600;
 }
 
-/* line 109, ../scss/blocks/_statuses.scss */
+/* line 122, ../scss/blocks/_statuses.scss */
 .text-status-duplicate,
 .text-status-ignored {
   color: #606060;
@@ -10676,7 +10768,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -10783,7 +10875,7 @@ input[type="checkbox"] {
 }
 /* line 107, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -12023,7 +12115,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:first-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -945px;
+  background-position: 0 -925px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -12035,7 +12127,7 @@ ul.slimmenu > li:first-child, ul.slimmenu > li.has-submenu + li {
 .pagination > li:last-child > span {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -920px;
+  background-position: 0 -950px;
   height: 25px;
   width: 24px;
   text-indent: -9999px;
@@ -13435,7 +13527,7 @@ html[xmlns] .flexslider .slides {
 .filter-box .filter-box-content .calendar-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -192px;
+  background-position: -12px -204px;
   height: 14px;
   width: 14px;
   vertical-align: middle;
@@ -13481,7 +13573,7 @@ html[xmlns] .flexslider .slides {
   *zoom: 1;
   background: #fff;
 }
-/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .filter-list-actions:after {
   content: "";
   display: table;
@@ -13679,7 +13771,7 @@ html[xmlns] .flexslider .slides {
 .community-articles .table th a.current-orderby.asc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -885px;
+  background-position: 0 -253px;
   height: 16px;
   width: 16px;
 }
@@ -13687,7 +13779,7 @@ html[xmlns] .flexslider .slides {
 .community-articles .table th a.current-orderby.desc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -10px -221px;
+  background-position: 0 -277px;
   height: 16px;
   width: 16px;
 }
@@ -13705,7 +13797,7 @@ html[xmlns] .flexslider .slides {
   top: 50%;
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -16px -885px;
+  background-position: -15px -218px;
   height: 35px;
   width: 13px;
   margin-top: -17.5px;
@@ -13776,7 +13868,7 @@ html[xmlns] .flexslider .slides {
 .community-search .submit-search-btn .submit-search-btn-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -261px;
+  background-position: 0 -301px;
   height: 18px;
   width: 18px;
   text-indent: -999999px;
@@ -13890,7 +13982,7 @@ html[xmlns] .flexslider .slides {
   content: '';
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -22px -11px;
+  background-position: -22px -9px;
   height: 24px;
   width: 1px;
   position: absolute;
@@ -14143,7 +14235,7 @@ html[xmlns] .flexslider .slides {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -14399,7 +14491,7 @@ input.notify-changes {
 .add-new-item-default .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -1054px;
+  background-position: 0 -1059px;
   height: 29px;
   width: 29px;
   content: '';
@@ -14469,7 +14561,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -14493,7 +14585,7 @@ input.notify-changes {
 .community-downloads .form-actions .add-new-download-link:before, .community-forums .form-actions .add-new-download-link:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -206px;
+  background-position: 0 -218px;
   height: 15px;
   width: 15px;
   content: '';
@@ -14520,7 +14612,7 @@ input.notify-changes {
 .community-downloads .download-license-red:before, .community-forums .download-license-red:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -362px;
+  background-position: 0 -402px;
   height: 21px;
   width: 18px;
 }
@@ -14532,7 +14624,7 @@ input.notify-changes {
 .community-downloads .download-license-green:before, .community-forums .download-license-green:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -341px;
+  background-position: 0 -381px;
   height: 21px;
   width: 18px;
 }
@@ -14571,7 +14663,7 @@ input.notify-changes {
 .coverage-test-case-item {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -53px;
+  background-position: 0 -69px;
   height: 9px;
   width: 22px;
   float: left;
@@ -14583,7 +14675,7 @@ input.notify-changes {
 .coverage-test-case-item.test-excluded {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -44px;
+  background-position: 0 -9px;
   height: 9px;
   width: 22px;
 }
@@ -14591,7 +14683,7 @@ input.notify-changes {
 .coverage-test-case-item.test-failed {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -62px;
+  background-position: 0 -60px;
   height: 9px;
   width: 22px;
 }
@@ -14599,7 +14691,7 @@ input.notify-changes {
 .coverage-test-case-item.test-optional {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -11px;
+  background-position: 0 -51px;
   height: 9px;
   width: 22px;
 }
@@ -14607,7 +14699,7 @@ input.notify-changes {
 .coverage-test-case-item.test-passed {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -35px;
+  background-position: 0 -42px;
   height: 9px;
   width: 22px;
 }
@@ -14615,7 +14707,7 @@ input.notify-changes {
 .coverage-test-case-item.test-skipped {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -71px;
+  background-position: 0 -33px;
   height: 9px;
   width: 22px;
 }
@@ -14680,7 +14772,7 @@ input.notify-changes {
 }
 /* line 106, ../scss/pages/_test-coverage.scss */
 .scanned-image .img-loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -14726,7 +14818,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -14807,12 +14899,12 @@ input.notify-changes {
 
 /* line 30, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 /* line 33, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 37, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
@@ -14837,12 +14929,12 @@ input.notify-changes {
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
   vertical-align: middle;
 }
 /* line 69, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 
 /* line 78, ../scss/pages/_transaction-log.scss */
@@ -14919,59 +15011,90 @@ input.notify-changes {
   font-weight: 600;
 }
 
-/* line 1, ../scss/pages/_test-suites.scss */
+/* line 4, ../scss/pages/_test-suites.scss */
+.edit-test-suite-page .status-radio-group .status-circle {
+  position: relative;
+  top: -2px;
+}
+/* line 11, ../scss/pages/_test-suites.scss */
+.edit-test-suite-page .form-actions .checkbox {
+  margin-top: 5px;
+}
+
+/* line 18, ../scss/pages/_test-suites.scss */
 .test-suite-types-box .checkbox {
   margin-top: 0;
 }
 
-/* line 6, ../scss/pages/_test-suites.scss */
+/* line 23, ../scss/pages/_test-suites.scss */
 .status-radio-group .radio {
   width: 33.3%;
   display: inline-block;
   margin-right: -4px;
 }
 
-/* line 15, ../scss/pages/_test-suites.scss */
+/* line 32, ../scss/pages/_test-suites.scss */
 .dynamic-rows .form-group {
   border-bottom: 1px solid #e3e3e3;
   margin-bottom: 10px;
   padding-bottom: 12px;
 }
-/* line 20, ../scss/pages/_test-suites.scss */
+/* line 37, ../scss/pages/_test-suites.scss */
 .dynamic-rows .form-group .form-group {
   border-bottom: 0;
   padding-bottom: 0;
 }
-/* line 26, ../scss/pages/_test-suites.scss */
+/* line 43, ../scss/pages/_test-suites.scss */
 .dynamic-rows .action-col {
   padding-top: 19px;
   text-align: center;
 }
 
-/* line 32, ../scss/pages/_test-suites.scss */
+/* line 49, ../scss/pages/_test-suites.scss */
 .test-suite-subheader {
   font-size: 13px;
   font-weight: 600;
   margin: 0 0 5px 0;
 }
 
-/* line 38, ../scss/pages/_test-suites.scss */
+/* line 55, ../scss/pages/_test-suites.scss */
 .test-data-profile-types {
   margin-top: 10px;
   border-top: 1px solid #cbcbcb;
   padding-top: 10px;
 }
-/* line 44, ../scss/pages/_test-suites.scss */
+/* line 61, ../scss/pages/_test-suites.scss */
 .test-data-profile-types .checkboxes-group .checkbox {
   width: 50%;
   float: left;
+}
+
+/* line 68, ../scss/pages/_test-suites.scss */
+.test-suites-cases-list {
+  margin: 0 0 10px -10px;
+}
+/* line 71, ../scss/pages/_test-suites.scss */
+.test-suites-cases-list li {
+  width: 25%;
+  float: left;
+}
+/* line 75, ../scss/pages/_test-suites.scss */
+.test-suites-cases-list li a {
+  line-height: 25px;
+  display: block;
+  margin: 0 0 10px 10px;
+  padding: 2px 3px;
+  border: 1px solid #cbcbcb;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -15625,7 +15748,7 @@ input.notify-changes {
 .header-authorise .btn-login:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -237px;
+  background-position: -16px -277px;
   height: 24px;
   width: 12px;
 }
@@ -15637,7 +15760,7 @@ input.notify-changes {
 .header-authorise .btn-signup:before {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: -12px -237px;
+  background-position: -16px -253px;
   height: 24px;
   width: 12px;
   top: 2px;
@@ -15720,7 +15843,7 @@ input.notify-changes {
 .header-login-block .header-login-from .login-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -429px;
+  background-position: 0 -469px;
   height: 24px;
   width: 28px;
 }
@@ -15735,7 +15858,7 @@ input.notify-changes {
 .header-login-block .header-login-from .password-group label {
   display: inline-block;
   background-image: url('../images/icons.png');
-  background-position: 0 -405px;
+  background-position: 0 -445px;
   height: 24px;
   width: 28px;
 }
@@ -15778,7 +15901,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -15788,7 +15911,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;
