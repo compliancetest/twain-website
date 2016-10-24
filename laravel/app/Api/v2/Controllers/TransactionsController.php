@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v2\Controllers;
 
 use App\Jobs\ProcessTransactionLog;
 use Aws\Laravel\AwsFacade as AWS;
@@ -10,7 +10,9 @@ use Validator;
 class TransactionsController extends BaseApiController
 {
     /**
-     * @api {post} /v1/transactions Create transaction
+     * @api {post} /v2/transactions Create transaction
+     * @apiVersion 2.0.0
+     * 
      * @apiParam {file} file  Mandatory - zip file.
      * @apiParam {string} test_case_id  Mandatory - test case id string.
      * @apiParam {string} product_id  Mandatory - product id string.
@@ -28,39 +30,31 @@ class TransactionsController extends BaseApiController
      *       "status": "File Uploaded",
      *       "url": "https://s3-us-west-2.amazonaws.com/captures.integration.twain.gosource.com.au/20/ca-02-v1-0/aff8f0fa-e201-432e-a086-397875dd5219/2_fujitsu_paperstream-ip-fi-7160_v1-42_2016-10-11_000147.zip"
      *     },
+     *     "status": "success",
      *     "code": 201
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Only organization member can perform testing"
-     *       ]
-     *     },
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization is not approved yet:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Your organization can't perform testing."
-     *       ]
-     *     },
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization doesn't have access to test suite:
      *    {
-     *     "errors": {
-     *       "message": [
-     *         "Your organisation doesn't have access to this test suite."
-     *       ]
-     *     },
+     *     "messages": ["Your organisation doesn't have access to this test suite."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
@@ -69,32 +63,20 @@ class TransactionsController extends BaseApiController
      * @apiErrorExample {json} Validation error:
      *
      *   {
-     *     "errors": {
-     *       "file": [
+     *     "messages": [
      *         "The file field is required."
-     *       ],
-     *       "test_case_id": [
      *         "The test case id field is required."
-     *       ],
-     *       "test_suite_id": [
      *         "The test suite id field is required."
-     *       ],
-     *       "execution_id": [
      *         "The execution id field is required."
-     *       ],
-     *       "product_id": [
      *         "The product id field is required."
-     *       ],
-     *        "test_outcome": [
      *         "The selected test outcome is invalid."
-     *       ]
-     *     },
+     *     ],
+     *     "status": "error",
      *     "code": 422
      *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
-     * @apiVersion 1.0.0
      */
     public function create(\Illuminate\Http\Request $request)
     {

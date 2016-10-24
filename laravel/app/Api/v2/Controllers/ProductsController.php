@@ -1,0 +1,835 @@
+<?php
+
+namespace App\Api\v2\Controllers;
+
+use App\CommunityOrganisationsApprovedProducts;
+use App\CommunityOrganisationsApprovedTestSuites;
+use App\Jobs\ProcessTransactionLog;
+use App\Organisation;
+use App\OrganisationMember;
+use App\OrganisationSubscription;
+use App\Post;
+use App\PostMeta;
+use App\PricingPlan;
+use App\TestPlan;
+use App\TestPlanExcludedCases;
+use App\TestSuite;
+use Aws\Laravel\AwsFacade as AWS;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpKernel;
+use Validator;
+
+class ProductsController extends BaseApiController
+{
+
+    private $product;
+
+    /**
+     * @api {post} /v2/products Create product
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {JSON} identity  Mandatory - product identity json.
+     * @apiParam {string} product_type  Mandatory - product type (either 'DataSource' or 'Application')
+     * @apiParam {integer} organisation_id  Mandatory - User's organisation ID
+     * @apiParam {string} [product_id]  Optional - Product with this ID will be updated
+     * @apiParamExample {json} DataSource example
+     *
+     *  {
+     *       "Identity": {
+     *           "ProtocolMajor": 2,
+     *           "ProtocolMinor": 322,
+     *           "Manufacturer": "TEST!!",
+     *           "ProductName": "1111",
+     *           "ProductFamily": "Software Scan",
+     *           "Version": {
+     *               "MajorNum": 2,
+     *               "MinorNum": 201,
+     *               "Language": "TWLG_ENGLISH",
+     *               "Country": "TWCY_USA",
+     *               "Info": "2.1.3 sample debug 32bit"
+     *           },
+     *           "SupportedGroups": ["DG_CONTROL",
+     *           "DG_IMAGE",
+     *           "DF_DS2"]
+     *       },
+     *       "Model": "TEST_MODEL1",
+     *       "Capabilities": ["CAP_SUPPORTEDCAPS",
+     *       "CAP_XFERCOUNT",
+     *       "ICAP_BITDEPTH",
+     *       "ICAP_BITORDER",
+     *       "ICAP_COMPRESSION",
+     *       "ICAP_PHYSICALHEIGHT",
+     *       "ICAP_PHYSICALWIDTH",
+     *       "ICAP_PIXELFLAVOR",
+     *       "ICAP_PIXELTYPE",
+     *       "ICAP_PLANARCHUNKY",
+     *       "ICAP_UNITS",
+     *       "ICAP_XFERMECH",
+     *       "ICAP_XNATIVERESOLUTION",
+     *       "ICAP_XRESOLUTION",
+     *       "ICAP_YNATIVERESOLUTION",
+     *       "ICAP_YRESOLUTION"]
+     *   }
+     *
+     * @apiParamExample {json} Application example
+     *   {
+     *       "Identity": {
+     *           "ProtocolMajor": 2,
+     *           "ProtocolMinor": 1,
+     *           "Manufacturer": "TWAIN Working Group",
+     *           "ProductName": "TWAIN2 FreeImage EHR Software",
+     *           "ProductFamily": "EHR Software",
+     *           "Version": {
+     *               "MajorNum": 2,
+     *               "MinorNum": 1,
+     *               "Language": "TWLG_ENGLISH",
+     *               "Country": "TWCY_USA",
+     *               "Info": "2.1.3 sample debug 32bit"
+     *           },
+     *          "SupportedGroups": ["DG_CONTROL",
+     *              "DG_IMAGE",
+     *              "DF_DS2"]
+     *       },
+     *       "Model": "TEST_MODEL2"
+     *   }
+     * @apiName createProduct
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Product exist (approved):
+     *  {
+          "messages": ["The product has been updated successfully"],
+          "status": "success",
+          "code": 200
+        }
+     *
+     * @apiSuccessExample {json} Product exist (not approved) / product created:
+     *  {
+          "messages": ["This product registration will require approval"],
+          "status": "info",
+          "code": 403
+        }
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error:
+     *  {
+          "messages": [The product type field is required."],
+          "status": "error",
+          "code": 422
+        }
+     *
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error:
+     *  {
+          "messages": [
+            "The identity field is required.",
+            "The organisation id field is required."
+          ],
+          "status": "error",
+          "code": 422
+        }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member:
+     *  {
+          "messages": [
+            "Only organization member can perform testing"
+          ],
+          "status": "error",
+          "code": 403
+        }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *
+     * {
+          "messages": [
+            "Your organization can't perform testing."
+          ],
+          "status": "error",
+          "code": 403
+        }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} No subscription with provided Product Type:
+     *
+     *  {
+          "messages": [
+            "Please subscribe to Test Suite with '{Application|DataSource}' Product Type"
+          ],
+          "status": "error",
+          "code": 403
+        }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Permissions error:
+     *
+     * {
+          "messages": [
+            "This product was created by another organisation!"
+          ],
+          "status": "error",
+          "code": 403
+        }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+    public function create(\Illuminate\Http\Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'identity' => 'required|json',
+            'product_type' => 'required|in:DataSource,Application',
+            'organisation_id' => 'required|exists:wp_organisations,id',
+            'product_id' => 'exists:wp_posts,post_name',
+        ]);
+
+        $user = \Auth::user();
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+        $jsonEntry = json_decode($request->get('identity'), true);
+        $entity = $jsonEntry['Identity'];
+        $productName = $entity['ProductName'];
+        $productModel = isset($jsonEntry['Model']) ? $jsonEntry['Model'] : null;
+        $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
+        if (!empty($request->get('product_id'))) {
+            $productId = $request->get('product_id');
+        } else {
+            $productId = $request->get('organisation_id') . '_' . $this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
+            if ($productModel) {
+                $productId .= '_' . $this->cleanSlug($productModel);
+            }
+        }
+        $protocolVersion = $entity['ProtocolMajor'] . '.' . $entity['ProtocolMinor'];
+        $this->product = Post::where(['post_name' => $productId])->first();
+        if ($this->product) {
+            //any organisation member can update product
+            if (isset($user->organisation[0]->id) && OrganisationMember::where(['organisation_id' => $user->organisation[0]->id, 'user_id' => $this->product->post_author])->first()) {
+                $this->_setProductVisibility($request, $entity);
+                $this->_setProductTypeFields($request, $jsonEntry, false);
+
+                /**
+                 * Recreate test plans for DataSource product.
+                 * Test plans for Application product will be regenerated once user update supported features
+                 */
+                if ($request->get('product_type') == 'DataSource') {
+                    $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
+                }
+
+                $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
+                $this->product->meta()->updateOrCreate(['meta_key' => 'model'], ['meta_value' => $productModel]);
+
+                //trigger post observer
+                $this->product->timestamps = false;
+                $this->product->save();
+
+                if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
+                    return $this->respondSuccess('The product has been updated successfully');
+                } else {
+                    return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+                }
+            } else {
+                return $this->respondForbiddenError('This product was created by another organisation!');
+            }
+        }
+
+        $this->product = Post::create([
+            'post_title' => $productName,
+            'post_name' => $productId,
+            'post_type' => 'product-service',
+            'post_status' => 'publish',
+            'post_author' => \Auth::user()->ID,
+            'post_date' => Carbon::now(),
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+        ]);
+
+        $this->_setProductVisibility($request, $entity);
+        $this->_setProductTypeFields($request, $jsonEntry);
+
+        $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
+        $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $protocolVersion]);
+        $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
+        $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
+        $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
+        $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
+        $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
+        $this->product->meta()->create(['meta_key' => 'model', 'meta_value' => $productModel]);
+
+        $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
+
+        /**
+         * Create test plans for DataSource product.
+         * Test plans for application product will be generated once user set supported features
+         */
+        if ($request->get('product_type') == 'DataSource') {
+            $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
+        }
+
+        $this->product->save();
+
+        return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+    }
+
+    /**
+     * generate test plans for product. old test plans will be deleted
+     * @param $productId
+     * @param Request $request
+     * @param $protocolVersion
+     */
+    public function generateTestPlans($productId, Request $request, $protocolVersion)
+    {
+        $user = Auth::user();
+        TestPlan::where('product_id', $productId)->delete();
+        foreach ($user->getUserTestPlans() as $suiteName => $suite) {
+            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'test_suite_id' => TestSuite::getTestSuiteFamilyMark($suite['testSuite']->ID)])->first();
+            if ($type != $request->get('product_type') || !$aprovementEntry) {
+                continue;
+            }
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            if (!$organisationSubscription) {
+                continue;
+            }
+            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
+            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+
+            /**
+             * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
+             */
+            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+
+            if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+                continue;
+            }
+            foreach (explode(',', $attributes->value) as $level) {
+                $testPlan = TestPlan::create([
+                    'organisation_subscription_id' => $organisationSubscription->id,
+                    'product_id' => $this->product->ID,
+                    'suite_id' => $suite['testSuite']->ID,
+                    'creator_id' => $user->ID,
+                    'level' => $level,
+                    'role' => $request->get('product_type'),
+                ]);
+                if ($request->get('product_type') == 'DataSource') {
+                    $testPlan->excludeTestCases();
+                }
+            }
+        }
+    }
+
+    /**
+     * @api {get} /v2/products/{productId}/features Get product features
+     * @apiVersion 2.0.0
+     *
+     * @apiName Supported features
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Product's features list
+     *
+     *   {
+     *      "data": [
+     *        {
+     *          "id": "twain-v2-3-compliance-applications-v1-0",
+     *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
+     *          "status": true,
+     *          "features": [
+     *            {
+     *              "title": "UI image transfer",
+     *              "description": "UI image transfer",
+     *              "status": true
+     *            },
+     *            {
+     *              "title": "Non-UI image transfer",
+     *              "description": "Non-UI image transfer",
+     *              "status": false
+     *            }
+     *          ]
+     *        }
+     *      ],
+     *      "status": "success",
+     *      "code": 200
+     *    }
+     *
+     *
+     * @apiError 404 Invalid product ID
+     * @apiErrorExample {json} Invalid product ID
+     *   {
+     *      "messages": ["Product id is invalid"],
+     *      "status": "error",
+     *      "code": 404
+     *    }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member
+     *   {
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Invalid product type
+     *  {
+     *      "messages": ["This product has incorrect type"],
+     *      "status": "error",
+     *      "code": 403
+     *    }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+
+    public function listFeatures($productId)
+    {
+        $product = Post::where(['post_name' => $productId])->first();
+
+        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
+
+        if ($type !== 'Application') {
+            return $this->respondForbiddenError('This product has incorrect type');
+        }
+
+        $productSuites = (array)json_decode($product->getMetaByKey('product_suites'), true);
+        $productFeatures = (array)json_decode($product->getMetaByKey('product_features'), true);
+        $result = [];
+        foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+            $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+
+            if (!$productType || $productType->meta_value !== 'Application') {
+                continue;
+            }
+
+            $suiteData = [
+                'id' => $suite->post_name,
+                'title' => $suite->name,
+                'status' => in_array($suite->suite_id, $productSuites) ? true : false,
+                'features' => [],
+            ];
+
+            $suiteFeatures = json_decode($productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'featuresList'])->first()->meta_value, true);
+
+            foreach ($suiteFeatures as $suiteFeature) {
+                $suiteData['features'][] = [
+                    'title' => $suiteFeature['name'],
+                    'description' => $suiteFeature['description'],
+                    'status' => in_array($suiteFeature['name'], $productFeatures) ? true : false,
+                ];
+            }
+            $result[] = $suiteData;
+        }
+
+        return $this->respondWithData($result);
+    }
+
+    /**
+     * @api {post} /v2/products/{productId}/features Set product features
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {JSON} features  Mandatory - features json.
+     *
+     * @apiParamExample {json} Features JSON example
+     *
+     *   [{
+     *       "id": "twain-v2-3-compliance-applications-v1-0",
+     *       "features": ["UI image transfer"]
+     *   }]
+     *
+     * @apiName Set Features List
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Features saved
+     *   {
+     *      "data": [
+     *        {
+     *          "id": "twain-v2-3-compliance-applications-v1-0",
+     *          "title": "TWAIN v2.3 Compliance - Applications v1.0",
+     *          "status": true,
+     *          "features": [
+     *            {
+     *              "title": "UI image transfer",
+     *              "description": "UI image transfer",
+     *              "status": true
+     *            },
+     *            {
+     *              "title": "Non-UI image transfer",
+     *              "description": "Non-UI image transfer",
+     *              "status": false
+     *            }
+     *          ]
+     *        }
+     *      ],
+     *      "status": "success",
+     *      "code": 200
+     *    }
+     *
+     *
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error
+     *   {
+     *     "message": ["The features field is required."],
+     *     "status": "error",
+     *     "code": 422
+     *   }
+     *
+     * @apiError 422 Validation error
+     * @apiErrorExample {json} Validation error
+     * {
+     *     "messages": [
+     *         "Test suite id is invalid. Feature index - 0.",
+     *         "Test suite id is invalid. Feature index - 1.",
+     *         "Features field should be an array. Feature index - 1."
+     *       ],
+     *     "status": "error",
+     *     "code": 422
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member
+     *   {
+     *     "messagse": ["Only organization member can perform testing"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     * @apiError 404 Invalid product ID
+     * @apiErrorExample {json} Invalid product ID
+     *   {
+     *      "messages": ["Product id is invalid"],
+     *      "status": "error",
+     *      "code": 404
+     *    }
+     *
+     * @apiError 404 Invalid test suite ID
+     * @apiErrorExample {json} Invalid test suite ID
+     * {
+     *   "messages": ["Test suite ID is invalid"],
+     *   "status": "error",
+     *   "code": 404
+     * }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Invalid product type
+     *  {
+     *      "message": ["This product has incorrect type"],
+     *      "status": "error",
+     *      "code": 403
+     *    }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+
+    public function saveFeatures($productId, Request $request)
+    {
+        $product = Post::where(['post_name' => $productId])->first();
+        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
+
+        if ($type !== 'Application') {
+            return $this->respondForbiddenError('This product has incorrect type');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'features' => 'required|json',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $features = json_decode($request->get('features'), true);
+
+        $errors = [];
+        foreach ($features as $key => $feature) {
+            $validator = Validator::make($feature, [
+                'id' => 'required|string|exists:wp_posts,post_name',
+                'features' => 'array',
+            ],
+                [
+                    'id.required' => 'Test suite id field is required',
+                    'id.string' => 'Test suite id field is required and should be a string',
+                    'id.exists' => 'Test suite id is invalid',
+                    'features.array' => 'Features field should be an array',
+                ]
+            );
+            if ($validator->fails()) {
+                foreach ($validator->messages()->toArray() as $errorMessage) {
+                    $errors[] = $errorMessage[0] . sprintf('. Feature index - %d.', $key);
+                }
+            }
+        }
+        if ($errors) {
+            return $this->respondUnprocessableEntity(['message' => $errors]);
+        }
+
+        $productTestSuites = $productFeatures = [];
+
+        foreach ($features as $testSuite) {
+            $testSuiteEntry = Post::where(['post_name' => $testSuite['id']])->first();
+
+            $productTestSuites[] = $testSuiteEntry->ID;
+
+            $productFeatures = array_merge($productFeatures, $testSuite['features']);
+        }
+
+        $product->meta()->updateOrCreate(['meta_key' => 'product_features'], ['meta_value' => json_encode($productFeatures)]);
+        $product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productTestSuites)]);
+
+        //delete old and create new test plans
+        TestPlan::where(['product_id' => $product->ID, 'role' => 'Application'])->delete();
+
+        //generate new test plans
+        $protocolVersion = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'protocol_version'])->first()->meta_value;
+
+        $user = Auth::user();
+        foreach ($user->getUserTestPlans() as $suiteName => $suite) {
+            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            if ($type != 'Application' || !in_array($suite['testSuite']->post_name, array_values(array_column($features, 'id')))) {
+                continue;
+            }
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
+            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+
+            /**
+             * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
+             */
+            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+
+            if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+                continue;
+            }
+            foreach (explode(',', $attributes->value) as $level) {
+                $testPlan = TestPlan::create([
+                    'organisation_subscription_id' => $organisationSubscription->id,
+                    'product_id' => $product->ID,
+                    'suite_id' => $suite['testSuite']->ID,
+                    'creator_id' => $user->ID,
+                    'level' => $level,
+                    'role' => 'Application',
+                ]);
+                $testPlan->excludeTestCases('Application', $productFeatures);
+            }
+        }
+
+        return $this->listFeatures($productId);
+    }
+
+    /**
+     * Generate uri for string
+     * @param $str
+     * @return mixed
+     */
+    private function cleanSlug($str)
+    {
+        return trim(preg_replace('/-{2,}/', '-', strtolower(preg_replace("/[^A-Za-z0-9_]/", '-', $str))), ' _-');
+    }
+
+    /**
+     * Set up product type fields - capabilities for Application and test suites list for DataSource
+     * @param $request
+     * @param $jsonEntry
+     */
+    private function _setProductTypeFields($request, $jsonEntry, $isCreate = true)
+    {
+        if ($request->get('product_type') == 'DataSource') {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'capabilities'], ['meta_value' => json_encode($jsonEntry['Capabilities'])]);
+        } else {
+            if ($isCreate) {
+                $productSuites = [];
+                foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
+                    $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+
+                    if (!$productType || $productType->meta_value !== 'DataSource') {
+                        continue;
+                    }
+                    $productSuites[] = $suite->suite_id;
+                }
+                $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
+            }
+        }
+    }
+
+    /**
+     * Set product visibility field
+     * @param $request
+     * @param $entity
+     */
+    private function _setProductVisibility($request, $entity)
+    {
+        $organisation = Organisation::find($request->get('organisation_id'));
+        $productsOrganisations = json_decode($organisation->products_organisations);
+        if (!$productsOrganisations) {
+            $productsOrganisations = [$organisation->organisation_name];
+        }
+
+        if (in_array($entity['Manufacturer'], $productsOrganisations)) {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Public']);
+        } else {
+            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
+        }
+    }
+
+    /**
+     * @api {get} /v2/products Get user organisation's products
+     * @apiVersion 2.0.0
+     * 
+     ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
+     *
+     * @apiName getProducts
+     * @apiGroup Products
+     *
+     * @apiSuccessExample {json} Products list:
+     *   {
+            "data": [{
+                "id": "kv-s1026c-twain-driver",
+                "title": "KV-S1026C twain driver v15.0",
+                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
+                "model": null,
+                "approved": false
+            }, {
+                "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+                "title": "Panasonic KV-S1026C KV-S1015C v15.0",
+                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+                "model": null,
+                "approved": true
+            }, {
+                "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+                "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
+                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+                "model": "KV-S1026C",
+                "approved": false
+            }],
+            "status": "success",
+            "code": 200
+        }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member:
+     *   {
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     * @apiError 404 Products not found
+     * @apiErrorExample {json} Products not found error:
+     *  {
+     *     "messages": ["No products were found for this user!"],
+     *     "status": "error",
+     *     "code": 404
+     *   }
+     * @apiError 422 Invalid product_type value
+     * @apiErrorExample {json} Invalid product_type value:
+     *   {
+     *     "messages": ["The selected product type is invalid."],
+     *     "status": "error",
+     *     "code": 422,
+     *   }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+
+    public function get(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_type' => 'in:DataSource,Application'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $userOrganisationId = \Auth::user()->organisation[0]->id;
+
+        if ($request->has('product_type')) {
+            $type = $request->get('product_type');
+
+            $products = DB::table('wp_posts')
+                ->join('wp_postmeta AS pm1', function ($join) use ($type) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $type)
+                        ->where('pm1.meta_key', '=', 'product_type');
+                })
+                ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
+                    $join->on('pm2.post_id', '=', 'wp_posts.ID')
+                        ->where('pm2.meta_value', '=', $userOrganisationId)
+                        ->where('pm2.meta_key', '=', 'product_organisation_id');
+                })
+                ->join('wp_postmeta AS version', function ($join) {
+                    $join->on('version.post_id', '=', 'wp_posts.ID')
+                        ->where('version.meta_key', '=', 'product_version');
+                })
+                ->where('wp_posts.post_type', '=', 'product-service')
+                ->groupBy('wp_posts.ID')
+                ->get();
+
+            if (empty($products)) {
+                return $this->respondNotFound('No products were found with ' . $type . ' type for this user!');
+            }
+        } else {
+            $products = DB::table('wp_posts')
+                ->join('wp_postmeta AS pm1', function ($join) use ($userOrganisationId) {
+                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                        ->where('pm1.meta_value', '=', $userOrganisationId)
+                        ->where('pm1.meta_key', '=', 'product_organisation_id');
+                })
+                ->join('wp_postmeta AS version', function ($join) {
+                    $join->on('version.post_id', '=', 'wp_posts.ID')
+                        ->where('version.meta_key', '=', 'product_version');
+                })
+                ->where('wp_posts.post_type', '=', 'product-service')
+                ->groupBy('wp_posts.ID')
+                ->get();
+            if (empty($products)) {
+                return $this->respondNotFound('No products were found for this user!');
+            }
+        }
+
+        $response = [];
+        foreach ($products as $product) {
+            $model = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'model'])->first();
+            $response[] = [
+                'id' => $product->post_name,
+                'title' => $product->post_title . ' v' . $product->meta_value,
+                'link' => getSiteUrl() . '/product/' . $product->post_name,
+                'model' => $model ? $model->meta_value : null,
+                'approved' => CommunityOrganisationsApprovedProducts::where('product_id', $product->ID)->first() ? true : false,
+            ];
+        }
+        return $this->respondWithData($response);
+    }
+}

@@ -1,0 +1,331 @@
+<?php
+
+namespace App\Api\v2\Controllers;
+
+use App\Post;
+use Validator;
+use App\UserSubscription;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
+class TestSuitesController extends BaseApiController
+{
+
+    /**
+     * @api {get} /v2/testsuites Request Test Suites list
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} [product_type]  Optional - get test suites by product type (either 'DataSource' or 'Application')
+     * @apiParam {string} [product_id]  Optional - get test suites, associated with a product
+     *
+     * @apiName getTestSuites
+     * @apiGroup Test Suites
+     *
+     * @apiDescription Method used to get test suites list
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} No subscription:
+     *   {
+     *     "messages": ["You do not have any active subscription"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member:
+     *   {
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     * @apiError 404 Not Found
+     * @apiErrorExample {json} Subscriptions not found:
+     *   {
+     *     "messages": ["Suites not found"],
+     *     "status": "error",
+     *     "code": 404
+     *   }
+     *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} Validation error:
+     *   {
+     *     "messages": [
+     *          "The selected tester role is invalid.",
+     *         "The selected product id is invalid."
+     *      ],
+     *     "status": "error",
+     *     "code": 422
+     *   }
+     *
+     * @apiSuccessExample {json} Success Response:
+     *   {
+     *     "data": [
+     *       {
+     *         "id": "twain-compliance-technical-app-v1-0",
+     *         "title": "TWAIN Compliance Technical - App v1.0"
+     *       },
+     *       {
+     *         "id": "twain-compliance-technical-ds-v1-0",
+     *         "title": "TWAIN Compliance Technical - DS v1.0"
+     *       }
+     *     ],
+     *     "status": "success",
+     *     "code": 200
+     *   }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+    public function index(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_type' => 'in:Application,DataSource',
+            'product_id' => 'exists:wp_posts,post_name,post_type,product-service',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $suites = [];
+
+        /**
+         * Return product's test suites if product_id parameter exists
+         */
+        if ($request->has('product_id')) {
+
+            $product = Post::where(['post_name' => $request->get('product_id')])->first();
+            $productSuiteMeta = $product->meta()->where(['meta_key' => 'product_suites'])->first();
+
+            if (!empty($productSuiteMeta)) {
+                foreach (json_decode($productSuiteMeta->meta_value, true) as $suiteId) {
+                    $suite = Post::find($suiteId);
+                    /**
+                     * We filter test suites by tester role if tester_role parameter exists
+                     */
+                    if ($request->has('product_type')) {
+                        $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
+                        if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
+                            continue;
+                        }
+                    }
+                    $suites[] = [
+                        'id' => $suite->post_name,
+                        'title' => $suite->post_title,
+                    ];
+                }
+            }
+
+        /**
+         * Return subscribed test suites
+         */
+        } else {
+
+            $subscriptions = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active'])->get();
+
+            if ($subscriptions->isEmpty()) {
+                return $this->respondForbiddenError("You do not have any active subscription");
+            }
+
+            foreach ($subscriptions as $subscription) {
+                $suite = Post::find($subscription->suite_id);
+                /**
+                 * We filter test suites by tester role if tester_role parameter exists
+                 */
+                if ($request->has('product_type')) {
+                    $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
+                    if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
+                        continue;
+                    }
+                }
+                $suites[] = [
+                    'id' => $suite->post_name,
+                    'title' => $suite->post_title,
+                ];
+            }
+        }
+
+        if (empty($suites)) {
+            return $this->respondNotFound("Suites not found");
+        }
+
+        return $this->respondWithData($suites);
+    }
+
+    /**
+     * @api {get} /v2/testsuites/{SUITE_ID}/testcases Request Test Suite's Test Case
+     * @apiVersion 2.0.0
+     * 
+     * @apiParam {string} [execution_mode]  Optional - get test cases by ExecutionMode (either 'Auto' or 'Manual')
+     *
+     * @apiName getTestCases
+     * @apiGroup Test Suites
+     *
+     * @apiDescription Method used to get test suite's active test cases
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Not organization member:
+     *   {
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization is not approved yet:
+     *   {
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     * @apiError 403 Forbidden
+     * @apiErrorExample {json} Organization doesn't have access to test suite:
+     *    {
+     *     "messages": ["Your organisation doesn't have access to this test suite."],
+     *     "status": "error",
+     *     "code": 403
+     *   }
+     *
+     *
+     * @apiError 404 Not Found
+     * @apiErrorExample {json} Subscriptions not found:
+     *   {
+     *     "messages": ["Subscriptions not found"],
+     *     "status": "error",
+     *     "code": 404
+     *   }
+     *
+     * @apiError 404 Not Found
+     * @apiErrorExample {json} Test Cases not found:
+     *   {
+     *     "messages":  ["Test Cases not found"],
+     *     "status": "error",
+     *     "code": 404
+     *   }
+     *
+     * @apiError 422 Unprocessable entity
+     * @apiErrorExample {json} Validation error:
+     *   {
+     *     "messages": ["The selected execution mode is invalid."],
+     *     "status": "error",
+     *     "code": 422
+     *   }
+     * @apiSuccessExample {json} Success-Response:
+     *   {
+     *     "data": [
+     *       {
+     *         "id": "dsm-01-v1-0-1",
+     *         "title": "DSM-01 v1.0.1",
+     *         "description": "Test successful open the data source manager. Transition the session state from 1 to 2."
+     *       },
+     *       {
+     *         "id": "ixf-01-v1-0",
+     *         "title": "IXF-01 v1.0",
+     *         "description": "Image transfer in the Native mode"
+     *       }
+     *     ],
+     *     "status": "success",
+     *     "code": 200
+     *   }
+     *
+     * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
+     *
+     */
+
+    public function testcases($suiteId, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'execution_mode' => 'in:Auto,Manual'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->respondUnprocessableEntity($validator->messages());
+        }
+
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($suiteId);
+        if(!$hasAccessToTestSuite){
+            return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
+        }
+        
+        $suite = Post::where(['post_name' => $suiteId])->first();
+        $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
+        if (!$subscription) {
+            return $this->respondNotFound("Subscriptions not found");
+        }
+
+        $cases = [];
+
+        $query = DB::table('wp_posts')
+            ->join('wp_postmeta AS pm1', function ($join) use ($suite) {
+                $join->on('pm1.post_id', '=', 'wp_posts.ID')
+                    ->where('pm1.meta_value', '=', $suite->ID)
+                    ->where('pm1.meta_key', '=', 'test_suite');
+            })
+            ->join('wp_postmeta AS pm2', function ($join) {
+                $join->on('pm2.post_id', '=', 'wp_posts.ID')
+                    ->where('pm2.meta_value', '=', 'Active')
+                    ->where('pm2.meta_key', '=', 'test_case_status');
+            })
+            ->join('wp_postmeta AS pm3', function ($join) {
+                $join->on('pm3.post_id', '=', 'wp_posts.ID')
+                    ->where('pm3.meta_key', '=', 'test_intent_description');
+            })
+            ->join('wp_postmeta AS pm4', function ($join) {
+                $join->on('pm4.post_id', '=', 'wp_posts.ID')
+                    ->where('pm4.meta_key', 'LIKE', 'scenario_%');
+            })
+            ->join('wp_test_suites_scenarios AS scenario', function ($join) {
+                $join->on('scenario.id', '=', 'pm4.meta_value');
+            })
+            ->join('wp_postmeta AS pm5', function ($join) {
+                $join->on('pm5.post_id', '=', 'wp_posts.ID')
+                    ->where('pm5.meta_value', '=', '0')
+                    ->where('pm5.meta_key', '=', 'hide_case');
+            });
+
+        if ($request->get('execution_mode')) {
+            $executionMode = $request->get('execution_mode');
+
+            $query->join('wp_postmeta AS pm6', function ($join) use($executionMode) {
+                $join->on('pm6.post_id', '=', 'wp_posts.ID')
+                    ->where('pm6.meta_value', '=', $executionMode)
+                    ->where('pm6.meta_key', '=', 'executionMode');
+            });
+        }
+
+        $testCases = $query->where('wp_posts.post_type', '=', 'test-case')
+            ->groupBy('wp_posts.ID')
+            ->orderBy('scenario.sequence')
+            ->orderBy('wp_posts.post_title')
+            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm3.meta_value', 'pm4.meta_value AS scenarioId')->get();
+
+        if (empty($testCases)) {
+            return $this->respondNotFound("Test Cases not found");
+        }
+
+        foreach ($testCases AS $testCase) {
+            $cases[] = [
+                'id' => $testCase->post_name,
+                'title' => $testCase->post_title,
+                'description' => strip_tags($testCase->meta_value),
+            ];
+        }
+
+        return $this->respondWithData($cases);
+    }
+}

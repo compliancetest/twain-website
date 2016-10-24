@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v2\Controllers;
 
 use App\Profile;
 use Symfony\Component\HttpKernel;
@@ -9,7 +9,8 @@ class ProfilesController extends BaseApiController
 {
 
     /**
-     * @api {get} /v1/profiles/:profile_id Request Profile Content
+     * @api {get} /v2/profiles/:profile_id Request Profile Content
+     * @apiVersion 2.0.0
      *
      * @apiName getProfile
      * @apiGroup Profiles
@@ -62,28 +63,23 @@ class ProfilesController extends BaseApiController
      *         ]
      *       ]
      *     },
-     *     "code": 200
+     *     "status": "success",
+     *     "code": 200,
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Only organization member can perform testing"
-     *       ]
-     *     },
+     *     "messages": ["Only organization member can perform testing"],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization is not approved yet:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Your organization can't perform testing."
-     *       ]
-     *     },
+     *     "messages": ["Your organization can't perform testing."],
+     *     "status": "error",
      *     "code": 403
      *   }
      *
@@ -93,17 +89,13 @@ class ProfilesController extends BaseApiController
      * @apiErrorExample {json} Not Found error:
      *
      * {
-     *     "errors": [
-     *       "message": [
-     *          "Profile not found"
-     *       ]
-     *     ],
+     *     "messages": ["Profile not found"],
+     *     "status": "error",
      *     "code": 404
      *   }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
-     * @apiVersion 1.0.0
      */
     public function show($profileId)
     {
@@ -115,7 +107,6 @@ class ProfilesController extends BaseApiController
             }
 
             return $this->respondNotFound('Profile not found');
-
         }
     }
 }

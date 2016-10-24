@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v1\Controllers;
 
 use App\Post;
 use Validator;
