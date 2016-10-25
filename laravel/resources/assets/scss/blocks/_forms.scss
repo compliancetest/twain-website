@@ -108,3 +108,42 @@ input[type="checkbox"]{
     margin-top: 0;
   }
 }
+
+
+.manage-version-box{
+
+  .manage-version-group{
+    display: inline-block;
+    padding-right: 5px;
+    white-space: nowrap;
+    width: 100px;
+  }
+
+  .form-control{
+    width: 30px;
+    padding: 4px 0;
+    line-height: 17px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &.version-updated{
+    .btn-add{
+      display: none;
+    }
+  }
+
+  .version-cancel{
+    height: 22px;
+    width: 22px;
+    border: 0;
+    background: none;
+    display: inline-block;
+    vertical-align: middle;
+
+    .cancel-icon{
+      @include iconsSprite(version-cancel);
+    }
+  }
+}

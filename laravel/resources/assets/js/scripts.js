@@ -364,6 +364,10 @@ var Page = {
                 self.approveOrganisation($(this), e);
             });
 
+            $('.approveProduct').click(function(e) {
+                self.approveProduct($(this), e);
+            });
+
             $('#addAddNewProfileType').click(function(e) {
                 self.showAddNewProfileType(e);
             });
@@ -454,6 +458,26 @@ var Page = {
                 },
                 success: function (rsp) {
                     $('#approveOrganisationSaving').hide();
+                }
+            });
+
+        },
+
+        approveProduct: function(elem, e){
+            var self = this;
+
+            $('#approveOrganisationProductSaving').show();
+
+            jQuery.ajax({
+                type: 'post',
+                url: '/communities/' + elem.data('community') + '/approve_product',
+                data: {
+                    'organisation_id' : elem.val(),
+                    'product_id' : elem.data('product-id'),
+                    'is_checked' : elem.is(":checked") ? 1 : 0,
+                },
+                success: function (rsp) {
+                    $('#approveOrganisationProductSaving').hide();
                 }
             });
 

@@ -212,12 +212,14 @@ class MigrateProductsSuitesCases extends Migration
         Schema::create('test_cases_roles', function (Blueprint $table) {
             $table->primary('id');
             $table->uuid('id');
+            $table->uuid('test_case_id');
             $table->uuid('test_suites_role_id');
             $table->timestamps();
         });
 
         Schema::table('test_cases_roles', function ($table) {
             $table->foreign('test_suites_role_id')->references('id')->on('test_suites_roles')->onDelete('cascade');
+            $table->foreign('test_case_id')->references('id')->on('test_cases')->onDelete('cascade');
         });
 
         Schema::create('test_cases_samples', function (Blueprint $table) {
@@ -252,6 +254,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->uuid('test_case_id');
             $table->text('action');
             $table->text('expected_result');
+            $table->integer('step');
             $table->timestamps();
         });
 
@@ -272,8 +275,7 @@ class MigrateProductsSuitesCases extends Migration
         });
 
         Schema::create('test_suite_test_case', function (Blueprint $table) {
-            $table->primary('id');
-            $table->uuid('id');
+            $table->increments('id');
             $table->uuid('test_case_id');
             $table->uuid('test_suite_id');
         });

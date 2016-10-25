@@ -18,6 +18,11 @@ class LaravelTestSuite extends Model
         'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark', 'updated_at', 'created_at'
     ];
 
+    public function testCases()
+    {
+        return $this->belongsToMany('App\LaravelTestCase', 'test_suite_test_case', 'test_suite_id', 'test_case_id');
+    }
+
     public function types()
     {
         return $this->hasMany('\App\TestSuiteTypes', 'test_suite_id');

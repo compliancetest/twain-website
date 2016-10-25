@@ -8,6 +8,7 @@
             @endif
             <li @if($community->isModerator())class="active"@endif><a href="#settings-members">Members</a></li>
             <li><a href="#settings-testing-approved">Testing Approved</a></li>
+            <li><a href="#settings-products-approved">Products Approved</a></li>
             <li><a href="#settings-extra">Extra</a></li>
         </ul>
     </div>
@@ -494,6 +495,72 @@
                         @endif
                     </div>
                     <div id="approveOrganisationSaving" class="color-box-loading">
+                        <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div role="tabpanel" class="tab-pane" id="settings-products-approved">
+            <div class="colored-box">
+                <div class="colored-box-header">Products Approved</div>
+                <div class="colored-box-body">
+                    <div class="colored-box-content">
+                        @if(count($organisations) > 0)
+                            @foreach($organisations as $organisation)
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <dl class="organisation-data-info">
+                                            @if ($organisation->organisation_name)
+                                            <dt>Organization:</dt>
+                                            <dd>{{ $organisation->organisation_name }}</dd>
+                                            @endif
+                                            <dt>Contact email:</dt>
+                                            <dd title="{{ $organisation->contact_email }}">{{ $organisation->contact_email }}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="table-responsive">
+                                            <table class="table colored-table invitations_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-left">Product</th>
+                                                        <th>Type</th>
+                                                        <th>Is Approved?</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php $products = $organisation->getProducts();?>
+                                                @if($products)
+                                                    @foreach($organisation->getProducts() as $product)
+                                                    <tr>
+                                                        <?php $eloquentProduct = \App\Post::find($product->ID);?>
+                                                        <td style="width: 60%"><a href="/product/{{ $product->post_name }}" target="_blank"> {{ $eloquentProduct->getProductFullName() }}</a></td>
+                                                        <td style="width: 20%" class="text-center">{{ $product->product_type }}</td>
+                                                        <td style="width: 20%" class="text-center">
+                                                            <input type="checkbox" value="{{ $organisation->id }}" class="approveProduct"
+                                                                   data-community="{{ $community->slug }}" data-product-id="{{ $product->ID }}"
+                                                                   @if(\App\CommunityOrganisationsApprovedProducts::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'product_id' => $product->ID])->first()) checked="checked" @endif>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">No products yet</td>
+                                                    </tr>
+                                                @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="empty-row">No data yet</div>
+                        @endif
+                    </div>
+                    <div id="approveOrganisationProductSaving" class="color-box-loading">
                         <div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING</div><div class="loading-wait">Please wait...</div></div>
                     </div>
                 </div>

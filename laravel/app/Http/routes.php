@@ -169,6 +169,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('membership/{community}/changerole', 'CommunityMembershipController@changeRole');
         Route::post('membership/{community}/invite', 'CommunityMembershipController@inviteUser');
         Route::post('communities/{community}/approve_organisation', 'CommunitiesController@approveOrganisation');
+        Route::post('communities/{community}/approve_product', 'CommunitiesController@approveProduct');
 
         Route::get('communitysurveys/{community}/surveyresults', 'CommunitiesController@surveysList');
         Route::post('communitysurveys/{community}/surveyresults', 'CommunitiesController@saveSurveysLinks');

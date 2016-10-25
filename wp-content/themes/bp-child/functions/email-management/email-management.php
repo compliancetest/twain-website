@@ -252,6 +252,17 @@ $ct_email_templates = array(
                 )
             )
         ),
+        array(
+            'menu' => 'Product Approvement',
+            'title' => 'Send email to Product author',
+            'shortcodes' => '[author_name], [product_url], [product_name], [env], [site_title]', '[community_name]', '[status]',
+            'fields' => array(
+                array(
+                    'title' => 'For Product Author',
+                    'id' => 'product_approvement_to_user'
+                )
+            )
+        ),
 
     ),
     'Subscription Section' => array(

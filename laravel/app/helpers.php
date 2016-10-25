@@ -149,3 +149,26 @@ function getProductFullName($productId)
     $product = \App\Post::find($productId);
     return $product->getProductFullName();
 }
+
+function getSortingCssClass($request, $field){
+
+    if($request->get('orderby') != $field){
+        $class = 'glyphicon-sort';
+    } else {
+        if($request->get('order') == 'desc'){
+            $class = 'glyphicon-sort-by-attributes-alt';
+        } else {
+            $class = 'glyphicon-sort-by-attributes';
+        }
+    }
+    return $class;
+}
+
+function getSortingOrder($request, $field){
+    if($request->get('orderby') == $field && $request->get('order') == 'asc'){
+        $class = 'desc';
+    } else {
+        $class = 'asc';
+    }
+    return $class;
+}

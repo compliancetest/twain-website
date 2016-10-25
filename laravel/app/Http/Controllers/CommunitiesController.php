@@ -7,6 +7,7 @@ use App\CommunityApprovedOrganisation;
 use App\CommunityBackups;
 use App\CommunityMembers;
 use App\CommunityMeta;
+use App\CommunityOrganisationsApprovedProducts;
 use App\CommunityOrganisationsApprovedTestSuites;
 use App\CommunitySurveyResult;
 use App\ForumThread;
@@ -14,6 +15,7 @@ use App\ForumThreadRead;
 use App\Organisation;
 use App\Post;
 use App\Profile;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -57,7 +59,7 @@ class CommunitiesController extends Controller
         $modelData['creator_id'] = Auth::user()->ID;
         $modelData['slug'] = Community::getUniqueSlug(new Community(), $modelData['title']);
         $modelData['articles_status'] = true;
-        if(!$request->has('articles_enabled')){
+        if (!$request->has('articles_enabled')) {
             $modelData['articles_status'] = false;
         }
 
@@ -93,14 +95,14 @@ class CommunitiesController extends Controller
         ];
         if ($action == 'testsuites') {
             $showOnlyLastSuitePerFamilyMark = true;
-            if(is_super_admin() || $community->isAdmin()){
+            if (is_super_admin() || $community->isAdmin()) {
                 $showOnlyLastSuitePerFamilyMark = false;
             }
             $data['testSuites'] = Post::getCommunityTestSuites($community->id, $showOnlyLastSuitePerFamilyMark);
         }
         if ($action == 'forum') {
             $data['threads'] = $community->threads()->with('user')->get();
-            if($threadSlug){
+            if ($threadSlug) {
                 $thread = ForumThread::findBySlug($threadSlug);
                 $data['thread'] = ForumThread::findBySlug($threadSlug);
                 $data['threadPosts'] = $thread->replies()->with('user')->get();
@@ -118,7 +120,7 @@ class CommunitiesController extends Controller
             $data['instances'] = getCommunityProfileInstatnces($community->id);
         }
         if ($action == 'downloads') {
-            if($community->isAdmin()) {
+            if ($community->isAdmin()) {
                 $data['downloads'] = $community->downloads;
             } else {
                 $data['downloads'] = $community->nonAdminDownloads;
@@ -129,7 +131,7 @@ class CommunitiesController extends Controller
             $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
             $data['links'] = CommunitySurveyResult::all()->keyBy('survey_id');
             $apiResults = $surveyMonkey->getSurveyList();
-            if(isset($apiResults['data'])) {
+            if (isset($apiResults['data'])) {
                 foreach ($surveyMonkey->getSurveyList()['data'] as $survey) {
                     $collectors = $surveyMonkey->getCollectorList($survey['id']);
                     if ($collectors['data']) {
@@ -208,11 +210,11 @@ class CommunitiesController extends Controller
             $community->update(['status' => $request->get('status')]);
         }
 
-        if($request->has('visibility_status')){
+        if ($request->has('visibility_status')) {
             $community->update(['visibility_status' => $request->get('visibility_status')]);
         }
         if ($request->has('change_article_status')) {
-            if($request->has('articles_enabled')){
+            if ($request->has('articles_enabled')) {
                 $community->update(['articles_status' => true]);
             } else {
                 $community->update(['articles_status' => false]);
@@ -220,7 +222,7 @@ class CommunitiesController extends Controller
         }
 
         if ($request->has('change_list_only_certified')) {
-            if($request->has('list_only_certified')){
+            if ($request->has('list_only_certified')) {
                 $community->update(['list_only_certified' => true]);
             } else {
                 $community->update(['list_only_certified' => false]);
@@ -272,11 +274,59 @@ class CommunitiesController extends Controller
             CommunityOrganisationsApprovedTestSuites::where([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
-                 'test_suite_id' => $request->get('test_suite_id')
+                'test_suite_id' => $request->get('test_suite_id')
             ])->delete();
         }
         return response()->json(array('success' => true));
     }
+
+    /**
+     * Approve / disapprove product
+     * @param $communitySlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approveProduct($communitySlug, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'organisation_id' => 'exists:wp_organisations,id',
+            'product_id' => 'exists:wp_posts,ID'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid organisation / product id'], 422);
+        }
+
+        $community = Community::findBySlug($communitySlug);
+        if ($request->get('is_checked')) {
+            CommunityOrganisationsApprovedProducts::create([
+                'organisation_id' => $request->get('organisation_id'),
+                'community_id' => $community->id,
+                'product_id' => $request->get('product_id'),
+                'approved_by' => Auth::user()->ID
+            ]);
+        } else {
+            CommunityOrganisationsApprovedProducts::where([
+                'organisation_id' => $request->get('organisation_id'),
+                'community_id' => $community->id,
+                'product_id' => $request->get('product_id')
+            ])->delete();
+        }
+        $product = Post::find($request->get('product_id'));
+        $emailData = [
+            '[author_name]' => cp_get_user_fullname($product->post_author),
+            '[product_url]' => getSiteUrl() . '/product/' . $product->post_name,
+            '[product_name]' => $product->getProductFullName(),
+            '[site_title]' => get_site_title(),
+            '[community_name]' => Community::find($community->id)->title,
+            '[status]' => $request->get('is_checked') ? 'Approved' : 'Disapproved',
+            '[env]' => get_option('env')
+        ];
+        sendEmails([['user_id' => $product->post_author]], 'product_approvement_to_user', $emailData);
+
+        return response()->json(array('success' => true));
+    }
+
     /**
      * Render list of surveys
      * @param $communitySlug
@@ -287,15 +337,15 @@ class CommunitiesController extends Controller
         $surveys = [];
         $community = Community::findBySlug($communitySlug);
         $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
-        foreach($surveyMonkey->getSurveyList()['data'] as $survey){
+        foreach ($surveyMonkey->getSurveyList()['data'] as $survey) {
             $collectors = $surveyMonkey->getCollectorList($survey['id']);
-            if($collectors['data']){
-                foreach($collectors['data'] as $col) {
-                    if($col['name'] != $community->title){
+            if ($collectors['data']) {
+                foreach ($collectors['data'] as $col) {
+                    if ($col['name'] != $community->title) {
                         continue;
                     }
                     $collector = $surveyMonkey->getCollector($col['id']);
-                    if($collector['data']['type'] == 'weblink') {
+                    if ($collector['data']['type'] == 'weblink') {
                         $surveys[] = [
                             'title' => $survey['title'],
                             'id' => $survey['id'],
@@ -320,7 +370,7 @@ class CommunitiesController extends Controller
      */
     public function saveSurveysLinks($communitySlug, Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'links.*' => 'url'
         ]);
 
@@ -350,23 +400,24 @@ class CommunitiesController extends Controller
         $zip = new \ZipArchive();
         $zipName = date('Ymd_Hi_') . $communitySlug . '_backup.zip';
         $zipPath = storage_path('app/public/' . $zipName);
-        $zip->open( $zipPath, \ZIPARCHIVE::CREATE);
-        foreach($profiles as $profile){
+        $zip->open($zipPath, \ZIPARCHIVE::CREATE);
+        foreach ($profiles as $profile) {
             $profileObject = Profile::find($profile->id);
-            $zip->addFromString($profile->profile_name . '.json',  json_encode($profileObject->getProfileFromS3(), JSON_PRETTY_PRINT));
+            $zip->addFromString($profile->profile_name . '.json', json_encode($profileObject->getProfileFromS3(), JSON_PRETTY_PRINT));
         }
         $zip->close();
 
         //save backup's database entry and save zip to s3
-        Storage::put('backups/'.$communitySlug.'/' . $zipName, file_get_contents($zipPath));
+        Storage::put('backups/' . $communitySlug . '/' . $zipName, file_get_contents($zipPath));
         $community->backups()->create([
             'user_id' => \Auth::user()->ID,
-            's3_key' => 'backups/'.$communitySlug.'/' . $zipName, file_get_contents($zipPath)
+            's3_key' => 'backups/' . $communitySlug . '/' . $zipName, file_get_contents($zipPath)
         ]);
 
         @unlink($zipPath);
         return response()->json(['status' => 'success']);
     }
+
     /**
      * @param $request
      * @param $model

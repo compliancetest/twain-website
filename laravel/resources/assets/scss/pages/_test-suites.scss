@@ -1,3 +1,20 @@
+.edit-test-suite-page {
+
+  .status-radio-group {
+    .status-circle {
+      position: relative;
+      top: -2px;
+    }
+  }
+
+  .form-actions{
+    .checkbox{
+      margin-top: 5px;
+    }
+  }
+
+}
+
 .test-suite-types-box .checkbox{
   margin-top: 0;
 }
@@ -44,6 +61,24 @@
     .checkbox{
       width: 50%;
       float: left;
+    }
+  }
+}
+
+.test-suites-cases-list{
+  margin: 0 0 10px -10px;
+
+  li{
+    width: 25%;
+    float: left;
+
+    a{
+      line-height: 25px;
+      display: block;
+      margin: 0 0 10px 10px;
+      padding: 2px 3px;
+      border: 1px solid #cbcbcb;
+      @include border-radius(3px);
     }
   }
 }

@@ -15,4 +15,14 @@ class Product extends Model
         'manufacturer', 'protocol_version', 'model', 'access_url', 'organisation_id', 'user_id', 'wp_id',
         'created_at', 'updated_at'
     ];
+
+    public function capabilities()
+    {
+        return $this->hasMany('App\ProductCapability');
+    }
+
+    public function features()
+    {
+        return $this->hasMany('App\ProductFeature');
+    }
 }

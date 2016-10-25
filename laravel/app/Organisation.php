@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Organisation extends Model
 {
@@ -76,5 +77,28 @@ class Organisation extends Model
         }
 
         return $result;
+    }
+
+    public function getProducts()
+    {
+        $organisationId = $this->id;
+        $products = DB::table('wp_posts')
+            ->select('wp_posts.*', 'pm.meta_value AS product_type')
+            ->join('wp_postmeta AS pm', function ($join){
+                $join->on('pm.post_id', '=', 'wp_posts.ID')
+                    ->where('pm.meta_key', '=', 'product_type');
+            })
+            ->join('wp_postmeta AS pm2', function ($join) use ($organisationId) {
+                $join->on('pm2.post_id', '=', 'wp_posts.ID')
+                    ->where('pm2.meta_value', '=', $organisationId)
+                    ->where('pm2.meta_key', '=', 'product_organisation_id');
+            })
+            ->whereIn('pm.meta_value', ['DataSource', 'Application'])
+            ->where('wp_posts.post_type', '=', 'product-service')
+            ->groupBy('wp_posts.ID')
+            ->orderBy('product_type')
+            ->orderBy('wp_posts.post_title')
+            ->get();
+        return $products;
     }
 }

@@ -18,11 +18,11 @@
         <table class="table blue-colored-table sort-table">
             <thead>
             <tr>
-                <th><a href="#">Title <span class="glyphicon glyphicon-sort-by-attributes"></span></a></th>
+                <th><a href="#" class="sortby" data-type="post_title" data-order="{{ getSortingOrder($request, 'post_title') }}">Title <span class="glyphicon {{ getSortingCssClass($request, 'post_title') }}"></span></a></th>
                 <th>Description</th>
-                <th><a href="#">Type <span class="glyphicon glyphicon-sort"></span></a></th>
+                <th><a href="#" class="sortby" data-type="post_type" data-order="{{ getSortingOrder($request, 'post_type') }}">Type <span class="glyphicon {{ getSortingCssClass($request, 'post_type') }}"></span></a></th>
                 <th>Community</th>
-                <th>Date</th>
+                <th><a href="#" class="sortby" data-type="last_updated_date" data-order="{{ getSortingOrder($request, 'last_updated_date') }}">Date <span class="glyphicon {{ getSortingCssClass($request, 'last_updated_date') }}"></span></a></th>
                 @if(is_super_admin())
                     <th>Action</th>
                 @endif
@@ -48,7 +48,7 @@
                             {{ $entry['fields']['post_type'][0] }}
                         </td>
                         <td class="text-center col-md-1">
-                            {{ implode(',', $entry['fields']['community']) }}
+                            {{ implode(', ', $entry['fields']['community']) }}
                         </td>
                         <td class="text-center col-md-1">
                             {{ formatDate($entry['fields']['last_updated_date'][0], 'Y-m-d') }}
