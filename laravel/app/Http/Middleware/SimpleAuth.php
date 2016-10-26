@@ -19,7 +19,7 @@ class SimpleAuth
     {
         $field = filter_var($request->getUser(), FILTER_VALIDATE_EMAIL) ? 'user_email' : 'user_login';
         return Auth::onceBasic($field) ?
-            response()->json(['errors' => ['message' => ['Invalid credentials']], 'code' => 401], 401)
+            response()->json(['messages' => ['Invalid credentials'], 'status' => 'error', 'code' => 401], 401)
             ->withHeaders(['www-authenticate' => ['Basic'], 'cache-control' => ['no-cache']])
             : $next($request);
     }

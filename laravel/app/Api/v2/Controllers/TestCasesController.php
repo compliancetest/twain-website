@@ -451,11 +451,29 @@ class TestCasesController extends BaseApiController
      *
      *
      * @apiSuccessExample {json} Success-Response:
-     *   {
-     *     "messages": ["Ok"],
-     *     "status": "success",
-     *     "code": 200
-     *   }
+     *
+     *  {
+          "data": {
+            "ExecutionId": "414d5f4d-9580-4f1c-a956-c6b6cade6080",
+            "TestSuite": {
+              "id": "twain-v2-3-compliance-data-sources-v1-0",
+              "title": "TWAIN v2.3 Compliance - Data Sources v1.0"
+            },
+            "TestCase": {
+              "id": "sc-01-v1-0",
+              "title": "SC-01 v1.0"
+            },
+            "Product": {
+              "id": "4_ain-working-group_test_v2-201",
+              "title": "Test"
+            },
+            "ExecutionProfile": null,
+            "ConfigurationProfile": null,
+            "images": null
+          },
+          "status": "success",
+          "code": 200
+        }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *

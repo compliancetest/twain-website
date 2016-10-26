@@ -53,7 +53,7 @@ class BaseApiController extends Controller
      * @param string $message
      * @return mixed
      */
-    public function respondUnauthorizedError($message = 'Unauthorized!')
+    public function respondUnauthorizedError($message = 'Invalid credentials.')
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_UNAUTHORIZED)->respondWithError($message);
     }
@@ -77,6 +77,11 @@ class BaseApiController extends Controller
     public function respondNotFound($message = 'Not Found')
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_NOT_FOUND)->respondWithError($message);
+    }
+
+    public function respondInfo($message)
+    {
+        return $this->respond(['messages' => $message], 'info');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 Route::group(array('prefix' => 'api', 'middleware' => 'api.logs'), function () {
-    Route::get('apiversion', ['uses' => '\App\Api\v1\Controllers\VersionController@apiversion', 'middleware' => ['simpleauth']]);
+    Route::get('apiversion', ['uses' => '\App\Api\v1\Controllers\VersionController@apiversion']);
 });
 Route::group(array('prefix' => 'api/v1', 'middleware' => 'api.logs'), function () {
 

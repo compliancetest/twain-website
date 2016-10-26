@@ -102,15 +102,22 @@ class ProductsController extends BaseApiController
      * @apiSuccessExample {json} Product exist (approved):
      *  {
           "messages": ["The product has been updated successfully"],
-          "status": "success",
+          "status": "info",
           "code": 200
         }
      *
-     * @apiSuccessExample {json} Product exist (not approved) / product created:
+     * @apiSuccessExample {json} Product exist (not approved):
      *  {
           "messages": ["This product registration will require approval"],
           "status": "info",
-          "code": 403
+          "code": 200
+        }
+     *
+     *  @apiSuccessExample {json} Product created:
+     *  {
+          "messages": ["This product registration will require approval"],
+          "status": "info",
+          "code": 201
         }
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
@@ -230,7 +237,7 @@ class ProductsController extends BaseApiController
                 if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
                     return $this->respondSuccess('The product has been updated successfully');
                 } else {
-                    return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+                    return $this->setStatusCode(200)->respondInfo('This product registration will require approval');
                 }
             } else {
                 return $this->respondForbiddenError('This product was created by another organisation!');
@@ -272,7 +279,7 @@ class ProductsController extends BaseApiController
 
         $this->product->save();
 
-        return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+        return $this->setStatusCode(201)->respondInfo('This product registration will require approval');
     }
 
     /**

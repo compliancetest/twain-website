@@ -14,19 +14,6 @@
         }
       ]
     },
-    "header": {
-      "fields": {
-        "Headers": [
-          {
-            "group": "Headers",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>Authorization value Basic (base64_encode(login:password)).</p>"
-          }
-        ]
-      }
-    },
     "version": "1.0.0",
     "filename": "app/Api/v1/Controllers/VersionController.php",
     "groupTitle": "Helpers"
@@ -262,7 +249,7 @@
         },
         {
           "title": "Unauthorized:",
-          "content": "{\n   \"messages\": [\"Unauthorized!\"],\n   \"status\": \"error\",\n   \"code\": 401\n }",
+          "content": "{\n   \"messages\": [\"Invalid credentials.\"],\n   \"status\": \"error\",\n   \"code\": 401\n }",
           "type": "json"
         },
         {
@@ -782,12 +769,17 @@
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"info\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {
-          "title": "Product exist (not approved) / product created:",
-          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 403\n       }",
+          "title": "Product exist (not approved):",
+          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 200\n       }",
+          "type": "json"
+        },
+        {
+          "title": "Product created:",
+          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 201\n       }",
           "type": "json"
         }
       ]
@@ -1826,7 +1818,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n  \"messages\": [\"Ok\"],\n  \"status\": \"success\",\n  \"code\": 200\n}",
+          "content": "\n{\n         \"data\": {\n           \"ExecutionId\": \"414d5f4d-9580-4f1c-a956-c6b6cade6080\",\n           \"TestSuite\": {\n             \"id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n             \"title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\"\n           },\n           \"TestCase\": {\n             \"id\": \"sc-01-v1-0\",\n             \"title\": \"SC-01 v1.0\"\n           },\n           \"Product\": {\n             \"id\": \"4_ain-working-group_test_v2-201\",\n             \"title\": \"Test\"\n           },\n           \"ExecutionProfile\": null,\n           \"ConfigurationProfile\": null,\n           \"images\": null\n         },\n         \"status\": \"success\",\n         \"code\": 200\n       }",
           "type": "json"
         }
       ]
