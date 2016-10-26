@@ -436,7 +436,7 @@ class TestCasesController extends BaseApiController
      *
      *  {
      *     "messages": ["You are not running any test case now"],
-     *     "status": "error",
+     *     "status": "success",
      *     "code": 404
      *   }
      *
@@ -483,7 +483,7 @@ class TestCasesController extends BaseApiController
     {
         $model = TestingDetail::where(['user_id' => Auth::user()->ID, 'is_running' => true])->first();
         if (!$model) {
-            return $this->respondNotFound('You are not running any test case now');
+            return $this->respondWithStatus('You are not running any test case now', 'success');
         }
 
         $product = Post::find($model->product_id);

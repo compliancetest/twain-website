@@ -84,6 +84,11 @@ class BaseApiController extends Controller
         return $this->respond(['messages' => $message], 'info');
     }
 
+    public function respondWithStatus($message, $status)
+    {
+        return $this->respond(['messages' => $message], $status);
+    }
+
     /**
      * Function to return an internal error response.
      *

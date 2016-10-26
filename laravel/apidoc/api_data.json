@@ -1804,7 +1804,7 @@
         },
         {
           "title": "You are not running any test case now:",
-          "content": "\n{\n   \"messages\": [\"You are not running any test case now\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
+          "content": "\n{\n   \"messages\": [\"You are not running any test case now\"],\n   \"status\": \"success\",\n   \"code\": 404\n }",
           "type": "json"
         },
         {
