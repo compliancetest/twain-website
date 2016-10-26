@@ -159,7 +159,7 @@ class Post extends Model
             if ($productsWithPendingTransactions) {
                 foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
                     $product = Post::find($productWithPendingTransactions->product_id);
-                    $response[$product->post_title] = $product;
+                    $response[$product->post_name] = $product;
                 }
             }
         }
