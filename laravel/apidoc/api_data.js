@@ -769,7 +769,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"info\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"success\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {

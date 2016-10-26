@@ -102,7 +102,7 @@ class ProductsController extends BaseApiController
      * @apiSuccessExample {json} Product exist (approved):
      *  {
           "messages": ["The product has been updated successfully"],
-          "status": "info",
+          "status": "success",
           "code": 200
         }
      *
