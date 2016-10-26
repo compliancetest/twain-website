@@ -81,12 +81,12 @@ class BaseApiController extends Controller
 
     public function respondInfo($message)
     {
-        return $this->respond(['messages' => $message], 'info');
+        return $this->respond(['messages' => [$message]], 'info');
     }
 
     public function respondWithStatus($message, $status)
     {
-        return $this->respond(['messages' => $message], $status);
+        return $this->respond(['messages' => [$message]], $status);
     }
 
     /**
@@ -163,7 +163,7 @@ class BaseApiController extends Controller
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_CREATED)
             ->respond([
-                'message' => $message
+                'messages' => [$message]
             ], 'success');
     }
 
