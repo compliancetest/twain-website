@@ -21,27 +21,27 @@
 <table cellspacing="5" cellpadding="5" class="certificate-info" width="100%">
     <tr>
         <th>Issued To</th>
-        <td>{{ $product->getMetaByKey('product_manufacturer') }}</td>
+        <td>{{ $product->manufacturer }}</td>
     </tr>
     <tr>
         <th>Product</th>
-        <td><a href="{{ getSiteUrl() }}/product/{{ $product->post_name }}">{{ $product->post_title }}</a></td>
+        <td><a href="{{ getSiteUrl() }}/product/{{ $product->slug }}">{{ $product->full_name }}</a></td>
     </tr>
     <tr>
         <th>Product Version</th>
-        <td>{{ $product->getMetaByKey('product_version') }}</td>
+        <td>{{ $product->version }}</td>
     </tr>
     <tr>
         <th>Test Suite</th>
-        <td><a href="{{ getSiteUrl() }}/test-suite/{{ $testSuite->post_name }}">{{ $testSuite->post_title }}</a></td>
+        <td><a href="{{ getSiteUrl() }}/test-suite/{{ $testSuite->slug }}">{{ $testSuite->name }}</a></td>
     </tr>
     <tr>
         <th>Test Suite Version</th>
-        <td>{{ $testSuite->getMetaByKey('ts_version_major') . '.' . $testSuite->getMetaByKey('ts_version_minor') }}</td>
+        <td>{{ $testSuite->version_major . '.' . $testSuite->version_minor }}</td>
     </tr>
     <tr>
         <th>Specification Issuer</th>
-        <td>{{ $testSuite->getMetaByKey('ts_issuer') }}</td>
+        <td>{{ $testSuite->issuer }}</td>
     </tr>
     <tr>
         <th>Conformance Level</th>

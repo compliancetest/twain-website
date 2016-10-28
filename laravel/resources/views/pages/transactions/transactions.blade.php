@@ -23,9 +23,9 @@
             @foreach($transactions AS $transaction)
                 <?php
                 $eloquentTransaction = \App\Transaction::find($transaction->id);
-                $product = \App\Post::find($transaction->product_id);
-                $testCase = \App\Post::find($transaction->test_case_id);
-                $testSuite = \App\Post::find($transaction->test_suite_id);
+                $product = \App\Product::find($transaction->product_id);
+                $testCase = \App\LaravelTestCase::find($transaction->test_case_id);
+                $testSuite = \App\LaravelTestSuite::find($transaction->suite_minor_family_mark);
                 $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
                 $status = getOutcomeStatusClass($outcomeStatus->code);
                 if($supportOrAdmin){
@@ -45,12 +45,12 @@
                     </td>
                     <td class="product-name">
                         <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                        <a href="/product/{{ $product->post_name }}" class="product-name-link" target="_blank">{{ $product->getProductFullName() }}</a>
+                        <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
                     </td>
                     <td class="text-center">
-                        <a href="/test-suite/{{ $testSuite->post_name }}/" target="_blank">{{ $testSuite->post_title }}</a>
+                        <a href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
                         <br/>
-                        <a href="/test-case/{{ $testCase->post_name }}/?test_suite_id={{ $testSuite->ID }}" target="_blank">{{ $testCase->post_title }}</a>
+                        <a href="/test-case/{{ $testCase->slug }}/?test_suite_id={{ $testSuite->id }}" target="_blank">{{ $testCase->name }}</a>
                     </td>
                     <td>
                         <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
@@ -95,7 +95,7 @@
                         @endif
                         @if(isImageViewerEnabled())
                             <span class="tooltip-wrapper" data-toggle="tooltip" title="Image Viewer">
-                                <a class="btn btn-primary btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find(\App\Post::find($transaction->test_suite_id)->getMetaByKey('community_id'))->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                                <a class="btn btn-primary btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find($testSuite->community_id)->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                             </span>
                         @endif
                     </td>

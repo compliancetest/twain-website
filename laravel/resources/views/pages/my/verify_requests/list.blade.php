@@ -1,7 +1,7 @@
 @if($userSuites)
     @foreach($userSuites as $userSuite)
         <div class="colored-box">
-            <div class="colored-box-header"><a href="/test-suite/{{ $userSuite['testSuite']->post_name }}/">{{ $userSuite['testSuite']->post_title }}</a></div>
+            <div class="colored-box-header"><a href="/test-suite/{{ $userSuite['testSuite']->slug }}/">{{ $userSuite['testSuite']->full_name }}</a></div>
             <div class="colored-box-body">
                 <div class="table-responsive">
                     <table class="table colored-table">
@@ -25,7 +25,7 @@
                                     <td class="text-left">
                                         <a href="#verify-request-details-{{ $verifyRequest['verifyRequest']->id }}" class="collapsed" data-toggle="collapse">
                                             <span class="collapse-icon"></span></a>
-                                        <a href="/product/{{ $verifyRequest['product']->post_name }}" target="_blank"> {{ $verifyRequest['product']->getProductFullName() }} </a>
+                                        <a href="/product/{{ $verifyRequest['product']->slug }}" target="_blank"> {{ $verifyRequest['product']->full_name }} </a>
                                     </td>
                                     <td class="col-sm-1 text-center">{{ $verifyRequest['testPlan']->level }}</td>
                                     <td>
@@ -157,9 +157,9 @@
                                                             <a href="#verify-request-transactions-{{ $transactionId }}" class="collapsed" data-toggle="collapse">
                                                                 <span class="collapse-icon"></span>
                                                             </a>
-                                                            <?php $testCaseData = \App\Post::find($transaction->test_case_id);?>
-                                                            <a href="/test-case/{{ $testCaseData->post_name }}/?test_suite_id={{ $transaction->test_suite_id }}"
-                                                               target="_blank">{{ $testCaseData->post_title }}</a>
+                                                            <?php $testCaseData = \App\LaravelTestCase::find($transaction->test_case_id);?>
+                                                            <a href="/test-case/{{ $testCaseData->slug }}/?test_suite_id={{ $transaction->suite_minor_family_mark }}"
+                                                               target="_blank">{{ $testCaseData->full_name }}</a>
                                                         </td>
                                                         <td class="text-center">
                                                             @if($transaction->s3_link)
@@ -182,7 +182,7 @@
                                                         @if(isImageViewerEnabled())
                                                             <td class="text-center">
                                                                 <a class="btn btn-success showImageViewer"
-                                                                   href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->getMetaByKey('community_id'))->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
+                                                                   href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->community_id)->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
                                                                    data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                                                             </td>
                                                         @endif

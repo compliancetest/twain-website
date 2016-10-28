@@ -49,7 +49,7 @@ function ct_save_organisation_subscription_on_admin()
         'organisation_id' => $_POST['organisation_id'],
         'purchased_date' => $_POST['purchased_date'],
         'status' => $_POST['status'],
-        'suite_family_mark' => $_POST['suite_family_mark'],
+        'suite_minor_family_mark' => $_POST['suite_family_mark'],
         'user_id' => $_POST['user_id'],
         'payment_method' => $_POST['payment_method'],
         'purchaser_id' => 0
@@ -167,7 +167,7 @@ function ct_save_user_subscription_on_admin()
     if (!$_POST['id']) {
         $controller->create_user_harness_detail($_POST['user_id'], $_POST['suite_id'], $subscription->organisation_id, $subscription->id);    
     } else {
-        $wpdb->update($wpdb->prefix . "users_subscriptions", array('user_id' => $_POST['user_id'], 'parent_id' => $subscription->id, 'suite_id' => $_POST['suite_id']), array('id' => $_POST['id']), array('%d'), array('%d'));
+        $wpdb->update($wpdb->prefix . "users_subscriptions", array('user_id' => $_POST['user_id'], 'parent_id' => $subscription->id, 'suite_minor_family_mark' => $_POST['suite_id']), array('id' => $_POST['id']), array('%d'), array('%d'));
     }
     
     addMessage('Subscription saved successfully.');

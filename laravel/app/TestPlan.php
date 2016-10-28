@@ -13,7 +13,7 @@ class TestPlan extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'organisation_subscription_id', 'product_id', 'suite_id', 'level', 'role', 'creator_id'
+        'organisation_subscription_id', 'product_id', 'suite_minor_family_mark', 'level', 'role', 'creator_id'
     ];
 
     /**
@@ -23,6 +23,7 @@ class TestPlan extends Model
     {
         return $this->hasOne('App\Claim');
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -107,7 +108,7 @@ class TestPlan extends Model
             ->lists('test_case_id');
     }
 
-     /**
+    /**
      * Get test cases list with SKIP status from transactions table
      * @return mixed
      */
@@ -127,19 +128,21 @@ class TestPlan extends Model
 
     /**
      * Exclude cases with unsupported capabilities / features
+     * @param string $type
+     * @param array $applicationProductFeatures
      */
     public function excludeTestCases($type = 'DataSource', $applicationProductFeatures = [])
     {
-        $testSuite = Post::find($this->suite_id);
+        $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
+        $product = Product::find($this->product_id);
         $testCases = $testSuite->getTestCases($this->role, $this->level);
         foreach ($testCases as $testCase) {
-
             if ($type == 'DataSource') {
-                $capabilities = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'capabilities'])->first()->meta_value, true);
-                $diff = array_diff($capabilities, (array)json_decode(@PostMeta::where(['post_id' => $this->product_id, 'meta_key' => 'capabilities'])->first()->meta_value));
+                $capabilities = (array)$testCase->capabilities()->pluck('capability');
+                $diff = array_diff($capabilities, (array)$product->capabilities()->pluck('capability'));
                 if (!empty($diff)) {
                     TestPlanExcludedCases::create([
-                        'test_case_id' => $testCase->ID,
+                        'test_case_id' => $testCase->id,
                         'excluded_by_user_id' => \Auth::user()->ID,
                         'test_plan_id' => $this->id,
                         'reason' => 'Those capabilities not supported by data source: ' . implode(', ', $diff),
@@ -147,11 +150,11 @@ class TestPlan extends Model
                     ]);
                 }
             } else {
-                $testCaseFeatures = (array)json_decode(PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'featuresList'])->first()->meta_value, true);
-                $diff = array_diff($testCaseFeatures, $applicationProductFeatures);
+                $testCaseFeatures = (array)$testCase->features()->pluck('test_suites_feature_id');
+                $diff = array_diff($testCaseFeatures, (array)$product->features()->pluck('test_suites_feature_id'));
                 if (!empty($diff)) {
                     TestPlanExcludedCases::create([
-                        'test_case_id' => $testCase->ID,
+                        'test_case_id' => $testCase->id,
                         'excluded_by_user_id' => \Auth::user()->ID,
                         'test_plan_id' => $this->id,
                         'reason' => 'Those features not supported by application: ' . implode(', ', $diff),
@@ -164,7 +167,7 @@ class TestPlan extends Model
 
     public function canBeClaimed()
     {
-        $suite = Post::find($this->suite_id);
+        $suite = LaravelTestSuite::find($this->suite_minor_family_mark);
         $testCases = $suite->getTestCases($this->role, $this->level);
 
         if ($testCases->isEmpty()) {
@@ -177,7 +180,7 @@ class TestPlan extends Model
         $skippedCases = $this->getSkippedCases();
 
         foreach ($testCases as $case) {
-            if (in_array($case->ID, $successCases) || in_array($case->ID, $skippedCases) || array_key_exists($case->ID, $excludedCases) || in_array($case->ID, $optionalCases)) {
+            if (in_array($case->id, $successCases) || in_array($case->id, $skippedCases) || array_key_exists($case->id, $excludedCases) || in_array($case->id, $optionalCases)) {
                 //success case
             } else {
                 return false;
@@ -192,7 +195,7 @@ class TestPlan extends Model
      */
     public function hasExclusions()
     {
-        $suite = Post::find($this->suite_id);
+        $suite = LaravelTestSuite::find($this->suite_minor_family_mark);
         $testCases = $suite->getTestCases($this->role, $this->level);
 
         $excludedCases = $this->getExcludedCases();
@@ -202,7 +205,7 @@ class TestPlan extends Model
         $hasExclusions = false;
 
         foreach ($testCases as $case) {
-            if (!in_array($case->ID, $successCases) && (in_array($case->ID, $skippedCases) || array_key_exists($case->ID, $excludedCases))) {
+            if (!in_array($case->id, $successCases) && (in_array($case->id, $skippedCases) || array_key_exists($case->id, $excludedCases))) {
                 $hasExclusions = true;
             }
         }

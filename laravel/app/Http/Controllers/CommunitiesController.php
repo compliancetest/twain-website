@@ -169,7 +169,7 @@ class CommunitiesController extends Controller
             $data['invitedUsers'] = $community->invitations;
             $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
-            $data['communityTestSuites'] = Post::getCommunityTestSuites($community->id);
+            $data['communityTestSuites'] = $community->getCommunityTestSuites();
         }
         return view('pages.communities.show')->with($data);
     }

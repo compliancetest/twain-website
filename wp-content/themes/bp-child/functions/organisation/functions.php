@@ -60,7 +60,7 @@ function ct_is_organisation_purchased_subscription($organisation_id, $suite_fami
     global $wpdb;
     
     $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_subscriptions AS os                             
-            WHERE os.organisation_id=%d AND os.suite_family_mark=%d", $organisation_id, $suite_family_mark);
+            WHERE os.organisation_id=%d AND os.suite_minor_family_mark=%d", $organisation_id, $suite_family_mark);
     $id = $wpdb->get_var($query);
     
     return !$id ? false : $id;
@@ -169,7 +169,7 @@ function ct_get_organisation_subscriptions($organisation_id)
     
     $query = $wpdb->prepare("SELECT os.*, u.user_email, u.display_name, t.suite_title FROM {$wpdb->prefix}organisations_subscriptions AS os 
                             LEFT JOIN {$wpdb->users} AS u ON u.ID=os.user_id 
-                            LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_family_mark
+                            LEFT JOIN {$wpdb->prefix}test_suites AS t ON t.family_mark=os.suite_minor_family_mark
                             WHERE us.organisation_id=%d", $organisation_id);
     
     $rows = $wpdb->get_results($query);

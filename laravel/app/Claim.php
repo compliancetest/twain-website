@@ -15,7 +15,7 @@ class Claim extends Model
     protected $fillable = [
         'product_id',
         'organisation_id',
-        'test_suite_id',
+        'suite_minor_family_mark',
         'creator_id',
         'conformance_level',
         'role',
@@ -31,6 +31,16 @@ class Claim extends Model
     public function testPlan()
     {
         return $this->belongsTo('App\TestPlan');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
+    }
+
+    public function testSuite()
+    {
+        return $this->belongsTo('App\LaravelTestSuite', 'suite_minor_family_mark');
     }
 
     /**
@@ -109,7 +119,7 @@ class Claim extends Model
         // define active area for signature appearance
         $pdf->setSignatureAppearance(45, 72, 121, 29);
 
-        $testSuite = Post::find($this->test_suite_id);
+        $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
         $testPlan = TestPlan::find($this->test_plan_id);
 
         $successCases = $testPlan->getSuccessCases($this->product_id);
@@ -119,7 +129,7 @@ class Claim extends Model
         //Classify the results by Scenario
         $excludedCases = $skippedCases = $generalCases = array();
         foreach ($testSuite->getTestCases($testPlan->role, $testPlan->level) as $case) {
-            if (in_array($case->ID, $successCases)) {
+            if (in_array($case->id, $successCases)) {
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
@@ -127,12 +137,12 @@ class Claim extends Model
                 $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
                 $case->link = $tempTransaction->s3_link;
                 $generalCases[$case->scenarioID][] = $case;
-            } elseif (!in_array($case->ID, $optionalCases)) {
+            } elseif (!in_array($case->id, $optionalCases)) {
                 if (!isset($excludedCases[$case->scenarioID])) {
                     $excludedCases[$case->scenarioID] = array();
                 }
-                $case->reason = $excCases[$case->ID]['reason'];
-                if($excCases[$case->ID]['is_skipped'] == 1){
+                $case->reason = $excCases[$case->id]['reason'];
+                if($excCases[$case->id]['is_skipped'] == 1){
                     $skippedCases[$case->scenarioID][] = $case;
                 } else {
                     $excludedCases[$case->scenarioID][] = $case;
@@ -146,8 +156,8 @@ class Claim extends Model
         $countExcludeCases = $this->countCases($excludedCases);
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell('', '', '', '', view('pages.my.claims._cert_info')->with([
-            'product' => Post::find($this->product_id),
-            'testSuite' => Post::find($this->test_suite_id),
+            'product' => Product::find($this->product_id),
+            'testSuite' => LaravelTestSuite::find($this->suite_minor_family_mark),
             'claim' => $this,
             'passCount' => $countPassCases,
             'excludeCount' => $countExcludeCases,
@@ -202,15 +212,15 @@ class Claim extends Model
     public function sendNewClaimNotification()
     {
         $user = \Auth::user();
-        $testSuite = Post::find($this->test_suite_id);
-        $product = Post::find($this->product_id);
+        $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
+        $product = Product::find($this->product_id);
         $emailData = array(
             '[claim_id]' => $this->id,
-            '[product_name]' => $product->post_title,
-            '[product_url]' => getSiteUrl() . '/product/' . $product->post_name,
-            '[suite_name]' => $testSuite->post_title,
-            '[suite_url]' => getSiteUrl() . '/test-suite/' . $testSuite->post_name,
-            '[issuer]' => $testSuite->getMetaByKey('ts_issuer'),
+            '[product_name]' => $product->full_name,
+            '[product_url]' => getSiteUrl() . '/product/' . $product->slug,
+            '[suite_name]' => $testSuite->full_name,
+            '[suite_url]' => getSiteUrl() . '/test-suite/' . $testSuite->slug,
+            '[issuer]' => $testSuite->issuer,
             '[conformance_level]' => $this->conformance_level,
             '[role]' => $this->role,
             '[status]' => $this->status,
@@ -220,7 +230,7 @@ class Claim extends Model
             '[certificate]' => '<a href="' . getSiteUrl() . '/claims/' . $this->id . '" target="_blank">View PDF</a>'
         );
 
-        cp_send_email_to_community_admin($testSuite->getMetaByKey('community_id'), 'claim_created_admin', $emailData);
+        cp_send_email_to_community_admin($testSuite->community_id, 'claim_created_admin', $emailData);
     }
 
     /**

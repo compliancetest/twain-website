@@ -39,14 +39,14 @@ class MigrateProductsCasesSuitesData extends Migration
                 'status' => $testSuite->getMetaByKey('ts_status'),
                 'product_type' => $testSuite->getMetaByKey('ts_tester_role'),
                 'excerpt' => $testSuite->post_excerpt,
-                'major_family_mark' => \App\TestSuite::getTestSuiteFamilyMark($testSuite->ID),
                 'wp_id' => $testSuite->ID,
                 'published_at' => $testSuite->getMetaByKey('ts_issue_date'),
                 'created_at' => $testSuite->post_date,
                 'updated_at' => $testSuite->post_date,
             ]);
 
-            $laravelTestSuite->minor_family_mark = $testSuite->id;
+            $laravelTestSuite->major_family_mark = $laravelTestSuite->id;
+            $laravelTestSuite->minor_family_mark = $laravelTestSuite->id;
             $laravelTestSuite->save();
 
             //test suite types
@@ -172,6 +172,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'tester_role' => $testCase->getMetaByKey('choose_tester_role'),
                 'harness_role' => $testCase->getMetaByKey('choose_harness_role'),
                 'initiator' => $testCase->getMetaByKey('choose_initiator'),
+                'status' => (string) $testCase->getMetaByKey('test_case_status'),
                 'test_execution_profile_id' => (integer)$testCase->getMetaByKey('test_execution'),
                 'configuration_profile_id' => (integer)$testCase->getMetaByKey('test_data_profile'),
                 'outcome_type' => (string)$testCase->getMetaByKey('outcome_type'),
@@ -357,6 +358,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'organisation_id' => $product->getMetaByKey('product_organisation_id'),
                 'user_id' => $product->post_author,
                 'wp_id' => $product->ID,
+                'released_at' => $product->post_date,
                 'created_at' => $product->post_date,
                 'updated_at' => $product->post_date,
             ]);
@@ -373,23 +375,22 @@ class MigrateProductsCasesSuitesData extends Migration
                 }
             }
             $featuresData = \App\PostMeta::where(['post_id' => $laravelProduct->wp_id, 'meta_key' => 'product_features'])->first();
+            if ($featuresData) {
+                $featuresData = json_decode($featuresData->meta_value, true);
                 if ($featuresData) {
-                    $featuresData = json_decode($featuresData->meta_value, true);
-                    if ($featuresData) {
-                        foreach ($featuresData as $feature) {
-                            $productSuites = \App\PostMeta::where(['post_id' => $laravelProduct->wp_id, 'meta_key' => 'product_suites'])->first();
+                    foreach ($featuresData as $feature) {
+                        $productSuites = \App\PostMeta::where(['post_id' => $laravelProduct->wp_id, 'meta_key' => 'product_suites'])->first();
+                        if ($productSuites) {
+                            $productSuites = json_decode($productSuites->meta_value, true);
                             if ($productSuites) {
-                                $productSuites = json_decode($productSuites->meta_value, true);
-                                if ($productSuites) {
-                                    foreach ($productSuites as $productSuite) {
-                                        $laravelSuite = \App\LaravelTestSuite::where('wp_id', $productSuite)->first();
-                                        if ($laravelSuite) {
-                                            $laravelFeature = $laravelSuite->features()->where('name', $feature)->first();
-                                            if ($laravelFeature) {
-                                                $laravelProduct->features()->create([
-                                                    'test_suites_feature_id' => $laravelFeature->id
-                                                ]);
-                                            }
+                                foreach ($productSuites as $productSuite) {
+                                    $laravelSuite = \App\LaravelTestSuite::where('wp_id', $productSuite)->first();
+                                    if ($laravelSuite) {
+                                        $laravelFeature = $laravelSuite->features()->where('name', $feature)->first();
+                                        if ($laravelFeature) {
+                                            $laravelProduct->features()->create([
+                                                'test_suites_feature_id' => $laravelFeature->id
+                                            ]);
                                         }
                                     }
                                 }
@@ -397,6 +398,16 @@ class MigrateProductsCasesSuitesData extends Migration
                         }
                     }
                 }
+            }
+        }
+        $testSuites = \App\Post::where(['post_type' => 'test-suite'])->get();
+        foreach ($testSuites as $testSuite) {
+            $laravelTestSuite = \App\LaravelTestSuite::where('wp_id', $testSuite->ID)->first();
+            $ll = \App\LaravelTestSuite::where('wp_id', \App\TestSuite::find($testSuite->ID)->family_mark)->first();
+            if ($ll) {
+                $laravelTestSuite->major_family_mark = $ll->id;
+                $laravelTestSuite->save();
+            }
         }
     }
 

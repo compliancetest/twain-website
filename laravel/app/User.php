@@ -120,23 +120,22 @@ class User extends Authenticatable
 
         foreach($organisationSubscriptions as $organisationSubscription){
 
-            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $this->organisation[0]->id, 'test_suite_id' => $organisationSubscription->suite_family_mark])->first();
+            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $this->organisation[0]->id, 'suite_major_family_mark' => LaravelTestSuite::getMajorFamilyMarkForMinorFamilyMark($organisationSubscription->suite_minor_family_mark)])->first();
             //user shouldn't see test plans for a test suite if he is not subscribed to test suite or if organisation doesn't have approvement for this suite
-            if (!OrganisationSubscription::where(['user_id' => $this->ID, 'suite_family_mark' => $organisationSubscription->suite_family_mark])->first() || !$aprovementEntry) {
+            if (!OrganisationSubscription::where(['user_id' => $this->ID, 'suite_minor_family_mark' => $organisationSubscription->suite_minor_family_mark])->first() || !$aprovementEntry) {
                 continue;
             }
-            $testPlans = TestPlan::where(['is_claimed' => false, 'organisation_subscription_id' => $organisationSubscription->id, 'suite_id' => $organisationSubscription->suite_family_mark])->get();
-            $suite = Post::find(TestSuite::getLatestSuiteIdForFamilyMark($organisationSubscription->suite_family_mark));
-            if(!isset($response[$suite->post_title] )) {
-                $response[$suite->post_title] = [
+            $testPlans = TestPlan::where(['is_claimed' => false, 'organisation_subscription_id' => $organisationSubscription->id, 'suite_minor_family_mark' => $organisationSubscription->suite_minor_family_mark])->get();
+            $suite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($organisationSubscription->suite_minor_family_mark);
+            if(!isset($response[$suite->full_name] )) {
+                $response[$suite->full_name] = [
                     'testSuite' => $suite,
                     'testPlans' => [],
                 ];
             }
             foreach($testPlans as $testPlan){
-
-                 $response[$suite->post_title]['testPlans'][] = [
-                     'product' => Post::find($testPlan->product_id),
+                 $response[$suite->full_name]['testPlans'][] = [
+                     'product' => Product::find($testPlan->product_id),
                      'testPlan' => $testPlan,
                      'testPlanData' => [
                          'excludedCases' => $testPlan->getExcludedCases(),
@@ -155,7 +154,7 @@ class User extends Authenticatable
             $size = count($testPlans) - 1;
             for ($i = $size; $i >= 0; $i--) {
                 for ($j = 0; $j <= ($i - 1); $j++)
-                    if (strtolower($testPlans[$j]['product']->post_title . $testPlans[$j]['testPlan']->level) > strtolower($testPlans[$j + 1]['product']->post_title . $testPlans[$j + 1]['testPlan']->level)) {
+                    if (strtolower($testPlans[$j]['product']->full_name . $testPlans[$j]['testPlan']->level) > strtolower($testPlans[$j + 1]['product']->full_name . $testPlans[$j + 1]['testPlan']->level)) {
                         $k = $testPlans[$j];
                         $testPlans[$j] = $testPlans[$j + 1];
                         $testPlans[$j + 1] = $k;
@@ -168,11 +167,9 @@ class User extends Authenticatable
 
     public function getProducts($productType = 'DataSource', $protocolVersions = false)
     {
-        $productType = str_replace(' ', '', $productType);
-        $results = [];
         //admin will see all products
         if (is_super_admin()) {
-            $products = Post::where(['post_type' => 'product-service'])->orderBy('post_title')->get();
+            $productsQuery = Product::orderBy('full_name');
         } else {
 
             $organisation = @$this->organisation[0];
@@ -181,33 +178,16 @@ class User extends Authenticatable
                 return [];
             }
             //usual user will see only his organisation's products
-            $products = DB::table('wp_posts')
-                ->select('wp_posts.*', 'pm2.meta_value AS version', 'pm1.*')
-                ->join('wp_postmeta AS pm1', function ($join) use ($organisation) {
-                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                        ->where('pm1.meta_value', '=', $organisation->id)
-                        ->where('pm1.meta_key', '=', 'product_organisation_id');
-                })
-                ->join('wp_postmeta AS pm2', function ($join) use ($organisation) {
-                    $join->on('pm2.post_id', '=', 'wp_posts.ID')
-                        ->where('pm2.meta_key', '=', 'product_version');
-                })
-                ->where('wp_posts.post_type', '=', 'product-service')
-                ->orderBy('post_title')
-                ->groupBy('wp_posts.ID')->get();
-        }
-        foreach ($products as $product) {
-            if($protocolVersions){
-                if (!in_array(PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'protocol_version'])->first()->meta_value, $protocolVersions)) {
-                    continue;
-                }
-            }
-            if (str_replace(' ', '', PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value) == $productType) {
-                $results[] = $product;
-            }
+            $productsQuery = Product::where('organisation_id', $organisation->id)->orderBy('full_name');
         }
 
-        return $results;
+        if($productType){
+            $productsQuery->where('type', $productType);
+        }
+         if($protocolVersions){
+            $productsQuery->whereIn('protocol_version', $protocolVersions);
+        }
+        return $productsQuery->get();
     }
 
     public function getMetaByKey($metaKey)

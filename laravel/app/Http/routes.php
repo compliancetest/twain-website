@@ -67,7 +67,12 @@ Route::group(array('prefix' => 'api/v2', 'middleware' => 'api.logs'), function (
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('laravel-product/{productId}', 'ProductsController@view');
-    Route::get('laravel-product/{productId}/edit', 'ProductsController@edit');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('laravel-product/{productId}/edit', 'ProductsController@edit');
+        Route::post('laravel-product/{productId}', 'ProductsController@update');
+        Route::delete('laravel-product/{productId}', 'ProductsController@destroy');
+        Route::get('laravel-my-products', 'ProductsController@index');
+    });
 
     Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
     Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');

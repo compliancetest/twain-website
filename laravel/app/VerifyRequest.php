@@ -28,25 +28,29 @@ class VerifyRequest extends Model
         $userCommunities = $user->subscriptions;
         foreach ($userCommunities as $userCommunity) {
             $community = Community::find($userCommunity->community_id);
+
+            $isAdministrator = $community->isModerator() || $community->isAdmin();
+
             //Community Support users can see all community suites
-            if ($community->isModerator() || $community->isAdmin()) {
-                $userTestSuites = Post::getCommunityTestSuites($community->id);
+            if ($isAdministrator) {
+                $userTestSuites = $community->getCommunityTestSuites();
             } else {
                 $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }
-
             foreach ($userTestSuites as $userTestSuite) {
-                if (!isset($result[$userTestSuite->suite_family_mark])) {
-                    $result[$userTestSuite->suite_family_mark] = [
-                        'testSuite' => Post::find(TestSuite::getLatestSuiteIdForFamilyMark($userTestSuite->suite_family_mark)),
+                $minorFamilyMark = $isAdministrator ? $userTestSuite->id : $userTestSuite->minor_family_mark;
+                if (!isset($result[$minorFamilyMark])) {
+                    $result[$minorFamilyMark] = [
+                        'testSuite' => LaravelTestSuite::getLatestSuiteForMinorFamilyMark($minorFamilyMark),
                         'data' => [],
                     ];
                 }
 
                 if ($userCommunity->is_admin || $userCommunity->is_mod) {
                     $query = VerifyRequest::where([
-                        'community_id' => $userCommunity->community_id
-                    ])->whereIn('test_suite_id',TestSuite::getFamilyMarkSuitesIds($userTestSuite->suite_family_mark));
+                        'community_id' => $userCommunity->community_id,
+                        'suite_minor_family_mark' => $minorFamilyMark
+                    ]);
                     if ($hideResolved) {
                         $query->where('status', '<>', 'Resolved');
                     }
@@ -58,21 +62,23 @@ class VerifyRequest extends Model
                     $requests = VerifyRequest::where([
                         'community_id' => $userCommunity->community_id,
                         'organisation_id' => Auth::user()->organisation[0]['id'],
-                    ])->whereIn('test_suite_id', TestSuite::getFamilyMarkSuitesIds($userTestSuite->suite_family_mark))->get();
+                        'suite_minor_family_mark' => $minorFamilyMark
+                    ])->get();
                 }
+
                 if (is_object($requests) && !$requests->isEmpty()) {
                     foreach ($requests as $request) {
                         $testCases = Transaction::find(json_decode($request->transactions, true))->map(function ($item, $key) {
-                            return Post::find($item->test_case_id);
+                            return LaravelTestCase::find($item->test_case_id);
                         });
-                        $result[$userTestSuite->suite_family_mark]['data'][] = [
+                        $result[$minorFamilyMark]['data'][] = [
                             'verifyRequest' => $request,
                             'requestor' => User::find($request->requestor_id),
                             'assignee' => $request->assignee_id ? User::find($request->assignee_id) : false,
-                            'product' => Post::find($request->product_id),
+                            'product' => Product::find($request->product_id),
                             'testPlan' => TestPlan::find($request->test_plan_id),
                             'testCases' => $testCases->sortBy(function($item){
-                                return $item->post_title;
+                                return $item->full_name;
                             }),
                         ];
                     }

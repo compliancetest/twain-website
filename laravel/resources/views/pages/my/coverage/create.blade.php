@@ -5,14 +5,14 @@
 <form action="/testplan/" id="coverageEditPlanForm" method="post">
     <div class="modal-body">
 
-        <input type="hidden" name="suite_id" value="{{ $suiteId }}">
+        <input type="hidden" name="suite_minor_family_mark" value="{{ $suiteId }}">
 
         <div class="form-group">
             <label for="availableProducts">Product</label>
             <select name="product_id" id="availableProducts" class="form-control">
                 <option value="">Select a Product</option>
                 @foreach($products as $product)
-                    <option value="{{ $product->ID }}">{{ getProductFullName($product->ID) }}</option>
+                    <option value="{{ $product->id }}">{{ $product->full_name }}</option>
                 @endforeach
             </select>
         </div>

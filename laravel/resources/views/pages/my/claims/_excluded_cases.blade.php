@@ -61,9 +61,9 @@
                         {!! $testCase->scenarioDescription !!}
                     </td>
                 @endif
-                <td class="test-case">{{ $testCase->post_title }}</td>
-                <td class="issued">{{ date('Y-m-d', strtotime(getPostMeta($testCase->ID, 'published'))) }}</td>
-                <td class="test-intent">{!! getPostMeta($testCase->ID, 'test_intent_description') !!}</td>
+                <td class="test-case">{{ $testCase->full_name }}</td>
+                <td class="issued">{{ date('Y-m-d', $testCase->published_at) }}</td>
+                <td class="test-intent">{!! $testCase->description !!}</td>
                 <td class="test-reason">{{ $testCase->reason }}</td>
             </tr>
         @endforeach

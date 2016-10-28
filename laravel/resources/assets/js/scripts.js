@@ -651,6 +651,12 @@ var Page = {
                     if(form.data('reset-form-after-submit')){
                         $(form)[0].reset();
                     }
+                    if(form.data('redirect-after-submit')){
+                        setTimeout(function() {
+                            location.href = form.data('redirect-after-submit');
+                        }, 2500);
+
+                    }
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();

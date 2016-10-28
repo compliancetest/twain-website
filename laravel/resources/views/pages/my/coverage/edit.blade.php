@@ -10,7 +10,7 @@
             <select name="product_id" id="availableProducts" class="form-control">
                 <option value="">Select a Product</option>
                 @foreach($products as $product)
-                    <option value="{{ $product->ID }}" @if($product->ID == $testPlan->product_id) selected="selected" @endif>{{ getProductFullName($product->ID) }}</option>
+                    <option value="{{ $product->id }}" @if($product->id == $testPlan->product_id) selected="selected" @endif>{{ $product->full_name }}</option>
                 @endforeach
             </select>
         </div>

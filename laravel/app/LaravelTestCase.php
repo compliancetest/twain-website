@@ -15,7 +15,7 @@ class LaravelTestCase extends Model
     protected $fillable = [
         'slug', 'name', 'version_major', 'version_minor', 'version_patch', 'description', 'full_name', 'tester_role',
         'harness_role', 'initiator', 'test_execution_profile_id', 'configuration_profile_id', 'outcome_type', 'is_optional', 'test_pattern',
-        'wp_id', 'published_at', 'created_at', 'updated_at'
+        'wp_id', 'published_at', 'created_at', 'updated_at', 'status'
     ];
 
     public function testSuites()

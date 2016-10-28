@@ -16,6 +16,17 @@ class Product extends Model
         'created_at', 'updated_at'
     ];
 
+    public $dates = ['released_at', 'created_at', 'updated_at'];
+
+    /**
+     * @param $slug
+     * @return mixed
+     */
+    public static function findBySlug($slug)
+    {
+        return Product::where(['slug' => $slug])->firstOrFail();
+    }
+
     public function capabilities()
     {
         return $this->hasMany('App\ProductCapability');
@@ -24,5 +35,20 @@ class Product extends Model
     public function features()
     {
         return $this->hasMany('App\ProductFeature');
+    }
+
+    public function claims()
+    {
+        return $this->hasMany('App\Claim');
+    }
+
+    /**
+     * Check that user can edit / delete permission
+     * @param User $user
+     * @return bool
+     */
+    public function doesUserCanEdit(User $user)
+    {
+        return $user->check() && ($this->organisation_id == @$user->organisation[0]->id || is_super_admin());
     }
 }

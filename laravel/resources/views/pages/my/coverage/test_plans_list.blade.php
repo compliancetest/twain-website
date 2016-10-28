@@ -1,7 +1,7 @@
 @if($userSuites)
     @foreach($userSuites as $suiteName => $userSuite)
         <div class="colored-box">
-            <div class="colored-box-header"><a href="/test-suite/{{ $userSuite['testSuite']->post_name }}/">{{ $suiteName }}</a></div>
+            <div class="colored-box-header"><a href="/test-suite/{{ $userSuite['testSuite']->slug }}/">{{ $suiteName }}</a></div>
             <div class="colored-box-body">
                 <div class="table-responsive">
                     <table class="table colored-table">
@@ -20,8 +20,8 @@
                             @foreach($userSuite['testPlans'] as $userPlan)
                                 <tr id="coverage-plan-{{ $userPlan['testPlan']->id }}">
                                     <td class="text-nowrap">
-                                        <a href="/product/{{ $userPlan['product']->post_name }}" target="_blank">
-                                            {{ $userPlan['product']->getProductFullName() }}
+                                        <a href="/product/{{ $userPlan['product']->slug }}" target="_blank">
+                                            {{ $userPlan['product']->full_name }}
                                         </a>
                                     </td>
                                     <td class="text-center">{{ $userPlan['testPlan']->level }}</td>
@@ -34,8 +34,8 @@
                                         </div>
                                     </td>
                                     <td class="col-sm-1 text-nowrap">
-                                        @if(!\App\Transaction::where(['product_id' => $userPlan['product']->ID, 'test_suite_id' => $userSuite['testSuite']->ID])->get()->isEmpty())
-                                            <a href="/my-transaction-log/?test_suite_id={{ $userSuite['testSuite']->ID }}&product_id={{ $userPlan['product']->ID }}" target="_blank"
+                                        @if(!\App\Transaction::where(['product_id' => $userPlan['product']->id, 'suite_minor_family_mark' => $userSuite['testSuite']->id])->get()->isEmpty())
+                                            <a href="/my-transaction-log/?suite_minor_family_mark={{ $userSuite['testSuite']->id }}&product_id={{ $userPlan['product']->id }}" target="_blank"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
                                         @endif
 
@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <a href="/testplan/create/{{ $userSuite['testSuite']->ID }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#editPlanModal"
+        <a href="/testplan/create/{{ $userSuite['testSuite']->minor_family_mark}}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#editPlanModal"
            class="btn btn-success btn-with-icon btn-add" style="margin-bottom: 20px;">Add</a>
 
     @endforeach

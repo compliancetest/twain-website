@@ -25,10 +25,10 @@ class TestPlanRequest extends Request
     public function rules()
     {
         return [
-            'product_id' => 'required|exists:wp_posts,ID',
+            'product_id' => 'required|exists:products,id',
             'level' => 'required|string',
             'role' => 'required|string',
-            'suite_id' => 'exists:wp_posts,ID',
+            'suite_minor_family_mark' => 'exists:test_suites,minor_family_mark',
         ];
     }
 }

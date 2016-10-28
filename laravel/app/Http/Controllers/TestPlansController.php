@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Claim;
+use App\LaravelTestCase;
+use App\LaravelTestSuite;
 use App\OrganisationSubscription;
 use App\Post;
 use App\PostMeta;
 use App\PricingPlan;
+use App\Product;
 use App\TestPlan;
 use App\TestPlanExcludedCases;
+use App\TestSuiteFeatures;
 use App\Transaction;
 use App\UserSubscription;
 use Illuminate\Http\JsonResponse;
@@ -38,22 +42,21 @@ class TestPlansController extends Controller
      * Render create test plan form
      * @return mixed
      */
-    public function create($suiteId)
+    public function create($suiteMinorFamilyMark)
     {
-        $userSubscription = UserSubscription::where(['suite_id' => $suiteId, 'user_id' => Auth::user()->ID])->first();
-        $subscription = OrganisationSubscription::find($userSubscription->parent_id);
+        $subscription = OrganisationSubscription::where(['suite_minor_family_mark' => $suiteMinorFamilyMark, 'user_id' => Auth::user()->ID])->first();
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
-        $suiteType = PostMeta::where(['post_id' => $suiteId, 'meta_key' => 'ts_tester_role'])->first();
-        $suiteProtocolVersions = PostMeta::where(['post_id' => $suiteId, 'meta_key' => 'protocol_versions'])->first();
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($suiteMinorFamilyMark);
+        $suiteType = $testSuite->product_type;
+        $suiteProtocolVersions = $testSuite->protocolVersions->toArray();
         $data = [
-            'products' => Auth::user()->getProducts($suiteType->meta_value, json_decode($suiteProtocolVersions->meta_value, true)),
+            'products' => Auth::user()->getProducts($suiteType, $suiteProtocolVersions),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
-            'suiteId' => $suiteId,
+            'suiteId' => $suiteMinorFamilyMark,
         ];
-
         return view('pages.my.coverage.create')->with($data)->render();
     }
 
@@ -66,7 +69,7 @@ class TestPlansController extends Controller
     {
         $testPlanData = [
             'product_id' => $request->get('product_id'),
-            'suite_id' => $request->get('suite_id'),
+            'suite_minor_family_mark' => $request->get('suite_minor_family_mark'),
             'level' => $request->get('level'),
             'role' => $request->get('role'),
             'is_claimed' => false,
@@ -75,25 +78,22 @@ class TestPlansController extends Controller
             return JsonResponse::create(['message' => 'You already have test plan for this test suite'], 422);
         }
 
+        $product = Product::find($request->get('product_id'));
         if ($request->get('role') == 'Application') {
-            $configuredTestSuites =  (array) json_decode(Post::find($request->get('product_id'))->getMetaByKey('product_suites'));
+            $configuredTestSuites =  TestSuiteFeatures::find($product->features)->pluck('test_suite_id');
             if (!in_array($request->get('suite_id'), $configuredTestSuites)) {
                 return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool.'], 422);
             }
         }
 
-        $userSubscription = UserSubscription::where(['suite_id' => $request->get('suite_id'), 'user_id' => Auth::user()->ID])->first();
-        $organisationSubscription = OrganisationSubscription::find($userSubscription->parent_id);
+        $organisationSubscription = OrganisationSubscription::where(['suite_minor_family_mark' => $request->get('suite_minor_family_mark'), 'user_id' => Auth::user()->ID])->first();
 
         $allData = $request->all();
         $allData['creator_id'] = Auth::user()->ID;
         $allData['organisation_subscription_id'] = $organisationSubscription->id;
         $testPlan = TestPlan::create($allData);
 
-        $productFeatures = (array) json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_features'), true);
-
-        $productType = str_replace(' ', '', $request->get('role'));
-        $testPlan->excludeTestCases($productType, $productFeatures);
+        $testPlan->excludeTestCases($request->get('role'));
 
         return JsonResponse::create(['status' => 'success', 'html' => view('pages.my.coverage.test_plans_list', ['userSuites' => Auth::user()->getUserTestPlans()])->render()]);
     }
@@ -106,15 +106,16 @@ class TestPlansController extends Controller
     public function edit($testPlanId)
     {
         $testPlan = TestPlan::find($testPlanId);
-        $subscription = OrganisationSubscription::where(['suite_family_mark' => $testPlan->suite_id])->first();
+        $subscription = OrganisationSubscription::where(['suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first();
         $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
         $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
-        $suiteType = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'ts_tester_role'])->first()->meta_value;
-        $suiteProtocolVersions = PostMeta::where(['post_id' => $testPlan->suite_id, 'meta_key' => 'protocol_versions'])->first();
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testPlan->suite_minor_family_mark);
+        $suiteType = $testSuite->product_type;
+        $suiteProtocolVersions = $testSuite->protocolVersions->toArray();
 
         $data = [
-            'products' => Auth::user()->getProducts($suiteType, json_decode($suiteProtocolVersions->meta_value, true)),
+            'products' => Auth::user()->getProducts($suiteType, $suiteProtocolVersions),
             'levels' => explode(',', $attributes->value),
             'roles' => explode(',', $attributes->name),
             'testPlan' => $testPlan,
@@ -130,7 +131,7 @@ class TestPlansController extends Controller
      */
     public function view($testPlanId, $testCaseId)
     {
-        $testCase = Post::find($testCaseId);
+        $testCase = LaravelTestCase::find($testCaseId);
         $testPlan = TestPlan::find($testPlanId);
         $excludedCases = $testPlan->getExcludedCases();
         $isExcluded = array_key_exists($testCaseId, $excludedCases) ? $excludedCases[$testCaseId] : false;
@@ -141,7 +142,7 @@ class TestPlansController extends Controller
             'hasTransactions' => Transaction::where([
                 'test_case_id' => $testCase->ID,
                 'product_id' => $testPlan->product_id,
-                'test_suite_id' => $testPlan->suite_id,
+                'suite_minor_family_mark' => $testPlan->suite_minor_family_mark,
             ])->get()
         ];
         return view('pages.my.coverage.view')->with($data)->render();
@@ -172,12 +173,13 @@ class TestPlansController extends Controller
     {
         $testPlan = TestPlan::find($testPlanId);
         if (OrganisationSubscription::find($testPlan->organisation_subscription_id)->organisation_id ==
-            OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $testPlan->suite_id])->first()->organisation_id
+            OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()->organisation_id
         ) {
 
             if ($testPlan->role == 'Application') {
-                $configuredTestSuites = json_decode(Post::find($testPlan->product_id)->getMetaByKey('product_suites'));
-                if (!in_array($testPlan->suite_id, $configuredTestSuites)) {
+                $product = Product::find($testPlan->product_id);
+                $configuredTestSuites =  TestSuiteFeatures::find($product->features)->pluck('test_suite_id');
+                if (!in_array($testPlan->suite_minor_family_mark, $configuredTestSuites)) {
                     return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool.'], 422);
                 }
             }
@@ -198,7 +200,7 @@ class TestPlansController extends Controller
     {
         $testPlan = TestPlan::find($id);
         if (OrganisationSubscription::find($testPlan->organisation_subscription_id)->organisation_id ==
-            OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_family_mark' => $testPlan->suite_id])->first()->organisation_id
+            OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()->organisation_id
         ) {
             $testPlan->delete();
             return JsonResponse::create(['status' => 'success']);
@@ -229,7 +231,7 @@ class TestPlansController extends Controller
             'product_id' => $testPlan->product_id,
             'creator_id' => $user->ID,
             'organisation_id' => $user->organisation[0]->id,
-            'test_suite_id' => $testPlan->suite_id,
+            'suite_minor_family_mark' => $testPlan->suite_minor_family_mark,
             'conformance_level' => $testPlan->level,
             'role' => $testPlan->role,
             'status' => 'Verified',

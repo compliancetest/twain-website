@@ -386,14 +386,12 @@ function getUserSubscriptions($user_id = null, $all = false)
         $user_id = get_current_user_id();
     
     if($all)
-        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, os.status FROM " . $wpdb->prefix . "users_subscriptions AS s 
-                                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+        $query = $wpdb->prepare("SELECT s.*, p.full_name AS suite_title FROM " . $wpdb->prefix . "organisations_subscriptions AS s 
+                                 LEFT JOIN test_suites AS p ON p.id=s.suite_minor_family_mark
                                  WHERE s.user_id=%d", $user_id);
     else
-        $query = $wpdb->prepare("SELECT s.*, p.post_title AS suite_title, os.status FROM " . $wpdb->prefix . "users_subscriptions AS s 
-                                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=s.suite_id
-                                 LEFT JOIN {$wpdb->prefix}organisations_subscriptions AS os ON os.id=s.parent_id
+        $query = $wpdb->prepare("SELECT s.*, p.full_name AS suite_title FROM " . $wpdb->prefix . "organisations_subscriptions AS s 
+                                 LEFT JOIN test_suites AS p ON p.id=s.suite_minor_family_mark
                                  WHERE s.user_id=%d AND os.status != 'Frozen'", $user_id);
     
     $query .= " ORDER BY suite_title";

@@ -8,21 +8,21 @@
             <select class="form-control" id="filterProduct" name="product_id">
                 <option value="">- All -</option>
                 @foreach($filters['product_id'] as $product)
-                    <option value="{{ $product->ID }}" @if($request->get('product_id') == $product->ID) selected="selected" @endif>{{ $product->getProductFullName() }}</option>
+                    <option value="{{ $product->id }}" @if($request->get('product_id') == $product->id) selected="selected" @endif>{{ $product->full_name }}</option>
                 @endforeach
             </select>
-            @if(($request->get('product_id')) && ($request->get('product_id') !== '') && ($request->get('product_id') == $product->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
+            @if(($request->get('product_id')) && ($request->get('product_id') !== '') && ($request->get('product_id') == $product->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterSuite">Test Suite:</label>
-            <select class="form-control" id="filterSuite" name="test_suite_id">
+            <select class="form-control" id="filterSuite" name="suite_minor_family_mark">
                 <option value="">- All -</option>
-                @foreach($filters['test_suite_id'] as $testSuite)
-                    <option value="{{ $testSuite->ID }}" @if($request->get('test_suite_id') == $testSuite->ID) selected="selected" @endif>{{ $testSuite->post_title }}</option>
+                @foreach($filters['suite_minor_family_mark'] as $testSuite)
+                    <option value="{{ $testSuite->id }}" @if($request->get('suite_minor_family_mark') == $testSuite->id) selected="selected" @endif>{{ $testSuite->full_name }}</option>
                 @endforeach
             </select>
-            @if(($request->get('test_suite_id')) && ($request->get('test_suite_id') !== '') && ($request->get('test_suite_id') == $testSuite->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
+            @if(($request->get('suite_minor_family_mark')) && ($request->get('suite_minor_family_mark') !== '') && ($request->get('suite_minor_family_mark') == $testSuite->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
@@ -30,10 +30,10 @@
             <select class="form-control" id="filterCase" name="test_case_id">
                 <option value="">- All -</option>
                 @foreach($filters['test_case_id'] as $testCase)
-                    <option value="{{ $testCase->ID }}" @if($request->get('test_case_id') == $testCase->ID) selected="selected" @endif>{{ $testCase->post_title }}</option>
+                    <option value="{{ $testCase->id }}" @if($request->get('test_case_id') == $testCase->id) selected="selected" @endif>{{ $testCase->name }}</option>
                 @endforeach
             </select>
-            @if(($request->get('test_case_id')) && ($request->get('test_case_id') !== '') && ($request->get('test_case_id') == $testCase->ID))<span class="clear-filter" title="Clear Filter">X</span>@endif
+            @if(($request->get('test_case_id')) && ($request->get('test_case_id') !== '') && ($request->get('test_case_id') == $testCase->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">

@@ -44,6 +44,22 @@ class Community extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function testSuites()
+    {
+        return $this->hasMany('App\LaravelTestSuite');
+    }
+
+    public function getCommunityTestSuites()
+    {
+        if($this->isAdmin() || $this->isModerator()){
+            return $this->testSuites()->orderBy('full_name')->get();
+        }
+        return $this->testSuites()->orderBy('created_by', 'DESC')->groupBy('minor_family_mark')->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function meta()
     {
         return $this->hasMany('App\CommunityMeta');

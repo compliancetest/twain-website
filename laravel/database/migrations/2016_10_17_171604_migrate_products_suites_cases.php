@@ -173,6 +173,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->string('tester_role');//Application
             $table->string('harness_role');//DataSource
             $table->string('initiator');//Tester
+            $table->string('status');//Active
             $table->integer('test_execution_profile_id');//12
             $table->integer('configuration_profile_id');//12
             $table->string('outcome_type');//Positive
@@ -301,7 +302,8 @@ class MigrateProductsSuitesCases extends Migration
             $table->text('access_url');
             $table->integer('organisation_id');
             $table->integer('user_id');
-            $table->integer('wp_id');//..
+            $table->integer('wp_id');
+            $table->timestamp('released_at');
             $table->timestamps();
         });
 

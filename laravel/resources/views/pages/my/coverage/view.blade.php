@@ -2,22 +2,22 @@
     <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>
     Test Case Details
 </div>
-<form action="/testplan/{{ $testPlan->id }}/exclude/{{ $testCase->ID }}" method="post" id="testCaseDetailsForm">
+<form action="/testplan/{{ $testPlan->id }}/exclude/{{ $testCase->id }}" method="post" id="testCaseDetailsForm">
     <div class="modal-body">
         <ul class="coverage-test-details">
             <li>
                 <label>Identifier:</label>
-                <a href="/{{ $testCase->post_name }}/?test_suite_id={{ $testPlan->suite_id }}" target="_blank">{{ $testCase->post_title }}</a>
+                <a href="/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testPlan->suite_minor_family_mark }}" target="_blank">{{ $testCase->full_name }}</a>
             </li>
             @if(!$hasTransactions->isEmpty())
                 <li>
                     <label>Transaction Log:</label>
-                    <a href="/my-transaction-log?test_case_id={{ $testCase->ID }}&product_id={{ $testPlan->product_id }}&test_suite_id={{ $testPlan->suite_id }}" target="_blank">View Audit Record</a>
+                    <a href="/my-transaction-log?test_case_id={{ $testCase->id }}&product_id={{ $testPlan->product_id }}&suite_minor_family_mark={{ $testPlan->suite_minor_family_mark }}" target="_blank">View Audit Record</a>
                 </li>
             @endif
             <li>
                 <label>Optional:</label>
-                <strong>{{ \App\TestCase::isOptional($testCase->ID) ? 'Yes' : 'No' }}</strong>
+                <strong>{{ $testCase->is_optional ? 'Yes' : 'No' }}</strong>
             </li>
             <li>
                 <label for="caseExclude">Exclude</label>

@@ -1,27 +1,27 @@
-@if(in_array($case->ID, $testPlanData['successCases']))
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item test-passed" title="{{ $case->post_title }}"></a>
+@if(in_array($case->id, $testPlanData['successCases']))
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-passed" title="{{ $case->full_name }}"></a>
 
-@elseif(in_array($case->ID, $testPlanData['skippedCases']))
+@elseif(in_array($case->id, $testPlanData['skippedCases']))
 
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item test-skipped" title="{{ $case->post_title }}"></a>
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-skipped" title="{{ $case->full_name }}"></a>
 
-@elseif(array_key_exists($case->ID, $testPlanData['excludedCases']))
+@elseif(array_key_exists($case->id, $testPlanData['excludedCases']))
 
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item test-excluded" title="{{ $case->post_title }} (excl)"></a>
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-excluded" title="{{ $case->full_name }} (excl)"></a>
 
-@elseif(in_array($case->ID, $testPlanData['failedCases']))
+@elseif(in_array($case->id, $testPlanData['failedCases']))
 
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item test-failed" title="{{ $case->post_title }}"></a>
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-failed" title="{{ $case->full_name }}"></a>
 
-@elseif(in_array($case->ID, $testPlanData['optionalCases']))
+@elseif(in_array($case->id, $testPlanData['optionalCases']))
 
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item test-optional" title="{{ $case->post_title }}"></a>
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item test-optional" title="{{ $case->full_name }}"></a>
 @else
-    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->ID }}"
-       data-tooltip="tooltip" class="coverage-test-case-item" title="{{ $case->post_title }}"></a>
+    <a data-toggle="modal" data-remote="true" data-ajax-modal data-target="#testDetailsModal" href="/testplan/{{ $userPlan['testPlan']->id }}/view/{{ $case->id }}"
+       data-tooltip="tooltip" class="coverage-test-case-item" title="{{ $case->full_name }}"></a>
 @endif
