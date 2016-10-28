@@ -19,7 +19,7 @@ class OrganisationCanPerformTesting
     {
         $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
         if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id])->first()) {
-            return response()->json(['errors' => ['message' => ["Your organisation can't perform testing."]], 'code' => 403], 403);
+            return response()->json(['messages' => ["Your organisation can't perform testing."], "status" => "error", 'code' => 403], 403);
         }
         return $next($request);
     }

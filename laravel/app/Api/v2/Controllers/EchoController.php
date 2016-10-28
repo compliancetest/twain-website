@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Api\v2\Controllers;
 
 use App\Jobs\ProcessTransactionLog;
 use App\OrganisationMember;
@@ -15,7 +15,8 @@ class EchoController extends BaseApiController
 {
 
     /**
-     * @api {post} /v1/echo Validate credentials
+     * @api {post} /v2/echo Validate credentials
+     * @apiVersion 2.0.0
      * @apiParam {string} username  Mandatory - username / email.
      * @apiParam {string} password  Mandatory - password.
      *
@@ -27,46 +28,39 @@ class EchoController extends BaseApiController
      *     "data": {
      *       "organisation_id": 4
      *     },
+     *     "status": "success",
      *     "code": 200
      *   }
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
-     *  {
-     *     "errors": {
-     *       "username": [
-     *         "The username field is required."
-     *       ],
-     *       "password": [
-     *         "The password field is required."
-     *       ]
-     *     },
+     *   {
+     *     "messages": [
+     *       "The username field is required.",
+     *       "The password field is required."
+     *     ],
+     *     "status": "error",
      *     "code": 422
-     *  }
+     *   }
      *
      * @apiError 401 Unauthorized
      * @apiErrorExample {json} Unauthorized:
      *  {
-     *     "errors": {
-     *       "message": [
-     *          "Unauthorized!"
-     *       ]
-     *     },
+     *     "messages": ["Invalid credentials."],
+     *     "status": "error",
      *     "code": 401
-     *  }
+     *   }
      *
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Forbidden:
      *   {
-     *     "errors": {
-     *       "message": [
-     *         "Only organisation member can perform testing"
-     *       ]
-     *     },
+     *     "messages": [
+     *       "Only organisation member can perform testing"
+     *     ],
+     *     "status": "error",
      *     "code": 403
      *   }
      * 
-     * @apiVersion 1.0.0
      */
     public function index(\Illuminate\Http\Request $request)
     {
