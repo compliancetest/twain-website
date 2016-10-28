@@ -38,6 +38,8 @@
                         <dl class="definition-list">
                             <dt>DataSource</dt>
                             <dd>A TWAIN data source is an image acquisition device and associated driver sofware</dd>
+                        </dl>
+                        <dl class="definition-list">
                             <dt>Application</dt>
                             <dd>A TWAIN application is a business software system that connects to a data source via the TWAIN standard</dd>
                         </dl>
@@ -46,6 +48,8 @@
                         <dl class="definition-list">
                             <dt>Default</dt>
                             <dd>All test cases created via this test suite are automatically associated with this conformance level. This association cannot be deleted.</dd>
+                        </dl>
+                        <dl class="definition-list">
                             <dt>A</dt>
                             <dd>Conformance level A represents full compliance with all mandatory components of the TWAIN specification.</dd>
                         </dl>

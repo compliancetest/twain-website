@@ -154,17 +154,17 @@
                                             <div class="manage-version-group">
                                                 <span>Major</span>
                                                 <input type="text" id="tsVersionMajor" name="ts_version_major" class="form-control" readonly="readonly" value="0" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-suite-version-id="tsVersionMajor"></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMajor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
                                                 <input type="text" id="tsVersionMinor" name="ts_version_minor" class="form-control" readonly="readonly" value="1" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-suite-version-id="tsVersionMinor"></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMinor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
                                                 <input type="text" id="tsVersionPatch" name="ts_version_patch" class="form-control" readonly="readonly" value="2" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-suite-version-id="tsVersionPatch" disabled="disabled" data-tooltip="tooltip" title="Later version already exists."></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch" disabled="disabled" data-tooltip="tooltip" title="Later version already exists."></button>
                                             </div>
                                         </div>
 
@@ -341,7 +341,7 @@
                     <div class="colored-box-body collapse in" id="testDataBox">
                         <div class="colored-box-content dynamic-rows">
                             <div id="messageTemplatesContent">
-                                <h4 class="test-suite-subheader">Message Templates</h4>
+                                <h4 class="test-item-subheader">Message Templates</h4>
                                 <div class="form-group messageTemplatesRow">
                                     <div class="row">
                                         <div class="col-md-5">
@@ -365,7 +365,7 @@
                             <button type="button" onclick="Page.helpers.addRow('#messageTemplatesTemplate','#messageTemplatesContent');" class="btn btn-success btn-with-icon btn-add">New Template</button>
 
                             <div class="test-data-profile-types">
-                                <h4 class="test-suite-subheader">Profile Type:</h4>
+                                <h4 class="test-item-subheader">Profile Type:</h4>
                                 <div class="checkboxes-group clearfix">
                                     <div class="checkbox">
                                         <label>
@@ -623,7 +623,7 @@
 
         $('.manage-version-group .btn-add').click(function (e) {
             $('.manage-version-box').addClass('version-updated');
-            var versionIdentifier = $(this).data('suite-version-id');
+            var versionIdentifier = $(this).data('version-id');
             var inputToUpdate = $('#' + versionIdentifier);
             var currentVal = parseInt(inputToUpdate.val());
             if (!isNaN(currentVal)) {

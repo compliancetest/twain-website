@@ -340,3 +340,55 @@ body.modal-open,
         background: sprite($icons, 'test-pattern-#{$i}');
     }
 }
+
+.definition-list{
+    overflow: hidden;
+    margin: 0;
+    padding: 7px 0;
+
+    & + .definition-list{
+        border-top: 1px solid #cfcfcf;
+    }
+    dt, dd{
+        display: block;
+        line-height: 14px;
+    }
+
+    dt{
+        clear: left;
+        float: left;
+        text-align: left;
+        width: 10%;
+        color: #2c80e8;
+        font-weight: 400;
+        font-size: 13px;
+
+        label{
+            color: #666;
+            font-weight: 600;
+            margin: 0;
+            font-size: 12px;
+
+            input{
+                margin-right: 5px;
+            }
+        }
+    }
+
+    dd{
+        width: 90%;
+        margin: 0 0 0 10%;
+        overflow: hidden;
+    }
+
+    @media (max-width: $screen-sm-min) {
+        dt{
+            width: 25%;
+        }
+
+        dd{
+            width: 75%;
+            margin: 0 0 0 25px;
+        }
+    }
+}

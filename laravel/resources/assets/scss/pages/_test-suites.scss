@@ -46,7 +46,7 @@
   }
 }
 
-.test-suite-subheader{
+.test-item-subheader{
   font-size: 13px;
   font-weight: 600;
   margin: 0 0 5px 0;
@@ -114,46 +114,6 @@
   }
 }
 
-.definition-list{
-
-  dt, dd{
-    padding: 7px 0;
-    display: block;
-    line-height: 14px;
-    border-top: 1px solid #cfcfcf;
-  }
-
-  dt:first-of-type, dd:first-of-type{
-    border-top: 0;
-  }
-
-  dt{
-    float: left;
-    text-align: left;
-    width: 10%;
-    color: #2c80e8;
-    font-weight: 400;
-    font-size: 13px;
-  }
-
-  dd{
-    width: 90%;
-    margin: 0 0 0 10%;
-    overflow: hidden;
-  }
-
-  @media (max-width: $screen-sm-min) {
-    dt{
-      width: 25%;
-    }
-
-    dd{
-      width: 75%;
-      margin: 0 0 0 25px;
-    }
-  }
-}
-
 @media (max-width: $screen-sm-min) {
   .ts-simple-tabs{
     height: 60px;
@@ -207,6 +167,6 @@
   }
 
   .status-circle{
-    vertical-align: top;
+    margin-top: 0;
   }
 }

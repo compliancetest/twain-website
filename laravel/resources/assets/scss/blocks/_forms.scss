@@ -109,6 +109,15 @@ input[type="checkbox"]{
   }
 }
 
+.checkboxes-group{
+  .checkbox-inline{
+    padding: 5px 0 0 5px;
+
+    &:first-child{
+      padding-left: 0;
+    }
+  }
+}
 
 .manage-version-box{
 
