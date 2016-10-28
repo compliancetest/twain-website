@@ -69,7 +69,7 @@ body.modal-open,
     h1 {
         font-size: 20px;
         font-weight: 600;
-        margin: 0;
+        margin: 0 10px 0 0;
         padding: 0;
         float: left;
     }
@@ -293,4 +293,50 @@ body.modal-open,
     font-style: italic;
     font-size: 12px;
     line-height: 1.5;
+}
+
+.options-box{
+    padding: 10px;
+    border: 1px solid #d7d7d7;
+    margin: 10px 0;
+}
+
+.inline-options-list{
+    font-size: 12px;
+    margin: 0;
+
+    li{
+        display: inline-block;
+        padding: 2px 15px 2px 0;
+
+        a{
+            font-weight: 700;
+            text-decoration: underline;
+
+            &:hover{
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.item-subtitle{
+    font-size: 17px;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+
+.test-pattern-icon{
+    width: 29px;
+    height: 32px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+@for $i from 1 through 7 {
+    .test-pattern-#{$i}{
+        background: sprite($icons, 'test-pattern-#{$i}');
+    }
 }

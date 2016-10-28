@@ -5,7 +5,7 @@
 <div class="container main-container">
     <div class="main-content product-page">
         <div class="page-title">
-            <a href="#" onclick="window.print();" class="btn btn-primary btn-with-icon btn-print pull-right">Print</a>
+            <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print pull-right">Print</button>
             <h1 class="pull-left">Product Details <a href="/my-products/" class="btn btn-default btn-with-icon btn-back" data-tooltip="tooltip" title="Back to My Products">Back</a></h1>
         </div>
         <div class="product-info">
@@ -32,7 +32,7 @@
         </div>
 
 
-        <h2 class="product-subtitle">Test Plans and Compliance Claims</h2>
+        <h2 class="item-subtitle">Test Plans and Compliance Claims</h2>
         <div class="blue-colored-table-wrapper table-responsive">
             <table class="table blue-colored-table">
                 <thead>

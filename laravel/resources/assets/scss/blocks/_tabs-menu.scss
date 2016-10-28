@@ -188,3 +188,46 @@
     }
 
 }
+
+.simple-tabs{
+  margin: 20px 0 0 0;
+
+  .simple-tab-content{
+    border: 1px solid #bfbfbf;
+    padding: 15px;
+    clear: both;
+  }
+}
+
+.simple-tabs-nav{
+  height: 40px;
+  margin: 0;
+  position: relative;
+
+  li{
+    float: left;
+    margin: 0 0 -1px 0;
+
+    a{
+      padding: 0 20px;
+      line-height: 40px;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      outline: none;
+
+      &:hover, &:focus{
+        text-decoration: none;
+      }
+    }
+
+    &.active a{
+      background: #fff;
+      border-color: #bfbfbf;
+      @include border-radius(3px 3px 0 0);
+      color: #666;
+    }
+  }
+}
