@@ -74,8 +74,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-my-products', 'ProductsController@index');
     });
 
-    Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
-    Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
+        Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
+        Route::get('laravel-test-suites', 'TestSuitesController@index');
+    });
 
     Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');
     Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');

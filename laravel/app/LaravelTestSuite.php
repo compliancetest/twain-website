@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class LaravelTestSuite extends Model
 {
-    use UuidTrait;
+    use UuidTrait, SlugTrait;
 
     protected $table = 'test_suites';
 

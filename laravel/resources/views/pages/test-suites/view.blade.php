@@ -5,27 +5,29 @@
     <div class="container main-container">
         <div class="main-content test-suite-view">
             <div class="page-title">
-                <a href="#" class="btn btn-primary btn-print pull-right">Community Home Page</a>
+                <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right">Community Home Page</a>
 
-                <h1>TWAIN v2.3 Compliance – Data Sources v1.0</h1>
-                <a href="#" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                <h1>{{ $testSuite->full_name }}</h1>
+                <a href="/laravel-test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
             </div>
 
             <div class="options-box">
                 <ul class="inline-options-list">
-                    <li>ID: <strong>TWAINDS_V1.0</strong></li>
+                    <li>ID: <strong>{{ $testSuite->short_name }}</strong></li>
                     <li>Published: <strong>2016-01-29</strong></li>
-                    <li>Issuer: <a href="#">twain.org</a></li>
-                    <li>Status: <span class="status status-active">Active</span></li>
-                    <li>Revision: <strong>First Draft</strong></li>
-                    <li>Protocol Versions: <strong>some protocols versions</strong></li>
+                    <li>Issuer: <a href="/laravel-test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
+                    <li>Status: <span class="status status-active">{{ $testSuite->status }}</span></li>
+                    <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
+                    @if(!$testSuite->protocolVersions->isEmpty())
+                        <li>Protocol Versions: <strong>{{ $testSuite->protocolVersions }}</strong></li>
+                    @endif
                     <li>Test Tool: <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0.exe</a></li>
                     <li>Test Tool(X64): <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0_X64.exe</a></li>
                 </ul>
             </div>
 
-            <div class="test-suite-description">This test suite is designed to assess technical compliance with the TWAIN specification for data sources.  It includes all steps of the image acquisition state lifecycle (data source management, capability negotiation, and image transfer). The tests are based on the self-certification tests published in the twain 2.3 technical specification, chapter 13</div>
+            <div class="test-suite-description">{!! $testSuite->description !!}</div>
             <div class="simple-tabs">
                 <ul class="simple-tabs-nav ts-simple-tabs" role="tablist">
                     <li class="active"><a href="#ts-test-suite-roles">Test Suite Roles</a></li>
@@ -35,76 +37,36 @@
                 </ul>
                 <div class="tab-content simple-tab-content">
                     <div role="tabpanel" class="tab-pane active" id="ts-test-suite-roles">
-                        <dl class="definition-list">
-                            <dt>DataSource</dt>
-                            <dd>A TWAIN data source is an image acquisition device and associated driver sofware</dd>
-                        </dl>
-                        <dl class="definition-list">
-                            <dt>Application</dt>
-                            <dd>A TWAIN application is a business software system that connects to a data source via the TWAIN standard</dd>
-                        </dl>
+                        @foreach($testSuite->roles as $role)
+                            <dl class="definition-list">
+                                <dt>{{ $role->name }}</dt>
+                                <dd>{{ $role->description }}</dd>
+                            </dl>
+                        @endforeach
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ts-conformance-levels">
-                        <dl class="definition-list">
-                            <dt>Default</dt>
-                            <dd>All test cases created via this test suite are automatically associated with this conformance level. This association cannot be deleted.</dd>
-                        </dl>
-                        <dl class="definition-list">
-                            <dt>A</dt>
-                            <dd>Conformance level A represents full compliance with all mandatory components of the TWAIN specification.</dd>
-                        </dl>
+                        @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                            <dl class="definition-list">
+                                <dt>{{ $conformanceLevel->code }}</dt>
+                                <dd>{{ $conformanceLevel->description }}</dd>
+                            </dl>
+                        @endforeach
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ts-profile-types">
                        <ul>
-                           <li><a href="#">TCEF v1.1 </a></li>
-                           <li><a href="#">TCEF v1.2 </a></li>
-                           <li><a href="#">TCEF v1.3 </a></li>
-                           <li><a href="#">TCEF v1.3.1 </a></li>
-                           <li><a href="#">TCEF v1.3.2 </a></li>
-                           <li><a href="#">TCEF v1.4 </a></li>
-                           <li><a href="#">TCEF v1.4.1 </a></li>
-                           <li><a href="#">TCEF v1.4.2 </a></li>
-                           <li><a href="#">TCEF v1.5 </a></li>
-                           <li><a href="#">TCEF v1.5.1 </a></li>
-                           <li><a href="#">TCEF v1.5.2 </a></li>
-                           <li><a href="#">TCEF v1.5.3 </a></li>
-                           <li><a href="#">TCEF v1.5.4 </a></li>
-                           <li><a href="#">TCEF v1.5.5 </a></li>
-                           <li><a href="#">TCEF v1.5.6 </a></li>
-                           <li><a href="#">TCEF v1.5.7 </a></li>
-                           <li><a href="#">TCEF v1.5.8 </a></li>
-                           <li><a href="#">TCEF v1.5.9 </a></li>
-                           <li><a href="#">TCEF v2.0 </a></li>
-                           <li><a href="#">TCEF v2.1 </a></li>
-                           <li><a href="#">TCEF v2.2 </a></li>
-                           <li><a href="#">TCEF v2.3 </a></li>
-                           <li><a href="#">TCEF v2.4 </a></li>
-                           <li><a href="#">TCEF v2.5 </a></li>
-                           <li><a href="#">TCEF v2.5.1 </a></li>
-                           <li><a href="#">TCEF v2.5.2 </a></li>
-                           <li><a href="#">TCEF v2.5.5 </a></li>
-                           <li><a href="#">TCEF v2.5.6 </a></li>
-                           <li><a href="#">TCEF v2.5.7 </a></li>
-                           <li><a href="#">TCEF v2.5.8 </a></li>
-                           <li><a href="#">TCEF v2.5.9 </a></li>
-                           <li><a href="#">TCEF v2.5.10 </a></li>
-                           <li><a href="#">TCEF v2.5.11 </a></li>
-                           <li><a href="#">TCEF v2.5.12 </a></li>
-                           <li><a href="#">TCEF v2.5.13 </a></li>
-                           <li><a href="#">TCEF v2.5.14 </a></li>
-                           <li><a href="#">TCEF v2.5.15 </a></li>
+                           @foreach($testSuite->profileTypes as $profileType)
+                               <li><a href="#">{{ \App\ProfileType::find($profileType->profile_type_id)->getTitle() }}</a></li>
+                           @endforeach
                        </ul>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ts-specification-documents">
                         <ul class="spec-doc-list">
-                            <li>
-                                <a href="#">TWAIN v2.3 Specification</a>
-                                <p>The TWAIN Technical Specification document, version 2.3</p>
-                            </li>
-                            <li>
-                                <a href="#">TWAIN v2.3 Header File</a>
-                                <p>The C header file for inclusion in TWAIN drivers and application software.</p>
-                            </li>
+                            @foreach($testSuite->specificationDocuments as $specificationDocument)
+                                <li>
+                                    <a href="{{ $specificationDocument->link }}">{{ $specificationDocument->name }}</a>
+                                    <p>{!! $specificationDocument->description !!}</p>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

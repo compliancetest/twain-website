@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use UuidTrait;
+    use UuidTrait, SlugTrait;
 
     public $incrementing = false;
 
@@ -17,15 +17,6 @@ class Product extends Model
     ];
 
     public $dates = ['released_at', 'created_at', 'updated_at'];
-
-    /**
-     * @param $slug
-     * @return mixed
-     */
-    public static function findBySlug($slug)
-    {
-        return Product::where(['slug' => $slug])->firstOrFail();
-    }
 
     public function capabilities()
     {

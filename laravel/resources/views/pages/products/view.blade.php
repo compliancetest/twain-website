@@ -9,16 +9,12 @@
                 <h1 class="pull-left">Product Details <a href="/my-products/" class="btn btn-default btn-with-icon btn-back" data-tooltip="tooltip"
                                                          title="Back to My Products">Back</a></h1>
             </div>
-            @if(!Auth::check() && $product->visibility == 'Public')
+            @can('view', $product)
                 @include('pages.products.partials.view.can_view')
-            @else
-                @can('view', $product)
-                    @include('pages.products.partials.view.can_view')
-                @endcan
-                @cannot('view', $product)
-                    @include('pages.products.partials.view.cannot_view')
-                @endcannot
-            @endif
+            @endcan
+            @cannot('view', $product)
+                @include('pages.products.partials.view.cannot_view')
+            @endcannot
         </div>
     </div>
 
