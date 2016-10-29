@@ -41,7 +41,7 @@ class LaravelTestSuite extends Model
 
     public function scenarios()
     {
-        return $this->hasMany('\App\TestSuiteScenarios', 'test_suite_id');
+        return $this->hasMany('\App\TestSuiteScenarios', 'test_suite_id')->orderBy('sequence');
     }
 
     public function profileTypes()
@@ -136,5 +136,22 @@ class LaravelTestSuite extends Model
             $query->where('tester_role', '=', $role);
         }
         return $query->get();
+    }
+
+    public function getCases($filters = [], $isAdmin = false)
+    {
+        $query =  $this->testCases()->select("test_cases.*", 'TSS.id AS scenarioId', 'TSS.code AS scenarioCode')
+            ->join('test_cases_scenarios as TCS', function ($join) {
+                $join->on('TCS.test_case_id', '=', 'test_cases.id');
+            })
+            ->join('test_suites_scenarios as TSS', function ($join) {
+                $join->on('TSS.id', '=', 'TCS.test_suites_scenario_id');
+            })
+            ->orderBy('TSS.sequence')
+            ->orderBy('test_cases.full_name');
+        if(!$isAdmin){
+            $query->where('test_cases.status', 'Active');
+        }
+        return $query;
     }
 }

@@ -8,7 +8,9 @@
                 <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right">Community Home Page</a>
 
                 <h1>{{ $testSuite->full_name }}</h1>
-                <a href="/laravel-test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                @can('change', $testSuite)
+                    <a href="/laravel-test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                @endcan
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
             </div>
 
@@ -80,16 +82,9 @@
                         <div class="form-group">
                             <select name="scenario" class="form-control">
                                 <option value="">- Scenario -</option>
-                                <option value="7">Default</option>
-                                <option value="8">SC</option>
-                                <option value="9">VC</option>
-                                <option value="10">SR</option>
-                                <option value="11">ST</option>
-                                <option value="12">IT</option>
-                                <option value="13">UI</option>
-                                <option value="14">CX</option>
-                                <option value="15">VN</option>
-                                <option value="16">VV</option>
+                                @foreach($testSuite->scenarios as $scenario)
+                                    <option value="{{ $scenario->id }}">{{ $scenario->code }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -108,7 +103,9 @@
                                 <option value="Obsolete">Obsolete</option>
                             </select>
                         </div>
-                        <a href="#" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                         @can('change', $testSuite)
+                            <a href="#" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                         @endcan
                     </div>
                 </div>
             </div>
@@ -124,138 +121,51 @@
                             <th>Outcome Type</th>
                             <th>Test Pattern</th>
                             <th class="text-left">Test Intent Description</th>
-                            <th>Actions</th>
+                            @can('change', $testSuite)
+                                <th>Actions</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $scenarioId = false;?>
+                        <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate(25);?>
+                        @foreach($testCases  as $testCase)
                         <tr>
-                            <td rowspan="7" class="rowspan-cell">
-                                <strong>SC:</strong><br /> Standard Capability. TWAIN Standard capabilities (ID's with a value less than 0x8000). Ignore Vendor Custom capabilities (ID’s with a value of 0x8000 or greater).
+                            @if($scenarioId != $testCase->scenarioId)
+                                <?php $scenarioId = $testCase->scenarioId;?>
+                                    <td rowspan="{{ $testCases->filter(function ($value, $key) use ($scenarioId) {
+                                            return $value->scenarioId == $scenarioId;
+                                        })->count() }}" class="rowspan-cell">
+                                    <?php $scenario = \App\TestSuiteScenarios::find($testCase->scenario->test_suites_scenario_id);?>
+                                    <strong>{{ $scenario->code }}:</strong><br /> {!! $scenario->description !!}
+                                </td>
+                            @endif
+                            <td><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip" title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a href="/laravel-test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
+                            <td class="text-center">{{ $testCase->tester_role}}</td>
+                            <td class="text-center">
+                                {{ implode(', ', array_unique($testCase->getConformanceLevels($isAdmin)->pluck('code')->toArray())) }}
                             </td>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
+                            <td class="text-center">{{ $testCase->outcome_type }}</td>
                             <td class="text-center">
                                 <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Tester Initiated 1-Way Notification pattern represents the case where a tester sends a single message (eg a initiate.rollover.request) to the the harness, which performs a set of validations and then stores the result for the tester to view via the message log. There is no correlated response message.">
                                     <span class="test-pattern-icon test-pattern-1"></span>
                                 </a>
                             </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
+                            <td>{!! $testCase->description !!}</td>
+                            @can('change', $testSuite)
+                                <td class="text-center">
+                                    <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
+                                    <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
+                                </td>
+                            @endcan
                         </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="In the Harness Initiated 1-Way Notification pattern, the harness initiates a single outbound message to the tester system (testers can pull messages or receive a push) for processing by the tester. Testers confirm that their own validation results match those performed on the same message by the harness. There is no response message.">
-                                    <span class="test-pattern-icon test-pattern-2"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Tester Initiated 2-Way Asynchronous Transaction represents the case where a tester sends a 1-way message (eg a initiate.rollover.request) to the the harness, which performs a set of validations and then sends an asynchronous correlated 1-way message response (eg initiate.rollover.errorResponse) back to the tester. Testers should confirm that the response message matches the expected response defined by the test case.">
-                                    <span class="test-pattern-icon test-pattern-3"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="In the Harness Initiated 2-Way Asynchronous Transaction pattern, the harness sends a single message to the tester. The tester processes the message and sends back a single asynchronous correlated response. The test harness itself also generates an 'expected response' which is compared with the actual response from the tester in order to determine test outcome (match = successful test).">
-                                    <span class="test-pattern-icon test-pattern-4"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Tester Initiated Synchronous Query/Response matches the client/server web service pattern where the tester is the client and the response is received in the same http session. The pattern is used for scenarios where a real-time response is feasible (eg ATO SuperTICK). Testers should confirm that the response matches the expected response defined in the test case.">
-                                    <span class="test-pattern-icon test-pattern-5"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Harness Initiated Synchronous Query/Response matches the client/server web service pattern where the tester is the server and the response is returned to the harness in the same http session. This pattern is rarely encountered because it would imply that there are many providers of the same synchronous service. The harness generates and expected response which is compared with the actual tester response to determine test outcome.">
-                                    <span class="test-pattern-icon test-pattern-6"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="status status-circle status-active" data-tooltip="tooltip" title="Active">A</span><a href="#">SC-01 v1.0</a></td>
-                            <td class="text-center">DataSource</td>
-                            <td class="text-center">A, Default</td>
-                            <td class="text-center">Positive</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Long Running Correlated Choreography is a composite pattern that is built from a combination 1-way notifications, 2-way transactions, and synchronous services. This pattern is used only when there is a need to simulate long running stateful conversations (for example employer->default fund->choice fund forwarding of choice superannuation contributions).">
-                                    <span class="test-pattern-icon test-pattern-7"></span>
-                                </a>
-                            </td>
-                            <td>Confirm Basic Negotiation with CAP_SUPPORTEDCAPS.</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
-                            </td>
-                        </tr>
-
+                        @endforeach
                     </tbody>
                 </table>
             </div>
 
             <div class="pagination-wrapper">
-                <ul class="pagination">
-                    <li class="disabled"><span>«</span></li>
-                    <li class="active"><span>1</span></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#" rel="next">»</a></li>
-                </ul>
+                {{ $testCases->links() }}
             </div>
 
         </div>

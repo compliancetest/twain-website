@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\LaravelTestCase;
+use App\LaravelTestSuite;
+use App\Policies\TestCasePolicy;
+use App\Policies\TestSuitePolicy;
 use App\Product;
 use App\Policies\ProductPolicy;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -16,7 +20,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        Product::class => ProductPolicy::class
+        Product::class => ProductPolicy::class,
+        LaravelTestSuite::class => TestSuitePolicy::class,
+        LaravelTestCase::class => TestCasePolicy::class,
     ];
 
     /**

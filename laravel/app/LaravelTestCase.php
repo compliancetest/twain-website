@@ -28,12 +28,31 @@ class LaravelTestCase extends Model
         return $this->hasMany('\App\TestCaseConformanceLevel', 'test_case_id');
     }
 
-    public function scenarios()
+    /**
+     * Get conformance levels for a given test suite
+     * @param bool $isAdmin
+     * @return mixed
+     */
+    public function getConformanceLevels($isAdmin = false)
     {
-        return $this->hasMany('\App\TestCaseScenario', 'test_case_id');
+        $query = $this->conformanceLevels()
+            ->select('TSCL.*')
+            ->join('test_suites_conformance_levels as TSCL', function ($join) {
+                $join->on('TSCL.id', '=', 'test_cases_conformance_levels.conformance_level_id');
+            });
+        if (!$isAdmin) {
+            $query->where('TSCL.code', '!=', 'Default');
+        }
+
+        return $query->get();
     }
 
-     public function roles()
+    public function scenario()
+    {
+        return $this->hasOne('\App\TestCaseScenario', 'test_case_id');
+    }
+
+    public function roles()
     {
         return $this->hasMany('\App\TestCaseRole', 'test_case_id');
     }
