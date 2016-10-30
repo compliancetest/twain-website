@@ -299,6 +299,34 @@ body.modal-open,
     padding: 10px;
     border: 1px solid #d7d7d7;
     margin: 10px 0;
+
+    .options-box-row{
+        overflow: hidden;
+        border-top: 1px solid #cfcfcf;
+        padding: 5px 0;
+        line-height: 32px;
+
+        &:first-child{
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .inline-options-list{
+            margin: 0 0 0 105px;
+
+            li{
+                line-height: normal;
+            }
+        }
+    }
+
+    .options-box-row-title{
+        float: left;
+        width: 100px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #316c9c;
+    }
 }
 
 .inline-options-list{
@@ -330,8 +358,9 @@ body.modal-open,
 .test-pattern-icon{
     width: 29px;
     height: 32px;
-    display: block;
+    display: inline-block;
     margin: 0 auto;
+    vertical-align: middle;
 }
 
 

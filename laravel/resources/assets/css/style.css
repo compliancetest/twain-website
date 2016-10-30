@@ -9104,92 +9104,121 @@ body.modal-open,
   border: 1px solid #d7d7d7;
   margin: 10px 0;
 }
+/* line 303, ../scss/_common.scss */
+.options-box .options-box-row {
+  overflow: hidden;
+  border-top: 1px solid #cfcfcf;
+  padding: 5px 0;
+  line-height: 32px;
+}
+/* line 309, ../scss/_common.scss */
+.options-box .options-box-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+/* line 314, ../scss/_common.scss */
+.options-box .options-box-row .inline-options-list {
+  margin: 0 0 0 105px;
+}
+/* line 317, ../scss/_common.scss */
+.options-box .options-box-row .inline-options-list li {
+  line-height: normal;
+}
+/* line 323, ../scss/_common.scss */
+.options-box .options-box-row-title {
+  float: left;
+  width: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #316c9c;
+}
 
-/* line 304, ../scss/_common.scss */
+/* line 332, ../scss/_common.scss */
 .inline-options-list {
   font-size: 12px;
   margin: 0;
 }
-/* line 308, ../scss/_common.scss */
+/* line 336, ../scss/_common.scss */
 .inline-options-list li {
   display: inline-block;
   padding: 2px 15px 2px 0;
 }
-/* line 312, ../scss/_common.scss */
+/* line 340, ../scss/_common.scss */
 .inline-options-list li a {
   font-weight: 700;
   text-decoration: underline;
 }
-/* line 316, ../scss/_common.scss */
+/* line 344, ../scss/_common.scss */
 .inline-options-list li a:hover {
   text-decoration: none;
 }
 
-/* line 323, ../scss/_common.scss */
+/* line 351, ../scss/_common.scss */
 .item-subtitle {
   font-size: 17px;
   margin: 0 0 10px 0;
   font-weight: 600;
 }
 
-/* line 330, ../scss/_common.scss */
+/* line 358, ../scss/_common.scss */
 .test-pattern-icon {
   width: 29px;
   height: 32px;
-  display: block;
+  display: inline-block;
   margin: 0 auto;
+  vertical-align: middle;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-1 {
   background: url('../images/icons.png') 0 -1101px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-2 {
   background: url('../images/icons.png') 0 -1293px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-3 {
   background: url('../images/icons.png') 0 -1165px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-4 {
   background: url('../images/icons.png') 0 -1197px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-5 {
   background: url('../images/icons.png') 0 -1229px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-6 {
   background: url('../images/icons.png') 0 -1261px;
 }
 
-/* line 339, ../scss/_common.scss */
+/* line 368, ../scss/_common.scss */
 .test-pattern-7 {
   background: url('../images/icons.png') 0 -1133px;
 }
 
-/* line 344, ../scss/_common.scss */
+/* line 373, ../scss/_common.scss */
 .definition-list {
   overflow: hidden;
   margin: 0;
   padding: 7px 0;
 }
-/* line 349, ../scss/_common.scss */
+/* line 378, ../scss/_common.scss */
 .definition-list + .definition-list {
   border-top: 1px solid #cfcfcf;
 }
-/* line 352, ../scss/_common.scss */
+/* line 381, ../scss/_common.scss */
 .definition-list dt, .definition-list dd {
   display: block;
 }
-/* line 356, ../scss/_common.scss */
+/* line 385, ../scss/_common.scss */
 .definition-list dt {
   clear: left;
   float: left;
@@ -9199,28 +9228,28 @@ body.modal-open,
   font-weight: 400;
   font-size: 13px;
 }
-/* line 365, ../scss/_common.scss */
+/* line 394, ../scss/_common.scss */
 .definition-list dt label {
   color: #666;
   font-weight: 600;
   margin: 0;
   font-size: 12px;
 }
-/* line 371, ../scss/_common.scss */
+/* line 400, ../scss/_common.scss */
 .definition-list dt label input {
   margin-right: 5px;
 }
-/* line 377, ../scss/_common.scss */
+/* line 406, ../scss/_common.scss */
 .definition-list dd {
   width: 90%;
   margin: 0 0 0 10%;
 }
 @media (max-width: 768px) {
-  /* line 383, ../scss/_common.scss */
+  /* line 412, ../scss/_common.scss */
   .definition-list dt {
     width: 25%;
   }
-  /* line 387, ../scss/_common.scss */
+  /* line 416, ../scss/_common.scss */
   .definition-list dd {
     width: 75%;
     margin: 0 0 0 25px;
@@ -15438,9 +15467,32 @@ input.notify-changes {
   font-size: 12px;
 }
 
+/* line 184, ../scss/pages/_test-suites.scss */
+.test-cases-table .test-pattern-icon {
+  display: block;
+}
+
 /* line 3, ../scss/pages/_test-cases.scss */
 .edit-test-case-page .initiator-role-group .checkbox-inline {
   padding-top: 7px;
+}
+
+/* line 34, ../scss/pages/_test-cases.scss */
+.test-case-view .steps-table > tbody > tr td {
+  background: #fff;
+  font-size: 12px;
+  text-shadow: none;
+  color: #666;
+  font-weight: 400;
+}
+/* line 41, ../scss/pages/_test-cases.scss */
+.test-case-view .steps-table > tbody > tr td:first-child {
+  vertical-align: middle;
+}
+/* line 46, ../scss/pages/_test-cases.scss */
+.test-case-view .steps-table > tbody > tr.step-row:target td {
+  background: #d9d9d9;
+  transition: background-color 2s;
 }
 
 /* line 3, ../scss/_header.scss */

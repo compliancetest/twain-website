@@ -5,3 +5,46 @@
     }
   }
 }
+
+.test-case-view{
+  //.steps{
+  //  .steps-header{
+  //    font-weight: 600;
+  //    font-size: 13px;
+  //    padding: 15px 0;
+  //    overflow: hidden;
+  //  }
+  //
+  //  .steps-list{
+  //    border: 1px solid #d7d7d7;
+  //
+  //    li{
+  //      padding: 15px 0;
+  //      overflow: hidden;
+  //
+  //      &:target{
+  //        background: #d7d7d7;
+  //        transition: 2s;
+  //      }
+  //
+  //    }
+  //  }
+  //}
+
+  .steps-table > tbody > tr td{
+    background: #fff;
+    font-size: 12px;
+    text-shadow: none;
+    color: #666;
+    font-weight: 400;
+
+    &:first-child{
+      vertical-align: middle;
+    }
+  }
+
+  .steps-table > tbody > tr.step-row:target td{
+    background: #d9d9d9;
+    transition: background-color 2s;
+  }
+}
