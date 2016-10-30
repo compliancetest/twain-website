@@ -10754,10 +10754,11 @@ input[type="checkbox"] {
   border-radius: 5px;
   -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.23) inset;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.23) inset;
+  text-shadow: none;
   font-size: 11px;
   padding: 0 5px;
 }
-/* line 15, ../scss/blocks/_statuses.scss */
+/* line 16, ../scss/blocks/_statuses.scss */
 .status.status-lg {
   padding: 11px 18px;
   font-size: 16px;
@@ -10765,7 +10766,7 @@ input[type="checkbox"] {
   height: 40px;
   line-height: 1;
 }
-/* line 23, ../scss/blocks/_statuses.scss */
+/* line 24, ../scss/blocks/_statuses.scss */
 .status.status-circle {
   width: 12px;
   height: 12px;
@@ -10781,7 +10782,7 @@ input[type="checkbox"] {
   border: 0;
   margin: 1px 3px 0 0;
 }
-/* line 37, ../scss/blocks/_statuses.scss */
+/* line 38, ../scss/blocks/_statuses.scss */
 .status.status-active {
   border-color: #47a518;
   background: #48a719;
@@ -10792,7 +10793,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #55c21f, #47a518);
   background-image: linear-gradient(to bottom, #55c21f, #47a518);
 }
-/* line 42, ../scss/blocks/_statuses.scss */
+/* line 43, ../scss/blocks/_statuses.scss */
 .status.status-build {
   border-color: #6527a4;
   background: #7536b5;
@@ -10803,7 +10804,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #8950c2, #6122a1);
   background-image: linear-gradient(to bottom, #8950c2, #6122a1);
 }
-/* line 47, ../scss/blocks/_statuses.scss */
+/* line 48, ../scss/blocks/_statuses.scss */
 .status.status-draft {
   border-color: #a0a0a0;
   background: #8f8f8f;
@@ -10814,7 +10815,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #ababab, #7b7b7b);
   background-image: linear-gradient(to bottom, #ababab, #7b7b7b);
 }
-/* line 52, ../scss/blocks/_statuses.scss */
+/* line 53, ../scss/blocks/_statuses.scss */
 .status.status-suspended, .status.status-sent, .status.status-inarrears, .status.status-deprecated {
   border-color: #e96208;
   background: #f36f16;
@@ -10825,7 +10826,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #fb7821, #e96208);
   background-image: linear-gradient(to bottom, #fb7821, #e96208);
 }
-/* line 60, ../scss/blocks/_statuses.scss */
+/* line 61, ../scss/blocks/_statuses.scss */
 .status.status-obsolete {
   border-color: #9d1d1c;
   background: #b92621;
@@ -10836,7 +10837,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #c32d27, #991817);
   background-image: linear-gradient(to bottom, #c32d27, #991817);
 }
-/* line 65, ../scss/blocks/_statuses.scss */
+/* line 66, ../scss/blocks/_statuses.scss */
 .status.status-partial {
   border-color: #3c7db3;
   background: #2c85d0;
@@ -10847,7 +10848,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #469ce6, #3577ae);
   background-image: linear-gradient(to bottom, #469ce6, #3577ae);
 }
-/* line 70, ../scss/blocks/_statuses.scss */
+/* line 71, ../scss/blocks/_statuses.scss */
 .status.status-frozen {
   border-color: #c51e1e;
   background: #dc1515;
@@ -10858,7 +10859,7 @@ input[type="checkbox"] {
   background-image: -webkit-linear-gradient(top, #f20c0c, #c51e1e);
   background-image: linear-gradient(to bottom, #f20c0c, #c51e1e);
 }
-/* line 75, ../scss/blocks/_statuses.scss */
+/* line 76, ../scss/blocks/_statuses.scss */
 .status.status-unsubscribing {
   border-color: #9f9f9f;
   background: #8a8a8a;
@@ -10872,7 +10873,7 @@ input[type="checkbox"] {
   box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
 
-/* line 84, ../scss/blocks/_statuses.scss */
+/* line 85, ../scss/blocks/_statuses.scss */
 .item-pending {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10881,7 +10882,7 @@ input[type="checkbox"] {
   width: 20px;
 }
 
-/* line 87, ../scss/blocks/_statuses.scss */
+/* line 88, ../scss/blocks/_statuses.scss */
 .item-valid {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10890,7 +10891,7 @@ input[type="checkbox"] {
   width: 21px;
 }
 
-/* line 90, ../scss/blocks/_statuses.scss */
+/* line 91, ../scss/blocks/_statuses.scss */
 .item-invalid {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10899,63 +10900,63 @@ input[type="checkbox"] {
   width: 21px;
 }
 
-/* line 94, ../scss/blocks/_statuses.scss */
+/* line 95, ../scss/blocks/_statuses.scss */
 .text-status-active {
   color: #47a518;
 }
 
-/* line 97, ../scss/blocks/_statuses.scss */
+/* line 98, ../scss/blocks/_statuses.scss */
 .text-status-in-progress {
   color: blue;
 }
 
-/* line 100, ../scss/blocks/_statuses.scss */
+/* line 101, ../scss/blocks/_statuses.scss */
 .text-status-assigned {
   color: orange;
 }
 
-/* line 103, ../scss/blocks/_statuses.scss */
+/* line 104, ../scss/blocks/_statuses.scss */
 .text-status-suspended {
   color: #d9231f;
 }
 
-/* line 106, ../scss/blocks/_statuses.scss */
+/* line 107, ../scss/blocks/_statuses.scss */
 .text-status-success,
 .text-status-pass,
 .text-status-certified {
   color: #4aa31e;
 }
 
-/* line 111, ../scss/blocks/_statuses.scss */
+/* line 112, ../scss/blocks/_statuses.scss */
 .text-status-fail,
 .text-status-testing,
 .text-status-failure {
   color: #e33f3f;
 }
 
-/* line 116, ../scss/blocks/_statuses.scss */
+/* line 117, ../scss/blocks/_statuses.scss */
 .text-status-not_performed,
 .text-status-unverified {
   color: #666;
 }
 
-/* line 120, ../scss/blocks/_statuses.scss */
+/* line 121, ../scss/blocks/_statuses.scss */
 .text-status-warning {
   color: #CC6600;
 }
 
-/* line 123, ../scss/blocks/_statuses.scss */
+/* line 124, ../scss/blocks/_statuses.scss */
 .text-status-duplicate,
 .text-status-ignored {
   color: #606060;
 }
 
-/* line 127, ../scss/blocks/_statuses.scss */
+/* line 128, ../scss/blocks/_statuses.scss */
 .text-status-verified {
   color: #369817;
 }
 
-/* line 130, ../scss/blocks/_statuses.scss */
+/* line 131, ../scss/blocks/_statuses.scss */
 .text-status-claimed {
   color: #f66200;
 }
@@ -15425,6 +15426,12 @@ input.notify-changes {
 /* line 169, ../scss/pages/_test-suites.scss */
 .test-cases-table .status-circle {
   margin-top: 0;
+}
+
+/* line 174, ../scss/pages/_test-suites.scss */
+.test-suites-table > tbody > tr > td {
+  vertical-align: middle;
+  font-size: 12px;
 }
 
 /* line 3, ../scss/pages/_test-cases.scss */
