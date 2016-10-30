@@ -750,14 +750,6 @@ class ProductsController extends BaseApiController
      *     "code": 403
      *   }
      *
-     *
-     * @apiError 404 Products not found
-     * @apiErrorExample {json} Products not found error:
-     *  {
-     *     "messages": ["No products were found for this user!"],
-     *     "status": "error",
-     *     "code": 404
-     *   }
      * @apiError 422 Invalid product_type value
      * @apiErrorExample {json} Invalid product_type value:
      *   {
@@ -804,9 +796,6 @@ class ProductsController extends BaseApiController
                 ->groupBy('wp_posts.ID')
                 ->get();
 
-            if (empty($products)) {
-                return $this->respondNotFound('No products were found with ' . $type . ' type for this user!');
-            }
         } else {
             $products = DB::table('wp_posts')
                 ->join('wp_postmeta AS pm1', function ($join) use ($userOrganisationId) {
@@ -821,9 +810,6 @@ class ProductsController extends BaseApiController
                 ->where('wp_posts.post_type', '=', 'product-service')
                 ->groupBy('wp_posts.ID')
                 ->get();
-            if (empty($products)) {
-                return $this->respondNotFound('No products were found for this user!');
-            }
         }
 
         $response = [];

@@ -1019,12 +1019,6 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "404",
-            "description": "<p>Products not found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
             "field": "422",
             "description": "<p>Invalid product_type value</p>"
           }
@@ -1039,11 +1033,6 @@ define({ "api": [
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"messages\": [\"Your organization can't perform testing.\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
-          "type": "json"
-        },
-        {
-          "title": "Products not found error:",
-          "content": "{\n   \"messages\": [\"No products were found for this user!\"],\n   \"status\": \"error\",\n   \"code\": 404\n }",
           "type": "json"
         },
         {
@@ -1109,12 +1098,6 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "404",
-            "description": "<p>Products not found</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
             "field": "422",
             "description": "<p>Invalid product_type value</p>"
           }
@@ -1129,11 +1112,6 @@ define({ "api": [
         {
           "title": "Organization is not approved yet:",
           "content": "{\n  \"errors\": {\n    \"message\": [\n      \"Your organization can't perform testing.\"\n    ]\n  },\n  \"code\": 403\n}",
-          "type": "json"
-        },
-        {
-          "title": "Products not found error:",
-          "content": "{\n   \"errors\": {\n     \"message\": [\n        \"No products were found for this user!\"\n           ]\n   },\n   \"code\": 404\n }",
           "type": "json"
         },
         {
