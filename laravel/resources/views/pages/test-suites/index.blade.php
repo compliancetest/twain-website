@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="form-group col-sm-6 col-md-3">
-                                <label for="filterDateFrom">Published From:</label>
+                                <label for="filterDateFrom">Published Date:</label>
                                 <div class="input-group">
                                     <input class="form-control datepicker-form-control" id="filterDateFrom" readonly="" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date_from" placeholder="Date From" type="text">
                                     <span class="input-group-addon filterCalendarFrom"><span class="calendar-icon"></span></span>
