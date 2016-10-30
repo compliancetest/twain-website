@@ -320,7 +320,8 @@ class CommunitiesController extends Controller
             '[site_title]' => get_site_title(),
             '[community_name]' => Community::find($community->id)->title,
             '[status]' => $request->get('is_checked') ? 'Approved' : 'Disapproved',
-            '[env]' => get_option('env')
+            '[env]' => get_option('env'),
+            '[website_url]' => getSiteUrl(),
         ];
         sendEmails([['user_id' => $product->post_author]], 'product_approvement_to_user', $emailData);
 
