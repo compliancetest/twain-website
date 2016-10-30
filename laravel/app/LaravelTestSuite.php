@@ -49,6 +49,17 @@ class LaravelTestSuite extends Model
         return $this->hasMany('\App\TestSuiteProfileType', 'test_suite_id');
     }
 
+    public function getProfileTypes()
+    {
+        $profiletypes = [];
+        foreach ($this->profileTypes as $profileType) {
+            $profileType = ProfileType::find($profileType->profile_type_id);
+            $profiletypes[str_replace('.', '', $profileType->getVersion())] = $profileType->getTitle();
+        }
+        ksort($profiletypes);
+        return $profiletypes;
+    }
+
     public function relatedTestSuites()
     {
         return $this->hasMany('\App\TestSuiteRelatedSuite', 'test_suite_id');

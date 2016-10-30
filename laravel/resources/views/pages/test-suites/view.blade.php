@@ -24,8 +24,8 @@
                     @if(!$testSuite->protocolVersions->isEmpty())
                         <li>Protocol Versions: <strong>{{ $testSuite->protocolVersions }}</strong></li>
                     @endif
-                    <li>Test Tool: <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0.exe</a></li>
-                    <li>Test Tool(X64): <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0_X64.exe</a></li>
+                    {{--<li>Test Tool: <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0.exe</a></li>--}}
+                    {{--<li>Test Tool(X64): <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0_X64.exe</a></li>--}}
                 </ul>
             </div>
 
@@ -56,8 +56,8 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ts-profile-types">
                        <ul>
-                           @foreach($testSuite->profileTypes as $profileType)
-                               <li><a href="#">{{ \App\ProfileType::find($profileType->profile_type_id)->getTitle() }}</a></li>
+                           @foreach($testSuite->getProfileTypes() as $profileType)
+                               <li><a href="#">{{ $profileType }}</a></li>
                            @endforeach
                        </ul>
                     </div>
@@ -133,7 +133,7 @@
                         <tr>
                             @if($scenarioId != $testCase->scenarioId)
                                 <?php $scenarioId = $testCase->scenarioId;?>
-                                    <td rowspan="{{ $testCases->filter(function ($value, $key) use ($scenarioId) {
+                                    <td rowspan="{{ $testCases->filter(function ($value) use ($scenarioId) {
                                             return $value->scenarioId == $scenarioId;
                                         })->count() }}" class="rowspan-cell">
                                     <?php $scenario = \App\TestSuiteScenarios::find($testCase->scenario->test_suites_scenario_id);?>

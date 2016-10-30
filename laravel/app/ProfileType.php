@@ -28,4 +28,16 @@ class ProfileType extends Model
         }
         return $title;
     }
+
+    public function getVersion()
+    {
+        $array = json_decode(base64_decode($this->schema), true);
+        $title = $array['Version']['Major'].'.'.$array['Version']['Minor'] ;
+        if(!empty($array['Version']['Patch'])){
+            $title .= '.'.$array['Version']['Patch'];
+        } else {
+            $title .= '.0';
+        }
+        return $title;
+    }
 }
