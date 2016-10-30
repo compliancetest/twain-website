@@ -8,7 +8,25 @@
             @can('change', $product)
                 <a href="/laravel-product/{{ $product->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
             <!-- todo-migration add confirmation popup with confirmed DELETE request to /laravel-product/{{ $produc->slug }}-->
-                <a href="#" class="btn btn-danger btn-with-icon btn-delete">Delete</a>
+                <button type="button" data-toggle="modal" data-target="#deleteProductModal" class="btn btn-danger btn-with-icon btn-delete">Delete</button>
+                {{-- Delete Product Modal--}}
+                <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content block-loading-wrapper">
+                            <div class="modal-header">
+                                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                Delete Product
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want delete {{ $product->full_name }}?
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#DELETE_URL" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                                <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endcan
         </div>
     </div>

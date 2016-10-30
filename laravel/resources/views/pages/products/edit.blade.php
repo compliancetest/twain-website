@@ -104,6 +104,35 @@
 
                                             @else
                                                 <!-- todo-migration add list with selected features for Application product, e.g. (product features section) - https://www-integration-twain.ct01.gosource.com.au/edit-product-and-service/?id=5537-->
+                                                <label>Product Features:</label>
+                                                <div class="suite-checkboxes-group">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="product_features[]" value="5282">
+                                                            TWAIN v2.3 Compliance - Applications v1.0
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="checkbox">
+                                                        <label data-tooltip="tooltip" title="UI image transfer">
+                                                            <input type="checkbox" name="product_features[]" value="UI image transfer">
+                                                            UI image transfer
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label data-tooltip="tooltip" title="Non-UI image transfer">
+                                                            <input type="checkbox" name="product_features[]" value="Non-UI image transfer">
+                                                            Non-UI image transfer
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label data-tooltip="tooltip" title="New description. New description New description New description New description. New description.">
+                                                            <input type="checkbox" name="product_features[]" value="123">
+                                                            123
+                                                        </label>
+                                                    </div>
+
+                                                </div>
                                             @endif
                                         </div>
 

@@ -70,3 +70,27 @@
   }
 
 }
+
+.products-list{
+
+  .colored-box {
+    .colored-box-content{
+      padding: 0;
+    }
+
+    .table{
+      margin: 0;
+    }
+  }
+
+}
+
+.suite-checkboxes-group{
+  .checkbox{
+    margin-left: 20px;
+
+    &:first-child{
+      margin-left: 10px;
+    }
+  }
+}

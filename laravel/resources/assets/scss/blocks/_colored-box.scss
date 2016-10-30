@@ -34,6 +34,7 @@
       background: rgba(0,0,0,0.1);
       font-size: 11px;
       @include border-radius(4px 0 0 0);
+      outline: 0;
 
       .glyphicon-triangle-right{
         display: none;
@@ -47,6 +48,33 @@
           display: inline-block;
         }
 
+      }
+    }
+
+    .colored-box-header-actions{
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      li{
+        float: left;
+      }
+
+      a{
+        width: 30px;
+        height: 29px;
+        display: block;
+        text-align: center;
+        padding: 8px 0 0 0;
+        border-left: 1px solid #145489;
+        background: rgba(0,0,0,0.1);
+
+        .edit-icon{
+          @include iconsSprite(btn-icon-edit);
+        }
+        .delete-icon{
+          @include iconsSprite(btn-icon-delete);
+        }
       }
     }
 
