@@ -9188,9 +9188,8 @@ body.modal-open,
 /* line 352, ../scss/_common.scss */
 .definition-list dt, .definition-list dd {
   display: block;
-  line-height: 14px;
 }
-/* line 357, ../scss/_common.scss */
+/* line 356, ../scss/_common.scss */
 .definition-list dt {
   clear: left;
   float: left;
@@ -9200,29 +9199,28 @@ body.modal-open,
   font-weight: 400;
   font-size: 13px;
 }
-/* line 366, ../scss/_common.scss */
+/* line 365, ../scss/_common.scss */
 .definition-list dt label {
   color: #666;
   font-weight: 600;
   margin: 0;
   font-size: 12px;
 }
-/* line 372, ../scss/_common.scss */
+/* line 371, ../scss/_common.scss */
 .definition-list dt label input {
   margin-right: 5px;
 }
-/* line 378, ../scss/_common.scss */
+/* line 377, ../scss/_common.scss */
 .definition-list dd {
   width: 90%;
   margin: 0 0 0 10%;
-  overflow: hidden;
 }
 @media (max-width: 768px) {
-  /* line 385, ../scss/_common.scss */
+  /* line 383, ../scss/_common.scss */
   .definition-list dt {
     width: 25%;
   }
-  /* line 389, ../scss/_common.scss */
+  /* line 387, ../scss/_common.scss */
   .definition-list dd {
     width: 75%;
     margin: 0 0 0 25px;
@@ -15431,6 +15429,12 @@ input.notify-changes {
 /* line 174, ../scss/pages/_test-suites.scss */
 .test-suites-table > tbody > tr > td {
   vertical-align: middle;
+  font-size: 12px;
+}
+
+/* line 179, ../scss/pages/_test-suites.scss */
+.test-cases-table .modal-body {
+  color: #666;
   font-size: 12px;
 }
 

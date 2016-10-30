@@ -17,7 +17,7 @@
             <div class="options-box">
                 <ul class="inline-options-list">
                     <li>ID: <strong>{{ $testSuite->short_name }}</strong></li>
-                    <li>Published: <strong>2016-01-29</strong></li>
+                    <li>Published: <strong>{{$testSuite->published_at}}</strong></li>
                     <li>Issuer: <a href="/laravel-test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
                     <li>Status: <span class="status status-active">{{ $testSuite->status }}</span></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
@@ -32,13 +32,22 @@
             <div class="test-suite-description">{!! $testSuite->description !!}</div>
             <div class="simple-tabs">
                 <ul class="simple-tabs-nav ts-simple-tabs" role="tablist">
-                    <li class="active"><a href="#ts-test-suite-roles">Test Suite Roles</a></li>
-                    <li><a href="#ts-conformance-levels">Conformance Levels</a></li>
-                    <li><a href="#ts-profile-types">Profile Types</a></li>
-                    <li><a href="#ts-specification-documents">Specification Documents</a></li>
+                    @if(count($testSuite->roles) > 0)
+                        <li><a href="#ts-test-suite-roles">Test Suite Roles</a></li>
+                    @endif
+                    @if(count($testSuite->conformanceLevels) > 0)
+                        <li><a href="#ts-conformance-levels">Conformance Levels</a></li>
+                    @endif
+                    @if(count($testSuite->getProfileTypes()) > 0)
+                        <li><a href="#ts-profile-types">Profile Types</a></li>
+                    @endif
+                    @if(count($testSuite->specificationDocuments) > 0)
+                        <li><a href="#ts-specification-documents">Specification Documents</a></li>
+                    @endif
                 </ul>
                 <div class="tab-content simple-tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="ts-test-suite-roles">
+                    @if(count($testSuite->roles) > 0)
+                    <div role="tabpanel" class="tab-pane" id="ts-test-suite-roles">
                         @foreach($testSuite->roles as $role)
                             <dl class="definition-list">
                                 <dt>{{ $role->name }}</dt>
@@ -46,6 +55,8 @@
                             </dl>
                         @endforeach
                     </div>
+                    @endif
+                    @if(count($testSuite->conformanceLevels) > 0)
                     <div role="tabpanel" class="tab-pane" id="ts-conformance-levels">
                         @foreach($testSuite->conformanceLevels as $conformanceLevel)
                             <dl class="definition-list">
@@ -54,6 +65,8 @@
                             </dl>
                         @endforeach
                     </div>
+                    @endif
+                    @if(count($testSuite->getProfileTypes()) > 0)
                     <div role="tabpanel" class="tab-pane" id="ts-profile-types">
                        <ul>
                            @foreach($testSuite->getProfileTypes() as $profileType)
@@ -61,6 +74,8 @@
                            @endforeach
                        </ul>
                     </div>
+                    @endif
+                    @if(count($testSuite->specificationDocuments) > 0)
                     <div role="tabpanel" class="tab-pane" id="ts-specification-documents">
                         <ul class="spec-doc-list">
                             @foreach($testSuite->specificationDocuments as $specificationDocument)
@@ -71,6 +86,7 @@
                             @endforeach
                         </ul>
                     </div>
+                    @endif
                 </div>
             </div>
             
@@ -129,7 +145,7 @@
                     <tbody>
                         <?php $scenarioId = false;?>
                         <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate(25);?>
-                        @foreach($testCases  as $testCase)
+                        @foreach($testCases  as $index => $testCase)
                         <tr>
                             @if($scenarioId != $testCase->scenarioId)
                                 <?php $scenarioId = $testCase->scenarioId;?>
@@ -155,7 +171,25 @@
                             @can('change', $testSuite)
                                 <td class="text-center">
                                     <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                    <a href="#" class="btn btn-success btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</a>
+                                    <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</button>
+                                    {{-- Delete Test Case Modal--}}
+                                    <div class="modal fade" id="deleteTestCaseModal{{$index}}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content block-loading-wrapper">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                                                    Delete Test Case
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want delete {{ $testCase->full_name }}?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="#DELETE_URL" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                                                    <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             @endcan
                         </tr>
@@ -179,6 +213,7 @@
             e.preventDefault();
             $(this).tab('show')
         });
+        $('.simple-tabs-nav li:first-child a').click();
     });
 </script>
 @stop
