@@ -58,8 +58,9 @@ class TestSuitesController extends Controller
         }
 
         $pageTitle = 'Edit ' . $testSuite->full_name;
-        $isAdmin = Community::find($testSuite->community_id)->isAdmin() || is_super_admin();
-        return view('pages.test-suites.edit', compact('testSuite', 'pageTitle', 'isAdmin'));
+        $suiteCommunity = Community::find($testSuite->community_id);
+        $isAdmin = $suiteCommunity->isAdmin() || is_super_admin();
+        return view('pages.test-suites.edit', compact('testSuite', 'pageTitle', 'isAdmin', 'suiteCommunity'));
     }
 
     public function getTestCasesList($testSuiteSlug, Request $request)

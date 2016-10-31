@@ -5,7 +5,7 @@
     <div class="container main-container">
         <div class="main-content edit-test-suite-page">
             <div class="page-title">
-                <h1>Add/Edit Test Suite: Name</h1>
+                <h1>Edit Test Suite: {{ $testSuite->full_name }}</h1>
             </div>
             <form action="#" method="post">
                 <div class="row">
@@ -16,8 +16,9 @@
                                 <div class="colored-box-content">
                                     <div class="form-group">
                                         <select name="community_id" id="communityId" class="form-control">
-                                            <option value="2b631ece-4fa1-4277-96bf-6efe1a279893">Find</option>
-                                            <option value="857d8b15-76bd-49d4-9e4b-b2d35aea7db1">TWAIN</option>
+                                            @foreach(\App\Community::all()->sortBy('title') as $community)
+                                                <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -28,34 +29,35 @@
                         <div class="colored-box collapsible-box">
                             <div class="colored-box-header"><a href="#testSuiteTypesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Suite Types</div>
                             <div class="colored-box-body collapse in" id="testSuiteTypesBox">
+                                <?php $testSuiteTypes = $testSuite->types->keyBy('type');?>
                                 <div class="colored-box-content test-suite-types-box">
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="11" type="checkbox">
+                                            <input name="test_suite_type[]" value="Data Exchange" type="checkbox" @if(isset($testSuiteTypes['Data Exchange'])) checked="checked"@endif>
                                             Data Exchange
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="12" checked="checked" type="checkbox">
+                                            <input name="test_suite_type[]" value="Environment" checked="checked" type="checkbox" @if(isset($testSuiteTypes['Environment'])) checked="checked"@endif>
                                             Environment
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="13" checked="checked" type="checkbox">
+                                            <input name="test_suite_type[]" value="Quality" checked="checked" type="checkbox" @if(isset($testSuiteTypes['Quality'])) checked="checked"@endif>
                                             Quality
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="14" type="checkbox">
+                                            <input name="test_suite_type[]" value="Some Other Type" type="checkbox" @if(isset($testSuiteTypes['Some Other Type'])) checked="checked"@endif>
                                             Some Other Type
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="15" type="checkbox">
+                                            <input name="test_suite_type[]" value="Web Technology" type="checkbox" @if(isset($testSuiteTypes['Web Technology'])) checked="checked"@endif>
                                             Web Technology
                                         </label>
                                     </div>
@@ -74,13 +76,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="testSuiteTitle">Title:</label>
-                                        <input type="text" id="testSuiteTitle" name="test_suite_title" class="form-control" value="">
+                                        <input type="text" id="testSuiteTitle" name="name" class="form-control" value="{{ $testSuite->name }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="testSuiteName">Name:</label>
-                                        <input type="text" id="testSuiteName" name="test_suite_name" class="form-control" value="">
+                                        <input type="text" id="testSuiteName" name="short_name" class="form-control" value="{{ $testSuite->short_name }}">
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +92,7 @@
                                     <div class="form-group">
                                         <label for="testSuitePublishedDate">Published:</label>
                                         <div class="input-group">
-                                            <input type="text" id="testSuitePublishedDate" name="test_suite_published_date" class="form-control datepicker-form-control" readonly value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                                            <input type="text" id="testSuitePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly value="{{ formatDate($testSuite->published_at) }}" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
                                             <span class="input-group-addon test-suite-published-date"><span class="calendar-icon"></span></span>
                                         </div>
                                     </div>
@@ -98,13 +100,13 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testSuiteIssuer">Issuer:</label>
-                                        <input type="text" id="testSuiteIssuer" name="test_suite_issuer" class="form-control" value="">
+                                        <input type="text" id="testSuiteIssuer" name="issuer" class="form-control" value="{{ $testSuite->issuer }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testSuiteRevisionDescription">Revision Description:</label>
-                                        <input type="text" id="testSuiteRevisionDescription" name="test_suite_revision_description" class="form-control" value="">
+                                        <input type="text" id="testSuiteRevisionDescription" name="revision_description" class="form-control" value="{{ $testSuite->revision_description }}">
                                     </div>
                                 </div>
                             </div>
@@ -116,31 +118,31 @@
                                         <div class="radio-group status-radio-group">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_suite_status" value="draft">
+                                                    <input type="radio" name="status" value="draft" @if($testSuite->status == 'Draft') checked="checked"@endif>
                                                     <span class="status status-circle status-draft">D</span>Draft
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_suite_status" value="active">
+                                                    <input type="radio" name="status" value="active" @if($testSuite->status == 'Active') checked="checked"@endif>
                                                     <span class="status status-circle status-active">A</span>Active
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_suite_status" value="deprecated">
+                                                    <input type="radio" name="status" value="deprecated" @if($testSuite->status == 'Deprecated') checked="checked"@endif>
                                                     <span class="status status-circle status-deprecated">C</span>Deprecated
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_suite_status" value="obsolete">
+                                                    <input type="radio" name="status" value="obsolete" @if($testSuite->status == 'Obsolete') checked="checked"@endif>
                                                     <span class="status status-circle status-obsolete">O</span>Obsolete
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_suite_status" value="partial">
+                                                    <input type="radio" name="status" value="partial" @if($testSuite->status == 'Partial') checked="checked"@endif>
                                                     <span class="status status-circle status-partial">P</span>Partial
                                                 </label>
                                             </div>
@@ -153,18 +155,18 @@
                                         <div class="manage-version-box row">
                                             <div class="manage-version-group">
                                                 <span>Major</span>
-                                                <input type="text" id="tsVersionMajor" name="ts_version_major" class="form-control" readonly="readonly" value="0" />
+                                                <input type="text" id="tsVersionMajor" name="ts_version_major" class="form-control" readonly="readonly" value="{{ $testSuite->version_major }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMajor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
-                                                <input type="text" id="tsVersionMinor" name="ts_version_minor" class="form-control" readonly="readonly" value="1" />
+                                                <input type="text" id="tsVersionMinor" name="ts_version_minor" class="form-control" readonly="readonly" value="{{ $testSuite->version_minor }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMinor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
-                                                <input type="text" id="tsVersionPatch" name="ts_version_patch" class="form-control" readonly="readonly" value="2" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch" disabled="disabled" data-tooltip="tooltip" title="Later version already exists."></button>
+                                                <input type="text" id="tsVersionPatch" name="ts_version_patch" class="form-control" readonly="readonly" value="{{ $testSuite->version_patch }}" />
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch" data-tooltip="tooltip" title="Later version already exists."></button>
                                             </div>
                                         </div>
 
@@ -177,13 +179,13 @@
                                 <div class="radio-group">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="test_suite_product_type" value="DataSource">
+                                            <input type="radio" name="product_type" value="DataSource" @if($testSuite->product_type == 'DataSource') checked="checked" @endif>
                                             DataSource
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="test_suite_product_type" value="Application">
+                                            <input type="radio" name="product_type" value="Application" @if($testSuite->product_type == 'Application') checked="checked" @endif>
                                             Application
                                         </label>
                                     </div>
@@ -192,7 +194,7 @@
 
                             <div class="form-group">
                                 <label for="testSuiteDescription">Description:</label>
-                                <textarea rows="5" class="form-control" id="testSuiteDescription" name="test_suite_description"></textarea>
+                                <textarea rows="5" class="form-control" id="testSuiteDescription" name="description">{!! $testSuite->description !!}</textarea>
                             </div>
 
                         </div>
@@ -206,18 +208,20 @@
                         <div class="colored-box-content dynamic-rows" id="conformanceLevelContent">
 
 
-                            <div class="form-group conformance-level-row">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Conformance Level Code:</label>
-                                        <input type="text" class="form-control" name="lvl_code[]" value=""/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Conformance Level Description:</label>
-                                        <textarea rows="3" class="form-control" name="lvl_desc[]"></textarea>
+                            @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                                <div class="form-group conformance-level-row">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Conformance Level Code:</label>
+                                            <input type="text" class="form-control" name="lvl_code[]" value="{{ $conformanceLevel->code }}"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Conformance Level Description:</label>
+                                            <textarea rows="3" class="form-control" name="lvl_desc[]">{{ $conformanceLevel->description }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
 
 
                             <div class="form-group conformance-level-row">
@@ -249,18 +253,20 @@
                     <div class="colored-box-body collapse in" id="featuresListBox">
                         <div class="colored-box-content dynamic-rows" id="featuresListContent">
 
-                            <div class="form-group featureRow">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Feature Name:</label>
-                                        <input type="text" class="form-control" name="feature_name[]]" value=""/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="feature_description[]"></textarea>
+                            @foreach($testSuite->features as $feature)
+                                <div class="form-group featureRow">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Feature Name:</label>
+                                            <input type="text" class="form-control" name="feature_name[]]" value="{{ $feature->name }}"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Description:</label>
+                                            <textarea rows="3" class="form-control" name="feature_description[]">{!! $feature->description !!}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
 
                             <div class="form-group featureRow">
                                 <div class="row">
@@ -291,22 +297,24 @@
                     <div class="colored-box-body collapse in" id="scenariosBox">
                         <div class="colored-box-content dynamic-rows" id="scenariosContent">
 
+                            @foreach($testSuite->scenarios as $scenario)
                             <div class="form-group scenarioRow">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Code:</label>
-                                        <input type="text" class="form-control" name="scenario_code[]" value=""/>
+                                        <input type="text" class="form-control" name="scenario_code[]" value="{{ $scenario->code }}"/>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="scenario_desc[]"></textarea>
+                                        <textarea rows="3" class="form-control" name="scenario_desc[]">{!! $scenario->description  !!}</textarea>
                                     </div>
                                     <div class="col-md-1">
                                         <label>Sequence:</label>
-                                        <input type="text" class="form-control" name="scenario_sequence[]" value=""/>
+                                        <input type="text" class="form-control" name="scenario_sequence[]" value="{{ $scenario->sequence }}"/>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
                             <div class="form-group scenarioRow">
                                 <div class="row">
@@ -337,78 +345,20 @@
 
                 {{-- Test Data --}}
                 <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testDataBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Data</div>
+                    <div class="colored-box-header"><a href="#testDataBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Profile Types</div>
                     <div class="colored-box-body collapse in" id="testDataBox">
-                        <div class="colored-box-content dynamic-rows">
-                            <div id="messageTemplatesContent">
-                                <h4 class="test-item-subheader">Message Templates</h4>
-                                <div class="form-group messageTemplatesRow">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <label>Template Name:</label>
-                                            <input type="text" class="form-control" name="message_template_name[]" value=""/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Template URI:</label>
-                                            <select name="message_template_url[]" class="form-control">
-                                                <option>Select a Template</option>
-                                                <option>Template 1</option>
-                                                <option>Template 2</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-1 action-col">
-                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="messageTemplatesRow">Delete Message Template</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" onclick="Page.helpers.addRow('#messageTemplatesTemplate','#messageTemplatesContent');" class="btn btn-success btn-with-icon btn-add">New Template</button>
 
                             <div class="test-data-profile-types">
-                                <h4 class="test-item-subheader">Profile Type:</h4>
                                 <div class="checkboxes-group clearfix">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 1</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 2</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 3</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 4</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 5</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 6</a>
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="test_suite_profile_type" type="checkbox">
-                                            <a href="javascript:void(0);">Profile Type 7</a>
-                                        </label>
-                                    </div>
+                                    <?php $testSuiteProfileType = $testSuite->profileTypes->keyBy('profile_type_id');?>
+                                    @foreach($suiteCommunity->profileTypes as $profileType)
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="profile_types[]" type="checkbox" @if(isset($testSuiteProfileType[$profileType->id])) checked="checked"@endif>
+                                                <a href="javascript:void(0);">{{ $profileType->getTitle() }}</a>
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -421,21 +371,9 @@
                     <div class="colored-box-body collapse in" id="testCasesBox">
                         <div class="colored-box-content">
                             <ul class="test-suites-cases-list clearfix">
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
-                                <li><a href="#" target="_blank">CN-02b v1.0</a></li>
+                                @foreach($testSuite->testCases as $testCase)
+                                    <li><a href="/laravel-test-case/{{ $testCase->slug }}" target="_blank">{{ $testCase->full_name }}</a></li>
+                                @endforeach
                             </ul>
                             <a href="/laravel-test-case/123/edit" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
 
@@ -449,15 +387,42 @@
                     <div class="colored-box-body collapse in" id="relatedTestSuitesBox">
                         <div class="colored-box-content dynamic-rows" id="relatedTestSuitesContent">
 
+                            @foreach($testSuite->relatedTestSuites as $relatedTestSuite)
                             <div class="form-group relatedTestSuiteRow">
                                 <div class="row">
                                     <div class="col-md-5">
                                         <label>Related Suite:</label>
                                         <select class="form-control" name="related_ts[]">
                                             <option>Select test suite</option>
-                                            <option>Test suite 1</option>
-                                            <option>Test suite 2</option>
-                                            <option>Test suite 3</option>
+                                            @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
+                                                @if($communityTestSuite->id != $suiteCommunity->id)
+                                                    <option value="{{ $communityTestSuite->id }}" @if($communityTestSuite->id == $relatedTestSuite->related_test_suite_id) selected="selected"@endif>{{ $communityTestSuite->full_name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Description:</label>
+                                        <textarea rows="3" class="form-control" name="related_ts_desc[]">{!! $relatedTestSuite->description !!}</textarea>
+                                    </div>
+                                    <div class="col-md-1 action-col">
+                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+
+                            <div class="form-group relatedTestSuiteRow">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label>Related Suite:</label>
+                                        <select class="form-control" name="related_ts[]">
+                                            <option>Select test suite</option>
+                                            @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
+                                                @if($communityTestSuite->id != $suiteCommunity->id)
+                                                    <option value="{{ $communityTestSuite->id }}">{{ $communityTestSuite->full_name }}</option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-6">
@@ -483,25 +448,23 @@
                     <div class="colored-box-body collapse in" id="testSuitesRolesBox">
                         <div class="colored-box-content dynamic-rows" id="testSuitesRolesContent">
 
-                            <div class="form-group testSuiteRoleRow">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Name:</label>
-                                        <input type="text" class="form-control" name="role_names[]" value=""/>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label>Description:</label>
-                                        <input type="text" class="form-control" name="role_descs[]" value=""/>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Profile types:</label>
-                                        <input type="text" class="form-control" name="role_types[]" value=""/>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
+                            @foreach($testSuite->roles as $role)
+                                <div class="form-group testSuiteRoleRow">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Name:</label>
+                                            <input type="text" class="form-control" name="role_names[]" value="{{ $role->name }}"/>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <label>Description:</label>
+                                            <input type="text" class="form-control" name="role_descs[]" value="{!! $role->description !!}"/>
+                                        </div>
+                                        <div class="col-md-1 action-col">
+                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
 
                         </div>
                         <div class="colored-box-footer">
@@ -516,20 +479,21 @@
                     <div class="colored-box-body collapse in" id="specificationDocsBox">
                         <div class="colored-box-content dynamic-rows" id="specificationDocsBoxContent">
 
+                            @foreach($testSuite->specificationDocuments as $specificationDocument)
                             <div class="form-group specificationDocRow">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Document Name:</label>
-                                        <input type="text" class="form-control" name="doc_name[]" value=""/>
+                                        <input type="text" class="form-control" name="doc_name[]" value="{{ $specificationDocument->name }}"/>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="form-group">
                                             <label>Document Description:</label>
-                                            <textarea name="doc_desc[]" class="form-control" rows="3"></textarea>
+                                            <textarea name="doc_desc[]" class="form-control" rows="3">{!! $specificationDocument->description !!}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Document Location:</label>
-                                            <input type="text" class="form-control" name="doc_loc[]" value=""/>
+                                            <input type="text" class="form-control" name="doc_loc[]" value="{{ $specificationDocument->link }}"/>
                                         </div>
                                         <div class="form-group">
                                             <div class="upload-file-field">
@@ -542,6 +506,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
                         </div>
                         <div class="colored-box-footer">
@@ -559,7 +524,7 @@
                             <div class="form-group featureRow">
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <textarea rows="3" class="form-control" name="excerpt"></textarea>
+                                        <textarea rows="3" class="form-control" name="excerpt">{{ $testSuite->excerpt }}</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <p class="field-light-description">Excerpts are optional hand-crafted summaries of your content that can be used in your theme.</p>
@@ -580,7 +545,7 @@
                             <div class="form-group featureRow">
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <textarea rows="3" class="form-control" name="protocol_versions"></textarea>
+                                        <textarea rows="3" class="form-control" name="protocol_versions">{{ implode(',', $testSuite->protocolVersions()->pluck('version')->toArray()) }}</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <p class="field-light-description">List of supported protocol versions could be just a list of strings(separated by comma) with the following format: ProtocolMajor.ProtocolMinor For example: 2.3,2.3 Empty list of supported protocol versions is allowed and means that a test suite supports any version.</p>
@@ -704,27 +669,6 @@
     </div>
 </script>
 
-<script type="text/html" id="messageTemplatesTemplate">
-    <div class="form-group messageTemplatesRow">
-        <div class="row">
-            <div class="col-md-5">
-                <label>Template Name:</label>
-                <input type="text" class="form-control" name="message_template_name[]" value=""/>
-            </div>
-            <div class="col-md-6">
-                <label>Template URI:</label>
-                <select name="message_template_url[]" class="form-control">
-                    <option>Select a Template</option>
-                    <option>Template 1</option>
-                    <option>Template 2</option>
-                </select>
-            </div>
-            <div class="col-md-1 action-col">
-                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="messageTemplatesRow">Delete Message Template</button>
-            </div>
-        </div>
-    </div>
-</script>
 
 <script type="text/html" id="relatedTestSuiteTemplate">
     <div class="form-group relatedTestSuiteRow">
@@ -733,9 +677,11 @@
                 <label>Related Suite:</label>
                 <select class="form-control" name="related_ts[]">
                     <option>Select test suite</option>
-                    <option>Test suite 1</option>
-                    <option>Test suite 2</option>
-                    <option>Test suite 3</option>
+                    @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
+                        @if($communityTestSuite->id != $suiteCommunity->id)
+                            <option value="{{ $communityTestSuite->id }}">{{ $communityTestSuite->full_name }}</option>
+                        @endif
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-6">
@@ -752,17 +698,13 @@
 <script type="text/html" id="testSuiteRoleTemplate">
     <div class="form-group testSuiteRoleRow">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label>Name:</label>
                 <input type="text" class="form-control" name="role_names[]" value=""/>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-7">
                 <label>Description:</label>
                 <input type="text" class="form-control" name="role_descs[]" value=""/>
-            </div>
-            <div class="col-md-3">
-                <label>Profile types:</label>
-                <input type="text" class="form-control" name="role_types[]" value=""/>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>

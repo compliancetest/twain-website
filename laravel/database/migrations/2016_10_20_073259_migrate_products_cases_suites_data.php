@@ -31,14 +31,14 @@ class MigrateProductsCasesSuitesData extends Migration
                 'version_major' => $testSuite->getMetaByKey('ts_version_major'),
                 'version_minor' => $testSuite->getMetaByKey('ts_version_minor'),
                 'version_patch' => $testSuite->getMetaByKey('ts_version_patch'),
-                'description' => $testSuite->getMetaByKey('ts_description'),
+                'description' => strip_tags($testSuite->getMetaByKey('ts_description')),
                 'full_name' => $testSuiteFullName,
                 'short_name' => $testSuite->getMetaByKey('ts_identifier'),
                 'issuer' => $testSuite->getMetaByKey('ts_issuer'),
-                'revision_description' => $testSuite->getMetaByKey('ts_revision_description'),
+                'revision_description' => strip_tags($testSuite->getMetaByKey('ts_revision_description')),
                 'status' => $testSuite->getMetaByKey('ts_status'),
                 'product_type' => $testSuite->getMetaByKey('ts_tester_role'),
-                'excerpt' => $testSuite->post_excerpt,
+                'excerpt' => strip_tags($testSuite->post_excerpt),
                 'wp_id' => $testSuite->ID,
                 'published_at' => $testSuite->getMetaByKey('ts_issue_date'),
                 'created_at' => $testSuite->post_date,
@@ -60,7 +60,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 $descs = unserialize($descs->meta_value);
                 foreach ($codes as $i => $code) {
                     if (!empty($code)) {
-                        $laravelTestSuite->conformanceLevels()->create(['code' => $code, 'description' => (string)$descs[$i]]);
+                        $laravelTestSuite->conformanceLevels()->create(['code' => $code, 'description' => strip_tags((string)$descs[$i])]);
                     }
                 }
             }
@@ -71,7 +71,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 $features = json_decode($features->meta_value, true);
                 foreach ($features as $feature) {
                     if (!empty($feature)) {
-                        $laravelTestSuite->features()->create(['name' => $feature['name'], 'description' => $feature['description']]);
+                        $laravelTestSuite->features()->create(['name' => $feature['name'], 'description' => strip_tags($feature['description'])]);
                     }
                 }
             }
@@ -80,7 +80,7 @@ class MigrateProductsCasesSuitesData extends Migration
 
             $scenarios = DB::select("SELECT * FROM wp_test_suites_scenarios WHERE suite_id = ? ORDER BY sequence", [$testSuite->ID]);
             foreach ($scenarios as $scenario) {
-                $laravelTestSuite->scenarios()->create(['code' => $scenario->code, 'description' => $scenario->description, 'sequence' => $scenario->sequence]);
+                $laravelTestSuite->scenarios()->create(['code' => $scenario->code, 'description' => strip_tags($scenario->description), 'sequence' => $scenario->sequence]);
             }
 
             //profile types
@@ -106,7 +106,7 @@ class MigrateProductsCasesSuitesData extends Migration
                         if (!empty($id)) {
                             $ls = \App\LaravelTestSuite::where('wp_id', $id)->first();
                             if ($ls) {
-                                $laravelTestSuite->relatedTestSuites()->create(['related_test_suite_id' => $ls->id, 'description' => (string)$descs[$i]]);
+                                $laravelTestSuite->relatedTestSuites()->create(['related_test_suite_id' => $ls->id, 'description' => strip_tags((string)$descs[$i])]);
                             }
                         }
                     }
@@ -123,7 +123,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 if ($roles) {
                     foreach ($roles as $i => $role) {
                         if (!empty($role)) {
-                            $laravelTestSuite->roles()->create(['name' => $role, 'description' => (string)$descs[$i]]);
+                            $laravelTestSuite->roles()->create(['name' => $role, 'description' => strip_tags((string)$descs[$i])]);
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class MigrateProductsCasesSuitesData extends Migration
             $specificationDocuments = DB::select("SELECT * FROM wp_ts_options_documents WHERE ts_id = ? ORDER BY id", [$testSuite->ID]);
             foreach ($specificationDocuments as $specificationDocument) {
                 if (!empty($specificationDocument->doc_loc_url)) {
-                    $laravelTestSuite->specificationDocuments()->create(['name' => $specificationDocument->doc_name, 'description' => $specificationDocument->doc_desc, 'link' => $specificationDocument->doc_loc_url]);
+                    $laravelTestSuite->specificationDocuments()->create(['name' => $specificationDocument->doc_name, 'description' => strip_tags($specificationDocument->doc_desc), 'link' => $specificationDocument->doc_loc_url]);
                 }
             }
 
@@ -149,9 +149,6 @@ class MigrateProductsCasesSuitesData extends Migration
                     }
                 }
             }
-
-
-            //todo - pricing plans
         }
 
         $testCases = \App\Post::where(['post_type' => 'test-case'])->get();
@@ -167,7 +164,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'version_major' => (integer)$testCase->getMetaByKey('version_major'),
                 'version_minor' => (integer)$testCase->getMetaByKey('version_minor'),
                 'version_patch' => (integer)$testCase->getMetaByKey('version_patch'),
-                'description' => (string)$testCase->getMetaByKey('test_intent_description'),
+                'description' => strip_tags((string)$testCase->getMetaByKey('test_intent_description')),
                 'full_name' => $testCaseFullName,
                 'tester_role' => $testCase->getMetaByKey('choose_tester_role'),
                 'harness_role' => $testCase->getMetaByKey('choose_harness_role'),
@@ -177,7 +174,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'configuration_profile_id' => (integer)$testCase->getMetaByKey('test_data_profile'),
                 'outcome_type' => (string)$testCase->getMetaByKey('outcome_type'),
                 'is_optional' => $testCase->getMetaByKey('testcase_status') == 'Yes' ? true : false,
-                'test_pattern' => (string)$testCase->getMetaByKey('message_count'),
+                'test_pattern' => strip_tags((string)$testCase->getMetaByKey('message_count')),
                 'wp_id' => $testCase->ID,
                 'published_at' => $testCase->getMetaByKey('published'),
                 'created_at' => $testCase->post_date,
@@ -263,7 +260,7 @@ class MigrateProductsCasesSuitesData extends Migration
                         if (!empty($imageData['name'])) {
                             $laravelTestCase->samples()->create([
                                 'image' => $imageData['name'],
-                                'description' => (string)$imageData['description']
+                                'description' => strip_tags((string)$imageData['description'])
                             ]);
                         }
                     }
@@ -300,7 +297,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 if ($capabilitiesData) {
                     foreach ($capabilitiesData as $capability) {
                         $laravelTestCase->capabilities()->create([
-                            'capability' => $capability
+                            'capability' => strip_tags($capability)
                         ]);
                     }
                 }
@@ -316,8 +313,8 @@ class MigrateProductsCasesSuitesData extends Migration
                     foreach ($stepsActions as $i => $stepsAction) {
                         if (!empty($stepsAction)) {
                             $laravelTestCase->steps()->create([
-                                'action' => $stepsAction,
-                                'expected_result' => $stepsResults[$i],
+                                'action' => strip_tags($stepsAction),
+                                'expected_result' => strip_tags($stepsResults[$i]),
                                 'step' => $i + 1
                             ]);
                         }
@@ -347,7 +344,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'slug' => $product->post_name,
                 'name' => $product->post_title,
                 'full_name' => $product->getProductFullName(),
-                'description' => $product->getMetaByKey('product_description'),
+                'description' => strip_tags($product->getMetaByKey('product_description')),
                 'visibility' => $product->getMetaByKey('product_visibility'),
                 'type' => $product->getMetaByKey('product_type'),
                 'version' => $product->getMetaByKey('product_version'),

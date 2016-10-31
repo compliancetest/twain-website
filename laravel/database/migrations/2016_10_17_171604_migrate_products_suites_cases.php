@@ -24,11 +24,11 @@ class MigrateProductsSuitesCases extends Migration
             $table->integer('version_major');//1
             $table->integer('version_minor');//2
             $table->integer('version_patch');//0
-            $table->string('description');//...
+            $table->text('description');//...
             $table->string('full_name');//TWAIN v2.3 Compliance - Data Sources v1.2
             $table->string('short_name');//TWAINDS
             $table->string('issuer');//twain.org
-            $table->string('revision_description');//First Draft
+            $table->text('revision_description');//First Draft
             $table->string('status');//Active
             $table->string('product_type');//DataSource
             $table->text('excerpt');//DataSource
@@ -168,7 +168,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->integer('version_major');//1
             $table->integer('version_minor');//2
             $table->integer('version_patch');//0
-            $table->string('description');//...
+            $table->text('description');//...
             $table->string('full_name');//CN-10 v1.2
             $table->string('tester_role');//Application
             $table->string('harness_role');//DataSource
@@ -178,7 +178,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->integer('configuration_profile_id');//12
             $table->string('outcome_type');//Positive
             $table->boolean('is_optional');//true
-            $table->string('test_pattern');//..
+            $table->text('test_pattern');//..
             $table->integer('wp_id');//..
             $table->timestamp('published_at');//2016-01-29
             $table->timestamps();
