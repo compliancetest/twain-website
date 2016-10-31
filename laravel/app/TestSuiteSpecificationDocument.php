@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestSuiteSpecificationDocument extends Model
 {
-     use UuidTrait;
+    use UuidTrait;
 
     public $table = 'test_suites_specification_documents';
 

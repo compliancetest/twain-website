@@ -27,6 +27,11 @@ class Organisation extends Model
         return $this->hasMany('App\OrganisationSubscription');
     }
 
+    public function approvedSuites()
+    {
+        return $this->hasMany(\App\CommunityOrganisationsApprovedTestSuites::class);
+    }
+
     /**
      * Get organisation test plans. Only non-claimed test plans will be returned if $excludeClaimed flas is true
      * @param bool $productStringId
@@ -100,5 +105,10 @@ class Organisation extends Model
             ->orderBy('wp_posts.post_title')
             ->get();
         return $products;
+    }
+
+    public function testSuiteIsApproved(LaravelTestSuite $testSuite)
+    {
+        return $this->approvedSuites()->where('suite_major_family_mark', $testSuite->minor_family_mark)->first();
     }
 }

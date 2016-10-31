@@ -332,4 +332,21 @@ class Community extends Model
             cp_send_email(['name' => cp_get_user_fullname($adminUser->ID), 'email' => $adminUser->user_email], $emailTemplate, $data);
         }
     }
+
+    /**
+     * get latest installer
+     * @param $productType
+     * @param bool $x64
+     * @return mixed
+     */
+    public function getTestTool($productType, $x64 = false)
+    {
+        if ($x64) {
+            if ($productType == 'DataSource') {
+                return $this->downloads()->where(['is_installer' => true, 'product_type' => 'DataSourceX64'])->orderBy('created_at', 'DESC')->first();
+            }
+            return false;
+        }
+        return $this->downloads()->where(['is_installer' => true, 'product_type' => $productType])->orderBy('created_at', 'DESC')->first();
+    }
 }

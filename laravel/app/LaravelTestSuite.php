@@ -158,10 +158,26 @@ class LaravelTestSuite extends Model
             ->join('test_suites_scenarios as TSS', function ($join) {
                 $join->on('TSS.id', '=', 'TCS.test_suites_scenario_id');
             })
+            ->join('test_cases_conformance_levels as TCCL', function ($join) {
+                $join->on('TCCL.test_case_id', '=', 'test_cases.id');
+            })
+            ->join('test_suites_conformance_levels as TSCL', function ($join) {
+                $join->on('TSCL.id', '=', 'TCCL.conformance_level_id');
+            })
             ->orderBy('TSS.sequence')
-            ->orderBy('test_cases.full_name');
+            ->orderBy('test_cases.full_name')
+            ->groupBy('test_cases.id');
         if(!$isAdmin){
             $query->where('test_cases.status', 'Active');
+        }
+        if(!empty($filters['scenario'])){
+            $query->where('TSS.code', $filters['scenario']);
+        }
+        if(!empty($filters['status'])){
+            $query->where('test_cases.status', $filters['status']);
+        }
+        if(!empty($filters['conformance_level'])){
+            $query->where('TSCL.code', $filters['conformance_level']);
         }
         return $query;
     }

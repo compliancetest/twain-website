@@ -215,4 +215,28 @@ class User extends Authenticatable
         ]);
         return 25;
     }
+
+    /**
+     * Get suite subscription
+     * @param LaravelTestSuite $testSuite
+     * @return mixed
+     */
+    public function getSuiteSubscription(LaravelTestSuite $testSuite)
+    {
+        return $this->suiteSubscriptions()->where('suite_minor_family_mark', $testSuite->minor_family_mark)->first();
+    }
+
+    /**
+     * Ensure that user's organisation has access to a given test suite
+     * @param LaravelTestSuite $testSuite
+     * @return bool
+     */
+    public function doesUserOrganisationApproved(LaravelTestSuite $testSuite)
+    {
+        $organisation = $this->organisation;
+        if(!empty($organisation[0])){
+            return $organisation[0]->testSuiteIsApproved($testSuite);
+        }
+        return false;
+    }
 }

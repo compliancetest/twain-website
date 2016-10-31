@@ -7,7 +7,6 @@
         <div class="pull-right">
             @can('change', $product)
                 <a href="/laravel-product/{{ $product->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
-            <!-- todo-migration add confirmation popup with confirmed DELETE request to /laravel-product/{{ $produc->slug }}-->
                 <button type="button" data-toggle="modal" data-target="#deleteProductModal" class="btn btn-danger btn-with-icon btn-delete">Delete</button>
                 {{-- Delete Product Modal--}}
                 <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog">
@@ -21,7 +20,8 @@
                                 Are you sure you want delete {{ $product->full_name }}?
                             </div>
                             <div class="modal-footer">
-                                <a href="#DELETE_URL" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
+                                <!--todo-migration onclick show loader, send DELETE request to /laravel-product/PRODUCT_SLUG, show notification and redirect to /my-products-->
+                                <a href="/laravel-product/{{ $produc->slug }}" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
                                 <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>

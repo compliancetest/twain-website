@@ -24,8 +24,8 @@
                     @if(!$testSuite->protocolVersions->isEmpty())
                         <li>Protocol Versions: <strong>{{ $testSuite->protocolVersions }}</strong></li>
                     @endif
-                    {{--<li>Test Tool: <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0.exe</a></li>--}}
-                    {{--<li>Test Tool(X64): <a href="#" data-tooltip="tooltip">DTS-DS-Installer-1.0_X64.exe</a></li>--}}
+                    @include('pages.test-suites.partials.download-test-tool', ['installer' => $installer, 'x64' => false])
+                    @include('pages.test-suites.partials.download-test-tool', ['installer' => $installerX64, 'x64' => true])
                 </ul>
             </div>
 
@@ -89,28 +89,48 @@
                     @endif
                 </div>
             </div>
-            
+
+            @if(Auth::check())
+                @if(Auth::user()->getSuiteSubscription($testSuite))
+                    <!-- todo-migration release link with confirmation popup -->
+                    @include('pages.test-suites.partials.release-subscription')
+                @else
+                    @if(Auth::user()->doesUserOrganisationApproved($testSuite))
+                        <!-- todo-migration assign subscription link with conformation popup -->
+                        @include('pages.test-suites.partials.assign-subscription')
+                    @else
+                        @include('pages.test-suites.partials.contact-us-button')
+                    @endif
+                @endif
+            @else
+                @include('pages.test-suites.partials.contact-us-button')
+            @endif
+
             <div class="row test-cases-list-header">
                 <div class="col-md-4 item-subtitle">Test Cases</div>
                 <div class="col-md-8 text-right">
-                    <div class="form-inline">
+                    <form class="form-inline" id="suiteTestCasesForm">
                         <label>Filter By:</label>
                         <div class="form-group">
                             <select name="scenario" class="form-control">
                                 <option value="">- Scenario -</option>
                                 @foreach($testSuite->scenarios as $scenario)
-                                    <option value="{{ $scenario->id }}">{{ $scenario->code }}</option>
+                                    <?php if(!$isAdmin && $scenario->code == 'Default') continue;?>
+                                    <option value="{{ $scenario->code }}">{{ $scenario->code }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <select name="conformance" class="form-control">
+                            <select name="conformance_level" class="form-control">
                                 <option value="">- Conformance Level -</option>
-                                <option value="Default">Default</option><option value="A">A</option>
+                                 @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                                    <?php if(!$isAdmin && $conformanceLevel->code == 'Default') continue;?>
+                                    <option value="{{ $conformanceLevel->code }}">{{ $conformanceLevel->code }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <select name="tc_status" class="form-control">
+                            <select name="status" class="form-control">
                                 <option value="">- Status -</option>
                                 <option value="Active">Active</option>
                                 <option value="Draft">Draft</option>
@@ -122,84 +142,12 @@
                          @can('change', $testSuite)
                             <a href="#" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                          @endcan
-                    </div>
+                    </form>
                 </div>
             </div>
 
-            <div class="blue-colored-table-wrapper table-responsive">
-                <table class="table blue-colored-table test-cases-table">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Test Scenario</th>
-                            <th class="text-left">Test Case</th>
-                            <th>Tester Role</th>
-                            <th>Conf Levels</th>
-                            <th>Outcome Type</th>
-                            <th>Test Pattern</th>
-                            <th class="text-left">Test Intent Description</th>
-                            @can('change', $testSuite)
-                                <th>Actions</th>
-                            @endcan
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $scenarioId = false;?>
-                        <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate(25);?>
-                        @foreach($testCases  as $index => $testCase)
-                        <tr>
-                            @if($scenarioId != $testCase->scenarioId)
-                                <?php $scenarioId = $testCase->scenarioId;?>
-                                    <td rowspan="{{ $testCases->filter(function ($value) use ($scenarioId) {
-                                            return $value->scenarioId == $scenarioId;
-                                        })->count() }}" class="rowspan-cell">
-                                    <?php $scenario = \App\TestSuiteScenarios::find($testCase->scenario->test_suites_scenario_id);?>
-                                    <strong>{{ $scenario->code }}:</strong><br /> {!! $scenario->description !!}
-                                </td>
-                            @endif
-                            <td><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip" title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a href="/laravel-test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
-                            <td class="text-center">{{ $testCase->tester_role}}</td>
-                            <td class="text-center">
-                                {{ implode(', ', array_unique($testCase->getConformanceLevels($isAdmin)->pluck('code')->toArray())) }}
-                            </td>
-                            <td class="text-center">{{ $testCase->outcome_type }}</td>
-                            <td class="text-center">
-                                <a href="/help-faq/test-patterns/" data-tooltip="tooltip" title="The Tester Initiated 1-Way Notification pattern represents the case where a tester sends a single message (eg a initiate.rollover.request) to the the harness, which performs a set of validations and then stores the result for the tester to view via the message log. There is no correlated response message.">
-                                    <span class="test-pattern-icon test-pattern-1"></span>
-                                </a>
-                            </td>
-                            <td>{!! $testCase->description !!}</td>
-                            @can('change', $testSuite)
-                                <td class="text-center">
-                                    <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                                    <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip" title="Delete Case">Delete</button>
-                                    {{-- Delete Test Case Modal--}}
-                                    <div class="modal fade" id="deleteTestCaseModal{{$index}}" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content block-loading-wrapper">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                                                    Delete Test Case
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want delete {{ $testCase->full_name }}?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="#DELETE_URL" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
-                                                    <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            @endcan
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination-wrapper">
-                {{ $testCases->links() }}
+            <div id="suiteCases">
+                @include('pages.test-suites.partials.test-cases-list')
             </div>
 
         </div>
@@ -214,6 +162,34 @@
             $(this).tab('show')
         });
         $('.simple-tabs-nav li:first-child a').click();
+
+        function loadTestCases(data) {
+            <!--todo-migration fix loading div - it should appear in test cases section-->
+            $('#loadTestCasesResultsSpinner').show();
+            $.ajax({
+                url: '/laravel-test-suite/{{ $testSuite->slug }}/get-test-cases',
+                type: 'get',
+                data: data, //$('#suiteTestCasesForm').serialize(),
+                error: function (jqXHR, status) {
+                },
+                success: function (rsp) {
+                    $('#suiteCases').html(rsp.html);
+                },
+                complete: function () {
+                    $('#loadTestCasesResultsSpinner').hide();
+                }
+            })
+        }
+
+        $('#suiteTestCasesForm').on('change', function(){
+            loadTestCases($('#suiteTestCasesForm').serialize());
+        });
+
+        $('body').on('click', '.pagination a', function(e){
+            e.preventDefault();
+            loadTestCases($('#suiteTestCasesForm').serialize() + "&page=" + getUrlVar($(this).attr('href'), 'page'));
+        });
+
     });
 </script>
 @stop

@@ -55,6 +55,7 @@
 
                                     <div class="col-sm-7">
                                         <div class="form-group">
+                                            <!--todo-migration tooltip doesnt disappear once datepicker is opened(chrome/ubuntu)-->
                                             <label for="productReleaseDate">Release Date:</label>
                                             <div class="input-group col-sm-6 col-md-4">
                                                 <input type="text" class="form-control" id="productReleaseDate" required="required" name="release_date" value="{{ formatDate($product->released_at) }}"
