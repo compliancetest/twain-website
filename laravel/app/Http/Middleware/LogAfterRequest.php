@@ -16,7 +16,7 @@ class LogAfterRequest
 
     public function terminate($request, $response)
     {
-        if ($request->path() != 'api/v1/echo') {
+        if (!in_array($request->path(), ['api/v1/echo', 'api/v2/echo'])) {
             ApiLog::create([
                 'user_id' => (integer)Auth::user()->ID,
                 'ip_address' => $request->getClientIp(),
