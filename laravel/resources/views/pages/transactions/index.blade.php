@@ -50,7 +50,7 @@
                                data-tooltip="tooltip" title="Change Test Results to Skip">Verify As Skip</a>
                     @endif
                      <a href="#deleteTransactionModal" data-toggle="modal" class="btn btn-danger btn-with-icon btn-delete delete_transactions"
-                               data-tooltip="tooltip" title="Permanently remove Test Results (this cannot be undone!)">Delete Test Results</a>
+                               data-tooltip="tooltip" title="Permanently delete Test Results (this cannot be undone!)">Delete Test Results</a>
                     <button type="button" class="btn btn-default btn-with-icon btn-collapse" id="collapseAllResults" data-tooltip="tooltip" title="Close all Test Result details and return to Test Result list">Collapse All Results</button>
                 </div>
                 <div class="pull-right pagination-box">

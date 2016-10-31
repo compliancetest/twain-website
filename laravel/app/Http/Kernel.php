@@ -61,5 +61,10 @@ class Kernel extends HttpKernel
         'organisation.can_test' => \App\Http\Middleware\OrganisationCanPerformTesting::class,
         'organisation.subscriptions.product_type' => \App\Http\Middleware\DoesUserHasSubscriptionToProductType::class,
         'post.product.exist' => \App\Http\Middleware\PostExists::class,
+
+        'api.v1.organisation.member' => \App\Http\Middleware\api\v1\OrganisationMember::class,
+        'api.v1.organisation.can_test' => \App\Http\Middleware\api\v1\OrganisationCanPerformTesting::class,
+        'api.v1.organisation.subscriptions.product_type' => \App\Http\Middleware\api\v1\DoesUserHasSubscriptionToProductType::class,
+        'api.v1.post.product.exist' => \App\Http\Middleware\api\v1\PostExists::class,
     ];
 }
