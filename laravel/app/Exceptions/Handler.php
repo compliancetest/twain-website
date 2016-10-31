@@ -45,6 +45,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+
+        if ($request->is('api/*')) {
+            return response()->json(
+                array_merge($this->getJsonMessage($e), ['code' => $this->getExceptionHTTPStatusCode($e)]),
+                $this->getExceptionHTTPStatusCode($e)
+            );
+        }
+
         if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ||
             $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException
         ) {
@@ -56,5 +64,21 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    protected function getJsonMessage($e)
+    {
+        return [
+            'status' => 'error',
+            'messages' => ['Server error. Please try again later or contact administrator']
+        ];
+    }
+
+    protected function getExceptionHTTPStatusCode($e)
+    {
+        // Not all Exceptions have a http status code
+        // We will give Error 500 if none found
+        return method_exists($e, 'getStatusCode') ?
+            $e->getStatusCode() : 500;
     }
 }

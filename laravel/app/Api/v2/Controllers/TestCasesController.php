@@ -499,6 +499,21 @@ class TestCasesController extends BaseApiController
             return $this->respondNotFound(sprintf($validateConfigs, $testCase->post_name));
         }
 
+        $executionProfileData = $configurationProfileData = null;
+        if ($testExecutionProfile) {
+            $p = Profile::find($testExecutionProfile);
+            if ($p) {
+                $executionProfileData = $p->getProfileFromS3();
+            }
+        }
+
+        if ($testConfigurationProfile) {
+            $p = Profile::find($testConfigurationProfile);
+            if ($p) {
+                $configurationProfileData = $p->getProfileFromS3();
+            }
+        }
+
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
@@ -513,8 +528,8 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => $testExecutionProfile ? Profile::find($testExecutionProfile)->getProfileFromS3() : null,
-            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
+            'ExecutionProfile' => $executionProfileData,
+            'ConfigurationProfile' => $configurationProfileData,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
