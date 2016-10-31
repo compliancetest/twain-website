@@ -8650,7 +8650,6 @@ input.inactive_s{
 }
 
 .getting-started-steps li:hover .step-description{
-    display: block;
     position: absolute;
     top: -12px;
     left: -47px;
@@ -8684,11 +8683,14 @@ input.inactive_s{
 }
 
 .getting-started-steps li .step-description .inner-description{
-    padding: 20px 31px 0 39px;
+    padding: 0 31px 0 39px;
     color: #fff;
     line-height: 15px;
-    display: inline-block;
+    display: block;
     vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .getting-started-steps li.step_1 .step-description .inner-description{
