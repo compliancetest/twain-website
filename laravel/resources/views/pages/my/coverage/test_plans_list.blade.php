@@ -33,7 +33,7 @@
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td class="col-sm-1 text-nowrap">
+                                    <td class="col-sm-1 text-nowrap text-center">
                                         @if(!\App\Transaction::where(['product_id' => $userPlan['product']->ID, 'test_suite_id' => $userSuite['testSuite']->ID])->get()->isEmpty())
                                             <a href="/my-transaction-log/?test_suite_id={{ $userSuite['testSuite']->ID }}&product_id={{ $userPlan['product']->ID }}" target="_blank"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
