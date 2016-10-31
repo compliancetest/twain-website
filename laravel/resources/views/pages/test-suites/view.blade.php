@@ -146,8 +146,16 @@
                 </div>
             </div>
 
-            <div id="suiteCases">
-                @include('pages.test-suites.partials.test-cases-list')
+            <div class="block-loading-wrapper">
+                <div id="suiteCases">
+                    @include('pages.test-suites.partials.test-cases-list')
+                </div>
+                <div id="loadTestCasesResultsSpinner" class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING DATA</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -164,7 +172,7 @@
         $('.simple-tabs-nav li:first-child a').click();
 
         function loadTestCases(data) {
-            <!--todo-migration fix loading div - it should appear in test cases section-->
+            <!--todo-verify fix loading div - it should appear in test cases section-->
             $('#loadTestCasesResultsSpinner').show();
             $.ajax({
                 url: '/laravel-test-suite/{{ $testSuite->slug }}/get-test-cases',

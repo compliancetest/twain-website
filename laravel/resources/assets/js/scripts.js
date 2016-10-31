@@ -1,7 +1,8 @@
 jQuery(document).ready(function($) {
 
     $('body').tooltip({
-        selector: '[data-tooltip]'
+        selector: '[data-tooltip]',
+        trigger: 'hover'
     });
 
     $('[data-validate="validate"]').each(function () {

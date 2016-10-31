@@ -55,7 +55,7 @@
 
                                     <div class="col-sm-7">
                                         <div class="form-group">
-                                            <!--todo-migration tooltip doesnt disappear once datepicker is opened(chrome/ubuntu)-->
+                                            <!--todo-verify tooltip doesnt disappear once datepicker is opened(chrome/ubuntu)-->
                                             <label for="productReleaseDate">Release Date:</label>
                                             <div class="input-group col-sm-6 col-md-4">
                                                 <input type="text" class="form-control" id="productReleaseDate" required="required" name="release_date" value="{{ formatDate($product->released_at) }}"
@@ -104,7 +104,7 @@
                                                           disabled="disabled">{{ implode(', ', $product->capabilities->pluck('capability')->toArray()) }}</textarea>
 
                                             @else
-                                                <!-- todo-migration add list with selected features for Application product, e.g. (product features section) - https://www-integration-twain.ct01.gosource.com.au/edit-product-and-service/?id=5537-->
+                                                <!-- todo-verify add list with selected features for Application product, e.g. (product features section) - https://www-integration-twain.ct01.gosource.com.au/edit-product-and-service/?id=5537-->
                                                 <label>Product Features:</label>
                                                 <div class="suite-checkboxes-group">
                                                     <div class="checkbox">

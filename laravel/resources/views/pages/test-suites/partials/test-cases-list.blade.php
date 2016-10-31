@@ -1,4 +1,4 @@
-<!--todo-migration fix test case column width-->
+<!--todo-verify fix test case column width-->
 <div class="blue-colored-table-wrapper table-responsive">
     <table class="table blue-colored-table test-cases-table">
         <thead>
@@ -30,7 +30,7 @@
                             <strong>{{ $scenario->code }}:</strong><br/> {!! $scenario->description !!}
                         </td>
                     @endif
-                    <td><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip"
+                    <td class="text-nowrap"><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip"
                               title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a
                                 href="/laravel-test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
                     <td class="text-center">{{ $testCase->tester_role}}</td>
@@ -80,15 +80,8 @@
         @endif
         </tbody>
     </table>
-    <div id="loadTestCasesResultsSpinner" class="block-loading">
-        <div class="loading-content"><span class="loader"></span>
-            <div class="loading-text">LOADING DATA</div>
-            <div class="loading-wait">Please wait...</div>
-        </div>
-    </div>
 </div>
 
 <div class="pagination-wrapper">
     {{ $testCases->links() }}
 </div>
-
