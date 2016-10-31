@@ -71,6 +71,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-product/{productId}/edit', 'ProductsController@edit');
         Route::post('laravel-product/{productId}', 'ProductsController@update');
         Route::delete('laravel-product/{productId}', 'ProductsController@destroy');
+        Route::delete('laravel-product/{productId}/claim/{claimId}', 'ProductsController@destroyClaim');
         Route::get('laravel-my-products', 'ProductsController@index');
     });
 

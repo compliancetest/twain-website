@@ -28,6 +28,19 @@ class Product extends Model
         return $this->hasMany('App\ProductFeature');
     }
 
+    public function getFeatures()
+    {
+        $result = [];
+        foreach($this->features as $feature){
+            $testSuiteFeature = TestSuiteFeatures::find($feature->test_suites_feature_id);
+            @$result[$testSuiteFeature->test_suite_id][] = [
+                'name' => $testSuiteFeature->name,
+                'description' => $testSuiteFeature->description,
+            ];
+        }
+        return $result;
+    }
+
     public function claims()
     {
         return $this->hasMany('App\Claim');

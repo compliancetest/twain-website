@@ -55,7 +55,6 @@
 
                                     <div class="col-sm-7">
                                         <div class="form-group">
-                                            <!--todo-verify tooltip doesnt disappear once datepicker is opened(chrome/ubuntu)-->
                                             <label for="productReleaseDate">Release Date:</label>
                                             <div class="input-group col-sm-6 col-md-4">
                                                 <input type="text" class="form-control" id="productReleaseDate" required="required" name="release_date" value="{{ formatDate($product->released_at) }}"
@@ -104,36 +103,26 @@
                                                           disabled="disabled">{{ implode(', ', $product->capabilities->pluck('capability')->toArray()) }}</textarea>
 
                                             @else
-                                                <!-- todo-verify add list with selected features for Application product, e.g. (product features section) - https://www-integration-twain.ct01.gosource.com.au/edit-product-and-service/?id=5537-->
                                                 <label>Product Features:</label>
-                                                <div class="suite-checkboxes-group">
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" name="product_features[]" value="5282">
-                                                            TWAIN v2.3 Compliance - Applications v1.0
-                                                        </label>
-                                                    </div>
+                                                @foreach($product->getFeatures() as $testSuiteId => $features)
+                                                    <div class="suite-checkboxes-group">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="product_features[]" checked="checked" disabled="disabled">
+                                                                {{ \App\LaravelTestSuite::find($testSuiteId)->full_name }}
+                                                            </label>
+                                                        </div>
 
-                                                    <div class="checkbox">
-                                                        <label data-tooltip="tooltip" title="UI image transfer">
-                                                            <input type="checkbox" name="product_features[]" value="UI image transfer">
-                                                            UI image transfer
-                                                        </label>
+                                                        @foreach($features as $feature)
+                                                            <div class="checkbox">
+                                                                <label data-tooltip="tooltip" title="UI image transfer">
+                                                                    <input type="checkbox" name="product_features[]" value="{{ $feature['description'] }}" checked="checked" disabled="disabled">
+                                                                    {{ $feature['name'] }}
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                    <div class="checkbox">
-                                                        <label data-tooltip="tooltip" title="Non-UI image transfer">
-                                                            <input type="checkbox" name="product_features[]" value="Non-UI image transfer">
-                                                            Non-UI image transfer
-                                                        </label>
-                                                    </div>
-                                                    <div class="checkbox">
-                                                        <label data-tooltip="tooltip" title="New description. New description New description New description New description. New description.">
-                                                            <input type="checkbox" name="product_features[]" value="123">
-                                                            123
-                                                        </label>
-                                                    </div>
-
-                                                </div>
+                                                @endforeach
                                             @endif
                                         </div>
 

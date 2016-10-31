@@ -172,12 +172,11 @@
         $('.simple-tabs-nav li:first-child a').click();
 
         function loadTestCases(data) {
-            <!--todo-verify fix loading div - it should appear in test cases section-->
             $('#loadTestCasesResultsSpinner').show();
             $.ajax({
                 url: '/laravel-test-suite/{{ $testSuite->slug }}/get-test-cases',
                 type: 'get',
-                data: data, //$('#suiteTestCasesForm').serialize(),
+                data: data,
                 error: function (jqXHR, status) {
                 },
                 success: function (rsp) {

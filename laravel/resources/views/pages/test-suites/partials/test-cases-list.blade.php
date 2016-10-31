@@ -1,4 +1,3 @@
-<!--todo-verify fix test case column width-->
 <div class="blue-colored-table-wrapper table-responsive">
     <table class="table blue-colored-table test-cases-table">
         <thead>

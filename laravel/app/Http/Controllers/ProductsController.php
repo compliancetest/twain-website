@@ -6,18 +6,30 @@ use App\Product;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Validator;
 
 class ProductsController extends Controller
 {
 
+    /**
+     * Display organisation's products
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
-        $pageTitle = 'My Products';
-        return view('pages.products.index', compact('product', 'pageTitle'));
+        $pageTitle = 'My Organisation Products';
+        $applicationProducts = Auth::user()->getProducts('Application');
+        $dataSourceProducts = Auth::user()->getProducts('DataSource');
+        return view('pages.products.index', compact('applicationProducts', 'pageTitle', 'dataSourceProducts'));
     }
 
+    /**
+     * View single product details
+     * @param $productSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function view($productSlug)
     {
         $product = Product::findBySlug($productSlug);
@@ -25,6 +37,11 @@ class ProductsController extends Controller
         return view('pages.products.view', compact('product', 'pageTitle'));
     }
 
+    /**
+     * Edit product page
+     * @param $productSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function edit($productSlug)
     {
         $product = Product::findBySlug($productSlug);
@@ -81,6 +98,24 @@ class ProductsController extends Controller
             return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
         }
         $product->delete();
+        addMessage('Product was deleted successfully');
         return response()->json(array('success' => true));
+    }
+
+    /**
+     * Delete product claim
+     * @param $productSlug
+     * @param $claimId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyClaim($productSlug, $claimId)
+    {
+        $product = Product::findBySlug($productSlug);
+
+        if (Gate::denies('change', $product)) {
+            return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
+        }
+        $product->claims()->where('id', $claimId)->delete();
+        return response()->json(['Claim was deleted successfully.']);
     }
 }
