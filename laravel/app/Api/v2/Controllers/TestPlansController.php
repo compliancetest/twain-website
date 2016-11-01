@@ -53,10 +53,13 @@ class TestPlansController extends BaseApiController
      *
      *  @apiErrorExample {json} The product registration has been not approved yet:
      * {
-     *     "messages": ["The product registration has been not approved yet."],
-     *     "status": "error",
-     *     "code": 403
-     *   }
+          "messages": [
+            "The product registration has been not approved yet."
+          ],
+          "data": [],
+          "status": "info",
+          "code": 403
+        }
      *
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test plans not found:
@@ -111,7 +114,7 @@ class TestPlansController extends BaseApiController
         }
 
         if(!CommunityOrganisationsApprovedProducts::where('product_id', Post::where('post_name', $request->get('product_id'))->first()->ID)->first()){
-            return $this->respondForbiddenError("The product registration has been not approved yet.");
+            return $this->setStatusCode(403)->respondWithDataAndMessage("The product registration has been not approved yet.", [], 'info');
         }
         $organisationPlans = \Auth::user()->organisation[0]->getTestPlans($request->get('product_id'));
         if (empty($organisationPlans)) {

@@ -1801,7 +1801,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "\n{\n         \"data\": {\n           \"ExecutionId\": \"414d5f4d-9580-4f1c-a956-c6b6cade6080\",\n           \"TestSuite\": {\n             \"id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n             \"title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\"\n           },\n           \"TestCase\": {\n             \"id\": \"sc-01-v1-0\",\n             \"title\": \"SC-01 v1.0\"\n           },\n           \"Product\": {\n             \"id\": \"4_ain-working-group_test_v2-201\",\n             \"title\": \"Test\"\n           },\n           \"ExecutionProfile\": null,\n           \"ConfigurationProfile\": null,\n           \"images\": null\n         },\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "content": "\n {\n\"data\": {\n\"ExecutionId\": \"414d5f4d-9580-4f1c-a956-c6b6cade6080\",\n\"TestSuite\": {\n\"id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n\"title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\"\n},\n\"TestCase\": {\n\"id\": \"sc-01-v1-0\",\n\"title\": \"SC-01 v1.0\"\n},\n\"Product\": {\n\"id\": \"4_ain-working-group_test_v2-201\",\n\"title\": \"Test\"\n},\n\"ExecutionProfile\": null,\n\"ConfigurationProfile\": null,\n\"images\": null\n},\n\"status\": \"success\",\n\"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -2405,7 +2405,7 @@ define({ "api": [
         },
         {
           "title": "The product registration has been not approved yet:",
-          "content": "{\n    \"messages\": [\"The product registration has been not approved yet.\"],\n    \"status\": \"error\",\n    \"code\": 403\n  }",
+          "content": "{\n          \"messages\": [\n            \"The product registration has been not approved yet.\"\n          ],\n          \"data\": [],\n          \"status\": \"info\",\n          \"code\": 403\n        }",
           "type": "json"
         },
         {
