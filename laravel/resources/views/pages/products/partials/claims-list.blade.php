@@ -39,8 +39,7 @@
     @endforeach
 @else
     <tr>
-            <td colspan="@can('change', $product)9@else8@endcan" class="empty-row">No compliance claim recorded yet</td>
-        @endcan
+        <td colspan="@can('change', $product)9@else8@endcan" class="empty-row">No compliance claim recorded yet</td>
     </tr>
 @endif
 </tbody>
