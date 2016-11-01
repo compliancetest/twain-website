@@ -661,9 +661,9 @@ var Page = {
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();
-                    setTimeout(function() {
-                        form.find('.message').fadeOut("slow", function() { $(this).remove(); });
-                    }, 3000);
+                    // setTimeout(function() {
+                    //     form.find('.message').fadeOut("slow", function() { $(this).remove(); });
+                    // }, 3000);
 
                 }
             })

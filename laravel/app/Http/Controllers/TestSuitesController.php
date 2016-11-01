@@ -63,6 +63,63 @@ class TestSuitesController extends Controller
         return view('pages.test-suites.edit', compact('testSuite', 'pageTitle', 'isAdmin', 'suiteCommunity'));
     }
 
+    /**
+     * Load community profile types
+     * @param $testSuiteSlug
+     * @param $communityId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function communityProfileTypes($testSuiteSlug, $communityId)
+    {
+        $data = [
+            'suiteCommunity' => Community::find($communityId),
+            'testSuite' => LaravelTestSuite::findBySlug($testSuiteSlug)
+        ];
+        return response()->json(['html' => view('pages.test-suites.partials.community-profile-types')->with($data)->render()]);
+    }
+
+    /**
+     * Update test suite data
+     * @param $testSuiteSlug
+     * @param Requests\TestSuiteRequest $request
+     */
+    public function update($testSuiteSlug, Requests\TestSuiteRequest $request)
+    {
+//        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+//        $testSuite->fill($request->all());
+//        //save conformance levels
+//        foreach($request->get('lvl_code') as $key => $conformanceLevelCode){
+//            dump($testSuite->conformanceLevels()->updateOrCreate(['code' => $conformanceLevelCode], [
+//                'description' => @$request->get('lvl_desc')[$key]
+//            ]));
+//        }
+//         //save roles
+//        foreach($request->get('role_names') as $key => $role){
+//            dump($testSuite->roles()->updateOrCreate(['name' => $role], [
+//                'description' => @$request->get('role_desc')[$key]
+//            ]));
+//        }
+//         //save scenarios
+//        foreach($request->get('scenario_code') as $key => $scenario){
+//            dump($testSuite->scenarios()->updateOrCreate(['code' => $scenario], [
+//                'description' => @$request->get('scenario_desc')[$key]
+//            ]));
+//        }
+//         //save profile types
+//        foreach($request->get('profile_types') as $key => $profiletypeId){
+//            dump($testSuite->profileTypes()->updateOrCreate(['profile_type_id' => $scenario]));
+//        }
+//        //save test suite types
+//        foreach($request->get('test_suite_type') as $key => $testSuiteType){
+//            dump($testSuite->types()->updateOrCreate(['type' => $testSuiteType]));
+//        }
+//        //save test suite types
+//        foreach($request->get('documents') as $key => $testSuiteType){
+//            dump($testSuite->types()->updateOrCreate(['type' => $testSuiteType]));
+//        }
+//        $testSuite->save();
+    }
+
     public function getTestCasesList($testSuiteSlug, Request $request)
     {
         $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);

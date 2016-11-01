@@ -78,8 +78,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
         Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
+        Route::post('laravel-test-suite/{testSuiteId}', 'TestSuitesController@update');
         Route::get('laravel-test-suites', 'TestSuitesController@index');
+        Route::get('laravel-test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
         Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
+
     });
 
     Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');

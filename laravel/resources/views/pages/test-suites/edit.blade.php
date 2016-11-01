@@ -7,7 +7,16 @@
             <div class="page-title">
                 <h1>Edit Test Suite: {{ $testSuite->full_name }}</h1>
             </div>
-            <form action="#" method="post">
+            @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {!! Form::model($testSuite, ['data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="colored-box collapsible-box">
@@ -118,31 +127,31 @@
                                         <div class="radio-group status-radio-group">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="draft" @if($testSuite->status == 'Draft') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="Draft" @if($testSuite->status == 'Draft') checked="checked"@endif>
                                                     <span class="status status-circle status-draft">D</span>Draft
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="active" @if($testSuite->status == 'Active') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="Active" @if($testSuite->status == 'Active') checked="checked"@endif>
                                                     <span class="status status-circle status-active">A</span>Active
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="deprecated" @if($testSuite->status == 'Deprecated') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="Deprecated" @if($testSuite->status == 'Deprecated') checked="checked"@endif>
                                                     <span class="status status-circle status-deprecated">C</span>Deprecated
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="obsolete" @if($testSuite->status == 'Obsolete') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="Obsolete" @if($testSuite->status == 'Obsolete') checked="checked"@endif>
                                                     <span class="status status-circle status-obsolete">O</span>Obsolete
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="partial" @if($testSuite->status == 'Partial') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="Partial" @if($testSuite->status == 'Partial') checked="checked"@endif>
                                                     <span class="status status-circle status-partial">P</span>Partial
                                                 </label>
                                             </div>
@@ -213,32 +222,20 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <label>Conformance Level Code:</label>
-                                            <input type="text" class="form-control" name="lvl_code[]" value="{{ $conformanceLevel->code }}"/>
+                                            <input type="text" class="form-control" name="conformanceLevels[code][]" value="{{ $conformanceLevel->code }}"/>
                                         </div>
                                         <div class="col-md-6">
                                             <label>Conformance Level Description:</label>
-                                            <textarea rows="3" class="form-control" name="lvl_desc[]">{{ $conformanceLevel->description }}</textarea>
+                                            <textarea rows="3" class="form-control" name="conformanceLevels[description]">{{ $conformanceLevel->description }}</textarea>
                                         </div>
+                                        @if($conformanceLevel->code != 'Default')
+                                            <div class="col-md-1 action-col">
+                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
-
-
-                            <div class="form-group conformance-level-row">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Conformance Level Code:</label>
-                                        <input type="text" class="form-control" name="lvl_code[]" value=""/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Conformance Level Description:</label>
-                                        <textarea rows="3" class="form-control" name="lvl_desc[]"></textarea>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                         <div class="colored-box-footer">
@@ -248,7 +245,7 @@
                 </div>
 
                 {{-- Features List --}}
-                <div class="colored-box collapsible-box">
+                <div class="colored-box collapsible-box" id="featuresBox">
                     <div class="colored-box-header"><a href="#featuresListBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Features List</div>
                     <div class="colored-box-body collapse in" id="featuresListBox">
                         <div class="colored-box-content dynamic-rows" id="featuresListContent">
@@ -258,31 +255,15 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <label>Feature Name:</label>
-                                            <input type="text" class="form-control" name="feature_name[]]" value="{{ $feature->name }}"/>
+                                            <input type="text" class="form-control" name="features[name][]" value="{{ $feature->name }}"/>
                                         </div>
                                         <div class="col-md-6">
                                             <label>Description:</label>
-                                            <textarea rows="3" class="form-control" name="feature_description[]">{!! $feature->description !!}</textarea>
+                                            <textarea rows="3" class="form-control" name="features[description][]">{!! $feature->description !!}</textarea>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-
-                            <div class="form-group featureRow">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Feature Name:</label>
-                                        <input type="text" class="form-control" name="feature_name[]]" value=""/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="feature_description[]"></textarea>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="featureRow">Delete Feature</button>
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                         <div class="colored-box-footer">
@@ -302,40 +283,24 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Code:</label>
-                                        <input type="text" class="form-control" name="scenario_code[]" value="{{ $scenario->code }}"/>
+                                        <input type="text" class="form-control" name="scenarios[code][]" value="{{ $scenario->code }}"/>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="scenario_desc[]">{!! $scenario->description  !!}</textarea>
+                                        <textarea rows="3" class="form-control" name="scenarios[description][]">{!! $scenario->description  !!}</textarea>
                                     </div>
                                     <div class="col-md-1">
                                         <label>Sequence:</label>
-                                        <input type="text" class="form-control" name="scenario_sequence[]" value="{{ $scenario->sequence }}"/>
+                                        <input type="text" class="form-control" name="scenarios[sequence][]" value="{{ $scenario->sequence }}"/>
                                     </div>
+                                    @if($scenario->code != 'Default')
+                                        <div class="col-md-1 action-col">
+                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             @endforeach
-
-                            <div class="form-group scenarioRow">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Code:</label>
-                                        <input type="text" class="form-control" name="scenario_code[]" value=""/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="scenario_desc[]"></textarea>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label>Sequence:</label>
-                                        <input type="text" class="form-control" name="scenario_sequence[]" value=""/>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                         <div class="colored-box-footer">
                             <button type="button" onclick="Page.helpers.addRow('#scenarioTemplate','#scenariosContent');" class="btn btn-success btn-with-icon btn-add">New Scenario</button>
@@ -343,27 +308,10 @@
                     </div>
                 </div>
 
-                {{-- Test Data --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testDataBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Profile Types</div>
-                    <div class="colored-box-body collapse in" id="testDataBox">
-
-                            <div class="test-data-profile-types">
-                                <div class="checkboxes-group clearfix">
-                                    <?php $testSuiteProfileType = $testSuite->profileTypes->keyBy('profile_type_id');?>
-                                    @foreach($suiteCommunity->profileTypes as $profileType)
-                                        <div class="checkbox">
-                                            <label>
-                                                <input name="profile_types[]" type="checkbox" @if(isset($testSuiteProfileType[$profileType->id])) checked="checked"@endif>
-                                                <a href="javascript:void(0);">{{ $profileType->getTitle() }}</a>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="block-loading-wrapper" id="profileTypesContent">
+                    @include('pages.test-suites.partials.community-profile-types', ['suiteCommunity' => $suiteCommunity])
                 </div>
+
 
                 {{-- Test Cases --}}
                 <div class="colored-box collapsible-box">
@@ -392,7 +340,7 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <label>Related Suite:</label>
-                                        <select class="form-control" name="related_ts[]">
+                                        <select class="form-control" name="related_ts[id][]">
                                             <option>Select test suite</option>
                                             @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
                                                 @if($communityTestSuite->id != $suiteCommunity->id)
@@ -403,7 +351,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="related_ts_desc[]">{!! $relatedTestSuite->description !!}</textarea>
+                                        <textarea rows="3" class="form-control" name="related_ts[description][]">{!! $relatedTestSuite->description !!}</textarea>
                                     </div>
                                     <div class="col-md-1 action-col">
                                         <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
@@ -411,29 +359,6 @@
                                 </div>
                             </div>
                             @endforeach
-
-                            <div class="form-group relatedTestSuiteRow">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Related Suite:</label>
-                                        <select class="form-control" name="related_ts[]">
-                                            <option>Select test suite</option>
-                                            @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
-                                                @if($communityTestSuite->id != $suiteCommunity->id)
-                                                    <option value="{{ $communityTestSuite->id }}">{{ $communityTestSuite->full_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="related_ts_desc[]"></textarea>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                         <div class="colored-box-footer">
@@ -453,11 +378,11 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Name:</label>
-                                            <input type="text" class="form-control" name="role_names[]" value="{{ $role->name }}"/>
+                                            <input type="text" class="form-control" name="roles[name][]" value="{{ $role->name }}"/>
                                         </div>
                                         <div class="col-md-7">
                                             <label>Description:</label>
-                                            <input type="text" class="form-control" name="role_descs[]" value="{!! $role->description !!}"/>
+                                            <input type="text" class="form-control" name="roles[description][]" value="{!! $role->description !!}"/>
                                         </div>
                                         <div class="col-md-1 action-col">
                                             <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
@@ -484,20 +409,20 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Document Name:</label>
-                                        <input type="text" class="form-control" name="doc_name[]" value="{{ $specificationDocument->name }}"/>
+                                        <input type="text" class="form-control" name="specificationDocuments[name][]" value="{{ $specificationDocument->name }}"/>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="form-group">
                                             <label>Document Description:</label>
-                                            <textarea name="doc_desc[]" class="form-control" rows="3">{!! $specificationDocument->description !!}</textarea>
+                                            <textarea name="specificationDocuments[description][]" class="form-control" rows="3">{!! $specificationDocument->description !!}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Document Location:</label>
-                                            <input type="text" class="form-control" name="doc_loc[]" value="{{ $specificationDocument->link }}"/>
+                                            <input type="text" class="form-control" name="specificationDocuments[link][]" value="{{ $specificationDocument->link }}"/>
                                         </div>
                                         <div class="form-group">
                                             <div class="upload-file-field">
-                                                <input type="file" name="doc_file[]" class="input-file" />
+                                                <input type="file" name="specificationDocuments[file][]" class="input-file" />
                                             </div>
                                         </div>
                                     </div>
@@ -564,8 +489,7 @@
                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Suite</button>
                     <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                 </div>
-
-            </form>
+            {{ Form::close() }}
         </div>
     </div>
 @stop
@@ -607,6 +531,38 @@
             $(this).remove();
         })
 
+        $('body').on('change', '#communityId', function(e){
+            jQuery('.profileTypes.block-loading').show();
+
+                jQuery.ajax({
+                    url: '/laravel-test-suite/{{ $testSuite->slug }}/community-profiles/' + $('#communityId').val(),
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (rsp) {
+                        $('.profileTypes.block-loading').hide();
+                        $('#profileTypesContent').html(rsp.html);
+                    },
+                    error: function (jqXHR, status) {
+                        $('.profileTypes.block-loading').hide();
+                        $('.profileTypes.block-loading').before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('.profileTypes.block-loading > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+                    }
+                });
+        });
+
+
+        $('body').on('change', 'input[name="product_type"]', function(e){
+            if($(this).val() == 'Application'){
+                $('#featuresBox').hide();
+            } else {
+                $('#featuresBox').show();
+            }
+        });
+         $('input[name="product_type"]').change();
 
     });
 
@@ -616,11 +572,11 @@
         <div class="row">
             <div class="col-md-5">
                 <label>Conformance Level Code:</label>
-                <input type="text" class="form-control" name="lvl_code[]" value=""/>
+                <input type="text" class="form-control" name="conformanceLevels[code][]" value=""/>
             </div>
             <div class="col-md-6">
                 <label>Conformance Level Description:</label>
-                <textarea rows="3" class="form-control" name="lvl_desc[]"></textarea>
+                <textarea rows="3" class="form-control" name="conformanceLevels[description][]"></textarea>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
@@ -634,11 +590,11 @@
         <div class="row">
             <div class="col-md-5">
                 <label>Feature Name:</label>
-                <input type="text" class="form-control" name="feature_name[]]" value=""/>
+                <input type="text" class="form-control" name="features[name][]" value=""/>
             </div>
             <div class="col-md-6">
                 <label>Description:</label>
-                <textarea rows="3" class="form-control" name="feature_description[]"></textarea>
+                <textarea rows="3" class="form-control" name="features[description][]"></textarea>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="featureRow">Delete Feature</button>
@@ -652,15 +608,15 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Code:</label>
-                <input type="text" class="form-control" name="scenario_code[]" value=""/>
+                <input type="text" class="form-control" name="scenarios[code][]" value=""/>
             </div>
             <div class="col-md-6">
                 <label>Description:</label>
-                <textarea rows="3" class="form-control" name="scenario_desc[]"></textarea>
+                <textarea rows="3" class="form-control" name="scenarios[description][]"></textarea>
             </div>
             <div class="col-md-1">
                 <label>Sequence:</label>
-                <input type="text" class="form-control" name="scenario_sequence[]" value=""/>
+                <input type="text" class="form-control" name="scenarios[sequence][]" value=""/>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
@@ -675,7 +631,7 @@
         <div class="row">
             <div class="col-md-5">
                 <label>Related Suite:</label>
-                <select class="form-control" name="related_ts[]">
+                <select class="form-control" name="related_ts[id][]">
                     <option>Select test suite</option>
                     @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
                         @if($communityTestSuite->id != $suiteCommunity->id)
@@ -686,7 +642,7 @@
             </div>
             <div class="col-md-6">
                 <label>Description:</label>
-                <textarea rows="3" class="form-control" name="related_ts_desc[][]"></textarea>
+                <textarea rows="3" class="form-control" name="related_ts[description][]"></textarea>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
@@ -700,11 +656,11 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Name:</label>
-                <input type="text" class="form-control" name="role_names[]" value=""/>
+                <input type="text" class="form-control" name="roles[name][]" value=""/>
             </div>
             <div class="col-md-7">
                 <label>Description:</label>
-                <input type="text" class="form-control" name="role_descs[]" value=""/>
+                <input type="text" class="form-control" name="roles[description][]" value=""/>
             </div>
             <div class="col-md-1 action-col">
                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
@@ -718,20 +674,20 @@
         <div class="row">
             <div class="col-md-4">
                 <label>Document Name:</label>
-                <input type="text" class="form-control" name="doc_name[]" value=""/>
+                <input type="text" class="form-control" name="specificationDocuments[name][]" value=""/>
             </div>
             <div class="col-md-7">
                 <div class="form-group">
                     <label>Document Description:</label>
-                    <textarea name="doc_desc[]" class="form-control" rows="3"></textarea>
+                    <textarea name="specificationDocuments[description]" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Document Location:</label>
-                    <input type="text" class="form-control" name="doc_loc[]" value=""/>
+                    <input type="text" class="form-control" name="specificationDocuments[link]" value=""/>
                 </div>
                 <div class="form-group">
                     <div class="upload-file-field">
-                        <input type="file" name="doc_file[]" class="input-file" />
+                        <input type="file" name="specificationDocuments[file]" class="input-file" />
                     </div>
                 </div>
             </div>
