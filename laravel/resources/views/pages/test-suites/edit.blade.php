@@ -16,7 +16,7 @@
                     </ul>
                 </div>
             @endif
-            {!! Form::model($testSuite, ['data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
+            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="colored-box collapsible-box">
@@ -226,7 +226,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label>Conformance Level Description:</label>
-                                            <textarea rows="3" class="form-control" name="conformanceLevels[description]">{{ $conformanceLevel->description }}</textarea>
+                                            <textarea rows="3" class="form-control" name="conformanceLevels[description][]">{{ $conformanceLevel->description }}</textarea>
                                         </div>
                                         @if($conformanceLevel->code != 'Default')
                                             <div class="col-md-1 action-col">
@@ -556,7 +556,7 @@
 
 
         $('body').on('change', 'input[name="product_type"]', function(e){
-            if($(this).val() == 'Application'){
+            if($(this).val() != 'Application'){
                 $('#featuresBox').hide();
             } else {
                 $('#featuresBox').show();

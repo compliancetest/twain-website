@@ -181,4 +181,118 @@ class LaravelTestSuite extends Model
         }
         return $query;
     }
+
+    public function updateRelations($request)
+    {
+        $conformanceLevelCodes = [];
+        foreach ($request->get('conformanceLevels') as $subName => $conformanceLevel) {
+            if($subName == 'code') {
+                foreach ($conformanceLevel as $key => $code) {
+                    $conformanceLevelCodes[] = $code;
+                    $this->conformanceLevels()->updateOrCreate(['code' => $code], [
+                        'description' => @$request->get('conformanceLevels')['description'][$key]
+                    ]);
+                }
+                if (!empty($conformanceLevelCodes)) {
+                    $this->conformanceLevels()->whereNotIn('code', $conformanceLevelCodes)->delete();
+                }
+            }
+        }
+
+        //roles
+         $processedEntries = [];
+        foreach ($request->get('roles') as $subName => $row) {
+            if($subName == 'name') {
+                foreach ($row as $key => $name) {
+                    $processedEntries[] = $name;
+                    $this->roles()->updateOrCreate(['name' => $name], [
+                        'description' => @$request->get('roles')['description'][$key]
+                    ]);
+                }
+                if (!empty($processedEntries)) {
+                    $this->roles()->whereNotIn('name', $processedEntries)->delete();
+                }
+            }
+        }
+
+         //save scenarios
+        $processedEntries = [];
+        foreach ($request->get('scenarios') as $subName => $row) {
+            if($subName == 'code') {
+                foreach ($row as $key => $name) {
+                    $processedEntries[] = $name;
+                    $this->scenarios()->updateOrCreate(['code' => $name], [
+                        'description' => @$request->get('scenarios')['description'][$key],
+                        'sequence' => @$request->get('scenarios')['sequence'][$key],
+                    ]);
+                }
+                if (!empty($processedEntries)) {
+                    $this->scenarios()->whereNotIn('code', $processedEntries)->delete();
+                }
+            }
+        }
+
+         //save profileTypes
+        $processedEntries = [];
+        foreach ($request->get('profile_types') as $profiletypeId => $row) {
+            $processedEntries[] = $profiletypeId;
+            $this->profileTypes()->updateOrCreate(['profile_type_id' => $profiletypeId]);
+        }
+        if (!empty($processedEntries)) {
+            $this->profileTypes()->whereNotIn('profile_type_id', $processedEntries)->delete();
+        }
+
+        $processedEntries = [];
+        foreach ($request->get('test_suite_type') as $testSuiteType) {
+            $processedEntries[] = $testSuiteType;
+            $this->types()->updateOrCreate(['type' => $testSuiteType]);
+        }
+        if (!empty($processedEntries)) {
+            $this->types()->whereNotIn('type', $processedEntries)->delete();
+        }
+
+        //specification documents
+        $processedEntries = [];
+        foreach ($request->get('specificationDocuments') as $subName => $row) {
+            if($subName == 'name') {
+                foreach ($row as $key => $name) {
+                    $processedEntries[] = $name;
+                    $this->specificationDocuments()->updateOrCreate(['name' => $name], [
+                        'description' => @$request->get('specificationDocuments')['description'][$key],
+                        'sequence' => @$request->get('specificationDocuments')['link'][$key],
+                    ]);
+                }
+                if (!empty($processedEntries)) {
+                    $this->specificationDocuments()->whereNotIn('name', $processedEntries)->delete();
+                }
+            }
+        }
+
+        //protocol versions
+        $processedEntries = [];
+        foreach (explode(',', @$request->get('protocol_version')) as $row) {
+            $row = trim($row);
+            $processedEntries[] = $row;
+            $this->protocolVersions()->updateOrCreate(['version' => $row]);
+        }
+        if (!empty($processedEntries)) {
+            $this->protocolVersions()->whereNotIn('version', $processedEntries)->delete();
+        }
+
+        //related suites
+        $processedEntries = [];
+        if(is_array($request->get('related_ts'))) {
+            foreach ($request->get('related_ts') as $subName => $row) {
+                if ($subName == 'id') {
+                    foreach ($row as $key => $name) {
+                        $processedEntries[] = $name;
+                        $this->relatedTestSuites()->updateOrCreate(['related_test_suite_id' => $name]);
+                    }
+                    if (!empty($processedEntries)) {
+                        $this->relatedTestSuites()->whereNotIn('related_test_suite_id', $processedEntries)->delete();
+                    }
+                }
+            }
+        }
+    }
 }

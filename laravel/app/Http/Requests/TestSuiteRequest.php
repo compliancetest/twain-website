@@ -28,6 +28,7 @@ class TestSuiteRequest extends Request
             'test_suite_type' => 'required|array|in:Data Exchange,Environment,Quality,Some Other Type,Web Technology',
             'name' => 'required|string',
             'short_name' => 'required|string',
+            'profile_types' => 'required|array',
             'published_at' => 'date:Y-m-d',
             'issuer' => 'required',
             'revision_description' => 'string',
@@ -36,28 +37,30 @@ class TestSuiteRequest extends Request
             'description' => 'required|string',
 
             'conformanceLevels.code' => 'required|array',
+            'conformanceLevels.code.*' => 'required_with:conformanceLevels.description.*',
             'conformanceLevels.description.*' => 'required_with:conformanceLevels.code.*',
 
             'roles.name' => 'required|array',
+            'roles.name.*' => 'required_with:roles.description.*',
             'roles.description.*' => 'required_with:roles.name.*',
 
             'features.name' => 'required_if:product_type,Application|array',
+            'features.name.*' => 'required_with:features.description.*',
             'features.description.*' => 'required_with:features.name.*',
 
             'scenarios.code' => 'required|array',
-            'scenarios.description.*' => 'required_with:scenarios.code.*',
-            'scenarios.sequence.*' => 'required_with:scenarios.code.*',
+            'scenarios.code.*' => 'required_with:scenarios.description.*|required_with:scenarios.sequence.*',
+            'scenarios.description.*' => 'required_with:scenarios.code.*|required_with:scenarios.sequence.*',
+            'scenarios.sequence.*' => 'required_with:scenarios.code.*|required_with:scenarios.description.*',
 
-//            'specificationDocuments.name' => 'required|array',
+            'specificationDocuments.name.*' => 'required_with:specificationDocuments.description.*',
             'specificationDocuments.description.*' => 'required_with:specificationDocuments.name.*',
             'specificationDocuments.link.*' => 'url',
             'specificationDocuments.file.*' => 'file|required_with:specificationDocuments.name.*|required_without:specificationDocuments.link.*',
 
-            'roles.name' => 'required|array',
-            'roles.name.*' => 'string|min:3',
-            'roles.description.*' => 'required_with:roles.name.*',
-
-
+//            'roles.name' => 'required|array',
+//            'roles.name.*' => 'filled|required_with:roles.description.*',
+//            'roles.description.*' => 'filled|required_with:roles.name.*',
         ];
     }
 
@@ -71,6 +74,12 @@ class TestSuiteRequest extends Request
             'scenarios.code.required' => 'Please define at least one Scenario',
             'name.required' => 'Test Suite title is required',
             'short_name.required' => 'Test Suite name is required',
+
+            'conformanceLevels.*.required_with' => 'Please fill Conformance Level Code / Description',
+            'roles.*.required_with' => 'Please fill Role Name / Description',
+            'features.*.required_with' => 'Please fill Feature Name / Description',
+            'scenarios.*.required_with' => 'Please fill Scenario Code / Description / Sequence number',
+            'specificationDocuments.*.required_with' => 'Please fill Specification Document Name / Description / Location',
         ];
     }
 }

@@ -634,7 +634,35 @@ var Page = {
                 type: 'post',
                 data: form.serialize(),
                 error: function(jqXHR, status){
-                    form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    if(form.data('test-suites') == true){
+                        var processedMessages = [];
+                        var error = jQuery.map(jqXHR.responseJSON, function(v){
+                            v = v.toString();
+                            if($.inArray(v, processedMessages) == -1) {
+                                var divId = 'testSuiteInformationBox';
+                                if(v.indexOf('Conformance') != -1){
+                                    divId = 'conformanceLevelsBox';
+                                } else if(v.indexOf('Scenario') != -1){
+                                    divId = 'scenariosBox';
+                                } else if(v.indexOf('Role') != -1){
+                                    divId = 'testSuitesRolesBox';
+                                } else if(v.indexOf('specificationDocuments') != -1){
+                                    divId = 'specificationDocsBox';
+                                } else if(v.indexOf('Feature') != -1){
+                                    divId = 'featuresBox';
+                                } else if(v.indexOf('profile') != -1){
+                                    divId = 'testDataBox';
+                                } else if(v.indexOf('test suite type') != -1){
+                                    divId = 'testSuiteTypesBox';
+                                }
+                                form.find('#'+ divId).append('<div class=" message error-message">' + v + '</div>');
+                                processedMessages.push(v);
+                            }
+                        });
+                        return error;
+                    } else {
+                        form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    }
                 },
                 success: function(rsp, status, jqXHR){
                     if(form.attr('id') == 'invite-user-form'){
@@ -654,7 +682,7 @@ var Page = {
                     }
                     if(form.data('redirect-after-submit')){
                         setTimeout(function() {
-                            location.href = form.data('redirect-after-submit');
+                            // location.href = form.data('redirect-after-submit');
                         }, 2500);
 
                     }

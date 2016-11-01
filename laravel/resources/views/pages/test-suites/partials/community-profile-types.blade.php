@@ -25,6 +25,7 @@
                 @endif
             </div>
         </div>
+        <div class="colored-box-footer"></div>
     </div>
     <div class="block-loading profileTypes">
         <div class="loading-content"><span class="loader"></span>
