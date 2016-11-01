@@ -101,21 +101,45 @@ class ProductsController extends BaseApiController
      *
      * @apiSuccessExample {json} Product exist (approved):
      *  {
-          "messages": ["The product has been updated successfully"],
+          "messages": [
+            "The product has been updated successfully"
+          ],
+          "data": {
+            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
           "status": "success",
           "code": 200
         }
      *
      * @apiSuccessExample {json} Product exist (not approved):
      *  {
-          "messages": ["This product registration will require approval"],
+          "messages": [
+            "This product registration will require approval"
+          ],
+          "data": {
+            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
           "status": "info",
           "code": 200
         }
      *
      *  @apiSuccessExample {json} Product created:
      *  {
-          "messages": ["This product registration will require approval"],
+          "messages": [
+            "This product registration will require approval"
+          ],
+          "data": {
+            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
           "status": "info",
           "code": 201
         }
@@ -235,10 +259,20 @@ class ProductsController extends BaseApiController
                 $this->product->save();
 
                 if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
-                    return $this->respondSuccess('The product has been updated successfully');
+                    $message = 'The product has been updated successfully';
+                    $status = 'success';
                 } else {
-                    return $this->setStatusCode(200)->respondInfo('This product registration will require approval');
+                    $status = 'info';
+                    $message = 'This product registration will require approval';
+                    $this->setStatusCode(403);
                 }
+                $response = [
+                    'id' => $this->product->post_name,
+                    'title' => $this->product->post_title . ' v' . $productVersion,
+                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+                    'model' => $productModel,
+                ];
+                return $this->respondWithDataAndMessage($message, $response, $status);
             } else {
                 return $this->respondForbiddenError('This product was created by another organisation!');
             }
@@ -279,7 +313,13 @@ class ProductsController extends BaseApiController
 
         $this->product->save();
 
-        return $this->setStatusCode(201)->respondInfo('This product registration will require approval');
+        $response = [
+            'id' => $this->product->post_name,
+            'title' => $this->product->post_title . ' v' . $productVersion,
+            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+            'model' => $productModel,
+        ];
+        return $this->respondWithDataAndMessage('This product registration will require approval', $response, 'info');
     }
 
     /**

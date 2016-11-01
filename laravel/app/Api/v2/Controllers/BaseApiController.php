@@ -154,6 +154,14 @@ class BaseApiController extends Controller
         ]);
     }
 
+    public function respondWithDataAndMessage($message, $data, $status = 'info')
+    {
+        return $this->respond([
+            'messages' => [$message],
+            'data' => $data
+        ], $status);
+    }
+
 
     /**
      * @param $message
@@ -186,10 +194,10 @@ class BaseApiController extends Controller
      */
     protected function respondUnprocessableEntity($message)
     {
-        if($message instanceof MessageBag){
+        if ($message instanceof MessageBag) {
             $tempMessages = [];
-            foreach($message->getMessages() as $validationMessages){
-                foreach ($validationMessages as $validationMessage){
+            foreach ($message->getMessages() as $validationMessages) {
+                foreach ($validationMessages as $validationMessage) {
                     $tempMessages[] = $validationMessage;
                 }
             }

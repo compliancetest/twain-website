@@ -769,17 +769,17 @@ define({ "api": [
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\n           \"The product has been updated successfully\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"success\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {
           "title": "Product exist (not approved):",
-          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\n           \"This product registration will require approval\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"info\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {
           "title": "Product created:",
-          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 201\n       }",
+          "content": "{\n         \"messages\": [\n           \"This product registration will require approval\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"info\",\n         \"code\": 201\n       }",
           "type": "json"
         }
       ]
@@ -906,12 +906,17 @@ define({ "api": [
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n   \"message\": \"The product has been updated successfully\",\n   \"code\": 200\n }",
+          "content": "{\n          \"messages\": [\n            \"The product has been updated successfully\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 200\n        }",
           "type": "json"
         },
         {
-          "title": "Product exist (not approved) / product created:",
-          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product registration will require approval\"\n      ]\n    },\n    \"code\": 403\n  }",
+          "title": "Product exist (not approved):",
+          "content": "{\n          \"messages\": [\n            \"This product registration will require approval\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 200\n        }",
+          "type": "json"
+        },
+        {
+          "title": "Product created:",
+          "content": "{\n          \"messages\": [\n            \"This product registration will require approval\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 201\n        }",
           "type": "json"
         }
       ]

@@ -99,20 +99,48 @@ class ProductsController extends BaseApiController
      * @apiGroup Products
      *
      * @apiSuccessExample {json} Product exist (approved):
-     *  {
-     *     "message": "The product has been updated successfully",
-     *     "code": 200
-     *   }
-     *
-     * @apiSuccessExample {json} Product exist (not approved) / product created:
      * {
-     *     "errors": {
-     *       "message": [
-     *         "This product registration will require approval"
-     *       ]
-     *     },
-     *     "code": 403
-     *   }
+          "messages": [
+            "The product has been updated successfully"
+          ],
+          "data": {
+            "id": "4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "1277121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
+          "code": 200
+        }
+     *
+     *
+     * @apiSuccessExample {json} Product exist (not approved):
+     * {
+          "messages": [
+            "This product registration will require approval"
+          ],
+          "data": {
+            "id": "4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "1277121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
+          "code": 200
+        }
+     *
+     * * @apiSuccessExample {json} Product created:
+     * {
+          "messages": [
+            "This product registration will require approval"
+          ],
+          "data": {
+            "id": "4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "title": "1277121542111111TWAIN Virtual Software Scanner v2.1",
+            "link": "http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2",
+            "model": "None2"
+          },
+          "code": 201
+        }
+     *
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
      *   {
@@ -229,11 +257,18 @@ class ProductsController extends BaseApiController
                 $this->product->timestamps = false;
                 $this->product->save();
 
-                if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
-                    return $this->respondSuccess('The product has been updated successfully');
+                if (!CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
+                    $message = 'The product has been updated successfully';
                 } else {
-                    return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+                    $message = 'This product registration will require approval';
                 }
+                $response = [
+                    'id' => $this->product->post_name,
+                    'title' => $this->product->post_title . ' v' . $productVersion,
+                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+                    'model' => $productModel,
+                ];
+                return $this->respondWithDataAndMessage($message, $response);
             } else {
                 return $this->respondForbiddenError('This product was created by another organisation!');
             }
@@ -274,7 +309,13 @@ class ProductsController extends BaseApiController
 
         $this->product->save();
 
-        return $this->setStatusCode(403)->respondWithError('This product registration will require approval');
+        $response = [
+            'id' => $this->product->post_name,
+            'title' => $this->product->post_title . ' v' . $productVersion,
+            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+            'model' => $productModel,
+        ];
+        return $this->setStatusCode(201)->respondWithDataAndMessage('This product registration will require approval', $response);
     }
 
     /**
