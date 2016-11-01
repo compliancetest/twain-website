@@ -285,8 +285,8 @@ class TestCasesController extends BaseApiController
         $model->is_running = true;
         $model->save();
 
-        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
-        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
+        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
+        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
 
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
@@ -308,8 +308,8 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => $this->getProfileInfo($testExecutionProfile),
-            'ConfigurationProfile' => $this->getProfileInfo($testConfigurationProfile),
+            'ExecutionProfile' => $testExecutionProfile,
+            'ConfigurationProfile' => $testConfigurationProfile,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
@@ -503,8 +503,8 @@ class TestCasesController extends BaseApiController
         $testSuite = Post::find($model->test_suite_id);
         $testCase = Post::find($model->test_case_id);
 
-        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
-        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
+        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
+        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
 
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
@@ -526,8 +526,8 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => $this->getProfileInfo($testExecutionProfile),
-            'ConfigurationProfile' => $this->getProfileInfo($testConfigurationProfile),
+            'ExecutionProfile' => $testExecutionProfile,
+            'ConfigurationProfile' => $testConfigurationProfile,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
