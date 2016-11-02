@@ -23,7 +23,7 @@ class TestSuiteRequest extends Request
      */
     public function rules()
     {
-        return [
+        $rules = [
             'community_id' => 'required|exists:communities,id',
             'test_suite_type' => 'required|array|in:Data Exchange,Environment,Quality,Some Other Type,Web Technology',
             'name' => 'required|string',
@@ -35,33 +35,32 @@ class TestSuiteRequest extends Request
             'status' => 'required|in:Draft,Obsolete,Active,Partial,Deprecated',
             'product_type' => 'required|in:DataSource,Application',
             'description' => 'required|string',
-
-            'conformanceLevels.code' => 'required|array',
-            'conformanceLevels.code.*' => 'required_with:conformanceLevels.description.*',
-            'conformanceLevels.description.*' => 'required_with:conformanceLevels.code.*',
-
-            'roles.name' => 'required|array',
-            'roles.name.*' => 'required_with:roles.description.*',
-            'roles.description.*' => 'required_with:roles.name.*',
-
-            'features.name' => 'required_if:product_type,Application|array',
-            'features.name.*' => 'required_with:features.description.*',
-            'features.description.*' => 'required_with:features.name.*',
-
-            'scenarios.code' => 'required|array',
-            'scenarios.code.*' => 'required_with:scenarios.description.*|required_with:scenarios.sequence.*',
-            'scenarios.description.*' => 'required_with:scenarios.code.*|required_with:scenarios.sequence.*',
-            'scenarios.sequence.*' => 'required_with:scenarios.code.*|required_with:scenarios.description.*',
-
-            'specificationDocuments.name.*' => 'required_with:specificationDocuments.description.*',
-            'specificationDocuments.description.*' => 'required_with:specificationDocuments.name.*',
-            'specificationDocuments.link.*' => 'url',
-            'specificationDocuments.file.*' => 'file|required_with:specificationDocuments.name.*|required_without:specificationDocuments.link.*',
-
-//            'roles.name' => 'required|array',
-//            'roles.name.*' => 'filled|required_with:roles.description.*',
-//            'roles.description.*' => 'filled|required_with:roles.name.*',
         ];
+        if ($this->request->get('status') == 'Active') {
+            $rules = array_merge($rules, [
+                'conformanceLevels.code' => 'required|array',
+                'conformanceLevels.code.*' => 'required_with:conformanceLevels.description.*',
+                'conformanceLevels.description.*' => 'required_with:conformanceLevels.code.*',
+
+                'roles.name' => 'required|array',
+                'roles.name.*' => 'required_with:roles.description.*',
+                'roles.description.*' => 'required_with:roles.name.*',
+
+                'features.name' => 'required_if:product_type,Application|array',
+                'features.name.*' => 'required_with:features.description.*',
+                'features.description.*' => 'required_with:features.name.*',
+
+                'scenarios.code' => 'required|array',
+                'scenarios.code.*' => 'required_with:scenarios.description.*|required_with:scenarios.sequence.*',
+                'scenarios.description.*' => 'required_with:scenarios.code.*|required_with:scenarios.sequence.*',
+                'scenarios.sequence.*' => 'required_with:scenarios.code.*|required_with:scenarios.description.*',
+
+                'specificationDocuments.name.*' => 'required_with:specificationDocuments.description.*',
+                'specificationDocuments.description.*' => 'required_with:specificationDocuments.name.*',
+                'specificationDocuments.link.*' => 'url',
+            ]);
+        }
+        return $rules;
     }
 
     public function messages()

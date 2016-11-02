@@ -673,25 +673,25 @@ var Page = {
                                         '</tr>');
                     }
                     if(jqXHR.status == 201){
-                        form.find('.colored-box-footer').prepend('<div class="message success-message">'+rsp.message+'</div>');
+                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">'+rsp.message+'</div>');
                     } else {
-                        form.find('.colored-box-footer').prepend('<div class="message success-message">Changes saved successfully.</div>');
+                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">Changes saved successfully.</div>');
                     }
                     if(form.data('reset-form-after-submit')){
                         $(form)[0].reset();
                     }
                     if(form.data('redirect-after-submit')){
                         setTimeout(function() {
-                            // location.href = form.data('redirect-after-submit');
+                            location.href = form.data('redirect-after-submit');
                         }, 2500);
 
                     }
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();
-                    // setTimeout(function() {
-                    //     form.find('.message').fadeOut("slow", function() { $(this).remove(); });
-                    // }, 3000);
+                    setTimeout(function() {
+                        form.find('.message:not(.error-message)').fadeOut("slow", function() { $(this).remove(); });
+                    }, 3000);
 
                 }
             })

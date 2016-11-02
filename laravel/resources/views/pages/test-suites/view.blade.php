@@ -22,7 +22,7 @@
                     <li>Status: <span class="status status-active">{{ $testSuite->status }}</span></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
                     @if(!$testSuite->protocolVersions->isEmpty())
-                        <li>Protocol Versions: <strong>{{ $testSuite->protocolVersions }}</strong></li>
+                        <li>Protocol Versions: <strong>{{ implode(', ', $testSuite->protocolVersions()->pluck('version')->toArray() ) }}</strong></li>
                     @endif
                     @include('pages.test-suites.partials.download-test-tool', ['installer' => $installer, 'x64' => false])
                     @include('pages.test-suites.partials.download-test-tool', ['installer' => $installerX64, 'x64' => true])

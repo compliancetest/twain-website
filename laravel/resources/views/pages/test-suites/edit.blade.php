@@ -26,7 +26,9 @@
                                     <div class="form-group">
                                         <select name="community_id" id="communityId" class="form-control">
                                             @foreach(\App\Community::all()->sortBy('title') as $community)
-                                                <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                                @if($community->isAdmin() || is_super_admin())
+                                                    <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -233,6 +235,7 @@
                                                 <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
                                             </div>
                                         @endif
+                                        <input type="hidden" name="conformanceLevels[id][]" value="{{ $conformanceLevel->id }}">
                                     </div>
                                 </div>
                             @endforeach
@@ -261,6 +264,10 @@
                                             <label>Description:</label>
                                             <textarea rows="3" class="form-control" name="features[description][]">{!! $feature->description !!}</textarea>
                                         </div>
+                                        <div class="col-md-1 action-col">
+                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="featureRow">Delete Feature</button>
+                                        </div>
+                                        <input type="hidden" name="features[id][]" value="{{ $feature->id }}">
                                     </div>
                                 </div>
                             @endforeach
@@ -298,6 +305,7 @@
                                             <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
                                         </div>
                                     @endif
+                                    <input type="hidden" name="scenarios[id][]" value="{{ $scenario->id }}">
                                 </div>
                             </div>
                             @endforeach
@@ -356,6 +364,7 @@
                                     <div class="col-md-1 action-col">
                                         <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
                                     </div>
+                                    <input type="hidden" name="related_ts[id][]" value="{{ $relatedTestSuite->id }}">
                                 </div>
                             </div>
                             @endforeach
@@ -387,6 +396,7 @@
                                         <div class="col-md-1 action-col">
                                             <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
                                         </div>
+                                        <input type="hidden" name="roles[id][]" value="{{ $role->id }}">
                                     </div>
                                 </div>
                             @endforeach
@@ -420,15 +430,11 @@
                                             <label>Document Location:</label>
                                             <input type="text" class="form-control" name="specificationDocuments[link][]" value="{{ $specificationDocument->link }}"/>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="upload-file-field">
-                                                <input type="file" name="specificationDocuments[file][]" class="input-file" />
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="col-md-1 action-col">
                                         <button class="btn btn-primary btn-icon btn-delete" data-delete-row="specificationDocRow">Delete Document</button>
                                     </div>
+                                    <input type="hidden" name="specificationDocuments[id][]" value="{{ $specificationDocument->id }}">
                                 </div>
                             </div>
                             @endforeach
@@ -480,6 +486,7 @@
 
                         </div>
                     </div>
+                    <div class="colored-box-footer"></div>
                 </div>
 
                 <div class="form-actions">
@@ -684,11 +691,6 @@
                 <div class="form-group">
                     <label>Document Location:</label>
                     <input type="text" class="form-control" name="specificationDocuments[link]" value=""/>
-                </div>
-                <div class="form-group">
-                    <div class="upload-file-field">
-                        <input type="file" name="specificationDocuments[file]" class="input-file" />
-                    </div>
                 </div>
             </div>
             <div class="col-md-1 action-col">

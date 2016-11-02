@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LaravelTestSuite extends Model
 {
@@ -151,7 +152,7 @@ class LaravelTestSuite extends Model
 
     public function getCases($filters = [], $isAdmin = false)
     {
-        $query =  $this->testCases()->select("test_cases.*", 'TSS.id AS scenarioId', 'TSS.code AS scenarioCode')
+        $query = $this->testCases()->select("test_cases.*", 'TSS.id AS scenarioId', 'TSS.code AS scenarioCode')
             ->join('test_cases_scenarios as TCS', function ($join) {
                 $join->on('TCS.test_case_id', '=', 'test_cases.id');
             })
@@ -167,126 +168,204 @@ class LaravelTestSuite extends Model
             ->orderBy('TSS.sequence')
             ->orderBy('test_cases.full_name')
             ->groupBy('test_cases.id');
-        if(!$isAdmin){
+        if (!$isAdmin) {
             $query->where('test_cases.status', 'Active');
         }
-        if(!empty($filters['scenario'])){
+        if (!empty($filters['scenario'])) {
             $query->where('TSS.code', $filters['scenario']);
         }
-        if(!empty($filters['status'])){
+        if (!empty($filters['status'])) {
             $query->where('test_cases.status', $filters['status']);
         }
-        if(!empty($filters['conformance_level'])){
+        if (!empty($filters['conformance_level'])) {
             $query->where('TSCL.code', $filters['conformance_level']);
         }
         return $query;
     }
 
+    /**
+     * Process request data and update all test suite relations
+     * @param $request
+     */
     public function updateRelations($request)
     {
         $conformanceLevelCodes = [];
-        foreach ($request->get('conformanceLevels') as $subName => $conformanceLevel) {
-            if($subName == 'code') {
-                foreach ($conformanceLevel as $key => $code) {
-                    $conformanceLevelCodes[] = $code;
-                    $this->conformanceLevels()->updateOrCreate(['code' => $code], [
-                        'description' => @$request->get('conformanceLevels')['description'][$key]
-                    ]);
-                }
-                if (!empty($conformanceLevelCodes)) {
-                    $this->conformanceLevels()->whereNotIn('code', $conformanceLevelCodes)->delete();
+        if (is_array($request->get('conformanceLevels'))) {
+            foreach ($request->get('conformanceLevels') as $subName => $conformanceLevel) {
+                if ($subName == 'code') {
+                    foreach ($conformanceLevel as $key => $code) {
+                        $conformanceLevelCodes[] = $code;
+                        if (isset($request->get('conformanceLevels')['id'][$key])) {
+                            $entry = $this->conformanceLevels()->find($request->get('conformanceLevels')['id'][$key]);
+                            if ($entry) {
+                                $entry->code = $code;
+                                $entry->description = @$request->get('conformanceLevels')['description'][$key];
+                                $entry->save();
+                            }
+                        } else {
+                            $this->conformanceLevels()->updateOrCreate(['code' => $code], [
+                                'description' => @$request->get('conformanceLevels')['description'][$key]
+                            ]);
+                        }
+                    }
+                    if (!empty($conformanceLevelCodes)) {
+                        $this->conformanceLevels()->whereNotIn('code', $conformanceLevelCodes)->delete();
+                    }
                 }
             }
         }
 
         //roles
-         $processedEntries = [];
-        foreach ($request->get('roles') as $subName => $row) {
-            if($subName == 'name') {
-                foreach ($row as $key => $name) {
-                    $processedEntries[] = $name;
-                    $this->roles()->updateOrCreate(['name' => $name], [
-                        'description' => @$request->get('roles')['description'][$key]
-                    ]);
-                }
-                if (!empty($processedEntries)) {
-                    $this->roles()->whereNotIn('name', $processedEntries)->delete();
+        $processedEntries = [];
+        if (is_array($request->get('roles'))) {
+            foreach ($request->get('roles') as $subName => $row) {
+                if ($subName == 'name') {
+                    foreach ($row as $key => $name) {
+                        $processedEntries[] = $name;
+                        if (isset($request->get('roles')['id'][$key])) {
+                            $entry = $this->roles()->find($request->get('roles')['id'][$key]);
+                            if ($entry) {
+                                $entry->name = $name;
+                                $entry->description = @$request->get('roles')['description'][$key];
+                                $entry->save();
+                            }
+                        } else {
+                            $this->roles()->updateOrCreate(['name' => $name], [
+                                'description' => @$request->get('roles')['description'][$key]
+                            ]);
+                        }
+                    }
+                    if (!empty($processedEntries)) {
+                        $this->roles()->whereNotIn('name', $processedEntries)->delete();
+                    }
                 }
             }
         }
 
-         //save scenarios
+        //save scenarios
         $processedEntries = [];
-        foreach ($request->get('scenarios') as $subName => $row) {
-            if($subName == 'code') {
-                foreach ($row as $key => $name) {
-                    $processedEntries[] = $name;
-                    $this->scenarios()->updateOrCreate(['code' => $name], [
-                        'description' => @$request->get('scenarios')['description'][$key],
-                        'sequence' => @$request->get('scenarios')['sequence'][$key],
-                    ]);
-                }
-                if (!empty($processedEntries)) {
-                    $this->scenarios()->whereNotIn('code', $processedEntries)->delete();
+        if ($request->get('scenarios')) {
+            foreach ($request->get('scenarios') as $subName => $row) {
+                if ($subName == 'code') {
+                    foreach ($row as $key => $name) {
+                        $processedEntries[] = $name;
+                        if (isset($request->get('scenarios')['id'][$key])) {
+                            $entry = $this->scenarios()->find($request->get('scenarios')['id'][$key]);
+                            if ($entry) {
+                                $entry->code = $name;
+                                $entry->description = @$request->get('roles')['description'][$key];
+                                $entry->sequence = @$request->get('roles')['sequence'][$key];
+                                $entry->save();
+                            }
+                        } else {
+                            $this->scenarios()->updateOrCreate(['code' => $name], [
+                                'description' => @$request->get('scenarios')['description'][$key],
+                                'sequence' => @$request->get('scenarios')['sequence'][$key],
+                            ]);
+                        }
+                    }
+                    if (!empty($processedEntries)) {
+                        $this->scenarios()->whereNotIn('code', $processedEntries)->delete();
+                    }
                 }
             }
         }
 
-         //save profileTypes
+        //save profileTypes
         $processedEntries = [];
-        foreach ($request->get('profile_types') as $profiletypeId => $row) {
-            $processedEntries[] = $profiletypeId;
-            $this->profileTypes()->updateOrCreate(['profile_type_id' => $profiletypeId]);
-        }
-        if (!empty($processedEntries)) {
-            $this->profileTypes()->whereNotIn('profile_type_id', $processedEntries)->delete();
+        if (is_array($request->get('profile_types'))) {
+            foreach ($request->get('profile_types') as $profiletypeId => $row) {
+                $processedEntries[] = $profiletypeId;
+                $this->profileTypes()->updateOrCreate(['profile_type_id' => $profiletypeId]);
+            }
+            if (!empty($processedEntries)) {
+                $this->profileTypes()->whereNotIn('profile_type_id', $processedEntries)->delete();
+            }
         }
 
-        $processedEntries = [];
-        foreach ($request->get('test_suite_type') as $testSuiteType) {
-            $processedEntries[] = $testSuiteType;
-            $this->types()->updateOrCreate(['type' => $testSuiteType]);
-        }
-        if (!empty($processedEntries)) {
-            $this->types()->whereNotIn('type', $processedEntries)->delete();
+        if (is_array($request->get('test_suite_type'))) {
+            $processedEntries = [];
+            foreach ($request->get('test_suite_type') as $testSuiteType) {
+                $processedEntries[] = $testSuiteType;
+                $this->types()->updateOrCreate(['type' => $testSuiteType]);
+            }
+            if (!empty($processedEntries)) {
+                $this->types()->whereNotIn('type', $processedEntries)->delete();
+            }
         }
 
         //specification documents
         $processedEntries = [];
-        foreach ($request->get('specificationDocuments') as $subName => $row) {
-            if($subName == 'name') {
-                foreach ($row as $key => $name) {
-                    $processedEntries[] = $name;
-                    $this->specificationDocuments()->updateOrCreate(['name' => $name], [
-                        'description' => @$request->get('specificationDocuments')['description'][$key],
-                        'sequence' => @$request->get('specificationDocuments')['link'][$key],
-                    ]);
+        if (is_array($request->get('specificationDocuments'))) {
+            foreach ($request->get('specificationDocuments') as $subName => $row) {
+                if ($subName == 'name') {
+                    foreach ($row as $key => $name) {
+                        $processedEntries[] = $name;
+                        $link = @$request->get('specificationDocuments')['link'][$key];
+                        $this->specificationDocuments()->updateOrCreate(['name' => $name], [
+                            'description' => @$request->get('specificationDocuments')['description'][$key],
+                            'link' => $link,
+                        ]);
+                    }
+                    if (!empty($processedEntries)) {
+                        $this->specificationDocuments()->whereNotIn('name', $processedEntries)->delete();
+                    }
                 }
-                if (!empty($processedEntries)) {
-                    $this->specificationDocuments()->whereNotIn('name', $processedEntries)->delete();
+            }
+        }
+
+        //features
+        $processedEntries = [];
+        if (is_array($request->get('features'))) {
+            foreach ($request->get('features') as $subName => $row) {
+                if ($subName == 'name') {
+                    foreach ($row as $key => $name) {
+                        $processedEntries[] = $name;
+                        if (isset($request->get('features')['id'][$key])) {
+                            $entry = $this->features()->find($request->get('features')['id'][$key]);
+                            if ($entry) {
+                                $entry->name = $name;
+                                $entry->description = @$request->get('features')['description'][$key];
+                                $entry->save();
+                            }
+                        } else {
+                            $this->features()->updateOrCreate(['name' => $name], [
+                                'description' => @$request->get('features')['description'][$key],
+                            ]);
+                        }
+                    }
+                    if (!empty($processedEntries)) {
+                        $this->features()->whereNotIn('name', $processedEntries)->delete();
+                    }
                 }
             }
         }
 
         //protocol versions
-        $processedEntries = [];
-        foreach (explode(',', @$request->get('protocol_version')) as $row) {
-            $row = trim($row);
-            $processedEntries[] = $row;
-            $this->protocolVersions()->updateOrCreate(['version' => $row]);
-        }
-        if (!empty($processedEntries)) {
-            $this->protocolVersions()->whereNotIn('version', $processedEntries)->delete();
+        if (is_array(explode(',', @$request->get('protocol_versions')))) {
+            $processedEntries = [];
+            foreach (explode(',', @$request->get('protocol_versions')) as $row) {
+                $row = trim($row);
+                $processedEntries[] = $row;
+                if(!empty($row)) {
+                    $this->protocolVersions()->updateOrCreate(['version' => $row]);
+                }
+            }
+            if (!empty($processedEntries)) {
+                $this->protocolVersions()->whereNotIn('version', $processedEntries)->delete();
+            }
         }
 
         //related suites
         $processedEntries = [];
-        if(is_array($request->get('related_ts'))) {
+        if (is_array($request->get('related_ts'))) {
             foreach ($request->get('related_ts') as $subName => $row) {
                 if ($subName == 'id') {
                     foreach ($row as $key => $name) {
                         $processedEntries[] = $name;
-                        $this->relatedTestSuites()->updateOrCreate(['related_test_suite_id' => $name]);
+                        if (self::find($name)) {
+                            $this->relatedTestSuites()->updateOrCreate(['related_test_suite_id' => $name]);
+                        }
                     }
                     if (!empty($processedEntries)) {
                         $this->relatedTestSuites()->whereNotIn('related_test_suite_id', $processedEntries)->delete();
