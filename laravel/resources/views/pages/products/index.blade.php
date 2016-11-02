@@ -15,3 +15,59 @@
         </div>
     </div>
 @stop
+
+@section('page-scripts')
+<script>
+    jQuery(document).ready(function ($) {
+        $('.deleteProduct').click(function () {
+            <!--todo-verify spinner doent work on /laravel-my-products page-->
+            var productIndex = $(this).data('product-index');
+            var productSlug = $(this).data('product-slug');
+
+            $('#removingProductSpinner' + productIndex).show();
+            $.ajax({
+                url: '/laravel-product/' + productSlug,
+                type: 'DELETE',
+                success: function () {
+                    window.location = "/my-products";
+                },
+                error: function (jqXHR, status) {
+                    alert(formatErrorMessage(jqXHR, status));
+                }
+            });
+        });
+
+        $('.deleteProductClaimConfirm').click(function () {
+            var claimId = $(this).data('claim-id');
+            var productSlug = $(this).data('product-slug');
+            var claimRow =  $('#claimRow' + claimId);
+            var claimContainer = claimRow.parents('.colored-box-content');
+            var claimSpinner = $('#removingProductClaimSpinner' + claimId);
+
+            claimSpinner.show();
+
+            $.ajax({
+                url: '/laravel-product/' + productSlug +'/claim/' + claimId,
+                type: 'DELETE',
+                success: function () {
+                    <!--todo-verify append notification to claims table and delete claim row from claims list-->
+                    $('#deleteProductClaimModal' + claimId).modal('hide');
+                    claimSpinner.hide();
+                    claimRow.addClass('removing').fadeTo("slow", 0.3, function () {
+                        $(this).remove();
+                        claimContainer.prepend('<div class="success-message">Claim {{ $id }} was deleted successfully.</div>');
+                        setTimeout(function () {
+                            claimContainer.find('.success-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 2000);
+                    });
+                },
+                error: function (jqXHR, status) {
+                    alert(formatErrorMessage(jqXHR, status));
+                }
+            });
+        });
+    });
+</script>
+@stop

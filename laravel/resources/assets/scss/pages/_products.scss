@@ -76,6 +76,11 @@
   .colored-box {
     .colored-box-content{
       padding: 0;
+
+      &.product-item-box-content{
+        padding: 15px 15px 0 15px;
+      }
+
     }
 
     .table{
@@ -92,5 +97,13 @@
     &:first-child{
       margin-left: 10px;
     }
+  }
+}
+
+.delete-product-claim-modal{
+  .modal-body{
+    font-weight: 400;
+    font-size: 12px;
+    color: #666;
   }
 }

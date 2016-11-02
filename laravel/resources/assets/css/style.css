@@ -8819,7 +8819,7 @@ body.modal-open,
   margin: -20px -15px 20px -15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .page-title:after {
   content: "\0020";
   display: block;
@@ -8892,7 +8892,7 @@ body.modal-open,
 }
 /* line 126, ../scss/_common.scss */
 .block-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -9587,7 +9587,7 @@ input[type="checkbox"] {
     height: 100%;
     margin: 0 auto -155px 0;
     padding: 0 0 155px 0;
-    background: #fff url('../images/separate-bg/content.jpg?1464115992') repeat-x 50% 121px;
+    background: #fff url('../images/separate-bg/content.jpg') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
@@ -10538,7 +10538,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0px rgba(255, 255, 255, 0.4) inset;
-  background: #de6262 url('../images/separate-bg/table-header.png?1464115992') repeat-x 0 0;
+  background: #de6262 url('../images/separate-bg/table-header.png') repeat-x 0 0;
   border: 1px solid #e33f3f;
   border-left: 0;
   border-top: solid 1px #b56a79;
@@ -10565,7 +10565,7 @@ input[type="checkbox"] {
 }
 /* line 81, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 84, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr > td {
@@ -10596,7 +10596,7 @@ input[type="checkbox"] {
 }
 /* line 113, ../scss/blocks/_tables.scss */
 .colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 123, ../scss/blocks/_tables.scss */
@@ -10605,7 +10605,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10631,7 +10631,7 @@ input[type="checkbox"] {
 }
 /* line 158, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 161, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr > td {
@@ -10662,7 +10662,7 @@ input[type="checkbox"] {
 }
 /* line 190, ../scss/blocks/_tables.scss */
 .colored-parent-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 197, ../scss/blocks/_tables.scss */
@@ -10684,7 +10684,7 @@ input[type="checkbox"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
-  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png?1471786864') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/blue-table-header.png') repeat-x 0 0;
   border: 1px solid #1d76c0;
   border-left: 0;
   border-top: solid 1px #1d76c0;
@@ -10714,7 +10714,7 @@ input[type="checkbox"] {
 }
 /* line 252, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 255, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr > td {
@@ -10742,7 +10742,7 @@ input[type="checkbox"] {
 }
 /* line 281, ../scss/blocks/_tables.scss */
 .blue-colored-table > tbody > tr:nth-child(2n+1) {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 
 /* line 290, ../scss/blocks/_tables.scss */
@@ -10994,7 +10994,7 @@ input[type="checkbox"] {
 }
 /* line 4, ../scss/blocks/_colored-box.scss */
 .colored-box .colored-box-header {
-  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png?1464115992') repeat-x 0 0;
+  background: #1f7ac7 url('../images/separate-bg/colored-box-header.png') repeat-x 0 0;
   padding: 6px 10px;
   font-size: 14px;
   color: #fff;
@@ -11138,7 +11138,7 @@ input[type="checkbox"] {
 }
 /* line 135, ../scss/blocks/_colored-box.scss */
 .colored-box .color-box-loading .loading-content .loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -13836,7 +13836,7 @@ html[xmlns] .flexslider .slides {
   *zoom: 1;
   background: #fff;
 }
-/* line 38, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .filter-list-actions:after {
   content: "";
   display: table;
@@ -14498,7 +14498,7 @@ html[xmlns] .flexslider .slides {
   padding: 6px 14px;
   position: relative;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .article-attachments-box .attached-file-list li:after {
   content: "\0020";
   display: block;
@@ -14824,7 +14824,7 @@ input.notify-changes {
   border-bottom: 1px solid #d8d8d8;
   border-top: 1px solid #d8d8d8;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .community-downloads .form-actions:after, .community-forums .form-actions:after {
   content: "\0020";
   display: block;
@@ -15035,7 +15035,7 @@ input.notify-changes {
 }
 /* line 106, ../scss/pages/_test-coverage.scss */
 .scanned-image .img-loader {
-  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -15081,7 +15081,7 @@ input.notify-changes {
   padding: 5px 15px;
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .forum-post .forum-post-header:after {
   content: "\0020";
   display: block;
@@ -15162,12 +15162,12 @@ input.notify-changes {
 
 /* line 30, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td {
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
 }
 /* line 33, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr:nth-child(4n-1) > td,
 .log-results-table > tbody > tr:nth-child(4n+4) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 /* line 37, ../scss/pages/_transaction-log.scss */
 .log-results-table > tbody > tr > td:last-child {
@@ -15192,12 +15192,12 @@ input.notify-changes {
 .log-results-sub-table > tbody > tr > td {
   text-align: center;
   padding: 5px;
-  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png?1464115992') repeat 0 0;
+  background: #d9d9d9 url('../images/separate-bg/table-tr-bg-even.png') repeat 0 0;
   vertical-align: middle;
 }
 /* line 69, ../scss/pages/_transaction-log.scss */
 .log-results-sub-table > tbody > tr:nth-child(2n+1) > td {
-  background: #eee url('../images/separate-bg/table-tr-bg-odd.png?1464115992') repeat 0 0;
+  background: #eee url('../images/separate-bg/table-tr-bg-odd.png') repeat 0 0;
 }
 
 /* line 78, ../scss/pages/_transaction-log.scss */
@@ -15272,18 +15272,29 @@ input.notify-changes {
 .products-list .colored-box .colored-box-content {
   padding: 0;
 }
-/* line 81, ../scss/pages/_products.scss */
+/* line 80, ../scss/pages/_products.scss */
+.products-list .colored-box .colored-box-content.product-item-box-content {
+  padding: 15px 15px 0 15px;
+}
+/* line 86, ../scss/pages/_products.scss */
 .products-list .colored-box .table {
   margin: 0;
 }
 
-/* line 89, ../scss/pages/_products.scss */
+/* line 94, ../scss/pages/_products.scss */
 .suite-checkboxes-group .checkbox {
   margin-left: 20px;
 }
-/* line 92, ../scss/pages/_products.scss */
+/* line 97, ../scss/pages/_products.scss */
 .suite-checkboxes-group .checkbox:first-child {
   margin-left: 10px;
+}
+
+/* line 104, ../scss/pages/_products.scss */
+.delete-product-claim-modal .modal-body {
+  font-weight: 400;
+  font-size: 12px;
+  color: #666;
 }
 
 /* line 4, ../scss/pages/_test-suites.scss */
@@ -15499,7 +15510,7 @@ input.notify-changes {
 #header .header-inner {
   *zoom: 1;
 }
-/* line 22, ../../../../../../../../tools/Ruby/lib/ruby/gems/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../../tools/ruby/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 #header .header-inner:after {
   content: "\0020";
   display: block;
@@ -16306,7 +16317,7 @@ input.notify-changes {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url('../images/header-loing-form-loader.gif?1464115992') no-repeat 0 0;
+  background: url('../images/header-loing-form-loader.gif') no-repeat 0 0;
   height: 31px;
   width: 31px;
   display: block;
@@ -16316,7 +16327,7 @@ input.notify-changes {
 
 /* line 1, ../scss/_footer.scss */
 #footer {
-  background: url('../images/separate-bg/footer.png?1464115992') repeat 0 0;
+  background: url('../images/separate-bg/footer.png') repeat 0 0;
   border-top: 1px solid #D8D8D8;
   padding: 0 0 30px 0;
   text-align: center;

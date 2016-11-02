@@ -1,4 +1,4 @@
-<!--todo-migration -->
+<!--todo-verify -->
 <div class="colored-box collapsible-box">
     <div class="colored-box-header">
         <a href="#productItemBox{{ $productType }}" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span
@@ -6,7 +6,7 @@
         {{ $productType }} Products
     </div>
     <div class="colored-box-body collapse in" id="productItemBox{{ $productType }}">
-        <div class="colored-box-content">
+        <div class="colored-box-content product-item-box-content">
             @foreach($products as $k => $product)
                 <div class="colored-box collapsible-box">
                     <div class="colored-box-header">
@@ -18,7 +18,7 @@
                             <li><a href="#" data-tooltip="tooltip" title="Delete" data-toggle="modal" data-target="#deleteProductModal{{ $k }}"><span class="delete-icon"></span></a></li>
                         </ul>
                     </div>
-                    @include('pages.products.partials.confirm-delete-modal', ['k' => $k])
+                    @include('pages.products.partials.confirm-delete-product-modal', ['k' => $k, 'productSlug'=>$product->slug])
                     <div class="colored-box-body collapse in" id="productItemBox{{ $k }}">
                         <div class="colored-box-content">
                             <table class="table colored-table">

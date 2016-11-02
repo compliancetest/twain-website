@@ -10,7 +10,7 @@
                 Are you sure you want delete {{ $product->full_name }}?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success btn-with-icon btn-confirm deleteProduct">Confirm</button>
+                <button type="button" class="btn btn-success btn-with-icon btn-confirm deleteProduct" data-product-slug="{{ $productSlug }}" data-product-index="{{ $k }}">Confirm</button>
                 <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
             </div>
             <div class="block-loading" id="removingProductSpinner{{ $k }}">
@@ -22,23 +22,3 @@
         </div>
     </div>
 </div>
-@section('page-scripts')
-    <script>
-        jQuery(document).ready(function ($) {
-            $('.deleteProduct').click(function () {
-                <!--todo-migration spinner doent work on /laravel-my-products page-->
-                $('#removingProductSpinner{{ $k }}').show();
-                $.ajax({
-                    url: '/laravel-product/{{ $product->slug }}',
-                    type: 'DELETE',
-                    success: function () {
-                        window.location = "/my-products";
-                    },
-                    error: function (jqXHR, status) {
-                        alert(formatErrorMessage(jqXHR, status));
-                    }
-                });
-            });
-        });
-    </script>
-@stop

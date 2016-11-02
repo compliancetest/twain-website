@@ -16,7 +16,7 @@
 <tbody>
 @if(count($product->claims))
     @foreach($product->claims as $claim)
-        <tr>
+        <tr id="claimRow{{ $claim->id }}">
             <td>{{ $claim->id }}</td>
             <td class="text-center">
                 <a href="{{ $claim->getPdfUrl() }}" class="btn btn-primary btn-icon btn-view"
@@ -31,15 +31,16 @@
             <td class="text-center"><span class="text-status-verified">Verified</span></td>
             <td class="text-center">{{ formatDate($claim->created_at) }}</td>
             @can('change', $product)
-                <td class="text-center"><a href="#" class="btn btn-danger btn-icon btn-delete deleteProductClaim" data-toggle="modal" data-target="#deleteProductClaimModal{{ $claim->id }}" data-tooltip="tooltip" title="Delete Claim">Delete</a>
-                @include('pages.products.partials.confirm-delete-claim-modal', ['id' => $claim->id])
+                <td class="text-center">
+                    <a href="#deleteProductClaimModal{{ $claim->id }}" class="btn btn-danger btn-icon btn-delete" data-toggle="modal" data-tooltip="tooltip" title="Delete Claim">Delete</a>
+                    @include('pages.products.partials.confirm-delete-claim-modal', ['id' => $claim->id, 'productSlug' => $product->slug])
+                </td>
             @endcan
-            </td>
         </tr>
     @endforeach
 @else
     <tr>
-        <td colspan="@can('change', $product)9@else8@endcan" class="empty-row">No compliance claim recorded yet</td>
+        <td colspan="@can('change', $product) 9 @else 8 @endcan" class="empty-row">No compliance claim recorded yet</td>
     </tr>
 @endif
 </tbody>
