@@ -197,6 +197,14 @@
             loadTestCases($('#suiteTestCasesForm').serialize() + "&page=" + getUrlVar($(this).attr('href'), 'page'));
         });
 
+        $('.downloadAgreeLicenseCheck').click(function() {
+            var downloadButton = $(this).data('installer-id');
+            if (this.checked) {
+                $('.licenseDownloadBtn' + downloadButton).prop("disabled", false);
+            } else {
+                $('.licenseDownloadBtn' + downloadButton).prop("disabled", true);
+            }
+        });
     });
 </script>
 @stop
