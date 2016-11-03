@@ -44,6 +44,29 @@ class TestSuitesController extends Controller
     }
 
     /**
+     * Create new test suite page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        $pageTitle = 'Create Test Suite';
+        $isAdmin = doesUserAdminInAnyCommunity() || is_super_admin();
+        return view('pages.test-suites.edit', compact('pageTitle', 'isAdmin'));
+    }
+
+    public function store(Requests\TestSuiteRequest $request)
+    {
+        if (Gate::denies('change', false, $request->get('community_id'))) {
+            return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
+        }
+
+        $testSuite = LaravelTestSuite::create($request->all());
+        $testSuite->updateRelations($request);
+        $testSuite->save();
+        return response()->json(['status' => 'success']);
+    }
+
+    /**
      * Edit test suite page
      * @param $testSuiteSlug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -79,18 +102,38 @@ class TestSuitesController extends Controller
     }
 
     /**
+     * Community test suites dropdown
+     * @param $testSuiteSlug
+     * @param $communityId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function communityTestSuites($testSuiteSlug, $communityId)
+    {
+        $data = [
+            'suiteCommunity' => Community::find($communityId),
+            'testSuite' => LaravelTestSuite::findBySlug($testSuiteSlug)
+        ];
+        return response()->json(['html' => view('pages.test-suites.partials.community-test-suites')->with($data)->render()]);
+    }
+
+    /**
      * Update test suite data
      * @param $testSuiteSlug
      * @param Requests\TestSuiteRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update($testSuiteSlug, Requests\TestSuiteRequest $request)
     {
         $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
-        $testSuite->fill($request->all());
-        //save conformance levels
-        $testSuite->updateRelations($request);
 
+        if (Gate::denies('change', $testSuite)) {
+            return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
+        }
+
+        $testSuite->fill($request->all());
+        $testSuite->updateRelations($request);
         $testSuite->save();
+        return response()->json(['status' => 'success']);
     }
 
     public function getTestCasesList($testSuiteSlug, Request $request)

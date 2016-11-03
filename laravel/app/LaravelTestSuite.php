@@ -360,7 +360,7 @@ class LaravelTestSuite extends Model
         $processedEntries = [];
         if (is_array($request->get('related_ts'))) {
             foreach ($request->get('related_ts') as $subName => $row) {
-                if ($subName == 'id') {
+                if ($subName == 'suite_id') {
                     foreach ($row as $key => $name) {
                         $processedEntries[] = $name;
                         if (self::find($name)) {

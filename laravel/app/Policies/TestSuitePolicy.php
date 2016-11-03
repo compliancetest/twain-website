@@ -17,9 +17,12 @@ class TestSuitePolicy
      * @param LaravelTestSuite $testSuite
      * @return bool
      */
-    public function change(User $user, LaravelTestSuite $testSuite)
+    public function change(User $user, $testSuite = false, $communityId = false)
     {
-        return (boolean) Community::find($testSuite->community_id)->members()->where(['user_id' => $user->ID, 'is_admin' => true])->first();
+        if(!$communityId){
+            $communityId = $testSuite->community_id;
+        }
+        return (boolean) Community::find($communityId)->members()->where(['user_id' => $user->ID, 'is_admin' => true])->first();
     }
 
     /**

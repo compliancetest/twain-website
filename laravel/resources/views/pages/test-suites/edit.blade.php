@@ -5,7 +5,11 @@
     <div class="container main-container">
         <div class="main-content edit-test-suite-page">
             <div class="page-title">
-                <h1>Edit Test Suite: {{ $testSuite->full_name }}</h1>
+                @if($testSuite)
+                    <h1>Edit Test Suite: {{ $testSuite->full_name }}</h1>
+                @else
+                    <h1>Create Test Suite:</h1>
+                @endif
             </div>
             @if (count($errors) > 0)
                 <div class="alert alert-danger">
@@ -40,7 +44,7 @@
                         <div class="colored-box collapsible-box">
                             <div class="colored-box-header"><a href="#testSuiteTypesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Suite Types</div>
                             <div class="colored-box-body collapse in" id="testSuiteTypesBox">
-                                <?php $testSuiteTypes = $testSuite->types->keyBy('type');?>
+                                <?php $testSuiteTypes = is_object($testSuite) ? $testSuite->types->keyBy('type') : [];?>
                                 <div class="colored-box-content test-suite-types-box">
                                     <div class="checkbox">
                                         <label>
@@ -50,13 +54,13 @@
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="Environment" checked="checked" type="checkbox" @if(isset($testSuiteTypes['Environment'])) checked="checked"@endif>
+                                            <input name="test_suite_type[]" value="Environment" type="checkbox" @if(isset($testSuiteTypes['Environment'])) checked="checked"@endif>
                                             Environment
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="test_suite_type[]" value="Quality" checked="checked" type="checkbox" @if(isset($testSuiteTypes['Quality'])) checked="checked"@endif>
+                                            <input name="test_suite_type[]" value="Quality" type="checkbox" @if(isset($testSuiteTypes['Quality'])) checked="checked"@endif>
                                             Quality
                                         </label>
                                     </div>
@@ -166,17 +170,17 @@
                                         <div class="manage-version-box row">
                                             <div class="manage-version-group">
                                                 <span>Major</span>
-                                                <input type="text" id="tsVersionMajor" name="ts_version_major" class="form-control" readonly="readonly" value="{{ $testSuite->version_major }}" />
+                                                <input type="text" id="tsVersionMajor" name="ts_version_major" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_major) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMajor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
-                                                <input type="text" id="tsVersionMinor" name="ts_version_minor" class="form-control" readonly="readonly" value="{{ $testSuite->version_minor }}" />
+                                                <input type="text" id="tsVersionMinor" name="ts_version_minor" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_minor) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMinor"></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
-                                                <input type="text" id="tsVersionPatch" name="ts_version_patch" class="form-control" readonly="readonly" value="{{ $testSuite->version_patch }}" />
+                                                <input type="text" id="tsVersionPatch" name="ts_version_patch" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_patch) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch" data-tooltip="tooltip" title="Later version already exists."></button>
                                             </div>
                                         </div>
@@ -219,26 +223,28 @@
                         <div class="colored-box-content dynamic-rows" id="conformanceLevelContent">
 
 
-                            @foreach($testSuite->conformanceLevels as $conformanceLevel)
-                                <div class="form-group conformance-level-row">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <label>Conformance Level Code:</label>
-                                            <input type="text" class="form-control" name="conformanceLevels[code][]" value="{{ $conformanceLevel->code }}"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Conformance Level Description:</label>
-                                            <textarea rows="3" class="form-control" name="conformanceLevels[description][]">{{ $conformanceLevel->description }}</textarea>
-                                        </div>
-                                        @if($conformanceLevel->code != 'Default')
-                                            <div class="col-md-1 action-col">
-                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
+                            @if($testSuite->conformanceLevels)
+                                @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                                    <div class="form-group conformance-level-row">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label>Conformance Level Code:</label>
+                                                <input type="text" class="form-control" name="conformanceLevels[code][]" value="{{ $conformanceLevel->code }}"/>
                                             </div>
-                                        @endif
-                                        <input type="hidden" name="conformanceLevels[id][]" value="{{ $conformanceLevel->id }}">
+                                            <div class="col-md-6">
+                                                <label>Conformance Level Description:</label>
+                                                <textarea rows="3" class="form-control" name="conformanceLevels[description][]">{{ $conformanceLevel->description }}</textarea>
+                                            </div>
+                                            @if($conformanceLevel->code != 'Default')
+                                                <div class="col-md-1 action-col">
+                                                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
+                                                </div>
+                                            @endif
+                                            <input type="hidden" name="conformanceLevels[id][]" value="{{ $conformanceLevel->id }}">
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
 
                         </div>
                         <div class="colored-box-footer">
@@ -253,24 +259,26 @@
                     <div class="colored-box-body collapse in" id="featuresListBox">
                         <div class="colored-box-content dynamic-rows" id="featuresListContent">
 
-                            @foreach($testSuite->features as $feature)
-                                <div class="form-group featureRow">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <label>Feature Name:</label>
-                                            <input type="text" class="form-control" name="features[name][]" value="{{ $feature->name }}"/>
+                            @if($testSuite->features)
+                                @foreach($testSuite->features as $feature)
+                                    <div class="form-group featureRow">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label>Feature Name:</label>
+                                                <input type="text" class="form-control" name="features[name][]" value="{{ $feature->name }}"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Description:</label>
+                                                <textarea rows="3" class="form-control" name="features[description][]">{!! $feature->description !!}</textarea>
+                                            </div>
+                                            <div class="col-md-1 action-col">
+                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="featureRow">Delete Feature</button>
+                                            </div>
+                                            <input type="hidden" name="features[id][]" value="{{ $feature->id }}">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label>Description:</label>
-                                            <textarea rows="3" class="form-control" name="features[description][]">{!! $feature->description !!}</textarea>
-                                        </div>
-                                        <div class="col-md-1 action-col">
-                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="featureRow">Delete Feature</button>
-                                        </div>
-                                        <input type="hidden" name="features[id][]" value="{{ $feature->id }}">
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
 
                         </div>
                         <div class="colored-box-footer">
@@ -285,30 +293,32 @@
                     <div class="colored-box-body collapse in" id="scenariosBox">
                         <div class="colored-box-content dynamic-rows" id="scenariosContent">
 
-                            @foreach($testSuite->scenarios as $scenario)
-                            <div class="form-group scenarioRow">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Code:</label>
-                                        <input type="text" class="form-control" name="scenarios[code][]" value="{{ $scenario->code }}"/>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="scenarios[description][]">{!! $scenario->description  !!}</textarea>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label>Sequence:</label>
-                                        <input type="text" class="form-control" name="scenarios[sequence][]" value="{{ $scenario->sequence }}"/>
-                                    </div>
-                                    @if($scenario->code != 'Default')
-                                        <div class="col-md-1 action-col">
-                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
+                            @if($testSuite->scenarios)
+                                @foreach($testSuite->scenarios as $scenario)
+                                    <div class="form-group scenarioRow">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Code:</label>
+                                                <input type="text" class="form-control" name="scenarios[code][]" value="{{ $scenario->code }}"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Description:</label>
+                                                <textarea rows="3" class="form-control" name="scenarios[description][]">{!! $scenario->description  !!}</textarea>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>Sequence:</label>
+                                                <input type="text" class="form-control" name="scenarios[sequence][]" value="{{ $scenario->sequence }}"/>
+                                            </div>
+                                            @if($scenario->code != 'Default')
+                                                <div class="col-md-1 action-col">
+                                                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="scenarioRow">Delete Scenario</button>
+                                                </div>
+                                            @endif
+                                            <input type="hidden" name="scenarios[id][]" value="{{ $scenario->id }}">
                                         </div>
-                                    @endif
-                                    <input type="hidden" name="scenarios[id][]" value="{{ $scenario->id }}">
-                                </div>
-                            </div>
-                            @endforeach
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                         <div class="colored-box-footer">
                             <button type="button" onclick="Page.helpers.addRow('#scenarioTemplate','#scenariosContent');" class="btn btn-success btn-with-icon btn-add">New Scenario</button>
@@ -327,51 +337,61 @@
                     <div class="colored-box-body collapse in" id="testCasesBox">
                         <div class="colored-box-content">
                             <ul class="test-suites-cases-list clearfix">
-                                @foreach($testSuite->testCases as $testCase)
-                                    <li><a href="/laravel-test-case/{{ $testCase->slug }}" target="_blank">{{ $testCase->full_name }}</a></li>
-                                @endforeach
+                                @if($testSuite->testCases)
+                                    @foreach($testSuite->testCases as $testCase)
+                                        <li><a href="/laravel-test-case/{{ $testCase->slug }}" target="_blank">{{ $testCase->full_name }}</a></li>
+                                    @endforeach
+                                @endif
                             </ul>
-                            <a href="/laravel-test-case/123/edit" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
-
+                            <a href="/laravel-test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                         </div>
                     </div>
                 </div>
 
                 {{-- Related Test Suites --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#relatedTestSuitesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Related Test Suites</div>
-                    <div class="colored-box-body collapse in" id="relatedTestSuitesBox">
-                        <div class="colored-box-content dynamic-rows" id="relatedTestSuitesContent">
-
-                            @foreach($testSuite->relatedTestSuites as $relatedTestSuite)
-                            <div class="form-group relatedTestSuiteRow">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <label>Related Suite:</label>
-                                        <select class="form-control" name="related_ts[id][]">
-                                            <option>Select test suite</option>
-                                            @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
-                                                @if($communityTestSuite->id != $suiteCommunity->id)
-                                                    <option value="{{ $communityTestSuite->id }}" @if($communityTestSuite->id == $relatedTestSuite->related_test_suite_id) selected="selected"@endif>{{ $communityTestSuite->full_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Description:</label>
-                                        <textarea rows="3" class="form-control" name="related_ts[description][]">{!! $relatedTestSuite->description !!}</textarea>
-                                    </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
-                                    </div>
-                                    <input type="hidden" name="related_ts[id][]" value="{{ $relatedTestSuite->id }}">
-                                </div>
-                            </div>
-                            @endforeach
-
+                <div class="block-loading-wrapper" id="testSuitesContent">
+                    <div class="colored-box collapsible-box">
+                        <div class="colored-box-header"><a href="#relatedTestSuitesBox" class="collapse-arrow" data-toggle="collapse"><span
+                                        class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Related Test Suites
                         </div>
-                        <div class="colored-box-footer">
-                            <button type="button" onclick="Page.helpers.addRow('#relatedTestSuiteTemplate','#relatedTestSuitesContent');" class="btn btn-success btn-with-icon btn-add">New Test Suite</button>
+                        <div class="colored-box-body collapse in" id="relatedTestSuitesBox">
+                            <div class="colored-box-content dynamic-rows" id="relatedTestSuitesContent">
+
+                                @if($testSuite->relatedTestSuites)
+                                    @foreach($testSuite->relatedTestSuites as $relatedTestSuite)
+                                        <div class="form-group relatedTestSuiteRow">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <label>Related Suite:</label>
+                                                     <div class="relatedSuitesList">
+                                                        @include('pages.test-suites.partials.community-test-suites')
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Description:</label>
+                                                    <textarea rows="3" class="form-control" name="related_ts[description][]">{!! $relatedTestSuite->description !!}</textarea>
+                                                </div>
+                                                <div class="col-md-1 action-col">
+                                                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="relatedTestSuiteRow">Delete Related Test Suite</button>
+                                                </div>
+                                                <input type="hidden" name="related_ts[id][]" value="{{ $relatedTestSuite->id }}">
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                <div class="block-loading relatedTestSuites">
+                                    <div class="loading-content"><span class="loader"></span>
+                                        <div class="loading-text">LOADING DATA</div>
+                                        <div class="loading-wait">Please wait...</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="colored-box-footer">
+                                <button type="button" onclick="Page.helpers.addRow('#relatedTestSuiteTemplate','#relatedTestSuitesContent');"
+                                        class="btn btn-success btn-with-icon btn-add">New Test Suite
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -382,24 +402,26 @@
                     <div class="colored-box-body collapse in" id="testSuitesRolesBox">
                         <div class="colored-box-content dynamic-rows" id="testSuitesRolesContent">
 
-                            @foreach($testSuite->roles as $role)
-                                <div class="form-group testSuiteRoleRow">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Name:</label>
-                                            <input type="text" class="form-control" name="roles[name][]" value="{{ $role->name }}"/>
+                            @if($testSuite->roles)
+                                @foreach($testSuite->roles as $role)
+                                    <div class="form-group testSuiteRoleRow">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Name:</label>
+                                                <input type="text" class="form-control" name="roles[name][]" value="{{ $role->name }}"/>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <label>Description:</label>
+                                                <input type="text" class="form-control" name="roles[description][]" value="{!! $role->description !!}"/>
+                                            </div>
+                                            <div class="col-md-1 action-col">
+                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
+                                            </div>
+                                            <input type="hidden" name="roles[id][]" value="{{ $role->id }}">
                                         </div>
-                                        <div class="col-md-7">
-                                            <label>Description:</label>
-                                            <input type="text" class="form-control" name="roles[description][]" value="{!! $role->description !!}"/>
-                                        </div>
-                                        <div class="col-md-1 action-col">
-                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testSuiteRoleRow">Delete Test Suite Role</button>
-                                        </div>
-                                        <input type="hidden" name="roles[id][]" value="{{ $role->id }}">
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
 
                         </div>
                         <div class="colored-box-footer">
@@ -414,30 +436,33 @@
                     <div class="colored-box-body collapse in" id="specificationDocsBox">
                         <div class="colored-box-content dynamic-rows" id="specificationDocsBoxContent">
 
-                            @foreach($testSuite->specificationDocuments as $specificationDocument)
-                            <div class="form-group specificationDocRow">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Document Name:</label>
-                                        <input type="text" class="form-control" name="specificationDocuments[name][]" value="{{ $specificationDocument->name }}"/>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="form-group">
-                                            <label>Document Description:</label>
-                                            <textarea name="specificationDocuments[description][]" class="form-control" rows="3">{!! $specificationDocument->description !!}</textarea>
+                            @if($testSuite->specificationDocuments)
+                                @foreach($testSuite->specificationDocuments as $specificationDocument)
+                                    <div class="form-group specificationDocRow">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Document Name:</label>
+                                                <input type="text" class="form-control" name="specificationDocuments[name][]" value="{{ $specificationDocument->name }}"/>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label>Document Description:</label>
+                                                    <textarea name="specificationDocuments[description][]" class="form-control"
+                                                              rows="3">{!! $specificationDocument->description !!}</textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Document Location:</label>
+                                                    <input type="text" class="form-control" name="specificationDocuments[link][]" value="{{ $specificationDocument->link }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1 action-col">
+                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="specificationDocRow">Delete Document</button>
+                                            </div>
+                                            <input type="hidden" name="specificationDocuments[id][]" value="{{ $specificationDocument->id }}">
                                         </div>
-                                        <div class="form-group">
-                                            <label>Document Location:</label>
-                                            <input type="text" class="form-control" name="specificationDocuments[link][]" value="{{ $specificationDocument->link }}"/>
-                                        </div>
                                     </div>
-                                    <div class="col-md-1 action-col">
-                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="specificationDocRow">Delete Document</button>
-                                    </div>
-                                    <input type="hidden" name="specificationDocuments[id][]" value="{{ $specificationDocument->id }}">
-                                </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @endif
 
                         </div>
                         <div class="colored-box-footer">
@@ -476,7 +501,11 @@
                             <div class="form-group featureRow">
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <textarea rows="3" class="form-control" name="protocol_versions">{{ implode(',', $testSuite->protocolVersions()->pluck('version')->toArray()) }}</textarea>
+                                        <textarea rows="3" class="form-control" name="protocol_versions">
+                                            @if($testSuite)
+                                                {{ implode(',', $testSuite->protocolVersions()->pluck('version')->toArray()) }}
+                                            @endif
+                                        </textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <p class="field-light-description">List of supported protocol versions could be just a list of strings(separated by comma) with the following format: ProtocolMajor.ProtocolMinor For example: 2.3,2.3 Empty list of supported protocol versions is allowed and means that a test suite supports any version.</p>
@@ -540,33 +569,52 @@
 
         $('body').on('change', '#communityId', function(e){
             jQuery('.profileTypes.block-loading').show();
-
-                jQuery.ajax({
-                    url: '/laravel-test-suite/{{ $testSuite->slug }}/community-profiles/' + $('#communityId').val(),
-                    type: 'get',
-                    dataType: 'json',
-                    success: function (rsp) {
-                        $('.profileTypes.block-loading').hide();
-                        $('#profileTypesContent').html(rsp.html);
-                    },
-                    error: function (jqXHR, status) {
-                        $('.profileTypes.block-loading').hide();
-                        $('.profileTypes.block-loading').before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
-                        setTimeout(function () {
-                            $('.profileTypes.block-loading > .error-message').slideUp(function () {
-                                $(this).remove();
-                            });
-                        }, 3000);
-                    }
-                });
+            jQuery.ajax({
+                url: '/laravel-test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-profiles/' + $('#communityId').val(),
+                type: 'get',
+                dataType: 'json',
+                success: function (rsp) {
+                    $('.profileTypes.block-loading').hide();
+                    $('#profileTypesContent').html(rsp.html);
+                },
+                error: function (jqXHR, status) {
+                    $('.profileTypes.block-loading').hide();
+                    $('.profileTypes.block-loading').before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('.profileTypes.block-loading > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
+            var loadingBox = jQuery('.relatedTestSuites.block-loading');
+            loadingBox.show();
+            jQuery.ajax({
+                url: '/laravel-test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-test-suites/' + $('#communityId').val(),
+                type: 'get',
+                dataType: 'json',
+                success: function (rsp) {
+                    loadingBox.hide();
+                    $('.relatedSuitesList').html(rsp.html);
+                },
+                error: function (jqXHR, status) {
+                    loadingBox.hide();
+                    loadingBox.before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    setTimeout(function () {
+                        $('#testSuitesContent > .error-message').slideUp(function () {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            });
         });
 
 
         $('body').on('change', 'input[name="product_type"]', function(e){
-            if($(this).val() != 'Application'){
-                $('#featuresBox').hide();
-            } else {
+            if($(this).val() == 'Application'){
                 $('#featuresBox').show();
+            } else {
+                $('#featuresBox').hide();
             }
         });
          $('input[name="product_type"]').change();
@@ -638,14 +686,9 @@
         <div class="row">
             <div class="col-md-5">
                 <label>Related Suite:</label>
-                <select class="form-control" name="related_ts[id][]">
-                    <option>Select test suite</option>
-                    @foreach($suiteCommunity->testSuites()->orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get() as $communityTestSuite)
-                        @if($communityTestSuite->id != $suiteCommunity->id)
-                            <option value="{{ $communityTestSuite->id }}">{{ $communityTestSuite->full_name }}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div class="relatedSuitesList">
+                    @include('pages.test-suites.partials.community-test-suites')
+                </div>
             </div>
             <div class="col-md-6">
                 <label>Description:</label>

@@ -8,7 +8,7 @@
 
         <div class="test-data-profile-types">
             <div class="checkboxes-group clearfix">
-                <?php $testSuiteProfileType = $testSuite->profileTypes->keyBy('profile_type_id');?>
+                <?php $testSuiteProfileType = $testSuite ? $testSuite->profileTypes->keyBy('profile_type_id') : [];?>
                 @if(count($suiteCommunity->profileTypes))
                     @foreach($suiteCommunity->profileTypes as $profileType)
                         <div class="checkbox">

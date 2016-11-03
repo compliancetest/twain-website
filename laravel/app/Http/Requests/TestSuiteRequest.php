@@ -28,7 +28,6 @@ class TestSuiteRequest extends Request
             'test_suite_type' => 'required|array|in:Data Exchange,Environment,Quality,Some Other Type,Web Technology',
             'name' => 'required|string',
             'short_name' => 'required|string',
-            'profile_types' => 'required|array',
             'published_at' => 'date:Y-m-d',
             'issuer' => 'required',
             'revision_description' => 'string',
@@ -38,6 +37,8 @@ class TestSuiteRequest extends Request
         ];
         if ($this->request->get('status') == 'Active') {
             $rules = array_merge($rules, [
+                'profile_types' => 'required|array',
+
                 'conformanceLevels.code' => 'required|array',
                 'conformanceLevels.code.*' => 'required_with:conformanceLevels.description.*',
                 'conformanceLevels.description.*' => 'required_with:conformanceLevels.code.*',
