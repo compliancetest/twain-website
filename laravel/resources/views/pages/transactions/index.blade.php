@@ -352,17 +352,18 @@
 
         $('body').on('click', '.submit-new-message', function(e){
             jQuery('#viewExplanationLogs .block-loading').show();
-
+            var transactionId = $('#transactionId').val();
             jQuery.ajax({
-                url: '/transactions/'+$('#transactionId').val()+'/explanation-logs/create',
+                url: '/transactions/' + transactionId + '/explanation-logs/create',
                 data: {
                     'message': jQuery('#explanationMessage').val()
                 },
                 type: 'post',
                 dataType: 'json',
                 success: function (message) {
-                     $('#viewExplanationLogs .modal-content').html(message.html);
-                     $('#viewExplanationLogs .modal-body').append('<div class="success-message">Your message has been sent!</div>');
+                    $('#viewExplanationLogs .modal-content').html(message.html);
+                    $('#viewExplanationLogs .modal-body').append('<div class="success-message">Your message has been sent!</div>');
+                    $('#questionBtn' + transactionId).removeClass('btn-default').addClass('btn-success');
                     setTimeout(function () {
                         $('#viewExplanationLogs .modal-body > .success-message').slideUp(function () {
                             $(this).remove();
