@@ -90,21 +90,23 @@
                 </div>
             </div>
 
-            @if(Auth::check())
-                @if(Auth::user()->getSuiteSubscription($testSuite))
-                    <!-- todo-migration release link with confirmation popup -->
-                    @include('pages.test-suites.partials.release-subscription')
-                @else
-                    @if(Auth::user()->doesUserOrganisationApproved($testSuite))
-                        <!-- todo-migration assign subscription link with conformation popup -->
-                        @include('pages.test-suites.partials.assign-subscription')
+            <div class="test-suite-subscription">
+                @if(Auth::check())
+                    @if(Auth::user()->getSuiteSubscription($testSuite))
+                        <!-- todo-verify release link with confirmation popup -->
+                        @include('pages.test-suites.partials.release-subscription')
                     @else
-                        @include('pages.test-suites.partials.contact-us-button')
+                        @if(Auth::user()->doesUserOrganisationApproved($testSuite))
+                            <!-- todo-verify assign subscription link with conformation popup -->
+                            @include('pages.test-suites.partials.assign-subscription')
+                        @else
+                            @include('pages.test-suites.partials.contact-us-button')
+                        @endif
                     @endif
+                @else
+                    @include('pages.test-suites.partials.contact-us-button')
                 @endif
-            @else
-                @include('pages.test-suites.partials.contact-us-button')
-            @endif
+            </div>
 
             <div class="row test-cases-list-header">
                 <div class="col-md-4 item-subtitle">Test Cases</div>
@@ -140,7 +142,7 @@
                             </select>
                         </div>
                          @can('change', $testSuite)
-                            <a href="#" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                            <a href="/laravel-test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                          @endcan
                     </form>
                 </div>
@@ -204,6 +206,21 @@
             } else {
                 $('.licenseDownloadBtn' + downloadButton).prop("disabled", true);
             }
+        });
+
+
+        $('#confirmSubscriptionForm').submit(function () {
+            $(this).find('.error-message').remove();
+            if(!$(this).find('#agreeCustomerTerms').prop('checked')) {
+                $(this).find('.modal-body').append('<div class="error-message">You must agree to our Terms &amp; Conditions.</div>');
+            } else {
+                jQuery('#confirmSubscriptionFormSpinner').show();
+            }
+        });
+
+
+        $('#confirmReleaseSubscriptionForm').submit(function () {
+            jQuery('#confirmReleaseSubscriptionSpinner').show();
         });
     });
 </script>

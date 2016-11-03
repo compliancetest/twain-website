@@ -181,3 +181,23 @@
 .test-cases-table .test-pattern-icon{
   display: block;
 }
+
+.test-suite-subscription{
+  padding: 15px 0;
+  text-align: right;
+
+  .success-message{
+    text-align: left;
+
+    a{
+      color: #fff;
+      font-weight: 600;
+      font-style: italic;
+      text-decoration: underline;
+
+      &:hover{
+        text-decoration: none;
+      }
+    }
+  }
+}

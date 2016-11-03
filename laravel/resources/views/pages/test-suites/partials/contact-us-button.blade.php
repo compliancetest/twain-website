@@ -1,7 +1,6 @@
-<a class="big-red-btn" href="/contact-us/">
-    <span class="price-b">
-        <span class="l"></span>
-        <span class="m">CONTACT US<br>For Pricing</span>
-        <span class="r"></span>
+<a class="btn btn-danger btn-lg btn-pricing-contact-wrapper" href="/contact-us/">
+    <span class="btn btn-primary btn-pricing-contact">
+        CONTACT US
+        <span>For Pricing</span>
     </span>
 </a>
