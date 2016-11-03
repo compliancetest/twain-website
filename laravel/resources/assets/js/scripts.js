@@ -686,6 +686,11 @@ var Page = {
                         }, 2500);
 
                     }
+                    if (rsp.redirect_to) {
+                        setTimeout(function () {
+                            location.href = rsp.redirect_to;
+                        }, 2500);
+                    }
                 },
                 complete: function(){
                     form.find('.color-box-loading').hide();

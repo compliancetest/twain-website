@@ -17,7 +17,7 @@ class TestSuitePolicy
      * @param LaravelTestSuite $testSuite
      * @return bool
      */
-    public function change(User $user, $testSuite = false, $communityId = false)
+    public function changeTestSuite(User $user, LaravelTestSuite $testSuite = null, $communityId = false)
     {
         if(!$communityId){
             $communityId = $testSuite->community_id;

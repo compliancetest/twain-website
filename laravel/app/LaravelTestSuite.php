@@ -374,4 +374,20 @@ class LaravelTestSuite extends Model
             }
         }
     }
+
+    /**
+     *
+     * @param $request
+     * @return bool
+     */
+    public function isVersionUpdated($request)
+    {
+        if ($this->version_major < $request->get('version_major') ||
+            $this->version_minor < $request->get('version_minor') ||
+            $this->version_patch < $request->get('version_patch')
+        ) {
+            return true;
+        }
+        return false;
+    }
 }

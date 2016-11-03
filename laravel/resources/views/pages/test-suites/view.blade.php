@@ -19,7 +19,7 @@
                     <li>ID: <strong>{{ $testSuite->short_name }}</strong></li>
                     <li>Published: <strong>{{$testSuite->published_at}}</strong></li>
                     <li>Issuer: <a href="/laravel-test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
-                    <li>Status: <span class="status status-active">{{ $testSuite->status }}</span></li>
+                    <li>Status: <span class="status status-{{ strtolower($testSuite->status) }}">{{ $testSuite->status }}</span></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
                     @if(!$testSuite->protocolVersions->isEmpty())
                         <li>Protocol Versions: <strong>{{ implode(', ', $testSuite->protocolVersions()->pluck('version')->toArray() ) }}</strong></li>

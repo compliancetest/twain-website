@@ -56,14 +56,14 @@ class TestSuitesController extends Controller
 
     public function store(Requests\TestSuiteRequest $request)
     {
-        if (Gate::denies('change', false, $request->get('community_id'))) {
+        if (!(is_super_admin() || doesUserCommunityAdmin(Auth::user()->ID, $request->get('community_id')))) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
 
         $testSuite = LaravelTestSuite::create($request->all());
         $testSuite->updateRelations($request);
         $testSuite->save();
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
     }
 
     /**
@@ -75,7 +75,7 @@ class TestSuitesController extends Controller
     {
         $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
 
-        if (Gate::denies('change', $testSuite)) {
+        if (Gate::denies('changeTestSuite', $testSuite)) {
             addMessage('You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
             return redirect()->to('/');
         }
@@ -124,16 +124,31 @@ class TestSuitesController extends Controller
      */
     public function update($testSuiteSlug, Requests\TestSuiteRequest $request)
     {
-        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        $oldTestSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
 
-        if (Gate::denies('change', $testSuite)) {
+        if (Gate::denies('change', $oldTestSuite)) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
 
+        if ($oldTestSuite->isVersionUpdated($request)) {
+            $testSuite = LaravelTestSuite::create($request->all());
+            if ($oldTestSuite->version_major < $request->get('version_major')) {
+
+            } else {
+                if ($oldTestSuite->version_minor < $request->get('version_minor')) {
+                    $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
+                } else if ($oldTestSuite->version_patch < $request->get('version_patch')) {
+                    $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
+                    $testSuite->version_patch = $oldTestSuite->version_patch;
+                }
+            }
+        } else {
+            $testSuite = $oldTestSuite;
+        }
         $testSuite->fill($request->all());
         $testSuite->updateRelations($request);
         $testSuite->save();
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success' , 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
     }
 
     public function getTestCasesList($testSuiteSlug, Request $request)

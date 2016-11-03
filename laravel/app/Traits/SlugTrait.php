@@ -13,8 +13,24 @@ trait SlugTrait
     public static function bootSlugTrait()
     {
         static::creating(function($model) {
+            if(!empty($model->title)) {
                 $model->slug = self::getUniqueSlug($model, $model->title);
-            });
+            } else {
+                $fullName = $model->name;
+                if(isset($model->version_major)) {
+                    $fullName .= ' v' . (string)$model->version_major . '-' . (string)$model->version_minor;
+                    if ($model->version_patch) {
+                        $fullName .= '-' . (string)$model->version_patch;
+                    }
+                } else {
+                    $fullName .= ' v' . $model->version;
+                }
+                $model->full_name = $fullName;
+                $model->slug = self::getUniqueSlug($model, $fullName);
+                $model->minor_family_mark = $model->id;
+                $model->major_family_mark = $model->id;
+            }
+        });
     }
 
     public static function getUniqueSlug(\Illuminate\Database\Eloquent\Model $model, $value)
