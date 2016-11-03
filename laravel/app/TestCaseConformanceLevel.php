@@ -18,4 +18,9 @@ class TestCaseConformanceLevel extends Model
     {
         return $this->belongsTo('\App\LaravelTestCase', 'test_case_id');
     }
+
+     public function testSuiteConformanceLevel()
+    {
+        return $this->belongsTo('\App\TestSuiteConformanceLevels', 'conformance_level_id');
+    }
 }

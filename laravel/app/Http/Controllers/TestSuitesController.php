@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\Http\Requests;
 use App\LaravelTestSuite;
+use App\OrganisationMember;
+use App\OrganisationSubscription;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class TestSuitesController extends Controller
@@ -33,7 +37,7 @@ class TestSuitesController extends Controller
         $data = [
             'testSuite' => $testSuite,
             'community' => $community,
-            'pageTitle' => $testSuite->full_name,
+            'pageTitle' => 'View Test Suite | ' . $testSuite->full_name,
             'isAdmin' => $isAdmin,
             'isSupport' => $isAdmin || $community->isModerator(),
             'installer' => $community->getTestTool($testSuite->product_type),
@@ -80,7 +84,7 @@ class TestSuitesController extends Controller
             return redirect()->to('/');
         }
 
-        $pageTitle = 'Edit ' . $testSuite->full_name;
+        $pageTitle = 'Edit Test Suite | ' . $testSuite->full_name;
         $suiteCommunity = Community::find($testSuite->community_id);
         $isAdmin = $suiteCommunity->isAdmin() || is_super_admin();
         return view('pages.test-suites.edit', compact('testSuite', 'pageTitle', 'isAdmin', 'suiteCommunity'));
@@ -160,5 +164,75 @@ class TestSuitesController extends Controller
             'isAdmin' => Community::find($testSuite->community_id)->isAdmin() || is_super_admin(),
         ];
         return response()->json(['html' => view('pages.test-suites.partials/test-cases-list')->with($data)->render()]);
+    }
+
+    /**
+     * Manage user subscription to test suite
+     * @param $testSuiteSlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function subscription($testSuiteSlug, Request $request)
+    {
+        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        if ($request->get('status')) {
+            $existingSubscription = OrganisationSubscription::where([
+                'organisation_id' => Auth::user()->organisation[0]->id,
+                'suite_minor_family_mark' => $testSuite->minor_family_mark,
+                'user_id' => 0,
+            ])->first();
+            if ($existingSubscription) {
+                $existingSubscription->update(['user_id' => Auth::user()->ID]);
+            } else {
+                $nickname = $testSuite->short_name . '_v' . $testSuite->version_major . '_' . $testSuite->version_minor;
+                $existingSubscription = OrganisationSubscription::create([
+                    'nickname' => OrganisationSubscription::getUniqueSlug($nickname),
+                    'organisation_id' => Auth::user()->organisation[0]->id,
+                    'purchaser_id' => Auth::user()->ID,
+                    'purchased_date' => date('Y-m-d H:i:s'),
+                    'status' => 'Active',
+                    'user_id' => Auth::user()->ID,
+                    'suite_minor_family_mark' => $testSuite->minor_family_mark,
+                ]);
+            }
+            //Send Email
+            $emailData = array(
+                '[name]'            => cp_get_user_fullname(Auth::user()->ID),
+                '[email]'           => Auth::user()->user_email,
+                '[suite_name]'      => $testSuite->full_name,
+                '[nickname]'        => $existingSubscription->nickname,
+                '[organisation]'    => Auth::user()->organisation[0]->organisation_name,
+                '[community_url]'   => getSiteUrl() . '/communities/' . Community::find($testSuite->community_id)->slug
+            );
+
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'allocate_subscription_to_user', $emailData);
+            cp_send_email_to_admin('allocate_subscription_to_user_admin', $emailData);
+
+        } else {
+            $subscription = OrganisationSubscription::where([
+                'organisation_id' => Auth::user()->organisation[0]->id,
+                'suite_minor_family_mark' => $testSuite->minor_family_mark,
+                'user_id' => Auth::user()->ID,
+            ])->first();
+
+            $orgAdmin = User::find(OrganisationMember::where([
+                'organisation_id' => Auth::user()->organisation[0]->id,
+                'is_admin' => 1,
+            ])->first()->user_id);
+            $emailData = array(
+                '[name]' => cp_get_user_fullname($orgAdmin->ID),
+                '[email]' => $orgAdmin->user_email,
+                '[nickname]' => $subscription->nickname,
+                '[organisation]' => Auth::user()->organisation[0]->organisation_name,
+                '[suite_name]' => $testSuite->full_name
+            );
+
+            $subscription->user_id = 0;
+            $subscription->save();
+
+            cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'cancel_subscription', $emailData);
+            cp_send_email_to_admin('cancel_subscription_admin', $emailData);
+        }
+        return response()->json(['html' => view('pages.test-suites.partials.subscriptions-section')->with(['testSuite' => $testSuite])->render()]);
     }
 }

@@ -18,4 +18,9 @@ class TestCaseScenario extends Model
     {
         return $this->belongsTo('\App\LaravelTestCase', 'test_case_id');
     }
+
+    public function testSuiteScenario()
+    {
+        return $this->belongsTo('\App\TestSuiteScenarios', 'test_suites_scenario_id');
+    }
 }

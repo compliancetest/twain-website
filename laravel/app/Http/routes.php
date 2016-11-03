@@ -78,6 +78,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::get('laravel-test-suite/create', 'TestSuitesController@create');
         Route::post('laravel-test-suite', 'TestSuitesController@store');
+        Route::post('laravel-test-suite/{testSuiteId}/subscription', 'TestSuitesController@subscription');
         Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
         Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
         Route::post('laravel-test-suite/{testSuiteId}', 'TestSuitesController@update');

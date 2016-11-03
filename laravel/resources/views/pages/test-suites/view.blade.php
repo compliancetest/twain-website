@@ -91,21 +91,7 @@
             </div>
 
             <div class="test-suite-subscription">
-                @if(Auth::check())
-                    @if(Auth::user()->getSuiteSubscription($testSuite))
-                        <!-- todo-verify release link with confirmation popup -->
-                        @include('pages.test-suites.partials.release-subscription')
-                    @else
-                        @if(Auth::user()->doesUserOrganisationApproved($testSuite))
-                            <!-- todo-verify assign subscription link with conformation popup -->
-                            @include('pages.test-suites.partials.assign-subscription')
-                        @else
-                            @include('pages.test-suites.partials.contact-us-button')
-                        @endif
-                    @endif
-                @else
-                    @include('pages.test-suites.partials.contact-us-button')
-                @endif
+                @include('pages.test-suites.partials.subscriptions-section')
             </div>
 
             <div class="row test-cases-list-header">
@@ -209,18 +195,50 @@
         });
 
 
-        $('#confirmSubscriptionForm').submit(function () {
+        $('body').on('submit', '#confirmSubscriptionForm', function (e) {
+            e.preventDefault();
             $(this).find('.error-message').remove();
             if(!$(this).find('#agreeCustomerTerms').prop('checked')) {
                 $(this).find('.modal-body').append('<div class="error-message">You must agree to our Terms &amp; Conditions.</div>');
             } else {
                 jQuery('#confirmSubscriptionFormSpinner').show();
+                $.ajax({
+                    url: '/laravel-test-suite/{{ $testSuite->slug }}/subscription',
+                    type: 'post',
+                    data: {
+                        'status' : 1
+                    },
+                    success: function (rsp) {
+                        <!--todo-migration после отправки реквеста и обновления html в .test-suite-subscription остается див с серым фоном-->
+                        $('#accessTestHarnessModal').modal('hide');
+                        $('.test-suite-subscription').html(rsp.html);
+                        $('#confirmSubscriptionFormSpinner').hide();
+                    },
+                    complete: function () {
+                        $('#confirmSubscriptionFormSpinner').hide();
+                    }
+                })
             }
         });
 
 
-        $('#confirmReleaseSubscriptionForm').submit(function () {
+        $('body').on('submit', '#confirmReleaseSubscriptionForm', function (e) {
+            e.preventDefault();
             jQuery('#confirmReleaseSubscriptionSpinner').show();
+            $.ajax({
+                    url: '/laravel-test-suite/{{ $testSuite->slug }}/subscription',
+                    type: 'post',
+                    data: {},
+                    success: function (rsp) {
+                        <!--todo-migration после отправки реквеста и обновления html в .test-suite-subscription остается див с серым фоном-->
+                        $('.modal').modal('hide');
+                        $('.test-suite-subscription').html(rsp.html);
+                        $('#confirmReleaseSubscriptionSpinner').hide();
+                    },
+                    complete: function () {
+                        $('#confirmReleaseSubscriptionSpinner').hide();
+                    }
+                })
         });
     });
 </script>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LaravelTestCase extends Model
 {
-    use UuidTrait;
+     use UuidTrait, SlugTrait;
 
     protected $table = 'test_cases';
 
@@ -25,31 +25,26 @@ class LaravelTestCase extends Model
 
     public function conformanceLevels()
     {
-        return $this->hasMany('\App\TestCaseConformanceLevel', 'test_case_id');
+        return $this->hasMany('\App\TestCaseConformanceLevel', 'test_case_id')->with('testSuiteConformanceLevel');
     }
 
     /**
      * Get conformance levels for a given test suite
-     * @param bool $isAdmin
      * @return mixed
      */
-    public function getConformanceLevels($isAdmin = false)
+    public function getConformanceLevels()
     {
-        $query = $this->conformanceLevels()
+        return $this->conformanceLevels()
             ->select('TSCL.*')
             ->join('test_suites_conformance_levels as TSCL', function ($join) {
                 $join->on('TSCL.id', '=', 'test_cases_conformance_levels.conformance_level_id');
-            });
-        if (!$isAdmin) {
-            $query->where('TSCL.code', '!=', 'Default');
-        }
-
-        return $query->get();
+            })
+            ->where('TSCL.code', '!=', 'Default')->get();
     }
 
     public function scenario()
     {
-        return $this->hasOne('\App\TestCaseScenario', 'test_case_id');
+        return $this->hasOne('\App\TestCaseScenario', 'test_case_id')->with('testSuiteScenario');
     }
 
     public function roles()
@@ -74,6 +69,6 @@ class LaravelTestCase extends Model
 
     public function steps()
     {
-        return $this->hasMany('\App\TestCaseStep', 'test_case_id');
+        return $this->hasMany('\App\TestCaseStep', 'test_case_id')->orderBy('step');
     }
 }
