@@ -15343,28 +15343,22 @@ input.notify-changes {
   margin: 0 0 5px 0;
 }
 
-/* line 55, ../scss/pages/_test-suites.scss */
-.test-data-profile-types {
-  margin-top: 10px;
-  border-top: 1px solid #cbcbcb;
-  padding-top: 10px;
-}
-/* line 61, ../scss/pages/_test-suites.scss */
+/* line 58, ../scss/pages/_test-suites.scss */
 .test-data-profile-types .checkboxes-group .checkbox {
   width: 50%;
   float: left;
 }
 
-/* line 68, ../scss/pages/_test-suites.scss */
+/* line 65, ../scss/pages/_test-suites.scss */
 .test-suites-cases-list {
   margin: 0 0 10px -10px;
 }
-/* line 71, ../scss/pages/_test-suites.scss */
+/* line 68, ../scss/pages/_test-suites.scss */
 .test-suites-cases-list li {
   width: 25%;
   float: left;
 }
-/* line 75, ../scss/pages/_test-suites.scss */
+/* line 72, ../scss/pages/_test-suites.scss */
 .test-suites-cases-list li a {
   line-height: 25px;
   display: block;
@@ -15376,17 +15370,17 @@ input.notify-changes {
   border-radius: 3px;
 }
 
-/* line 86, ../scss/pages/_test-suites.scss */
+/* line 83, ../scss/pages/_test-suites.scss */
 .spec-doc-list {
   margin: 0;
 }
-/* line 89, ../scss/pages/_test-suites.scss */
+/* line 86, ../scss/pages/_test-suites.scss */
 .spec-doc-list li {
   padding: 0 0 5px 20px;
   position: relative;
   margin: 5px 0 0 0;
 }
-/* line 94, ../scss/pages/_test-suites.scss */
+/* line 91, ../scss/pages/_test-suites.scss */
 .spec-doc-list li:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -15398,30 +15392,30 @@ input.notify-changes {
   left: 0;
   top: 3px;
 }
-/* line 102, ../scss/pages/_test-suites.scss */
+/* line 99, ../scss/pages/_test-suites.scss */
 .spec-doc-list li a {
   text-decoration: underline;
 }
-/* line 105, ../scss/pages/_test-suites.scss */
+/* line 102, ../scss/pages/_test-suites.scss */
 .spec-doc-list li a:hover {
   text-decoration: none;
 }
-/* line 110, ../scss/pages/_test-suites.scss */
+/* line 107, ../scss/pages/_test-suites.scss */
 .spec-doc-list li p {
   line-height: 16px;
   margin: 0;
 }
 
 @media (max-width: 768px) {
-  /* line 118, ../scss/pages/_test-suites.scss */
+  /* line 115, ../scss/pages/_test-suites.scss */
   .ts-simple-tabs {
     height: 60px;
   }
-  /* line 121, ../scss/pages/_test-suites.scss */
+  /* line 118, ../scss/pages/_test-suites.scss */
   .ts-simple-tabs li {
     width: 25%;
   }
-  /* line 124, ../scss/pages/_test-suites.scss */
+  /* line 121, ../scss/pages/_test-suites.scss */
   .ts-simple-tabs li a {
     line-height: normal;
     padding: 10px;
@@ -15430,55 +15424,55 @@ input.notify-changes {
     font-size: 12px;
   }
 }
-/* line 137, ../scss/pages/_test-suites.scss */
+/* line 134, ../scss/pages/_test-suites.scss */
 .test-suite-view .test-suite-description {
   padding: 10px 0;
   line-height: 16px;
   font-size: 12px;
 }
 
-/* line 144, ../scss/pages/_test-suites.scss */
+/* line 141, ../scss/pages/_test-suites.scss */
 .test-cases-list-header {
   padding: 15px 0 10px 0;
 }
-/* line 147, ../scss/pages/_test-suites.scss */
+/* line 144, ../scss/pages/_test-suites.scss */
 .test-cases-list-header label {
   margin-right: 10px;
 }
-/* line 151, ../scss/pages/_test-suites.scss */
+/* line 148, ../scss/pages/_test-suites.scss */
 .test-cases-list-header .form-control {
   height: 24px;
   padding-top: 2px;
   margin-right: 10px;
 }
 
-/* line 159, ../scss/pages/_test-suites.scss */
+/* line 156, ../scss/pages/_test-suites.scss */
 .test-cases-table > tbody > tr > td {
   font-weight: 400;
   background: #fff;
 }
-/* line 163, ../scss/pages/_test-suites.scss */
+/* line 160, ../scss/pages/_test-suites.scss */
 .test-cases-table > tbody > tr > td.rowspan-cell {
   width: 20%;
 }
-/* line 169, ../scss/pages/_test-suites.scss */
+/* line 166, ../scss/pages/_test-suites.scss */
 .test-cases-table .status-circle {
   margin-top: 0;
 }
 
-/* line 174, ../scss/pages/_test-suites.scss */
+/* line 171, ../scss/pages/_test-suites.scss */
 .test-suites-table > tbody > tr > td {
   vertical-align: middle;
   font-size: 12px;
 }
 
-/* line 179, ../scss/pages/_test-suites.scss */
+/* line 176, ../scss/pages/_test-suites.scss */
 .test-cases-table .modal-body {
   color: #666;
   font-size: 12px;
 }
 
-/* line 184, ../scss/pages/_test-suites.scss */
+/* line 181, ../scss/pages/_test-suites.scss */
 .test-cases-table .test-pattern-icon {
   display: block;
 }

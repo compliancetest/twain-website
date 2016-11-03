@@ -5,8 +5,7 @@
                     class="glyphicon glyphicon-triangle-right"></span></a>Profile Types
     </div>
     <div class="colored-box-body collapse in" id="testDataBox">
-
-        <div class="test-data-profile-types">
+        <div class="colored-box-content test-data-profile-types">
             <div class="checkboxes-group clearfix">
                 <?php $testSuiteProfileType = $testSuite ? $testSuite->profileTypes->keyBy('profile_type_id') : [];?>
                 @if(count($suiteCommunity->profileTypes))
@@ -25,7 +24,6 @@
                 @endif
             </div>
         </div>
-        <div class="colored-box-footer"></div>
     </div>
     <div class="block-loading profileTypes">
         <div class="loading-content"><span class="loader"></span>

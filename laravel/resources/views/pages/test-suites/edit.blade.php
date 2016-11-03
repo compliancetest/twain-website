@@ -681,7 +681,7 @@
 </script>
 
 
-<script type="text/html" id="relatedTestSuiteTemplate">
+<div id="relatedTestSuiteTemplate" style="display: none;">
     <div class="form-group relatedTestSuiteRow">
         <div class="row">
             <div class="col-md-5">
@@ -699,7 +699,7 @@
             </div>
         </div>
     </div>
-</script>
+</div>
 
 <script type="text/html" id="testSuiteRoleTemplate">
     <div class="form-group testSuiteRoleRow">
