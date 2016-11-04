@@ -1,0 +1,13 @@
+@if(Auth::check())
+    @if(Auth::user()->getSuiteSubscription($testSuite))
+        @include('pages.test-suites.partials.release-subscription')
+    @else
+        @if(Auth::user()->doesUserOrganisationApproved($testSuite))
+            @include('pages.test-suites.partials.assign-subscription')
+        @else
+            @include('pages.test-suites.partials.contact-us-button')
+        @endif
+    @endif
+@else
+    @include('pages.test-suites.partials.contact-us-button')
+@endif
