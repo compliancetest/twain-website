@@ -223,13 +223,13 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = $entity['ProductName'];
-        $productModel = isset($jsonEntry['Model']) ? $jsonEntry['Model'] : null;
+        $productModel = !empty($jsonEntry['Model']) ? (string) $jsonEntry['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
         if (!empty($request->get('product_id'))) {
             $productId = $request->get('product_id');
         } else {
             $productId = $request->get('organisation_id') . '_' . $this->cleanSlug($entity['Manufacturer']) . "_" . $this->cleanSlug($productName) . "_v" . str_replace('.', '-', $productVersion);
-            if ($productModel) {
+            if (!is_null($productModel)) {
                 $productId .= '_' . $this->cleanSlug($productModel);
             }
         }
@@ -315,6 +315,18 @@ class ProductsController extends BaseApiController
             'link' => getSiteUrl() . '/product/' . $this->product->post_name,
             'model' => $productModel,
         ];
+
+         $emailData = [
+            '[author_name]' => cp_get_user_fullname($this->product->post_author),
+            '[product_url]' => getSiteUrl() . '/product/' . $this->product->post_name,
+            '[product_name]' => $this->product->getProductFullName(),
+            '[site_title]' => get_site_title(),
+            '[organisation]' => Auth::user()->organisation[0]->organisation_name,
+            '[env]' => get_option('env'),
+            '[website_url]' => getSiteUrl(),
+        ];
+        sendEmails(CommunityMembers::where('is_mod', true)->get()->toArray(), 'product_approvement_to_admin', $emailData);
+        
         return $this->setStatusCode(201)->respondWithDataAndMessage('This product registration will require approval', $response);
     }
 

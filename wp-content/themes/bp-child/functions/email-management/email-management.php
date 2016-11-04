@@ -260,6 +260,10 @@ $ct_email_templates = array(
                 array(
                     'title' => 'For Product Author',
                     'id' => 'product_approvement_to_user'
+                ),
+                array(
+                    'title' => 'For Community Support Users',
+                    'id' => 'product_approvement_to_admin'
                 )
             )
         ),
