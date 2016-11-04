@@ -39,8 +39,8 @@
                     <td class="text-center">{{ $testCase->outcome_type }}</td>
                     <td class="text-center">
                         <a href="/help-faq/test-patterns/" data-tooltip="tooltip"
-                           title="The Tester Initiated 1-Way Notification pattern represents the case where a tester sends a single message (eg a initiate.rollover.request) to the the harness, which performs a set of validations and then stores the result for the tester to view via the message log. There is no correlated response message.">
-                            <span class="test-pattern-icon test-pattern-1"></span>
+                           title="{{ get_test_patterns_description($testCase->test_pattern) }}">
+                            <span class="test-pattern-icon test-pattern-{{ $testCase->test_pattern }}"></span>
                         </a>
                     </td>
                     <td>{!! $testCase->description !!}</td>

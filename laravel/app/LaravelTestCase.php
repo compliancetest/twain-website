@@ -42,6 +42,21 @@ class LaravelTestCase extends Model
             ->where('TSCL.code', '!=', 'Default')->get();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUniqueConformanceLevels()
+    {
+        return $this->conformanceLevels()
+            ->select('TSCL.*')
+            ->join('test_suites_conformance_levels as TSCL', function ($join) {
+                $join->on('TSCL.id', '=', 'test_cases_conformance_levels.conformance_level_id');
+            })
+            ->where('TSCL.code', '!=', 'Default')
+            ->groupBy('TSCL.code')
+            ->pluck('code')->toArray();
+    }
+
     public function scenario()
     {
         return $this->hasOne('\App\TestCaseScenario', 'test_case_id')->with('testSuiteScenario');

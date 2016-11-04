@@ -10,16 +10,25 @@ use App\Http\Requests;
 class TestCasesController extends Controller
 {
 
-    public function view($testCaseSlug)
+    public function view($testCaseSlug, Request $request)
     {
         $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        $testSuites = $testCase->testSuites;
+        if($request->get('suite_minor_family_mark')){
+            $suiteExist = $testCase->testSuites()->where('minor_family_mark', $request->get('suite_minor_family_mark'))->orderBy('created_at', 'DESC')->limit(1)->get();
+            if(count($suiteExist)){
+                $testSuites = $suiteExist;
+            }
+        }
         $pageTitle = 'View Test Case | ' . $testCase->full_name;
-        return view('pages.test-cases.view', compact('testCase', 'pageTitle'));
+        return view('pages.test-cases.view', compact('testCase', 'pageTitle', 'testSuites'));
     }
 
     public function edit($testCaseSlug)
     {
-        return view('pages.test-cases.edit');
+        $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        $pageTitle = 'Edit Test Case | ' . $testCase->full_name;
+        return view('pages.test-cases.edit', compact('testCase', 'pageTitle', 'testSuites'));
     }
 
 }

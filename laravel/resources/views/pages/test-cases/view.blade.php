@@ -6,7 +6,7 @@
         <div class="main-content test-case-view">
             <div class="page-title">
                 <ul class="pull-right">
-                    @foreach($testCase->testSuites as $testSuite)
+                    @foreach($testSuites as $testSuite)
                         <li>Go To <a href="/laravel-test-suite/{{ $testSuite->slug }}">{{ $testSuite->full_name }}</a></li>
                     @endforeach
                 </ul>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="test-case-description">
-                Blank page detection and handling. Set ICAP_AUTODISCARDBLANKPAGES to TWBP_DISABLE.
+                {{ $testCase->description }}
             </div>
 
             <div class="options-box">
@@ -41,12 +41,12 @@
                     <div class="options-box-row-title">Properties:</div>
                     <ul class="inline-options-list">
                         <li>Conformance Levels:
-                            @foreach($testCase->conformanceLevels as $conformanceLevel)
-                                <strong>{{ $conformanceLevel->testSuiteConformanceLevel->code }}</strong>
+                            @foreach($testCase->getUniqueConformanceLevels() as $conformanceLevel)
+                                <strong>{{ $conformanceLevel }}</strong>
                             @endforeach
                         </li>
                         <li>Outcome Type: <strong>{{ $testCase->outcome_type }}</strong></li>
-                        <li>Test Pattern: <span class="test-pattern-icon test-pattern-1" data-tooltip="tooltip" title="" data-original-title="The Tester Initiated 1-Way Notification pattern represents the case where a tester sends a single message (eg a initiate.rollover.request) to the the harness, which performs a set of validations and then stores the result for the tester to view via the message log. There is no correlated response message."></span></li>
+                        <li>Test Pattern: <span class="test-pattern-icon test-pattern-{{ $testCase->test_pattern }}" data-tooltip="tooltip" title="" data-original-title="{{ get_test_patterns_description($testCase->test_pattern) }}"></span></li>
                         <li>Execution mode: <strong>Auto</strong></li>
                         <li>Optional: <strong>{{ $testCase->is_optional ? 'Yes' : 'No' }}</strong></li>
                     </ul>
