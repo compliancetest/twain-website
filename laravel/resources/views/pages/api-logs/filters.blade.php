@@ -1,4 +1,4 @@
-<form action="#" method="get" id="filterByForm">
+<form action="/api-logs/logs-list" method="get" id="apiLogSearchFilterForm" data-search-filter="/api-logs/filters" data-search-name="apiLogSearch">
     <div class="row">
 
         <div class="form-group col-sm-6 col-md-3">
@@ -41,7 +41,7 @@
     </div>
 </form>
 
-<div class="block-loading" id="filterBySpinner">
+<div class="block-loading" id="apiLogSearchFilterSpinner">
     <div class="loading-content"><span class="loader"></span>
         <div class="loading-text">LOADING FILTERS</div>
         <div class="loading-wait">Please wait...</div>

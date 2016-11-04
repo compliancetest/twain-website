@@ -30,7 +30,7 @@
     <div class="main-content">
         <div class="filter-box">
             <div class="filter-box-title">Filter By:</div>
-            <div class="filter-box-content block-loading-wrapper">
+            <div id="transactionSearchFilterContent" class="filter-box-content block-loading-wrapper">
 
                 @include('pages.transactions.filters')
 
@@ -68,11 +68,11 @@
                 </div>
             </div>
 
-            <div id="log-result-table">
+            <div id="transactionSearchResultsTable">
                 @include('pages.transactions.transactions')
             </div>
 
-            <div id="loadLogResultsSpinner" class="block-loading">
+            <div id="transactionSearchResultsSpinner" class="block-loading">
                 <div class="loading-content"><span class="loader"></span>
                     <div class="loading-text">LOADING DATA</div>
                     <div class="loading-wait">Please wait...</div>
@@ -315,7 +315,7 @@
             }
         });
 
-        $('.confirm_bulk_audit').on('click', function(e){
+        $('.confirm_bulk_audit').on('click', function(){
             var ids = new Array();
             jQuery('.checkTransaction:checked').each(function () {
                 ids.push(this.value);
@@ -347,7 +347,7 @@
             });
         });
 
-        $('body').on('click', '.submit-new-message', function(e){
+        $('body').on('click', '.submit-new-message', function(){
             jQuery('#viewExplanationLogs .block-loading').show();
             var transactionId = $('#transactionId').val();
             jQuery.ajax({
@@ -391,7 +391,7 @@
             }
         });
 
-        $('.confirm_delete_transactions').on('click', function(e){
+        $('.confirm_delete_transactions').on('click', function(){
             var ids = new Array();
             jQuery('.checkTransaction:checked').each(function () {
                 ids.push(this.value);
@@ -423,7 +423,7 @@
             });
         });
 
-        $('.confirm_change_status').on('click', function(e){
+        $('.confirm_change_status').on('click', function(){
             var ids = new Array();
             jQuery('.checkTransaction:checked').each(function () {
                 ids.push(this.value);
@@ -457,37 +457,6 @@
             });
         });
 
-        $('body').on('click', '.pagination a', function(e){
-            e.preventDefault();
-            $('#filterBySpinner, #loadLogResultsSpinner').show();
-            var link = $(this);
-            var form = $('#filterByForm');
-            $.ajax({
-                url: '/transactions/transactions-list',
-                type: 'get',
-                data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
-                error: function (jqXHR, status) {
-                },
-                success: function (rsp) {
-                    $('#log-result-table').html(rsp.html);
-                },
-                complete: function () {
-                    $('#filterBySpinner, #loadLogResultsSpinner').hide();
-                }
-            });
-        });
-
-        $('body').on('click', '.btn-clear', function () {
-            $('#filterByForm')[0].reset();
-            getBoxFilters('','/transactions/filters');
-        });
-
-        $('body').on('change', '#filterByForm .form-control', function () {
-            $('#filterBySpinner').show();
-            var form = $('#filterByForm');
-            getBoxFilters(form.serialize(),'/transactions/filters');
-        });
-
         $('body').on('change', '.auditRecordCheckbox', function (e) {
             e.preventDefault();
             $('#loadLogResultsSpinner').show();
@@ -513,26 +482,6 @@
             })
         });
 
-        $('body').on('submit', '#filterByForm', function (e) {
-            e.preventDefault();
-            $('#filterBySpinner, #loadLogResultsSpinner').show();
-
-            var form = $('#filterByForm');
-            $.ajax({
-                url: '/transactions/transactions-list',
-                type: 'get',
-                data: form.serialize(),
-                error: function (jqXHR, status) {
-                },
-                success: function (rsp) {
-                    $('#log-result-table').html(rsp.html);
-                },
-                complete: function () {
-                    $('#filterBySpinner, #loadLogResultsSpinner').hide();
-                }
-            })
-        });
-
         //When open log, load transaction details
         $('body').on('show.bs.collapse', '.logRow', function () {
             var transactionId = $(this).data('transactionId');
@@ -551,7 +500,7 @@
         });
 
         //OnClose Message Data popup remove data and replace it to the loader
-        $('#modalLogTestingDetails').on('hidden.bs.modal', function (e) {
+        $('#modalLogTestingDetails').on('hidden.bs.modal', function () {
             var popupLoadingBlock = '<div class="modal-header">' +
                 '<button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal" aria-label="Close">Close</button>' +
                 'Message Data' +
@@ -560,13 +509,6 @@
                 '<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>' +
                 '</div>';
             $(this).find('.modal-content').html(popupLoadingBlock);
-        });
-
-
-        $('body').on('click', '#filterByForm .clear-filter', function (e) {
-            $(this).parent().find('input, select').val('');
-            var form = $('#filterByForm');
-            getBoxFilters(form.serialize(),'/transactions/filters');
         });
 
         $('#collapseAllResults').click(function () {
@@ -585,7 +527,9 @@
                 $('.transaction-list-actions .btn').attr('data-tooltip', 'tooltip');
             }
         });
-        
+
+        Page.ajaxSearchForm.init();
+
     });
 </script>
 @stop

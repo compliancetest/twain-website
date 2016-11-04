@@ -27,7 +27,7 @@
         <div class="main-content">
             <div class="filter-box">
                 <div class="filter-box-title">Filter By:</div>
-                <div class="filter-box-content block-loading-wrapper">
+                <div id="apiLogSearchFilterContent" class="filter-box-content block-loading-wrapper">
 
                     @include('pages.api-logs.filters')
 
@@ -36,11 +36,11 @@
             <br/>
             <div class="block-loading-wrapper">
 
-                <div class="filter-results-table">
+                <div id="apiLogSearchResultsTable">
                     @include('pages.api-logs.logs')
                 </div>
 
-                <div id="loadApiLogsResultsSpinner" class="block-loading">
+                <div id="apiLogSearchResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -73,68 +73,6 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-            /**
-             * Extract GET param value from URL
-             * @param url
-             * @param key
-             * @returns {Array|{index: number, input: string}|string}
-             */
-            function getUrlVar(url, key) {
-                var result = new RegExp(key + "=([^&]*)", "i").exec(url);
-                return result && unescape(result[1]) || "";
-            }
-
-            $('body').on('click', '.pagination a', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadApiLogsResultsSpinner').show();
-                var link = $(this);
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/api-logs/logs-list',
-                    type: 'get',
-                    data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.filter-results-table').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadApiLogsResultsSpinner').hide();
-                    }
-                });
-            });
-
-            $('body').on('click', '.btn-clear', function () {
-                $('#filterByForm')[0].reset();
-                getBoxFilters('','/api-logs/filters');
-            });
-
-            $('body').on('change', '#filterByForm .form-control', function () {
-                $('#filterBySpinner').show();
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(),'/api-logs/filters');
-            });
-
-
-            $('body').on('submit', '#filterByForm', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadApiLogsResultsSpinner').show();
-
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/api-logs/logs-list',
-                    type: 'get',
-                    data: form.serialize(),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('.filter-results-table').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadApiLogsResultsSpinner').hide();
-                    }
-                })
-            });
 
             //OnClose Message Data popup remove data and replace it to the loader
             $('#viewLogModal').on('hidden.bs.modal', function (e) {
@@ -148,13 +86,7 @@
                 $(this).find('.modal-content').html(popupLoadingBlock);
             });
 
-
-            $('body').on('click', '#filterByForm .clear-filter', function (e) {
-                $(this).parent().find('input, select').val('');
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(),'/api-logs/filters');
-            });
-
+            Page.ajaxSearchForm.init();
         });
     </script>
 @stop

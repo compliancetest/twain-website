@@ -1,10 +1,9 @@
-<form action="#" method="get" id="filterByForm">
+<form action="/test-outcome-logs/logs-list" method="get" id="outcomeLogSearchFilterForm" data-search-filter="/test-outcome-logs/filters" data-search-name="outcomeLogSearch">
     <div class="row">
 
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterExecutionID">Execution Id:</label>
-            <input type="text" class="form-control" name="execution_id" id="filterExecutionID" style="width: "
-                   @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif>
+            <label for="keyword">Execution Id:</label>
+            <input type="text" class="form-control" name="execution_id" id="keyword" @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif >
             @if(($request->get('execution_id')) && ($request->get('execution_id') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
@@ -49,7 +48,7 @@
     </div>
 </form>
 
-<div class="block-loading" id="filterBySpinner">
+<div class="block-loading" id="outcomeLogSearchFilterSpinner">
     <div class="loading-content"><span class="loader"></span>
         <div class="loading-text">LOADING FILTERS</div>
         <div class="loading-wait">Please wait...</div>

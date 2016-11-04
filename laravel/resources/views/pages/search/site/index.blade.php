@@ -7,7 +7,7 @@
         <div class="main-content">
             <div class="filter-box">
                 <div class="filter-box-title">Filter By:</div>
-                <div class="filter-box-content block-loading-wrapper">
+                <div id="siteSearchFilterContent" class="filter-box-content block-loading-wrapper">
 
                     @include('pages.search.site.filters')
 
@@ -15,11 +15,11 @@
             </div>
             <div class="block-loading-wrapper">
 
-                <div id="site-search-results-table">
+                <div id="siteSearchResultsTable">
                     @include('pages.search.site.list')
                 </div>
 
-                <div id="loadSiteSearchResultsSpinner" class="block-loading">
+                <div id="siteSearchResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -62,14 +62,6 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-            $('body').on('focus', '#q', function(){
-                $('.btn-confirm').prop('disabled', 'disabled');
-            });
-
-             $('body').on('blur', '#q', function(){
-                $('.btn-confirm').removeAttr('disabled');
-            });
-
             $('body').on('click', '.delete_search_entry', function(){
                 $('#entry_id').val($('.delete_search_entry').data('id'));
             });
@@ -98,75 +90,13 @@
                 });
             });
 
-            $('body').on('click', '.sortby', function (e) {
-                e.preventDefault();
-                $('#orderby').val($(this).data('type'));
-                $('#order').val($(this).data('order'));
-                $('#filterByForm').submit();
-            });
-
-            $('body').on('click', '.pagination a', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadSiteSearchResultsSpinner').show();
-                var link = $(this);
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/search-results/logs-list',
-                    type: 'get',
-                    data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('#site-search-results-table').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadSiteSearchResultsSpinner').hide();
-                    }
-                });
-            });
-
-            $('body').on('click', '.btn-clear', function () {
-                $('#filterByForm')[0].reset();
-                getBoxFilters('', '/search-results/filters');
-            });
+            Page.ajaxSearchForm.init();
+            Page.ajaxSearchForm.initSorting();
+            Page.ajaxSearchForm.disableFormSubmit();
 
             $('body').on('click', '.download-site', function (e) {
                 e.preventDefault();
-                location.href = '/search-results/download/?' + $('#filterByForm').serialize();
-            });
-
-            $('body').on('change', '#filterByForm .form-control', function () {
-                $('#filterBySpinner').show();
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(), '/search-results/filters');
-            });
-
-
-            $('body').on('submit', '#filterByForm', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadSiteSearchResultsSpinner').show();
-
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/search-results/logs-list',
-                    type: 'get',
-                    data: form.serialize(),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('#site-search-results-table').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadSiteSearchResultsSpinner').hide();
-                    }
-                })
-            });
-
-
-            $('body').on('click', '#filterByForm .clear-filter', function (e) {
-                $(this).parent().find('input, select').val('');
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(), '/search-results/filters');
+                location.href = '/search-results/download/?' + $('#siteSearchFilterByForm').serialize();
             });
 
         });

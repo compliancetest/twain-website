@@ -1,4 +1,4 @@
-<form action="#" method="get" id="filterByForm">
+<form action="/transactions/transactions-list" method="get" id="transactionSearchFilterByForm" data-search-filter="/transactions/filters" data-search-name="transactionSearch">
     <div class="row">
 
         <input type="hidden" name="itemsCount" value="{{ $perPage }}" id="perPage">
@@ -127,7 +127,7 @@
     </div>
 </form>
 
-<div class="block-loading" id="filterBySpinner">
+<div class="block-loading" id="transactionSearchFilterSpinner">
     <div class="loading-content"><span class="loader"></span>
         <div class="loading-text">LOADING FILTERS</div>
         <div class="loading-wait">Please wait...</div>
