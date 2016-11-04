@@ -125,7 +125,6 @@ class TestPlansController extends BaseApiController
         if (!$hasSubscription) {
             return $this->respondForbiddenError(sprintf("Please subscribe to Test Suite with '%s' Product Type", $productType));
         }
-asd
         if(!CommunityOrganisationsApprovedProducts::where('product_id', Post::where('post_name', $request->get('product_id'))->first()->ID)->first()){
             return $this->setStatusCode(403)->respondWithDataAndMessage("The product registration has been not approved yet.", [], 'info');
         }
