@@ -209,10 +209,12 @@
                         'status' : 1
                     },
                     success: function (rsp) {
-                        <!--todo-migration после отправки реквеста и обновления html в .test-suite-subscription остается див с серым фоном-->
-                        $('#accessTestHarnessModal').modal('hide');
-                        $('.test-suite-subscription').html(rsp.html);
+                        var confirmAccessModal = $('#accessTestHarnessModal');
                         $('#confirmSubscriptionFormSpinner').hide();
+                        confirmAccessModal.modal('hide');
+                        confirmAccessModal.on('hidden.bs.modal', function (e) {
+                            $('.test-suite-subscription').html(rsp.html);
+                        })
                     },
                     complete: function () {
                         $('#confirmSubscriptionFormSpinner').hide();
@@ -230,10 +232,12 @@
                     type: 'post',
                     data: {},
                     success: function (rsp) {
-                        <!--todo-migration после отправки реквеста и обновления html в .test-suite-subscription остается див с серым фоном-->
-                        $('.modal').modal('hide');
-                        $('.test-suite-subscription').html(rsp.html);
+                        var confirmModal = $('#confirmReleaseSubscriptionModal');
                         $('#confirmReleaseSubscriptionSpinner').hide();
+                        confirmModal.modal('hide');
+                        confirmModal.on('hidden.bs.modal', function (e) {
+                            $('.test-suite-subscription').html(rsp.html);
+                        })
                     },
                     complete: function () {
                         $('#confirmReleaseSubscriptionSpinner').hide();
