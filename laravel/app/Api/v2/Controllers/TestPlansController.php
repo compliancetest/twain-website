@@ -29,7 +29,7 @@ class TestPlansController extends BaseApiController
      * @apiError 403 Forbidden
      * @apiErrorExample {json} No subscription:
      *   {
-     *     "messages": ["You do not have any active subscription"],
+     *     "messages": ["Please subscribe to Test Suite with 'Application' Product Type"],
      *     "status": "error",
      *     "code": 403
      *   }
@@ -64,10 +64,13 @@ class TestPlansController extends BaseApiController
      * @apiError 404 Not Found
      * @apiErrorExample {json} Test plans not found:
      *   {
-     *     "messages": ["Test plans not found"],
-     *     "status": "error",
-     *     "code": 404
-     *   }
+          "messages": [
+            "Test plans not found. Please update product/edit features or add test plans on the web site."
+          ],
+          "data": [],
+          "status": "warning",
+          "code": 404
+        }
      *
      * @apiError 422 Unprocessable entity
      * @apiErrorExample {json} Validation error:
@@ -108,17 +111,27 @@ class TestPlansController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        // we shouldn't show test plan's data to user without subscription
-        if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'user_id' => \Auth::user()->ID])->first()) {
-            return $this->respondForbiddenError("You do not have any active subscription");
+        $product = Post::where('post_name', $request->get('product_id'))->first();
+        $productType = $product->getMetaByKey('product_type');
+        $hasSubscription = false;
+        $suiteSubscriptions = \App\OrganisationSubscription::where(['user_id' => Auth::user()->ID])->get();
+        foreach ($suiteSubscriptions as $suiteSubscription) {
+            $type = Post::find($suiteSubscription->suite_family_mark)->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
+            if ($type == $productType) {
+                $hasSubscription = true;
+            }
         }
-
+        // we shouldn't show test plan's data to user without subscription
+        if (!$hasSubscription) {
+            return $this->respondForbiddenError(sprintf("Please subscribe to Test Suite with '%s' Product Type", $productType));
+        }
+asd
         if(!CommunityOrganisationsApprovedProducts::where('product_id', Post::where('post_name', $request->get('product_id'))->first()->ID)->first()){
             return $this->setStatusCode(403)->respondWithDataAndMessage("The product registration has been not approved yet.", [], 'info');
         }
         $organisationPlans = \Auth::user()->organisation[0]->getTestPlans($request->get('product_id'));
         if (empty($organisationPlans)) {
-            return $this->respondNotFound("Test plans not found");
+            return $this->setStatusCode(404)->respondWithDataAndMessage("Test plans not found. Please update product/edit features or add test plans on the web site.", [], 'warning');
         }
 
         return $this->respondWithData($organisationPlans);

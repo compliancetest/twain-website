@@ -2390,7 +2390,7 @@
       "examples": [
         {
           "title": "No subscription:",
-          "content": "{\n  \"messages\": [\"You do not have any active subscription\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "content": "{\n  \"messages\": [\"Please subscribe to Test Suite with 'Application' Product Type\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -2410,7 +2410,7 @@
         },
         {
           "title": "Test plans not found:",
-          "content": "{\n  \"messages\": [\"Test plans not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "content": "{\n        \"messages\": [\n          \"Test plans not found. Please update product/edit features or add test plans on the web site.\"\n        ],\n        \"data\": [],\n        \"status\": \"warning\",\n        \"code\": 404\n      }",
           "type": "json"
         },
         {
