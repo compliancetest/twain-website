@@ -58,10 +58,6 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-            $('body').on('click', '#filterCalendar', function () {
-                $('#filterDate').datepicker('show');
-            });
-
             $('body').on('click', '.pagination a', function (e) {
                 e.preventDefault();
                 $('#filterBySpinner, #loadLogResultsSpinner').show();

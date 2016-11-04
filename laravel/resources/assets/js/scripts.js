@@ -82,6 +82,11 @@ jQuery(document).ready(function($) {
         });
     }
 
+    //Change default options for bootsrtap datepicker
+    if ($.fn.datepicker){
+        $.fn.datepicker.defaults.autoclose = 'true';
+        $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
+    }
 
     Page.header.init();
 

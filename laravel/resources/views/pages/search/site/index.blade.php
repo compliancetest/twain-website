@@ -62,14 +62,6 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-            $('body').on('click', '.filterCalendar1', function () {
-                $('#filterDate1').datepicker('show');
-            });
-
-            $('body').on('click', '.filterCalendar2', function () {
-                $('#filterDate2').datepicker('show');
-            });
-
             $('body').on('focus', '#q', function(){
                 $('.btn-confirm').prop('disabled', 'disabled');
             });

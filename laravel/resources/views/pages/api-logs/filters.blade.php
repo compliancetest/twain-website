@@ -25,10 +25,10 @@
 
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterDate">Date:</label>
-            <div class="input-group">
-                <input type="text" class="form-control datepicker-form-control" id="filterDate" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date"
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control datepicker-form-control" id="filterDate" readonly name="date"
                        @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
-                <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
+                <span class="input-group-addon"><span class="calendar-icon"></span></span>
             </div>
             @if(($request->get('date')) && ($request->get('date') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>

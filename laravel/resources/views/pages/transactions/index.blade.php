@@ -273,9 +273,6 @@
             $('#perPage').val($(this).val());
             $('#filterByForm').submit();
         });
-        $('body').on('click', '#filterCalendar', function () {
-            $('#filterDate').datepicker('show');
-        });
 
         $('body').on('change', '.checkAll', function () {
             $('.checkTransaction').not(':disabled').prop('checked', $(this).is(':checked'));
