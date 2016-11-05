@@ -4,25 +4,7 @@
 
     <div class="container main-container">
 
-        <div class="tabs-menu">
-            <ul>
-                @if(is_organisation_admin())
-                    <li class="organisation-tab"><a href="/my-organisation/" data-tooltip="tooltip" title="My Organization">Organization</a></li>
-                @endif
-
-                <li class="communities-tab"><a data-tooltip="tooltip" href="/my-communities/" title="My community memberships">Communities</a></li>
-                <li class="test-suites-tab"><a href="/my-test-suites/" data-tooltip="tooltip" title="My test suite subscriptions">Test Suites</a></li>
-                <li class="products-tab"><a href="/my-products/" data-tooltip="tooltip" title="My products under test">Products</a></li>
-                <li class="coverage-tab"><a href="/test-suite-coverage/" data-tooltip="tooltip" title="Completeness of my testing">Coverage</a></li>
-                <li class="coverage-tab"><a href="/verify-requests/" data-tooltip="tooltip" title="My Verify Test Results Requests">Verify Requests</a></li>
-                <li class="transactions-tab"><a href="/my-transaction-log/" data-tooltip="tooltip" title="My Test Results">Test Results</a></li>
-                <li class="support-tab"><a href="/my-support-tickets/" data-tooltip="tooltip" title="My support tickets">Support</a></li>
-                <li class="profile-tab"><a href="/my-profile/" data-tooltip="tooltip" title="My profile">Profile</a></li>
-                <li class="transactions-tab"><a href="/api-logs/" class="active" data-tooltip="tooltip" title="ApiLogs">ApiLogs</a></li>
-                <li class="transactions-tab"><a href="/test-outcome-logs/" data-tooltip="tooltip" title="Outcome Logs">Outcome Logs</a></li>
-
-            </ul>
-        </div>
+        @include('pages.user-tabs', ['tab' => 'api-logs'])
 
         <div class="main-content">
             <div class="filter-box">
