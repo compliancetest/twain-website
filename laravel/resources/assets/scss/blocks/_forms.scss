@@ -117,6 +117,19 @@ input[type="checkbox"]{
       padding-left: 0;
     }
   }
+
+  &.two-col{
+    overflow: hidden;
+
+    .checkbox{
+      width: 50%;
+      float: left;
+
+      &:nth-child(2n-1){
+        clear: left;
+      }
+    }
+  }
 }
 
 .manage-version-box{

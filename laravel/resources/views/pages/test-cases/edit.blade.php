@@ -109,7 +109,7 @@
                     <div class="colored-box-header"><a href="#testTestSuitesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Test Suite</div>
                     <div class="colored-box-body collapse in" id="testTestSuitesBox">
                         <div class="colored-box-content">
-                            <div class="checkboxes-group">
+                            <div class="checkboxes-group two-col">
                                 @foreach($testSuites as $testSuite)
                                     <div class="checkbox">
                                         <label>
@@ -176,19 +176,21 @@
                     <div class="colored-box-body collapse in" id="testCaseConformanceLevelsBox">
                         <div class="colored-box-content">
                             @foreach($testCase->testSuites as $testSuite)
-                                <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                                @foreach($testSuite->conformanceLevels as $conformanceLevel)
-                                    <dl class="definition-list">
-                                        <dt>
-                                            <label>
-                                                <input type="checkbox" name="conformanceLevel[{{ $testSuite->id }}][]" value="{{ $conformanceLevel->code }}"
-                                                      @if(count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
-                                                {{ $conformanceLevel->code }}
-                                            </label>
-                                        </dt>
-                                        <dd>{{ $conformanceLevel->description }}</dd>
-                                    </dl>
-                                @endforeach
+                                <div class="definition-box">
+                                    <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
+                                    @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                                        <dl class="definition-list">
+                                            <dt>
+                                                <label>
+                                                    <input type="checkbox" name="conformanceLevel[{{ $testSuite->id }}][]" value="{{ $conformanceLevel->code }}"
+                                                          @if(count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
+                                                    {{ $conformanceLevel->code }}
+                                                </label>
+                                            </dt>
+                                            <dd>{{ $conformanceLevel->description }}</dd>
+                                        </dl>
+                                    @endforeach
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -200,18 +202,20 @@
                     <div class="colored-box-body collapse in" id="testCaseScenariosBox">
                         <div class="colored-box-content">
                             @foreach($testCase->testSuites as $testSuite)
-                            <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                                @foreach($testSuite->scenarios as $scenario)
-                                    <dl class="definition-list">
-                                        <dt>
-                                            <label>
-                                                <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->code }}"
-                                                       @if(count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
-                                            </label>
-                                        </dt>
-                                        <dd>{{ $scenario->description }}</dd>
-                                    </dl>
-                                @endforeach
+                                <div class="definition-box">
+                                    <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
+                                    @foreach($testSuite->scenarios as $scenario)
+                                        <dl class="definition-list">
+                                            <dt>
+                                                <label>
+                                                    <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->code }}"
+                                                           @if(count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
+                                                </label>
+                                            </dt>
+                                            <dd>{{ $scenario->description }}</dd>
+                                        </dl>
+                                    @endforeach
+                                </div>
                             @endforeach
                         </div>
                     </div>

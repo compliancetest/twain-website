@@ -9397,15 +9397,28 @@ input[type="checkbox"] {
 .checkboxes-group .checkbox-inline:first-child {
   padding-left: 0;
 }
-
+/* line 121, ../scss/blocks/_forms.scss */
+.checkboxes-group.two-col {
+  overflow: hidden;
+}
 /* line 124, ../scss/blocks/_forms.scss */
+.checkboxes-group.two-col .checkbox {
+  width: 50%;
+  float: left;
+}
+/* line 128, ../scss/blocks/_forms.scss */
+.checkboxes-group.two-col .checkbox:nth-child(2n-1) {
+  clear: left;
+}
+
+/* line 137, ../scss/blocks/_forms.scss */
 .manage-version-box .manage-version-group {
   display: inline-block;
   padding-right: 5px;
   white-space: nowrap;
   width: 100px;
 }
-/* line 131, ../scss/blocks/_forms.scss */
+/* line 144, ../scss/blocks/_forms.scss */
 .manage-version-box .form-control {
   width: 30px;
   padding: 4px 0;
@@ -9414,11 +9427,11 @@ input[type="checkbox"] {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 141, ../scss/blocks/_forms.scss */
+/* line 154, ../scss/blocks/_forms.scss */
 .manage-version-box.version-updated .btn-add {
   display: none;
 }
-/* line 146, ../scss/blocks/_forms.scss */
+/* line 159, ../scss/blocks/_forms.scss */
 .manage-version-box .version-cancel {
   height: 22px;
   width: 22px;
@@ -9427,7 +9440,7 @@ input[type="checkbox"] {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 154, ../scss/blocks/_forms.scss */
+/* line 167, ../scss/blocks/_forms.scss */
 .manage-version-box .version-cancel .cancel-icon {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -15603,6 +15616,24 @@ input.notify-changes {
 .test-case-view .steps-table > tbody > tr.step-row:target td {
   background: #d9d9d9;
   transition: background-color 2s;
+}
+
+/* line 52, ../scss/pages/_test-cases.scss */
+.definition-box {
+  border-top: 2px solid #e3e3e3;
+  margin-top: 15px;
+  padding-top: 12px;
+}
+/* line 57, ../scss/pages/_test-cases.scss */
+.definition-box .definition-list {
+  margin: 0 0 0 25px;
+}
+
+/* line 63, ../scss/pages/_test-cases.scss */
+.colored-box-content .definition-box:first-child {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 10px;
 }
 
 /* line 3, ../scss/_header.scss */
