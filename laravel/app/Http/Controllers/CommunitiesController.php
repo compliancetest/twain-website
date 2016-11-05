@@ -442,4 +442,10 @@ class CommunitiesController extends Controller
             $model->save();
         }
     }
+
+    public function userCommunities()
+    {
+        $userCommunities = Auth::user()->subscriptions->sortByDesc('created_at');
+        return view('pages.my.communities.index', compact('userCommunities'));
+    }
 }

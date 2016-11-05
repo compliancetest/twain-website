@@ -37,4 +37,20 @@ class CommunityMembers extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * get role name
+     * @return string
+     */
+    public function getRoleName()
+    {
+        $role = 'Member';
+        if ($this->is_admin) {
+            $role = 'Admin';
+        }
+        if ($this->is_mod) {
+            $role = 'Support';
+        }
+        return $role;
+    }
 }
