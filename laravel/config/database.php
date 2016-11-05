@@ -60,7 +60,7 @@ return [
             'username'  => getenv('DB_MYSQL_USERNAME') ? getenv('DB_MYSQL_USERNAME') : env('DB_USERNAME', 'forge'),
             'password'  => getenv('DB_MYSQL_PASSWORD') ? getenv('DB_MYSQL_PASSWORD') : env('DB_PASSWORD', 'forge'),
             'charset'   => 'utf8',
-            'collation' => 'utf8_general_ci',
+            'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
             'strict'    => false,
         ],

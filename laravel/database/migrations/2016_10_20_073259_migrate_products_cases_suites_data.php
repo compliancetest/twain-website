@@ -16,7 +16,7 @@ class MigrateProductsCasesSuitesData extends Migration
 
         $testSuites = \App\Post::where(['post_type' => 'test-suite'])->get();
         foreach ($testSuites as $testSuite) {
-            $testSuiteFullName = $testSuite->post_title;
+            $testSuiteFullName = $testSuite->getMetaByKey('ts_name') . ' v' .$testSuite->getMetaByKey('ts_version_major').'.'.$testSuite->getMetaByKey('ts_version_minor');
             $patch = $testSuite->getMetaByKey('ts_version_patch');
             if ($patch) {
                 $testSuiteFullName .= '.' . $patch;
@@ -27,7 +27,7 @@ class MigrateProductsCasesSuitesData extends Migration
             $laravelTestSuite = \App\LaravelTestSuite::create([
                 'community_id' => $testSuite->getMetaByKey('community_id'),
                 'slug' => $testSuite->post_name,
-                'name' => $testSuite->post_title,
+                'name' => $testSuite->getMetaByKey('ts_name'),
                 'version_major' => $testSuite->getMetaByKey('ts_version_major'),
                 'version_minor' => $testSuite->getMetaByKey('ts_version_minor'),
                 'version_patch' => $testSuite->getMetaByKey('ts_version_patch'),
@@ -216,7 +216,7 @@ class MigrateProductsCasesSuitesData extends Migration
                                 if (isset($wpScenario[0]->code)) {
                                     $suiteScenario = $laravelSuite->scenarios()->where('code', $wpScenario[0]->code)->first();
                                     if ($suiteScenario) {
-                                        $laravelTestCase->scenarios()->create([
+                                        $laravelTestCase->scenario()->create([
                                             'test_suites_scenario_id' => $suiteScenario->id,
                                         ]);
                                     }

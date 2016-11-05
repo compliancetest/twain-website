@@ -27,8 +27,10 @@ trait SlugTrait
                 }
                 $model->full_name = $fullName;
                 $model->slug = self::getUniqueSlug($model, $fullName);
-                $model->minor_family_mark = $model->id;
-                $model->major_family_mark = $model->id;
+                if(isset($model->minor_family_mark)) {
+                    $model->minor_family_mark = $model->id;
+                    $model->major_family_mark = $model->id;
+                }
             }
         });
     }
