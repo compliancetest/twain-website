@@ -34,7 +34,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="/laravel-test-suite/create" class="btn btn-success btn-with-icon btn-add">Add Test Suite</a>
+            <a href="/laravel-test-suites" class="btn btn-success btn-with-icon btn-add">Add Test Suite</a>
         </div>
     </div>
 @stop
