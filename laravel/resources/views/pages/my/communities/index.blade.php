@@ -18,8 +18,8 @@
                         @foreach($userCommunities as $userCommunity)
                             <tr>
                                 <td><a href="/communities/{{ $userCommunity->community->slug }}">{{ $userCommunity->community->title }}</a></td>
-                                <td>{{ formatDate($userCommunity->created_at) }}</td>
-                                <td>{{ $userCommunity->getRoleName() }}</td>
+                                <td class="text-nowrap">{{ formatDate($userCommunity->created_at) }}</td>
+                                <td class="text-nowrap">{{ $userCommunity->getRoleName() }}</td>
                                 <td class="text-center">
                                     @if(!($userCommunity->community->isAdmin() && count($userCommunity->community->getAdmins()) == 1))
                                         <a class="btn btn-danger btn-icon btn-delete" data-toggle="modal" href="#confirmCancelMembership{{ $userCommunity->community->slug }}" data-tooltip="tooltip" data-container="body" title="Remove Membership">Cancel Membership</a>
