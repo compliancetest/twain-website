@@ -460,7 +460,7 @@ var Page = {
                 data: {
                     'organisation_id' : elem.val(),
                     'test_suite_id' : elem.data('test-suite-id'),
-                    'is_checked' : elem.is(":checked") ? 1 : 0,
+                    'is_checked' : elem.is(":checked") ? 1 : 0
                 },
                 success: function (rsp) {
                     $('#approveOrganisationSaving').hide();
@@ -609,7 +609,7 @@ var Page = {
                     $.ajax({
                         url: $(this).attr('href'),
                         type: 'DELETE',
-                        success: function(result) {
+                        success: function() {
                             $(elem).parents('li').slideUp('slow', function () {
                                $(elem).remove();
                             });
@@ -867,7 +867,6 @@ var Page = {
                     form.find('.modal-body').append('<div class="message error-message">Please select Support user</div>');
                     return false;
                 }
-                ;
 
                 form.find('.block-loading').show();
                 $.ajax({
@@ -945,7 +944,6 @@ var Page = {
                     form.find('.modal-body').append('<div class="message error-message">Please confirm</div>');
                     return false;
                 }
-                ;
 
                 form.find('.block-loading').show();
                 $.ajax({
@@ -954,7 +952,7 @@ var Page = {
                     data: {
                         'user_id': $('#availableSupportUsers').val(),
                         'hideResolved': $('#hideResolved:checked').length,
-                        'hideOthers': $('#hideOthers:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length
                     },
                     error: function (jqXHR, status) {
                         form.find('.block-loading').hide();
@@ -986,7 +984,7 @@ var Page = {
                     data: {
                         'user_id': $('#availableSupportUsers').val(),
                         'hideResolved': $('#hideResolved:checked').length,
-                        'hideOthers': $('#hideOthers:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length
                     },
                     error: function (jqXHR, status) {
                         form.find('.block-loading').hide();
@@ -1266,7 +1264,6 @@ var Page = {
                 filterUrl:  formEl.data('search-filter')
             }
         }
-    }
     },
 
     helpers: {
