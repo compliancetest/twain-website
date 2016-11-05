@@ -33,16 +33,16 @@
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td class="col-sm-1 text-nowrap">
+                                    <td class="col-sm-1 text-nowrap text-center">
                                         @if(!\App\Transaction::where(['product_id' => $userPlan['product']->id, 'suite_minor_family_mark' => $userSuite['testSuite']->id])->get()->isEmpty())
                                             <a href="/my-transaction-log/?suite_minor_family_mark={{ $userSuite['testSuite']->id }}&product_id={{ $userPlan['product']->id }}" target="_blank"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
                                         @endif
 
                                         <a href="/testplan/{{ $userPlan['testPlan']->id }}/edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#editPlanModal"
-                                           class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit plan"></a>
+                                           class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" data-container="body" title="Edit plan"></a>
                                         <a href="#removePlanModal-{{ $userPlan['testPlan']->id }}" data-toggle="modal" class="btn btn-danger btn-icon btn-delete"
-                                           data-tooltip="tooltip"
+                                           data-tooltip="tooltip" data-container="body"
                                            title="Delete plan"></a>
                                         @if($userPlan['testPlan']->canBeClaimed() && !$userPlan['testPlan']->is_claimed)
                                             <a href="/testplan/{{ $userPlan['testPlan']->id }}/claim" class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip"
