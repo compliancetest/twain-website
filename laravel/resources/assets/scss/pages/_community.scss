@@ -789,3 +789,16 @@ input.notify-changes{
     resize: none;
   }
 }
+
+.my-communities-table{
+  tr{
+    th{
+      width: 65px;
+
+      &:first-child{
+        width: auto;
+      }
+    }
+
+  }
+}

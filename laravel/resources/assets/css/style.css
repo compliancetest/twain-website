@@ -14739,6 +14739,15 @@ input.notify-changes {
   resize: none;
 }
 
+/* line 795, ../scss/pages/_community.scss */
+.my-communities-table tr th {
+  width: 65px;
+}
+/* line 798, ../scss/pages/_community.scss */
+.my-communities-table tr th:first-child {
+  width: auto;
+}
+
 /* line 1, ../scss/pages/_contact-us.scss */
 .contact-us {
   font-size: 14px;
