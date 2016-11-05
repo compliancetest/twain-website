@@ -25,9 +25,9 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testCasePublishedDate">Published:</label>
-                                        <div class="input-group">
-                                            <input type="text" id="testCasePublishedDate" name="test_case_published_date" class="form-control datepicker-form-control" readonly value="{{ formatDate($testCase->published_at) }}" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
-                                            <span class="input-group-addon test-case-published-date"><span class="calendar-icon"></span></span>
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" id="testCasePublishedDate" name="test_case_published_date" class="form-control datepicker-form-control" readonly value="{{ formatDate($testCase->published_at) }}">
+                                            <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -487,10 +487,6 @@
 <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function ($) {
-        $('body').on('click', '.test-case-published-date', function () {
-            $('#testCasePublishedDate').datepicker('show');
-        });
-
         $('body').on('click', '[data-delete-row]', function () {
             var parenElement = '.' + $(this).data('delete-row');
             $(this).parents(parenElement).fadeOut('fast', function () {

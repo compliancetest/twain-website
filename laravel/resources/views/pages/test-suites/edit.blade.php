@@ -106,9 +106,9 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testSuitePublishedDate">Published:</label>
-                                        <div class="input-group">
-                                            <input type="text" id="testSuitePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly value="{{ formatDate($testSuite->published_at) }}" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
-                                            <span class="input-group-addon test-suite-published-date"><span class="calendar-icon"></span></span>
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" id="testSuitePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly value="{{ formatDate($testSuite->published_at) }}">
+                                            <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -534,10 +534,6 @@
 <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
 <script>
     jQuery(document).ready(function ($) {
-        $('body').on('click', '.test-suite-published-date', function () {
-            $('#testSuitePublishedDate').datepicker('show');
-        });
-
         $('body').on('click', '[data-delete-row]', function () {
             var parenElement = '.' + $(this).data('delete-row');
             $(this).parents(parenElement).fadeOut('fast', function () {
@@ -565,7 +561,7 @@
             }
             $('[data-tooltip]').tooltip('hide');
             $(this).remove();
-        })
+        });
 
         $('body').on('change', '#communityId', function(e){
             jQuery('.profileTypes.block-loading').show();

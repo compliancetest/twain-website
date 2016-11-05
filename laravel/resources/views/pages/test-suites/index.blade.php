@@ -5,9 +5,9 @@
         <div class="main-content">
             <div class="filter-box">
                 <div class="filter-box-title">Filter By:</div>
-                <div class="filter-box-content block-loading-wrapper">
+                <div id="productsSearchFilterContent" class="filter-box-content block-loading-wrapper">
 
-                    <form action="#" method="get" id="filterByForm">
+                    <form action="/search-results/logs-list" method="get" id="productsSearchFilterForm" data-search-name="productsSearch" data-search-filter="/search-results/filters" >
                         <div class="row">
 
                             <div class="form-group col-sm-12 col-md-6">
@@ -66,16 +66,16 @@
 
                             <div class="form-group col-sm-6 col-md-3">
                                 <label for="filterDateFrom">Published Date:</label>
-                                <div class="input-group">
-                                    <input class="form-control datepicker-form-control" id="filterDateFrom" readonly="" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date_from" placeholder="Date From" type="text">
-                                    <span class="input-group-addon filterCalendarFrom"><span class="calendar-icon"></span></span>
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input class="form-control datepicker-form-control" id="filterDateFrom" readonly=""  name="date_from" placeholder="Date From" type="text">
+                                    <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                 </div>
                             </div>
                             <div class="form-group col-sm-6 col-md-3">
                                 <label for="filterDateTo">&nbsp;</label>
-                                <div class="input-group">
-                                    <input class="form-control col-md-1 datepicker-form-control" id="filterDateTo" readonly="" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date_to" placeholder="Date To" type="text">
-                                    <span class="input-group-addon filterCalendarTo"><span class="calendar-icon"></span></span>
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input class="form-control col-md-1 datepicker-form-control" id="filterDateTo" readonly="" name="date_to" placeholder="Date To" type="text">
+                                    <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                         </div>
                     </form>
 
-                    <div class="block-loading" id="filterBySpinner">
+                    <div class="block-loading" id="productsSearchFilterSpinner">
                         <div class="loading-content"><span class="loader"></span>
                             <div class="loading-text">LOADING FILTERS</div>
                             <div class="loading-wait">Please wait...</div>
@@ -97,7 +97,7 @@
             </div>
 
             <div class="block-loading-wrapper">
-                <div id="test-suites-search-results">
+                <div id="productsSearchResultsTable">
                     <div class="filter-list-actions">
                         <div class="col-md-9">
                             <div class="filter-results-count">
@@ -164,7 +164,7 @@
 
                 </div>
 
-                <div id="loadTestSuitesSearchResultsSpinner" class="block-loading">
+                <div id="productsSearchResultsSpinner" class="block-loading">
                     <div class="loading-content">
                         <span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
@@ -181,81 +181,8 @@
 @section('page-scripts')
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
-        jQuery(document).ready(function ($) {
-            $('body').on('click', '.filterCalendarFrom', function () {
-                $('#filterDateFrom').datepicker('show');
-            });
-
-            $('body').on('click', '.filterCalendarTo', function () {
-                $('#filterDateTo').datepicker('show');
-            });
-
-            $('body').on('click', '.sortby', function (e) {
-                e.preventDefault();
-                $('#orderby').val($(this).data('type'));
-                $('#order').val($(this).data('order'));
-                $('#filterByForm').submit();
-            });
-
-            $('body').on('click', '.pagination a', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadTestSuitesSearchResultsSpinner').show();
-                var link = $(this);
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/search-results/logs-list',
-                    type: 'get',
-                    data: form.serialize() + "&page=" + getUrlVar(link.attr('href'), 'page'),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('#test-suites-search-results').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadTestSuitesSearchResultsSpinner').hide();
-                    }
-                });
-            });
-
-            $('body').on('click', '.btn-clear', function () {
-                $('#filterByForm')[0].reset();
-                getBoxFilters('', '/search-results/filters');
-            });
-
-            $('body').on('change', '#filterByForm .form-control', function () {
-                $('#filterBySpinner').show();
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(), '/search-results/filters');
-            });
-
-
-            $('body').on('submit', '#filterByForm', function (e) {
-                e.preventDefault();
-                $('#filterBySpinner, #loadTestSuitesSearchResultsSpinner').show();
-
-                var form = $('#filterByForm');
-                $.ajax({
-                    url: '/search-results/logs-list',
-                    type: 'get',
-                    data: form.serialize(),
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
-                        $('#test-suites-search-results').html(rsp.html);
-                    },
-                    complete: function () {
-                        $('#filterBySpinner, #loadTestSuitesSearchResultsSpinner').hide();
-                    }
-                })
-            });
-
-
-            $('body').on('click', '#filterByForm .clear-filter', function (e) {
-                $(this).parent().find('input, select').val('');
-                var form = $('#filterByForm');
-                getBoxFilters(form.serialize(), '/search-results/filters');
-            });
-
-        });
+        Page.ajaxSearchForm.init();
+        Page.ajaxSearchForm.initSorting();
+        Page.ajaxSearchForm.disableFormSubmit();
     </script>
 @stop
