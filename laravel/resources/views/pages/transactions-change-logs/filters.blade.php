@@ -1,10 +1,9 @@
-<form action="#" method="get" id="filterByForm">
+<form action="/test-outcome-logs/logs-list" method="get" id="outcomeLogSearchFilterForm" data-search-filter="/test-outcome-logs/filters" data-search-name="outcomeLogSearch">
     <div class="row">
 
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterExecutionID">Execution Id:</label>
-            <input type="text" class="form-control" name="execution_id" id="filterExecutionID" style="width: "
-                   @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif>
+            <label for="keyword">Execution Id:</label>
+            <input type="text" class="form-control" name="execution_id" id="keyword" @if($request->get('execution_id')) value="{{ $request->get('execution_id') }}" @endif >
             @if(($request->get('execution_id')) && ($request->get('execution_id') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
@@ -32,10 +31,10 @@
 
         <div class="form-group col-sm-6 col-md-3">
             <label for="filterDate">Date:</label>
-            <div class="input-group">
-                <input type="text" class="form-control datepicker-form-control" id="filterDate" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date"
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control datepicker-form-control" id="filterDate" readonly name="date"
                        @if($request->get('date')) value="{{ $request->get('date') }}" @endif>
-                <span class="input-group-addon" id="filterCalendar"><span class="calendar-icon"></span></span>
+                <span class="input-group-addon"><span class="calendar-icon"></span></span>
             </div>
             @if(($request->get('date')) && ($request->get('date') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
@@ -49,7 +48,7 @@
     </div>
 </form>
 
-<div class="block-loading" id="filterBySpinner">
+<div class="block-loading" id="outcomeLogSearchFilterSpinner">
     <div class="loading-content"><span class="loader"></span>
         <div class="loading-text">LOADING FILTERS</div>
         <div class="loading-wait">Please wait...</div>

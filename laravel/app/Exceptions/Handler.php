@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 
-        if ($request->is('api/*')) {
+        if (env('ENVIRONMENT') !== 'local' && $request->is('api/*')) {
             return response()->json(
                 array_merge($this->getJsonMessage($e), ['code' => $this->getExceptionHTTPStatusCode($e)]),
                 $this->getExceptionHTTPStatusCode($e)

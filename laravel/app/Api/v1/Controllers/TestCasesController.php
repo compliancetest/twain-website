@@ -105,7 +105,7 @@ class TestCasesController extends BaseApiController
 
         $testSuiteData = Post::find($testingDetails->test_suite_id);
         $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->post_name);
-        if(!$hasAccessToTestSuite){
+        if (!$hasAccessToTestSuite) {
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
@@ -313,7 +313,7 @@ class TestCasesController extends BaseApiController
         }
 
         $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($request->get('test_suite_id'));
-        if(!$hasAccessToTestSuite){
+        if (!$hasAccessToTestSuite) {
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
 
@@ -335,8 +335,8 @@ class TestCasesController extends BaseApiController
         $model->is_running = true;
         $model->save();
 
-        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
-        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
+        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
+        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
 
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
@@ -358,11 +358,23 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => $testExecutionProfile ? Profile::find($testExecutionProfile)->getProfileFromS3() : null,
-            'ConfigurationProfile' => $testConfigurationProfile ? Profile::find($testConfigurationProfile)->getProfileFromS3() : null,
+            'ExecutionProfile' => $testExecutionProfile,
+            'ConfigurationProfile' => $testConfigurationProfile,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);
+    }
+
+    public function getProfileInfo($ProfileId)
+    {
+        $profileData = null;
+        if ($ProfileId) {
+            $p = Profile::find($ProfileId);
+            if ($p) {
+                $profileData = $p->getProfileFromS3();
+            }
+        }
+        return $profileData;
     }
 
     /**
@@ -379,6 +391,7 @@ class TestCasesController extends BaseApiController
         }
         return true;
     }
+
     /**
      * Get test case images data
      * @param $testCase
@@ -541,28 +554,13 @@ class TestCasesController extends BaseApiController
         $testSuite = Post::find($model->test_suite_id);
         $testCase = Post::find($model->test_case_id);
 
-        $testConfigurationProfile = TestCase::find($testCase->ID)->getTestDataProfileId();
-        $testExecutionProfile = TestCase::find($testCase->ID)->getTestExecutionProfileId();
+        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
+        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
 
         $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
             $this->stop();
             return $this->respondNotFound(sprintf($validateConfigs, $testCase->post_name));
-        }
-
-        $executionProfileData = $configurationProfileData = null;
-        if ($testExecutionProfile) {
-            $p = Profile::find($testExecutionProfile);
-            if ($p) {
-                $executionProfileData = $p->getProfileFromS3();
-            }
-        }
-
-        if ($testConfigurationProfile) {
-            $p = Profile::find($testConfigurationProfile);
-            if ($p) {
-                $configurationProfileData = $p->getProfileFromS3();
-            }
         }
 
         $response = [
@@ -579,8 +577,8 @@ class TestCasesController extends BaseApiController
                 'id' => $product->post_name,
                 'title' => $product->post_title,
             ],
-            'ExecutionProfile' => $executionProfileData,
-            'ConfigurationProfile' => $configurationProfileData,
+            'ExecutionProfile' => $testExecutionProfile,
+            'ConfigurationProfile' => $testConfigurationProfile,
             'images' => $this->_getTestCaseImages($testCase)
         ];
         return $this->respondWithData($response);

@@ -90,7 +90,7 @@
                         @if($explainRequestsEnabled)
                             <?php $imageClass = count($eloquentTransaction->explanationLogs) > 0 ? 'btn-success' : 'btn-default';?>
                             <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Request Status Explanation">
-                                <a class="btn {{ $imageClass }} btn-icon btn-question" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
+                                <a class="btn {{ $imageClass }} btn-icon btn-question" id="questionBtn{{ $transaction->id }}" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
                             </span>
                         @endif
                         @if(isImageViewerEnabled())

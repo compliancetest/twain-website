@@ -769,17 +769,17 @@ define({ "api": [
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n         \"messages\": [\"The product has been updated successfully\"],\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\n           \"The product has been updated successfully\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"success\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {
           "title": "Product exist (not approved):",
-          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 200\n       }",
+          "content": "{\n         \"messages\": [\n           \"This product registration will require approval\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"info\",\n         \"code\": 200\n       }",
           "type": "json"
         },
         {
           "title": "Product created:",
-          "content": "{\n         \"messages\": [\"This product registration will require approval\"],\n         \"status\": \"info\",\n         \"code\": 201\n       }",
+          "content": "{\n         \"messages\": [\n           \"This product registration will require approval\"\n         ],\n         \"data\": {\n           \"id\": \"4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"title\": \"77121542111111TWAIN Virtual Software Scanner v2.1\",\n           \"link\": \"http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2\",\n           \"model\": \"None2\"\n         },\n         \"status\": \"info\",\n         \"code\": 201\n       }",
           "type": "json"
         }
       ]
@@ -906,12 +906,17 @@ define({ "api": [
       "examples": [
         {
           "title": "Product exist (approved):",
-          "content": "{\n   \"message\": \"The product has been updated successfully\",\n   \"code\": 200\n }",
+          "content": "{\n          \"messages\": [\n            \"The product has been updated successfully\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 200\n        }",
           "type": "json"
         },
         {
-          "title": "Product exist (not approved) / product created:",
-          "content": "{\n    \"errors\": {\n      \"message\": [\n        \"This product registration will require approval\"\n      ]\n    },\n    \"code\": 403\n  }",
+          "title": "Product exist (not approved):",
+          "content": "{\n          \"messages\": [\n            \"This product registration will require approval\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 200\n        }",
+          "type": "json"
+        },
+        {
+          "title": "Product created:",
+          "content": "{\n          \"messages\": [\n            \"This product registration will require approval\"\n          ],\n          \"data\": {\n            \"id\": \"4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"title\": \"1277121542111111TWAIN Virtual Software Scanner v2.1\",\n            \"link\": \"http://twain.my/product/4_twain-working-group_1277121542111111twain-virtual-software-scanner_v2-1_none2\",\n            \"model\": \"None2\"\n          },\n          \"code\": 201\n        }",
           "type": "json"
         }
       ]
@@ -1796,7 +1801,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "\n{\n         \"data\": {\n           \"ExecutionId\": \"414d5f4d-9580-4f1c-a956-c6b6cade6080\",\n           \"TestSuite\": {\n             \"id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n             \"title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\"\n           },\n           \"TestCase\": {\n             \"id\": \"sc-01-v1-0\",\n             \"title\": \"SC-01 v1.0\"\n           },\n           \"Product\": {\n             \"id\": \"4_ain-working-group_test_v2-201\",\n             \"title\": \"Test\"\n           },\n           \"ExecutionProfile\": null,\n           \"ConfigurationProfile\": null,\n           \"images\": null\n         },\n         \"status\": \"success\",\n         \"code\": 200\n       }",
+          "content": "\n {\n\"data\": {\n\"ExecutionId\": \"414d5f4d-9580-4f1c-a956-c6b6cade6080\",\n\"TestSuite\": {\n\"id\": \"twain-v2-3-compliance-data-sources-v1-0\",\n\"title\": \"TWAIN v2.3 Compliance - Data Sources v1.0\"\n},\n\"TestCase\": {\n\"id\": \"sc-01-v1-0\",\n\"title\": \"SC-01 v1.0\"\n},\n\"Product\": {\n\"id\": \"4_ain-working-group_test_v2-201\",\n\"title\": \"Test\"\n},\n\"ExecutionProfile\": null,\n\"ConfigurationProfile\": null,\n\"images\": null\n},\n\"status\": \"success\",\n\"code\": 200\n}",
           "type": "json"
         }
       ]
@@ -2385,7 +2390,7 @@ define({ "api": [
       "examples": [
         {
           "title": "No subscription:",
-          "content": "{\n  \"messages\": [\"You do not have any active subscription\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
+          "content": "{\n  \"messages\": [\"Please subscribe to Test Suite with 'Application' Product Type\"],\n  \"status\": \"error\",\n  \"code\": 403\n}",
           "type": "json"
         },
         {
@@ -2400,12 +2405,12 @@ define({ "api": [
         },
         {
           "title": "The product registration has been not approved yet:",
-          "content": "{\n    \"messages\": [\"The product registration has been not approved yet.\"],\n    \"status\": \"error\",\n    \"code\": 403\n  }",
+          "content": "{\n          \"messages\": [\n            \"The product registration has been not approved yet.\"\n          ],\n          \"data\": [],\n          \"status\": \"info\",\n          \"code\": 403\n        }",
           "type": "json"
         },
         {
           "title": "Test plans not found:",
-          "content": "{\n  \"messages\": [\"Test plans not found\"],\n  \"status\": \"error\",\n  \"code\": 404\n}",
+          "content": "{\n        \"messages\": [\n          \"Test plans not found. Please update product/edit features or add test plans on the web site.\"\n        ],\n        \"data\": [],\n        \"status\": \"warning\",\n        \"code\": 404\n      }",
           "type": "json"
         },
         {

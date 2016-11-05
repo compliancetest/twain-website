@@ -1,9 +1,9 @@
-<form action="#" method="get" id="filterByForm">
+<form action="/products-and-services/logs-list" method="get" id="registrySearchFilterByForm" data-search-filter="/products-and-services/filters" data-search-name="registrySearch">
     <div class="row">
 
         <div class="form-group col-sm-12 col-md-12">
             <label for="filterExecutionID">Keyword:</label>
-            <input type="text" class="form-control" name="q" id="q"
+            <input type="text" class="form-control" name="q" id="keyword"
                    @if($request->get('q')) value="{{ $request->get('q') }}" @endif>
             @if(($request->get('q')) && ($request->get('q') !== ''))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
@@ -75,27 +75,29 @@
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterDate1">Last Update:</label>
-            <div class="input-group">
-                <input type="text" class="form-control datepicker-form-control" id="filterDate1" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" name="date_from"
+            <label for="registrySearchDateFrom">Last Update:</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control datepicker-form-control" id="registrySearchDateFrom" readonly name="date_from"
                        placeholder="Date From"
                        @if($request->get('date_from')) value="{{ $request->get('date_from') }}" @endif>
-                <span class="input-group-addon filterCalendar1"><span class="calendar-icon"></span></span>
+                <span class="input-group-addon"><span class="calendar-icon"></span></span>
             </div>
             @if($request->get('date_from') && $request->get('date_from') !== '')<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
+
         <div class="form-group col-sm-6 col-md-3">
-            <label for="filterDate2">&nbsp;</label>
-            <div class="input-group">
-                <input type="text" class="form-control col-md-1 datepicker-form-control" id="filterDate2" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd"
+            <label for="registrySearchDateTo">&nbsp;</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control col-md-1 datepicker-form-control" id="registrySearchDateTo" readonly
                        name="date_to" placeholder="Date To"
                        @if($request->get('date_to')) value="{{ $request->get('date_to') }}" @endif>
-                <span class="input-group-addon filterCalendar2"><span class="calendar-icon"></span></span>
+                <span class="input-group-addon"><span class="calendar-icon"></span></span>
             </div>
             @if($request->get('date_to') && $request->get('date_to') !== '')<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
-        <input type="hidden" name="orderby" id="orderby">
-        <input type="hidden" name="order" id="order">
+
+        <input type="hidden" name="orderby" id="orderby" value="{{ $request->get('orderby') }}">
+        <input type="hidden" name="order" id="order" value="{{ $request->get('order') }}">
     </div>
 
     <div class="filter-box-footer">
@@ -105,7 +107,7 @@
     </div>
 </form>
 
-<div class="block-loading" id="filterBySpinner">
+<div class="block-loading" id="registrySearchFilterSpinner">
     <div class="loading-content"><span class="loader"></span>
         <div class="loading-text">LOADING FILTERS</div>
         <div class="loading-wait">Please wait...</div>

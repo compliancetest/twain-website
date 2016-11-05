@@ -144,6 +144,14 @@ class BaseApiController extends Controller
         ]);
     }
 
+    public function respondWithDataAndMessage($message, $data)
+    {
+        return $this->respond([
+            'messages' => [$message],
+            'data' => $data
+        ]);
+    }
+
 
     /**
      * @param $message
