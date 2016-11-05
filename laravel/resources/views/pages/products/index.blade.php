@@ -20,7 +20,7 @@
 <script>
     jQuery(document).ready(function ($) {
         $('.deleteProduct').click(function () {
-            <!--todo-verify spinner doent work on /laravel-my-products page-->
+
             var productIndex = $(this).data('product-index');
             var productSlug = $(this).data('product-slug');
 
