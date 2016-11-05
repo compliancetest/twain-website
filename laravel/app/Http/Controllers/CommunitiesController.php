@@ -445,7 +445,7 @@ class CommunitiesController extends Controller
 
     public function userCommunities()
     {
-        $userCommunities = Auth::user()->subscriptions->sortByDesc('created_at');
+        $userCommunities = Auth::user()->subscriptions()->where('is_confirmed', true)->get()->sortByDesc('created_at');
         return view('pages.my.communities.index', compact('userCommunities'));
     }
 }
