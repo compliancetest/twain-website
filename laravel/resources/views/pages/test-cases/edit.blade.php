@@ -298,17 +298,19 @@
                         <div class="colored-box-content">
                             @foreach($testSuites as $testSuite)
                                 @if(count($testSuite->features))
-                                    <label>{{ $testSuite->full_name }}</label>
-                                    @foreach($testSuite->features as $feature)
-                                        <dl class="definition-list">
-                                            <dt>
-                                                <label>
-                                                    <input type="checkbox" name="features[]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
-                                                </label>
-                                            </dt>
-                                            <dd>{{ $feature->description }}</dd>
-                                        </dl>
-                                    @endforeach
+                                    <div class="definition-box">
+                                        <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
+                                        @foreach($testSuite->features as $feature)
+                                            <dl class="definition-list">
+                                                <dt>
+                                                    <label>
+                                                        <input type="checkbox" name="features[]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
+                                                    </label>
+                                                </dt>
+                                                <dd>{{ $feature->description }}</dd>
+                                            </dl>
+                                        @endforeach
+                                    </div>
                                 @endif
                             @endforeach
                         </div>
