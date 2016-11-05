@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\LaravelTestCase;
+use App\LaravelTestSuite;
+use App\Profile;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -28,7 +30,9 @@ class TestCasesController extends Controller
     {
         $testCase = LaravelTestCase::findBySlug($testCaseSlug);
         $pageTitle = 'Edit Test Case | ' . $testCase->full_name;
-        return view('pages.test-cases.edit', compact('testCase', 'pageTitle', 'testSuites'));
+        $testSuites = LaravelTestSuite::orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get();
+        $profiles = Profile::getSuitesProfiles(array_keys($testCase->testSuites->keyBy('id')->toArray()));
+        return view('pages.test-cases.edit', compact('testCase', 'pageTitle', 'profiles', 'testSuites'));
     }
 
 }

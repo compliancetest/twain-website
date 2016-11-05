@@ -74,7 +74,7 @@ class LaravelTestCase extends Model
 
     public function features()
     {
-        return $this->hasMany('\App\TestCaseFeature', 'test_case_id');
+        return $this->hasMany('\App\TestCaseFeature', 'test_case_id')->with('testSuiteFeature');
     }
 
     public function capabilities()

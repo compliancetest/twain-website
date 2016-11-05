@@ -81,4 +81,15 @@ class Profile extends Model
         return $version;
     }
 
+    public static function getSuitesProfiles($testSuites)
+    {
+        $profileTypes = [];
+        foreach($testSuites as $testSuiteId){
+            $testSuite = LaravelTestSuite::find($testSuiteId);
+            $profileTypes = array_merge($testSuite->profileTypes->keyBy('profile_type_id')->toArray(), $profileTypes);
+        }
+        $profileTypes = array_unique(array_column($profileTypes, 'profile_type_id'));
+        return  Profile::whereIn('type_id', $profileTypes)->where('type', 'harness')->orderBy('profile_name')->get();
+    }
+
 }

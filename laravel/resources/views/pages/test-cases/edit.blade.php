@@ -110,36 +110,14 @@
                     <div class="colored-box-body collapse in" id="testTestSuitesBox">
                         <div class="colored-box-content">
                             <div class="checkboxes-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="test_suite_id[]" value="1" type="checkbox">
-                                        Test Suite 1
-                                    </label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="test_suite_id[]" value="2" type="checkbox">
-                                        Test Suite 2
-                                    </label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="test_suite_id[]" value="3" type="checkbox">
-                                        Test Suite 3
-                                    </label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="test_suite_id[]" value="4" type="checkbox">
-                                        Test Suite 4
-                                    </label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="test_suite_id[]" value="5" type="checkbox">
-                                        Test Suite 5
-                                    </label>
-                                </div>
+                                @foreach($testSuites as $testSuite)
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="test_suite_id[]" value="{{ $testSuite->id }}" type="checkbox" @if(count($testCase->testSuites->where('id', $testSuite->id))) checked="checked" @endif>
+                                            {{ $testSuite->full_name }}
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -197,23 +175,19 @@
                     <div class="colored-box-header"><a href="#testCaseConformanceLevelsBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Conformance Levels</div>
                     <div class="colored-box-body collapse in" id="testCaseConformanceLevelsBox">
                         <div class="colored-box-content">
-                            <h4 class="test-item-subheader">TWAIN v2.3 Compliance – Data Sources v1.0</h4>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="checkbox" name="conformance_level[]" value="Default" checked="checked">Default
-                                    </label>
-                                </dt>
-                                <dd>All test cases created via this test suite are automatically associated with this conformance level. This association cannot be deleted.</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="checkbox" name="conformance_level[]" value="A">A
-                                    </label>
-                                </dt>
-                                <dd>Conformance level A represents full compliance with all mandatory components of the TWAIN specification.</dd>
-                            </dl>
+                            @foreach($testSuites as $testSuite)
+                                <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
+                                @foreach($testSuite->conformanceLevels as $conformanceLevel)
+                                    <dl class="definition-list">
+                                        <dt>
+                                            <label>
+                                                <input type="checkbox" name="conformance_level[]" value="Default" checked="checked">{{ $conformanceLevel->code }}
+                                            </label>
+                                        </dt>
+                                        <dd>{{ $conformanceLevel->description }}</dd>
+                                    </dl>
+                                @endforeach
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -340,15 +314,11 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="testCaseTestDataProfile">Attach JSON configuration profile file:</label>
-                                    <select name="test_data_profile" id="testCaseTestDataProfile" class="form-control">
+                                    <select name="configuration_profile_id" id="testCaseTestDataProfile" class="form-control">
                                         <option value="">-- Select profile type -- </option>
-                                        <option value="720">CX-01a_v1.0 TEFC v2.0</option>
-                                        <option value="286">CX-01a_v1.0 TEFC v3.0</option>
-                                        <option value="287">CX-01b_v1.0 TEFC v3.0</option>
-                                        <option value="288">CX-01c_v1.0 TEFC v3.0</option>
-                                        <option value="289">CX-02a_v1.0 TEFC v3.0</option>
-                                        <option value="290">CX-02b_v1.0 TEFC v3.0</option>
-                                        <option value="291">CX-02c_v1.0 TEFC v3.0</option>
+                                        @foreach($profiles as $profile)
+                                            <option value="{{ $profile->id }}" @if($profile->id == $testCase->configuration_profile_id) selected="selected"@endif>{{ $profile->profile_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -366,15 +336,13 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="testCaseExecutionFile">Attach JSON test execution file:</label>
-                                    <select name="test_data_profile" id="testCaseExecutionFile" class="form-control">
-                                        <option value="">-- Select execution file -- </option>
-                                        <option value="720">CX-01a_v1.0 TEFC v2.0</option>
-                                        <option value="286">CX-01a_v1.0 TEFC v3.0</option>
-                                        <option value="287">CX-01b_v1.0 TEFC v3.0</option>
-                                        <option value="288">CX-01c_v1.0 TEFC v3.0</option>
-                                        <option value="289">CX-02a_v1.0 TEFC v3.0</option>
-                                        <option value="290">CX-02b_v1.0 TEFC v3.0</option>
-                                        <option value="291">CX-02c_v1.0 TEFC v3.0</option>
+                                    <select name="test_execution_profile_id" id="testCaseExecutionFile" class="form-control">
+                                        <option value="">-- Select execution file --</option>
+                                        @foreach($profiles as $profile)
+                                            @if($profile->profile_role == 'TCEF')
+                                                <option value="{{ $profile->id }}" @if($profile->id == $testCase->test_execution_profile_id) selected="selected"@endif>{{ $profile->profile_name }}</option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -389,30 +357,21 @@
                     <div class="colored-box-header"><a href="#testCaseFeaturesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Features</div>
                     <div class="colored-box-body collapse in" id="testCaseFeaturesBox">
                         <div class="colored-box-content">
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="checkbox" name="test_case_feature[]" value="Feature 1" checked="checked">Feature 1
-                                    </label>
-                                </dt>
-                                <dd>Feature 1 description</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="checkbox" name="test_case_feature[]" value="Feature 1" checked="checked">Feature 2
-                                    </label>
-                                </dt>
-                                <dd>Feature 2 description</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="checkbox" name="test_case_feature[]" value="Feature 1" checked="checked">Feature 3
-                                    </label>
-                                </dt>
-                                <dd>Feature 3 description</dd>
-                            </dl>
+                            @foreach($testSuites as $testSuite)
+                                @if(count($testSuite->features))
+                                    <label>{{ $testSuite->full_name }}</label>
+                                    @foreach($testSuite->features as $feature)
+                                        <dl class="definition-list">
+                                            <dt>
+                                                <label>
+                                                    <input type="checkbox" name="features[]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
+                                                </label>
+                                            </dt>
+                                            <dd>{{ $feature->description }}</dd>
+                                        </dl>
+                                    @endforeach
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
