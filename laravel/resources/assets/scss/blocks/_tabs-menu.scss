@@ -227,7 +227,7 @@
       background: #fff;
       border-color: #bfbfbf;
       @include border-radius(3px 3px 0 0);
-      color: #666;
+      color: $text-color;
     }
   }
 }

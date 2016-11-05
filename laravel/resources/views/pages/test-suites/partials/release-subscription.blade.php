@@ -1,8 +1,8 @@
 {{-- Access Test Harness Modal--}}
-<div class="modal fade" id="confirmReleaseSubscriptionModal" tabindex="-1" role="dialog" data-backdrop="static">
+<div class="modal fade" id="confirmReleaseSubscriptionModal{{$index}}" tabindex="-1" role="dialog" data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content block-loading-wrapper">
-            <form action="#" method="get" id="confirmReleaseSubscriptionForm">
+            <form action="{{$suiteSlug}}" method="get" class="confirmReleaseSubscriptionForm" id="confirmReleaseSubscriptionForm{{$index}}" data-form-index="{{$index}}">
                 <div class="modal-header">
                     <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
                     Confirm Subscription Release
@@ -14,7 +14,7 @@
                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
                     <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                 </div>
-                <div class="block-loading" id="confirmReleaseSubscriptionSpinner">
+                <div class="block-loading" id="confirmReleaseSubscriptionSpinner{{$index}}">
                     <div class="loading-content">
                         <span class="loader"></span>
                         <div class="loading-text">UNSUBSCRIBING</div>

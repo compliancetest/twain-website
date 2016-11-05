@@ -286,6 +286,9 @@
   &.btn-add{
     @include btnIconsSprite(btn-icon-add);
   }
+  &.btn-unsubscribe{
+    @include btnIconsSprite(btn-icon-unsubscribe);
+  }
 
 }
 

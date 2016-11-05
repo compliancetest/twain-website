@@ -116,7 +116,7 @@ body .redactor_box_fullscreen {
     margin: 0px;
 }
 .redactor_editor blockquote {
-    color: #666;
+    color: $text-color;
 }
 .redactor_editor.redactor_editor_wym {
 	padding: 10px 7px 0 7px !important;
@@ -332,7 +332,7 @@ body .redactor_toolbar li a.redactor_btn_pre		 		{ background-position: -875px; 
 */
 .redactor_format_blockquote {
 	padding-left: 10px;
-	color: #666 !important;
+	color: $text-color !important;
 	font-style: italic;
 }
 .redactor_format_pre {
