@@ -1,7 +1,3 @@
-<div class="success-message lg">
-    You have currently been allocated a subscription to this test suite.
-    If you want to release this subscription, click <a href="#confirmReleaseSubscriptionModal" data-toggle="modal">here</a>.
-</div>
 {{-- Access Test Harness Modal--}}
 <div class="modal fade" id="confirmReleaseSubscriptionModal" tabindex="-1" role="dialog" data-backdrop="static">
     <div class="modal-dialog" role="document">

@@ -23,6 +23,11 @@ class OrganisationSubscription extends Model
         return $this->belongsTo('\App\Organisation', 'wp_organisations');
     }
 
+    public function testSuite()
+    {
+        return $this->belongsTo('\App\LaravelTestSuite', 'suite_minor_family_mark')->orderBy('created_at')->limit(1);
+    }
+
     public static function getUniqueSlug($value)
     {
         $slug = \Illuminate\Support\Str::slug($value);

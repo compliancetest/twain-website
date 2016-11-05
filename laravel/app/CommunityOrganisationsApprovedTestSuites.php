@@ -13,7 +13,7 @@ class CommunityOrganisationsApprovedTestSuites extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'organisation_id', 'approved_by', 'community_id', 'test_suite_id'
+        'organisation_id', 'approved_by', 'community_id', 'suite_major_family_mark'
     ];
 
     /**

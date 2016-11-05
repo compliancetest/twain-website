@@ -459,7 +459,7 @@ var Page = {
                 url: '/communities/' + elem.data('community') + '/approve_organisation',
                 data: {
                     'organisation_id' : elem.val(),
-                    'test_suite_id' : elem.data('test-suite-id'),
+                    'major-family-mark' : elem.data('major-family-mark'),
                     'is_checked' : elem.is(":checked") ? 1 : 0
                 },
                 success: function (rsp) {

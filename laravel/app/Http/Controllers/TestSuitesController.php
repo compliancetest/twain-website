@@ -235,4 +235,10 @@ class TestSuitesController extends Controller
         }
         return response()->json(['html' => view('pages.test-suites.partials.subscriptions-section')->with(['testSuite' => $testSuite])->render()]);
     }
+
+    public function userTestSuites()
+    {
+        $userSubscriptions = Auth::user()->suiteSubscriptions;
+        return view('pages.my.test-suites.index', compact('userSubscriptions'));
+    }
 }

@@ -14,6 +14,7 @@ use App\ForumThread;
 use App\ForumThreadRead;
 use App\Organisation;
 use App\Post;
+use App\Product;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
@@ -169,7 +170,7 @@ class CommunitiesController extends Controller
             $data['invitedUsers'] = $community->invitations;
             $data['organisations'] = Organisation::orderBy('organisation_name')->get();
             $data['membershipRequests'] = $community->getMembershipRequests();
-            $data['communityTestSuites'] = $community->getCommunityTestSuites();
+            $data['communityTestSuites'] = $community->getCommunityTestSuitesMajorVersions();
         }
         return view('pages.communities.show')->with($data);
     }
@@ -255,7 +256,7 @@ class CommunitiesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'exists:wp_organisations,id',
-            'test_suite_id' => 'exists:wp_posts,ID'
+            'suite_major_family_mark' => 'exists:test_suite,major_family_mark'
         ]);
 
         if ($validator->fails()) {
@@ -267,14 +268,14 @@ class CommunitiesController extends Controller
             CommunityOrganisationsApprovedTestSuites::create([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
-                'test_suite_id' => $request->get('test_suite_id'),
+                'suite_major_family_mark' => $request->get('major-family-mark'),
                 'approved_by' => Auth::user()->ID
             ]);
         } else {
             CommunityOrganisationsApprovedTestSuites::where([
                 'organisation_id' => $request->get('organisation_id'),
                 'community_id' => $community->id,
-                'test_suite_id' => $request->get('test_suite_id')
+                'suite_major_family_mark' => $request->get('major-family-mark')
             ])->delete();
         }
         return response()->json(array('success' => true));
@@ -290,7 +291,7 @@ class CommunitiesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'organisation_id' => 'exists:wp_organisations,id',
-            'product_id' => 'exists:wp_posts,ID'
+            'product_id' => 'exists:products,id'
         ]);
 
         if ($validator->fails()) {
@@ -312,18 +313,18 @@ class CommunitiesController extends Controller
                 'product_id' => $request->get('product_id')
             ])->delete();
         }
-        $product = Post::find($request->get('product_id'));
+        $product = Product::find($request->get('product_id'));
         $emailData = [
-            '[author_name]' => cp_get_user_fullname($product->post_author),
-            '[product_url]' => getSiteUrl() . '/product/' . $product->post_name,
-            '[product_name]' => $product->getProductFullName(),
+            '[author_name]' => cp_get_user_fullname($product->user_id),
+            '[product_url]' => getSiteUrl() . '/product/' . $product->slug,
+            '[product_name]' => $product->full_name,
             '[site_title]' => get_site_title(),
             '[community_name]' => Community::find($community->id)->title,
             '[status]' => $request->get('is_checked') ? 'Approved' : 'Disapproved',
             '[env]' => get_option('env'),
             '[website_url]' => getSiteUrl(),
         ];
-        sendEmails([['user_id' => $product->post_author]], 'product_approvement_to_user', $emailData);
+        sendEmails([['user_id' => $product->user_id]], 'product_approvement_to_user', $emailData);
 
         return response()->json(array('success' => true));
     }

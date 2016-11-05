@@ -9,7 +9,7 @@ if(strpos($_SERVER['REQUEST_URI'], '?') !== false){
 $urls = ['communities', 'membership', 'downloads', 'sso', 'api', 'testingdetails', 'articles', 'communityprofiles', 'profiletypes', 'forums',
     'communitysurveys', 'test-suite-coverage', 'testplan', 'transactions', 'verify-requests', 'my-transaction-log', 'api-logs', 'test-outcome-logs',
     'contact-us', 'savepost', 'search-results', 'products-and-services', 'laravel-product', 'laravel-test-suite', 'laravel-test-case', 'laravel-my-products',
-    'laravel-test-suites'
+    'laravel-test-suites', 'laravel-my-test-suites', 'laravel-my-communities'
 ];
 
 if ( in_array($segments[0], $urls) || strpos($segments[0], 'communities?') === 0) {

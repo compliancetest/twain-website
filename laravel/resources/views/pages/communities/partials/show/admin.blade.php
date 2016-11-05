@@ -473,14 +473,13 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach($communityTestSuites as $communityTestSuite)
-                                                <?php $familymark = \App\TestSuite::getTestSuiteFamilyMark($communityTestSuite->ID);?>
                                                 <tr>
-                                                    <td><a href="/test-suite/{{ $communityTestSuite->post_name }}" target="_blank"> {{ $communityTestSuite->post_title }}</a></td>
-                                                    <td class="text-center">{{ \App\Post::find($communityTestSuite->ID)->getMetaByKey('ts_tester_role') }}</td>
+                                                    <td>{{ $communityTestSuite->name . ' v' . $communityTestSuite->version_major . '.*' }}</td>
+                                                    <td class="text-center">{{ $communityTestSuite->product_type }}</td>
                                                     <td class="text-center">
                                                         <input type="checkbox" value="{{ $organisation->id }}" class="approveOrganisation"
-                                                               data-community="{{ $community->slug }}" data-test-suite-id="{{ $familymark }}"
-                                                               @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'test_suite_id' => $familymark])->first()) checked="checked" @endif>
+                                                               data-community="{{ $community->slug }}" data-major-family-mark="{{ $communityTestSuite->major_family_mark }}"
+                                                               @if(\App\CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'suite_major_family_mark' => $communityTestSuite->major_family_mark])->first()) checked="checked" @endif>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -533,15 +532,14 @@
                                                 <tbody>
                                                 <?php $products = $organisation->getProducts();?>
                                                 @if($products)
-                                                    @foreach($organisation->getProducts() as $product)
+                                                    @foreach($products as $product)
                                                     <tr>
-                                                        <?php $eloquentProduct = \App\Post::find($product->ID);?>
-                                                        <td style="width: 60%"><a href="/product/{{ $product->post_name }}" target="_blank"> {{ $eloquentProduct->getProductFullName() }}</a></td>
+                                                        <td style="width: 60%"><a href="/product/{{ $product->slug }}" target="_blank"> {{ $product->full_name }}</a></td>
                                                         <td style="width: 20%" class="text-center">{{ $product->product_type }}</td>
                                                         <td style="width: 20%" class="text-center">
                                                             <input type="checkbox" value="{{ $organisation->id }}" class="approveProduct"
-                                                                   data-community="{{ $community->slug }}" data-product-id="{{ $product->ID }}"
-                                                                   @if(\App\CommunityOrganisationsApprovedProducts::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'product_id' => $product->ID])->first()) checked="checked" @endif>
+                                                                   data-community="{{ $community->slug }}" data-product-id="{{ $product->id }}"
+                                                                   @if(\App\CommunityOrganisationsApprovedProducts::where(['organisation_id' => $organisation->id, 'community_id' => $community->id, 'product_id' => $product->id])->first()) checked="checked" @endif>
                                                         </td>
                                                     </tr>
                                                     @endforeach

@@ -91,7 +91,7 @@ class LaravelTestSuite extends Model
      */
     public function community()
     {
-        return $this->hasMany('App\Community');
+        return $this->belongsTo('App\Community', 'community_id');
     }
 
     /**

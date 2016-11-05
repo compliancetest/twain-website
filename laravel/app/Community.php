@@ -54,7 +54,12 @@ class Community extends Model
         if($this->isAdmin() || $this->isModerator()){
             return $this->testSuites()->orderBy('full_name')->get();
         }
-        return $this->testSuites()->orderBy('created_by', 'DESC')->groupBy('minor_family_mark')->get();
+        return $this->testSuites()->orderBy('created_at', 'DESC')->groupBy('minor_family_mark')->get();
+    }
+
+    public function getCommunityTestSuitesMajorVersions()
+    {
+        return $this->testSuites()->orderBy('created_at', 'DESC')->groupBy('major_family_mark')->get();
     }
 
     /**

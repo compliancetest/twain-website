@@ -110,7 +110,7 @@ class User extends Authenticatable
      */
     public function suiteSubscriptions()
     {
-        return $this->hasMany('\App\OrganisationSubscription', 'user_id');
+        return $this->hasMany('\App\OrganisationSubscription', 'user_id')->with('testSuite');
     }
 
     public function getUserTestPlans()
