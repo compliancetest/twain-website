@@ -45,6 +45,6 @@ trait SlugTrait
 
     public static function findBySlug($slug)
     {
-        return self::where(['slug' => $slug])->first();
+        return self::where(['slug' => $slug])->firstOrFail();
     }
 }

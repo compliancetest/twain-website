@@ -57,9 +57,9 @@ class LaravelTestCase extends Model
             ->pluck('code')->toArray();
     }
 
-    public function scenario()
+    public function scenarios()
     {
-        return $this->hasOne('\App\TestCaseScenario', 'test_case_id')->with('testSuiteScenario');
+        return $this->hasMany('\App\TestCaseScenario', 'test_case_id')->with('testSuiteScenario');
     }
 
     public function roles()

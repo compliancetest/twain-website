@@ -216,7 +216,7 @@ class MigrateProductsCasesSuitesData extends Migration
                                 if (isset($wpScenario[0]->code)) {
                                     $suiteScenario = $laravelSuite->scenarios()->where('code', $wpScenario[0]->code)->first();
                                     if ($suiteScenario) {
-                                        $laravelTestCase->scenario()->create([
+                                        $laravelTestCase->scenarios()->create([
                                             'test_suites_scenario_id' => $suiteScenario->id,
                                         ]);
                                     }

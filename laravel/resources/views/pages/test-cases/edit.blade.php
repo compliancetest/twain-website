@@ -175,13 +175,15 @@
                     <div class="colored-box-header"><a href="#testCaseConformanceLevelsBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Conformance Levels</div>
                     <div class="colored-box-body collapse in" id="testCaseConformanceLevelsBox">
                         <div class="colored-box-content">
-                            @foreach($testSuites as $testSuite)
+                            @foreach($testCase->testSuites as $testSuite)
                                 <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
                                 @foreach($testSuite->conformanceLevels as $conformanceLevel)
                                     <dl class="definition-list">
                                         <dt>
                                             <label>
-                                                <input type="checkbox" name="conformance_level[]" value="Default" checked="checked">{{ $conformanceLevel->code }}
+                                                <input type="checkbox" name="conformanceLevel[{{ $testSuite->id }}][]" value="{{ $conformanceLevel->code }}"
+                                                      @if(count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
+                                                {{ $conformanceLevel->code }}
                                             </label>
                                         </dt>
                                         <dd>{{ $conformanceLevel->description }}</dd>
@@ -197,87 +199,20 @@
                     <div class="colored-box-header"><a href="#testCaseScenariosBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Scenarios</div>
                     <div class="colored-box-body collapse in" id="testCaseScenariosBox">
                         <div class="colored-box-content">
-                            <h4 class="test-item-subheader">TWAIN v2.3 Compliance – Data Sources v1.0</h4>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="Default" checked="checked">Default
-                                    </label>
-                                </dt>
-                                <dd>All test cases created via this test suite are initially associated with this scenario. In general, test cases will be associated with test suite specific scenarios, so it will usually be the case that no test cases are associated with this scenario.</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="SC" checked="checked">SC
-                                    </label>
-                                </dt>
-                                <dd>Standard Capability. TWAIN Standard capabilities (ID's with a value less than 0x8000). Ignore Vendor Custom capabilities (ID’s with a value of 0x8000 or greater).</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="VC" checked="checked">VC
-                                    </label>
-                                </dt>
-                                <dd>Vendor Specific Capability. Vendor Custom capabilities (ID's with a value of 0x8000 or greater). Ignore TWAIN Standard capabilities (ID’s with a value less than 0x8000).</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="SR" checked="checked">SR
-                                    </label>
-                                </dt>
-                                <dd>Status Return Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="ST" checked="checked">ST
-                                    </label>
-                                </dt>
-                                <dd>Stress Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="IT" checked="checked">IT
-                                    </label>
-                                </dt>
-                                <dd>Non-UI Image Transfer Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="UI" checked="checked">UI
-                                    </label>
-                                </dt>
-                                <dd>UI Driven Image Transfer Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="CX" checked="checked">CX
-                                    </label>
-                                </dt>
-                                <dd>CAP_XFERCOUNT Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="VN" checked="checked">VN
-                                    </label>
-                                </dt>
-                                <dd>Version Tests</dd>
-                            </dl>
-                            <dl class="definition-list">
-                                <dt>
-                                    <label>
-                                        <input type="radio" name="test-case-scenario" value="VV" checked="checked">VV
-                                    </label>
-                                </dt>
-                                <dd>Verify Values For MSG_RESETALL and MSG_RESET</dd>
-                            </dl>
+                            @foreach($testCase->testSuites as $testSuite)
+                            <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
+                                @foreach($testSuite->scenarios as $scenario)
+                                    <dl class="definition-list">
+                                        <dt>
+                                            <label>
+                                                <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->code }}"
+                                                       @if(count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
+                                            </label>
+                                        </dt>
+                                        <dd>{{ $scenario->description }}</dd>
+                                    </dl>
+                                @endforeach
+                            @endforeach
                         </div>
                     </div>
                 </div>
