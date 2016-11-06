@@ -7,8 +7,8 @@
         <div class="pull-right">
             @can('change', $product)
                 <a href="/laravel-product/{{ $product->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
-                <button type="button" data-toggle="modal" data-target="#deleteProductModal" class="btn btn-danger btn-with-icon btn-delete">Delete</button>
-                @include('pages.products.partials.confirm-delete-modal', ['k' => 1])
+                <button type="button" data-toggle="modal" data-target="#deleteProductModal1" class="btn btn-danger btn-with-icon btn-delete">Delete</button>
+                @include('pages.products.partials.confirm-delete-product-modal', ['k' => 1])
             @endcan
         </div>
     </div>

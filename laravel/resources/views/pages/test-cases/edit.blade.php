@@ -19,14 +19,14 @@
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="testCaseName">Name:</label>
-                                        <input type="text" id="testCaseName" name="test_case_name" class="form-control" value="{{ $testCase->name }}">
+                                        <input type="text" id="testCaseName" name="name" class="form-control" value="{{ $testCase->name }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testCasePublishedDate">Published:</label>
                                         <div class="input-group date" data-provide="datepicker">
-                                            <input type="text" id="testCasePublishedDate" name="test_case_published_date" class="form-control datepicker-form-control" readonly value="{{ formatDate($testCase->published_at) }}">
+                                            <input type="text" id="testCasePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly value="{{ formatDate($testCase->published_at) }}">
                                             <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                         </div>
                                     </div>
@@ -40,31 +40,31 @@
                                         <div class="radio-group status-radio-group">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_case_status" value="draft" @if($testCase->status == 'Draft') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="draft" @if($testCase->status == 'Draft') checked="checked"@endif>
                                                     <span class="status status-circle status-draft">D</span>Draft
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_case_status" value="active" @if($testCase->status == 'Active') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="active" @if($testCase->status == 'Active') checked="checked"@endif>
                                                     <span class="status status-circle status-active">A</span>Active
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_case_status" value="deprecated" @if($testCase->status == 'Deprecated') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="deprecated" @if($testCase->status == 'Deprecated') checked="checked"@endif>
                                                     <span class="status status-circle status-deprecated">C</span>Deprecated
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_case_status" value="obsolete" @if($testCase->status == 'Obsolete') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="obsolete" @if($testCase->status == 'Obsolete') checked="checked"@endif>
                                                     <span class="status status-circle status-obsolete">O</span>Obsolete
                                                 </label>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="test_case_status" value="partial" @if($testCase->status == 'Partial') checked="checked"@endif>
+                                                    <input type="radio" name="status" value="partial" @if($testCase->status == 'Partial') checked="checked"@endif>
                                                     <span class="status status-circle status-partial">P</span>Partial
                                                 </label>
                                             </div>
@@ -97,7 +97,7 @@
 
                             <div class="form-group">
                                 <label for="testCaseDescription">Description:</label>
-                                <textarea rows="5" class="form-control" id="testCaseDescription" name="test_case_description">{{ $testCase->description }}</textarea>
+                                <textarea rows="5" class="form-control" id="testCaseDescription" name="description">{{ $testCase->description }}</textarea>
                             </div>
 
                         </div>
@@ -233,12 +233,12 @@
                                         <div class="col-md-4">
                                             <label>Image:</label>
                                             <div class="upload-file-field">
-                                                <input type="file" name="test_sample_file[]" class="input-file" />
+                                                <input type="file" name="test_case_sample[file][]" class="input-file" />
                                             </div>
                                         </div>
                                         <div class="col-md-7">
                                             <label for="testSampleFileDescription">Description:</label>
-                                            <input type="text" name="test_sample_file_description[]" id="testSampleFileDescription" value="" class="form-control" />
+                                            <input type="text" name="test_case_sample[description][]" id="testSampleFileDescription" value="" class="form-control" />
                                         </div>
                                         <div class="col-md-1 action-col">
                                             <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
@@ -304,7 +304,7 @@
                                             <dl class="definition-list">
                                                 <dt>
                                                     <label>
-                                                        <input type="checkbox" name="features[]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
+                                                        <input type="checkbox" name="features[{{ $testSuite->id }}][]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
                                                     </label>
                                                 </dt>
                                                 <dd>{{ $feature->description }}</dd>
@@ -360,7 +360,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label for="testCaseTestPattern">Test Pattern:</label>
-                                        <select name="test_case_pattern" id="testCaseTestPattern" class="form-control">
+                                        <select name="test_pattern" id="testCaseTestPattern" class="form-control">
                                             <option value="1" @if($testCase->test_pattern == 1) selected="selected" @endif>Tester Initiated 1-Way Notification</option>
                                             <option value="2" @if($testCase->test_pattern == 2) selected="selected" @endif>Harness Initiated 1-Way Notification</option>
                                             <option value="3" @if($testCase->test_pattern == 3) selected="selected" @endif>Tester Initiated 2-Way Asynchronous Transaction</option>

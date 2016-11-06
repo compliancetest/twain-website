@@ -154,13 +154,9 @@ class MigrateProductsCasesSuitesData extends Migration
         $testCases = \App\Post::where(['post_type' => 'test-case'])->get();
         foreach ($testCases as $testCase) {
             $testCaseFullName = $testCase->post_title;
-            $patch = $testCase->getMetaByKey('version_patch');
-            if ($patch) {
-                $testCaseFullName .= '.' . $patch;
-            }
             $laravelTestCase = \App\LaravelTestCase::create([
                 'slug' => $testCase->post_name,
-                'name' => $testCase->post_title,
+                'name' => count(explode(' v', $testCase->post_title)) == 2 ? explode(' v', $testCase->post_title)[0] :  $testCase->post_title,
                 'version_major' => (integer)$testCase->getMetaByKey('version_major'),
                 'version_minor' => (integer)$testCase->getMetaByKey('version_minor'),
                 'version_patch' => (integer)$testCase->getMetaByKey('version_patch'),
