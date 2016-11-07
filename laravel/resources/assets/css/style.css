@@ -13936,6 +13936,273 @@ html[xmlns] .flexslider .slides {
   line-height: 22px;
 }
 
+/*
+ * blueimp Gallery CSS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+/* line 13, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery,
+.blueimp-gallery > .slides > .slide > .slide-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* Prevent artifacts in Mozilla Firefox: */
+  -moz-backface-visibility: hidden;
+}
+
+/* line 23, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide > .slide-content {
+  margin: auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  opacity: 1;
+}
+
+/* line 31, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery {
+  position: fixed;
+  z-index: 999999;
+  overflow: hidden;
+  background: #000;
+  background: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  display: none;
+  direction: ltr;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+/* line 43, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-carousel {
+  position: relative;
+  z-index: auto;
+  margin: 1em auto;
+  /* Set the carousel width/height ratio to 16/9: */
+  padding-bottom: 56.25%;
+  box-shadow: 0 0 10px #000;
+  -ms-touch-action: pan-y;
+  touch-action: pan-y;
+}
+
+/* line 53, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-display {
+  display: block;
+  opacity: 1;
+}
+
+/* line 57, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* line 62, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-carousel > .slides {
+  position: absolute;
+}
+
+/* line 65, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide {
+  position: relative;
+  float: left;
+  height: 100%;
+  text-align: center;
+  -webkit-transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  -moz-transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  -ms-transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  -o-transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* line 76, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery,
+.blueimp-gallery > .slides > .slide > .slide-content {
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -ms-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear;
+}
+
+/* line 84, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide-loading {
+  background: url('../images/loader.gif?1464115992') no-repeat 0 0;
+  background-size: 31px 31px;
+}
+
+/* line 88, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide-loading > .slide-content {
+  opacity: 0;
+}
+
+/* line 91, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide-error {
+  background: url('../images/gallery/error.png?1466973048') center no-repeat;
+}
+
+/* line 94, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide-error > .slide-content {
+  display: none;
+}
+
+/* line 97, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .prev,
+.blueimp-gallery > .next {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  margin-top: -23px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 60px;
+  font-weight: 100;
+  line-height: 30px;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 0 2px #000;
+  text-align: center;
+  background: #222;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border: 3px solid #fff;
+  -webkit-border-radius: 23px;
+  -moz-border-radius: 23px;
+  border-radius: 23px;
+  opacity: 0.5;
+  cursor: pointer;
+  display: block;
+}
+
+/* line 126, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .next {
+  left: auto;
+  right: 15px;
+}
+
+/* line 130, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .close,
+.blueimp-gallery > .title {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  margin: 0 40px 0 0;
+  font-size: 20px;
+  line-height: 30px;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  opacity: 0.8;
+  display: block;
+}
+
+/* line 143, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .close {
+  padding: 15px;
+  right: 15px;
+  left: auto;
+  margin: -15px;
+  font-size: 30px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* line 152, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .play-pause {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  width: 15px;
+  height: 15px;
+  background: url('../images/gallery/play-pause.png?1466973048') 0 0 no-repeat;
+  cursor: pointer;
+  opacity: 0.5;
+  display: none;
+}
+
+/* line 163, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-playing > .play-pause {
+  background-position: -15px 0;
+}
+
+/* line 166, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .prev:hover,
+.blueimp-gallery > .next:hover,
+.blueimp-gallery > .close:hover,
+.blueimp-gallery > .title:hover,
+.blueimp-gallery > .play-pause:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+/* line 174, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-controls > .prev,
+.blueimp-gallery-controls > .next,
+.blueimp-gallery-controls > .close,
+.blueimp-gallery-controls > .title,
+.blueimp-gallery-controls > .play-pause {
+  display: block;
+  /* Fix z-index issues (controls behind slide element) on Android: */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* line 187, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery-single > .prev,
+.blueimp-gallery-left > .prev,
+.blueimp-gallery-single > .next,
+.blueimp-gallery-right > .next,
+.blueimp-gallery-single > .play-pause {
+  display: none;
+}
+
+/* line 194, ../scss/blocks/_blueimp-gallery.scss */
+.blueimp-gallery > .slides > .slide > .slide-content,
+.blueimp-gallery > .prev,
+.blueimp-gallery > .next,
+.blueimp-gallery > .close,
+.blueimp-gallery > .play-pause {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Replace PNGs with SVGs for capable browsers (excluding IE<9) */
+/* line 207, ../scss/blocks/_blueimp-gallery.scss */
+body:last-child .blueimp-gallery > .slides > .slide-error {
+  background-image: url('../images/gallery/error.svg?1466973048');
+}
+
+/* line 210, ../scss/blocks/_blueimp-gallery.scss */
+body:last-child .blueimp-gallery > .play-pause {
+  width: 20px;
+  height: 20px;
+  background-size: 40px 20px;
+  background-image: url('../images/gallery/play-pause.svg?1466973048');
+}
+
+/* line 216, ../scss/blocks/_blueimp-gallery.scss */
+body:last-child .blueimp-gallery-playing > .play-pause {
+  background-position: -20px 0;
+}
+
 /* line 1, ../scss/pages/_community.scss */
 .community-header {
   border-bottom: 1px solid #e1e1e1;
@@ -15634,6 +15901,21 @@ input.notify-changes {
   border-top: 0;
   margin-top: 0;
   padding-top: 10px;
+}
+
+/* line 71, ../scss/pages/_test-cases.scss */
+.image-gallery-list li {
+  margin: 10px 5px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  max-width: 175px;
+}
+/* line 78, ../scss/pages/_test-cases.scss */
+.image-gallery-list li img {
+  max-width: 200px;
+  height: auto;
+  display: block;
 }
 
 /* line 3, ../scss/_header.scss */

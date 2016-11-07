@@ -66,3 +66,20 @@
     padding-top: 10px;
   }
 }
+
+.image-gallery-list{
+  li{
+    margin: 10px 5px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    max-width: 175px;
+
+    img{
+      max-width: 200px;
+      height: auto;
+      display: block;
+    }
+  }
+
+}
