@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
+use App\CommunityMembers;
 use App\CommunityOrganisationsApprovedProducts;
 use App\CommunityOrganisationsApprovedTestSuites;
 use App\Jobs\ProcessTransactionLog;
