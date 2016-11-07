@@ -11,7 +11,9 @@
                     @endforeach
                 </ul>
                 <h1>Test case: <strong>{{ $testCase->full_name }}</strong></h1>
-                <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                @can('changeTestCase', $testCase)
+                    <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                @endcan
                 &nbsp;
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
             </div>
@@ -54,7 +56,9 @@
                 <div class="options-box-row">
                     <div class="options-box-row-title">Scenario:</div>
                     <ul class="inline-options-list">
-                        <li><strong>{{ $testCase->scenario->testSuiteScenario->code }}</strong> ({{ $testCase->scenario->testSuiteScenario->description }})</li>
+                        @foreach($testCase->scenarios as $scenario)
+                            <li><strong>{{ $scenario->testSuiteScenario->code }}</strong> ({{ $scenario->testSuiteScenario->description }})</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

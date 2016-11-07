@@ -639,32 +639,11 @@ var Page = {
                 type: 'post',
                 data: form.serialize(),
                 error: function(jqXHR, status){
-                    if(form.data('test-suites') == true){
-                        var processedMessages = [];
-                        var error = jQuery.map(jqXHR.responseJSON, function(v){
-                            v = v.toString();
-                            if($.inArray(v, processedMessages) == -1) {
-                                var divId = 'testSuiteInformationBox';
-                                if(v.indexOf('Conformance') != -1){
-                                    divId = 'conformanceLevelsBox';
-                                } else if(v.indexOf('Scenario') != -1){
-                                    divId = 'scenariosBox';
-                                } else if(v.indexOf('Role') != -1){
-                                    divId = 'testSuitesRolesBox';
-                                } else if(v.indexOf('specificationDocuments') != -1){
-                                    divId = 'specificationDocsBox';
-                                } else if(v.indexOf('Feature') != -1){
-                                    divId = 'featuresBox';
-                                } else if(v.indexOf('profile') != -1){
-                                    divId = 'testDataBox';
-                                } else if(v.indexOf('test suite type') != -1){
-                                    divId = 'testSuiteTypesBox';
-                                }
-                                form.find('#'+ divId).append('<div class=" message error-message">' + v + '</div>');
-                                processedMessages.push(v);
-                            }
-                        });
-                        return error;
+                    if(form.data('test-suites') == true) {
+                        handleChangeTestSuiteResponse(jqXHR, form);
+                    }
+                    else if(form.data('test-cases') == true){
+                        handleChangeTestCaseResponse(jqXHR, form);
                     } else {
                         form.find('.colored-box-footer').prepend('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     }
@@ -1379,4 +1358,56 @@ function getBoxFilters(data, url) {
             $('#filterBySpinner').hide();
         }
     })
+}
+
+function handleChangeTestCaseResponse(jqXHR, form){
+    var processedMessages = [];
+    var error = jQuery.map(jqXHR.responseJSON, function (v, index) {
+        v = v.toString();
+        if ($.inArray(v, processedMessages) == -1) {
+            var divId = 'testCaseInformationBox';
+            if (index == 'conformanceLevel') {
+                divId = 'testCaseConformanceLevelsBox';
+            } else if (index == 'scenario') {
+                divId = 'testCaseScenariosBox';
+             } else if (index == 'tester_role' || index == 'harness_role' || index == 'initiator') {
+                divId = 'testCaseRolesBox';
+            } else if (index == 'test_suite_id') {
+                divId = 'testTestSuitesBox';
+            } else if (v.indexOf('Expected Result') != -1) {
+                divId = 'testCaseStepsBoxContent';
+            }
+            form.find('#' + divId).append('<div class="message error-message">' + v + '</div>');
+            processedMessages.push(v);
+        }
+    });
+    return error;
+
+}
+function handleChangeTestSuiteResponse(jqXHR) {
+     var processedMessages = [];
+    var error = jQuery.map(jqXHR.responseJSON, function (v) {
+        v = v.toString();
+        if ($.inArray(v, processedMessages) == -1) {
+            var divId = 'testSuiteInformationBox';
+            if (v.indexOf('Conformance') != -1) {
+                divId = 'conformanceLevelsBox';
+            } else if (v.indexOf('Scenario') != -1) {
+                divId = 'scenariosBox';
+            } else if (v.indexOf('Role') != -1) {
+                divId = 'testSuitesRolesBox';
+            } else if (v.indexOf('specificationDocuments') != -1) {
+                divId = 'specificationDocsBox';
+            } else if (v.indexOf('Feature') != -1) {
+                divId = 'featuresBox';
+            } else if (v.indexOf('profile') != -1) {
+                divId = 'testDataBox';
+            } else if (v.indexOf('test suite type') != -1) {
+                divId = 'testSuiteTypesBox';
+            }
+            form.find('#' + divId).append('<div class=" message error-message">' + v + '</div>');
+            processedMessages.push(v);
+        }
+    });
+    return error;
 }

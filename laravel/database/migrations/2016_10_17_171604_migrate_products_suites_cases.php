@@ -13,37 +13,6 @@ class MigrateProductsSuitesCases extends Migration
     public function up()
     {
         Schema::disableForeignKeyConstraints();
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE api_logs CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 	claims CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 	claim_transactions CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 		communities CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 		communities_downloads CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 		communities_members CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 		communities_meta CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 			communities_organisations_approved_products CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 			communities_organisations_approved_test_suites	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 				communities_profiles_backups	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 					communities_testsuites	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 					community_articles	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 						community_articles_attachments	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							community_forum_posts	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							community_forum_threads	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							community_forum_threads_read	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							community_invitations	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							community_surveys_results	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							flash_messages	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							migrations	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 							sessions	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 								testing_details	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 								test_outcome_statuses	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 									test_plans	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 									test_plans_excluded_cases	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 										test_suites	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 										transactions	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 											transactions_logs	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 											transaction_change_logs	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 											transaction_explanation_logs	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE 											verify_requests	 CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci");
 
         $this->dropIfExistsData();
         Schema::create('test_suites', function (Blueprint $table) {
@@ -194,6 +163,7 @@ class MigrateProductsSuitesCases extends Migration
         Schema::create('test_cases', function (Blueprint $table) {
             $table->primary('id');
             $table->uuid('id');
+            $table->uuid('community_id');
             $table->string('slug');
             $table->string('name');//CN-10
             $table->integer('version_major');//1
@@ -213,6 +183,10 @@ class MigrateProductsSuitesCases extends Migration
             $table->integer('wp_id');//..
             $table->timestamp('published_at');//2016-01-29
             $table->timestamps();
+        });
+
+         Schema::table('test_cases', function ($table) {
+            $table->foreign('community_id')->references('id')->on('communities');
         });
 
         Schema::create('test_cases_conformance_levels', function (Blueprint $table) {

@@ -95,10 +95,16 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
         Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
 
+
+        Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');
+        Route::get('laravel-test-case/{testCaseId}/test-suites-list', 'TestCasesController@testSuitesList');
+        Route::get('laravel-test-case/{testCaseId}/test-suites-data', 'TestCasesController@testSuitesData');
+        Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');
+        Route::post('laravel-test-case/{testCaseId}', 'TestCasesController@update');
     });
 
-    Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');
-    Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');
+
+
 
     Route::get('contact-us', 'ContactUsController@index');
 

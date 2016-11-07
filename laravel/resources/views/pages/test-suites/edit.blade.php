@@ -11,15 +11,7 @@
                     <h1>Create Test Suite:</h1>
                 @endif
             </div>
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
             {!! Form::model($testSuite, ['data-test-suites' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">

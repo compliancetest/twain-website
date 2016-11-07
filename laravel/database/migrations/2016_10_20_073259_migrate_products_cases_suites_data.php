@@ -154,7 +154,9 @@ class MigrateProductsCasesSuitesData extends Migration
         $testCases = \App\Post::where(['post_type' => 'test-case'])->get();
         foreach ($testCases as $testCase) {
             $testCaseFullName = $testCase->post_title;
+            $testCaseSuite = \App\Post::find(\App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'test_suite'])->first()->meta_value);
             $laravelTestCase = \App\LaravelTestCase::create([
+                'community_id' => $testCaseSuite && \App\Community::find($testCaseSuite->getMetaByKey('community_id')) ? $testCaseSuite->getMetaByKey('community_id') : \App\Community::findBySlug('twain')->id,
                 'slug' => $testCase->post_name,
                 'name' => count(explode(' v', $testCase->post_title)) == 2 ? explode(' v', $testCase->post_title)[0] :  $testCase->post_title,
                 'version_major' => (integer)$testCase->getMetaByKey('version_major'),
@@ -162,9 +164,9 @@ class MigrateProductsCasesSuitesData extends Migration
                 'version_patch' => (integer)$testCase->getMetaByKey('version_patch'),
                 'description' => strip_tags((string)$testCase->getMetaByKey('test_intent_description')),
                 'full_name' => $testCaseFullName,
-                'tester_role' => $testCase->getMetaByKey('choose_tester_role'),
-                'harness_role' => $testCase->getMetaByKey('choose_harness_role'),
-                'initiator' => $testCase->getMetaByKey('choose_initiator'),
+                'tester_role' => str_replace(' ', '', $testCase->getMetaByKey('choose_tester_role')),
+                'harness_role' => str_replace(' ', '', $testCase->getMetaByKey('choose_harness_role')),
+                'initiator' => ucfirst($testCase->getMetaByKey('choose_initiator')),
                 'status' => (string) $testCase->getMetaByKey('test_case_status'),
                 'test_execution_profile_id' => (integer)$testCase->getMetaByKey('test_execution'),
                 'configuration_profile_id' => (integer)$testCase->getMetaByKey('test_data_profile'),

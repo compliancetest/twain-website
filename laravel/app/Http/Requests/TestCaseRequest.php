@@ -36,13 +36,26 @@ class TestCaseRequest extends Request
 
             'test_suite_id' => 'required|array',
 
-            'conformanceLevel.*' => 'required|array',
-            'scenario.*' => 'required|array',
-            'features.*' => 'required|array',
+            'conformanceLevel' => 'required|array',
+            'scenario' => 'required|array',
 
-            'steps.action.*' => 'required_with:steps.expected_result.*,required_with:steps.step.*',
-            'steps.expected_result.*' => 'required_with:steps.action.*,required_with:steps.step.*',
-            'steps.step.*' => 'integer,required_with:steps.expected_result.*,required_with:steps.action.*',
+            'steps.action.*' => 'required_with:steps.expected_result.*|required_with:steps.step.*',
+            'steps.expected_result.*' => 'required_with:steps.action.*|required_with:steps.step.*',
+            'steps.step.*' => 'integer|required_with:steps.expected_result.*|required_with:steps.action.*',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'steps.action.required' => 'Please fill Action / Expected Result / Step',
+            'steps.expected_result.required' => 'Please fill Action / Expected Result / Step',
+            'steps.step.required' => 'Please fill Action / Expected Result / Step',
+
+            'conformanceLevel.required' => 'Please define at least one Conformance Level',
+            'scenario.required' => 'Please define at least one Scenario',
+
+            'steps.*.required_with' => 'Please fill Action / Expected Result / Step',
         ];
     }
 }

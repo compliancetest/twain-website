@@ -8,498 +8,512 @@
                 <h1>Edit Test Case: {{ $testCase->full_name }}</h1>
             </div>
 
-            <form action="#" method="post">
+            {!! Form::model($testSuite, ['data-test-cases' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
 
-                {{-- Test Case Information --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseInformationBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Case Information</div>
-                    <div class="colored-box-body collapse in" id="testCaseInformationBox">
-                        <div class="colored-box-content">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="testCaseName">Name:</label>
-                                        <input type="text" id="testCaseName" name="name" class="form-control" value="{{ $testCase->name }}">
-                                    </div>
+            {{-- Test Case Information --}}
+            <div class="colored-box collapsible-box">
+                <div class="colored-box-header"><a href="#testCaseInformationBox" class="collapse-arrow" data-toggle="collapse"><span
+                                class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Case Information
+                </div>
+                <div class="colored-box-body collapse in" id="testCaseInformationBox">
+                    <div class="colored-box-content">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="testCaseName">Name:</label>
+                                    <input type="text" id="testCaseName" name="name" class="form-control" value="{{ $testCase->name }}">
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="testCasePublishedDate">Published:</label>
-                                        <div class="input-group date" data-provide="datepicker">
-                                            <input type="text" id="testCasePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly value="{{ formatDate($testCase->published_at) }}">
-                                            <span class="input-group-addon"><span class="calendar-icon"></span></span>
-                                        </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="testCasePublishedDate">Published:</label>
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" id="testCasePublishedDate" name="published_at" class="form-control datepicker-form-control" readonly
+                                               value="{{ formatDate($testCase->published_at) }}">
+                                        <span class="input-group-addon"><span class="calendar-icon"></span></span>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label for="testCaseStatus">Status:</label>
-                                        <div class="radio-group status-radio-group">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="status" value="draft" @if($testCase->status == 'Draft') checked="checked"@endif>
-                                                    <span class="status status-circle status-draft">D</span>Draft
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="status" value="active" @if($testCase->status == 'Active') checked="checked"@endif>
-                                                    <span class="status status-circle status-active">A</span>Active
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="status" value="deprecated" @if($testCase->status == 'Deprecated') checked="checked"@endif>
-                                                    <span class="status status-circle status-deprecated">C</span>Deprecated
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="status" value="obsolete" @if($testCase->status == 'Obsolete') checked="checked"@endif>
-                                                    <span class="status status-circle status-obsolete">O</span>Obsolete
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="status" value="partial" @if($testCase->status == 'Partial') checked="checked"@endif>
-                                                    <span class="status status-circle status-partial">P</span>Partial
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-md-offset-1">
-                                    <div class="form-group">
-                                        <label for="testCaseVersion">Version:</label>
-                                        <div class="manage-version-box row">
-                                            <div class="manage-version-group">
-                                                <span>Major</span>
-                                                <input type="text" id="tcVersionMajor" name="version_major" class="form-control" readonly="readonly" value="{{ $testCase->version_major }}" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMajor"></button>
-                                            </div>
-                                            <div class="manage-version-group">
-                                                <span>Minor</span>
-                                                <input type="text" id="tcVersionMinor" name="version_minor" class="form-control" readonly="readonly" value="{{ $testCase->version_minor }}" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMinor"></button>
-                                            </div>
-                                            <div class="manage-version-group">
-                                                <span>Patch</span>
-                                                <input type="text" id="tcVersionPatch" name="version_patch" class="form-control" readonly="readonly" value="{{ $testCase->version_patch }}" />
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionPatch" disabled="disabled" data-tooltip="tooltip" title="Later version already exists."></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="testCaseDescription">Description:</label>
-                                <textarea rows="5" class="form-control" id="testCaseDescription" name="description">{{ $testCase->description }}</textarea>
-                            </div>
-
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="testCaseStatus">Status:</label>
+                                    <div class="radio-group status-radio-group">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" value="Draft" @if($testCase->status == 'Draft') checked="checked"@endif>
+                                                <span class="status status-circle status-draft">D</span>Draft
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" value="Active" @if($testCase->status == 'Active') checked="checked"@endif>
+                                                <span class="status status-circle status-active">A</span>Active
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" value="Deprecated" @if($testCase->status == 'Deprecated') checked="checked"@endif>
+                                                <span class="status status-circle status-deprecated">C</span>Deprecated
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" value="Obsolete" @if($testCase->status == 'Obsolete') checked="checked"@endif>
+                                                <span class="status status-circle status-obsolete">O</span>Obsolete
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" value="Partial" @if($testCase->status == 'Partial') checked="checked"@endif>
+                                                <span class="status status-circle status-partial">P</span>Partial
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-md-offset-1">
+                                <div class="form-group">
+                                    <label for="testCaseVersion">Version:</label>
+                                    <div class="manage-version-box row">
+                                        <div class="manage-version-group">
+                                            <span>Major</span>
+                                            <input type="text" id="tcVersionMajor" name="version_major" class="form-control" readonly="readonly"
+                                                   value="{{ $testCase->version_major }}"/>
+                                            <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMajor"></button>
+                                        </div>
+                                        <div class="manage-version-group">
+                                            <span>Minor</span>
+                                            <input type="text" id="tcVersionMinor" name="version_minor" class="form-control" readonly="readonly"
+                                                   value="{{ $testCase->version_minor }}"/>
+                                            <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMinor"></button>
+                                        </div>
+                                        <div class="manage-version-group">
+                                            <span>Patch</span>
+                                            <input type="text" id="tcVersionPatch" name="version_patch" class="form-control" readonly="readonly"
+                                                   value="{{ $testCase->version_patch }}"/>
+                                            <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionPatch" disabled="disabled"
+                                                    data-tooltip="tooltip" title="Later version already exists."></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="testCaseCommunity">Community:</label>
+                            <select name="community_id" id="communityId" class="form-control">
+                                @foreach(\App\Community::all()->sortBy('title') as $community)
+                                    @if($community->isAdmin() || is_super_admin())
+                                        <option value="{{ $community->id }}"
+                                                @if($community->id == $testCase->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="testCaseDescription">Description:</label>
+                            <textarea rows="5" class="form-control" id="testCaseDescription" name="description">{{ $testCase->description }}</textarea>
+                        </div>
+
                     </div>
                 </div>
+            </div>
 
-                {{-- Choose Test Suite --}}
+            {{-- Choose Test Suite --}}
+            <div class="block-loading-wrapper" id="testSuitesContent">
                 <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testTestSuitesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Test Suite</div>
-                    <div class="colored-box-body collapse in" id="testTestSuitesBox">
-                        <div class="colored-box-content">
-                            <div class="checkboxes-group two-col">
-                                @foreach($testSuites as $testSuite)
-                                    <div class="checkbox">
+                    <div class="colored-box-header"><a href="#testTestSuitesBox" class="collapse-arrow" data-toggle="collapse"><span
+                                    class="glyphicon glyphicon-triangle-bottom"></span><span
+                                    class="glyphicon glyphicon-triangle-right"></span></a>Choose Test Suite
+                    </div>
+                    <div class="colored-box-body collapse in" id="testTestSuitesBox"></div>
+                    @include('loader', ['loaderClass' => 'testSuitesLoader'])
+                </div>
+            </div>
+
+            {{-- Choose Roles --}}
+            <div class="colored-box collapsible-box">
+                <div class="colored-box-header"><a href="#testCaseRolesBox" class="collapse-arrow" data-toggle="collapse"><span
+                                class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Roles
+                </div>
+                <div class="colored-box-body collapse in" id="testCaseRolesBox">
+                    <div class="colored-box-content">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="testCaseTesterRole">Tester Role:</label>
+                                    <select name="tester_role" id="testCaseTesterRole" class="form-control">
+                                        <option value="">- Select -</option>
+                                        <option value="Application" @if($testCase->tester_role == 'Application') selected="selected" @endif>Application</option>
+                                        <option value="DataSource" @if($testCase->tester_role == 'DataSource') selected="selected" @endif>DataSource</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="testCaseHarnessRole">Harness Role:</label>
+                                    <select name="harness_role" id="testCaseHarnessRole" class="form-control">
+                                        <option value="">- Select -</option>
+                                        <option value="Application" @if($testCase->harness_role == 'Application') selected="selected" @endif>Application</option>
+                                        <option value="DataSource" @if($testCase->harness_role == 'DataSource') selected="selected" @endif>DataSource</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Initiator:</label>
+                                    <div class="checkboxes-group initiator-role-group">
+                                        <div class="checkbox-inline">
+                                            <label>
+                                                <input type="radio" name="initiator" value="Tester" @if($testCase->initiator == 'Tester') checked="checked" @endif>
+                                                Tester
+                                            </label>
+                                        </div>
+                                        <div class="checkbox-inline">
+                                            <label>
+                                                <input type="radio" name="initiator" value="Harness" @if($testCase->initiator == 'Harness') checked="checked" @endif>
+                                                Harness
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{-- Choose Conformance Levels --}}
+            <div class="block-loading-wrapper">
+                <div class="colored-box collapsible-box">
+                    <div class="colored-box-header"><a href="#testCaseConformanceLevelsBox" class="collapse-arrow" data-toggle="collapse"><span
+                                    class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Conformance Levels
+                    </div>
+                    <div class="colored-box-body collapse in" id="testCaseConformanceLevelsBox"></div>
+                    @include('loader', ['loaderClass' => 'testSuitesDataLoader'])
+                </div>
+            </div>
+
+            {{-- Choose Scenarios --}}
+            <div class="block-loading-wrapper">
+                <div class="colored-box collapsible-box">
+                    <div class="colored-box-header"><a href="#testCaseScenariosBox" class="collapse-arrow" data-toggle="collapse"><span
+                                    class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Scenarios
+                    </div>
+                    <div class="colored-box-body collapse in" id="testCaseScenariosBox"></div>
+                    @include('loader', ['loaderClass' => 'testSuitesDataLoader'])
+                </div>
+            </div>
+
+            {{-- Test Data --}}
+            <div class="colored-box collapsible-box">
+                <div class="colored-box-header"><a href="#testCaseTestDataBox" class="collapse-arrow" data-toggle="collapse"><span
+                                class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Data
+                </div>
+                <div class="colored-box-body collapse in" id="testCaseTestDataBox">
+                    <div class="colored-box-content dynamic-rows">
+                        <h4 class="test-item-subheader">Test Samples</h4>
+                        <div id="testCaseTestDataBoxContent">
+                            <div class="form-group testCaseSampleRow">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Image:</label>
+                                        <div class="upload-file-field">
+                                            <input type="file" name="test_case_sample[file][]" class="input-file"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <label for="testSampleFileDescription">Description:</label>
+                                        <input type="text" name="test_case_sample[description][]" id="testSampleFileDescription" value="" class="form-control"/>
+                                    </div>
+                                    <div class="col-md-1 action-col">
+                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="Page.helpers.addRow('#testCaseTestDataBoxTemplate','#testCaseTestDataBoxContent'); customizeFileTag();"
+                                class="btn btn-success btn-with-icon btn-add">Add image
+                        </button>
+
+                        <br/><br/><br/>
+                        <div id="configurationProfileArea"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Test Execution --}}
+            <div class="colored-box collapsible-box">
+                <div class="colored-box-header"><a href="#testCaseTestExecutionBox" class="collapse-arrow" data-toggle="collapse"><span
+                                class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Execution
+                </div>
+                <div class="colored-box-body collapse in" id="testCaseTestExecutionBox"></div>
+
+
+            </div>
+        </div>
+
+        {{-- Choose Features --}}
+        <div class="block-loading-wrapper">
+            <div class="colored-box collapsible-box">
+                <div class="colored-box-header"><a href="#testCaseFeaturesBox" class="collapse-arrow" data-toggle="collapse"><span
+                                class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Features
+                </div>
+                <div class="colored-box-body collapse in" id="testCaseFeaturesBox"></div>
+                @include('loader', ['loaderClass' => 'testSuitesDataLoader'])
+            </div>
+        </div>
+
+        {{-- Test Case Property --}}
+        <div class="colored-box collapsible-box">
+            <div class="colored-box-header"><a href="#testCasePropertyBox" class="collapse-arrow" data-toggle="collapse"><span
+                            class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Case Property
+            </div>
+            <div class="colored-box-body collapse in" id="testCasePropertyBox">
+                <div class="colored-box-content">
+                    <div class="form-group testSuiteRoleRow">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Outcome Type:</label>
+                                <div class="checkboxes-group">
+                                    <div class="checkbox-inline">
                                         <label>
-                                            <input name="test_suite_id[]" value="{{ $testSuite->id }}" type="checkbox" @if(count($testCase->testSuites->where('id', $testSuite->id))) checked="checked" @endif>
-                                            {{ $testSuite->full_name }}
+                                            <input type="radio" name="outcome_type" value="Positive" @if($testCase->outcome_type == 'Positive') checked="checked" @endif>
+                                            Positive
                                         </label>
                                     </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Choose Roles --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseRolesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Roles</div>
-                    <div class="colored-box-body collapse in" id="testCaseRolesBox">
-                        <div class="colored-box-content">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="testCaseTesterRole">Tester Role:</label>
-                                        <select name="tester_role" id="testCaseTesterRole" class="form-control">
-                                            <option value="">- Select -</option>
-                                            <option value="Application" @if($testCase->tester_role == 'Application') selected="selected" @endif>Application</option>
-                                            <option value="DataSource" @if($testCase->tester_role == 'DataSource') selected="selected" @endif>DataSource</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="testCaseHarnessRole">Harness Role:</label>
-                                        <select name="harness_role" id="testCaseHarnessRole" class="form-control">
-                                            <option value="">- Select -</option>
-                                            <option value="Application" @if($testCase->harness_role == 'Application') selected="selected" @endif>Application</option>
-                                            <option value="DataSource" @if($testCase->harness_role == 'DataSource') selected="selected" @endif>DataSource</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>Initiator:</label>
-                                        <div class="checkboxes-group initiator-role-group">
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="initiator" value="Tester"  @if($testCase->initiator == 'Tester') selected="selected" @endif>
-                                                    Tester
-                                                </label>
-                                            </div>
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="initiator" value="Harness" @if($testCase->initiator == 'Harness') selected="selected" @endif>
-                                                    Harness
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="radio" name="outcome_type" value="Negative" @if($testCase->outcome_type == 'Negative') checked="checked" @endif>
+                                            Negative
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Choose Conformance Levels --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseConformanceLevelsBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Conformance Levels</div>
-                    <div class="colored-box-body collapse in" id="testCaseConformanceLevelsBox">
-                        <div class="colored-box-content">
-                            @foreach($testCase->testSuites as $testSuite)
-                                <div class="definition-box">
-                                    <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                                    @foreach($testSuite->conformanceLevels as $conformanceLevel)
-                                        <dl class="definition-list">
-                                            <dt>
-                                                <label>
-                                                    <input type="checkbox" name="conformanceLevel[{{ $testSuite->id }}][]" value="{{ $conformanceLevel->code }}"
-                                                          @if(count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
-                                                    {{ $conformanceLevel->code }}
-                                                </label>
-                                            </dt>
-                                            <dd>{{ $conformanceLevel->description }}</dd>
-                                        </dl>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Choose Scenarios --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseScenariosBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Scenarios</div>
-                    <div class="colored-box-body collapse in" id="testCaseScenariosBox">
-                        <div class="colored-box-content">
-                            @foreach($testCase->testSuites as $testSuite)
-                                <div class="definition-box">
-                                    <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                                    @foreach($testSuite->scenarios as $scenario)
-                                        <dl class="definition-list">
-                                            <dt>
-                                                <label>
-                                                    <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->code }}"
-                                                           @if(count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
-                                                </label>
-                                            </dt>
-                                            <dd>{{ $scenario->description }}</dd>
-                                        </dl>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Test Data --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseTestDataBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Data</div>
-                    <div class="colored-box-body collapse in" id="testCaseTestDataBox">
-                        <div class="colored-box-content dynamic-rows">
-                            <h4 class="test-item-subheader">Test Samples</h4>
-                            <div id="testCaseTestDataBoxContent">
-                                <div class="form-group testCaseSampleRow">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Image:</label>
-                                            <div class="upload-file-field">
-                                                <input type="file" name="test_case_sample[file][]" class="input-file" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <label for="testSampleFileDescription">Description:</label>
-                                            <input type="text" name="test_case_sample[description][]" id="testSampleFileDescription" value="" class="form-control" />
-                                        </div>
-                                        <div class="col-md-1 action-col">
-                                            <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
-                                        </div>
+                            <div class="col-md-3">
+                                <label>Optional:</label>
+                                <div class="checkboxes-group">
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="radio" name="is_optional" value="Yes" @if($testCase->is_optional) checked="checked" @endif>
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="radio" name="is_optional" value="No" @if(!$testCase->is_optional) checked="checked" @endif>
+                                            No
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" onclick="Page.helpers.addRow('#testCaseTestDataBoxTemplate','#testCaseTestDataBoxContent'); customizeFileTag();" class="btn btn-success btn-with-icon btn-add">Add image</button>
-
-                            <br/><br/><br/>
-                            <h4 class="test-item-subheader">Test Configuration</h4>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="testCaseTestDataProfile">Attach JSON configuration profile file:</label>
-                                    <select name="configuration_profile_id" id="testCaseTestDataProfile" class="form-control">
-                                        <option value="">-- Select profile type -- </option>
-                                        @foreach($profiles as $profile)
-                                            <option value="{{ $profile->id }}" @if($profile->id == $testCase->configuration_profile_id) selected="selected"@endif>{{ $profile->profile_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div class="col-md-3">
+                                <label for="testCaseTestPattern">Test Pattern:</label>
+                                <select name="test_pattern" id="testCaseTestPattern" class="form-control">
+                                    <option value="1" @if($testCase->test_pattern == 1) selected="selected" @endif>Tester Initiated 1-Way Notification</option>
+                                    <option value="2" @if($testCase->test_pattern == 2) selected="selected" @endif>Harness Initiated 1-Way Notification</option>
+                                    <option value="3" @if($testCase->test_pattern == 3) selected="selected" @endif>Tester Initiated 2-Way Asynchronous Transaction</option>
+                                    <option value="4" @if($testCase->test_pattern == 4) selected="selected" @endif>Harness Initiated 2-Way Asynchronous Transaction</option>
+                                    <option value="5" @if($testCase->test_pattern == 5) selected="selected" @endif>Tester Initiated Synchronous Query/Response</option>
+                                    <option value="6" @if($testCase->test_pattern == 6) selected="selected" @endif>Harness Initiated Synchronous Query/Response</option>
+                                    <option value="7" @if($testCase->test_pattern == 7) selected="selected" @endif>Long Running Correlated Choreography</option>
+                                </select>
                             </div>
                         </div>
-
-
                     </div>
+
                 </div>
-
-                {{-- Test Execution --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseTestExecutionBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Execution</div>
-                    <div class="colored-box-body collapse in" id="testCaseTestExecutionBox">
-                        <div class="colored-box-content dynamic-rows">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="testCaseExecutionFile">Attach JSON test execution file:</label>
-                                    <select name="test_execution_profile_id" id="testCaseExecutionFile" class="form-control">
-                                        <option value="">-- Select execution file --</option>
-                                        @foreach($profiles as $profile)
-                                            @if($profile->profile_role == 'TCEF')
-                                                <option value="{{ $profile->id }}" @if($profile->id == $testCase->test_execution_profile_id) selected="selected"@endif>{{ $profile->profile_name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                {{-- Choose Features --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseFeaturesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Choose Features</div>
-                    <div class="colored-box-body collapse in" id="testCaseFeaturesBox">
-                        <div class="colored-box-content">
-                            @foreach($testSuites as $testSuite)
-                                @if(count($testSuite->features))
-                                    <div class="definition-box">
-                                        <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                                        @foreach($testSuite->features as $feature)
-                                            <dl class="definition-list">
-                                                <dt>
-                                                    <label>
-                                                        <input type="checkbox" name="features[{{ $testSuite->id }}][]" value="{{ $feature->id }}" @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
-                                                    </label>
-                                                </dt>
-                                                <dd>{{ $feature->description }}</dd>
-                                            </dl>
-                                        @endforeach
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Test Case Property --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCasePropertyBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Case Property</div>
-                    <div class="colored-box-body collapse in" id="testCasePropertyBox">
-                        <div class="colored-box-content">
-                            <div class="form-group testSuiteRoleRow">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>Outcome Type:</label>
-                                        <div class="checkboxes-group">
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="outcome_type" value="Positive" @if($testCase->outcome_type == 'Positive') checked="checked" @endif>
-                                                    Positive
-                                                </label>
-                                            </div>
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="outcome_type" value="Negative" @if($testCase->outcome_type == 'Negative') checked="checked" @endif>
-                                                    Negative
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Optional:</label>
-                                        <div class="checkboxes-group">
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="is_optional" value="Yes" @if($testCase->is_optional) checked="checked" @endif>
-                                                    Yes
-                                                </label>
-                                            </div>
-                                            <div class="checkbox-inline">
-                                                <label>
-                                                    <input type="radio" name="is_optional" value="No" @if(!$testCase->is_optional) checked="checked" @endif>
-                                                    No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="testCaseTestPattern">Test Pattern:</label>
-                                        <select name="test_pattern" id="testCaseTestPattern" class="form-control">
-                                            <option value="1" @if($testCase->test_pattern == 1) selected="selected" @endif>Tester Initiated 1-Way Notification</option>
-                                            <option value="2" @if($testCase->test_pattern == 2) selected="selected" @endif>Harness Initiated 1-Way Notification</option>
-                                            <option value="3" @if($testCase->test_pattern == 3) selected="selected" @endif>Tester Initiated 2-Way Asynchronous Transaction</option>
-                                            <option value="4" @if($testCase->test_pattern == 4) selected="selected" @endif>Harness Initiated 2-Way Asynchronous Transaction</option>
-                                            <option value="5" @if($testCase->test_pattern == 5) selected="selected" @endif>Tester Initiated Synchronous Query/Response</option>
-                                            <option value="6" @if($testCase->test_pattern == 6) selected="selected" @endif>Harness Initiated Synchronous Query/Response</option>
-                                            <option value="7" @if($testCase->test_pattern == 7) selected="selected" @endif>Long Running Correlated Choreography</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Test Steps --}}
-                <div class="colored-box collapsible-box">
-                    <div class="colored-box-header"><a href="#testCaseStepsBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Steps</div>
-                    <div class="colored-box-body collapse in" id="testCaseStepsBox">
-                        <div class="colored-box-content dynamic-rows">
-                            <div id="testCaseStepsBoxContent">
-                                <div class="form-group testCaseStepRow">
-                                    @foreach($testCase->steps as $k => $step)
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Action:</label>
-                                                <textarea name="steps[action][]" class="form-control" cols="30" rows="5">{{ $step->action }}</textarea>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Expected Result:</label>
-                                                <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5">{{ $step->expected_result }}</textarea>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <label>Step:</label>
-                                                <input type="text" class="form-control" name="steps[step][]" value="{{ $step->step }}">
-                                            </div>
-                                            <div class="col-md-1 action-col">
-                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <button type="button" onclick="Page.helpers.addRow('#testCaseStepBoxTemplate','#testCaseStepsBoxContent'); customizeFileTag();" class="btn btn-success btn-with-icon btn-add">New Test Step</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <div class="checkbox pull-right">
-                        <label><input type="checkbox" value=""> Send Notification to members</label>
-                    </div>
-                    <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Case</button>
-                    <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
-                </div>
-
-            </form>
+            </div>
         </div>
+
+        {{-- Test Steps --}}
+        <div class="colored-box collapsible-box">
+            <div class="colored-box-header"><a href="#testCaseStepsBox" class="collapse-arrow" data-toggle="collapse"><span
+                            class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Steps
+            </div>
+            <div class="colored-box-body collapse in" id="testCaseStepsBox">
+                <div class="colored-box-content dynamic-rows">
+                    <div id="testCaseStepsBoxContent">
+                        <div class="form-group testCaseStepRow">
+                            @foreach($testCase->steps as $k => $step)
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Action:</label>
+                                        <textarea name="steps[action][]" class="form-control" cols="30" rows="5">{{ $step->action }}</textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Expected Result:</label>
+                                        <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5">{{ $step->expected_result }}</textarea>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>Step:</label>
+                                        <input type="text" class="form-control" name="steps[step][]" value="{{ $step->step }}">
+                                    </div>
+                                    <div class="col-md-1 action-col">
+                                        <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <button type="button" onclick="Page.helpers.addRow('#testCaseStepBoxTemplate','#testCaseStepsBoxContent'); customizeFileTag();"
+                            class="btn btn-success btn-with-icon btn-add">New Test Step
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="checkbox pull-right">
+                <label><input type="checkbox" value=""> Send Notification to members</label>
+            </div>
+            <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Case</button>
+            <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
+        </div>
+
+        {{ Form::close() }}
+    </div>
     </div>
 @stop
 
 
 @section('page-scripts')
-<script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
-<script>
-    jQuery(document).ready(function ($) {
-        $('body').on('click', '[data-delete-row]', function () {
-            var parenElement = '.' + $(this).data('delete-row');
-            $(this).parents(parenElement).fadeOut('fast', function () {
+    <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+            $('body').on('click', '[data-delete-row]', function () {
+                var parenElement = '.' + $(this).data('delete-row');
+                $(this).parents(parenElement).fadeOut('fast', function () {
+                    $(this).remove();
+                });
+                return false;
+            });
+
+            $('.manage-version-group .btn-add').click(function () {
+                $('.manage-version-box').addClass('version-updated');
+                var versionIdentifier = $(this).data('version-id');
+                var inputToUpdate = $('#' + versionIdentifier);
+                var currentVal = parseInt(inputToUpdate.val());
+                if (!isNaN(currentVal)) {
+                    inputToUpdate.val(currentVal + 1);
+                }
+                inputToUpdate.after('<button type="button" class="version-cancel" data-tooltip="tooltip" data-trigger="hover" title="Undo"><span class="cancel-icon"></span></button>');
+            });
+
+            $('body').on('click', '.manage-version-group .version-cancel', function (e) {
+                $('.manage-version-box').removeClass('version-updated');
+                var currentVal = parseInt($(this).prev('.form-control').val());
+                if (!isNaN(currentVal) && currentVal !== 0) {
+                    $(this).prev('input').val(currentVal - 1);
+                }
+                $('[data-tooltip]').tooltip('hide');
                 $(this).remove();
             });
-            return false;
+
+            $('body').on('change', '#communityId', function (e) {
+                jQuery('.testSuitesLoader.block-loading').show();
+                jQuery.ajax({
+                    url: '/laravel-test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-list',
+                    type: 'get',
+                    data: {
+                        'community_id': $('#communityId').val()
+                    },
+                    dataType: 'json',
+                    success: function (rsp) {
+                        $('.testSuitesLoader.block-loading').hide();
+                        $('#testTestSuitesBox').html(rsp.html);
+                        $('.testSuite:first').change();
+                    },
+                    error: function (jqXHR, status) {
+                        $('.testSuitesLoader.block-loading').hide();
+                        $('.testSuitesLoader.block-loading').before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('.testSuitesLoader.block-loading > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+                    }
+                });
+            });
+
+            $('#communityId').change();
+
+            $('body').on('change', '.testSuite', function (e) {
+                jQuery('.testSuitesDataLoader.block-loading').show();
+                var selected = [];
+                $('.testSuite:checked').each(function () {
+                    selected.push($(this).val());
+                });
+                jQuery.ajax({
+                    url: '/laravel-test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-data',
+                    type: 'get',
+                    data: {
+                        'test_suite_ids': selected
+                    },
+                    dataType: 'json',
+                    success: function (rsp) {
+                        $('.testSuitesDataLoader.block-loading').hide();
+                        $('#testCaseConformanceLevelsBox').html(rsp.html.conformanceLevels);
+                        $('#testCaseScenariosBox').html(rsp.html.scenarios);
+                        $('#testCaseFeaturesBox').html(rsp.html.features);
+                        $('#testCaseTestExecutionBox').html(rsp.html.execution_profile);
+                        $('#configurationProfileArea').html(rsp.html.configuration_profile);
+                    },
+                    error: function (jqXHR, status) {
+                        $('.testSuitesDataLoader.block-loading').hide();
+                        $('.testSuitesDataLoader.block-loading').before('<div class="error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                        setTimeout(function () {
+                            $('.testSuitesDataLoader.block-loading > .error-message').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 3000);
+                    }
+                });
+            });
+
+
         });
 
-        $('.manage-version-group .btn-add').click(function () {
-            $('.manage-version-box').addClass('version-updated');
-            var versionIdentifier = $(this).data('version-id');
-            var inputToUpdate = $('#' + versionIdentifier);
-            var currentVal = parseInt(inputToUpdate.val());
-            if (!isNaN(currentVal)) {
-                inputToUpdate.val(currentVal + 1);
-            }
-            inputToUpdate.after('<button type="button" class="version-cancel" data-tooltip="tooltip" data-trigger="hover" title="Undo"><span class="cancel-icon"></span></button>');
-        });
-
-        $('body').on('click', '.manage-version-group .version-cancel', function (e) {
-            $('.manage-version-box').removeClass('version-updated');
-            var currentVal = parseInt($(this).prev('.form-control').val());
-            if (!isNaN(currentVal) && currentVal !== 0) {
-                $(this).prev('input').val(currentVal - 1);
-            }
-            $('[data-tooltip]').tooltip('hide');
-            $(this).remove();
-        })
-
-
-    });
-
-</script>
-<script type="text/html" id="testCaseTestDataBoxTemplate">
-    <div class="form-group testCaseSampleRow">
-        <div class="row">
-            <div class="col-md-4">
-                <label>Image:</label>
-                <div class="upload-file-field">
-                    <input type="file" name="test_sample_file[]" class="input-file" />
+    </script>
+    <script type="text/html" id="testCaseTestDataBoxTemplate">
+        <div class="form-group testCaseSampleRow">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Image:</label>
+                    <div class="upload-file-field">
+                        <input type="file" name="test_sample_file[]" class="input-file"/>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <label for="testSampleFileDescription">Description:</label>
+                    <input type="text" name="test_sample_file_description[]" id="testSampleFileDescription" value="" class="form-control"/>
+                </div>
+                <div class="col-md-1 action-col">
+                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
                 </div>
             </div>
-            <div class="col-md-7">
-                <label for="testSampleFileDescription">Description:</label>
-                <input type="text" name="test_sample_file_description[]" id="testSampleFileDescription" value="" class="form-control" />
-            </div>
-            <div class="col-md-1 action-col">
-                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
-            </div>
         </div>
-    </div>
-</script>
+    </script>
 
-<script type="text/html" id="testCaseStepBoxTemplate">
-    <div class="form-group testCaseStepRow">
-        <div class="row">
-            <div class="col-md-5">
-                <label>Action:</label>
-                <textarea name="steps[action][]" class="form-control" cols="30" rows="5"></textarea>
-            </div>
-            <div class="col-md-5">
-                <label>Expected Result:</label>
-                <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5"></textarea>
-            </div>
-            <div class="col-md-1">
-                <label>Step:</label>
-                <input type="text" class="form-control" name="steps[step][]" value="">
-            </div>
-            <div class="col-md-1 action-col">
-                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
+    <script type="text/html" id="testCaseStepBoxTemplate">
+        <div class="form-group testCaseStepRow">
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Action:</label>
+                    <textarea name="steps[action][]" class="form-control" cols="30" rows="5"></textarea>
+                </div>
+                <div class="col-md-5">
+                    <label>Expected Result:</label>
+                    <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5"></textarea>
+                </div>
+                <div class="col-md-1">
+                    <label>Step:</label>
+                    <input type="text" class="form-control" name="steps[step][]" value="">
+                </div>
+                <div class="col-md-1 action-col">
+                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
+                </div>
             </div>
         </div>
-    </div>
-</script>
+    </script>
 @stop

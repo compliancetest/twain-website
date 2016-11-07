@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Community;
 use App\LaravelTestSuite;
 use App\User;
 use App\LaravelTestCase;
@@ -18,9 +19,13 @@ class TestCasePolicy
      * @param LaravelTestSuite $testSuite
      * @return bool
      */
-    public function change(User $user, LaravelTestCase $testCase, LaravelTestSuite $testSuite)
+    public function changeTestCase(User $user, LaravelTestCase $testCase)
     {
-        return (boolean) Community::find($testSuite->community_id)->members()->where(['user_id' => $user->ID, 'is_admin' => true])->first();
+        $community = Community::find($testCase->community_id);
+        if (!$community) {
+            return false;
+        }
+        return (boolean) is_super_admin() || $community->members()->where(['user_id' => $user->ID, 'is_admin' => true])->first();
     }
 
     /**
@@ -32,18 +37,5 @@ class TestCasePolicy
     public function view(User $user, LaravelTestCase $testCase)
     {
         return true;
-    }
-
-    /**
-     * Wordpress super admin can view / edit all products
-     * @param $user
-     * @param $ability
-     * @return bool
-     */
-    public function before($user, $ability)
-    {
-        if (is_super_admin()) {
-            return true;
-        }
     }
 }
