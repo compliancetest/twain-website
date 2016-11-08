@@ -3,12 +3,12 @@
 @section('content')
 
     <div class="container main-container">
-        <div class="main-content edit-test-case-page">
+        <div class="main-content edit-test-case-page block-loading-wrapper">
             <div class="page-title">
                 <h1>Edit Test Case: {{ $testCase->full_name }}</h1>
             </div>
 
-            {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
+            {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
 
                 {{-- Test Case Information --}}
                 <div class="colored-box collapsible-box">
@@ -218,7 +218,7 @@
                                     <div class="form-group testCaseSampleRow">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <img src="{{ $testCase->getSampleLink($sample->image) }}" style="max-width: 100px;">
+                                                <img src="{{ $testCase->getSampleLink($sample->image) }}" class="test-sample-image" alt="">
                                             </div>
                                             <div class="col-md-7">
                                                 <label for="testSampleFileDescription">Description:</label>
@@ -381,6 +381,8 @@
                     </div>
                 </div>
 
+                <div class="error-box"></div>
+
                 <div class="form-actions">
                     <div class="checkbox pull-right">
                         <label><input type="checkbox" value=""> Send Notification to members</label>
@@ -388,6 +390,8 @@
                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Case</button>
                     <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                 </div>
+
+                @include('loader', ['loaderClass' => 'form-loading', 'loaderMessage' => 'SAVING...'])
 
             {{ Form::close() }}
         </div>

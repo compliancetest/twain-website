@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container main-container">
-        <div class="main-content edit-test-suite-page">
+        <div class="main-content edit-test-suite-page block-loading-wrapper">
             <div class="page-title">
                 @if($testSuite)
                     <h1>Edit Test Suite: {{ $testSuite->full_name }}</h1>
@@ -12,7 +12,7 @@
                 @endif
             </div>
 
-            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
+            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="colored-box collapsible-box">
@@ -322,7 +322,6 @@
                     @include('pages.test-suites.partials.community-profile-types', ['suiteCommunity' => $suiteCommunity])
                 </div>
 
-
                 {{-- Test Cases --}}
                 <div class="colored-box collapsible-box">
                     <div class="colored-box-header"><a href="#testCasesBox" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Cases</div>
@@ -510,6 +509,8 @@
                     <div class="colored-box-footer"></div>
                 </div>
 
+                <div class="error-box"></div>
+
                 <div class="form-actions">
                     <div class="checkbox pull-right">
                         <label><input type="checkbox" value=""> Send Notification to members</label>
@@ -517,6 +518,9 @@
                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Suite</button>
                     <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                 </div>
+
+                @include('loader', ['loaderClass' => 'form-loading', 'loaderMessage' => 'SAVING...'])
+
             {{ Form::close() }}
         </div>
     </div>

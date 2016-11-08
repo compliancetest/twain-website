@@ -38,12 +38,23 @@ jQuery(document).ready(function($) {
     });
 
     $.ajaxSetup({
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
     });
 
     $('[data-save-method="ajax"]').submit(function (e) {
         e.preventDefault();
         Page.coloredBoxAjaxSaveForm($(this));
+    });
+
+    $('[data-ajax-form]').submit(function (e) {
+       e.preventDefault();
+        var form = $(this);
+        var notificationEl = form.data('notification-container');
+        if (notificationEl){
+            Page.ajaxSaveForm(form, $(notificationEl));
+        } else {
+            Page.ajaxSaveForm(form, form);
+        }
     });
 
     $('body').on('click', '[data-ajax-modal]', function(e){
@@ -685,6 +696,74 @@ var Page = {
                     form.find('.color-box-loading').hide();
                     setTimeout(function() {
                         form.find('.message:not(.error-message)').fadeOut("slow", function() { $(this).remove(); });
+                    }, 3000);
+
+                }
+            })
+
+        } else {
+            console.error('Form is not valid');
+        }
+    },
+
+
+    /**
+     * Saving submitted form
+     * @param {JQuery} form Submitted form element
+     * @param {JQuery} notificationBox Element fir showing notification
+     */
+    ajaxSaveForm: function(form, notificationBox){
+        var formData = new FormData(form[0]);
+        var messageBox = notificationBox;
+
+        if (form.valid()){
+            messageBox.find('.message').remove();
+            form.find('.form-loading').show();
+            $.ajax({
+                url: form.attr('action'),
+                type: 'post',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+
+                error: function(jqXHR, status){
+                    if(form.data('test-suites') == true) {
+                        handleChangeTestSuiteResponse(jqXHR, form);
+                    }
+                    else if(form.data('test-cases') == true){
+                        handleChangeTestCaseResponse(jqXHR, form);
+                    } else {
+                        messageBox.append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
+                    }
+                },
+
+                success: function(rsp, status, jqXHR){
+                    if(jqXHR.status == 201){
+                        messageBox.append('<div class="message success-message">'+rsp.message+'</div>');
+                    } else {
+                        messageBox.append('<div class="message success-message">Changes saved successfully.</div>');
+                    }
+                    if(form.data('reset-form-after-submit')){
+                        $(form)[0].reset();
+                    }
+                    if(form.data('redirect-after-submit')){
+                        setTimeout(function() {
+                            location.href = form.data('redirect-after-submit');
+                        }, 2500);
+
+                    }
+                    if (rsp.redirect_to) {
+                        setTimeout(function () {
+                            location.href = rsp.redirect_to;
+                        }, 2500);
+                    }
+                },
+                complete: function(){
+                    form.find('.form-loading').hide();
+                    setTimeout(function() {
+                        messageBox.find('.message:not(.error-message)').fadeOut("slow", function() { $(this).remove(); });
                     }, 3000);
 
                 }
@@ -1389,7 +1468,7 @@ function handleChangeTestCaseResponse(jqXHR, form){
     return error;
 
 }
-function handleChangeTestSuiteResponse(jqXHR) {
+function handleChangeTestSuiteResponse(jqXHR, form) {
      var processedMessages = [];
     var error = jQuery.map(jqXHR.responseJSON, function (v) {
         v = v.toString();

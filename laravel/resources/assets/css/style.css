@@ -9118,7 +9118,7 @@ body.modal-open,
 }
 /* line 314, ../scss/_common.scss */
 .options-box .options-box-row .inline-options-list {
-  margin: 0 0 0 105px;
+  margin: 0 0 0 135px;
 }
 /* line 317, ../scss/_common.scss */
 .options-box .options-box-row .inline-options-list li {
@@ -9127,7 +9127,7 @@ body.modal-open,
 /* line 323, ../scss/_common.scss */
 .options-box .options-box-row-title {
   float: left;
-  width: 100px;
+  width: 130px;
   font-size: 13px;
   font-weight: 600;
   color: #316c9c;
@@ -15866,8 +15866,12 @@ input.notify-changes {
 .edit-test-case-page .initiator-role-group .checkbox-inline {
   padding-top: 7px;
 }
+/* line 8, ../scss/pages/_test-cases.scss */
+.edit-test-case-page .test-sample-image {
+  max-width: 100px;
+}
 
-/* line 34, ../scss/pages/_test-cases.scss */
+/* line 38, ../scss/pages/_test-cases.scss */
 .test-case-view .steps-table > tbody > tr td {
   background: #fff;
   font-size: 12px;
@@ -15875,43 +15879,43 @@ input.notify-changes {
   color: #666;
   font-weight: 400;
 }
-/* line 41, ../scss/pages/_test-cases.scss */
+/* line 45, ../scss/pages/_test-cases.scss */
 .test-case-view .steps-table > tbody > tr td:first-child {
   vertical-align: middle;
 }
-/* line 46, ../scss/pages/_test-cases.scss */
+/* line 50, ../scss/pages/_test-cases.scss */
 .test-case-view .steps-table > tbody > tr.step-row:target td {
   background: #d9d9d9;
   transition: background-color 2s;
 }
 
-/* line 52, ../scss/pages/_test-cases.scss */
+/* line 56, ../scss/pages/_test-cases.scss */
 .definition-box {
   border-top: 2px solid #e3e3e3;
   margin-top: 15px;
   padding-top: 12px;
 }
-/* line 57, ../scss/pages/_test-cases.scss */
+/* line 61, ../scss/pages/_test-cases.scss */
 .definition-box .definition-list {
   margin: 0 0 0 25px;
 }
 
-/* line 63, ../scss/pages/_test-cases.scss */
+/* line 67, ../scss/pages/_test-cases.scss */
 .colored-box-content .definition-box:first-child {
   border-top: 0;
   margin-top: 0;
   padding-top: 10px;
 }
 
-/* line 71, ../scss/pages/_test-cases.scss */
+/* line 76, ../scss/pages/_test-cases.scss */
 .image-gallery-list li {
   margin: 10px 5px;
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  max-width: 175px;
+  max-width: 210px;
 }
-/* line 78, ../scss/pages/_test-cases.scss */
+/* line 83, ../scss/pages/_test-cases.scss */
 .image-gallery-list li img {
   max-width: 200px;
   height: auto;
