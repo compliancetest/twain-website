@@ -17,7 +17,7 @@ class LaravelTestCase extends Model
     protected $fillable = [
         'slug', 'name', 'version_major', 'version_minor', 'version_patch', 'description', 'full_name', 'tester_role',
         'harness_role', 'initiator', 'test_execution_profile_id', 'configuration_profile_id', 'outcome_type', 'is_optional', 'test_pattern',
-        'wp_id', 'published_at', 'created_at', 'updated_at', 'status', 'community_id'
+        'wp_id', 'published_at', 'created_at', 'updated_at', 'status', 'community_id', 'execution_mode'
     ];
 
     public function testSuites()
@@ -187,6 +187,25 @@ class LaravelTestCase extends Model
             }
         }
         $this->samples()->whereNotIn('id', $processedEntries)->delete();
+
+        if ($request->get('test_execution_profile_id')) {
+            $processedEntries = [];
+            $profile = (array) Profile::find($request->get('test_execution_profile_id'))->getProfileFromS3();
+            if(isset($profile['Meta']->Capabilities) && is_array($profile['Meta']->Capabilities)) {
+                foreach ($profile['Meta']->Capabilities as $cap) {
+                    $this->capabilities()->updateOrCreate([
+                        'capability' => $cap->Cap
+                    ]);
+                    $processedEntries[] = $cap->Cap;
+                }
+                $this->capabilities()->whereNotIn('capability', $processedEntries)->delete();
+            }
+
+            if (!empty($profile['Meta']->ExecutionMode)) {
+                $this->update('execution_mode', $profile['Meta']->ExecutionMode);
+            }
+        }
+
     }
 
     /**

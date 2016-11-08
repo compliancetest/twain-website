@@ -33,11 +33,15 @@ class Profile extends Model
     public function getProfileFromS3()
     {
         $s3 = AwsFacade::createClient('s3');
-        return json_decode((string)$s3->getObject(array(
-            'Bucket' => config('env.bucket.website'),
-            'Key' => 'profiles/user/' . $this->token . '.json',
-            'ResponseContentType' => 'application/json',
-        ))['Body']);
+        try {
+            return json_decode((string)$s3->getObject(array(
+                'Bucket' => config('env.bucket.website'),
+                'Key' => 'profiles/user/' . $this->token . '.json',
+                'ResponseContentType' => 'application/json',
+            ))['Body']);
+        } catch ( \Exception $e){
+            return [];
+        }
     }
 
     /**

@@ -155,6 +155,10 @@ class MigrateProductsCasesSuitesData extends Migration
         foreach ($testCases as $testCase) {
             $testCaseFullName = $testCase->post_title;
             $testCaseSuite = \App\Post::find(\App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'test_suite'])->first()->meta_value);
+            $executionMode = $testCase->getMetaByKey('executionMode');
+            if(empty($executionMode)){
+                $executionMode = 'Auto';
+            }
             $laravelTestCase = \App\LaravelTestCase::create([
                 'community_id' => $testCaseSuite && \App\Community::find($testCaseSuite->getMetaByKey('community_id')) ? $testCaseSuite->getMetaByKey('community_id') : \App\Community::findBySlug('twain')->id,
                 'slug' => $testCase->post_name,
@@ -164,6 +168,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'version_patch' => (integer)$testCase->getMetaByKey('version_patch'),
                 'description' => strip_tags((string)$testCase->getMetaByKey('test_intent_description')),
                 'full_name' => $testCaseFullName,
+                'execution_mode' => $executionMode,
                 'tester_role' => str_replace(' ', '', $testCase->getMetaByKey('choose_tester_role')),
                 'harness_role' => str_replace(' ', '', $testCase->getMetaByKey('choose_harness_role')),
                 'initiator' => ucfirst($testCase->getMetaByKey('choose_initiator')),

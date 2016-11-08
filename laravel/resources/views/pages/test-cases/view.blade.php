@@ -49,7 +49,7 @@
                         </li>
                         <li>Outcome Type: <strong>{{ $testCase->outcome_type }}</strong></li>
                         <li>Test Pattern: <span class="test-pattern-icon test-pattern-{{ $testCase->test_pattern }}" data-tooltip="tooltip" title="" data-original-title="{{ get_test_patterns_description($testCase->test_pattern) }}"></span></li>
-                        <li>Execution mode: <strong>Auto</strong></li>
+                        <li>Execution mode: <strong>{{ $testCase->execution_mode }}</strong></li>
                         <li>Optional: <strong>{{ $testCase->is_optional ? 'Yes' : 'No' }}</strong></li>
                     </ul>
                 </div>

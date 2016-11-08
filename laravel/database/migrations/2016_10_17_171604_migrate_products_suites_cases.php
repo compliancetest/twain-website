@@ -166,6 +166,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->uuid('community_id');
             $table->string('slug');
             $table->string('name');//CN-10
+            $table->string('execution_mode');//Auto
             $table->integer('version_major');//1
             $table->integer('version_minor');//2
             $table->integer('version_patch');//0
