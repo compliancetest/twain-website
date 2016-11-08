@@ -202,7 +202,7 @@ class LaravelTestCase extends Model
             }
 
             if (!empty($profile['Meta']->ExecutionMode)) {
-                $this->update('execution_mode', $profile['Meta']->ExecutionMode);
+                $this->update(['execution_mode' => $profile['Meta']->ExecutionMode]);
             }
         }
 
