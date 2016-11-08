@@ -8,7 +8,7 @@
                 <h1>Edit Test Case: {{ $testCase->full_name }}</h1>
             </div>
 
-            {!! Form::model($testSuite, ['file' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
+            {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
 
                 {{-- Test Case Information --}}
                 <div class="colored-box collapsible-box">
@@ -214,17 +214,36 @@
                         <div class="colored-box-content dynamic-rows">
                             <h4 class="test-item-subheader">Test Samples</h4>
                             <div id="testCaseTestDataBoxContent">
+                                @foreach($testCase->samples as $sample)
+                                    <div class="form-group testCaseSampleRow">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <img src="{{ $testCase->getSampleLink($sample->image) }}" style="max-width: 100px;">
+                                            </div>
+                                            <div class="col-md-7">
+                                                <label for="testSampleFileDescription">Description:</label>
+                                                <input type="text" name="existingTestCaseSampleDescription[]" id="testSampleFileDescription" class="form-control"
+                                                       value="{{ $sample->description }}"/>
+                                            </div>
+                                            <div class="col-md-1 action-col">
+                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
+                                            </div>
+                                            <input type="hidden" name="existingTestCaseSampleId[]" value="{{ $sample->id }}">
+                                        </div>
+                                    </div>
+                                @endforeach
+
                                 <div class="form-group testCaseSampleRow">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Image:</label>
                                             <div class="upload-file-field">
-                                                <input type="file" name="test_case_sample[file][]" class="input-file"/>
+                                                <input type="file" name="testCaseSampleFile[]" class="input-file"/>
                                             </div>
                                         </div>
                                         <div class="col-md-7">
                                             <label for="testSampleFileDescription">Description:</label>
-                                            <input type="text" name="test_case_sample[description][]" id="testSampleFileDescription" value="" class="form-control"/>
+                                            <input type="text" name="testCaseSampleDescription[]" id="testSampleFileDescription" value="" class="form-control"/>
                                         </div>
                                         <div class="col-md-1 action-col">
                                             <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
@@ -480,12 +499,12 @@
                 <div class="col-md-4">
                     <label>Image:</label>
                     <div class="upload-file-field">
-                        <input type="file" name="test_sample_file[]" class="input-file"/>
+                        <input type="file" name="testCaseSampleFile[]" class="input-file"/>
                     </div>
                 </div>
                 <div class="col-md-7">
                     <label for="testSampleFileDescription">Description:</label>
-                    <input type="text" name="test_sample_file_description[]" id="testSampleFileDescription" value="" class="form-control"/>
+                    <input type="text" name="testCaseSampleDescription[]" id="testSampleFileDescription" value="" class="form-control"/>
                 </div>
                 <div class="col-md-1 action-col">
                     <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>

@@ -61,71 +61,46 @@
                         @endforeach
                     </ul>
                 </div>
+
+                @if($testCase->test_execution_profile_id)
+                    <div class="options-box-row">
+                        <div class="options-box-row-title">Test Execution:</div>
+                        <ul class="inline-options-list">
+                                <li><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/{{ $testCase->test_execution_profile_id }}" data-toggle="modal" data-remote="true"
+                                                    data-ajax-modal data-target="#testExecutionProfileInstance">{{ \App\Profile::find($testCase->test_execution_profile_id)->profile_name }}</a></li>
+                        </ul>
+                    </div>
+                @endif
+
+                @if($testCase->configuration_profile_id)
+                    <div class="options-box-row">
+                        <div class="options-box-row-title">Test Configuration:</div>
+                        <ul class="inline-options-list">
+                                <li><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/{{ $testCase->configuration_profile_id }}" data-toggle="modal" data-remote="true"
+                                                    data-ajax-modal data-target="#testExecutionProfileInstance">{{ \App\Profile::find($testCase->configuration_profile_id)->profile_name }}</a></li>
+                        </ul>
+                    </div>
+                @endif
+
             </div>
 
-            <div class="colored-box">
-                <div class="colored-box-header">Test Execution</div>
-                <div class="colored-box-content">
-                    <ul class="list-group row">
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                    </ul>
+            @if(count($testCase->samples))
+                <div class="colored-box">
+                    <div class="colored-box-header">Test Samples</div>
+                    <div class="colored-box-content">
+                        <ul class="image-gallery-list" id="testSamplesGallery">
+                            @foreach($testCase->samples as $sample)
+                                <?php $link = $testCase->getSampleLink($sample->image);?>
+                                <li>
+                                    <a href="{{ $link }}" title="{{ $sample->description }}" data-gallery="#blueimp-gallery">
+                                        <img src="{{ $link }}" title="{{ $sample->description }}" alt="" class="img-fluid">
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
-
-            <div class="colored-box">
-                <div class="colored-box-header">Test Samples</div>
-                <div class="colored-box-content">
-                    <ul class="image-gallery-list" id="testSamplesGallery">
-                        <li>
-                            <a href="http://placehold.it/550x750" title="Test image 1" data-gallery="#blueimp-gallery">
-                                <img src="http://placehold.it/550x750" title="" alt="" class="img-fluid">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://placehold.it/550x550" title="Test image 2" data-gallery="#blueimp-gallery">
-                                <img src="http://placehold.it/550x550" title="" alt="" class="img-fluid">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://placehold.it/450x350" title="Test image 3" data-gallery="#blueimp-gallery">
-                                <img src="http://placehold.it/450x350" title="" alt="" class="img-fluid">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://placehold.it/1000x1500" title="Test image 4" data-gallery="#blueimp-gallery">
-                                <img src="http://placehold.it/1000x1500" title="" alt="" class="img-fluid">
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://placehold.it/350x450" title="Test image 5" data-gallery="#blueimp-gallery">
-                                <img src="http://placehold.it/350x450" title="" alt="" class="img-fluid">
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="colored-box">
-                <div class="colored-box-header">Test Configuration</div>
-                <div class="colored-box-content">
-                    <ul class="list-group row">
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                        <li class="list-group-item col-xs-6"><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/668" data-toggle="modal" data-remote="true"
-                                                                data-ajax-modal data-target="#testExecutionProfileInstance">SIT-01b_v1.0 TEFC v1.0</a></li>
-                    </ul>
-                </div>
-            </div>
+            @endif
 
             <div class="colored-box">
                 <div class="colored-box-header">Test Steps</div>

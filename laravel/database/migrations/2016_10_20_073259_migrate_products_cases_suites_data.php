@@ -255,11 +255,16 @@ class MigrateProductsCasesSuitesData extends Migration
                 $imagesData = json_decode($imagesData->meta_value, true);
                 if ($imagesData) {
                     foreach ($imagesData as $imageData) {
-                        if (!empty($imageData['name'])) {
-                            $laravelTestCase->samples()->create([
-                                'image' => $imageData['name'],
+                        $oldEnv = getenv('ENVIRONMENT');
+                        if (!empty($imageData['name']) && \Illuminate\Support\Facades\Storage::disk('s3')->exists($oldEnv . '/case_images/' . $laravelTestCase->wp_id . '/' .
+                                    $imageData['name'])) {
+                            $newEntry = $laravelTestCase->samples()->create([
+                                'image' => 'case_images/' . $laravelTestCase->id . '/' . $imageData['name'],
                                 'description' => strip_tags((string)$imageData['description'])
                             ]);
+                            \Illuminate\Support\Facades\Storage::put('case_images/' . $laravelTestCase->id . '/' . $imageData['name'],
+                                \Illuminate\Support\Facades\Storage::get($oldEnv . '/case_images/' . $laravelTestCase->wp_id . '/' .
+                                    $imageData['name']));
                         }
                     }
                 }

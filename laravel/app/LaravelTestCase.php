@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 class LaravelTestCase extends Model
 {
@@ -158,6 +160,33 @@ class LaravelTestCase extends Model
                 }
             }
         }
+
+        $processedEntries = [];
+
+        if(!empty($request->get('existingTestCaseSampleId'))) {
+            foreach ($request->get('existingTestCaseSampleId') as $key => $row) {
+                $sample = $this->samples()->updateOrCreate(['id' => $row], [
+                    'description' => @$request->get('existingTestCaseSampleDescription')[$key]
+                ]);
+                $processedEntries[] = $sample->id;
+            }
+        }
+
+        if(!empty($request->file('testCaseSampleFile'))) {
+            foreach ($request->file('testCaseSampleFile') as $key => $row) {
+                if($row) {
+                    $s3 = Storage::disk('s3');
+                    $path = 'case_images/' . $this->id . '/' . $row->getClientOriginalName();
+
+                    $sample = $this->samples()->updateOrCreate(['image' => $path], [
+                        'description' => @$request->get('testCaseSampleDescription')[$key]
+                    ]);
+                    $processedEntries[] = $sample->id;
+                    $s3->put($path, file_get_contents($row));
+                }
+            }
+        }
+        $this->samples()->whereNotIn('id', $processedEntries)->delete();
     }
 
     /**
@@ -174,5 +203,24 @@ class LaravelTestCase extends Model
             return true;
         }
         return false;
+    }
+
+    /**
+     * get sample image url
+     * @param $path
+     * @return string
+     */
+    public function getSampleLink($path)
+    {
+        $disk = Storage::disk('s3');
+        $command = $disk->getDriver()->getAdapter()->getClient()->getCommand('GetObject', [
+            'Bucket' => config('env.bucket.website'),
+            'Key' => $path,
+            'ResponseContentDisposition' => 'attachment;filename="'.pathinfo($path, PATHINFO_FILENAME).'.json"'
+        ]);
+
+        $request = $disk->getDriver()->getAdapter()->getClient()->createPresignedRequest($command, '+1 day');
+
+        return (string)$request->getUri();
     }
 }

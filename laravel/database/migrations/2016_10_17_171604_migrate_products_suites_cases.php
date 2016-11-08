@@ -232,7 +232,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->primary('id');
             $table->uuid('id');
             $table->uuid('test_case_id');
-            $table->uuid('image');
+            $table->text('image');
             $table->text('description');
             $table->timestamps();
         });
