@@ -630,14 +630,19 @@ var Page = {
      * @param {JQuery} form Submitted form element
      */
     coloredBoxAjaxSaveForm: function(form){
-
+        var formData = new FormData(form[0]);
         if (form.valid()){
             form.find('.message').remove();
             form.find('.color-box-loading').show();
             $.ajax({
                 url: form.attr('action'),
                 type: 'post',
-                data: form.serialize(),
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+
                 error: function(jqXHR, status){
                     if(form.data('test-suites') == true) {
                         handleChangeTestSuiteResponse(jqXHR, form);
