@@ -225,6 +225,16 @@ class LaravelTestCase extends Model
     }
 
     /**
+     * Check next version existence
+     * @param string $fieldName
+     * @return mixed
+     */
+    public function isNextVersionExist($fieldName = 'version_major')
+    {
+        return self::where(['name' => $this->name, $fieldName => ($this->{$fieldName} + 1)])->first();
+    }
+
+    /**
      * get sample image url
      * @param $path
      * @return string

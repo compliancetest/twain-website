@@ -82,20 +82,22 @@
                                                 <span>Major</span>
                                                 <input type="text" id="tcVersionMajor" name="version_major" class="form-control" readonly="readonly"
                                                        value="{{ $testCase->version_major }}"/>
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMajor"></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMajor"
+                                                @if($testCase->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
                                                 <input type="text" id="tcVersionMinor" name="version_minor" class="form-control" readonly="readonly"
                                                        value="{{ $testCase->version_minor }}"/>
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMinor"></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMinor"
+                                                @if($testCase->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
                                                 <input type="text" id="tcVersionPatch" name="version_patch" class="form-control" readonly="readonly"
                                                        value="{{ $testCase->version_patch }}"/>
-                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionPatch" disabled="disabled"
-                                                        data-tooltip="tooltip" title="Later version already exists."></button>
+                                                <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionPatch"
+                                                        @if($testCase->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                         </div>
                                     </div>

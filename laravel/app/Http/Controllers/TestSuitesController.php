@@ -63,7 +63,7 @@ class TestSuitesController extends Controller
         if (!(is_super_admin() || doesUserCommunityAdmin(Auth::user()->ID, $request->get('community_id')))) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
-
+        
         $testSuite = LaravelTestSuite::create($request->all());
         $testSuite->updateRelations($request);
         $testSuite->save();
