@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 class LaravelTestCase extends Model
@@ -96,7 +95,7 @@ class LaravelTestCase extends Model
         if (is_array($request->get('test_suite_id'))) {
             foreach ($request->get('test_suite_id') as $testSuiteId => $entryId) {
                 $processedEntries[] = $entryId;
-                $this->testSuites()->updateOrCreate(['test_suite_id' => $entryId]);
+                $this->testSuites()->attach($entryId);
             }
             if (!empty($processedEntries)) {
                 $this->testSuites()->whereNotIn('test_suite_id', $processedEntries)->delete();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\Http\Requests;
+use App\LaravelTestCase;
 use App\LaravelTestSuite;
 use App\OrganisationMember;
 use App\OrganisationSubscription;
@@ -11,18 +12,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class TestSuitesController extends Controller
 {
-    /**
-     * View / search test suites page
-     */
-    public function index()
-    {
-        $pageTitle = 'Search Test Suites';
-        return view('pages.test-suites.index', compact('pageTitle'));
-    }
-
     /**
      * View test suite page
      * @param $testSuiteSlug
@@ -63,9 +56,20 @@ class TestSuitesController extends Controller
         if (!(is_super_admin() || doesUserCommunityAdmin(Auth::user()->ID, $request->get('community_id')))) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
-        
+
+        $fullName = LaravelTestSuite::generateCaseSuiteFullName($request);
+        $slug = LaravelTestSuite::generateSlug($fullName);
+
+        if (!LaravelTestSuite::findBySlug($slug)) {
+            return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
+        }
+
         $testSuite = LaravelTestSuite::create($request->all());
         $testSuite->updateRelations($request);
+
+        $testSuite->full_name = $fullName;
+        $testSuite->slug = $slug;
+
         $testSuite->save();
         return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
     }
@@ -127,33 +131,40 @@ class TestSuitesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function update($testSuiteSlug, Requests\TestSuiteRequest $request)
-{
-    $oldTestSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+    {
+        $oldTestSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
 
-    if (Gate::denies('change', $oldTestSuite)) {
-        return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
-    }
-
-    if ($oldTestSuite->isVersionUpdated($request)) {
-        $testSuite = LaravelTestSuite::create($request->all());
-        if ($oldTestSuite->version_major < $request->get('version_major')) {
-
-        } else {
-            if ($oldTestSuite->version_minor < $request->get('version_minor')) {
-                $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
-            } else if ($oldTestSuite->version_patch < $request->get('version_patch')) {
-                $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
-                $testSuite->version_patch = $oldTestSuite->version_patch;
-            }
+        if (Gate::denies('change', $oldTestSuite)) {
+            return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
-    } else {
-        $testSuite = $oldTestSuite;
+
+        if ($oldTestSuite->isVersionUpdated($request)) {
+            $fullName = LaravelTestSuite::generateCaseSuiteFullName($request);
+            $slug = LaravelTestSuite::generateSlug($fullName);
+            if (!LaravelTestSuite::findBySlug($slug)) {
+                return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
+            }
+            $testSuite = LaravelTestSuite::create($request->all());
+            $testSuite->full_name = $fullName;
+            $testSuite->slug = $slug;
+            if ($oldTestSuite->version_major < $request->get('version_major')) {
+
+            } else {
+                if ($oldTestSuite->version_minor < $request->get('version_minor')) {
+                    $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
+                } else if ($oldTestSuite->version_patch < $request->get('version_patch')) {
+                    $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
+                    $testSuite->version_patch = $oldTestSuite->version_patch;
+                }
+            }
+        } else {
+            $testSuite = $oldTestSuite;
+        }
+        $testSuite->fill($request->all());
+        $testSuite->updateRelations($request);
+        $testSuite->save();
+        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
     }
-    $testSuite->fill($request->all());
-    $testSuite->updateRelations($request);
-    $testSuite->save();
-    return response()->json(['status' => 'success' , 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
-}
 
     public function getTestCasesList($testSuiteSlug, Request $request)
     {
@@ -197,12 +208,12 @@ class TestSuitesController extends Controller
             }
             //Send Email
             $emailData = array(
-                '[name]'            => cp_get_user_fullname(Auth::user()->ID),
-                '[email]'           => Auth::user()->user_email,
-                '[suite_name]'      => $testSuite->full_name,
-                '[nickname]'        => $existingSubscription->nickname,
-                '[organisation]'    => Auth::user()->organisation[0]->organisation_name,
-                '[community_url]'   => getSiteUrl() . '/communities/' . Community::find($testSuite->community_id)->slug
+                '[name]' => cp_get_user_fullname(Auth::user()->ID),
+                '[email]' => Auth::user()->user_email,
+                '[suite_name]' => $testSuite->full_name,
+                '[nickname]' => $existingSubscription->nickname,
+                '[organisation]' => Auth::user()->organisation[0]->organisation_name,
+                '[community_url]' => getSiteUrl() . '/communities/' . Community::find($testSuite->community_id)->slug
             );
 
             cp_send_email(array('name' => $emailData['[name]'], 'email' => $emailData['[email]']), 'allocate_subscription_to_user', $emailData);

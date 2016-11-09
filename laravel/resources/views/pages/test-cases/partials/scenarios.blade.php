@@ -10,7 +10,7 @@
                         <dt>
                             <label>
                                 <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->id }}"
-                                       @if(count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
+                                       @if($testCase && count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
                             </label>
                         </dt>
                         <dd>{{ $scenario->description }}</dd>

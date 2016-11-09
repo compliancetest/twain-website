@@ -10,7 +10,7 @@
                         <dt>
                             <label>
                                 <input type="checkbox" name="conformanceLevel[{{ $testSuite->id }}][]" value="{{ $conformanceLevel->id }}"
-                                       @if(count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
+                                       @if($testCase && count($testCase->conformanceLevels->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>
                                 {{ $conformanceLevel->code }}
                             </label>
                         </dt>

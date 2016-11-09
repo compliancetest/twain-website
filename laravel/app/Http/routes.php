@@ -82,7 +82,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
         Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
         Route::post('laravel-test-suite/{testSuiteId}', 'TestSuitesController@update');
-        Route::get('laravel-test-suites', 'TestSuitesController@index');
+        Route::get('laravel-test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
+        Route::get('laravel-test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
+        Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
+
+        Route::get('laravel-test-suites', 'TestSuitesSearchController@index');
+        Route::get('laravel-test-suites/logs-list', 'TestSuitesSearchController@entries');
+        Route::get('laravel-test-suites/filters', 'TestSuitesSearchController@filters');
 
         Route::get('my-test-suites', 'TestSuitesController@userTestSuites');
         Route::get('my-communities', 'CommunitiesController@userCommunities');
@@ -90,12 +96,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-my-organisation/edit', 'UserController@organisation');
         Route::get('laravel-my-profile', 'UserController@profile');
 
-
-        Route::get('laravel-test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
-        Route::get('laravel-test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
-        Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
-
-
+        Route::get('laravel-test-case/create', 'TestCasesController@create');
+        Route::post('laravel-test-case', 'TestCasesController@store');
         Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');
         Route::get('laravel-test-case/{testCaseId}/test-suites-list', 'TestCasesController@testSuitesList');
         Route::get('laravel-test-case/{testCaseId}/test-suites-data', 'TestCasesController@testSuitesData');

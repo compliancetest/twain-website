@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -347,7 +348,7 @@ class LaravelTestSuite extends Model
             foreach (explode(',', @$request->get('protocol_versions')) as $row) {
                 $row = trim($row);
                 $processedEntries[] = $row;
-                if(!empty($row)) {
+                if (!empty($row)) {
                     $this->protocolVersions()->updateOrCreate(['version' => $row]);
                 }
             }

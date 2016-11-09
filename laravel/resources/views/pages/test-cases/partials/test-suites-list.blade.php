@@ -5,7 +5,7 @@
                 <div class="checkbox">
                     <label>
                         <input name="test_suite_id[]" value="{{ $testSuite->id }}" type="checkbox" class="testSuite"
-                               @if(count($testCase->testSuites->where('id', $testSuite->id))) checked="checked" @endif>
+                               @if($testCase && count($testCase->testSuites->where('id', $testSuite->id))) checked="checked" @endif>
                         {{ $testSuite->full_name }}
                     </label>
                 </div>

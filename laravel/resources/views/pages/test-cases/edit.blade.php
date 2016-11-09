@@ -5,7 +5,11 @@
     <div class="container main-container">
         <div class="main-content edit-test-case-page block-loading-wrapper">
             <div class="page-title">
-                <h1>Edit Test Case: {{ $testCase->full_name }}</h1>
+                @if($testCase)
+                    <h1>Edit Test Case: {{ $testCase->full_name }}</h1>
+                @else
+                    <h1>Create Test Case</h1>
+                @endif
             </div>
 
             {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
@@ -81,23 +85,23 @@
                                             <div class="manage-version-group">
                                                 <span>Major</span>
                                                 <input type="text" id="tcVersionMajor" name="version_major" class="form-control" readonly="readonly"
-                                                       value="{{ $testCase->version_major }}"/>
+                                                       value="{{ intval($testCase->version_major) }}"/>
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMajor"
-                                                @if($testCase->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                @if($testCase && $testCase->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
                                                 <input type="text" id="tcVersionMinor" name="version_minor" class="form-control" readonly="readonly"
-                                                       value="{{ $testCase->version_minor }}"/>
+                                                       value="{{ intval($testCase->version_minor) }}"/>
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionMinor"
-                                                @if($testCase->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                @if($testCase && $testCase->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
                                                 <input type="text" id="tcVersionPatch" name="version_patch" class="form-control" readonly="readonly"
-                                                       value="{{ $testCase->version_patch }}"/>
+                                                       value="{{ intval($testCase->version_patch) }}"/>
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tcVersionPatch"
-                                                        @if($testCase->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                        @if($testCase && $testCase->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                         </div>
                                     </div>
@@ -216,24 +220,26 @@
                         <div class="colored-box-content dynamic-rows">
                             <h4 class="test-item-subheader">Test Samples</h4>
                             <div id="testCaseTestDataBoxContent">
-                                @foreach($testCase->samples as $sample)
-                                    <div class="form-group testCaseSampleRow">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="{{ $testCase->getSampleLink($sample->image) }}" class="test-sample-image" alt="">
+                                @if($testCase->samples)
+                                    @foreach($testCase->samples as $sample)
+                                        <div class="form-group testCaseSampleRow">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <img src="{{ $testCase->getSampleLink($sample->image) }}" class="test-sample-image" alt="">
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <label for="testSampleFileDescription">Description:</label>
+                                                    <input type="text" name="existingTestCaseSampleDescription[]" id="testSampleFileDescription" class="form-control"
+                                                           value="{{ $sample->description }}"/>
+                                                </div>
+                                                <div class="col-md-1 action-col">
+                                                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
+                                                </div>
+                                                <input type="hidden" name="existingTestCaseSampleId[]" value="{{ $sample->id }}">
                                             </div>
-                                            <div class="col-md-7">
-                                                <label for="testSampleFileDescription">Description:</label>
-                                                <input type="text" name="existingTestCaseSampleDescription[]" id="testSampleFileDescription" class="form-control"
-                                                       value="{{ $sample->description }}"/>
-                                            </div>
-                                            <div class="col-md-1 action-col">
-                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseSampleRow">Delete Sample Data</button>
-                                            </div>
-                                            <input type="hidden" name="existingTestCaseSampleId[]" value="{{ $sample->id }}">
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                @endif
 
                                 <div class="form-group testCaseSampleRow">
                                     <div class="row">
@@ -355,25 +361,27 @@
                         <div class="colored-box-content dynamic-rows">
                             <div id="testCaseStepsBoxContent">
                                 <div class="form-group testCaseStepRow">
-                                    @foreach($testCase->steps as $k => $step)
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Action:</label>
-                                                <textarea name="steps[action][]" class="form-control" cols="30" rows="5">{{ $step->action }}</textarea>
+                                    @if($testCase->steps)
+                                        @foreach($testCase->steps as $k => $step)
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Action:</label>
+                                                    <textarea name="steps[action][]" class="form-control" cols="30" rows="5">{{ $step->action }}</textarea>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Expected Result:</label>
+                                                    <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5">{{ $step->expected_result }}</textarea>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>Step:</label>
+                                                    <input type="text" class="form-control" name="steps[step][]" value="{{ $step->step }}">
+                                                </div>
+                                                <div class="col-md-1 action-col">
+                                                    <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label>Expected Result:</label>
-                                                <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5">{{ $step->expected_result }}</textarea>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <label>Step:</label>
-                                                <input type="text" class="form-control" name="steps[step][]" value="{{ $step->step }}">
-                                            </div>
-                                            <div class="col-md-1 action-col">
-                                                <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                             <button type="button" onclick="Page.helpers.addRow('#testCaseStepBoxTemplate','#testCaseStepsBoxContent'); customizeFileTag();"

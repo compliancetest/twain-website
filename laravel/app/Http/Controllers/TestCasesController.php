@@ -12,9 +12,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class TestCasesController extends Controller
 {
+
+    /**
+     * Create new test suite page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create()
+    {
+        $pageTitle = 'Create Test Case';
+        $isAdmin = doesUserAdminInAnyCommunity() || is_super_admin();
+        return view('pages.test-cases.edit', compact('pageTitle', 'isAdmin'));
+    }
 
     public function view($testCaseSlug, Request $request)
     {
@@ -44,13 +56,23 @@ class TestCasesController extends Controller
 
     public function store(Requests\TestCaseRequest $request)
     {
-
-         if (!$this->hasAccess(Auth::user(), $request->get('community_id'))) {
+        if (!$this->hasAccess(Auth::user(), $request->get('community_id'))) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
+        }
+
+        $fullName = LaravelTestCase::generateCaseSuiteFullName($request);
+        $slug = LaravelTestCase::generateSlug($fullName);
+
+        if (!LaravelTestCase::findBySlug($slug)) {
+            return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
         }
 
         $testCase = LaravelTestCase::create($request->all());
         $testCase->updateRelations($request);
+
+        $testCase->full_name = $fullName;
+        $testCase->slug = $slug;
+
         $testCase->save();
         return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-case/' . $testCase->slug]);
     }
@@ -64,7 +86,14 @@ class TestCasesController extends Controller
         }
 
         if ($oldTestCase->isVersionUpdated($request)) {
+            $fullName = LaravelTestCase::generateCaseSuiteFullName($request);
+            $slug = LaravelTestCase::generateSlug($fullName);
+            if (!LaravelTestCase::findBySlug($slug)) {
+                return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
+            }
             $testCase = LaravelTestCase::create($request->all());
+            $testCase->full_name = $fullName;
+            $testCase->slug = $slug;
             if ($oldTestCase->version_major < $request->get('version_major')) {
 
             } else {

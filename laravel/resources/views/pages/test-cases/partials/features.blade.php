@@ -11,7 +11,7 @@
                             <dt>
                                 <label>
                                     <input type="checkbox" name="features[{{ $testSuite->id }}][]" value="{{ $feature->id }}"
-                                           @if(count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
+                                           @if($testCase && count($testCase->features->where('test_suites_feature_id', $feature->id))) checked="checked" @endif>{{ $feature->name }}
                                 </label>
                             </dt>
                             <dd>{{ $feature->description }}</dd>

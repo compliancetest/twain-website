@@ -164,19 +164,19 @@
                                                 <span>Major</span>
                                                 <input type="text" id="tsVersionMajor" name="version_major" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_major) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMajor"
-                                                @if($testSuite->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                @if($testSuite && $testSuite->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
                                                 <input type="text" id="tsVersionMinor" name="version_minor" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_minor) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMinor"
-                                                @if($testSuite->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                @if($testSuite && $testSuite->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
                                                 <input type="text" id="tsVersionPatch" name="version_patch" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_patch) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch"
-                                                @if($testSuite->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
+                                                @if($testSuite && $testSuite->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                         </div>
 
