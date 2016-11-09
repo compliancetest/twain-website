@@ -55,27 +55,27 @@ class Organisation extends Model
 
     /**
      * Get organisation test plans. Only non-claimed test plans will be returned if $excludeClaimed flas is true
-     * @param bool $productStringId
+     * @param bool $productSlug
      * @param bool $excludeClaimed
      * @return array
      */
-    public function getTestPlans($productStringId = false, $excludeClaimed = true)
+    public function getTestPlans($productSlug = false, $excludeClaimed = true)
     {
         $result = [];
         foreach ($this->subscriptions as $organisationSubscription) {
 
             $where = [
                 'organisation_subscription_id' => $organisationSubscription->id,
-                'suite_id' => $organisationSubscription->suite_family_mark
+                'suite_minor_family_mark' => $organisationSubscription->suite_minor_family_mark
             ];
 
-            if ($productStringId) {
-                $product = Post::where(['post_name' => $productStringId])->first();
-                $where['product_id'] = $product->ID;
+            if ($productSlug) {
+                $product = Product::findBySlug($productSlug);
+                $where['product_id'] = $product->id;
             }
 
             $testPlans = TestPlan::where($where)->get();
-            $suite = Post::find($organisationSubscription->suite_family_mark);
+            $suite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($organisationSubscription->suite_minor_family_mark);
 
             foreach ($testPlans as $testPlan) {
                 /*
@@ -86,17 +86,17 @@ class Organisation extends Model
                 }
 
                 // we shouldn't show test plans to user without subscription
-                if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_family_mark' => $testPlan->suite_id])->first()) {
+                if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()) {
                     continue;
                 }
 
-                $product = Post::find($testPlan->product_id);
+                $product = Product::find($testPlan->product_id);
                 $result[] = [
                     'id' => $testPlan->id,
-                    'test_suite_id' => $suite->post_name,
-                    'test_suite_title' => $suite->post_title,
-                    'product_id' => $product->post_name,
-                    'product_title' => $product->post_title,
+                    'test_suite_id' => $suite->slug,
+                    'test_suite_title' => $suite->full_name,
+                    'product_id' => $product->slug,
+                    'product_title' => $product->full_name,
                     'conformance_level' => $testPlan->level,
                 ];
             }

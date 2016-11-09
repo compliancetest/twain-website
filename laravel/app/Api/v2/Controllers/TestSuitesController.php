@@ -2,7 +2,9 @@
 
 namespace App\Api\v2\Controllers;
 
+use App\LaravelTestSuite;
 use App\Post;
+use App\Product;
 use Validator;
 use App\UserSubscription;
 use Illuminate\Http\Request;
@@ -93,7 +95,7 @@ class TestSuitesController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'product_type' => 'in:Application,DataSource',
-            'product_id' => 'exists:wp_posts,post_name,post_type,product-service',
+            'product_id' => 'exists:products,slug',
         ]);
 
         if ($validator->fails()) {
@@ -107,26 +109,22 @@ class TestSuitesController extends BaseApiController
          */
         if ($request->has('product_id')) {
 
-            $product = Post::where(['post_name' => $request->get('product_id')])->first();
-            $productSuiteMeta = $product->meta()->where(['meta_key' => 'product_suites'])->first();
+            $product = Product::findBySlug($request->get('product_id'));
 
-            if (!empty($productSuiteMeta)) {
-                foreach (json_decode($productSuiteMeta->meta_value, true) as $suiteId) {
-                    $suite = Post::find($suiteId);
-                    /**
-                     * We filter test suites by tester role if tester_role parameter exists
-                     */
-                    if ($request->has('product_type')) {
-                        $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
-                        if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
-                            continue;
-                        }
+            foreach ($product->getFeatures() as $testSuiteId => $features) {
+                $suite = LaravelTestSuite::find($testSuiteId);
+                /**
+                 * We filter test suites by tester role if tester_role parameter exists
+                 */
+                if ($request->has('product_type')) {
+                    if ($suite->product_type != $request->get('product_type')) {
+                        continue;
                     }
-                    $suites[] = [
-                        'id' => $suite->post_name,
-                        'title' => $suite->post_title,
-                    ];
                 }
+                $suites[] = [
+                    'id' => $suite->slug,
+                    'title' => $suite->full_name,
+                ];
             }
 
         /**
@@ -134,26 +132,25 @@ class TestSuitesController extends BaseApiController
          */
         } else {
 
-            $subscriptions = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active'])->get();
+            $subscriptions = Auth::user()->suiteSubscriptions;
 
-            if ($subscriptions->isEmpty()) {
+            if (!count($subscriptions)) {
                 return $this->respondForbiddenError("You do not have any active subscription");
             }
 
             foreach ($subscriptions as $subscription) {
-                $suite = Post::find($subscription->suite_id);
+                $suite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($subscription->suite_minor_family_mark);
                 /**
                  * We filter test suites by tester role if tester_role parameter exists
                  */
                 if ($request->has('product_type')) {
-                    $suiteRoleMeta = $suite->meta()->where(['meta_key' => 'ts_tester_role'])->first();
-                    if (empty($suiteRoleMeta) || $suiteRoleMeta->meta_value != $request->get('product_type')) {
+                    if ($suite->product_type != $request->get('product_type')) {
                         continue;
                     }
                 }
                 $suites[] = [
-                    'id' => $suite->post_name,
-                    'title' => $suite->post_title,
+                    'id' => $suite->slug,
+                    'title' => $suite->full_name,
                 ];
             }
         }
@@ -246,7 +243,7 @@ class TestSuitesController extends BaseApiController
      *
      */
 
-    public function testcases($suiteId, Request $request)
+    public function testcases($suiteSlug, Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -257,72 +254,30 @@ class TestSuitesController extends BaseApiController
             return $this->respondUnprocessableEntity($validator->messages());
         }
 
-        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($suiteId);
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($suiteSlug);
         if(!$hasAccessToTestSuite){
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
         
-        $suite = Post::where(['post_name' => $suiteId])->first();
-        $subscription = UserSubscription::where(['user_id' => Auth::user()->ID, 'status' => 'Active', 'suite_id' => $suite->ID])->first();
+        $suite = LaravelTestSuite::findBySlug($suiteSlug);
+        $subscription = Auth::user()->suiteSubscriptions()->where('suite_minor_family_mark', $suite->minor_family_mark)->first();
         if (!$subscription) {
             return $this->respondNotFound("Subscriptions not found");
         }
 
         $cases = [];
 
-        $query = DB::table('wp_posts')
-            ->join('wp_postmeta AS pm1', function ($join) use ($suite) {
-                $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                    ->where('pm1.meta_value', '=', $suite->ID)
-                    ->where('pm1.meta_key', '=', 'test_suite');
-            })
-            ->join('wp_postmeta AS pm2', function ($join) {
-                $join->on('pm2.post_id', '=', 'wp_posts.ID')
-                    ->where('pm2.meta_value', '=', 'Active')
-                    ->where('pm2.meta_key', '=', 'test_case_status');
-            })
-            ->join('wp_postmeta AS pm3', function ($join) {
-                $join->on('pm3.post_id', '=', 'wp_posts.ID')
-                    ->where('pm3.meta_key', '=', 'test_intent_description');
-            })
-            ->join('wp_postmeta AS pm4', function ($join) {
-                $join->on('pm4.post_id', '=', 'wp_posts.ID')
-                    ->where('pm4.meta_key', 'LIKE', 'scenario_%');
-            })
-            ->join('wp_test_suites_scenarios AS scenario', function ($join) {
-                $join->on('scenario.id', '=', 'pm4.meta_value');
-            })
-            ->join('wp_postmeta AS pm5', function ($join) {
-                $join->on('pm5.post_id', '=', 'wp_posts.ID')
-                    ->where('pm5.meta_value', '=', '0')
-                    ->where('pm5.meta_key', '=', 'hide_case');
-            });
+        $testCases = $suite->getOrderedCases(['execution_mode', $request->get('execution_mode')]);
 
-        if ($request->get('execution_mode')) {
-            $executionMode = $request->get('execution_mode');
-
-            $query->join('wp_postmeta AS pm6', function ($join) use($executionMode) {
-                $join->on('pm6.post_id', '=', 'wp_posts.ID')
-                    ->where('pm6.meta_value', '=', $executionMode)
-                    ->where('pm6.meta_key', '=', 'executionMode');
-            });
-        }
-
-        $testCases = $query->where('wp_posts.post_type', '=', 'test-case')
-            ->groupBy('wp_posts.ID')
-            ->orderBy('scenario.sequence')
-            ->orderBy('wp_posts.post_title')
-            ->select('wp_posts.post_name', 'wp_posts.post_title', 'pm3.meta_value', 'pm4.meta_value AS scenarioId')->get();
-
-        if (empty($testCases)) {
+        if (!count($testCases)) {
             return $this->respondNotFound("Test Cases not found");
         }
 
         foreach ($testCases AS $testCase) {
             $cases[] = [
-                'id' => $testCase->post_name,
-                'title' => $testCase->post_title,
-                'description' => strip_tags($testCase->meta_value),
+                'id' => $testCase->slug,
+                'title' => $testCase->full_name,
+                'description' => $testCase->description,
             ];
         }
 

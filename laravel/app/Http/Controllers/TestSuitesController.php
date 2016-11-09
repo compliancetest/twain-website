@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 
 class TestSuitesController extends Controller
 {
+
     /**
      * View test suite page
      * @param $testSuiteSlug

@@ -535,7 +535,7 @@
                                                     @foreach($products as $product)
                                                     <tr>
                                                         <td style="width: 60%"><a href="/product/{{ $product->slug }}" target="_blank"> {{ $product->full_name }}</a></td>
-                                                        <td style="width: 20%" class="text-center">{{ $product->product_type }}</td>
+                                                        <td style="width: 20%" class="text-center">{{ $product->type }}</td>
                                                         <td style="width: 20%" class="text-center">
                                                             <input type="checkbox" value="{{ $organisation->id }}" class="approveProduct"
                                                                    data-community="{{ $community->slug }}" data-product-id="{{ $product->id }}"

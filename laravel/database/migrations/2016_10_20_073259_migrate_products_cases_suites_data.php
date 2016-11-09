@@ -363,7 +363,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 'organisation_id' => $product->getMetaByKey('product_organisation_id'),
                 'user_id' => $product->post_author,
                 'wp_id' => $product->ID,
-                'released_at' => $product->post_date,
+                'released_at' => date('Y-m-d', strtotime($product->post_date)),
                 'created_at' => $product->post_date,
                 'updated_at' => $product->post_date,
             ]);

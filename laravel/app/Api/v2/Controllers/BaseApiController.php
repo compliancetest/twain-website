@@ -3,6 +3,7 @@
 namespace App\Api\v2\Controllers;
 
 use App\CommunityOrganisationsApprovedTestSuites;
+use App\LaravelTestSuite;
 use App\Post;
 use Illuminate\Http\Response as IlluminateResponse;
 use Illuminate\Pagination\Paginator;
@@ -244,11 +245,10 @@ class BaseApiController extends Controller
      * @param $testSuiteId - string suite ID
      * @return JsonResponse
      */
-    public function doesOrganisationHasAccessToTestSuite($testSuiteId)
+    public function doesOrganisationHasAccessToTestSuite($slug)
     {
-        $organisation = \App\OrganisationMember::where(['user_id' => Auth::user()->ID])->first();
-        $testSuite = Post::where(['post_name' => $testSuiteId])->first();
-        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $organisation->organisation_id, 'test_suite_id' => $testSuite->ID])->first()) {
+        $testSuite = LaravelTestSuite::findBySlug($slug);
+        if (!CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => Auth::user()->organisation[0]->id, 'suite_major_family_mark' => $testSuite->major_family_mark])->first()) {
             return false;
         }
         return true;

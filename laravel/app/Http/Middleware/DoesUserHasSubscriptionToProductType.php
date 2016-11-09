@@ -20,10 +20,8 @@ class DoesUserHasSubscriptionToProductType
         if (!in_array($request->get('product_type'), ['DataSource', 'Application'])) {
             return response()->json(['messages' => ['The product type field is required.'], 'status' => 'error', 'code' => 422], 422);
         }
-        $suiteSubscriptions = \App\OrganisationSubscription::where(['user_id' => Auth::user()->ID])->get();
-        foreach ($suiteSubscriptions as $suiteSubscription) {
-            $type = Post::find($suiteSubscription->suite_family_mark)->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-            if ($type == $request->get('product_type')) {
+        foreach (Auth::user()->suiteSubscriptions as $suiteSubscription) {
+            if ($suiteSubscription->testSuite->product_type == $request->get('product_type')) {
                 return $next($request);
             }
         }

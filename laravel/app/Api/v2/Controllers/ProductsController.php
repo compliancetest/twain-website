@@ -2,27 +2,19 @@
 
 namespace App\Api\v2\Controllers;
 
+use Validator;
+use App\Product;
+use App\TestPlan;
+use App\Organisation;
 use App\CommunityMembers;
+use App\LaravelTestSuite;
+use App\OrganisationMember;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel;
+use App\OrganisationSubscription;
+use Illuminate\Support\Facades\Auth;
 use App\CommunityOrganisationsApprovedProducts;
 use App\CommunityOrganisationsApprovedTestSuites;
-use App\Jobs\ProcessTransactionLog;
-use App\Organisation;
-use App\OrganisationMember;
-use App\OrganisationSubscription;
-use App\Post;
-use App\PostMeta;
-use App\PricingPlan;
-use App\TestPlan;
-use App\TestPlanExcludedCases;
-use App\TestSuite;
-use Aws\Laravel\AwsFacade as AWS;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
-use Symfony\Component\HttpKernel;
-use Validator;
 
 class ProductsController extends BaseApiController
 {
@@ -102,109 +94,109 @@ class ProductsController extends BaseApiController
      *
      * @apiSuccessExample {json} Product exist (approved):
      *  {
-          "messages": [
-            "The product has been updated successfully"
-          ],
-          "data": {
-            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
-            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "model": "None2"
-          },
-          "status": "success",
-          "code": 200
-        }
+     * "messages": [
+     * "The product has been updated successfully"
+     * ],
+     * "data": {
+     * "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+     * "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "model": "None2"
+     * },
+     * "status": "success",
+     * "code": 200
+     * }
      *
      * @apiSuccessExample {json} Product exist (not approved):
      *  {
-          "messages": [
-            "This product registration will require approval"
-          ],
-          "data": {
-            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
-            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "model": "None2"
-          },
-          "status": "info",
-          "code": 200
-        }
+     * "messages": [
+     * "This product registration will require approval"
+     * ],
+     * "data": {
+     * "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+     * "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "model": "None2"
+     * },
+     * "status": "info",
+     * "code": 200
+     * }
      *
-     *  @apiSuccessExample {json} Product created:
+     * @apiSuccessExample {json} Product created:
      *  {
-          "messages": [
-            "This product registration will require approval"
-          ],
-          "data": {
-            "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
-            "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
-            "model": "None2"
-          },
-          "status": "info",
-          "code": 201
-        }
+     * "messages": [
+     * "This product registration will require approval"
+     * ],
+     * "data": {
+     * "id": "4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "title": "77121542111111TWAIN Virtual Software Scanner v2.1",
+     * "link": "http://twain.my/product/4_twain-working-group_77121542111111twain-virtual-software-scanner_v2-1_none2",
+     * "model": "None2"
+     * },
+     * "status": "info",
+     * "code": 201
+     * }
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
      *  {
-          "messages": [The product type field is required."],
-          "status": "error",
-          "code": 422
-        }
+     * "messages": [The product type field is required."],
+     * "status": "error",
+     * "code": 422
+     * }
      *
      * @apiError 422 Validation error
      * @apiErrorExample {json} Validation error:
      *  {
-          "messages": [
-            "The identity field is required.",
-            "The organisation id field is required."
-          ],
-          "status": "error",
-          "code": 422
-        }
+     * "messages": [
+     * "The identity field is required.",
+     * "The organisation id field is required."
+     * ],
+     * "status": "error",
+     * "code": 422
+     * }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
      *  {
-          "messages": [
-            "Only organization member can perform testing"
-          ],
-          "status": "error",
-          "code": 403
-        }
+     * "messages": [
+     * "Only organization member can perform testing"
+     * ],
+     * "status": "error",
+     * "code": 403
+     * }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Organization is not approved yet:
      *
      * {
-          "messages": [
-            "Your organization can't perform testing."
-          ],
-          "status": "error",
-          "code": 403
-        }
+     * "messages": [
+     * "Your organization can't perform testing."
+     * ],
+     * "status": "error",
+     * "code": 403
+     * }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} No subscription with provided Product Type:
      *
      *  {
-          "messages": [
-            "Please subscribe to Test Suite with '{Application|DataSource}' Product Type"
-          ],
-          "status": "error",
-          "code": 403
-        }
+     * "messages": [
+     * "Please subscribe to Test Suite with '{Application|DataSource}' Product Type"
+     * ],
+     * "status": "error",
+     * "code": 403
+     * }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Permissions error:
      *
      * {
-          "messages": [
-            "This product was created by another organisation!"
-          ],
-          "status": "error",
-          "code": 403
-        }
+     * "messages": [
+     * "This product was created by another organisation!"
+     * ],
+     * "status": "error",
+     * "code": 403
+     * }
      *
      * @apiHeader (Headers) {String} Authorization Authorization value Basic (base64_encode(login:password)).
      *
@@ -225,7 +217,7 @@ class ProductsController extends BaseApiController
         $jsonEntry = json_decode($request->get('identity'), true);
         $entity = $jsonEntry['Identity'];
         $productName = $entity['ProductName'];
-        $productModel = !empty($jsonEntry['Model']) ? (string) $jsonEntry['Model'] : null;
+        $productModel = !empty($jsonEntry['Model']) ? (string)$jsonEntry['Model'] : null;
         $productVersion = $entity['Version']['MajorNum'] . '.' . $entity['Version']['MinorNum'];
         if (!empty($request->get('product_id'))) {
             $productId = $request->get('product_id');
@@ -236,30 +228,33 @@ class ProductsController extends BaseApiController
             }
         }
         $protocolVersion = $entity['ProtocolMajor'] . '.' . $entity['ProtocolMinor'];
-        $this->product = Post::where(['post_name' => $productId])->first();
+        $this->product = Product::findBySlug($productId);
         if ($this->product) {
             //any organisation member can update product
-            if (isset($user->organisation[0]->id) && OrganisationMember::where(['organisation_id' => $user->organisation[0]->id, 'user_id' => $this->product->post_author])->first()) {
-                $this->_setProductVisibility($request, $entity);
-                $this->_setProductTypeFields($request, $jsonEntry, false);
+            if (isset($user->organisation[0]->id) && OrganisationMember::where(['organisation_id' => $user->organisation[0]->id, 'user_id' => $this->product->user_id])->first()) {
+                $this->_setProductVisibility($this->product, $request, $entity);
+                $this->_setProductTypeFields($this->product, $request, $jsonEntry, false);
 
                 /**
                  * Recreate test plans for DataSource product.
                  * Test plans for Application product will be regenerated once user update supported features
                  */
                 if ($request->get('product_type') == 'DataSource') {
-                    $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
+                    $this->generateTestPlans($this->product->id, $request, $protocolVersion);
                 }
 
-                $this->product->meta()->updateOrCreate(['meta_key' => 'protocol_version'], ['meta_value' => $protocolVersion]);
-                $this->product->meta()->updateOrCreate(['meta_key' => 'product_description'], ['meta_value' => $entity['Version']['Info']]);
-                $this->product->meta()->updateOrCreate(['meta_key' => 'model'], ['meta_value' => $productModel]);
+                $this->product->protocol_version = $protocolVersion;
+                $this->product->description = $entity['Version']['Info'];
+                $this->product->model = $productModel;
 
-                //trigger post observer
-                $this->product->timestamps = false;
+                $this->product->full_name = $this->product_name . ' v' . $this->product->version;
+                if (!empty($productModel)) {
+                    $this->product->full_name .= ' for ' . $productModel;
+                }
+
                 $this->product->save();
 
-                if (CommunityOrganisationsApprovedProducts::where('product_id', $this->product->ID)->first()) {
+                if (!CommunityOrganisationsApprovedProducts::where('product_id', $this->product->id)->first()) {
                     $message = 'The product has been updated successfully';
                     $status = 'success';
                 } else {
@@ -268,9 +263,9 @@ class ProductsController extends BaseApiController
                     $this->setStatusCode(403);
                 }
                 $response = [
-                    'id' => $this->product->post_name,
-                    'title' => $this->product->post_title . ' v' . $productVersion,
-                    'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+                    'id' => $this->product->slug,
+                    'title' => $this->product->full_name,
+                    'link' => getSiteUrl() . '/product/' . $this->product->slug,
                     'model' => $productModel,
                 ];
                 return $this->respondWithDataAndMessage($message, $response, $status);
@@ -279,52 +274,48 @@ class ProductsController extends BaseApiController
             }
         }
 
-        $this->product = Post::create([
-            'post_title' => $productName,
-            'post_name' => $productId,
-            'post_type' => 'product-service',
-            'post_status' => 'publish',
-            'post_author' => \Auth::user()->ID,
-            'post_date' => Carbon::now(),
-            'comment_status' => 'closed',
-            'ping_status' => 'closed',
+        $this->product = Product::create([
+            'name' => $productName,
+            'slug' => $productId,
+            'user_id' => \Auth::user()->ID,
+            'model' => $productModel,
+            'protocol_version' => $protocolVersion,
+            'manufacturer' => $entity['Manufacturer'],
+            'description' => $entity['Version']['Info'],
+            'type' => $request->get('product_type'),
+            'version' => $productVersion,
+            'organisation_id' => $request->get('organisation_id'),
         ]);
 
-        $this->_setProductVisibility($request, $entity);
-        $this->_setProductTypeFields($request, $jsonEntry);
+        $this->_setProductVisibility($this->product, $request, $entity);
+        $this->_setProductTypeFields($this->product, $request, $jsonEntry);
 
-        $this->product->meta()->create(['meta_key' => 'product_id', 'meta_value' => $productId]);
-        $this->product->meta()->create(['meta_key' => 'protocol_version', 'meta_value' => $protocolVersion]);
-        $this->product->meta()->create(['meta_key' => 'product_manufacturer', 'meta_value' => $entity['Manufacturer']]);
-        $this->product->meta()->create(['meta_key' => 'product_description', 'meta_value' => $entity['Version']['Info']]);
-        $this->product->meta()->create(['meta_key' => 'product_type', 'meta_value' => $request->get('product_type')]);
-        $this->product->meta()->create(['meta_key' => 'product_name', 'meta_value' => $productName]);
-        $this->product->meta()->create(['meta_key' => 'product_version', 'meta_value' => $productVersion]);
-        $this->product->meta()->create(['meta_key' => 'model', 'meta_value' => $productModel]);
-
-        $this->product->meta()->create(['meta_key' => 'product_organisation_id', 'meta_value' => $request->get('organisation_id')]);
+        $this->product->full_name = $productName . ' v' . $protocolVersion;
+        if (!empty($productModel)) {
+            $this->product->full_name .= ' for ' . $productModel;
+        }
 
         /**
          * Create test plans for DataSource product.
          * Test plans for application product will be generated once user set supported features
          */
         if ($request->get('product_type') == 'DataSource') {
-            $this->generateTestPlans($this->product->ID, $request, $protocolVersion);
+            $this->generateTestPlans($this->product->id, $request, $protocolVersion);
         }
 
         $this->product->save();
 
         $response = [
-            'id' => $this->product->post_name,
-            'title' => $this->product->post_title . ' v' . $productVersion,
-            'link' => getSiteUrl() . '/product/' . $this->product->post_name,
+            'id' => $this->product->slug,
+            'title' => $this->product->name . ' v' . $productVersion,
+            'link' => getSiteUrl() . '/product/' . $this->product->slug,
             'model' => $productModel,
         ];
 
         $emailData = [
-            '[author_name]' => cp_get_user_fullname($this->product->post_author),
-            '[product_url]' => getSiteUrl() . '/product/' . $this->product->post_name,
-            '[product_name]' => $this->product->getProductFullName(),
+            '[author_name]' => cp_get_user_fullname($this->product->user_id),
+            '[product_url]' => getSiteUrl() . '/product/' . $this->product->slug,
+            '[product_name]' => $this->product->full_name,
             '[site_title]' => get_site_title(),
             '[organisation]' => Auth::user()->organisation[0]->organisation_name,
             '[env]' => get_option('env'),
@@ -346,33 +337,31 @@ class ProductsController extends BaseApiController
         $user = Auth::user();
         TestPlan::where('product_id', $productId)->delete();
         foreach ($user->getUserTestPlans() as $suiteName => $suite) {
-            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'test_suite_id' => TestSuite::getTestSuiteFamilyMark($suite['testSuite']->ID)])->first();
+            $type = $suite['testSuite']->product_type;
+            $aprovementEntry = CommunityOrganisationsApprovedTestSuites::where(['organisation_id' => $request->get('organisation_id'), 'suite_major_family_mark' => $suite['testSuite']->major_family_mark])->first();
             if ($type != $request->get('product_type') || !$aprovementEntry) {
                 continue;
             }
-            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark])->first();
             if (!$organisationSubscription) {
                 continue;
             }
-            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
-            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
             /**
              * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
              */
-            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+            $testSuiteSupportedProtocols = $suite['testSuite']->protocolVersions()->pluck('version');
 
-            if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
+            if (count($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
                 continue;
             }
-            foreach (explode(',', $attributes->value) as $level) {
+            foreach ($suite['testSuite']->conformanceLevels as $level) {
                 $testPlan = TestPlan::create([
                     'organisation_subscription_id' => $organisationSubscription->id,
-                    'product_id' => $this->product->ID,
-                    'suite_id' => $suite['testSuite']->ID,
+                    'product_id' => $this->product->id,
+                    'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark,
                     'creator_id' => $user->ID,
-                    'level' => $level,
+                    'level' => $level->code,
                     'role' => $request->get('product_type'),
                 ]);
                 if ($request->get('product_type') == 'DataSource') {
@@ -454,40 +443,34 @@ class ProductsController extends BaseApiController
      *
      */
 
-    public function listFeatures($productId)
+    public function listFeatures($productSlug)
     {
-        $product = Post::where(['post_name' => $productId])->first();
+        $product = Product::findBySlug($productSlug);
 
-        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
-
-        if ($type !== 'Application') {
+        if ($product->type !== 'Application') {
             return $this->respondForbiddenError('This product has incorrect type');
         }
 
-        $productSuites = (array)json_decode($product->getMetaByKey('product_suites'), true);
-        $productFeatures = (array)json_decode($product->getMetaByKey('product_features'), true);
         $result = [];
-        foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
-            $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
+        foreach (\Auth::user()->suiteSubscriptions as $suite) {
 
-            if (!$productType || $productType->meta_value !== 'Application') {
+            if ($suite->testSuite->tester_role !== 'Application') {
                 continue;
             }
 
+            $suiteFeatures = $suite->features;
             $suiteData = [
-                'id' => $suite->post_name,
-                'title' => $suite->name,
-                'status' => in_array($suite->suite_id, $productSuites) ? true : false,
+                'id' => $suite->slug,
+                'title' => $suite->full_name,
+                'status' => $product->features()->whereIn('test_suites_feature_id', $suite->features()->pluck('id'))->first() ? true : false,
                 'features' => [],
             ];
 
-            $suiteFeatures = json_decode($productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'featuresList'])->first()->meta_value, true);
-
             foreach ($suiteFeatures as $suiteFeature) {
                 $suiteData['features'][] = [
-                    'title' => $suiteFeature['name'],
-                    'description' => $suiteFeature['description'],
-                    'status' => in_array($suiteFeature['name'], $productFeatures) ? true : false,
+                    'title' => $suiteFeature->name,
+                    'description' => $suiteFeature->description,
+                    'status' => $product->features->where('test_suites_feature_id', $suiteFeature->id) ? true : false,
                 ];
             }
             $result[] = $suiteData;
@@ -603,12 +586,11 @@ class ProductsController extends BaseApiController
      *
      */
 
-    public function saveFeatures($productId, Request $request)
+    public function saveFeatures($productSlug, Request $request)
     {
-        $product = Post::where(['post_name' => $productId])->first();
-        $type = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'product_type'])->first()->meta_value;
+        $product = Product::findBySlug($productSlug);
 
-        if ($type !== 'Application') {
+        if ($product->type !== 'Application') {
             return $this->respondForbiddenError('This product has incorrect type');
         }
 
@@ -625,7 +607,7 @@ class ProductsController extends BaseApiController
         $errors = [];
         foreach ($features as $key => $feature) {
             $validator = Validator::make($feature, [
-                'id' => 'required|string|exists:wp_posts,post_name',
+                'id' => 'required|string|exists:test_suites,slug',
                 'features' => 'array',
             ],
                 [
@@ -645,34 +627,34 @@ class ProductsController extends BaseApiController
             return $this->respondUnprocessableEntity(['message' => $errors]);
         }
 
-        $productTestSuites = $productFeatures = [];
+        $productFeatures = [];
 
         foreach ($features as $testSuite) {
-            $testSuiteEntry = Post::where(['post_name' => $testSuite['id']])->first();
-
-            $productTestSuites[] = $testSuiteEntry->ID;
-
-            $productFeatures = array_merge($productFeatures, $testSuite['features']);
+            $testSuiteEntry = LaravelTestSuite::findBySlug($testSuite['id']);
+            foreach ($testSuite['features'] as $feature) {
+                $testSuiteFeature = $testSuiteEntry->features->where('name', $feature);
+                if ($testSuiteFeature) {
+                    $productFeatures = $testSuiteFeature->id;
+                    $product->features->updateOrCreate(['test_suites_feature_id' => $testSuiteFeature->id]);
+                }
+            }
+        }
+        if ($productFeatures) {
+            $product->features()->whereNotIn('test_suites_feature_id', $productFeatures)->delete();
         }
 
-        $product->meta()->updateOrCreate(['meta_key' => 'product_features'], ['meta_value' => json_encode($productFeatures)]);
-        $product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productTestSuites)]);
-
         //delete old and create new test plans
-        TestPlan::where(['product_id' => $product->ID, 'role' => 'Application'])->delete();
+        TestPlan::where(['product_id' => $product->id, 'role' => 'Application'])->delete();
 
         //generate new test plans
-        $protocolVersion = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'protocol_version'])->first()->meta_value;
+        $protocolVersion = $product->protocol_version;
 
         $user = Auth::user();
         foreach ($user->getUserTestPlans() as $suiteName => $suite) {
-            $type = $suite['testSuite']->meta()->where(['meta_key' => 'ts_tester_role'])->first()->meta_value;
-            if ($type != 'Application' || !in_array($suite['testSuite']->post_name, array_values(array_column($features, 'id')))) {
+            if ($suite['testSuite']->tester_role != 'Application' || !in_array($suite['testSuite']->slug, array_values(array_column($features, 'id')))) {
                 continue;
             }
-            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_family_mark' => $suite['testSuite']->ID])->first();
-            $pricingPlan = PricingPlan::where(['id' => $organisationSubscription->pricing_plan_id])->with('attributes')->first();
-            $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
+            $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark])->first();
 
             /**
              * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
@@ -682,20 +664,20 @@ class ProductsController extends BaseApiController
             if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
                 continue;
             }
-            foreach (explode(',', $attributes->value) as $level) {
+            foreach ($suite['testSuite']->conformanceLevels as $level) {
                 $testPlan = TestPlan::create([
                     'organisation_subscription_id' => $organisationSubscription->id,
                     'product_id' => $product->ID,
-                    'suite_id' => $suite['testSuite']->ID,
+                    'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark,
                     'creator_id' => $user->ID,
-                    'level' => $level,
+                    'level' => $level->name,
                     'role' => 'Application',
                 ]);
                 $testPlan->excludeTestCases('Application', $productFeatures);
             }
         }
 
-        return $this->listFeatures($productId);
+        return $this->listFeatures($productSlug);
     }
 
     /**
@@ -713,22 +695,36 @@ class ProductsController extends BaseApiController
      * @param $request
      * @param $jsonEntry
      */
-    private function _setProductTypeFields($request, $jsonEntry, $isCreate = true)
+    private function _setProductTypeFields(&$product, $request, $jsonEntry, $isCreate = true)
     {
         if ($request->get('product_type') == 'DataSource') {
-            $this->product->meta()->updateOrCreate(['meta_key' => 'capabilities'], ['meta_value' => json_encode($jsonEntry['Capabilities'])]);
+            $capabilities = $jsonEntry['Capabilities'];
+            if (is_array($capabilities)) {
+                $processedCapabilities = [];
+                foreach ($capabilities as $capability) {
+                    $product->capabilities()->updateOrCreate(['capability' => $capability]);
+                    $processedCapabilities[] = $capability;
+                }
+                $product->capabilities()->whereNotIn('capability', $processedCapabilities)->delete();
+
+            }
         } else {
             if ($isCreate) {
-                $productSuites = [];
-                foreach (getUserSubscribedSuites(\Auth::user()->ID) as $suite) {
-                    $productType = PostMeta::where(['post_id' => $suite->suite_id, 'meta_key' => 'ts_tester_role'])->first();
-
-                    if (!$productType || $productType->meta_value !== 'DataSource') {
+                $productFeatures = [];
+                foreach (Auth::user()->suiteSubscriptions as $suite) {
+                    if ($suite->testSuite->product_type !== 'DataSource') {
                         continue;
                     }
-                    $productSuites[] = $suite->suite_id;
+                    foreach ($suite->testSuite->features as $feature) {
+                        $productFeatures[] = $feature->id;
+                        $product->features()->updateOrCreate([
+                            'test_suites_feature_id' => $feature->id
+                        ]);
+                    }
                 }
-                $this->product->meta()->updateOrCreate(['meta_key' => 'product_suites'], ['meta_value' => json_encode($productSuites)]);
+                if (!empty($productFeatures)) {
+                    $product->features()->whereNotIn('test_suites_feature_id', $productFeatures)->delete();
+                }
             }
         }
     }
@@ -738,7 +734,7 @@ class ProductsController extends BaseApiController
      * @param $request
      * @param $entity
      */
-    private function _setProductVisibility($request, $entity)
+    private function _setProductVisibility(&$product, $request, $entity)
     {
         $organisation = Organisation::find($request->get('organisation_id'));
         $productsOrganisations = json_decode($organisation->products_organisations);
@@ -747,16 +743,16 @@ class ProductsController extends BaseApiController
         }
 
         if (in_array($entity['Manufacturer'], $productsOrganisations)) {
-            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Public']);
+            $product->visibility = 'Public';
         } else {
-            $this->product->meta()->updateOrCreate(['meta_key' => 'product_visibility'], ['meta_value' => 'Private']);
+            $product->visibility = 'Private';
         }
     }
 
     /**
      * @api {get} /v2/products Get user organisation's products
      * @apiVersion 2.0.0
-     * 
+     *
      ** @apiParam {string} [product_type]  Optional - product type (either 'Application' or 'DataSource').
      *
      * @apiName getProducts
@@ -764,28 +760,28 @@ class ProductsController extends BaseApiController
      *
      * @apiSuccessExample {json} Products list:
      *   {
-            "data": [{
-                "id": "kv-s1026c-twain-driver",
-                "title": "KV-S1026C twain driver v15.0",
-                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
-                "model": null,
-                "approved": false
-            }, {
-                "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
-                "title": "Panasonic KV-S1026C KV-S1015C v15.0",
-                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
-                "model": null,
-                "approved": true
-            }, {
-                "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
-                "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
-                "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
-                "model": "KV-S1026C",
-                "approved": false
-            }],
-            "status": "success",
-            "code": 200
-        }
+     * "data": [{
+     * "id": "kv-s1026c-twain-driver",
+     * "title": "KV-S1026C twain driver v15.0",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/kv-s1026c-twain-driver",
+     * "model": null,
+     * "approved": false
+     * }, {
+     * "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+     * "title": "Panasonic KV-S1026C KV-S1015C v15.0",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0",
+     * "model": null,
+     * "approved": true
+     * }, {
+     * "id": "6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+     * "title": "Panasonic KV-S1026C KV-S1015C v15.0 for KV-S1026C",
+     * "link": "https://www-preproduction-twain.ct01.gosource.com.au/product/6_panasonic-system-networks-co-lt_panasonic-kv-s1026c-kv-s1015c_v15-0_kv-s1026c",
+     * "model": "KV-S1026C",
+     * "approved": false
+     * }],
+     * "status": "success",
+     * "code": 200
+     * }
      *
      * @apiError 403 Forbidden
      * @apiErrorExample {json} Not organization member:
@@ -827,53 +823,19 @@ class ProductsController extends BaseApiController
 
         $userOrganisationId = \Auth::user()->organisation[0]->id;
 
+        $query = Product::where(['organisation_id' => $userOrganisationId]);
         if ($request->has('product_type')) {
-            $type = $request->get('product_type');
-
-            $products = DB::table('wp_posts')
-                ->join('wp_postmeta AS pm1', function ($join) use ($type) {
-                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                        ->where('pm1.meta_value', '=', $type)
-                        ->where('pm1.meta_key', '=', 'product_type');
-                })
-                ->join('wp_postmeta AS pm2', function ($join) use ($userOrganisationId) {
-                    $join->on('pm2.post_id', '=', 'wp_posts.ID')
-                        ->where('pm2.meta_value', '=', $userOrganisationId)
-                        ->where('pm2.meta_key', '=', 'product_organisation_id');
-                })
-                ->join('wp_postmeta AS version', function ($join) {
-                    $join->on('version.post_id', '=', 'wp_posts.ID')
-                        ->where('version.meta_key', '=', 'product_version');
-                })
-                ->where('wp_posts.post_type', '=', 'product-service')
-                ->groupBy('wp_posts.ID')
-                ->get();
-
-        } else {
-            $products = DB::table('wp_posts')
-                ->join('wp_postmeta AS pm1', function ($join) use ($userOrganisationId) {
-                    $join->on('pm1.post_id', '=', 'wp_posts.ID')
-                        ->where('pm1.meta_value', '=', $userOrganisationId)
-                        ->where('pm1.meta_key', '=', 'product_organisation_id');
-                })
-                ->join('wp_postmeta AS version', function ($join) {
-                    $join->on('version.post_id', '=', 'wp_posts.ID')
-                        ->where('version.meta_key', '=', 'product_version');
-                })
-                ->where('wp_posts.post_type', '=', 'product-service')
-                ->groupBy('wp_posts.ID')
-                ->get();
+            $query->type = $request->has('product_type');
         }
 
         $response = [];
-        foreach ($products as $product) {
-            $model = PostMeta::where(['post_id' => $product->ID, 'meta_key' => 'model'])->first();
+        foreach ($query->get() as $product) {
             $response[] = [
-                'id' => $product->post_name,
-                'title' => $product->post_title . ' v' . $product->meta_value,
-                'link' => getSiteUrl() . '/product/' . $product->post_name,
-                'model' => $model ? $model->meta_value : null,
-                'approved' => CommunityOrganisationsApprovedProducts::where('product_id', $product->ID)->first() ? true : false,
+                'id' => $product->slug,
+                'title' => $product->full_name,
+                'link' => getSiteUrl() . '/product/' . $product->slug,
+                'model' => !empty($product->model) ? $product->model : null,
+                'approved' => CommunityOrganisationsApprovedProducts::where('product_id', $product->id)->first() ? true : false,
             ];
         }
         return $this->respondWithData($response);

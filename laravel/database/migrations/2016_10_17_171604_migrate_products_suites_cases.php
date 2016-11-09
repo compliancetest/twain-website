@@ -35,7 +35,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->uuid('minor_family_mark');//
             $table->uuid('major_family_mark');//
             $table->integer('wp_id');//..
-            $table->timestamp('published_at');//2016-01-29
+            $table->date('published_at')->nullable();//2016-01-29
             $table->timestamps();
         });
 
@@ -182,7 +182,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->boolean('is_optional');//true
             $table->text('test_pattern');//..
             $table->integer('wp_id');//..
-            $table->timestamp('published_at');//2016-01-29
+            $table->date('published_at')->nullable();//2016-01-29
             $table->timestamps();
         });
 
@@ -309,7 +309,7 @@ class MigrateProductsSuitesCases extends Migration
             $table->integer('organisation_id');
             $table->integer('user_id');
             $table->integer('wp_id');
-            $table->timestamp('released_at');
+            $table->date('released_at')->nullable();
             $table->timestamps();
         });
 

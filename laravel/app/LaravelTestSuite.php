@@ -26,6 +26,34 @@ class LaravelTestSuite extends Model
         return $this->belongsToMany('App\LaravelTestCase', 'test_suite_test_case', 'test_suite_id', 'test_case_id');
     }
 
+    /**
+     * Get filtered / ordered by scenario sequence test cases
+     * @param array $args
+     * @return mixed
+     */
+    public function getOrderedCases($args = [])
+    {
+        $query = $this->testCases()
+            ->join('test_cases_conformance_levels', 'test_cases.id', '=', 'test_cases_conformance_levels.test_case_id')
+            ->join('test_suites_conformance_levels', 'test_suites_conformance_levels.id', '=', 'test_cases_conformance_levels.conformance_level_id')
+            ->join('test_cases_scenarios', 'test_cases.id', '=', 'test_cases_scenarios.test_case_id')
+            ->join('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id')
+            ->where('test_cases.status', 'Active')
+            ->orderBy('test_suites_scenarios.sequence')
+            ->orderBy('test_cases.full_name')
+            ->groupBy('test_cases.id');
+        if(!empty($args['role'])){
+            $query->where('test_cases.tester_role', $args['role']);
+        }
+        if(!empty($args['level'])){
+            $query->where('test_suites_conformance_levels.code', $args['level']);
+        }
+        if(!empty($args['execution_mode'])){
+            $query->where('execution_mode', $args['execution_mode']);
+        }
+        return $query->get();
+    }
+
     public function types()
     {
         return $this->hasMany('\App\TestSuiteTypes', 'test_suite_id');
@@ -33,7 +61,7 @@ class LaravelTestSuite extends Model
 
     public function conformanceLevels()
     {
-        return $this->hasMany('\App\TestSuiteConformanceLevels', 'test_suite_id');
+        return $this->hasMany('\App\TestSuiteConformanceLevels', 'test_suite_id')->where('code', '!=', 'Default');
     }
 
     public function features()

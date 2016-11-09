@@ -136,10 +136,12 @@ class TestPlan extends Model
         $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
         $product = Product::find($this->product_id);
         $testCases = $testSuite->getTestCases($this->role, $this->level);
+        $productCapabilities = $product->capabilities()->pluck('capability')->toArray();
+        $productFeatures = $product->features()->pluck('test_suites_feature_id')->toArray();
         foreach ($testCases as $testCase) {
             if ($type == 'DataSource') {
-                $capabilities = (array)$testCase->capabilities()->pluck('capability');
-                $diff = array_diff($capabilities, (array)$product->capabilities()->pluck('capability'));
+                $capabilities = $testCase->capabilities()->pluck('capability')->toArray();
+                $diff = array_diff($capabilities, $productCapabilities);
                 if (!empty($diff)) {
                     TestPlanExcludedCases::create([
                         'test_case_id' => $testCase->id,
@@ -150,8 +152,8 @@ class TestPlan extends Model
                     ]);
                 }
             } else {
-                $testCaseFeatures = (array)$testCase->features()->pluck('test_suites_feature_id');
-                $diff = array_diff($testCaseFeatures, (array)$product->features()->pluck('test_suites_feature_id'));
+                $testCaseFeatures = $testCase->features()->pluck('test_suites_feature_id')->toArray();
+                $diff = array_diff($testCaseFeatures, $productFeatures);
                 if (!empty($diff)) {
                     TestPlanExcludedCases::create([
                         'test_case_id' => $testCase->id,
