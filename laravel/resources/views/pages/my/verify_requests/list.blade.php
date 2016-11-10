@@ -32,7 +32,7 @@
                                         {{ $verifyRequest->transactions }}
                                         <div class="coverage-progress">
                                             @foreach($verifyRequest['testCases'] as $case)
-                                                <?php $status = $verifyRequest['verifyRequest']->getTestCaseStatus($case->ID);?>
+                                                <?php $status = $verifyRequest['verifyRequest']->getTestCaseStatus($case->id);?>
                                                 @include('pages.my.verify_requests._case_link', ['status' => $status])
                                             @endforeach
                                         </div>

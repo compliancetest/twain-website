@@ -28,7 +28,7 @@
                                     <td>{{ $userPlan['testPlan']->role }}</td>
                                     <td>
                                         <div class="coverage-progress">
-                                            @foreach($userSuite['testSuite']->getTestCases($userPlan['testPlan']->role, $userPlan['testPlan']->level) as $case)
+                                            @foreach($userSuite['testSuite']->getOrderedCases(['role' => $userPlan['testPlan']->role, 'level' => $userPlan['testPlan']->level]) as $case)
                                                 @include('pages.my.coverage._case_link', ['testPlanData' => $userPlan['testPlanData']])
                                             @endforeach
                                         </div>

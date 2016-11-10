@@ -31,14 +31,14 @@ class LaravelTestSuite extends Model
      * @param array $args
      * @return mixed
      */
-    public function getOrderedCases($args = [])
+    public function getOrderedCases($args = [], $isAdmin = false)
     {
         $query = $this->testCases()
+            ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioID')
             ->join('test_cases_conformance_levels', 'test_cases.id', '=', 'test_cases_conformance_levels.test_case_id')
             ->join('test_suites_conformance_levels', 'test_suites_conformance_levels.id', '=', 'test_cases_conformance_levels.conformance_level_id')
             ->join('test_cases_scenarios', 'test_cases.id', '=', 'test_cases_scenarios.test_case_id')
             ->join('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id')
-            ->where('test_cases.status', 'Active')
             ->orderBy('test_suites_scenarios.sequence')
             ->orderBy('test_cases.full_name')
             ->groupBy('test_cases.id');
@@ -50,6 +50,9 @@ class LaravelTestSuite extends Model
         }
         if(!empty($args['execution_mode'])){
             $query->where('execution_mode', $args['execution_mode']);
+        }
+        if(!$isAdmin){
+            $query->where('test_cases.status', 'Active');
         }
         return $query->get();
     }

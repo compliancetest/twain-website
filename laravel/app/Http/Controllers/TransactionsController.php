@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\LaravelTestSuite;
 use App\Post;
 use App\TransactionChangeLog;
 use App\WpOptions;
@@ -175,7 +176,7 @@ class TransactionsController extends Controller
     {
         $transaction = Transaction::find($transactionId);
         $logs = $transaction->explanationLogs;
-        $community = Community::find(Post::find($transaction->test_suite_id)->getMetaByKey('community_id'));
+        $community = Community::find(LaravelTestSuite::find($transaction->suite_minor_family_mark)->community_id);
         $isSupport = $community->isModerator() || $community->isAdmin() ? true : false;
         return view('pages.transactions.popups.explanation-logs', compact('logs', 'transactionId', 'isSupport'));
     }
@@ -199,7 +200,9 @@ class TransactionsController extends Controller
         }
 
         $transaction = Transaction::find($transactionId);
-        $community = Community::find(Post::find($transaction->test_suite_id)->getMetaByKey('community_id'));
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($transaction->suite_minor_family_mark);
+
+        $community = Community::find($testSuite->community_id);
         $isSupport = $community->isModerator() || $community->isAdmin() ? true : false;
         $transaction->explanationLogs()->create([
             'message' => $request->get('message'),
@@ -220,7 +223,7 @@ class TransactionsController extends Controller
             '[message]' => $request->get('message'),
             '[community]' => $community->title,
             '[website_url]' => getSiteUrl(),
-            '[test_suite]' => Post::find($transaction->test_suite_id)->post_title,
+            '[test_suite]' => $testSuite->full_name,
         ];
         if (!$isSupport) {
             sendEmails($community->getAdminsAndModerators(), 'send_explain_message_to_admin', $emailData);

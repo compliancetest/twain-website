@@ -38,7 +38,7 @@ class VerifyRequest extends Model
                 $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }
             foreach ($userTestSuites as $userTestSuite) {
-                $minorFamilyMark = $isAdministrator ? $userTestSuite->id : $userTestSuite->minor_family_mark;
+                $minorFamilyMark = $userTestSuite->suite_minor_family_mark;
                 if (!isset($result[$minorFamilyMark])) {
                     $result[$minorFamilyMark] = [
                         'testSuite' => LaravelTestSuite::getLatestSuiteForMinorFamilyMark($minorFamilyMark),
