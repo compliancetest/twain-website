@@ -2,6 +2,9 @@
 
 namespace App\Api\v2\Controllers;
 
+use App\LaravelTestCase;
+use App\LaravelTestSuite;
+use App\Product;
 use App\Profile;
 use App\TestCase;
 use App\TestingDetail;
@@ -85,8 +88,8 @@ class TestCasesController extends BaseApiController
             return $this->respondUnprocessableEntity("Please set testing details");
         }
 
-        $testSuiteData = Post::find($testingDetails->test_suite_id);
-        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->post_name);
+        $testSuiteData = LaravelTestSuite::find($testingDetails->test_suite_id);
+        $hasAccessToTestSuite = $this->doesOrganisationHasAccessToTestSuite($testSuiteData->slug);
         if (!$hasAccessToTestSuite) {
             return $this->respondForbiddenError("Your organisation doesn't have access to this test suite.");
         }
@@ -100,9 +103,9 @@ class TestCasesController extends BaseApiController
         $profile = Profile::find($profileId);
         if ($profile) {
             return $this->respondWithData([
-                'test_case_id' => Post::find($testCase->case_id)->post_name,
-                'test_suite_id' => Post::find($testingDetails->test_suite_id)->post_name,
-                'product_id' => Post::find($testingDetails->product_id)->post_name,
+                'test_case_id' => LaravelTestCase::find($testingDetails->test_case_id)->slug,
+                'test_suite_id' => LaravelTestSuite::find($testingDetails->test_suite_id)->slug,
+                'product_id' => Product::find($testingDetails->product_id)->slug,
                 'profile' => $profile->getProfileFromS3(),
             ]);
         }
@@ -254,9 +257,9 @@ class TestCasesController extends BaseApiController
     public function start(\Illuminate\Http\Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'test_suite_id' => 'required|exists:wp_posts,post_name',
-            'test_case_id' => 'required|exists:wp_posts,post_name',
-            'product_id' => 'required|exists:wp_posts,post_name',
+            'test_suite_id' => 'required|exists:test_suites,slug',
+            'test_case_id' => 'required|exists:test_cases,slug',
+            'product_id' => 'required|exists:products,slug',
         ]);
         if ($validator->fails()) {
             return $this->respondUnprocessableEntity($validator->messages());
@@ -273,40 +276,40 @@ class TestCasesController extends BaseApiController
         }
 
 
-        $product = Post::where(['post_type' => 'product-service', 'post_name' => $request->get('product_id')])->first();
-        $testSuite = Post::where(['post_type' => 'test-suite', 'post_name' => $request->get('test_suite_id')])->first();
-        $testCase = Post::where(['post_type' => 'test-case', 'post_name' => $request->get('test_case_id')])->first();
+        $product = Product::findBySlug($request->get('product_id'));
+        $testSuite = LaravelTestSuite::findBySlug($request->get('test_suite_id'));
+        $testCase = LaravelTestCase::findBySlug($request->get('test_case_id'));
 
         $model = TestingDetail::firstOrNew(['user_id' => Auth::user()->ID]);
-        $model->product_id = $product->ID;
-        $model->test_case_id = $testCase->ID;
-        $model->test_suite_id = $testSuite->ID;
+        $model->product_id = $product->id;
+        $model->test_case_id = $testCase->id;
+        $model->test_suite_id = $testSuite->id;
         $model->start_time = Carbon::now();
         $model->is_running = true;
         $model->save();
 
-        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
-        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
+        $testConfigurationProfile = $this->getProfileInfo($testCase->configuration_profile_id);
+        $testExecutionProfile = $this->getProfileInfo($testCase->test_execution_profile_id);
 
-        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
+        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->product_type, $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
             $this->stop();
-            return $this->respondNotFound(sprintf($validateConfigs, $testCase->post_name));
+            return $this->respondNotFound(sprintf($validateConfigs, $testCase->slug));
         }
 
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
-                'id' => $testSuite->post_name,
-                'title' => $testSuite->post_title,
+                'id' => $testSuite->slug,
+                'title' => $testSuite->full_name,
             ],
             'TestCase' => [
-                'id' => $testCase->post_name,
-                'title' => $testCase->post_title,
+                'id' => $testCase->slug,
+                'title' => $testCase->full_name,
             ],
             'Product' => [
-                'id' => $product->post_name,
-                'title' => $product->post_title,
+                'id' => $product->slug,
+                'title' => $product->full_name,
             ],
             'ExecutionProfile' => $testExecutionProfile,
             'ConfigurationProfile' => $testConfigurationProfile,
@@ -350,12 +353,11 @@ class TestCasesController extends BaseApiController
     private function _getTestCaseImages($testCase)
     {
         $images = [];
-        $imagesData = $testCase->postmeta()->where('meta_key', 'imagesData')->first();
-        if ($imagesData) {
-            $imagesData = json_decode($imagesData->meta_value);
+        $imagesData = $testCase->samples;
+        if (count($testCase->samples)) {
             foreach ($imagesData as $imageData) {
                 $images[] = [
-                    'link' => Storage::disk('s3')->url(config('env.env') . '/case_images/' . $testCase->ID . '/' . $imageData->name, $imageData->name),
+                    'link' => Storage::disk('s3')->url($imageData->name, pathinfo($imageData->name, PATHINFO_BASENAME)),
                     'description' => $imageData->description,
                 ];
             }
@@ -499,32 +501,32 @@ class TestCasesController extends BaseApiController
             return $this->respondWithStatus('You are not running any test case now', 'success');
         }
 
-        $product = Post::find($model->product_id);
-        $testSuite = Post::find($model->test_suite_id);
-        $testCase = Post::find($model->test_case_id);
+        $product = Product::find($model->product_id);
+        $testSuite = LaravelTestSuite::find($model->test_suite_id);
+        $testCase = LaravelTestCase::find($model->test_case_id);
 
-        $testConfigurationProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestDataProfileId());
-        $testExecutionProfile = $this->getProfileInfo(TestCase::find($testCase->ID)->getTestExecutionProfileId());
+        $testConfigurationProfile = $this->getProfileInfo($testCase->configuration_profile_id);
+        $testExecutionProfile = $this->getProfileInfo($testCase->test_execution_profile_id);
 
-        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->getMetaByKey('ts_tester_role'), $testExecutionProfile, $testConfigurationProfile);
+        $validateConfigs = $this->_validateTestCaseConfiguration($testSuite->product_type, $testExecutionProfile, $testConfigurationProfile);
         if ($validateConfigs !== true) {
             $this->stop();
-            return $this->respondNotFound(sprintf($validateConfigs, $testCase->post_name));
+            return $this->respondNotFound(sprintf($validateConfigs, $testCase->slug));
         }
 
         $response = [
             'ExecutionId' => $model->id,
             'TestSuite' => [
-                'id' => $testSuite->post_name,
-                'title' => $testSuite->post_title,
+                'id' => $testSuite->slug,
+                'title' => $testSuite->full_name,
             ],
             'TestCase' => [
-                'id' => $testCase->post_name,
-                'title' => $testCase->post_title,
+                'id' => $testCase->slug,
+                'title' => $testCase->full_name,
             ],
             'Product' => [
-                'id' => $product->post_name,
-                'title' => $product->post_title,
+                'id' => $product->slug,
+                'title' => $product->full_name,
             ],
             'ExecutionProfile' => $testExecutionProfile,
             'ConfigurationProfile' => $testConfigurationProfile,

@@ -84,6 +84,22 @@ class UpdateSuiteProductsCasesReferencesInTables extends Migration
         \Illuminate\Support\Facades\DB::statement("ALTER TABLE  `test_plans_excluded_cases` CHANGE  `test_case_id`  `test_case_id` VARCHAR( 36 ) NOT NULL ;");
         \Illuminate\Support\Facades\DB::statement("UPDATE  `test_plans_excluded_cases` as tp set test_case_id = (SELECT id FROM test_cases WHERE wp_id = tp.test_case_id)");
 
+        \Illuminate\Support\Facades\DB::statement("ALTER TABLE  `testing_details` CHANGE  `product_id`  `product_id` VARCHAR( 36 ) NOT NULL ;");
+        \Illuminate\Support\Facades\DB::statement("ALTER TABLE  `testing_details` CHANGE  `test_suite_id`  `test_suite_id` VARCHAR( 36 ) NOT NULL ;");
+        \Illuminate\Support\Facades\DB::statement("ALTER TABLE  `testing_details` CHANGE  `test_case_id`  `test_case_id` VARCHAR( 36 ) NOT NULL ;");
+
+        $entries = \App\TestingDetail::all();
+        foreach ($entries as $entry) {
+            $product = \App\Product::where(['wp_id' => $entry->product_id])->first();
+            $testSuite = \App\LaravelTestSuite::where(['wp_id' => $entry->test_suite_id])->first();
+            $testCase = \App\LaravelTestCase::where(['wp_id' => $entry->test_case_id])->first();
+            if ($product && $testSuite && $testCase) {
+                \Illuminate\Support\Facades\DB::statement("UPDATE  `testing_details` SET  `product_id`  = '{$product->id}' WHERE product_id = {$entry->product_id}");
+                \Illuminate\Support\Facades\DB::statement("UPDATE  `testing_details` SET  `test_suite_id`  = '{$testSuite->id}' WHERE test_suite_id = {$entry->test_suite_id}");
+                \Illuminate\Support\Facades\DB::statement("UPDATE  `testing_details` SET  `test_case_id`  = '{$testCase->id}' WHERE test_case_id = {$entry->test_case_id}");
+            }
+        }
+
     }
 
     /**
