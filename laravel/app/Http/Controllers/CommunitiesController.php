@@ -160,7 +160,7 @@ class CommunitiesController extends Controller
             }
             $data['surveys'] = $surveys;
         }
-        if ($action == 'admin') {
+        if ($action == 'settings') {
             if (!$community->isAdmin() && !$community->isModerator()) {
                 return Redirect::to(getSiteUrl() . '/communities');
             }
