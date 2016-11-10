@@ -509,7 +509,6 @@
 
                         </div>
                     </div>
-                    <div class="colored-box-footer"></div>
                 </div>
 
                 <div class="error-box"></div>

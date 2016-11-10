@@ -715,9 +715,10 @@ var Page = {
     ajaxSaveForm: function(form, notificationBox){
         var formData = new FormData(form[0]);
         var messageBox = notificationBox;
+        messageBox.find('.message').remove();
+        form.find('.message').remove();
 
         if (form.valid()){
-            messageBox.find('.message').remove();
             form.find('.form-loading').show();
             $.ajax({
                 url: form.attr('action'),
