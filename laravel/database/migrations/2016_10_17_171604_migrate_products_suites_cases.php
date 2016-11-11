@@ -43,6 +43,18 @@ class MigrateProductsSuitesCases extends Migration
             $table->foreign('community_id')->references('id')->on('communities');
         });
 
+        Schema::create('test_suites_changes_subscriptions', function (Blueprint $table) {
+            $table->primary('id');
+            $table->uuid('id');
+            $table->uuid('test_suite_id');
+            $table->integer('user_id');
+            $table->timestamps();
+        });
+
+        Schema::table('test_suites_changes_subscriptions', function ($table) {
+            $table->foreign('test_suite_id')->references('id')->on('test_suites')->onDelete('cascade');
+        });
+
         Schema::create('test_suites_types', function (Blueprint $table) {
             $table->primary('id');
             $table->uuid('id');
@@ -380,6 +392,7 @@ class MigrateProductsSuitesCases extends Migration
         Schema::dropIfExists('test_suite_test_case');
         Schema::dropIfExists('test_cases');
         Schema::dropIfExists('test_suites');
+        Schema::dropIfExists('test_suites_changes_subscriptions');
         Schema::enableForeignKeyConstraints();
     }
 }

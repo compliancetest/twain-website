@@ -515,7 +515,9 @@
 
                 <div class="form-actions">
                     <div class="checkbox pull-right">
-                        <label><input type="checkbox" value=""> Send Notification to members</label>
+                        @if($testSuite)
+                            <label><input type="checkbox" value="1" name="send-notification"> Send Notification to members</label>
+                        @endif
                     </div>
                     <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save Test Suite</button>
                     <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>

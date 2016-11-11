@@ -414,6 +414,15 @@ class MigrateProductsCasesSuitesData extends Migration
                 $laravelTestSuite->save();
             }
         }
+
+        $testSuitesSubscriptions = \App\UserMeta::where('meta_key', 'like', 'notify_suite_changes%')->get();
+        foreach ($testSuitesSubscriptions as $testSuitesSubscription) {
+            $suiteId = str_replace('notify_suite_changes', '', $testSuitesSubscription->meta_key);
+            $tt = \App\LaravelTestSuite::where('wp_id', $suiteId)->first();
+            if ($tt) {
+                $tt->changesSubscriptions()->create(['user_id' => $testSuitesSubscription->user_id]);
+            }
+        }
     }
 
     /**
@@ -453,6 +462,7 @@ class MigrateProductsCasesSuitesData extends Migration
         \Illuminate\Support\Facades\DB::statement("truncate test_cases_capabilities");
 
         \Illuminate\Support\Facades\DB::statement("truncate test_suite_test_case");
+        \Illuminate\Support\Facades\DB::statement("truncate test_suites_changes_subscriptions");
 
 
         \Illuminate\Support\Facades\DB::statement("truncate test_cases");

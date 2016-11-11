@@ -21,9 +21,18 @@ class LaravelTestSuite extends Model
         'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark', 'updated_at', 'created_at'
     ];
 
+    public function getUrl()
+    {
+        return getSiteUrl() . '/test-suite/' . $this->slug;
+    }
     public function testCases()
     {
         return $this->belongsToMany('App\LaravelTestCase', 'test_suite_test_case', 'test_suite_id', 'test_case_id');
+    }
+
+    public function changesSubscriptions()
+    {
+        return $this->hasMany('App\TestSuiteChangesSubscriptions', 'test_suite_id')->with('user');
     }
 
     /**
@@ -33,28 +42,7 @@ class LaravelTestSuite extends Model
      */
     public function getOrderedCases($args = [], $isAdmin = false)
     {
-        $query = $this->testCases()
-            ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioID')
-            ->join('test_cases_conformance_levels', 'test_cases.id', '=', 'test_cases_conformance_levels.test_case_id')
-            ->join('test_suites_conformance_levels', 'test_suites_conformance_levels.id', '=', 'test_cases_conformance_levels.conformance_level_id')
-            ->join('test_cases_scenarios', 'test_cases.id', '=', 'test_cases_scenarios.test_case_id')
-            ->join('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id')
-            ->orderBy('test_suites_scenarios.sequence')
-            ->orderBy('test_cases.full_name')
-            ->groupBy('test_cases.id');
-        if(!empty($args['role'])){
-            $query->where('test_cases.tester_role', $args['role']);
-        }
-        if(!empty($args['level'])){
-            $query->where('test_suites_conformance_levels.code', $args['level']);
-        }
-        if(!empty($args['execution_mode'])){
-            $query->where('execution_mode', $args['execution_mode']);
-        }
-        if(!$isAdmin){
-            $query->where('test_cases.status', 'Active');
-        }
-        return $query->get();
+        return $this->getCases($args, $isAdmin)->get();
     }
 
     public function types()
@@ -182,35 +170,43 @@ class LaravelTestSuite extends Model
         return $query->get();
     }
 
+    /**
+     * Get cases filtered by provided fields
+     * @param array $filters
+     * @param bool $isAdmin
+     * @return mixed
+     */
     public function getCases($filters = [], $isAdmin = false)
     {
-        $query = $this->testCases()->select("test_cases.*", 'TSS.id AS scenarioId', 'TSS.code AS scenarioCode')
-            ->join('test_cases_scenarios as TCS', function ($join) {
-                $join->on('TCS.test_case_id', '=', 'test_cases.id');
-            })
-            ->join('test_suites_scenarios as TSS', function ($join) {
-                $join->on('TSS.id', '=', 'TCS.test_suites_scenario_id');
-            })
-            ->join('test_cases_conformance_levels as TCCL', function ($join) {
-                $join->on('TCCL.test_case_id', '=', 'test_cases.id');
-            })
-            ->join('test_suites_conformance_levels as TSCL', function ($join) {
-                $join->on('TSCL.id', '=', 'TCCL.conformance_level_id');
-            })
-            ->orderBy('TSS.sequence')
+        $query = $this->testCases()
+            ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioID')
+            ->join('test_cases_conformance_levels', 'test_cases.id', '=', 'test_cases_conformance_levels.test_case_id')
+            ->join('test_suites_conformance_levels', 'test_suites_conformance_levels.id', '=', 'test_cases_conformance_levels.conformance_level_id')
+            ->leftjoin('test_cases_scenarios', 'test_cases.id', '=', 'test_cases_scenarios.test_case_id')
+            ->leftjoin('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id')
+            ->orderBy('test_suites_scenarios.sequence')
             ->orderBy('test_cases.full_name')
             ->groupBy('test_cases.id');
-        if (!$isAdmin) {
+        if(!empty($args['role'])){
+            $query->where('test_cases.tester_role', $args['role']);
+        }
+        if(!empty($args['level'])){
+            $query->where('test_suites_conformance_levels.code', $args['level']);
+        }
+        if(!empty($args['execution_mode'])){
+            $query->where('execution_mode', $args['execution_mode']);
+        }
+        if(!$isAdmin){
             $query->where('test_cases.status', 'Active');
         }
-        if (!empty($filters['scenario'])) {
-            $query->where('TSS.code', $filters['scenario']);
+        if (!empty($args['scenario'])) {
+            $query->where('test_suites_scenarios.code', $filters['scenario']);
         }
-        if (!empty($filters['status'])) {
+        if (!empty($args['status'])) {
             $query->where('test_cases.status', $filters['status']);
         }
-        if (!empty($filters['conformance_level'])) {
-            $query->where('TSCL.code', $filters['conformance_level']);
+        if (!empty($args['conformance_level'])) {
+            $query->where('test_suites_conformance_levels.code', $filters['conformance_level']);
         }
         return $query;
     }
@@ -431,5 +427,30 @@ class LaravelTestSuite extends Model
     public function isNextVersionExist($fieldName = 'version_major')
     {
         return self::where(['name' => $this->name, $fieldName => ($this->{$fieldName} + 1)])->first();
+    }
+
+    /**
+     * Send notification about change to subscribed users
+     */
+    public function notifySubscribers()
+    {
+        $community = $this->community;
+
+        $emailData = array(
+            '[community]' => $community->title,
+            '[community_url]' => $community->getUrl(),
+            '[suite_name]' => $this->full_name,
+            '[suite_url]' => $this->getUrl(),
+            '[editor_name]' => cp_get_user_fullname(Auth::user()->ID)
+        );
+
+        if (count($this->changesSubscriptions)) {
+            foreach ($this->changesSubscriptions as $member) {
+                if ($member->user_id != Auth::user()->ID) {
+                    $emailData['[name]'] = cp_get_user_fullname($member->user_id);
+                    cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user->user_email), 'suite_changed', $emailData);
+                }
+            }
+        }
     }
 }

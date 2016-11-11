@@ -9,6 +9,7 @@ use App\LaravelTestSuite;
 use App\OrganisationMember;
 use App\OrganisationSubscription;
 use App\User;
+use App\UserMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -158,12 +159,19 @@ class TestSuitesController extends Controller
                     $testSuite->version_patch = $oldTestSuite->version_patch;
                 }
             }
+            $subscribedUsers = $oldTestSuite->changesSubscriptions;
+            foreach ($subscribedUsers as $subscribedUser) {
+                $testSuite->changesSubscriptions()->create('user_id', $subscribedUser->user_id);
+            }
         } else {
             $testSuite = $oldTestSuite;
         }
         $testSuite->fill($request->all());
         $testSuite->updateRelations($request);
         $testSuite->save();
+        if ($request->get('send-notification')) {
+            $testSuite->notifySubscribers();
+        }
         return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
     }
 
@@ -252,5 +260,22 @@ class TestSuitesController extends Controller
     {
         $userSubscriptions = Auth::user()->suiteSubscriptions;
         return view('pages.my.test-suites.index', compact('userSubscriptions'));
+    }
+
+    /**
+     * Subscribe / unsibscribe to test suite changes
+     * @param $testSuiteSlug
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function subscribeToNotifications($testSuiteSlug, Request $request)
+    {
+        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        if ($request->get('checked')) {
+            $testSuite->changesSubscriptions()->create(['user_id' => Auth::user()->ID]);
+        } else {
+            $testSuite->changesSubscriptions()->where(['user_id' => Auth::user()->ID])->delete();
+        }
+        return response()->json(['status' => 'success']);
     }
 }

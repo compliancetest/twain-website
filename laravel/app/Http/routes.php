@@ -85,6 +85,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('laravel-test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
         Route::get('laravel-test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
         Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
+        Route::post('laravel-test-suite/{testSuiteSlug}/suite-notify-changes', 'TestSuitesController@subscribeToNotifications');
 
         Route::get('laravel-test-suites', 'TestSuitesSearchController@index');
         Route::get('laravel-test-suites/logs-list', 'TestSuitesSearchController@entries');

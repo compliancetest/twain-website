@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($userSubscriptions)
+                    @if(count($userSubscriptions))
                         @foreach($userSubscriptions as $index => $userSubscription)
                             <tr class="{{ $userSubscription->testSuite->slug }}">
                                 <td><a href="/communities/{{ $userSubscription->testSuite->community->slug }}">{{ $userSubscription->testSuite->community->title }}</a></td>

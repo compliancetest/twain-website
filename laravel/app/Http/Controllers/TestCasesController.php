@@ -63,7 +63,7 @@ class TestCasesController extends Controller
         $fullName = LaravelTestCase::generateCaseSuiteFullName($request);
         $slug = LaravelTestCase::generateSlug($fullName);
 
-        if (!LaravelTestCase::findBySlug($slug)) {
+        if (LaravelTestCase::findBySlug($slug)) {
             return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
         }
 
@@ -88,7 +88,7 @@ class TestCasesController extends Controller
         if ($oldTestCase->isVersionUpdated($request)) {
             $fullName = LaravelTestCase::generateCaseSuiteFullName($request);
             $slug = LaravelTestCase::generateSlug($fullName);
-            if (!LaravelTestCase::findBySlug($slug)) {
+            if (LaravelTestCase::findBySlug($slug)) {
                 return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
             }
             $testCase = LaravelTestCase::create($request->all());
@@ -105,11 +105,20 @@ class TestCasesController extends Controller
                 }
             }
         } else {
-            $testSuite = $oldTestCase;
+            $testCase = $oldTestCase;
+            $oldTestCase->status = 'Obsolete';
+            $oldTestCase->save();
         }
-        $testSuite->fill($request->all());
-        $testSuite->updateRelations($request);
-        $testSuite->save();
+        $testCase->fill($request->all());
+        $testCase->updateRelations($request);
+        $testCase->save();
+
+        if ($request->get('send-notification')) {
+            foreach ($testCase->testSuites as $testSuite) {
+                $testSuite->notifySubscribers();
+            }
+        }
+
         return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-case/' . $testSuite->slug]);
     }
 

@@ -460,7 +460,8 @@ function getTestSuiteInfoForCase()
 }
 
 
-function saveCase()
+function
+saveCase()
 {    
     global $wpdb;
     

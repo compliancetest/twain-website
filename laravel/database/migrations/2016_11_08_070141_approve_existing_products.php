@@ -21,7 +21,7 @@ class ApproveExistingProducts extends Migration
                     \App\CommunityOrganisationsApprovedProducts::create([
                         'organisation_id' => $organisation->id,
                         'community_id' => $community->id,
-                        'product_id' => $product->ID,
+                        'product_id' => !empty($product->ID) ? $product->ID : $product->id,
                         'approved_by' => 1
                     ]);
                 }

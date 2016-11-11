@@ -13,7 +13,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    @if($userCommunities)
+                    @if(count($userCommunities))
                     <tbody>
                         @foreach($userCommunities as $userCommunity)
                             <tr>
