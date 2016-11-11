@@ -2,6 +2,7 @@
 
 namespace App\Api\v1\Controllers;
 
+use App\CommunityMembers;
 use App\CommunityOrganisationsApprovedProducts;
 use App\CommunityOrganisationsApprovedTestSuites;
 use App\Jobs\ProcessTransactionLog;
@@ -325,7 +326,7 @@ class ProductsController extends BaseApiController
             '[env]' => get_option('env'),
             '[website_url]' => getSiteUrl(),
         ];
-        sendEmails(CommunityMembers::where('is_mod', true)->get()->toArray(), 'product_approvement_to_admin', $emailData);
+        sendEmails(CommunityMembers::where('is_mod', true)->orWhere('is_admin', true)->get()->toArray(), 'product_approvement_to_admin', $emailData);
         
         return $this->setStatusCode(201)->respondWithDataAndMessage('This product registration will require approval', $response);
     }
