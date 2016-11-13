@@ -247,7 +247,7 @@ class ProductsController extends BaseApiController
                 $this->product->description = $entity['Version']['Info'];
                 $this->product->model = $productModel;
 
-                $this->product->full_name = $this->product_name . ' v' . $this->product->version;
+                $this->product->full_name = $this->product->product_name . ' v' . $this->product->version;
                 if (!empty($productModel)) {
                     $this->product->full_name .= ' for ' . $productModel;
                 }
