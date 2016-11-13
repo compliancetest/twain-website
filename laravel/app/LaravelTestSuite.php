@@ -172,21 +172,24 @@ class LaravelTestSuite extends Model
 
     /**
      * Get cases filtered by provided fields
-     * @param array $filters
+     * @param array $args
      * @param bool $isAdmin
      * @return mixed
      */
-    public function getCases($filters = [], $isAdmin = false)
+    public function getCases($args = [], $isAdmin = false)
     {
         $query = $this->testCases()
-            ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioID')
+            ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioId')
             ->join('test_cases_conformance_levels', 'test_cases.id', '=', 'test_cases_conformance_levels.test_case_id')
             ->join('test_suites_conformance_levels', 'test_suites_conformance_levels.id', '=', 'test_cases_conformance_levels.conformance_level_id')
             ->leftjoin('test_cases_scenarios', 'test_cases.id', '=', 'test_cases_scenarios.test_case_id')
-            ->leftjoin('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id')
-            ->orderBy('test_suites_scenarios.sequence')
-            ->orderBy('test_cases.full_name')
-            ->groupBy('test_cases.id');
+            ->leftjoin('test_suites_scenarios', 'test_suites_scenarios.id', '=', 'test_cases_scenarios.test_suites_scenario_id');
+        if($args['orderBy']) {
+            $query->orderBy($args['orderBy'], isset($args['order']) ? $args['orderBy'] : 'asc');
+        }
+        if(!empty($args['groupBy'])) {
+            $query->groupBy($args['groupBy']);
+        }
         if(!empty($args['role'])){
             $query->where('test_cases.tester_role', $args['role']);
         }
@@ -200,14 +203,17 @@ class LaravelTestSuite extends Model
             $query->where('test_cases.status', 'Active');
         }
         if (!empty($args['scenario'])) {
-            $query->where('test_suites_scenarios.code', $filters['scenario']);
+            $query->where('test_suites_scenarios.code', $args['scenario']);
         }
         if (!empty($args['status'])) {
-            $query->where('test_cases.status', $filters['status']);
+            $query->where('test_cases.status', $args['status']);
         }
         if (!empty($args['conformance_level'])) {
-            $query->where('test_suites_conformance_levels.code', $filters['conformance_level']);
+            $query->where('test_suites_conformance_levels.code', $args['conformance_level']);
         }
+        $query->groupBy('test_cases.id')
+            ->orderBy('test_suites_scenarios.sequence')
+            ->orderBy('test_cases.full_name');
         return $query;
     }
 

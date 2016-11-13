@@ -9,8 +9,9 @@
                     <dl class="definition-list">
                         <dt>
                             <label>
+                                <?php $checked = true;?>
                                 <input type="radio" name="scenario[{{ $testSuite->id }}][]" value="{{ $scenario->id }}"
-                                       @if($testCase && count($testCase->scenarios->where('conformance_level_id', $conformanceLevel->id)))checked="checked"@endif>{{ $scenario->code }}
+                                       @if($testCase && count($testCase->scenarios->where('test_suites_scenario_id', $scenario->id)))checked="checked"@endif>{{ $scenario->code }}
                             </label>
                         </dt>
                         <dd>{{ $scenario->description }}</dd>

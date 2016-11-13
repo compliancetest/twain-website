@@ -25,7 +25,7 @@
                    title="Download">Download</a>
             </td>
             <td>{{ $claim->testSuite->issuer }}</td>
-            <td><a href="/laravel-test-suite/{{ $claim->testSuite->slug }}">{{ $claim->testSuite->full_name }}</a></td>
+            <td><a href="/test-suite/{{ $claim->testSuite->slug }}">{{ $claim->testSuite->full_name }}</a></td>
             <td class="text-center">{{ $claim->conformance_level }}</td>
             <td class="text-center">{{ $claim->role }}</td>
             <td class="text-center"><span class="text-status-verified">Verified</span></td>

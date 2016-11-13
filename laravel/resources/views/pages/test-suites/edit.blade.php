@@ -12,7 +12,7 @@
                 @endif
             </div>
 
-            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/laravel-test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/laravel-test-suite/' . $testSuite->slug]) !!}
+            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="colored-box collapsible-box">
@@ -333,11 +333,11 @@
                             <ul class="test-suites-cases-list clearfix">
                                 @if($testSuite->testCases)
                                     @foreach($testSuite->testCases as $testCase)
-                                        <li><a href="/laravel-test-case/{{ $testCase->slug }}" target="_blank">{{ $testCase->full_name }}</a></li>
+                                        <li><a href="/test-case/{{ $testCase->slug }}" target="_blank">{{ $testCase->full_name }}</a></li>
                                     @endforeach
                                 @endif
                             </ul>
-                            <a href="/laravel-test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                            <a href="/test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                         </div>
                     </div>
                 </div>
@@ -566,7 +566,7 @@
         $('body').on('change', '#communityId', function(e){
             jQuery('.profileTypes.block-loading').show();
             jQuery.ajax({
-                url: '/laravel-test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-profiles/' + $('#communityId').val(),
+                url: '/test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-profiles/' + $('#communityId').val(),
                 type: 'get',
                 dataType: 'json',
                 success: function (rsp) {
@@ -586,7 +586,7 @@
             var loadingBox = jQuery('.relatedTestSuites.block-loading');
             loadingBox.show();
             jQuery.ajax({
-                url: '/laravel-test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-test-suites/' + $('#communityId').val(),
+                url: '/test-suite/{{ $testSuite ? $testSuite->slug : 'create' }}/community-test-suites/' + $('#communityId').val(),
                 type: 'get',
                 dataType: 'json',
                 success: function (rsp) {

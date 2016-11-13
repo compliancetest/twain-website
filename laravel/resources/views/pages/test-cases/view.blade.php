@@ -7,12 +7,12 @@
             <div class="page-title">
                 <ul class="pull-right">
                     @foreach($testSuites as $testSuite)
-                        <li>Go To <a href="/laravel-test-suite/{{ $testSuite->slug }}">{{ $testSuite->full_name }}</a></li>
+                        <li>Go To <a href="/test-suite/{{ $testSuite->slug }}">{{ $testSuite->full_name }}</a></li>
                     @endforeach
                 </ul>
                 <h1>Test case: <strong>{{ $testCase->full_name }}</strong></h1>
                 @can('changeTestCase', $testCase)
-                    <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                    <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
                 @endcan
                 &nbsp;
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
@@ -35,8 +35,12 @@
                     <div class="options-box-row-title">Roles:</div>
                     <ul class="inline-options-list">
                         <li>Tester Role: <strong>{{ $testCase->tester_role }}</strong></li>
-                        <li>Harness Role: <strong>{{ $testCase->harness_role }}</strong></li>
-                        <li>Initiator: <strong>{{ $testCase->initiator }}</strong></li>
+                        @if($testCase->harness_role)
+                            <li>Harness Role: <strong>{{ $testCase->harness_role }}</strong></li>
+                        @endif
+                        @if($testCase->initiator)
+                            <li>Initiator: <strong>{{ $testCase->initiator }}</strong></li>
+                        @endif
                     </ul>
                 </div>
                 <div class="options-box-row">

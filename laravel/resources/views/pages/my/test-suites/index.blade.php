@@ -18,7 +18,7 @@
                         @foreach($userSubscriptions as $index => $userSubscription)
                             <tr class="{{ $userSubscription->testSuite->slug }}">
                                 <td><a href="/communities/{{ $userSubscription->testSuite->community->slug }}">{{ $userSubscription->testSuite->community->title }}</a></td>
-                                <td><a target="_blank" href="/laravel-test-suite/{{ $userSubscription->testSuite->slug }}">{{ $userSubscription->testSuite->full_name }}</a></td>
+                                <td><a target="_blank" href="/test-suite/{{ $userSubscription->testSuite->slug }}">{{ $userSubscription->testSuite->full_name }}</a></td>
                                 <td class="text-center"><span class="status status-{{ strtolower($userSubscription->status)}}">{{ $userSubscription->status }}</span></td>
                                 <td class="text-center">
                                     <a class="btn btn-default btn-icon btn-unsubscribe" href="#confirmReleaseSubscriptionModal{{$index}}" data-toggle="modal" data-tooltip="tooltip" title="Release Subscription">Delete button</a>
@@ -52,7 +52,7 @@
                 if (suiteSlug){
                     jQuery('#confirmReleaseSubscriptionSpinner' + formIndex).show();
                     $.ajax({
-                        url: '/laravel-test-suite/' + suiteSlug + '/subscription',
+                        url: '/test-suite/' + suiteSlug + '/subscription',
                         type: 'post',
                         data: {},
                         success: function (rsp) {

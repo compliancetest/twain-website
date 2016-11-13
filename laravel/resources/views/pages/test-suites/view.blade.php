@@ -9,7 +9,7 @@
 
                 <h1>{{ $testSuite->full_name }}</h1>
                 @can('change', $testSuite)
-                    <a href="/laravel-test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                    <a href="/test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
                 @endcan
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
             </div>
@@ -18,7 +18,7 @@
                 <ul class="inline-options-list">
                     <li>ID: <strong>{{ $testSuite->short_name }}</strong></li>
                     <li>Published: <strong>{{$testSuite->published_at}}</strong></li>
-                    <li>Issuer: <a href="/laravel-test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
+                    <li>Issuer: <a href="/test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
                     <li>Status: <span class="status status-{{ strtolower($testSuite->status) }}">{{ $testSuite->status }}</span></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
                     @if(!$testSuite->protocolVersions->isEmpty())
@@ -120,15 +120,14 @@
                         <div class="form-group">
                             <select name="status" class="form-control">
                                 <option value="">- Status -</option>
-                                <option value="Active">Active</option>
-                                <option value="Draft">Draft</option>
-                                <option value="Build">Build</option>
-                                <option value="Deprecated">Deprecated</option>
-                                <option value="Obsolete">Obsolete</option>
+
+                                @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'])->pluck('status') as $status)
+                                    <option value="{{ $status }}">{{ $status }}</option>
+                                @endforeach
                             </select>
                         </div>
                          @can('change', $testSuite)
-                            <a href="/laravel-test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                            <a href="/test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                          @endcan
                     </form>
                 </div>
@@ -162,7 +161,7 @@
         function loadTestCases(data) {
             $('#loadTestCasesResultsSpinner').show();
             $.ajax({
-                url: '/laravel-test-suite/{{ $testSuite->slug }}/get-test-cases',
+                url: '/test-suite/{{ $testSuite->slug }}/get-test-cases',
                 type: 'get',
                 data: data,
                 error: function (jqXHR, status) {
@@ -203,7 +202,7 @@
             } else {
                 jQuery('#confirmSubscriptionFormSpinner').show();
                 $.ajax({
-                    url: '/laravel-test-suite/{{ $testSuite->slug }}/subscription',
+                    url: '/test-suite/{{ $testSuite->slug }}/subscription',
                     type: 'post',
                     data: {
                         'status' : 1
@@ -228,7 +227,7 @@
             e.preventDefault();
             jQuery('#confirmReleaseSubscriptionSpinner').show();
             $.ajax({
-                    url: '/laravel-test-suite/{{ $testSuite->slug }}/subscription',
+                    url: '/test-suite/{{ $testSuite->slug }}/subscription',
                     type: 'post',
                     data: {},
                     success: function (rsp) {

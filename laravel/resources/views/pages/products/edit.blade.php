@@ -11,7 +11,7 @@
                 <div class="colored-box">
                     <div class="colored-box-header">Information</div>
                     <div class="colored-box-body">
-                        {!! Form::model($product, ['id'=> 'edit-product-form', 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/laravel-product/' . $product->slug, 'method' => 'POST', 'url' => '/laravel-product/'.$product->slug]) !!}
+                        {!! Form::model($product, ['id'=> 'edit-product-form', 'data-save-method' => 'ajax', 'data-redirect-after-submit' => '/product/' . $product->slug, 'method' => 'POST', 'url' => '/product/'.$product->slug]) !!}
                             <div class="colored-box-content">
                                 <div class="row">
                                     <div class="col-sm-5">

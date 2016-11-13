@@ -12,9 +12,9 @@
                         <div class="colored-box-header">
                             <a href="#productItemBox{{ $k }}" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span
                                         class="glyphicon glyphicon-triangle-right"></span></a>
-                            Product: <a href="/laravel-product/{{ $product->slug }}"><strong>{{ $product->full_name }} ({{ $product->protocol_version }})</strong></a>
+                            Product: <a href="/product/{{ $product->slug }}"><strong>{{ $product->full_name }} ({{ $product->protocol_version }})</strong></a>
                             <ul class="colored-box-header-actions">
-                                <li><a href="/laravel-product/{{ $product->slug }}/edit" data-tooltip="tooltip" title="Edit"><span class="edit-icon"></span></a></li>
+                                <li><a href="/product/{{ $product->slug }}/edit" data-tooltip="tooltip" title="Edit"><span class="edit-icon"></span></a></li>
                                 <li><a href="#" data-tooltip="tooltip" title="Delete" data-toggle="modal" data-target="#deleteProductModal{{ $k }}"><span class="delete-icon"></span></a></li>
                             </ul>
                         </div>

@@ -26,7 +26,7 @@
 
             $('#removingProductSpinner' + productIndex).show();
             $.ajax({
-                url: '/laravel-product/' + productSlug,
+                url: '/product/' + productSlug,
                 type: 'DELETE',
                 success: function () {
                     window.location = "/my-products";
@@ -47,10 +47,9 @@
             claimSpinner.show();
 
             $.ajax({
-                url: '/laravel-product/' + productSlug +'/claim/' + claimId,
+                url: '/product/' + productSlug +'/claim/' + claimId,
                 type: 'DELETE',
                 success: function () {
-                    <!--todo-verify append notification to claims table and delete claim row from claims list-->
                     $('#deleteProductClaimModal' + claimId).modal('hide');
                     claimSpinner.hide();
                     claimRow.addClass('removing').fadeTo("slow", 0.3, function () {

@@ -47,7 +47,7 @@ class TestCasesController extends Controller
         $testCase = LaravelTestCase::findBySlug($testCaseSlug);
         if (Gate::denies('changeTestCase', $testCase)) {
             addMessage('You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
-            return response()->redirectTo('/laravel-test-case/' . $testCaseSlug);
+            return response()->redirectTo('/test-case/' . $testCaseSlug);
         }
         $pageTitle = 'Edit Test Case | ' . $testCase->full_name;
         $testSuites = LaravelTestSuite::orderBy('name')->orderBy('version_major')->orderBy('version_minor')->get();
@@ -74,7 +74,7 @@ class TestCasesController extends Controller
         $testCase->slug = $slug;
 
         $testCase->save();
-        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-case/' . $testCase->slug]);
+        return response()->json(['status' => 'success', 'redirect_to' => '/test-case/' . $testCase->slug]);
     }
 
     public function update($testCaseSlug, Requests\TestCaseRequest $request)
@@ -119,7 +119,7 @@ class TestCasesController extends Controller
             }
         }
 
-        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-case/' . $testSuite->slug]);
+        return response()->json(['status' => 'success', 'redirect_to' => '/test-case/' . $testSuite->slug]);
     }
 
     /**

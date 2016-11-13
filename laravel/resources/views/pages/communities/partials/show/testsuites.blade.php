@@ -77,7 +77,7 @@
             var isChecked = this.checked;
             var sID = chObj.val();
             jQuery.ajax({
-                url: '/laravel-test-suite/'+chObj.data('slug')+'/suite-notify-changes',
+                url: '/test-suite/'+chObj.data('slug')+'/suite-notify-changes',
                 type: 'post',
                 data: {id: sID, checked: isChecked ? 1 : 0},
                 complete: function (rsp) {

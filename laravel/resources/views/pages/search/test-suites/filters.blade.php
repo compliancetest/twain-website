@@ -1,4 +1,4 @@
-<form action="/laravel-test-suites/logs-list" method="get" id="productsSearchFilterForm" data-search-name="productsSearch" data-search-filter="/laravel-test-suites/filters">
+<form action="/test-suites/logs-list" method="get" id="productsSearchFilterForm" data-search-name="productsSearch" data-search-filter="/test-suites/filters">
     <div class="row">
 
         <div class="form-group col-sm-12 col-md-6">

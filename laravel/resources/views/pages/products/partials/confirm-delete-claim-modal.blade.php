@@ -1,4 +1,3 @@
-<!--todo-verify delete claim modal doesnt show-->
 {{-- Delete Product's Claim Modal--}}
 <div class="modal fade delete-product-claim-modal" id="deleteProductClaimModal{{ $id }}" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">

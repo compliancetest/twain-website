@@ -66,44 +66,44 @@ Route::group(array('prefix' => 'api/v2', 'middleware' => 'api.logs'), function (
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::get('laravel-product/{productId}', 'ProductsController@view');
+    Route::get('product/{productId}', 'ProductsController@view');
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('laravel-product/{productId}/edit', 'ProductsController@edit');
-        Route::post('laravel-product/{productId}', 'ProductsController@update');
-        Route::delete('laravel-product/{productId}', 'ProductsController@destroy');
-        Route::delete('laravel-product/{productId}/claim/{claimId}', 'ProductsController@destroyClaim');
+        Route::get('product/{productId}/edit', 'ProductsController@edit');
+        Route::post('product/{productId}', 'ProductsController@update');
+        Route::delete('product/{productId}', 'ProductsController@destroy');
+        Route::delete('product/{productId}/claim/{claimId}', 'ProductsController@destroyClaim');
         Route::get('my-products', 'ProductsController@index');
     });
 
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('laravel-test-suite/create', 'TestSuitesController@create');
-        Route::post('laravel-test-suite', 'TestSuitesController@store');
-        Route::post('laravel-test-suite/{testSuiteId}/subscription', 'TestSuitesController@subscription');
-        Route::get('laravel-test-suite/{testSuiteId}', 'TestSuitesController@view');
-        Route::get('laravel-test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
-        Route::post('laravel-test-suite/{testSuiteId}', 'TestSuitesController@update');
-        Route::get('laravel-test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
-        Route::get('laravel-test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
-        Route::get('laravel-test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
-        Route::post('laravel-test-suite/{testSuiteSlug}/suite-notify-changes', 'TestSuitesController@subscribeToNotifications');
+        Route::get('test-suite/create', 'TestSuitesController@create');
+        Route::post('test-suite', 'TestSuitesController@store');
+        Route::post('test-suite/{testSuiteId}/subscription', 'TestSuitesController@subscription');
+        Route::get('test-suite/{testSuiteId}', 'TestSuitesController@view');
+        Route::get('test-suite/{testSuiteId}/edit', 'TestSuitesController@edit');
+        Route::post('test-suite/{testSuiteId}', 'TestSuitesController@update');
+        Route::get('test-suite/{testSuiteSlug}/community-profiles/{communityId}', 'TestSuitesController@communityProfileTypes');
+        Route::get('test-suite/{testSuiteSlug}/community-test-suites/{communityId}', 'TestSuitesController@communityTestSuites');
+        Route::get('test-suite/{testSuiteSlug}/get-test-cases', 'TestSuitesController@getTestCasesList');
+        Route::post('test-suite/{testSuiteSlug}/suite-notify-changes', 'TestSuitesController@subscribeToNotifications');
 
-        Route::get('laravel-test-suites', 'TestSuitesSearchController@index');
-        Route::get('laravel-test-suites/logs-list', 'TestSuitesSearchController@entries');
-        Route::get('laravel-test-suites/filters', 'TestSuitesSearchController@filters');
+        Route::get('test-suites', 'TestSuitesSearchController@index');
+        Route::get('test-suites/logs-list', 'TestSuitesSearchController@entries');
+        Route::get('test-suites/filters', 'TestSuitesSearchController@filters');
 
         Route::get('my-test-suites', 'TestSuitesController@userTestSuites');
         Route::get('my-communities', 'CommunitiesController@userCommunities');
-        Route::get('laravel-my-organisation', 'UserController@organisation');
-        Route::get('laravel-my-organisation/edit', 'UserController@organisation');
-        Route::get('laravel-my-profile', 'UserController@profile');
+        Route::get('my-organisation', 'UserController@organisation');
+        Route::get('my-organisation/edit', 'UserController@organisation');
+        Route::get('my-profile', 'UserController@profile');
 
-        Route::get('laravel-test-case/create', 'TestCasesController@create');
-        Route::post('laravel-test-case', 'TestCasesController@store');
-        Route::get('laravel-test-case/{testCaseId}/edit', 'TestCasesController@edit');
-        Route::get('laravel-test-case/{testCaseId}/test-suites-list', 'TestCasesController@testSuitesList');
-        Route::get('laravel-test-case/{testCaseId}/test-suites-data', 'TestCasesController@testSuitesData');
-        Route::get('laravel-test-case/{testCaseId}', 'TestCasesController@view');
-        Route::post('laravel-test-case/{testCaseId}', 'TestCasesController@update');
+        Route::get('test-case/create', 'TestCasesController@create');
+        Route::post('test-case', 'TestCasesController@store');
+        Route::get('test-case/{testCaseId}/edit', 'TestCasesController@edit');
+        Route::get('test-case/{testCaseId}/test-suites-list', 'TestCasesController@testSuitesList');
+        Route::get('test-case/{testCaseId}/test-suites-data', 'TestCasesController@testSuitesData');
+        Route::get('test-case/{testCaseId}', 'TestCasesController@view');
+        Route::post('test-case/{testCaseId}', 'TestCasesController@update');
     });
 
 

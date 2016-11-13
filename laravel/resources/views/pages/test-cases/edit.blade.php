@@ -12,7 +12,7 @@
                 @endif
             </div>
 
-            {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/laravel-test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/laravel-test-case/' . $testCase->slug]) !!}
+            {!! Form::model($testSuite, ['files' => true, 'enctype'=>'multipart/form-data', 'data-test-cases' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/test-case/' . $testCase->slug, 'method' => 'POST', 'url' => '/test-case/' . $testCase->slug]) !!}
 
                 {{-- Test Case Information --}}
                 <div class="colored-box collapsible-box">
@@ -275,8 +275,6 @@
                                     class="glyphicon glyphicon-triangle-bottom"></span><span class="glyphicon glyphicon-triangle-right"></span></a>Test Execution
                     </div>
                     <div class="colored-box-body collapse in" id="testCaseTestExecutionBox"></div>
-
-
                 </div>
 
                 {{-- Choose Features --}}
@@ -447,7 +445,7 @@
             $('body').on('change', '#communityId', function (e) {
                 jQuery('.testSuitesLoader.block-loading').show();
                 jQuery.ajax({
-                    url: '/laravel-test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-list',
+                    url: '/test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-list',
                     type: 'get',
                     data: {
                         'community_id': $('#communityId').val()
@@ -479,7 +477,7 @@
                     selected.push($(this).val());
                 });
                 jQuery.ajax({
-                    url: '/laravel-test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-data',
+                    url: '/test-case/{{ $testCase ? $testCase->slug : 'create' }}/test-suites-data',
                     type: 'get',
                     data: {
                         'test_suite_ids': selected

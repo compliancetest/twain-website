@@ -73,7 +73,7 @@ class TestSuitesController extends Controller
         $testSuite->slug = $slug;
 
         $testSuite->save();
-        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
+        return response()->json(['status' => 'success', 'redirect_to' => '/test-suite/' . $testSuite->slug]);
     }
 
     /**
@@ -172,7 +172,7 @@ class TestSuitesController extends Controller
         if ($request->get('send-notification')) {
             $testSuite->notifySubscribers();
         }
-        return response()->json(['status' => 'success', 'redirect_to' => '/laravel-test-suite/' . $testSuite->slug]);
+        return response()->json(['status' => 'success', 'redirect_to' => '/test-suite/' . $testSuite->slug]);
     }
 
     public function getTestCasesList($testSuiteSlug, Request $request)

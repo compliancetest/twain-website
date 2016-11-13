@@ -6,7 +6,7 @@
         </div>
         <div class="pull-right">
             @can('change', $product)
-                <a href="/laravel-product/{{ $product->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                <a href="/product/{{ $product->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
                 <button type="button" data-toggle="modal" data-target="#deleteProductModal1" class="btn btn-danger btn-with-icon btn-delete">Delete</button>
                 @include('pages.products.partials.confirm-delete-product-modal', ['k' => 1])
             @endcan
@@ -15,7 +15,9 @@
     <ul class="product-attributes">
         <li>Organization: <strong>Panasonic</strong></li>
         <li>Manufacturer: <strong>{{ $product->manufacturer }}</strong></li>
-        <li>Release Date: <strong>{{ $product->released_at->format('M Y') }}</strong></li>
+        @if($product->released_at)
+            <li>Release Date: <strong>{{ $product->released_at->format('M Y') }}</strong></li>
+        @endif
         <li>Version: <strong>{{ $product->version }}</strong></li>
         <li>Visibility: <strong>{{ $product->visibility }}</strong></li>
         <li>Product Type: <strong>{{ $product->type }}</strong></li>

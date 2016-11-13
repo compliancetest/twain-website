@@ -30,7 +30,7 @@
             @if(count($entries))
                 @foreach($entries as $entry)
                     <tr>
-                        <td><a href="/laravel-test-suite/{{ $entry->slug }}">{{ $entry->full_name }}</a></td>
+                        <td><a href="/test-suite/{{ $entry->slug }}">{{ $entry->full_name }}</a></td>
                         <td class="text-center"><a href="/communities/{{ $entry->communitySlug }}">{{ $entry->communityTitle }}</a></td>
                         <td class="text-center">{{ $entry->issuer }}</td>
                         <td class="text-center">{{ formatDate($entry->published_at) }}</td>

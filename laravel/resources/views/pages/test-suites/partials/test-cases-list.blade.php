@@ -20,18 +20,19 @@
         @if(count($testCases))
             @foreach($testCases  as $index => $testCase)
                 <tr>
-                    @if($scenarioId != $testCase->scenarioId)
+                    @if($scenarioId != $testCase->scenarioId || $index === 0)
                         <?php $scenarioId = $testCase->scenarioId;?>
                         <td rowspan="{{ $testCases->filter(function ($value) use ($scenarioId) {
                                                 return $value->scenarioId == $scenarioId;
                                             })->count() }}" class="rowspan-cell">
-                            <?php $scenario = \App\TestSuiteScenarios::find($testCase->scenario->test_suites_scenario_id);?>
-                            <strong>{{ $scenario->code }}:</strong><br/> {!! $scenario->description !!}
+                            @if($testCase->scenarioCode)
+                                <strong>{{ $testCase->scenarioCode }}:</strong><br/> {!! $testCase->scenarioDescription !!}
+                            @endif
                         </td>
                     @endif
                     <td class="text-nowrap"><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip"
                               title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a
-                                href="/laravel-test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
+                                href="/test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
                     <td class="text-center">{{ $testCase->tester_role}}</td>
                     <td class="text-center">
                         {{ implode(', ', array_unique($testCase->getConformanceLevels($isAdmin)->pluck('code')->toArray())) }}
@@ -46,7 +47,7 @@
                     <td>{!! $testCase->description !!}</td>
                     @can('change', $testSuite)
                         <td class="text-center">
-                            <a href="/laravel-test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
+                            <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
                             <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip"
                                     title="Delete Case">Delete
                             </button>
