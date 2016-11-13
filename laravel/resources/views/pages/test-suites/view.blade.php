@@ -102,8 +102,11 @@
                         <div class="form-group">
                             <select name="scenario" class="form-control">
                                 <option value="">- Scenario -</option>
-                                @foreach($testSuite->scenarios as $scenario)
-                                    <?php if(!$isAdmin && $scenario->code == 'Default') continue;?>
+                                @if($isAdmin)
+                                    <option value="Default">Default</option>
+                                @endif
+                                @foreach($testSuite->scenarios->sortBy('code') as $scenario)
+                                    <?php if ($scenario->code == 'Default') continue;?>
                                     <option value="{{ $scenario->code }}">{{ $scenario->code }}</option>
                                 @endforeach
                             </select>
@@ -111,8 +114,11 @@
                         <div class="form-group">
                             <select name="conformance_level" class="form-control">
                                 <option value="">- Conformance Level -</option>
-                                 @foreach($testSuite->conformanceLevels as $conformanceLevel)
-                                    <?php if(!$isAdmin && $conformanceLevel->code == 'Default') continue;?>
+                                @if($isAdmin)
+                                    <option value="Default">Default</option>
+                                @endif
+                                @foreach($testSuite->conformanceLevels->sortBy('code') as $conformanceLevel)
+                                    <?php if ($conformanceLevel->code == 'Default') continue;?>
                                     <option value="{{ $conformanceLevel->code }}">{{ $conformanceLevel->code }}</option>
                                 @endforeach
                             </select>
@@ -120,7 +126,6 @@
                         <div class="form-group">
                             <select name="status" class="form-control">
                                 <option value="">- Status -</option>
-
                                 @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'])->pluck('status') as $status)
                                     <option value="{{ $status }}">{{ $status }}</option>
                                 @endforeach

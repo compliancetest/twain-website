@@ -15,21 +15,22 @@
         </tr>
         </thead>
         <tbody>
-        <?php $scenarioId = false;?>
+        <?php $scenarioCode = false;?>
         <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate(10);?>
         @if(count($testCases))
             @foreach($testCases  as $index => $testCase)
                 <tr>
-                    @if($scenarioId != $testCase->scenarioId || $index === 0)
-                        <?php $scenarioId = $testCase->scenarioId;?>
-                        <td rowspan="{{ $testCases->filter(function ($value) use ($scenarioId) {
-                                                return $value->scenarioId == $scenarioId;
+                    @if($scenarioCode !== $testCase->scenarioCode)
+                        <?php $scenarioCode = $testCase->scenarioCode;?>
+                        <td rowspan="{{ $testCases->filter(function ($value) use ($scenarioCode) {
+                                                return $value->scenarioCode == $scenarioCode;
                                             })->count() }}" class="rowspan-cell">
                             @if($testCase->scenarioCode)
                                 <strong>{{ $testCase->scenarioCode }}:</strong><br/> {!! $testCase->scenarioDescription !!}
                             @endif
                         </td>
                     @endif
+
                     <td class="text-nowrap"><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip"
                               title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a
                                 href="/test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>

@@ -189,6 +189,8 @@ class LaravelTestSuite extends Model
         }
         if(!empty($args['groupBy'])) {
             $query->groupBy($args['groupBy']);
+        } else {
+            $query->groupBy('test_cases.id');
         }
         if(!empty($args['role'])){
             $query->where('test_cases.tester_role', $args['role']);
@@ -211,8 +213,7 @@ class LaravelTestSuite extends Model
         if (!empty($args['conformance_level'])) {
             $query->where('test_suites_conformance_levels.code', $args['conformance_level']);
         }
-        $query->groupBy('test_cases.id')
-            ->orderBy('test_suites_scenarios.sequence')
+        $query->orderBy('test_suites_scenarios.sequence')
             ->orderBy('test_cases.full_name');
         return $query;
     }
