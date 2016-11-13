@@ -126,7 +126,7 @@
                         <div class="form-group">
                             <select name="status" class="form-control">
                                 <option value="">- Status -</option>
-                                @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'])->pluck('status') as $status)
+                                @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'], $isAdmin)->get()->sortBy('status')->pluck('status') as $status)
                                     <option value="{{ $status }}">{{ $status }}</option>
                                 @endforeach
                             </select>
