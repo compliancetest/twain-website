@@ -8,6 +8,7 @@ use App\Post;
 use App\TransactionChangeLog;
 use App\WpOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use App\Transaction;
 use App\Http\Requests;
@@ -63,6 +64,78 @@ class TransactionsController extends Controller
             'explainRequestsEnabled' => WpOptions::where(['option_name' => 'explain_requests', 'option_value' => 'yes'])->first(),
         ];
         return response()->json(['html' => view('pages.transactions.transactions')->with($data)->render()]);
+    }
+
+     /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function migrate(Request $request)
+    {
+        $suitesFrom = Auth::user()->suiteSubscriptions;
+        $suitesTo = Auth::user()->suiteSubscriptions;
+        $data = [
+            'suitesFrom' => $suitesFrom,
+            'suitesTo' => $suitesTo,
+            'selectedSuiteFrom' => $request->get('suiteFrom'),
+            'selectedSuiteTo' => $request->get('suiteTo'),
+            'transactions' => false
+        ];
+        if($data['selectedSuiteFrom'] || $data['selectedSuiteTo']){
+            if($data['selectedSuiteFrom']){
+                $data['suitesTo'] = $data['suitesTo']->reject(function ($value, $key) use ($data) {
+                    return $value->suite_minor_family_mark == $data['selectedSuiteFrom'];
+                });
+            }
+            if($data['selectedSuiteFrom'] && $data['selectedSuiteTo']){
+                $transactions = Transaction::where([
+                    'suite_minor_family_mark' => $data['selectedSuiteFrom'],
+                    'audit_record' => 1,
+                ])->whereIn('subscription_id', Transaction::getUserSubscriptions())->get();
+                $selectedSuiteToEntry = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($data['selectedSuiteTo']);
+                $cases = $selectedSuiteToEntry->testCases()->pluck('test_cases.id')->toArray();
+                foreach($transactions as $transaction){
+                    if(in_array($transaction->test_case_id, $cases)){
+                        $data['transactions'][$transaction->test_case_id][] = $transaction;
+                    }
+                }
+            }
+            return response()->json(['html' => view('pages.transactions.popups.migrate')->with($data)->render()]);
+        }
+        return view('pages.transactions.popups.migrate')->with($data);
+    }
+
+    /**
+     * Copy transactions data for new test suite
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function migrateTransactions(Request $request)
+    {
+         $validator = Validator::make($request->all(), [
+            'suiteTo' => 'required',
+            'suiteFrom' => 'required',
+            'transactions' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 422);
+        }
+
+        $transactions  = Transaction::whereIn('id', $request->get('transactions'))->with('logs')->get();
+        foreach($transactions as $transaction){
+            $newTransaction = $transaction->replicate();
+            $newTransaction->suite_minor_family_mark = $request->get('suiteTo');
+            $newTransaction->subscription_id = Auth::user()->suiteSubscriptions->where('suite_minor_family_mark', $request->get('suiteTo'))->first()->id;
+            $newTransaction->save();
+            foreach ($transaction->getRelations() as $relation => $items) {
+                foreach ($items as $item) {
+                    unset($item->id);
+                    $newTransaction->{$relation}()->create($item->toArray());
+                }
+            }
+        }
+         return response(['status' => 'success']);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\LaravelTestSuite;
 use App\Post;
 use App\TestOutcomeStatus;
 use App\TestPlan;
@@ -56,11 +57,11 @@ class VerifyRequestsController extends Controller
      */
     public function create($testSuiteId, $productId = false, $testPlanId = false)
     {
-        $testSuite = Post::find($testSuiteId);
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuiteId);
         $products = $testSuite->getProductsForNewVerifyRequest();
         $transactions = $testPlans = [];
         if($productId){
-            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_id' => $testSuiteId])->get();
+            $testPlans = TestPlan::where(['product_id' => $productId, 'suite_minor_family_mark' => $testSuiteId])->get();
         }
         if($testPlanId){
             $transactions = Transaction::getTransactionsForVerifyRequest($productId, $testSuiteId);

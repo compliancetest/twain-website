@@ -20,7 +20,7 @@ class TransactionObserver
                 $testPlans = TestPlan::where([
                     'is_claimed' => false,
                     'organisation_subscription_id' => $organisationSubscription->id,
-                    'suite_id' => $organisationSubscription->suite_family_mark
+                    'suite_minor_family_mark' => $organisationSubscription->suite_minor_family_mark
                 ])->get();
                 foreach ($testPlans as $testPlan) {
                     if ($transaction->audit_record) {

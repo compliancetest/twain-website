@@ -218,7 +218,7 @@
         </div>
 
         @if(!$isAdmin)
-            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/create/" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#createVerifyRequestModal"
+            <a href="/verify-requests/{{ $userSuite['testSuite']->minor_family_mark }}/create/" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#createVerifyRequestModal"
                class="btn btn-success btn-with-icon btn-add" style="margin-bottom: 20px;">Add</a>
         @endif
 

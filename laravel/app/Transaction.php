@@ -176,7 +176,7 @@ class Transaction extends Model
             $this->whereModel->where('product_id', $filters['product_id']);
         }
         if ($filters['test_case_id']) {
-            $this->whereModel->where('tc.test_case_id', $filters['test_case_id']);
+            $this->whereModel->where('t.test_case_id', $filters['test_case_id']);
         }
         if ($filters['suite_minor_family_mark']) {
             $this->whereModel->where('suite_minor_family_mark', $filters['suite_minor_family_mark']);
@@ -185,10 +185,10 @@ class Transaction extends Model
             $this->whereModel->where('subscription_id', $filters['subscription_id']);
         }
         if ($filters['date']) {
-            $this->whereModel->whereRaw(" ( created_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND created_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
+            $this->whereModel->whereRaw(" ( t.created_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'])) . "' AND t.created_at <  '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date'] . ' 23:59:59')) . "' ) ");
         }
         if ($filters['execution_id']) {
-            $this->whereModel->where('execution_id', $filters['execution_id']);
+            $this->whereModel->where('t.execution_id', $filters['execution_id']);
         }
         if ($filters['test_outcome_status_id']) {
             $this->whereModel->where('test_outcome_status_id', $filters['test_outcome_status_id']);
@@ -239,7 +239,7 @@ class Transaction extends Model
     public static function getUserTransactionLog($filters, $totalPerPage = 25)
     {
         $transaction = new Transaction();
-        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id")->groupBy('t.id')->orderBy('t.created_at', 'desc')->paginate($totalPerPage);
+        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id", 't.created_at as created_at')->groupBy('t.id')->orderBy('t.created_at', 'desc')->paginate($totalPerPage);
     }
 
     /**

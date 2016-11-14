@@ -293,6 +293,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/transactions/filters', 'TransactionsController@filters');
         Route::get('/transactions/transactions-list', 'TransactionsController@transactionsList');
 
+        Route::get('/transactions/migrate', 'TransactionsController@migrate');
+        Route::post('/transactions/migrate', 'TransactionsController@migrateTransactions');
+
         Route::post('/transactions/update-transactions', 'TransactionsController@updateTransactions');
 
         Route::delete('/transactions/batch-delete', 'TransactionsController@batchDelete');

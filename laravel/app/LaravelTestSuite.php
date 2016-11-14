@@ -460,4 +460,29 @@ class LaravelTestSuite extends Model
             }
         }
     }
+
+     /**
+     * Get products with PENDING transactions for test suite
+     * @return array
+     */
+    public function getProductsForNewVerifyRequest()
+    {
+        $response = [];
+        $userSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->suiteSubscriptions[0]->organisation_id, 'suite_minor_family_mark' => $this->minor_family_mark])->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $productsWithPendingTransactions = Transaction::where([
+                'subscription_id' => $userSubscription->id,
+                'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING'),
+                'suite_minor_family_mark' => $this->minor_family_mark,
+            ])->groupBy('product_id')->get();
+            if ($productsWithPendingTransactions) {
+                foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
+                    $product = Product::find($productWithPendingTransactions->product_id);
+                    $response[$product->full_name] = $product;
+                }
+            }
+        }
+        ksort($response);
+        return $response;
+    }
 }

@@ -142,32 +142,6 @@ class Post extends Model
     }
 
     /**
-     * Get products with PENDING transactions for test suite
-     * @return array
-     */
-    public function getProductsForNewVerifyRequest()
-    {
-        $response = [];
-        $testSuiteEntry = TestSuite::where(['suite_id' => $this->ID])->first();
-        $userSubscriptions = OrganisationSubscription::where(['organisation_id' => Auth::user()->suiteSubscriptions[0]->organisation_id, 'suite_family_mark' => $testSuiteEntry->family_mark])->get();
-        foreach ($userSubscriptions as $userSubscription) {
-            $suitesWithSameFamilyMark = TestSuite::getFamilyMarkSuitesIds($userSubscription->suite_family_mark);
-            $productsWithPendingTransactions = Transaction::where([
-                'subscription_id' => $userSubscription->id,
-                'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
-            ])->whereIn('test_suite_id',  $suitesWithSameFamilyMark)->groupBy('product_id')->get();
-            if ($productsWithPendingTransactions) {
-                foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
-                    $product = Post::find($productWithPendingTransactions->product_id);
-                    $response[$product->post_name] = $product;
-                }
-            }
-        }
-        ksort($response);
-        return $response;
-    }
-
-    /**
      * Generate full product name with version and model
      * @return string
      */

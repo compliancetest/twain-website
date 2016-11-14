@@ -20,100 +20,114 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($transactions AS $transaction)
-                <?php
-                $eloquentTransaction = \App\Transaction::find($transaction->id);
-                $product = \App\Product::find($transaction->product_id);
-                $testCase = \App\LaravelTestCase::find($transaction->test_case_id);
-                $testSuite = \App\LaravelTestSuite::find($transaction->suite_minor_family_mark);
-                $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
-                $status = getOutcomeStatusClass($outcomeStatus->code);
-                if($supportOrAdmin){
-                    $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
-                    $organisation = \App\Organisation::find($subscription->organisation_id);
-                }
-                $transactionUsedInClaims = !$eloquentTransaction->usedInClaims->isEmpty();
-                ?>
-                <tr>
-                    <td class="text-center">
-                        @if($transactionUsedInClaims)
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="This test result is used in claim record and can't be deleted"></span>
-                        @else
-                            <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
-                               @if($transaction->audit_record || $transactionUsedInClaims) disabled="disabled" @endif>
-                        @endif
-                    </td>
-                    <td class="product-name">
-                        <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                        <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
-                    </td>
-                    <td class="text-center">
-                        <a href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
-                        <br/>
-                        <a href="/test-case/{{ $testCase->slug }}/?test_suite_id={{ $testSuite->id }}" target="_blank">{{ $testCase->name }}</a>
-                    </td>
-                    <td>
-                        <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
-                        @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
-                            <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewReasonModal"
-                               data-tooltip="tooltip" title="Reason" class="text-status-{{ $status }}">
-                                {{ $outcomeStatus->name }}
-                            </a>
-                        @else
-                            <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"
-                               @if(\App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING') disabled="disabled" @endif
-                               data-id="{{ $transaction->id }}">
-                    </td>
-                    <td class="text-center">
-                        @if($supportOrAdmin)
-                            {{ $organisation->organisation_name }}
+            @if(count($transactions))
+                @foreach($transactions AS $transaction)
+                    <?php
+                    $eloquentTransaction = \App\Transaction::find($transaction->id);
+                    $product = \App\Product::find($transaction->product_id);
+                    $testCase = \App\LaravelTestCase::find($transaction->test_case_id);
+                    $testSuite = \App\LaravelTestSuite::find($transaction->suite_minor_family_mark);
+                    $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
+                    $status = getOutcomeStatusClass($outcomeStatus->code);
+                    if ($supportOrAdmin) {
+                        $subscription = \App\OrganisationSubscription::find($transaction->subscription_id);
+                        $organisation = \App\Organisation::find($subscription->organisation_id);
+                    }
+                    $transactionUsedInClaims = !$eloquentTransaction->usedInClaims->isEmpty();
+                    ?>
+                    <tr>
+                        <td class="text-center">
+                            @if($transactionUsedInClaims)
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+                                      title="This test result is used in claim record and can't be deleted"></span>
+                            @else
+                                <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
+                                       @if($transaction->audit_record || $transactionUsedInClaims) disabled="disabled" @endif>
+                            @endif
+                        </td>
+                        <td class="product-name">
+                            <a data-toggle="collapse" class="loadLog product-collapse-link collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                            <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
+                        </td>
+                        <td class="text-center">
+                            <a href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
                             <br/>
-                            {{ $subscription->nickname }}
-                            <br/>
-                        @endif
-                        @if(!empty($transaction->s3_link))
-                            <a href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
-                        @else
-                            {{ $transaction->execution_id }}
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        {{ formatDate($transaction->created_at, 'Y-m-d') }}
-                        <br>
-                        {{ formatDate($transaction->created_at, 'H:i:s') }}
-                    </td>
-                    <td class="text-center">
-                        @if($explainRequestsEnabled)
-                            <?php $imageClass = count($eloquentTransaction->explanationLogs) > 0 ? 'btn-success' : 'btn-default';?>
-                            <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Request Status Explanation">
-                                <a class="btn {{ $imageClass }} btn-icon btn-question" id="questionBtn{{ $transaction->id }}" href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewExplanationLogs">Request Status Explanation</a>
+                            <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->name }}</a>
+                        </td>
+                        <td>
+                            <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
+                            @if(!empty($transaction->reason) && $transaction->test_outcome_status_id != \App\TestOutcomeStatus::getIdByCode('PASS'))
+                                <a href="/testingdetails/{{ $transaction->id }}/transaction-reason" data-toggle="modal" data-remote="true" data-ajax-modal
+                                   data-target="#viewReasonModal"
+                                   data-tooltip="tooltip" title="Reason" class="text-status-{{ $status }}">
+                                    {{ $outcomeStatus->name }}
+                                </a>
+                            @else
+                                <span class="text-status-{{ $status }}">{{ $outcomeStatus->name }}</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" @if($transaction->audit_record) checked="checked" @endif class="auditRecordCheckbox"
+                                   @if(\App\TestOutcomeStatus::find($transaction->test_outcome_status_id)->code == 'PENDING') disabled="disabled" @endif
+                                   data-id="{{ $transaction->id }}">
+                        </td>
+                        <td class="text-center">
+                            @if($supportOrAdmin)
+                                {{ $organisation->organisation_name }}
+                                <br/>
+                                {{ $subscription->nickname }}
+                                <br/>
+                            @endif
+                            @if(!empty($transaction->s3_link))
+                                <a href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
+                            @else
+                                {{ $transaction->execution_id }}
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            {{ formatDate($transaction->created_at, 'Y-m-d') }}
+                            <br>
+                            {{ formatDate($transaction->created_at, 'H:i:s') }}
+                        </td>
+                        <td class="text-center">
+                            @if($explainRequestsEnabled)
+                                <?php $imageClass = count($eloquentTransaction->explanationLogs) > 0 ? 'btn-success' : 'btn-default';?>
+                                <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Request Status Explanation">
+                                <a class="btn {{ $imageClass }} btn-icon btn-question" id="questionBtn{{ $transaction->id }}"
+                                   href="/transactions/{{ $transaction->id }}/explanation-logs" data-toggle="modal" data-remote="true" data-ajax-modal
+                                   data-target="#viewExplanationLogs">Request Status Explanation</a>
                             </span>
-                        @endif
-                        @if(isImageViewerEnabled())
-                            <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Image Viewer">
-                                <a class="btn btn-primary btn-icon btn-view showImageViewer" href="/verify-requests/{{ \App\Community::find($testSuite->community_id)->slug }}/transactions-image-viewer/{{ $transaction->id }}" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
+                            @endif
+                            @if(isImageViewerEnabled())
+                                <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Image Viewer">
+                                <a class="btn btn-primary btn-icon btn-view showImageViewer"
+                                   href="/verify-requests/{{ \App\Community::find($testSuite->community_id)->slug }}/transactions-image-viewer/{{ $transaction->id }}"
+                                   data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                             </span>
-                        @endif
-                    </td>
-                </tr>
+                            @endif
+                        </td>
+                    </tr>
 
-                <tr id="product-{{ $transaction->id }}" data-transaction-id="{{ $transaction->id }}" class="logRow collapse">
-                    <td colspan="8">
-                        <div class="block-loading-wrapper">
-                            <div class="block-loading loading-shown">
-                                <div class="loading-content"><span class="loader"></span>
-                                    <div class="loading-text">LOADING</div>
-                                    <div class="loading-wait">Please wait...</div>
+                    <tr id="product-{{ $transaction->id }}" data-transaction-id="{{ $transaction->id }}" class="logRow collapse">
+                        <td colspan="8">
+                            <div class="block-loading-wrapper">
+                                <div class="block-loading loading-shown">
+                                    <div class="loading-content"><span class="loader"></span>
+                                        <div class="loading-text">LOADING</div>
+                                        <div class="loading-wait">Please wait...</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="8" class="text-center">
+                        No transactions yet
                     </td>
                 </tr>
-            @endforeach
+            @endif
             </tbody>
         </table>
     </div>

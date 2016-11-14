@@ -30,7 +30,7 @@
             <select class="form-control" id="filterCase" name="test_case_id">
                 <option value="">- All -</option>
                 @foreach($filters['test_case_id'] as $testCase)
-                    <option value="{{ $testCase->id }}" @if($request->get('test_case_id') == $testCase->id) selected="selected" @endif>{{ $testCase->name }}</option>
+                    <option value="{{ $testCase->id }}" @if($request->get('test_case_id') == $testCase->id) selected="selected" @endif>{{ $testCase->full_name }}</option>
                 @endforeach
             </select>
             @if(($request->get('test_case_id')) && ($request->get('test_case_id') !== '') && ($request->get('test_case_id') == $testCase->id))<span class="clear-filter" title="Clear Filter">X</span>@endif

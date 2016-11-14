@@ -13,7 +13,7 @@
                 <select name="product_id" id="availableProducts" class="form-control">
                     <option value="">Select a Product</option>
                     @foreach($products as $product)
-                        <option @if($product->ID == $selectedProductId) selected="selected" @endif value="{{ $product->ID }}">{{ $product->getProductFullName() }}</option>
+                        <option @if($product->id == $selectedProductId) selected="selected" @endif value="{{ $product->id }}">{{ $product->full_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -46,7 +46,7 @@
                                         <?php $canBeAdded = checkTransactionsCanBeAddedToRequest($caseTransactions[0]->test_suite_id, $caseTransactions[0]->test_case_id, $selectedProductId);?>
                                         <tr>
                                             <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}">
-                                                {{ \App\Post::find($testCase)->post_title }}
+                                                {{ \App\LaravelTestCase::find($testCase)->full_name }}
                                                 @if(!\App\Transaction::where(['test_case_id' => $testCase, 'product_id' => $caseTransactions[0]->product_id, 'test_suite_id' => $caseTransactions[0]->test_suite_id])->get()->isEmpty())
                                                     <a href="/my-transaction-log/?test_case_id={{ $testCase }}&product_id={{ $caseTransactions[0]->product_id }}&test_suite_id={{ $caseTransactions[0]->test_suite_id }}" target="_blank" style="float: right;">View Log</a>
                                                 @endif

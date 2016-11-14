@@ -12,11 +12,8 @@ class TransactionsLog extends Model
 
     public $incrementing = false;
 
-    protected $fillable = [
-        'execution_id',
-        'transaction_id'
-    ];
-
+    protected $guarded = ['id'];
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
