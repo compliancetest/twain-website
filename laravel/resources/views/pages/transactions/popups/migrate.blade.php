@@ -71,7 +71,8 @@
                         </tbody>
                     </table>
                 </div>
-            @else
+            @endif
+            @if($selectedSuiteFrom && $selectedSuiteFrom && !$transactions)
                  <div class="alert alert-success text-center" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     You can't copy any transaction for selected test suites
