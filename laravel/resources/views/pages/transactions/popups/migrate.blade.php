@@ -72,7 +72,7 @@
                     </table>
                 </div>
             @endif
-            @if($selectedSuiteFrom && $selectedSuiteFrom && !$transactions)
+            @if($selectedSuiteFrom && $selectedSuiteTo && !count($transactions))
                  <div class="alert alert-success text-center" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     You can't copy any transaction for selected test suites
@@ -89,7 +89,7 @@
     @endif
 </div>
 <div class="modal-footer">
-    @if($selectedSuiteTo && $selectedSuiteFrom)
+    @if($selectedSuiteTo && $selectedSuiteFrom && count($transactions))
         <button type="submit" class="btn btn-success btn-with-icon btn-confirm submit-migration">Submit</button>
     @endif
     <button type="button" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
