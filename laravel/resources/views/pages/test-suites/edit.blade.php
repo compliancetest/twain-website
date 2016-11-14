@@ -12,7 +12,7 @@
                 @endif
             </div>
 
-            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => '/test-suite/' . $testSuite->slug]) !!}
+            {!! Form::model($testSuite, ['data-test-suites' => true, 'data-ajax-form'=>'true', 'data-notification-container'=>'.error-box', 'data-redirect-after-submit' => '/test-suite/' . $testSuite->slug, 'method' => 'POST', 'url' => getSiteUrl() . '/test-suite/' . $testSuite->slug]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="colored-box collapsible-box">
