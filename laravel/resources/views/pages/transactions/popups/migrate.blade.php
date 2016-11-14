@@ -71,6 +71,11 @@
                         </tbody>
                     </table>
                 </div>
+            @else
+                 <div class="alert alert-success text-center" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    You can't copy any transaction for selected test suites
+                </div>
             @endif
         </div>
     </div>
