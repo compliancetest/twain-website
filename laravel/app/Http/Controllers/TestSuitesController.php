@@ -62,17 +62,21 @@ class TestSuitesController extends Controller
         $fullName = LaravelTestSuite::generateCaseSuiteFullName($request);
         $slug = LaravelTestSuite::generateSlug($fullName);
 
-        if (!LaravelTestSuite::findBySlug($slug)) {
+        if (LaravelTestSuite::findBySlug($slug)) {
             return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
         }
 
         $testSuite = LaravelTestSuite::create($request->all());
-        $testSuite->updateRelations($request);
 
         $testSuite->full_name = $fullName;
         $testSuite->slug = $slug;
+        $testSuite->major_family_mark = $testSuite->id;
+        $testSuite->minor_family_mark = $testSuite->id;
 
         $testSuite->save();
+
+        $testSuite->updateRelations($request);
+
         return response()->json(['status' => 'success', 'redirect_to' => '/test-suite/' . $testSuite->slug]);
     }
 
@@ -143,7 +147,7 @@ class TestSuitesController extends Controller
         if ($oldTestSuite->isVersionUpdated($request)) {
             $fullName = LaravelTestSuite::generateCaseSuiteFullName($request);
             $slug = LaravelTestSuite::generateSlug($fullName);
-            if (!LaravelTestSuite::findBySlug($slug)) {
+            if (LaravelTestSuite::findBySlug($slug)) {
                 return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
             }
             $testSuite = LaravelTestSuite::create($request->all());
@@ -260,6 +264,52 @@ class TestSuitesController extends Controller
     {
         $userSubscriptions = Auth::user()->suiteSubscriptions;
         return view('pages.my.test-suites.index', compact('userSubscriptions'));
+    }
+
+    /**
+     * Render delete test suite popup
+     * @param $testSuiteSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deletePopup($testSuiteSlug)
+    {
+        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        return view('pages.test-suites.partials.confirm-delete-popup', compact('testSuite'));
+    }
+
+    /**
+     * Delete test suite
+     * @param $testSuiteSlug
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($testSuiteSlug)
+    {
+        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        $community = Community::find($testSuite->community_id);
+        if (!$community->isAdmin(Auth::user()->ID) && !is_super_admin()) {
+            return response()->json(['messages' => ['You do not have enough permissions for this action.']], 403);
+        }
+
+        $messages = [];
+        if (count($testSuite->claims)) {
+            $messages[] = "The test suite can't be deleted because " . count($testSuite->claims) . " claims still reference it.";
+        }
+        if (count($testSuite->transactions)) {
+            $messages[] = "The test suite can't be deleted because " . count($testSuite->transactions) . " transactions still reference it.";
+        }
+        if (count($testSuite->testPlans)) {
+            $messages[] = "The test suite can't be deleted because " . count($testSuite->testPlans) . " test plans still reference it.";
+        }
+        if (count($testSuite->subscribers)) {
+            $messages[] = "The test suite can't be deleted because " . count($testSuite->subscribers) . " subscriptions still reference it.";
+        }
+
+        if ($messages) {
+            return response()->json(['messages' => $messages], 422);
+        }
+
+        $testSuite->delete();
+        return response()->json(['status' => 'success']);
     }
 
     /**

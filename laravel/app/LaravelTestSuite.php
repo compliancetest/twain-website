@@ -106,6 +106,25 @@ class LaravelTestSuite extends Model
         return $this->hasMany('\App\Claim', 'suite_minor_family_mark');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany('\App\Transaction', 'suite_minor_family_mark');
+    }
+
+    public function testPlans()
+    {
+        return $this->hasMany('\App\TestPlan', 'suite_minor_family_mark');
+    }
+
+    /**
+     * Subscriptions to test suite
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscribers()
+    {
+        return $this->hasMany('\App\OrganisationSubscription', 'suite_minor_family_mark');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

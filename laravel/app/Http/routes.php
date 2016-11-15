@@ -76,7 +76,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::group(['middleware' => ['auth']], function () {
+
         Route::get('test-suite/create', 'TestSuitesController@create');
+
+        Route::get('test-suite/{testSuiteId}/delete', 'TestSuitesController@deletePopup');
+        Route::delete('test-suite/{testSuiteId}', 'TestSuitesController@destroy');
+
         Route::post('test-suite', 'TestSuitesController@store');
         Route::post('test-suite/{testSuiteId}/subscription', 'TestSuitesController@subscription');
         Route::get('test-suite/{testSuiteId}', 'TestSuitesController@view');

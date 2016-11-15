@@ -23,7 +23,7 @@
                 <tbody>
 
                 @if($testSuites)
-                    @foreach($testSuites as $testSuite)
+                    @foreach($testSuites as $kkk => $testSuite)
                         <tr>
                             <td>
                                 <a href="{!! $testSuite->geturl() !!}"
@@ -35,7 +35,8 @@
                             <td class="text-center"><span
                                         class="status status-{{ strtolower($testSuite->status) }}">{{ $testSuite->status }}</span></td>
                             <td class="text-center">
-                                <input class="notify-changes" type="checkbox" value="{{ $testSuite->id }}" name="notify_changes{{ $testSuite->id }}" data-slug="{{ $testSuite->slug }}"
+                                <input class="notify-changes" type="checkbox" value="{{ $testSuite->id }}" name="notify_changes{{ $testSuite->id }}"
+                                       data-slug="{{ $testSuite->slug }}"
                                        @if ($testSuite->changesSubscriptions()->where('user_id', Auth::user()->ID)->first()) checked="checked" @endif >
                                 <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt="" style="display: none;"/>
                             </td>
@@ -44,6 +45,10 @@
                                     <a href="{{ getSiteUrl() }}/test-suite/{{ $testSuite->slug }}/edit"
                                        class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                                        title="Edit Suite"></a>
+                                    <a data-target="#deleteTestSuiteModal" class="btn btn-danger btn-icon btn-delete"
+                                       data-tooltip="tooltip" href="/test-suite/{{ $testSuite->slug }}/delete" data-toggle="modal"
+                                       data-remote="true" data-ajax-modal data-original-title="Delete Test Suite">Delete
+                                    </a>
                                 </td>
                             @endif
                         </tr>
@@ -65,6 +70,25 @@
             </div>
         @endif
 
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTestSuiteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content block-loading-wrapper">
+            <div class="modal-header">
+                <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                Delete Test Suite
+            </div>
+            <div class="modal-body">
+                <div class="block-loading">
+                    <div class="loading-content"><span class="loader"></span>
+                        <div class="loading-text">LOADING DATA</div>
+                        <div class="loading-wait">Please wait...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

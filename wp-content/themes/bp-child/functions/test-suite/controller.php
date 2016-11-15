@@ -74,7 +74,7 @@ function process_testsuite_actions()
 
 
                     //Check Transactions, Subscriptions and Test Plans
-                    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}users_subscriptions WHERE suite_id=%d", $suite->id);
+                    $query = $wpdb->prepare("SELECT count(*) FROM {$wpdb->prefix}organisations_subscriptions WHERE suite_minor_family_mark=%s", $suite->id);
                     $subscriptions = $wpdb->get_var($query);
                     //Check Transactions, Subscriptions and Test Plans
                     $query = $wpdb->prepare("SELECT count(*) FROM test_plans WHERE suite_id=%d", $suite->id);
