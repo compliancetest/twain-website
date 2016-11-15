@@ -45,6 +45,7 @@ class RegistrySearchController extends Controller
      */
     public function entries(Request $request)
     {
+        $request->session()->put('registrySearch', $request->toArray());
         $results = (new RegistrySearch())->search($request->toArray());
         $data = [
             'results' => $results,
@@ -56,7 +57,7 @@ class RegistrySearchController extends Controller
 
     public function download(Request $request)
     {
-        generate_and_download((new RegistrySearch())->search($request->toArray(), true));
+        generate_and_download((new RegistrySearch())->search($request->session()->get('registrySearch', []), true));
     }
 
     /**

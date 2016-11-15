@@ -45,6 +45,7 @@ class SiteSearchController extends Controller
      */
     public function entries(Request $request)
     {
+        $request->session()->put('siteSearch', $request->toArray());
         $results = (new SiteSearch())->search($request->toArray());
         $data = [
             'results' => $results,
@@ -56,7 +57,8 @@ class SiteSearchController extends Controller
 
     public function download(Request $request)
     {
-        generate_and_download_site((new SiteSearch())->search($request->toArray(), true));
+
+        generate_and_download_site((new SiteSearch())->search($request->session()->get('siteSearch', []), true));
     }
 
     /**
