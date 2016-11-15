@@ -124,7 +124,7 @@
             @else
                 <tr>
                     <td colspan="8" class="text-center">
-                        No transactions yet
+                        No test results found
                     </td>
                 </tr>
             @endif
