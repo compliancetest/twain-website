@@ -245,7 +245,7 @@ function cp_activate_user()
         exit;
     }
 
-    addMessage('Invalid Request.', 'error');
+    addMessage('Please use the link from verification email to confirm your email address.', 'error');
 }
 
 function cp_activate_email()
