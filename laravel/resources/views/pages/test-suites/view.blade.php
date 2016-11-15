@@ -101,7 +101,7 @@
                         <label>Filter By:</label>
                         <div class="form-group">
                             <select name="scenario" class="form-control">
-                                <option value="">- Scenario -</option>
+                                <option value="">-Scenario-</option>
                                 @if($isAdmin)
                                     <option value="Default">Default</option>
                                 @endif
@@ -113,7 +113,7 @@
                         </div>
                         <div class="form-group">
                             <select name="conformance_level" class="form-control">
-                                <option value="">- Conformance Level -</option>
+                                <option value="">-Conformance Level-</option>
                                 @if($isAdmin)
                                     <option value="Default">Default</option>
                                 @endif
@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group">
                             <select name="status" class="form-control">
-                                <option value="">- Status -</option>
+                                <option value="">-Status-</option>
                                 @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'], $isAdmin)->get()->sortBy('status')->pluck('status') as $status)
                                     <option value="{{ $status }}">{{ $status }}</option>
                                 @endforeach

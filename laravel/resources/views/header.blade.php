@@ -39,8 +39,8 @@
                                                                     <ul class="dropdown-menu">
                                                                         @foreach ($testsuites as $k => $row)
                                                                             <li @if($k == 0) class="first" @endif>
-                                                                                <a href="{{ get_permalink($row->ID) }}">
-                                                                                    {{ apply_filters('the_title', $row->post_title) }}
+                                                                                <a href="/test-suite/{{ $row->slug }}">
+                                                                                    {{ $row->full_name }}
                                                                                 </a>
                                                                             </li>
                                                                         @endforeach

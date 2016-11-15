@@ -503,30 +503,13 @@ function getCommunityTestSuites($community_id)
 {
     global $wpdb;
 
-    $args = array(
-        'post_type' => 'test-suite',
-        'posts_per_page' => -1,
-        'tax_query' => array('relation' => 'and'),
-        'meta_query' => array(
-            array(
-                'key' => 'community_id',
-                'value' => $community_id,
-                'compare' => '='
-            )
-        )
-    );
-
-    if (!(doesUserCommunityAdmin(get_current_user_id(), $community_id) || is_super_admin())) {
-        $args['meta_query'][] = array(
-            'key' => 'hide_suite',
-            'value' => 0,
-            'compare' => '='
-        );
+    if (doesUserCommunityAdmin(get_current_user_id(), $community_id) || is_super_admin()) {
+        return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE community_id = %s ORDER BY full_name", $community_id));
     }
-
-    $testsuites = get_posts($args);
-
-    return $testsuites;
+    if (doesUserCommunityMember(get_current_user_id(), $community_id)) {
+        return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status IN ('Active', 'Partial') AND community_id = %s ORDER BY full_name", $community_id));
+    }
+    return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status = 'Active' AND community_id = %s ORDER BY full_name", $community_id));
 }
 
 
@@ -595,7 +578,7 @@ function getDashboardPages($type = 'page')
                     if (count($testsuites) > 0) {
                         $item2[0]['subpages'] = array();
                         foreach ($testsuites as $row) {
-                            $item2[0]['subpages'][] = array('title' => apply_filters('the_title', $row->post_title), 'url' => get_permalink($row->ID));
+                            $item2[0]['subpages'][] = array('title' => $row->full_name, 'url' => '/test-suite/' . $row->slug);
                         }
                     }
                     $item1['subpages'] = $item2;
