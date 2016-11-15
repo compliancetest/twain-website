@@ -202,7 +202,7 @@ if(DISPLAY_SUBSCRIPTIONS){
 <div class="right two_sixths">
     <div class="gray_message_box radius9 light_gray_txt">
         <div class="indicator"></div>
-        List of manufacturer aliases for product registration with pubplic visibility(semicolon separated)
+        List of manufacturer aliases for product registration with public visibility(semicolon separated)
     </div>
 </div>
 <?php endif; ?>
