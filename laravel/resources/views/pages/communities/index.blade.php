@@ -28,9 +28,9 @@
                                     <a href="{{ getSiteUrl() }}/communities/{{ $community->slug }}">{{ $community->title }}</a>
                                     <p>{!! $community->description !!}</p>
                                 </td>
-                                <td class="text-center">{{ count(\App\Post::getCommunityTestSuites($community->id)) }}</td>
+                                <td class="text-center">{{ count($community->testSuites) }}</td>
                                 <td class="text-center">{{ count($community->activeMembers()) }}</td>
-                                <td class="text-center">0</td>
+                                <td class="text-center">{{ count(\App\Claim::whereIn('suite_minor_family_mark', $community->testSuites()->pluck('minor_family_mark')->toArray())->get()) }}</td>
                                 <td class="text-center community-action">
                                     @include('pages.communities.partials.button', ['community' => $community])
                                 </td>

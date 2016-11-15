@@ -75,7 +75,7 @@ class Community extends Model
      */
     public function members()
     {
-        return $this->hasMany('App\CommunityMembers');
+        return $this->hasMany('App\CommunityMembers')->has('users');
     }
 
     /**
@@ -161,7 +161,7 @@ class Community extends Model
      */
     public function activeMembers()
     {
-        return $this->members()->where('is_confirmed', true)->get();
+        return $this->members()->with('users')->where('is_confirmed', true)->get();
     }
 
     /**
