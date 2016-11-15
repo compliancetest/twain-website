@@ -23,7 +23,7 @@ trait CloudSearchDomainTrait
         return CloudSearchDomainClient::factory([
             'region' => 'us-west-2',
             'version' => '2013-01-01',
-            'endpoint' => $documentEndpoint ? config('aws.registry_domain.integration') : config('aws.registry_domain_search.' . getenv('ENVIRONMENT')),
+            'endpoint' => $documentEndpoint ? config('aws.registry_domain.' . getenv('ENVIRONMENT')) : config('aws.registry_domain_search.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
@@ -43,7 +43,7 @@ trait CloudSearchDomainTrait
         return CloudSearchDomainClient::factory([
             'region' => 'us-west-2',
             'version' => '2013-01-01',
-            'endpoint' => $documentEndpoint ? config('aws.domain.integration') : config('aws.domain.' . getenv('ENVIRONMENT')),
+            'endpoint' => $documentEndpoint ? config('aws.domain.' . getenv('ENVIRONMENT')) : config('aws.domain.' . getenv('ENVIRONMENT')),
             'credentials' => $credentials
         ]);
     }
