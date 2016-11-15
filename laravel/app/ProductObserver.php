@@ -47,7 +47,7 @@ class ProductObserver
             'post_author_id' => $product->user_id,
             'post_content' => (string)$productDescription,
             'post_status' => 'Published',
-            'post_title' => $product->full_name,
+            'post_title' => (string) $product->full_name,
             'post_type' => 'Product',
             'post_id' => $product->id,
             'visibility' => $productVisibility == 'Public' ? 1 : $productVisibility == 'Community' ? 2 : 3,

@@ -31,7 +31,7 @@ class TestCaseObserver
             'post_author_id' => 0,
             'post_content' => (string)$description,
             'post_status' => 'Published',
-            'post_title' => $testCase->full_name,
+            'post_title' => (string) $testCase->full_name,
             'post_type' => 'Test Case',
             'post_id' => $testCase->id,
             'visibility' => 2,
