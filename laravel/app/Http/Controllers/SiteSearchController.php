@@ -58,7 +58,7 @@ class SiteSearchController extends Controller
     public function download(Request $request)
     {
 
-        generate_and_download_site((new SiteSearch())->search($request->session()->get('siteSearch', []), true));
+        generate_and_download_site((new SiteSearch())->search($request->session()->get('siteSearch', []), true, true));
     }
 
     /**
