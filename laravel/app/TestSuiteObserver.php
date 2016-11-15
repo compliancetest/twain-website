@@ -32,7 +32,7 @@ class TestSuiteObserver
             'post_author_id' => 0,
             'post_content' => (string)$description,
             'post_status' => 'Published',
-            'post_title' => $testSuite->full_name,
+            'post_title' => (string) $testSuite->full_name,
             'post_type' => 'Test Suite',
             'post_id' => $testSuite->id,
             'visibility' => 1,
