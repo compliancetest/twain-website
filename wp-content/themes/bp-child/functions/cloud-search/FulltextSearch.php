@@ -8,7 +8,7 @@ class FulltextSearch extends BaseAWS
     private $_domainName = '';
 
     private $_allowed_post_types = array(
-        'press-release', 'blog', 'event', 'page', 'product-service', 'service', 'test-case', 'test-suite', 'link'
+        'press-release', 'blog', 'event', 'page', 'service', 'link'
     );
 
     private $_allowedSortFields = array(
@@ -294,42 +294,7 @@ class FulltextSearch extends BaseAWS
                 array_push($data, array('type' => 'add', 'id' => $post->ID, 'fields' => $temp_data));
             }
         }
-        if (!$post_id) {
-            $test_scenarios = $wpdb->get_results("SELECT * FROM wp_test_suites_scenarios");
-            foreach ($test_scenarios AS $test_scenario) {
-                $post = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_posts WHERE ID = %d ", $test_scenario->suite_id));
-                if (!$post || $test_scenario->code == 'Default') {
-                    continue;
-                }
-                $scenarioCommunity = get_post_meta($test_scenario->suite_id, 'community_id', true);
-                $testSuiteCommunity = getCommunity($scenarioCommunity);
-                $communityNames = $groups = [];
-                if ($testSuiteCommunity) {
-                    $communityNames[] = ctE($testSuiteCommunity->title);
-                    $groups['groups'][] = $testSuiteCommunity->id;
-                }
-                if (empty($communityNames)) {
-                    $groups['groups'] = $wpdb->get_var("SELECT id FROM communities WHERE title = 'TWAIN'");
-                    $post_data['visibility'] = 1;
-                }
-                $temp_data = array(
-                    'community' => $communityNames,
-                    'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date)) . 'Z',
-                    'post_author_name' => cp_get_user_fullname($post->post_author),
-                    'post_author_id' => $post->post_author,
-                    'post_content' => $test_scenario->description,
-                    'post_status' => $post->post_status,
-                    'post_title' => $test_scenario->code,
-                    'post_type' => 'Test Scenario',
-                    'post_id' => $post->ID,
-                    'visibility' => 2,
-                    'community_id' => $groups['groups'],
-                    'for_search' => $test_scenario->description . 'Test Scenario' . $test_scenario->code . cp_get_user_fullname($post->post_author),
-                    'link' => get_permalink($post->ID)
-                );
-                array_push($data, array('type' => 'add', 'id' => 'scenario_' . $test_scenario->id, 'fields' => $temp_data));
-            }
-        }
+       
         if (!empty($data)) {
             $data = $this->_client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
             $response_data = array(
@@ -382,42 +347,6 @@ class FulltextSearch extends BaseAWS
                 );
                 break;
 
-            case 'product-service':
-                $product = new ProductAndService($post->ID);
-                $product->load();
-                $data = array(
-                    'type' => 'Product',
-                    'visibility' => $product->visibility == 'Public' ? 1 : $product->visibility == 'Community' ? 2 : 3,
-                    'for_search' => 'Product',
-                    'descr' => $product->descrition
-                );
-                break;
-            case 'service':
-                $service = new Service($post->ID);
-                $service->load();
-                $data = array(
-                    'type' => 'Service',
-                    'visibility' => $service->service_visibility == 'Public' ? 1 : $service->service_visibility == 'Community' ? 2 : 3,
-                    'for_search' => 'Service',
-                    'descr' => $service->service_description
-                );
-                break;
-            case 'test-case':
-                $data = array(
-                    'type' => 'Test Case',
-                    'visibility' => 2,
-                    'for_search' => 'Test Case',
-                    'descr' => get_post_meta($post->ID, 'test_intent_description', true)
-                );
-                break;
-            case 'test-suite':
-                $data = array(
-                    'type' => 'Test Suite',
-                    'visibility' => 1,
-                    'for_search' => 'Test Suite',
-                    'descr' => get_post_meta($post->ID, 'ts_description', true)
-                );
-                break;
             case 'blog':
                 $data = array(
                     'type' => 'Blog',

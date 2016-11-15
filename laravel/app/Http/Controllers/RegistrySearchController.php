@@ -69,4 +69,48 @@ class RegistrySearchController extends Controller
         (new RegistrySearch())->delete_item($entryId);
         return response()->json(['success']);
     }
+
+    /**
+     * Clear registry search domain data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeAll()
+    {
+        $client = (new RegistrySearch(true));
+        $results = $client->search([
+            'size' => 10000,
+            'query' => 'matchall',
+            'queryParser' => 'structured',
+        ]);
+
+        $data = $response_data = array();
+
+        foreach ($results['hits']['hit'] as $row) {
+            array_push($data, array('type' => 'delete', 'id' => $row['id']));
+        }
+        if (!empty($data)) {
+            $result = $client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
+        }
+
+        return response()->json($result);
+    }
+
+    /**
+     * Upload claims / test plans data to cloudsearch
+     * todo-refactoring - make bulk uploading instead of triggering observers
+     */
+    public function uploadAll()
+    {
+        $testPlans = \App\TestPlan::all();
+        foreach ($testPlans AS $testPlan) {
+            $testPlan->timestamps = false;
+            $testPlan->save();
+        }
+
+        $claims = \App\Claim::all();
+        foreach ($claims AS $claim) {
+            $claim->timestamps = false;
+            $claim->save();
+        }
+    }
 }

@@ -20,9 +20,9 @@ class RegistrySearch
         'type', 'owner', 'test_suite', 'test_type', 'role', 'level', 'status', 'date_from', 'date_to'
     );
 
-    public function __construct()
+    public function __construct($status = false)
     {
-        $this->_client = $this->getRegistryEndpointCloudSearchClient(false);
+        $this->_client = $this->getRegistryEndpointCloudSearchClient($status);
     }
 
     public function search($params = false, $fullResults = false)

@@ -55,4 +55,9 @@ class Product extends Model
     {
         return $user->check() && ($this->organisation_id == @$user->organisation[0]->id || is_super_admin());
     }
+
+    public function getUrl()
+    {
+        return getSiteUrl() . '/product/' . $this->slug;
+    }
 }

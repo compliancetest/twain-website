@@ -12,6 +12,10 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'transactions/*'
+        'transactions/*',
+        'search-results/delete-all-site-data',
+        'search-results/upload-all-site-data',
+        'products-and-services/delete-all-registry-data',
+        'products-and-services/upload-all-registry-data',
     ];
 }

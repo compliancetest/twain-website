@@ -88,8 +88,14 @@ function ct_cloud_search()
                             <td>
                                 <i>
                                     <?php
-                                    $cloudSearch = new CloudSearch();
-                                    _trace($cloudSearch->_initial_upload());
+                                    $ch = curl_init();
+                                    curl_setopt($ch, CURLOPT_URL, site_url() . '/products-and-services/upload-all-registry-data');
+                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_POST, true);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+                                    $response = curl_exec($ch);
+                                    curl_close($ch);
+                                    _trace('Done');
                                     ?>
                                 </i>
                             </td>
@@ -115,8 +121,14 @@ function ct_cloud_search()
                             <td>
                                 <i>
                                     <?php
-                                    $cloudSearch = new CloudSearch();
-                                    _trace($cloudSearch->_delete_all_items());
+                                    $ch = curl_init();
+                                    curl_setopt($ch, CURLOPT_URL, site_url() . '/products-and-services/delete-all-registry-data');
+                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+                                    curl_setopt($ch, CURLOPT_POST, true);
+                                    $response = curl_exec($ch);
+                                    curl_close($ch);
+                                    _trace('Done');
                                     ?>
                                 </i>
                             </td>
@@ -195,8 +207,14 @@ function ct_cloud_search()
                             <td>
                                 <i>
                                     <?php
-                                    $cloudSearch = new FulltextSearch();
-                                    _trace($cloudSearch->fullUpload());
+                                    $ch = curl_init();
+                                    curl_setopt($ch, CURLOPT_URL, site_url() . '/search-results/upload-all-site-data');
+                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+                                    curl_setopt($ch, CURLOPT_POST, true);
+                                    $response = curl_exec($ch);
+                                    curl_close($ch);
+                                    _trace('Done');
                                     ?>
                                 </i>
                             </td>
@@ -221,9 +239,15 @@ function ct_cloud_search()
                         <tr>
                             <td>
                                 <i>
-                                    <?php
-                                    $cloudSearch = new FulltextSearch();
-                                    _trace($cloudSearch->fullDelete());
+                                     <?php
+                                    $ch = curl_init();
+                                    curl_setopt($ch, CURLOPT_URL, site_url() . '/search-results/delete-all-site-data');
+                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+                                    curl_setopt($ch, CURLOPT_POST, true);
+                                    $response = curl_exec($ch);
+                                    curl_close($ch);
+                                    _trace('Done');
                                     ?>
                                 </i>
                             </td>

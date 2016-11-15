@@ -12,56 +12,87 @@ class PostObserver
      */
     public function saved(Post $post)
     {
-        if($post->post_type == 'product-service'){
-            $productTestPlans = TestPlan::where(['product_id' => $post->ID])->get();
-            foreach($productTestPlans as $productTestPlan){
-                $productTestPlan->timestamps = false;
-                $productTestPlan->save();
-            }
-            $productClaims = Claim::where(['product_id' => $post->ID])->get();
-            foreach($productClaims as $productClaim){
-                $productClaim->timestamps = false;
-                $productClaim->save();
-            }
+        if (in_array($post->post_type, ['press-release', 'blog', 'event', 'page', 'link'])) {
 
+            if (in_array($post->post_title, array('add-new-service', 'Edit Test Case', 'Edit Product and Service', 'Edit Test Suite',
+                'Message Envelope', 'View Validation Error', 'My Messages', 'Inbox', 'Sentbox', 'Compose', 'View', 'Members', 'Get Profile', 'View Message Template',
+                'My Organization', 'Test Suites', 'get-profile-meta', 'Users', 'Edit Service', 'Add New Product and Service', 'Reset Password', 'Sitemap',
+                'Add New Test Case', 'Add New Test Suite', 'Add new service', 'search-registry', 'My Test Data', 'Agreements', 'communities_old', 'License Agreement',
+                'More Reasons', 'Forum', 'login', 'My Organisation', 'My Profile', 'My Test Results', 'Test Suite Coverage', 'My Products', 'My Support Tickets',
+                'My Test Suites', 'My Communities', 'Search Results'))) {
+                return;
+            }
             //save product data to Fulltext search domain
             $cloudSearchClient = $this->getFulltextEndpointCloudSearchClient();
 
-            $productDescription = $post->getMetaByKey('product_description');
-            $productVisibility = $post->getMetaByKey('product_visibility');
-
-            $groups = getUserCommunities($post->post_author);
-            $communityNames = array();
-            if ($groups) {
-                foreach ($groups AS $group) {
-                    $communityNames[] = $group->title;
-                    $groups['groups'][] = $group->id;
+            $visibility = 1;
+            if (in_array($post->post_type, array('event', 'blog', 'press-release', 'link'))) {
+                $communityId = PostMeta::where(['post_id' => $post->ID, 'meta_key' => 'blog_community_id'])->first();
+                if (!$communityId || !Community::find($communityId)) {
+                    $twain = Community::findBySlug('twain');
+                    $communityNames = [$twain->title];
+                    $communityIds = [$twain->id];
+                    $visibility = 1;
+                } else {
+                    $communityNames = [Community::find($communityId)->title];
+                    $communityIds = [$communityId];
+                    $visibility = 2;
                 }
-            }
-            if (empty($communityNames)) {
-                $communityNames = ['TWAIN'];
-                $groups['groups'] = [Community::findBySlug('twain')->id];
+            } else {
+                $twain = Community::findBySlug('twain');
+                $communityNames = [$twain->title];
+                $communityIds = [$twain->id];
+                $visibility = 2;
             }
 
-            $productData = array(
+            //this pages should be visible only to logged in users
+            if (in_array($post->post_title, array('Add New Product and Service', 'Add New Test Case', 'Add New Test Suite', 'My Profile',
+                'My Transaction Log', 'Test Suite Coverage', 'My Products', 'My Support Tickets', 'My Test Suites', 'My Communities',
+                'Add new service', 'Add New Test Case', 'Add New Test Suite'))) {
+                $visibility = 2;
+            }
+            $data = array(
                 'community' => $communityNames,
                 'last_updated_date' => date('Y-m-d\TH:i:s', strtotime($post->post_date)) . 'Z',
-                'post_author_name' => cp_get_user_fullname($post->post_author),
+                'post_author_name' => User::find($post->post_author)->getFullName(),
                 'post_author_id' => $post->post_author,
-                'post_content' => (string) $productDescription,
+                'post_content' => trim(str_replace(array('Back to Documentation Home', 'Back to documentation home'), '', $post->post_content)),
                 'post_status' => $post->post_status,
                 'post_title' => $post->post_title,
-                'post_type' => 'Product',
+                'post_type' => $this->processPostType($post->post_type),
                 'post_id' => $post->ID,
-                'visibility' => $productVisibility == 'Public' ? 1 : $productVisibility == 'Community' ? 2 : 3,
-                'community_id' => $groups['groups'],
-                'for_search' => $productDescription . ' Product ' . $post->post_title .' ' . implode(' ', $communityNames) .' ' . $productVisibility,
-                'link' => get_permalink($post->ID)
+                'visibility' => $visibility,
+                'community_id' => $communityIds,
+                'for_search' => trim(str_replace(array('Back to Documentation Home', 'Back to documentation home'), '', $post->post_content)),
+                'link' => getSiteUrl() . '/' . $post->post_name
             );
+
             $cloudSearchClient->uploadDocuments([
-                'documents' => json_encode([['type' => 'add', 'id' => $post->ID, 'fields' => $productData]]),
+                'documents' => json_encode([['type' => 'add', 'id' => $post->ID, 'fields' => $data]]),
                 'contentType' => 'application/json'
             ]);
         }
+    }
+
+    public function processPostType($postType)
+    {
+        switch ($postType) {
+            case 'page':
+                $name = 'Page';
+                break;
+            case 'event':
+                $name = 'Event';
+                break;
+            case 'blog':
+                $name = 'Blog';
+                break;
+            case 'press-release':
+                $name = 'Press Release';
+                break;
+            case 'link':
+                $name = 'Link';
+                break;
+        }
+        return $name;
     }
 }

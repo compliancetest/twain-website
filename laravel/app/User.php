@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function getFullName()
     {
-        return cp_get_user_fullname($this->ID);
+        return @$this->meta()->where('meta_key', 'first_name')->first()->meta_value . " " . @$this->meta()->where('meta_key', 'last_name')->first()->meta_value;
     }
 
     /**

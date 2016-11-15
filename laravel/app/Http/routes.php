@@ -271,7 +271,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('products-and-services/download', 'RegistrySearchController@download');
     Route::get('products-and-services/filters', 'RegistrySearchController@filters');
 
-     Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
+    Route::post('search-results/delete-all-site-data', 'SiteSearchController@removeAll');
+    Route::post('search-results/upload-all-site-data', 'SiteSearchController@uploadAll');
+
+    Route::post('products-and-services/delete-all-registry-data', 'RegistrySearchController@removeAll');
+    Route::post('products-and-services/upload-all-registry-data', 'RegistrySearchController@uploadAll');
+
+    Route::group(['middleware' => ['auth', 'wordpress.super_admin']], function () {
         Route::delete('search-results/{entryId}', 'SiteSearchController@delete');
         Route::delete('products-and-services/{entryId}', 'RegistrySearchController@delete');
     });

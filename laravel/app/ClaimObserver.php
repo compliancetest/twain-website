@@ -24,16 +24,16 @@ class ClaimObserver
      */
     public function saved(Claim $claim)
     {
-        $product = Post::find($claim->product_id);
-        $testSuite = Post::find($claim->test_suite_id);
+        $product = Product::find($claim->product_id);
+        $testSuite = LaravelTestSuite::find($claim->suite_minor_family_mark);
         if (!$product || !$testSuite) {
             return;
         }
 
-        $productVisibility = $product->getMetaByKey('product_visibility');
+        $productVisibility = $product->visibility;
 
 
-        $testSuiteCommunity = $testSuite->getMetaByKey('community_id');
+        $testSuiteCommunity = $testSuite->community_id;
         $communities = [$testSuiteCommunity];
 
         if ($productVisibility == 'Public') {
@@ -46,30 +46,30 @@ class ClaimObserver
             }
         }
 
-        $productVersion = $product->getMetaByKey('product_version');
-        $productOrganisationId = $product->getMetaByKey('product_organisation_id');
+        $productVersion = $product->version;
+        $productOrganisationId = $product->organisation_id;
         $productOwner = Organisation::find($productOrganisationId)->organisation_name;
-        $productDescription = $product->getMetaByKey('product_description');
+        $productDescription = $product->description;
         $temp_data = array(
-            'name' => $product->post_title,
+            'name' => (string) $product->full_name,
             'version' => $productVersion,
             'owner' => $productOwner,
             'type' => 'Product',
-            'test_suite' => $testSuite->post_title,
+            'test_suite' => $testSuite->full_name,
             'role' => [$claim->role],
             'level' => [$claim->conformance_level],
             'status' => 'Verified',
             'test_type' => 'Certification',
             'date' => date('Y-m-d\TH:i:s') . 'Z',
-            'for_search' => $productDescription . ' + ' . $productOwner . ' + ' . $testSuite->post_title . ' + Product + Certification + ' . $claim->role . ' + ' . $claim->conformance_level,
-            'suite_id' => $claim->test_suite_id,
-            'post_id' => $product->ID,
+            'for_search' => $productDescription . ' + ' . $productOwner . ' + ' . $testSuite->full_name . ' + Product + Certification + ' . $claim->role . ' + ' . $claim->conformance_level,
+            'suite_id' => $claim->suite_minor_family_mark,
+            'post_id' => $product->id,
             'visibility' => $visibility,
             'community_id' => $communities,
             'user_id' => $claim->creator_id,
             'organisation_id' => $productOrganisationId,
             'product_id' => $claim->product_id,
-            'product_name' => $product->post_title,
+            'product_name' => $product->full_name,
             'start_date' => date('Y-m-d\TH:i:s', strtotime($claim->created_at)) . 'Z',
             'cert_number' => $claim->id,
             'cert_url' => $claim->getPdfUrl()

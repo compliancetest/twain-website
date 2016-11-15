@@ -251,4 +251,9 @@ class LaravelTestCase extends Model
 
         return (string)$request->getUri();
     }
+
+    public function getUrl()
+    {
+        return getSiteUrl() . '/test-case/' . $this->slug;
+    }
 }

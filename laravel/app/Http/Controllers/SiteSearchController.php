@@ -69,4 +69,62 @@ class SiteSearchController extends Controller
         (new SiteSearch())->delete_item($entryId);
         return response()->json(['success']);
     }
+
+    /**
+     * Clear registry search domain data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeAll()
+    {
+        $client = (new SiteSearch())->_client;
+        $results = $client->search([
+            'size' => 10000,
+            'query' => 'matchall',
+            'queryParser' => 'structured',
+        ]);
+
+        $data = $response_data = array();
+
+        foreach ($results['hits']['hit'] as $row) {
+            array_push($data, array('type' => 'delete', 'id' => $row['id']));
+        }
+        if (!empty($data)) {
+            $result = $client->uploadDocuments(array('documents' => json_encode($data), 'contentType' => 'application/json'));
+        }
+
+        return response()->json($result);
+    }
+
+    /**
+     * Upload data to cloudsearch
+     * todo-refactoring - make bulk uploading instead of triggering observers
+     */
+    public function uploadAll()
+    {
+        //update test cases
+        $entries = \App\LaravelTestCase::all();
+        foreach ($entries AS $entry) {
+            $entry->timestamps = false;
+            $entry->save();
+        }
+        //update suites
+        $entries = \App\LaravelTestSuite::all();
+        foreach ($entries AS $entry) {
+            $entry->timestamps = false;
+            $entry->save();
+        }
+        //update products
+         //update suites
+        $entries = \App\Product::all();
+        foreach ($entries AS $entry) {
+            $entry->timestamps = false;
+            $entry->save();
+        }
+
+        $entries = \App\Post::whereIn('post_type', ['press-release', 'blog', 'event', 'page', 'link'])->get();
+        foreach ($entries AS $entry) {
+            $entry->timestamps = false;
+            $entry->save();
+        }
+    }
 }
