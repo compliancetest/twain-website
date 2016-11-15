@@ -8,7 +8,7 @@
                 <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right">Community Home Page</a>
 
                 <h1>{{ $testSuite->full_name }}</h1>
-                @can('change', $testSuite)
+                @can('changeTestSuite', $testSuite)
                     <a href="/test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
                 @endcan
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
