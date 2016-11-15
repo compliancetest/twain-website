@@ -131,7 +131,7 @@
                                 @endforeach
                             </select>
                         </div>
-                         @can('change', $testSuite)
+                         @can('changeTestSuite', $testSuite)
                             <a href="/test-case/create" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                          @endcan
                     </form>
