@@ -1,6 +1,6 @@
 @if($installer && Auth::check() && (!Auth::user()->suiteSubscriptions->isEmpty() || $isSupport) )
     @if(!empty($installer->license))
-        <li>
+        <li class="noprint">
             Test Tool: <a href="#licenseAgreementModal{{$installer->id}}" data-toggle="modal" @if(!empty($installer->description)) data-tooltip="tooltip" title="{{ $installer->description }}" @endif>{{ $installer->title }}</a>
             {{-- License agreement popup --}}
             <div class="modal fade" id="licenseAgreementModal{{$installer->id}}" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">

@@ -9,16 +9,16 @@
 
                 <h1>{{ $testSuite->full_name }}</h1>
                 @can('changeTestSuite', $testSuite)
-                    <a href="/test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                    <a href="/test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit noprint">Edit</a>
                 @endcan
-                <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
+                <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print noprint">Print</button>
             </div>
 
             <div class="options-box">
                 <ul class="inline-options-list">
                     <li>ID: <strong>{{ $testSuite->short_name }}</strong></li>
                     <li>Published: <strong>{{$testSuite->published_at}}</strong></li>
-                    <li>Issuer: <a href="/test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
+                    <li class="noprint">Issuer: <a href="/test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
                     <li>Status: <span class="status status-{{ strtolower($testSuite->status) }}">{{ $testSuite->status }}</span></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
                     @if(!$testSuite->protocolVersions->isEmpty())
@@ -30,7 +30,7 @@
             </div>
 
             <div class="test-suite-description">{!! $testSuite->description !!}</div>
-            <div class="simple-tabs">
+            <div class="simple-tabs noprint">
                 <ul class="simple-tabs-nav ts-simple-tabs" role="tablist">
                     @if(count($testSuite->roles) > 0)
                         <li><a href="#ts-test-suite-roles">Test Suite Roles</a></li>
@@ -90,11 +90,11 @@
                 </div>
             </div>
 
-            <div class="test-suite-subscription">
+            <div class="test-suite-subscription noprint">
                 @include('pages.test-suites.partials.subscriptions-section')
             </div>
 
-            <div class="row test-cases-list-header">
+            <div class="row test-cases-list-header noprint">
                 <div class="col-md-4 item-subtitle">Test Cases</div>
                 <div class="col-md-8 text-right">
                     <form class="form-inline" id="suiteTestCasesForm">
@@ -138,7 +138,7 @@
                 </div>
             </div>
 
-            <div class="block-loading-wrapper">
+            <div class="block-loading-wrapper noprint">
                 <div id="suiteCases">
                     @include('pages.test-suites.partials.test-cases-list')
                 </div>

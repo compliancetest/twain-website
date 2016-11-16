@@ -12,10 +12,10 @@
                 </ul>
                 <h1>Test case: <strong>{{ $testCase->full_name }}</strong></h1>
                 @can('changeTestCase', $testCase)
-                    <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit">Edit</a>
+                    <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit noprint">Edit</a>
                 @endcan
                 &nbsp;
-                <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print">Print</button>
+                <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print noprint">Print</button>
             </div>
 
             <div class="test-case-description">
@@ -67,7 +67,7 @@
                 </div>
 
                 @if($testCase->test_execution_profile_id)
-                    <div class="options-box-row">
+                    <div class="options-box-row noprint">
                         <div class="options-box-row-title">Test Execution:</div>
                         <ul class="inline-options-list">
                                 <li><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/{{ $testCase->test_execution_profile_id }}" data-toggle="modal" data-remote="true"
@@ -77,7 +77,7 @@
                 @endif
 
                 @if($testCase->configuration_profile_id)
-                    <div class="options-box-row">
+                    <div class="options-box-row noprint">
                         <div class="options-box-row-title">Test Configuration:</div>
                         <ul class="inline-options-list">
                                 <li><a href="{{ getSiteUrl() }}/communityprofiles/twain/viewprofile/{{ $testCase->configuration_profile_id }}" data-toggle="modal" data-remote="true"
