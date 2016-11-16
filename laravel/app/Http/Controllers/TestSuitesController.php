@@ -25,7 +25,7 @@ class TestSuitesController extends Controller
      */
     public function view($testSuiteSlug)
     {
-        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        $testSuite = LaravelTestSuite::findBySlugOrFail($testSuiteSlug);
         $community = Community::find($testSuite->community_id);
         if (Gate::denies('viewTestSuite', $testSuite)) {
             addMessage('You do not have enough permissions to see this test suite. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
@@ -92,7 +92,7 @@ class TestSuitesController extends Controller
      */
     public function edit($testSuiteSlug)
     {
-        $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
+        $testSuite = LaravelTestSuite::findBySlugOrFail($testSuiteSlug);
 
         if (Gate::denies('changeTestSuite', $testSuite)) {
             addMessage('You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');

@@ -30,7 +30,7 @@ class TestCasesController extends Controller
 
     public function view($testCaseSlug, Request $request)
     {
-        $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        $testCase = LaravelTestCase::findBySlugOrFail($testCaseSlug);
         $testSuites = $testCase->testSuites;
         if ($request->get('suite_minor_family_mark')) {
             $suiteExist = $testCase->testSuites()->where('minor_family_mark', $request->get('suite_minor_family_mark'))->orderBy('created_at', 'DESC')->limit(1)->get();
@@ -44,7 +44,7 @@ class TestCasesController extends Controller
 
     public function edit($testCaseSlug)
     {
-        $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        $testCase = LaravelTestCase::findBySlugOrFail($testCaseSlug);
         if (Gate::denies('changeTestCase', $testCase)) {
             addMessage('You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
             return response()->redirectTo('/test-case/' . $testCaseSlug);
