@@ -9,7 +9,7 @@
             <th>Outcome Type</th>
             <th class="noprint">Test Pattern</th>
             <th class="text-left">Test Intent Description</th>
-            @can('change', $testSuite)
+            @can('changeTestSuite', $testSuite)
                 <th class="noprint">Actions</th>
             @endcan
         </tr>
@@ -46,7 +46,7 @@
                         </a>
                     </td>
                     <td>{!! $testCase->description !!}</td>
-                    @can('change', $testSuite)
+                    @can('changeTestSuite', $testSuite)
                         <td class="text-center noprint">
                             <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
                             <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip"
