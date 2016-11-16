@@ -29,7 +29,7 @@ class VerifyRequest extends Model
         foreach ($userCommunities as $userCommunity) {
             $community = Community::find($userCommunity->community_id);
 
-            $isAdministrator = $community->isModerator() || $community->isAdmin();
+            $isAdministrator = $community->isModerator() || $community->isAdmin() ;
 
             //Community Support users can see all community suites
             if ($isAdministrator) {
@@ -38,7 +38,7 @@ class VerifyRequest extends Model
                 $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
             }
             foreach ($userTestSuites as $userTestSuite) {
-                $minorFamilyMark = $userTestSuite->suite_minor_family_mark;
+                $minorFamilyMark = $userTestSuite->minor_family_mark;
                 if (!isset($result[$minorFamilyMark])) {
                     $result[$minorFamilyMark] = [
                         'testSuite' => LaravelTestSuite::getLatestSuiteForMinorFamilyMark($minorFamilyMark),
@@ -80,6 +80,9 @@ class VerifyRequest extends Model
                             'testCases' => $testCases->sortBy(function($item){
                                 return $item->full_name;
                             }),
+                            'transactions' => Transaction::find(json_decode($request->transactions, true))->sortBy(function ($item, $key) {
+                                return LaravelTestCase::find($item->test_case_id)->full_name;
+                            })
                         ];
                     }
                 }

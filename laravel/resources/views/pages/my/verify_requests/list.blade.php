@@ -139,9 +139,8 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(json_decode($verifyRequest['verifyRequest']->transactions, true) as  $transactionId)
+                                                @foreach($verifyRequest['transactions'] as  $transaction)
                                                     <?php
-                                                    $transaction = \App\Transaction::find($transactionId);
                                                     $testOutcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
                                                     $status = getOutcomeStatusClass($testOutcomeStatus->code);
                                                     $testOutcomeStatus = $testOutcomeStatus->name;
@@ -154,7 +153,7 @@
                                                             </td>
                                                         @endif
                                                         <td>
-                                                            <a href="#verify-request-transactions-{{ $transactionId }}" class="collapsed" data-toggle="collapse">
+                                                            <a href="#verify-request-transactions-{{ $transaction->id }}" class="collapsed" data-toggle="collapse">
                                                                 <span class="collapse-icon"></span>
                                                             </a>
                                                             <?php $testCaseData = \App\LaravelTestCase::find($transaction->test_case_id);?>
@@ -182,12 +181,12 @@
                                                         @if(isImageViewerEnabled())
                                                             <td class="text-center">
                                                                 <a class="btn btn-success showImageViewer"
-                                                                   href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->community_id)->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transactionId }}"
+                                                                   href="/verify-requests/{{ \App\Community::find($userSuite['testSuite']->community_id)->slug }}/image-viewer/{{ $verifyRequest['verifyRequest']->id }}/{{ $transaction->id }}"
                                                                    data-toggle="modal" data-remote="true" data-ajax-modal data-target="#viewImagesModal">View Images</a>
                                                             </td>
                                                         @endif
                                                     </tr>
-                                                    <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transactionId }}"
+                                                    <tr class="transactions_row collapse logRow" id="verify-request-transactions-{{ $transaction->id }}"
                                                         data-transaction-id="{{ $transaction->id }}">
                                                         <td colspan="7">
                                                             <div class="block-loading-wrapper">
