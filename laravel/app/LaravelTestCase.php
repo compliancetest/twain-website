@@ -93,12 +93,10 @@ class LaravelTestCase extends Model
 
         $processedEntries = [];
         if (is_array($request->get('test_suite_id'))) {
+            $this->testSuites()->detach();
             foreach ($request->get('test_suite_id') as $testSuiteId => $entryId) {
                 $processedEntries[] = $entryId;
                 $this->testSuites()->attach($entryId);
-            }
-            if (!empty($processedEntries)) {
-                $this->testSuites()->whereNotIn('test_suite_id', $processedEntries)->delete();
             }
         }
 
