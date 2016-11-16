@@ -407,6 +407,14 @@ var Page = {
                 $(this).tab('show')
             });
 
+            //open needed tab on browser's back / forward click
+             $(window).on('hashchange', function (e) {
+                var url = document.location.toString();
+                if (url.match('#')) {
+                    $('.settings-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+                }
+            });
+
             var url = document.location.toString();
             if (url.match('#')) {
                 $('.settings-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
