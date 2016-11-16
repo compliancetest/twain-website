@@ -27,6 +27,11 @@ class TestSuitesController extends Controller
     {
         $testSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
         $community = Community::find($testSuite->community_id);
+        if (Gate::denies('viewTestSuite', $testSuite)) {
+            addMessage('You do not have enough permissions to see this test suite. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
+            return redirect()->to('/communities/' . $community->slug);
+        }
+
         $isAdmin = $community->isAdmin() || is_super_admin();
 
         $data = [

@@ -51,10 +51,13 @@ class Community extends Model
 
     public function getCommunityTestSuites()
     {
-        if($this->isAdmin() || $this->isModerator()){
+        if($this->isAdmin()){
             return $this->testSuites()->orderBy('full_name')->get();
         }
-        return $this->testSuites()->orderBy('created_at', 'DESC')->groupBy('minor_family_mark')->get();
+        if($this->isModerator() || $this->getMember(Auth::user()->ID)){
+            return $this->testSuites()->whereIn('status', ['Active', 'Partial'])->orderBy('created_at', 'DESC')->groupBy('minor_family_mark')->get();
+        }
+        return $this->testSuites()->where('status', 'Active')->orderBy('created_at', 'DESC')->groupBy('minor_family_mark')->get();
     }
 
     public function getCommunityTestSuitesMajorVersions()

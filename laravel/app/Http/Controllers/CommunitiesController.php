@@ -95,7 +95,7 @@ class CommunitiesController extends Controller
             'isAdmin' => $community->isAdmin(),
         ];
         if ($action == 'testsuites') {
-            $data['testSuites'] = $community->testSuites()->orderBy('full_name')->get();
+            $data['testSuites'] = $community->getCommunityTestSuites();
         }
         if ($action == 'forum') {
             $data['threads'] = $community->threads()->with('user')->get();

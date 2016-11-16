@@ -31,9 +31,19 @@ class TestSuitePolicy
      * @param LaravelTestSuite $testSuite
      * @return bool
      */
-    public function view(User $user, LaravelTestSuite $testSuite)
+    public function viewTestSuite(User $user, LaravelTestSuite $testSuite)
     {
-        return true;
+        $community = Community::find($testSuite->community_id);
+        if ($testSuite->status == 'Active') {
+            return true;
+        }
+        if ($community->isAdmin()) {
+            return true;
+        }
+        if (($community->isModerator() || $community->getMember($user)) && in_array($testSuite->status, ['Active', 'Partial'])) {
+            return true;
+        }
+        return false;
     }
 
     /**
