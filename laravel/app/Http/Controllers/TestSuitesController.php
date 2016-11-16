@@ -140,7 +140,7 @@ class TestSuitesController extends Controller
     {
         $oldTestSuite = LaravelTestSuite::findBySlug($testSuiteSlug);
 
-        if (Gate::denies('change', $oldTestSuite)) {
+        if (Gate::denies('changeTestSuite', $oldTestSuite)) {
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
 
