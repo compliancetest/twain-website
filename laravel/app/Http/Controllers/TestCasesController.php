@@ -119,7 +119,7 @@ class TestCasesController extends Controller
             }
         }
 
-        return response()->json(['status' => 'success', 'redirect_to' => '/test-case/' . $testSuite->slug]);
+        return response()->json(['status' => 'success', 'redirect_to' => '/test-case/' . $testCase->slug]);
     }
 
     /**
