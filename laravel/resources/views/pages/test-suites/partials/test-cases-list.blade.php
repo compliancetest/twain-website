@@ -7,10 +7,10 @@
             <th>Tester Role</th>
             <th>Conf Levels</th>
             <th>Outcome Type</th>
-            <th>Test Pattern</th>
+            <th class="noprint">Test Pattern</th>
             <th class="text-left">Test Intent Description</th>
             @can('change', $testSuite)
-                <th>Actions</th>
+                <th class="noprint">Actions</th>
             @endcan
         </tr>
         </thead>
@@ -39,7 +39,7 @@
                         {{ implode(', ', array_unique($testCase->getConformanceLevels($isAdmin)->pluck('code')->toArray())) }}
                     </td>
                     <td class="text-center">{{ $testCase->outcome_type }}</td>
-                    <td class="text-center">
+                    <td class="text-center noprint">
                         <a href="/help-faq/test-patterns/" data-tooltip="tooltip"
                            title="{{ get_test_patterns_description($testCase->test_pattern) }}">
                             <span class="test-pattern-icon test-pattern-{{ $testCase->test_pattern }}"></span>
@@ -47,7 +47,7 @@
                     </td>
                     <td>{!! $testCase->description !!}</td>
                     @can('change', $testSuite)
-                        <td class="text-center">
+                        <td class="text-center noprint">
                             <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
                             <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip"
                                     title="Delete Case">Delete
@@ -83,6 +83,6 @@
     </table>
 </div>
 
-<div class="pagination-wrapper">
+<div class="pagination-wrapper noprint">
     {{ $testCases->links() }}
 </div>

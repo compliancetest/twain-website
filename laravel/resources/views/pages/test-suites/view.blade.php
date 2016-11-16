@@ -5,7 +5,7 @@
     <div class="container main-container">
         <div class="main-content test-suite-view">
             <div class="page-title">
-                <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right">Community Home Page</a>
+                <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right noprint">Community Home Page</a>
 
                 <h1>{{ $testSuite->full_name }}</h1>
                 @can('changeTestSuite', $testSuite)
@@ -94,10 +94,10 @@
                 @include('pages.test-suites.partials.subscriptions-section')
             </div>
 
-            <div class="row test-cases-list-header noprint">
+            <div class="row test-cases-list-header">
                 <div class="col-md-4 item-subtitle">Test Cases</div>
                 <div class="col-md-8 text-right">
-                    <form class="form-inline" id="suiteTestCasesForm">
+                    <form class="form-inline noprint" id="suiteTestCasesForm">
                         <label>Filter By:</label>
                         <div class="form-group">
                             <select name="scenario" class="form-control">
@@ -138,7 +138,7 @@
                 </div>
             </div>
 
-            <div class="block-loading-wrapper noprint">
+            <div class="block-loading-wrapper">
                 <div id="suiteCases">
                     @include('pages.test-suites.partials.test-cases-list')
                 </div>
