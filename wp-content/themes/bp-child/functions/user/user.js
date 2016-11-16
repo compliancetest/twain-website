@@ -3,19 +3,17 @@
     $(document).ready(function(){
         //Terms and Conditions
         $('#agree_terms').cplightbox({});
-        $('#site-terms-box .cancel-btn').cplightbox({
-            onLoad: function(){
-                $('#acc_tc_id').prop('checked', false);
-                $(window).scrollTop(0);
-            }
+
+        $('#site-terms-box .cancel-btn').click(function () {
+            $('#acc_tc_id').prop('checked', false);
+            $('.mask-wrapper').hide();
         });
-        $('#site-terms-box .process-btn').cplightbox({
-            onLoad: function(){
-                $('#acc_tc_id').prop('checked', true);
-                $(window).scrollTop(0);
-            }
+        $('#site-terms-box .process-btn').click(function () {
+            $('#acc_tc_id').prop('checked', true);
+            $('#site-terms-box').hide();
+            $('.mask-wrapper').hide();
         });
-        
+
         //Add Placeholder
         $("#user_login, #user_login2").attr("placeholder", "E-mail or User");
         $("#user_pass, #user_pass2").attr("placeholder", "********");
@@ -119,7 +117,7 @@
         //User Register
         $('#reg_user').on('click', function(){
             
-            $('#registration-popup #reg input.input-error').removeClass('input-error');
+            $('#reg input.input-error').removeClass('input-error');
             
             var form = $('#formreg');
             var firstname = $("#first_name_id").val();
@@ -135,7 +133,7 @@
             var emailReg = /^([\w-+\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             var noError = true;
             
-            var msgObj = $('#registration-popup #reg .message');
+            var msgObj = $('#reg .message');
             if(firstname && lastname && email && user /*&& organisation*/ && contact_phone && user_pass && user_pass_confirm && captcha_reg) {
                 if (email != email_confirm) {
                     msgObj.hide();
@@ -192,7 +190,7 @@
                             } else if (data == 'success1') {
                                 msgObj.removeClass('error').addClass('success').html('Thanks for your registration.').fadeIn('fast');
                                 setTimeout(function(){
-                                    location.href = '/';
+                                    location.href = '/login';
                                 },3000);
                             } else if(data == 'captcha_error') {
                                 jQuery('#recaptcha_reload').click();
@@ -207,7 +205,7 @@
                 }
                      
             }else{
-                $('#registration-popup #reg input.required').each(function(){
+                $('#reg input.required').each(function(){
                     if (this.value == '') {
                         $(this).addClass('input-error');
                     }

@@ -115,7 +115,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <a href="#" class="btn btn-danger btn-signup">Sign Up</a>
+                            <a href="/register" class="btn btn-danger btn-signup">Sign Up</a>
                         </div>
                     @endif
                     </div>
