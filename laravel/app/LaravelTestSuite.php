@@ -232,7 +232,9 @@ class LaravelTestSuite extends Model
         if (!empty($args['conformance_level'])) {
             $query->where('test_suites_conformance_levels.code', $args['conformance_level']);
         }
-        $query->orderBy('test_suites_scenarios.sequence')
+        $query
+            ->orderBy('scenarioCode')
+            ->orderBy('test_suites_scenarios.sequence')
             ->orderBy('test_cases.full_name');
         return $query;
     }

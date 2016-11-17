@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <?php $scenarioCode = false;?>
-        <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate($request->get('printMode') ? 1000 : 10);?>
+        <?php $testCases = $testSuite->getCases($filters, $isAdmin)->paginate(is_object($request) && $request->get('printMode') ? 1000 : 10);?>
         @if(count($testCases))
             @foreach($testCases  as $index => $testCase)
                 <tr>
