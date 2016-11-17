@@ -46,32 +46,15 @@
                         </a>
                     </td>
                     <td>{!! $testCase->description !!}</td>
-                    @can('changeTestSuite', $testSuite)
-                        <td class="text-center noprint">
-                            <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
-                            <button type="button" data-toggle="modal" data-target="#deleteTestCaseModal{{$index}}" class="btn btn-danger btn-icon btn-delete" data-tooltip="tooltip"
-                                    title="Delete Case">Delete
-                            </button>
-                            {{-- Delete Test Case Modal--}}
-                            <div class="modal fade" id="deleteTestCaseModal{{$index}}" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content block-loading-wrapper">
-                                        <div class="modal-header">
-                                            <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                                            Delete Test Case
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want delete {{ $testCase->full_name }}?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="#DELETE_URL" class="btn btn-success btn-with-icon btn-confirm">Confirm</a>
-                                            <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    @endcan
+                        @can('changeTestSuite', $testSuite)
+                            <td class="text-center noprint">
+                                <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
+                                <a data-target="#deleteTestCaseModal" class="btn btn-danger btn-icon btn-delete"
+                                   data-tooltip="tooltip" href="/test-case/{{ $testCase->slug }}/delete" data-toggle="modal"
+                                   data-remote="true" data-ajax-modal data-original-title="Delete Test Case">Delete
+                                </a>
+                            </td>
+                        @endcan
                 </tr>
             @endforeach
         @else
@@ -86,3 +69,5 @@
 <div class="pagination-wrapper noprint">
     {{ $testCases->links() }}
 </div>
+
+@include('pages.test-cases.partials.delete-test-case-popup')

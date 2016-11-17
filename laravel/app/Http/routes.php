@@ -82,6 +82,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('test-suite/{testSuiteId}/delete', 'TestSuitesController@deletePopup');
         Route::delete('test-suite/{testSuiteId}', 'TestSuitesController@destroy');
 
+        Route::get('test-case/{testSuiteId}/delete', 'TestCasesController@deletePopup');
+        Route::delete('test-case/{testSuiteId}', 'TestCasesController@destroy');
+
         Route::post('test-suite', 'TestSuitesController@store');
         Route::post('test-suite/{testSuiteId}/subscription', 'TestSuitesController@subscription');
         Route::get('test-suite/{testSuiteId}', 'TestSuitesController@view');

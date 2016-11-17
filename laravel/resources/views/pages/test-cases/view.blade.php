@@ -13,6 +13,11 @@
                 <h1>Test case: <strong>{{ $testCase->full_name }}</strong></h1>
                 @can('changeTestCase', $testCase)
                     <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit noprint">Edit</a>
+                    <a data-target="#deleteTestCaseModal" class="btn btn-danger btn-with-icon btn-delete noprint"
+                       data-tooltip="tooltip" href="/test-case/{{ $testCase->slug }}/delete" data-toggle="modal"
+                       data-remote="true" data-ajax-modal data-original-title="Delete Test Case">Delete
+                    </a>
+                    @include('pages.test-cases.partials.delete-test-case-popup')
                 @endcan
                 &nbsp;
                 <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print noprint">Print</button>

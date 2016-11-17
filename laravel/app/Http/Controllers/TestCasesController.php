@@ -163,4 +163,41 @@ class TestCasesController extends Controller
         }
         return is_super_admin() || $community->members()->where(['user_id' => $user->ID, 'is_admin' => true])->first();
     }
+
+    /**
+     * Render delete test case popup
+     * @param $testCaseSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deletePopup($testCaseSlug)
+    {
+        $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        return view('pages.test-cases.partials.confirm-delete-popup', compact('testCase'));
+    }
+
+    /**
+     * Delete test case
+     * @param $testCaseSlug
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($testCaseSlug)
+    {
+        $testCase = LaravelTestCase::findBySlug($testCaseSlug);
+        $community = Community::find($testCase->community_id);
+        if (!$community->isAdmin(Auth::user()->ID) && !is_super_admin()) {
+            return response()->json(['messages' => ['You do not have enough permissions for this action.']], 403);
+        }
+
+        $messages = [];
+        if (count($testCase->transactions)) {
+            $messages[] = "The test case can't be deleted because " . count($testCase->transactions) . " transactions still reference it.";
+        }
+
+        if ($messages) {
+            return response()->json(['messages' => $messages], 422);
+        }
+
+        $testCase->delete();
+        return response()->json(['status' => 'success', 'redirect_to' => 'test-suites']);
+    }
 }

@@ -19,6 +19,11 @@ class LaravelTestCase extends Model
         'wp_id', 'published_at', 'created_at', 'updated_at', 'status', 'community_id', 'execution_mode'
     ];
 
+    public function transactions()
+    {
+        return $this->hasMany('\App\Transaction', 'test_case_id');
+    }
+
     public function testSuites()
     {
         return $this->belongsToMany('App\LaravelTestSuite', 'test_suite_test_case', 'test_case_id', 'test_suite_id');
