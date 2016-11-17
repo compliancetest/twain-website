@@ -176,6 +176,7 @@ class LaravelTestSuite extends Model
             })
             ->where('status', 'Active')
             ->groupBy('test_cases.id')
+            ->orderBy('scenarioCode')
             ->orderBy('ss.sequence')
             ->orderBy('test_cases.full_name')
             ->select('test_cases.*', 'ss.code AS scenarioCode', 'ss.description AS scenarioDescription', 'ss.id AS scenarioID');
