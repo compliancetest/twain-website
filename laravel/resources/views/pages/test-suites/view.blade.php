@@ -11,7 +11,7 @@
                 @can('changeTestSuite', $testSuite)
                     <a href="/test-suite/{{ $testSuite->slug }}/edit" class="btn btn-primary btn-with-icon btn-edit noprint">Edit</a>
                 @endcan
-                <button onclick="window.print();" class="btn btn-primary btn-with-icon btn-print noprint">Print</button>
+                <a href="/test-suite/{{ $testSuite->slug }}" class="btn btn-primary btn-with-icon btn-print noprint">Print</a>
             </div>
 
             <div class="options-box">
@@ -157,6 +157,17 @@
 @section('page-scripts')
 <script>
     jQuery(document).ready(function ($) {
+
+        $('.btn-print').click(function(){
+            var pWin = window.open(jQuery(this).attr('href') + '?printMode=true', 'printpage', 'location=no,menubar=0,resizable=1,scrollbars=1,width=900,height=500');
+            return false;
+        })
+
+        if('{{ $request->get('printMode') }}'){
+            $('.noprint').hide();
+            window.print();
+        }
+
         $('.simple-tabs a').click(function (e) {
             e.preventDefault();
             $(this).tab('show')

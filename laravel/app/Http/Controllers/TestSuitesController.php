@@ -23,7 +23,7 @@ class TestSuitesController extends Controller
      * @param $testSuiteSlug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function view($testSuiteSlug)
+    public function view($testSuiteSlug, Request $request)
     {
         $testSuite = LaravelTestSuite::findBySlugOrFail($testSuiteSlug);
         $community = Community::find($testSuite->community_id);
@@ -36,6 +36,7 @@ class TestSuitesController extends Controller
 
         $data = [
             'testSuite' => $testSuite,
+            'request' => $request,
             'community' => $community,
             'pageTitle' => 'View Test Suite | ' . $testSuite->full_name,
             'isAdmin' => $isAdmin,

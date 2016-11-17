@@ -7,7 +7,7 @@
             <div class="page-title">
                 <ul class="pull-right">
                     @foreach($testSuites as $testSuite)
-                        <li>Go To <a href="/test-suite/{{ $testSuite->slug }}">{{ $testSuite->full_name }}</a></li>
+                        <li class="noprint">Go To <a href="/test-suite/{{ $testSuite->slug }}">{{ $testSuite->full_name }}</a></li>
                     @endforeach
                 </ul>
                 <h1>Test case: <strong>{{ $testCase->full_name }}</strong></h1>
