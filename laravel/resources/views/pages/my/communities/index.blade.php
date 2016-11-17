@@ -38,6 +38,7 @@
                     </tbody>
                 </table>
             </div>
+            <a href="/communities" class="btn btn-success btn-with-icon btn-add">Add Community</a>
         </div>
     </div>
 @stop
