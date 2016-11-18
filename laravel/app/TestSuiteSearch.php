@@ -61,7 +61,11 @@ class TestSuiteSearch extends Model
                 foreach (Community::all() as $community) {
                     if ($community->getActiveMember(Auth::user()->ID)) {
                         if (!$community->isAdmin()) {
-                            $q->orWhere(['status' => 'Active', 'community_id' => $community->id]);
+                            $q->orWhere(function($join) use ($community){
+                                $join
+                                    ->whereIn('status', ['Active', 'Partial'])
+                                    ->where('community_id', $community->id);
+                            });
                         } else {
                             $q->orWhere(['community_id' => $community->id]);
                         }
