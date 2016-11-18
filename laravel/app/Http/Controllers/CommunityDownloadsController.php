@@ -110,6 +110,19 @@ class CommunityDownloadsController extends Controller
     }
 
     /**
+     * Render delete download popup
+     * @param $communitySlug
+     * @param $downloadId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deletePopup($communitySlug, $downloadId)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $download = CommunityDownloads::find($downloadId);
+        return view('pages.communities.partials.show.downloads.confirm-delete-download-popup', compact('download', 'community'));
+    }
+
+    /**
      * Remove Download
      * @param $slug - Community Slug
      * @param $id - download id

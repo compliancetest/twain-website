@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\CommunityDownloads;
 use App\ForumThread;
 use App\ForumThreadPost;
 use Carbon\Carbon;

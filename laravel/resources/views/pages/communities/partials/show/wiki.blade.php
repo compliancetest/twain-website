@@ -35,6 +35,10 @@
                                 @if($isAdmin)
                                     <a href="{{ '/articles/' . $community->slug .'/'.$article->slug }}/edit/" class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                                        title="Edit Article"></a>
+                                    <a data-target="#deleteArticleModal" class="btn btn-danger btn-icon btn-delete" data-article-id="{{ $article->id }}"
+                                       data-tooltip="tooltip" href="/articles/{{ $community->slug }}/{{ $article->slug }}/delete/" data-toggle="modal"
+                                       data-remote="true" data-ajax-modal data-original-title="Delete Article">Delete
+                                    </a>
                                 @endif
                             </td>
                         </tr>
@@ -59,3 +63,5 @@
         </div>
     @endif
 </div>
+
+@include('pages.communities.partials.show.articles.delete-article-popup')

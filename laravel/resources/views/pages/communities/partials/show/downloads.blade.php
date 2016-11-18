@@ -75,7 +75,11 @@
                             @if($isAdmin)
                                 <td class="text-nowrap text-center">
                                     <a href="#" class="btn btn-icon btn-primary btn-edit editDownload" data-tooltip="tooltip" title="Edit" data-id="{{ $download->id }}"></a>
-                                    <a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $download->id }}" title="Delete"></a>
+                                    {{--<a href="#" class="btn btn-icon btn-danger btn-delete" data-tooltip="tooltip" data-id="{{ $download->id }}" title="Delete"></a>--}}
+                                    <a data-target="#deleteDownloadModal" class="btn btn-danger btn-icon btn-delete" data-download-id="{{ $download->id }}"
+                                       data-tooltip="tooltip" href="/downloads/{{ $community->slug }}/{{ $download->id }}/delete/" data-toggle="modal"
+                                       data-remote="true" data-ajax-modal data-original-title="Delete Download">Delete
+                                    </a>
                                 </td>
                             @endif
                         </tr>
@@ -180,6 +184,8 @@
         </div>
     </div>
 </div>
+
+@include('pages.communities.partials.show.downloads.delete-download-popup')
 <script>
     jQuery(document).ready(function ($) {
         Page.communityDownloads.init();
@@ -239,31 +245,31 @@
             }
         });
 
-        jQuery('.btn-delete').on('click', function (e) {
-            e.preventDefault();
-            var elem = jQuery(this);
-            var tr = $(elem).closest('tr');
-            if (confirm('Are you sure?')) {
-                $.ajax({
-                    url: '/downloads/{{ $community->slug }}/' + elem.attr('data-id'),
-                    type: 'DELETE',
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    success: function (result) {
-                        $('#edit-download-section').html('');
-                        jQuery('.success-message').removeClass('hide');
-                        setTimeout(function () {
-                            jQuery('.success-message').addClass('hide');
-                        }, 3000);
-                        tr.slideUp('slow', function () {
-                            $(this).remove();
-                            if ( !$('.downloads-list-table tbody tr').length){
-                                $('.downloads-list-table tbody').html('<tr><td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row">No files uploaded yet</td></tr>');
-                            }
-                        });
-                    }
-                });
-                return true;
-            }
-        });
+        {{--jQuery('.btn-delete').on('click', function (e) {--}}
+            {{--e.preventDefault();--}}
+            {{--var elem = jQuery(this);--}}
+            {{--var tr = $(elem).closest('tr');--}}
+            {{--if (confirm('Are you sure?')) {--}}
+                {{--$.ajax({--}}
+                    {{--url: '/downloads/{{ $community->slug }}/' + elem.attr('data-id'),--}}
+                    {{--type: 'DELETE',--}}
+                    {{--headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},--}}
+                    {{--success: function (result) {--}}
+                        {{--$('#edit-download-section').html('');--}}
+                        {{--jQuery('.success-message').removeClass('hide');--}}
+                        {{--setTimeout(function () {--}}
+                            {{--jQuery('.success-message').addClass('hide');--}}
+                        {{--}, 3000);--}}
+                        {{--tr.slideUp('slow', function () {--}}
+                            {{--$(this).remove();--}}
+                            {{--if ( !$('.downloads-list-table tbody tr').length){--}}
+                                {{--$('.downloads-list-table tbody').html('<tr><td colspan="@if($isAdmin) 6 @else 5 @endif" class="empty-row">No files uploaded yet</td></tr>');--}}
+                            {{--}--}}
+                        {{--});--}}
+                    {{--}--}}
+                {{--});--}}
+                {{--return true;--}}
+            {{--}--}}
+        {{--});--}}
     });
 </script>

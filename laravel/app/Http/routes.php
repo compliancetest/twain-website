@@ -148,6 +148,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('{community}/{article}', 'CommunityArticlesController@update');
         Route::post('{community}', 'CommunityArticlesController@store');
         Route::delete('{community}/{article}/{attachmentId}', 'CommunityArticlesController@destroyattachment');
+
+        Route::get('{community}/{article}/delete', 'CommunityArticlesController@deletePopup');
+        Route::delete('{community}/{article}', 'CommunityArticlesController@destroy');
     });
 
     Route::group(['prefix' => 'articles', 'middleware' => ['auth', 'community.user']], function () {
@@ -164,6 +167,7 @@ Route::group(['middleware' => ['web']], function () {
     //only admin can create / edit / delete attachments
     Route::group(['prefix' => 'downloads', 'middleware' => ['community.admin']], function () {
         Route::get('{community}/edit/{download}', 'CommunityDownloadsController@edit');
+        Route::get('{community}/{download}/delete', 'CommunityDownloadsController@deletePopup');
         Route::delete('{community}/{download}', 'CommunityDownloadsController@destroy');
         Route::patch('{community}/{download}', 'CommunityDownloadsController@update');
         Route::post('{community}', 'CommunityDownloadsController@store');

@@ -82,6 +82,32 @@ class CommunityArticlesController extends Controller
         return JsonResponse::create(['status' => 'success']);
     }
 
+    /**
+     * Render delete article popup
+     * @param $communitySlug
+     * @param $articleSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deletePopup($communitySlug, $articleSlug)
+    {
+        $community = Community::findBySlug($communitySlug);
+        $article = CommunityArticle::findBySlug($articleSlug);
+        return view('pages.communities.partials.show.articles.confirm-delete-article-popup', compact('article', 'community'));
+    }
+
+    /**
+     * Delete article
+     * @param $communitySlug
+     * @param $articleSlug
+     * @return JsonResponse
+     */
+    public function destroy($communitySlug, $articleSlug)
+    {
+        $article = CommunityArticle::findBySlug($articleSlug);
+        $article->delete();
+        return response()->json(['status' => 'success']);
+    }
+
     private function _handleAttachments($request, $article)
     {
         if($request->file('attachments')) {
