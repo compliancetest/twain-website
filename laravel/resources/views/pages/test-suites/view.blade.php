@@ -5,7 +5,7 @@
     <div class="container main-container">
         <div class="main-content test-suite-view">
             <div class="page-title">
-                <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary btn-print pull-right noprint">Community Home Page</a>
+                <a href="/communities/{{ \App\Community::find($testSuite->community_id)->slug }}" class="btn btn-primary pull-right noprint">Community Home Page</a>
 
                 <h1>{{ $testSuite->full_name }}</h1>
                 @can('changeTestSuite', $testSuite)
