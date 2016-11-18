@@ -35,7 +35,9 @@ get_header();
                                     <div class="td td-nickname">Nickname</div>
                                     <div class="td td-assignee">Assignee</div>
                                     <div class="td td-status tocenter">Status</div>
-                                    <div class="td td-action tocenter">Action</div>
+                                    <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                        <div class="td td-action tocenter">Action</div>
+                                    <?php endif;?>
                                     <div class="clear"></div>
                                 </div>
                                 <div class="tbody">
@@ -50,20 +52,20 @@ get_header();
                                         <?php
                                     } else {
                                         foreach ($subscriptions as $row) {
-
+                                            $testSuite = $wpdb->get_row($wpdb->prepare("SELECT * FROM test_suites WHERE minor_family_mark = %s ORDER by created_at DESC", $row->suite_minor_family_mark));
                                             ?>
                                             <div class="tr">
                                                 <div class="td td-community">
-                                                    <?php echo ctE($row->community_name); ?>
+                                                    <?php echo ctE(getCommunity($testSuite->community_id)->title); ?>
                                                 </div>
                                                 <div class="td td-suite">
-                                                    <?php echo $row->suite_title ?>
+                                                    <?php echo $testSuite->full_name ?>
                                                 </div>
                                                 <div class="td td-nickname">
                                                     <?php echo ctE($row->nickname); ?>
                                                 </div>
                                                 <div class="td td-assignee">
-                                                    <?php echo ctE($row->full_name); ?>
+                                                    <?php echo ctE(cp_get_user_fullname($row->user_id)); ?>
                                                     <?php echo ($row->user_email) ? ('<br/>(' . ctE($row->user_email) . ')') : (''); ?>
                                                 </div>
                                                 <div class="td td-status">
@@ -90,27 +92,27 @@ get_header();
                                                 <span></span></span>
                                         </span>
                                                 </div>
-                                                <div class="td td-action tocenter">
-                                                    <?php if(DISPLAY_SUBSCRIPTIONS):?>
-                                                        <a href="<?php echo get_permalink($row->suite_id) ?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe') ?>&id=<?php echo $row->id ?>&return=<?php echo base64_encode(get_permalink()) ?>"
-                                                           class="action-btn unsubscribe-btn icon-btn left10 has-tooltip"
-                                                           rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span
-                                                                class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
+                                                <?php if(DISPLAY_SUBSCRIPTIONS):?>
+                                                    <div class="td td-action tocenter">
+                                                            <a href="<?php echo get_permalink($row->suite_id) ?>?_organisation_nonce=<?php echo wp_create_nonce('organisation-unsubscribe') ?>&id=<?php echo $row->id ?>&return=<?php echo base64_encode(get_permalink()) ?>"
+                                                               class="action-btn unsubscribe-btn icon-btn left10 has-tooltip"
+                                                               rel="custom-popup" cp-type="ajax" cp-removeBoxAfterClose=1><span
+                                                                    class="p"></span><span class="simple_tooltip">Cancel Subscription<span></span></span></a>
 
-                                                        <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark; ?>&plan_id=<?php echo $row->pricing_plan_id; ?><?php if ($row->voucher): ?>&voucher=<?php echo $row->voucher; ?><?php endif; ?>"
-                                                           class="action-btn harness-detail-btn harness-detail-link has-tooltip left10"
-                                                           data-id="26" rel="custom-popup" cp-type="ajax"
-                                                           cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
-                                                            <span class="p"></span>
-                                                            <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
-                                                        </a>
-                                                        <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription') ?>&id=<?php echo $row->id ?>"
-                                                           class="action-btn edit-btn icon-btn left10 edit-link has-tooltip edit_sub_<?php echo $row->id ?>"
-                                                           cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup"
-                                                           cp-removeBoxAfterClose=1><span class="p"></span><span
-                                                                class="simple_tooltip">Edit Subscription<span></span></span></a>
-                                                    <?php endif;?>
-                                                </div>
+                                                            <a href="<?php echo the_permalink() ?>?_organisation_nonce=<?php echo wp_create_nonce('get_price_plan') ?>&suite_id=<?php echo $row->suite_family_mark; ?>&plan_id=<?php echo $row->pricing_plan_id; ?><?php if ($row->voucher): ?>&voucher=<?php echo $row->voucher; ?><?php endif; ?>"
+                                                               class="action-btn harness-detail-btn harness-detail-link has-tooltip left10"
+                                                               data-id="26" rel="custom-popup" cp-type="ajax"
+                                                               cp-removeboxafterclose="1" cp-closewhenclickoveraly="0">
+                                                                <span class="p"></span>
+                                                                <span class="simple_tooltip" style="top: -27px;">Pricing Plan Details<span></span></span>
+                                                            </a>
+                                                            <a href="#_organisation_nonce=<?php echo wp_create_nonce('edit-subscription') ?>&id=<?php echo $row->id ?>"
+                                                               class="action-btn edit-btn icon-btn left10 edit-link has-tooltip edit_sub_<?php echo $row->id ?>"
+                                                               cp-type="ajax" cp-closeWhenClickOveraly=0 rel="custom-popup"
+                                                               cp-removeBoxAfterClose=1><span class="p"></span><span
+                                                                    class="simple_tooltip">Edit Subscription<span></span></span></a>
+                                                    </div>
+                                                <?php endif;?>
                                                 <div class="clear"></div>
                                             </div>
                                             <?php
