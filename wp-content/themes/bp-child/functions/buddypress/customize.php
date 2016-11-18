@@ -596,7 +596,7 @@ function getDashboardPages($type = 'page')
 
             if (count($subscriptions) > 0) {
                 foreach ($subscriptions as $row) {
-                    $item['subpages'][] = array('title' => $row->suite_title, 'url' => get_permalink($row->suite_id));
+                    $item['subpages'][] = array('title' => $row->full_name, 'url' => '/test-suite/' . $row->slug);
                 }
             }
 
