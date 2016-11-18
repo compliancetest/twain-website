@@ -40,7 +40,7 @@ class TestSuitePolicy
         if ($community->isAdmin()) {
             return true;
         }
-        if (($community->isModerator() || $community->getMember($user)) && in_array($testSuite->status, ['Active', 'Partial'])) {
+        if (($community->isModerator() || $community->getMember($user->ID)) && in_array($testSuite->status, ['Active', 'Partial'])) {
             return true;
         }
         return false;
