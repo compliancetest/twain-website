@@ -69,6 +69,8 @@ class TestSuiteSearch extends Model
                         } else {
                             $q->orWhere(['community_id' => $community->id]);
                         }
+                    } else {
+                        $q->orWhere(['status' => null]);
                     }
 
                 }
