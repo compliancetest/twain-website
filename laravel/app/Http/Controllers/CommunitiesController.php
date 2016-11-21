@@ -230,14 +230,18 @@ class CommunitiesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * Remove community
+     * @param $communitySlug
+     * @return mixed
      */
     public function destroy($communitySlug)
     {
-        Community::findBySlug($communitySlug)->delete();
+        $community = Community::findBySlug($communitySlug);
+        if(count($community->testSuites)){
+            addMessage("The community can't be deleted because " . count($community->testSuites) . " test suites still reference it.. ", 'error');
+            return redirect()->to(getSiteUrl() . '/communities/' . $communitySlug);
+        }
+        $community->delete();
         addMessage('You successfully deleted the community. ');
         return redirect()->to(getSiteUrl() . '/communities');
     }
