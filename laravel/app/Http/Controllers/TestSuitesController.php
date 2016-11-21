@@ -306,7 +306,7 @@ class TestSuitesController extends Controller
         if (count($testSuite->testPlans)) {
             $messages[] = "The test suite can't be deleted because " . count($testSuite->testPlans) . " test plans still reference it.";
         }
-        if (count($testSuite->subscribers)) {
+        if (count($testSuite->subscribers()->where('user_id', '!=', 0)->get())) {
             $messages[] = "The test suite can't be deleted because " . count($testSuite->subscribers) . " subscriptions still reference it.";
         }
 

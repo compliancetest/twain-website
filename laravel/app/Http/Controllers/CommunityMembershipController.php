@@ -43,7 +43,7 @@ class CommunityMembershipController extends Controller
             '[username]' => $user->user_login
         );
 
-        OrganisationSubscription::where('user_id', $userId)->update(['user_id' => 0]);
+        OrganisationSubscription::where('user_id', $userId)->whereIn('suite_minor_family_mark', $community->testSuites()->pluck('minor_family_mark'))->update(['user_id' => 0]);
 
         sendEmails($admins, 'member_leave_community_admin', $emailData);
         $community->getMember($userId)->delete();

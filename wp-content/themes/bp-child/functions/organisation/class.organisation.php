@@ -254,7 +254,7 @@ class CT_Organisation
             return $this->subscriptions;
         
         $query = $wpdb->prepare("SELECT *, u.user_email FROM wp_organisations_subscriptions as s 
-                            JOIN wp_users AS u on u.ID = s.user_id
+                            LEFT JOIN wp_users AS u on u.ID = s.user_id
                             WHERE organisation_id=%d
                             ORDER BY nickname", $this->id);
     
