@@ -54,7 +54,7 @@
                             <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
                         </td>
                         <td class="text-center">
-                            <a href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
+                            <a class="text-nowrap" href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
                             <br/>
                             <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->full_name }}</a>
                         </td>
@@ -83,7 +83,7 @@
                                 <br/>
                             @endif
                             @if(!empty($transaction->s3_link))
-                                <a href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
+                                <a class="text-nowrap" href="{{ $transaction->s3_link }}" target="_blank">{{ $transaction->execution_id }}</a>
                             @else
                                 {{ $transaction->execution_id }}
                             @endif
@@ -93,7 +93,7 @@
                             <br>
                             {{ formatDate($transaction->created_at, 'H:i:s') }}
                         </td>
-                        <td class="text-center">
+                        <td class="text-center text-nowrap">
                             @if($explainRequestsEnabled)
                                 <?php $imageClass = count($eloquentTransaction->explanationLogs) > 0 ? 'btn-success' : 'btn-default';?>
                                 <span class="tooltip-wrapper" data-toggle="tooltip" data-trigger="hover" data-container="body" title="Request Status Explanation">
