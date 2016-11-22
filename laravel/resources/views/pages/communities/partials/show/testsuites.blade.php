@@ -41,7 +41,7 @@
                                 <img src="<?php echo CHILD_TEMPLATE_DIRECTORY ?>/images/loading-small.gif" alt="" style="display: none;"/>
                             </td>
                             @if($isAdmin)
-                                <td class="text-center td-actions">
+                                <td class="text-center td-actions text-nowrap">
                                     <a href="{{ getSiteUrl() }}/test-suite/{{ $testSuite->slug }}/edit"
                                        class="btn btn-icon btn-primary btn-edit" data-tooltip="tooltip"
                                        title="Edit Suite"></a>
