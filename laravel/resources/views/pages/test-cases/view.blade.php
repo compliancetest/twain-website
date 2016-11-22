@@ -27,7 +27,7 @@
                 {{ $testCase->description }}
             </div>
 
-            <div class="options-box">
+            <div class="options-box test-case-options-box">
                 <div class="options-box-row">
                     <div class="options-box-row-title">Info:</div>
                     <ul class="inline-options-list">
@@ -126,9 +126,9 @@
                         <tbody>
                             @foreach($testCase->steps as $testStep)
                                 <tr class="step-row" id="step_anchor_{{ $testStep->step }}">
-                                    <td class="col-sm-2 text-center">{{ $testStep->step }}</td>
-                                    <td class="col-sm-5">{{ $testStep->action }}</td>
-                                    <td class="col-sm-5">{{ $testStep->expected_result }}</td>
+                                    <td class="text-center">{{ $testStep->step }}</td>
+                                    <td>{{ $testStep->action }}</td>
+                                    <td>{{ $testStep->expected_result }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

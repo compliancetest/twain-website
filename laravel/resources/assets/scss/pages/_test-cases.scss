@@ -35,15 +35,20 @@
   //  }
   //}
 
-  .steps-table > tbody > tr td{
-    background: #fff;
-    font-size: 12px;
-    text-shadow: none;
-    color: #666;
-    font-weight: 400;
+  .steps-table > tbody > tr{
 
-    &:first-child{
-      vertical-align: middle;
+    td{
+      background: #fff;
+      font-size: 12px;
+      text-shadow: none;
+      color: #666;
+      font-weight: 400;
+      width: 47%;
+
+      &:first-child{
+        vertical-align: middle;
+        width: 6%;
+      }
     }
   }
 
@@ -87,4 +92,22 @@
     }
   }
 
+}
+
+.test-case-options-box{
+  .options-box-row .inline-options-list{
+    overflow: hidden;
+    
+    li{
+      width: 33%;
+      vertical-align: top;
+      line-height: 32px;
+      padding-right: 0;
+      margin-right: -4px;
+
+      @media (max-width: $screen-sm) {
+        width: 100%;
+      }
+    }
+  } 
 }
