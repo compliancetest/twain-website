@@ -163,14 +163,14 @@
         $('.btn-print').click(function(){
             var pWin = window.open(jQuery(this).attr('href') + '?printMode=true', 'printpage', 'location=no,menubar=0,resizable=1,scrollbars=1,width=900,height=500');
             return false;
-        })
+        });
 
         if('{{ $request->get('printMode') }}'){
             $('.noprint').hide();
             window.print();
         }
 
-        $('.simple-tabs a').click(function (e) {
+        $('.simple-tabs-nav a').click(function (e) {
             e.preventDefault();
             $(this).tab('show')
         });
