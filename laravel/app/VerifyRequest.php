@@ -130,6 +130,16 @@ class VerifyRequest extends Model
     }
 
     /**
+     * Check that transaction ID is used in any verify request
+     * @param $transactionId
+     * @return mixed
+     */
+    public static function doesTrunsactionUsedInVerifyRequests($transactionId)
+    {
+        return self::where('transactions', 'LIKE', '%'.$transactionId.'%')->get();
+    }
+
+    /**
      * Send email notification about VerifyRequest action (add / assign / resolve)
      */
     public function sendVerifyRequestNotification($emailtemplateName)

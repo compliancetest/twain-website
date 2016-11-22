@@ -34,12 +34,16 @@
                         $organisation = \App\Organisation::find($subscription->organisation_id);
                     }
                     $transactionUsedInClaims = !$eloquentTransaction->usedInClaims->isEmpty();
+                    $transactionUsedInVerifyRequests = count(\App\VerifyRequest::doesTrunsactionUsedInVerifyRequests($eloquentTransaction->id));
                     ?>
                     <tr>
                         <td class="text-center">
                             @if($transactionUsedInClaims)
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
                                       title="This test result is used in claim record and can't be deleted"></span>
+                            @elseif($transactionUsedInVerifyRequests)
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+                                      title="This test result is used in {{ $transactionUsedInVerifyRequests }} Verify Request(s) and can't be deleted"></span>
                             @else
                                 <input type="checkbox" name="id[]" id="id_{{ $transaction->id }}" value="{{ $transaction->id }}" class="checkTransaction"
                                        @if($transaction->audit_record || $transactionUsedInClaims) disabled="disabled" @endif>
