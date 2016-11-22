@@ -52,7 +52,7 @@
                         <td class="text-center">
                             <a href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
                             <br/>
-                            <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->name }}</a>
+                            <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->full_name }}</a>
                         </td>
                         <td>
                             <a data-toggle="collapse" class="loadLog collapsed" href="#product-{{ $transaction->id }}"><span class="collapse-icon"></span></a>
