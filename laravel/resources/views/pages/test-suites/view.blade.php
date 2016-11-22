@@ -67,13 +67,15 @@
                     </div>
                     @endif
                     @if(count($testSuite->getProfileTypes()) > 0)
-                    <div role="tabpanel" class="tab-pane" id="ts-profile-types">
-                       <ul>
-                           @foreach($testSuite->getProfileTypes() as $profileType)
-                               <li><a href="#">{{ $profileType }}</a></li>
-                           @endforeach
-                       </ul>
-                    </div>
+                        <div role="tabpanel" class="tab-pane" id="ts-profile-types">
+                           <ul>
+                               @foreach($testSuite->getProfileTypes() as $profileTypeId => $profileType)
+                                    <li><a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $profileType['id'] }}" data-toggle="modal" data-remote="true"
+                                       data-ajax-modal data-target="#modalViewProfile">{{ $profileType['title'] }}</a></li>
+                               @endforeach
+                           </ul>
+                        </div>
+                        @include('pages.communities.popups.view-profile-modal')
                     @endif
                     @if(count($testSuite->specificationDocuments) > 0)
                     <div role="tabpanel" class="tab-pane" id="ts-specification-documents">

@@ -75,7 +75,7 @@ class LaravelTestSuite extends Model
         $profiletypes = [];
         foreach ($this->profileTypes as $profileType) {
             $profileType = ProfileType::find($profileType->profile_type_id);
-            $profiletypes[str_replace('.', '', $profileType->getVersion())] = $profileType->getTitle();
+            $profiletypes[str_replace('.', '', $profileType->getVersion())] = ['title' => $profileType->getTitle(), 'id' => $profileType->id ];
         }
         ksort($profiletypes);
         return $profiletypes;
