@@ -732,7 +732,7 @@ var Page = {
                 url: form.attr('action'),
                 type: 'post',
                 data: formData,
-                async: false,
+                async: true,
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -746,6 +746,7 @@ var Page = {
                     } else {
                         messageBox.append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     }
+                    $('.error-message:first').parents('.colored-box').goTo();
                 },
 
                 success: function(rsp, status, jqXHR){
@@ -770,11 +771,10 @@ var Page = {
                     }
                 },
                 complete: function(){
-                    form.find('.form-loading').hide();
                     setTimeout(function() {
                         messageBox.find('.message:not(.error-message)').fadeOut("slow", function() { $(this).remove(); });
                     }, 3000);
-
+                    form.find('.form-loading').hide();
                 }
             })
 
@@ -1504,3 +1504,12 @@ function handleChangeTestSuiteResponse(jqXHR, form) {
     });
     return error;
 }
+
+(function($) {
+    $.fn.goTo = function(margin) {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top + 'px'
+        }, 'fast');
+        return this;
+    }
+})(jQuery);
