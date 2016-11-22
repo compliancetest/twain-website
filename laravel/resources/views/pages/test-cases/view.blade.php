@@ -65,7 +65,10 @@
                 <div class="options-box-row">
                     <div class="options-box-row-title">Scenario:</div>
                     <ul class="inline-options-list">
-                        @foreach($testCase->scenarios as $scenario)
+                        <?php $scenarious = $request->get('suite_minor_family_mark') ? $testCase->scenarios->filter(function ($item) use ($request) {
+                            return $item->testSuiteScenario->test_suite_id == $request->get('suite_minor_family_mark');
+                        }) : $testCase->scenarios;?>
+                        @foreach($scenarious as $scenario)
                             <li><strong>{{ $scenario->testSuiteScenario->code }}</strong> ({{ $scenario->testSuiteScenario->description }})</li>
                         @endforeach
                     </ul>

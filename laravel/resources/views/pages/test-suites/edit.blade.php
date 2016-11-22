@@ -495,11 +495,8 @@
                             <div class="form-group featureRow">
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <textarea rows="3" class="form-control" name="protocol_versions">
-                                            @if($testSuite)
-                                                {{ implode(',', $testSuite->protocolVersions()->pluck('version')->toArray()) }}
-                                            @endif
-                                        </textarea>
+                                        <textarea rows="3" class="form-control"
+                                                  name="protocol_versions">@if($testSuite){{ implode(',', $testSuite->protocolVersions()->pluck('version')->toArray()) }}@endif</textarea>
                                     </div>
                                     <div class="col-md-4">
                                         <p class="field-light-description">List of supported protocol versions could be just a list of strings(separated by comma) with the following format: ProtocolMajor.ProtocolMinor For example: 2.3,2.3 Empty list of supported protocol versions is allowed and means that a test suite supports any version.</p>

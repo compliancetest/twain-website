@@ -310,8 +310,8 @@ class LaravelTestSuite extends Model
                             $entry = $this->scenarios()->find($request->get('scenarios')['id'][$key]);
                             if ($entry) {
                                 $entry->code = $name;
-                                $entry->description = @$request->get('roles')['description'][$key];
-                                $entry->sequence = @$request->get('roles')['sequence'][$key];
+                                $entry->description = @$request->get('scenarios')['description'][$key];
+                                $entry->sequence = @$request->get('scenarios')['sequence'][$key];
                                 $entry->save();
                             }
                         } else {

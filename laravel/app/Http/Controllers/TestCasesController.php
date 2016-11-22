@@ -39,7 +39,7 @@ class TestCasesController extends Controller
             }
         }
         $pageTitle = 'View Test Case | ' . $testCase->full_name;
-        return view('pages.test-cases.view', compact('testCase', 'pageTitle', 'testSuites'));
+        return view('pages.test-cases.view', compact('testCase', 'pageTitle', 'testSuites', 'request'));
     }
 
     public function edit($testCaseSlug)

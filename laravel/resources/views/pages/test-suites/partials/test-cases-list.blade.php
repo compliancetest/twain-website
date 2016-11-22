@@ -33,7 +33,7 @@
 
                     <td class="text-nowrap"><span class="status status-circle status-{{ strtolower($testCase->status) }}" data-tooltip="tooltip"
                               title="{{ $testCase->status }}">{{ substr($testCase->status, 0, 1) }}</span><a
-                                href="/test-case/{{ $testCase->slug }}">{{ $testCase->full_name }}</a></td>
+                                href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}">{{ $testCase->full_name }}</a></td>
                     <td class="text-center">{{ $testCase->tester_role}}</td>
                     <td class="text-center">
                         {{ implode(', ', array_unique($testCase->getConformanceLevels($isAdmin)->pluck('code')->toArray())) }}
