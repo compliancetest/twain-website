@@ -198,7 +198,7 @@ class Transaction extends Model
         }
         if ($filters['scenario_id']) {
             $this->whereModel
-                ->where('tss.code', '=', filter_var($filters['scenario_id'], FILTER_SANITIZE_STRING));
+                ->where('tss.id', '=', filter_var($filters['scenario_id'], FILTER_SANITIZE_STRING));
         }
         return $this->whereModel;
     }
