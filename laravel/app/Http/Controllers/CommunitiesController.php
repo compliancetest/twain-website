@@ -226,7 +226,7 @@ class CommunitiesController extends Controller
             }
         }
 
-        return Redirect::to(getSiteUrl() . '/communities/' . $community->slug . '/admin');
+        return Redirect::to(getSiteUrl() . '/communities/' . $community->slug . '/settings');
     }
 
     /**
@@ -435,7 +435,7 @@ class CommunitiesController extends Controller
 
             if ($validator->fails()) {
                 addMessage(implode(', ', $validator->messages()->get('image')), 'error');
-                return Redirect::to(getSiteUrl() . '/communities/' . $model->slug . '/admin');
+                return Redirect::to(getSiteUrl() . '/communities/' . $model->slug . '/settings');
             }
             $model->image = 'communities/avatars/' . $model->id . '/avatar.' . $request->file('image')->getClientOriginalExtension();
             Storage::put($model->image, file_get_contents($request->file('image')));
