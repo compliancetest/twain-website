@@ -23,8 +23,8 @@
                 @foreach($levels as $level)
                     <div class="radio">
                         <label>
-                            <input type="radio" name="level" class="level" value="{{ $level }}">
-                            {{ $level }}
+                            <input type="radio" name="level" class="level" value="{{ $level->code }}">
+                            {{ $level->code }}
                         </label>
                     </div>
                 @endforeach

@@ -44,17 +44,13 @@ class TestPlansController extends Controller
      */
     public function create($suiteMinorFamilyMark)
     {
-        $subscription = OrganisationSubscription::where(['suite_minor_family_mark' => $suiteMinorFamilyMark, 'user_id' => Auth::user()->ID])->first();
-        $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
-        $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
-
         $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($suiteMinorFamilyMark);
         $suiteType = $testSuite->product_type;
-        $suiteProtocolVersions = $testSuite->protocolVersions->toArray();
+        $suiteProtocolVersions = $testSuite->protocolVersions()->pluck('version')->toArray();
         $data = [
             'products' => Auth::user()->getProducts($suiteType, $suiteProtocolVersions),
-            'levels' => explode(',', $attributes->value),
-            'roles' => explode(',', $attributes->name),
+            'levels' => $testSuite->conformanceLevels,
+            'roles' => [$testSuite->product_type],
             'suiteId' => $suiteMinorFamilyMark,
         ];
         return view('pages.my.coverage.create')->with($data)->render();
@@ -106,18 +102,15 @@ class TestPlansController extends Controller
     public function edit($testPlanId)
     {
         $testPlan = TestPlan::find($testPlanId);
-        $subscription = OrganisationSubscription::where(['suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first();
-        $pricingPlan = PricingPlan::where(['id' => $subscription->pricing_plan_id])->with('attributes')->first();
-        $attributes = $pricingPlan->attributes->keyBy('type')->get('role');
 
         $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testPlan->suite_minor_family_mark);
         $suiteType = $testSuite->product_type;
-        $suiteProtocolVersions = $testSuite->protocolVersions->toArray();
+        $suiteProtocolVersions = $testSuite->protocolVersions()->pluck('version')->toArray();
 
         $data = [
             'products' => Auth::user()->getProducts($suiteType, $suiteProtocolVersions),
-            'levels' => explode(',', $attributes->value),
-            'roles' => explode(',', $attributes->name),
+            'levels' => $testSuite->conformanceLevels,
+            'roles' => [$testSuite->product_type],
             'testPlan' => $testPlan,
         ];
 

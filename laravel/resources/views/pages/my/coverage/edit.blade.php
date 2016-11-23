@@ -21,8 +21,8 @@
                 @foreach($levels as $level)
                     <div class="radio">
                         <label>
-                            <input type="radio" name="level" class="level" value="{{ $level }}" @if($level == $testPlan->level) checked="checked" @endif>
-                            {{ $level }}
+                            <input type="radio" name="level" class="level" value="{{ $level->code }}" @if($level->code == $testPlan->level) checked="checked" @endif>
+                            {{ $level->code }}
                         </label>
                     </div>
                 @endforeach

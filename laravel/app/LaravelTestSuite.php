@@ -52,7 +52,7 @@ class LaravelTestSuite extends Model
 
     public function conformanceLevels()
     {
-        return $this->hasMany('\App\TestSuiteConformanceLevels', 'test_suite_id')->where('code', '!=', 'Default');
+        return $this->hasMany('\App\TestSuiteConformanceLevels', 'test_suite_id')->where('code', '!=', 'Default')->orderBy('code');
     }
 
     public function features()
