@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ForumThread extends Model
 {
 
-    use UuidTrait, SlugTrait;
+    use UuidTrait, ForumSlugTrait;
 
     public $incrementing = false;
 
