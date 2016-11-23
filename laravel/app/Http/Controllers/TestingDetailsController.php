@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LaravelTestCase;
 use App\Post;
 use App\TestingDetail;
 use App\Transaction;
@@ -96,8 +97,8 @@ class TestingDetailsController extends Controller
 
     /**
      * Show Fail / Skip reason popup
-     * @param $id
-     * @return $this
+     * @param $transactionId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function transactionReason($transactionId)
     {
@@ -115,7 +116,7 @@ class TestingDetailsController extends Controller
     {
         $logs = Transaction::find($transactionId)->logs;
         $transaction = Transaction::find($transactionId);
-        $testCase = Post::where(['ID' => $transaction->test_case_id])->first();
+        $testCase = LaravelTestCase::find($transaction->test_case_id);
         return view('pages.testingdetails.logs', compact('logs', 'testCase'));
     }
 

@@ -20,6 +20,7 @@
                     <li>Published: <strong>{{$testSuite->published_at}}</strong></li>
                     <li class="noprint">Issuer: <a href="/test-suites/?issuer={{ $testSuite->issuer }}">{{ $testSuite->issuer }}</a></li>
                     <li>Status: <span class="status status-{{ strtolower($testSuite->status) }}">{{ $testSuite->status }}</span></li>
+                    <li>Product Type: <strong>{{ $testSuite->product_type }}</strong></li>
                     <li>Revision: <strong>{{ $testSuite->revision_description }}</strong></li>
                     @if(!$testSuite->protocolVersions->isEmpty())
                         <li>Protocol Versions: <strong>{{ implode(', ', $testSuite->protocolVersions()->pluck('version')->toArray() ) }}</strong></li>

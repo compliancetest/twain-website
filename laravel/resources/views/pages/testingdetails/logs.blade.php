@@ -22,7 +22,7 @@
                 <td>{{ $message->from }}<br/>{{ $message->to }}</td>
                 <td>
                     @if(!empty($message->test_step))
-                        <a href="/test-case/{{ $testCase->post_name }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
+                        <a href="/test-case/{{ $testCase->slug }}#step_anchor_{{ $message->test_step }}" target="_blank">{{ $message->test_step }}</a>
                     @endif
                 </td>
                 <td>
