@@ -112,6 +112,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('test-case/{testCaseId}/test-suites-data', 'TestCasesController@testSuitesData');
         Route::get('test-case/{testCaseId}', 'TestCasesController@view');
         Route::post('test-case/{testCaseId}', 'TestCasesController@update');
+
+        Route::get('members/{memberSlug}', 'MembersController@show');
+
     });
 
 
