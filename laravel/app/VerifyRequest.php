@@ -148,19 +148,19 @@ class VerifyRequest extends Model
      */
     public function sendVerifyRequestNotification($emailtemplateName)
     {
-        $testSuite = Post::find($this->test_suite_id);
-        $community = Community::find($testSuite->getMetaByKey('community_id'));
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($this->suite_minor_family_mark);
+        $community = Community::find($testSuite->community_id);
         $testPlan = TestPlan::find($this->test_plan_id);
-        $product = Post::find($this->product_id);
+        $product = Product::find($this->product_id);
         $data = [
             '[requestor_name]' => cp_get_user_fullname($this->requestor_id),
             '[assignee_name]' => cp_get_user_fullname($this->assignee_id),
             '[verify_request_id]' => $this->id,
             '[website_url]' => getSiteUrl(),
             '[community]' => $community->title,
-            '[test_suite]' => $testSuite->post_title,
+            '[test_suite]' => $testSuite->full_name,
             '[level]' => $testPlan->level,
-            '[product]' => $product->post_title,
+            '[product]' => $product->full_name,
         ];
         $community->sendEmailsToSupportUsers( $emailtemplateName . '_to_support', $data);
         $community->sendEmailsToAdminUsers( $emailtemplateName . '_to_support', $data);

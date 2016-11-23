@@ -59,26 +59,26 @@
                                     <td class="text-center">
 
                                         @if($isAdmin && $verifyRequest['verifyRequest']->canBeResolved(Auth::user()))
-                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/resolve/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->minor_family_mark }}/resolve/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
                                                data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                                class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" data-container="body" title="Resolve"></a>
                                         @endif
 
                                         @if($isAdmin && $verifyRequest['verifyRequest']->status != 'Resolved')
-                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/assign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->minor_family_mark }}/assign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
                                                data-remote="true" data-ajax-modal data-target="#assignVerifyRequestModal"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" data-container="body" title="Assign Verify Request"></a>
                                         @endif
 
                                         @if($isAdmin && ( $verifyRequest['verifyRequest']->status == 'New' ||
                                             ($verifyRequest['verifyRequest']->is_accepted == false && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID)))
-                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/accept/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->minor_family_mark }}/accept/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
                                                data-remote="true" data-ajax-modal data-target="#acceptVerifyRequestModal"
                                                class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip" data-container="body" title="Accept Verify Request"></a>
                                         @endif
 
                                         @if($isAdmin && $verifyRequest['verifyRequest']->assignee_id == Auth::user()->ID && $verifyRequest['verifyRequest']->status != 'Resolved')
-                                            <a href="/verify-requests/{{ $userSuite['testSuite']->ID }}/unassign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
+                                            <a href="/verify-requests/{{ $userSuite['testSuite']->minor_family_mark }}/unassign/{{ $verifyRequest['verifyRequest']->id }}" data-toggle="modal"
                                                data-remote="true" data-ajax-modal data-target="#unassignVerifyRequestModal"
                                                class="btn btn-warning btn-icon btn-delete" data-tooltip="tooltip" data-container="body" title="Unassign Verify Request"></a>
                                         @endif

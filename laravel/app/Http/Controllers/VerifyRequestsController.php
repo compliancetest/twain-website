@@ -81,8 +81,8 @@ class VerifyRequestsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'suite_id' => 'required|exists:wp_posts,ID',
-            'product_id' => 'required|exists:wp_posts,ID',
+            'suite_minor_family_mark' => 'required|exists:test_suites,minor_family_mark',
+            'product_id' => 'required|exists:products,id',
             'test_plan_id' => 'required|exists:test_plans,id',
             'transactions' => 'required|array',
         ]);
@@ -91,13 +91,15 @@ class VerifyRequestsController extends Controller
             return response()->json($validator->messages(), 422);
         }
 
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($request->get('suite_minor_family_mark'));
+
         $testPlan = TestPlan::find($request->get('test_plan_id'));
         $verifyRequest = VerifyRequest::create([
             'test_plan_id' => $testPlan->id,
-            'community_id' => Post::find($request->get('suite_id'))->getMetaByKey('community_id'),
+            'community_id' => $testSuite->community_id,
             'requestor_id' => Auth::user()->ID,
             'product_id' => $request->get('product_id'),
-            'test_suite_id' => $request->get('suite_id'),
+            'suite_minor_family_mark' => $request->get('suite_minor_family_mark'),
             'transactions' => json_encode($request->get('transactions')),
             'organisation_id' => Auth::user()->organisation[0]['id'],
         ]);
@@ -131,8 +133,8 @@ class VerifyRequestsController extends Controller
      */
     public function assignPopup($testSuiteId, $verifyRequestId)
     {
-        $communityId = Post::find($testSuiteId)->getMetaByKey('community_id');
-        $moderators = Community::find($communityId)->getAdminsAndModerators();
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuiteId);
+        $moderators = Community::find($testSuite->community_id)->getAdminsAndModerators();
         $verifyRequest = VerifyRequest::find($verifyRequestId);
 
         return view('pages.my.verify_requests.assign_popup', compact('moderators', 'testSuiteId', 'verifyRequest'));
@@ -276,8 +278,9 @@ class VerifyRequestsController extends Controller
      */
     public function resolvePopup($testSuiteId, $verifyRequestId)
     {
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuiteId);
         $verifyRequest = VerifyRequest::find($verifyRequestId);
-        $communityId = Post::find($testSuiteId)->getMetaByKey('community_id');
+        $communityId = $testSuite->community_id;
         $transactions = Transaction::find(json_decode($verifyRequest->transactions, true));
         return view('pages.my.verify_requests.resolve_popup', compact('transactions', 'testSuiteId', 'verifyRequest', 'communityId'));
     }
