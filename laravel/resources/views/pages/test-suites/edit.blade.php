@@ -162,19 +162,19 @@
                                         <div class="manage-version-box row">
                                             <div class="manage-version-group">
                                                 <span>Major</span>
-                                                <input type="text" id="tsVersionMajor" name="version_major" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_major) }}" />
+                                                <input type="text" id="tsVersionMajor" name="version_major" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_major) }}" data-prev-value="{{ intval($testSuite->version_major) }}"  />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMajor"
                                                 @if($testSuite && $testSuite->isNextVersionExist('version_major')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Minor</span>
-                                                <input type="text" id="tsVersionMinor" name="version_minor" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_minor) }}" />
+                                                <input type="text" id="tsVersionMinor" name="version_minor" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_minor) }}" data-prev-value="{{ intval($testSuite->version_minor) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionMinor"
                                                 @if($testSuite && $testSuite->isNextVersionExist('version_minor')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
                                             <div class="manage-version-group">
                                                 <span>Patch</span>
-                                                <input type="text" id="tsVersionPatch" name="version_patch" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_patch) }}" />
+                                                <input type="text" id="tsVersionPatch" name="version_patch" class="form-control" readonly="readonly" value="{{ intval($testSuite->version_patch) }}" data-prev-value="{{ intval($testSuite->version_patch) }}" />
                                                 <button type="button" class="btn btn-primary btn-icon btn-add" data-version-id="tsVersionPatch"
                                                 @if($testSuite && $testSuite->isNextVersionExist('version_patch')) disabled="disabled" data-tooltip="tooltip" title="Later version already exists." @endif></button>
                                             </div>
@@ -547,15 +547,22 @@
             if (!isNaN(currentVal)) {
                 inputToUpdate.val(currentVal + 1);
             }
+
+            if (versionIdentifier == 'tsVersionMajor'){
+                $('#tsVersionMinor').val(0);
+                $('#tsVersionPatch').val(0);
+            }
+            if (versionIdentifier == 'tsVersionMinor'){
+                $('#tsVersionPatch').val(0);
+            }
             inputToUpdate.after('<button type="button" class="version-cancel" data-tooltip="tooltip" data-trigger="hover" title="Undo"><span class="cancel-icon"></span></button>');
         });
 
         $('body').on('click', '.manage-version-group .version-cancel', function (e) {
             $('.manage-version-box').removeClass('version-updated');
-            var currentVal = parseInt($(this).prev('.form-control').val());
-            if (!isNaN(currentVal) && currentVal !== 0) {
-                $(this).prev('input').val(currentVal - 1);
-            }
+            $('.manage-version-box .form-control').each(function(){
+               $(this).val(parseInt($(this).data('prev-value')));
+            });
             $('[data-tooltip]').tooltip('hide');
             $(this).remove();
         });
