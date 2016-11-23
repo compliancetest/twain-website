@@ -15943,6 +15943,24 @@ input.notify-changes {
   }
 }
 
+/* line 2, ../scss/pages/_profile.scss */
+.user-info-page .avatar {
+  float: left;
+  width: 150px;
+  height: 150px;
+}
+/* line 8, ../scss/pages/_profile.scss */
+.user-info-page .user-info-data {
+  overflow: hidden;
+  margin: 0 0 0 170px;
+  font-weight: 600;
+}
+/* line 13, ../scss/pages/_profile.scss */
+.user-info-page .user-info-data h1 {
+  float: none;
+  margin: 0 0 15px 0;
+}
+
 /* line 3, ../scss/_header.scss */
 #header .header-inner {
   *zoom: 1;
