@@ -15028,6 +15028,11 @@ input.notify-changes {
   width: auto;
 }
 
+/* line 806, ../scss/pages/_community.scss */
+#surveyMonkeyInfo {
+  overflow-y: auto;
+}
+
 /* line 1, ../scss/pages/_contact-us.scss */
 .contact-us {
   font-size: 14px;
