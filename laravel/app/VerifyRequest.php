@@ -13,7 +13,7 @@ class VerifyRequest extends Model
 
     protected $fillable = [
         'test_plan_id', 'requestor_id', 'transactions', 'assignee_id',
-        'product_id', 'test_suite_id', 'community_id', 'organisation_id'
+        'product_id', 'suite_minor_family_mark', 'community_id', 'organisation_id'
     ];
 
     /**

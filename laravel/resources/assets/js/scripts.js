@@ -904,7 +904,7 @@ var Page = {
                     url: form.attr('action'),
                     type: 'post',
                     data: {
-                        'suite_id' : $('#suiteId').val(),
+                        'suite_minor_family_mark' : $('#suiteId').val(),
                         'product_id': $('#availableProducts').val(),
                         'test_plan_id': $('#testPlanId').val(),
                         'transactions': $('.transaction:checked').map(function(){

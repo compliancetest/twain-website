@@ -85,14 +85,14 @@ class Transaction extends Model
     public static function getTransactionsForVerifyRequest($productId, $testSuiteId)
     {
         $processedTransactions = $processedTransactions1 = [];
-        $transactions = DB::table('transactions')
-        ->join('wp_test_cases', 'transactions.test_case_id', '=', 'wp_test_cases.case_id')
+        $transactions = DB::table('transactions')->select('transactions.*', 'test_cases.*', 'transactions.id as id')
+        ->join('test_cases', 'transactions.test_case_id', '=', 'test_cases.id')
         ->where([
             'product_id' => $productId,
             'suite_minor_family_mark' => $testSuiteId,
             'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING')
         ])
-        ->orderBy('wp_test_cases.case_name')
+        ->orderBy('test_cases.full_name')
         ->get();
         foreach($transactions as $transaction){
             $processedTransactions[$transaction->test_case_id][] = $transaction;

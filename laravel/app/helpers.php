@@ -105,7 +105,7 @@ function isImageViewerEnabled()
 function checkTransactionsCanBeAddedToRequest($testSuiteId, $testCaseId, $productId)
 {
     $transactions = [];
-    $verifyRequests = \App\VerifyRequest::where(['test_suite_id' => $testSuiteId, 'product_id' => $productId])->get();
+    $verifyRequests = \App\VerifyRequest::where(['suite_minor_family_mark' => $testSuiteId, 'product_id' => $productId])->get();
     foreach ($verifyRequests as $verifyRequest) {
         $transactions = array_merge($transactions, json_decode($verifyRequest->transactions, true));
     }

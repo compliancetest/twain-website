@@ -517,7 +517,7 @@ class LaravelTestSuite extends Model
                 'test_outcome_status_id' => TestOutcomeStatus::getIdByCode('PENDING'),
                 'suite_minor_family_mark' => $this->minor_family_mark,
             ])->groupBy('product_id')->get();
-            if ($productsWithPendingTransactions) {
+            if (count($productsWithPendingTransactions)) {
                 foreach ($productsWithPendingTransactions as $productWithPendingTransactions) {
                     $product = Product::find($productWithPendingTransactions->product_id);
                     $response[$product->full_name] = $product;

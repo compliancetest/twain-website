@@ -29,7 +29,6 @@
                                     </td>
                                     <td class="col-sm-1 text-center">{{ $verifyRequest['testPlan']->level }}</td>
                                     <td>
-                                        {{ $verifyRequest->transactions }}
                                         <div class="coverage-progress">
                                             @foreach($verifyRequest['testCases'] as $case)
                                                 <?php $status = $verifyRequest['verifyRequest']->getTestCaseStatus($case->id);?>
