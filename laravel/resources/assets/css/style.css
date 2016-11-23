@@ -9601,14 +9601,14 @@ input[type="checkbox"] {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -155px 0;
-    padding: 0 0 155px 0;
+    margin: 0 auto -140px 0;
+    padding: 0 0 140px 0;
     background: #fff url('../images/separate-bg/content.jpg') repeat-x 50% 121px;
   }
 
   /* line 15, ../scss/blocks/_sticky-footer.scss */
-  .footer {
-    height: 155px;
+  #footer {
+    height: 140px;
   }
 }
 /* line 1, ../scss/blocks/_buttons.scss */
