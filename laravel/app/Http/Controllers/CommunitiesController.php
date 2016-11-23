@@ -124,6 +124,9 @@ class CommunitiesController extends Controller
             }
         }
         if ($action == 'surveys') {
+            if (!$community->surveys_status) {
+                return Redirect::to(getSiteUrl() . '/communities');
+            }
             $surveys = [];
             $surveyMonkey = new \SurveyMonkey(get_option('surveymonkey_key'), get_option('surveymonkey_token'));
             $data['links'] = CommunitySurveyResult::all()->keyBy('survey_id');
@@ -215,6 +218,13 @@ class CommunitiesController extends Controller
                 $community->update(['articles_status' => true]);
             } else {
                 $community->update(['articles_status' => false]);
+            }
+        }
+        if ($request->has('change_surveys_status')) {
+            if ($request->has('surveys_enabled')) {
+                $community->update(['surveys_status' => true]);
+            } else {
+                $community->update(['surveys_status' => false]);
             }
         }
 

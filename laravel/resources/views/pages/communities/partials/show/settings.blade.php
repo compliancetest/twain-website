@@ -200,6 +200,26 @@
 
                     {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
+                        <div class="colored-box-header">Community Surveys</div>
+                        <div class="colored-box-body">
+                            <div class="colored-box-content">
+                                <div class="form-group">
+                                    <label for="surveys_status">
+                                        {!! Form::checkbox('surveys_enabled', 1,  !empty($community->surveys_status)) !!}
+                                        Enable Surveys for this community</label>
+                                </div>
+                                <input type="hidden" name="change_surveys_status" value="1">
+                            </div>
+                            <div class="colored-box-footer">
+                                <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
+                            </div>
+                            <div class="color-box-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">SAVING YOUR DATA</div><div class="loading-wait">Please wait...</div></div></div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+
+                    {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                    <div class="colored-box">
                         <div class="colored-box-header">Certified products visibility</div>
                         <div class="colored-box-body">
                             <div class="colored-box-content">
@@ -531,7 +551,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <?php $products = $organisation->getProducts();?>
-                                                @if($products)
+                                                @if(count($products))
                                                     @foreach($products as $product)
                                                     <tr>
                                                         <td style="width: 60%"><a href="/product/{{ $product->slug }}" target="_blank"> {{ $product->full_name }}</a></td>

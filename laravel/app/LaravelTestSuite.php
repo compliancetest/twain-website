@@ -450,12 +450,32 @@ class LaravelTestSuite extends Model
 
     /**
      * Check next version existence
-     * @param string $fieldName
+     * @param null $versionMinor
+     * @param null $versionPatch
      * @return mixed
      */
-    public function isNextVersionExist($fieldName = 'version_major')
+
+    function isNextVersionExist($versionMinor = null, $versionPatch = null)
     {
-        return self::where(['name' => $this->name, $fieldName => ($this->{$fieldName} + 1)])->first();
+        if ($versionMinor === null && $versionPatch === null) {
+            return self::where([
+                'minor_family_mark' => $this->name,
+                'version_major' => ($this->version_major + 1)
+            ])->first();
+        } else if ($versionPatch === null) {
+            return self::where([
+                'name' => $this->name,
+                'version_major' => ($this->version_major),
+                'version_minor' => ($this->version_minor + 1)
+            ])->first();
+        } else {
+            return self::where([
+                'name' => $this->name,
+                'version_major' => ($this->version_major),
+                'version_minor' => $this->version_minor,
+                'version_patch' => ($this->version_patch + 1)
+            ])->first();
+        }
     }
 
     /**

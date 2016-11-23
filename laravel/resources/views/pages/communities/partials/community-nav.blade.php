@@ -16,8 +16,10 @@
                                         @if($action == 'forum') class="active" @endif>Forum</a></li>
             <li class="downloads-tab"><a href="{{ $community->getUrl() }}downloads"
                                          @if($action == 'downloads') class="active" @endif>Downloads</a></li>
-            <li class="surveys-tab"><a href="{{ $community->getUrl() }}surveys"
+            @if($community->surveys_status)
+                <li class="surveys-tab"><a href="{{ $community->getUrl() }}surveys"
                                        @if($action == 'surveys') class="active" @endif>Surveys</a></li>
+            @endif
 
             @if(Auth::check() && $community->isModerator() || $community->isAdmin())
 
