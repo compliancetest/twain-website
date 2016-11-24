@@ -6,7 +6,7 @@
 
         @include('pages.user-tabs', ['tab' => 'verify-requests'])
 
-        <div class="main-content">
+        <div class="main-content block-loading-wrapper">
 
             @if($isAdmin && $userSuites)
                 <div class="row" style="margin-bottom: 10px;">
@@ -222,6 +222,7 @@
                     </div>
                 </div>
 
+                @include('loader', ['loaderClass' => 'verify-requests-loading', 'loaderMessage' => 'LOADING...'])
 
                 <!-- Init modal scripts-->
                 <script>

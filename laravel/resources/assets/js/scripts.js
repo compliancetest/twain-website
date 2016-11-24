@@ -809,12 +809,13 @@ var Page = {
 
                 var url = '/verify-requests/update-list';
 
+                $('.verify-requests-loading').show();
                 $.ajax({
                     url: url,
                     type: 'get',
                     data: {
                         'hideResolved': $('#hideResolved:checked').length,
-                        'hideOthers': $('#hideOthers:checked').length,
+                        'hideOthers': $('#hideOthers:checked').length
                     },
                     error: function (jqXHR, status) {
                     },
@@ -827,6 +828,7 @@ var Page = {
                         });
                     },
                     complete: function () {
+                        $('.verify-requests-loading').hide();
                     }
                 })
             });
