@@ -150,7 +150,8 @@ class TestSuitesController extends Controller
             return response()->json(['messages' => ['You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.']], 403);
         }
 
-        if ($oldTestSuite->isVersionUpdated($request)) {
+        $versionUpdated = $oldTestSuite->isVersionUpdated($request);
+        if ($versionUpdated) {
             $fullName = LaravelTestSuite::generateCaseSuiteFullName($request);
             $slug = LaravelTestSuite::generateSlug($fullName);
             if (LaravelTestSuite::findBySlug($slug)) {
@@ -160,24 +161,26 @@ class TestSuitesController extends Controller
             $testSuite->full_name = $fullName;
             $testSuite->slug = $slug;
             if ($oldTestSuite->version_major < $request->get('version_major')) {
-
+                    $testSuite->major_family_mark = $testSuite->id;
+                    $testSuite->minor_family_mark = $testSuite->id;
             } else {
                 if ($oldTestSuite->version_minor < $request->get('version_minor')) {
                     $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
+                    $testSuite->minor_family_mark = $testSuite->id;
                 } else if ($oldTestSuite->version_patch < $request->get('version_patch')) {
                     $testSuite->major_family_mark = $oldTestSuite->major_family_mark;
-                    $testSuite->version_patch = $oldTestSuite->version_patch;
+                    $testSuite->minor_family_mark = $oldTestSuite->minor_family_mark;
                 }
             }
             $subscribedUsers = $oldTestSuite->changesSubscriptions;
             foreach ($subscribedUsers as $subscribedUser) {
-                $testSuite->changesSubscriptions()->create('user_id', $subscribedUser->user_id);
+                $testSuite->changesSubscriptions()->create(['user_id' => $subscribedUser->user_id]);
             }
         } else {
             $testSuite = $oldTestSuite;
+            $testSuite->fill($request->all());
         }
-        $testSuite->fill($request->all());
-        $testSuite->updateRelations($request);
+        $testSuite->updateRelations($request, $versionUpdated);
         $testSuite->save();
         if ($request->get('send-notification')) {
             $testSuite->notifySubscribers();

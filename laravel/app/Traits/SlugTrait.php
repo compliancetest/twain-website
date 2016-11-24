@@ -20,7 +20,7 @@ trait SlugTrait
 
     public function generateSlug($fullName)
     {
-        return Str::slug($fullName);
+        return Str::slug(str_replace([' ', '.'], '-', $fullName));
     }
 
     public static function findBySlug($slug)

@@ -244,7 +244,7 @@ class LaravelTestSuite extends Model
      * Process request data and update all test suite relations
      * @param $request
      */
-    public function updateRelations($request)
+    public function updateRelations($request, $versionUpdated = false)
     {
         $conformanceLevelCodes = [];
         if (is_array($request->get('conformanceLevels'))) {
@@ -252,7 +252,7 @@ class LaravelTestSuite extends Model
                 if ($subName == 'code') {
                     foreach ($conformanceLevel as $key => $code) {
                         $conformanceLevelCodes[] = $code;
-                        if (isset($request->get('conformanceLevels')['id'][$key])) {
+                        if (isset($request->get('conformanceLevels')['id'][$key]) && !$versionUpdated) {
                             $entry = $this->conformanceLevels()->find($request->get('conformanceLevels')['id'][$key]);
                             if ($entry) {
                                 $entry->code = $code;
@@ -279,7 +279,7 @@ class LaravelTestSuite extends Model
                 if ($subName == 'name') {
                     foreach ($row as $key => $name) {
                         $processedEntries[] = $name;
-                        if (isset($request->get('roles')['id'][$key])) {
+                        if (isset($request->get('roles')['id'][$key]) && !$versionUpdated) {
                             $entry = $this->roles()->find($request->get('roles')['id'][$key]);
                             if ($entry) {
                                 $entry->name = $name;
@@ -306,7 +306,7 @@ class LaravelTestSuite extends Model
                 if ($subName == 'code') {
                     foreach ($row as $key => $name) {
                         $processedEntries[] = $name;
-                        if (isset($request->get('scenarios')['id'][$key])) {
+                        if (isset($request->get('scenarios')['id'][$key]) && !$versionUpdated) {
                             $entry = $this->scenarios()->find($request->get('scenarios')['id'][$key]);
                             if ($entry) {
                                 $entry->code = $name;
@@ -378,7 +378,7 @@ class LaravelTestSuite extends Model
                 if ($subName == 'name') {
                     foreach ($row as $key => $name) {
                         $processedEntries[] = $name;
-                        if (isset($request->get('features')['id'][$key])) {
+                        if (isset($request->get('features')['id'][$key]) && !$versionUpdated) {
                             $entry = $this->features()->find($request->get('features')['id'][$key]);
                             if ($entry) {
                                 $entry->name = $name;
