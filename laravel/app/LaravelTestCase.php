@@ -190,6 +190,7 @@ class LaravelTestCase extends Model
         }
         $this->samples()->whereNotIn('id', $processedEntries)->delete();
 
+        $mode = 'Auto';
         if ($request->get('test_execution_profile_id')) {
             $processedEntries = [];
             $profile = (array) Profile::find($request->get('test_execution_profile_id'))->getProfileFromS3();
@@ -204,9 +205,10 @@ class LaravelTestCase extends Model
             }
 
             if (!empty($profile['Meta']->ExecutionMode)) {
-                $this->update(['execution_mode' => $profile['Meta']->ExecutionMode]);
+                $mode = $profile['Meta']->ExecutionMode;
             }
         }
+        $this->update(['execution_mode' => $mode]);
 
     }
 

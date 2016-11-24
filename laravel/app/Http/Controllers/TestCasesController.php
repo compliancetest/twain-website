@@ -94,16 +94,6 @@ class TestCasesController extends Controller
             $testCase = LaravelTestCase::create($request->all());
             $testCase->full_name = $fullName;
             $testCase->slug = $slug;
-            if ($oldTestCase->version_major < $request->get('version_major')) {
-
-            } else {
-                if ($oldTestCase->version_minor < $request->get('version_minor')) {
-                    $testCase->major_family_mark = $oldTestCase->major_family_mark;
-                } else if ($oldTestCase->version_patch < $request->get('version_patch')) {
-                    $testCase->major_family_mark = $oldTestCase->major_family_mark;
-                    $testCase->version_patch = $oldTestCase->version_patch;
-                }
-            }
         } else {
             $testCase = $oldTestCase;
             $oldTestCase->status = 'Obsolete';
