@@ -892,7 +892,7 @@ var Page = {
                 $('.caseIdList').each(function(index, element){
                     if($('input[data-case="' + $(element).attr('data-id') + '"]').length > 0) {
                         if ($('input[data-case="' + $(element).attr('data-id') + '"]:checked').length == 0 || $('input[data-case="' + $(element).attr('data-id') + '"]:checked').length > 1) {
-                            form.find('.modal-body').append('<div class="message error-message">Please select transaction for ' + $(element).text() + ' test case</div>');
+                            form.find('.modal-body').append('<div class="message error-message">Please select transaction for ' + $(element).find('.test_case_name_str').text() + ' test case</div>');
                             isValid = false;
                         }
                     }

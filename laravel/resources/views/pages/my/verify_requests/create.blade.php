@@ -46,7 +46,7 @@
                                         <?php $canBeAdded = checkTransactionsCanBeAddedToRequest($caseTransactions[0]->suite_minor_family_mark, $caseTransactions[0]->test_case_id, $selectedProductId);?>
                                         <tr>
                                             <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}">
-                                                {{ \App\LaravelTestCase::find($testCase)->full_name }}
+                                                <span class="test_case_name_str">{{ \App\LaravelTestCase::find($testCase)->full_name }}</span>
                                                 @if(!\App\Transaction::where(['test_case_id' => $testCase, 'product_id' => $caseTransactions[0]->product_id, 'suite_minor_family_mark' => $caseTransactions[0]->suite_minor_family_mark])->get()->isEmpty())
                                                     <a href="/my-transaction-log/?test_case_id={{ $testCase }}&product_id={{ $caseTransactions[0]->product_id }}&suite_minor_family_mark={{ $caseTransactions[0]->suite_minor_family_mark }}" target="_blank" style="float: right;">View Log</a>
                                                 @endif
