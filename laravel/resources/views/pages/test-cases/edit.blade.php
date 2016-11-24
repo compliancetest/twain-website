@@ -358,9 +358,9 @@
                     <div class="colored-box-body collapse in" id="testCaseStepsBox">
                         <div class="colored-box-content dynamic-rows">
                             <div id="testCaseStepsBoxContent">
-                                <div class="form-group testCaseStepRow">
-                                    @if($testCase->steps)
-                                        @foreach($testCase->steps as $k => $step)
+                                @if($testCase->steps)
+                                    @foreach($testCase->steps as $k => $step)
+                                        <div class="form-group testCaseStepRow">
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <label>Action:</label>
@@ -378,9 +378,9 @@
                                                     <button class="btn btn-primary btn-icon btn-delete" data-delete-row="testCaseStepRow">Delete Step</button>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    @endif
-                                </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                             <button type="button" onclick="Page.helpers.addRow('#testCaseStepBoxTemplate','#testCaseStepsBoxContent'); customizeFileTag();"
                                     class="btn btn-success btn-with-icon btn-add">New Test Step
@@ -537,11 +537,11 @@
     <script type="text/html" id="testCaseStepBoxTemplate">
         <div class="form-group testCaseStepRow">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label>Action:</label>
                     <textarea name="steps[action][]" class="form-control" cols="30" rows="5"></textarea>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <label>Expected Result:</label>
                     <textarea name="steps[expected_result][]" class="form-control" cols="30" rows="5"></textarea>
                 </div>
