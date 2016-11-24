@@ -10,7 +10,7 @@
                     <h1>{{ $user->getFullName()}}</h1>
                     @if($isSupport)
                         <p>
-                            <strong>Email Address:</strong> <a href="{{ $user->user_email }}" target="_blank">{{ $user->user_email }}</a><br/>
+                            <strong>Email Address:</strong> <a href="mailto:{{ $user->user_email }}">{{ $user->user_email }}</a><br/>
                             @if($phoneNumber)
                                 <strong>Phone Number:</strong> {{ $user->getMetaByKey('phone_number')}}
                             @endif

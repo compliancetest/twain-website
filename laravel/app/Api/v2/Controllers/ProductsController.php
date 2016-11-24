@@ -350,7 +350,7 @@ class ProductsController extends BaseApiController
             /**
              * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
              */
-            $testSuiteSupportedProtocols = $suite['testSuite']->protocolVersions()->pluck('version');
+            $testSuiteSupportedProtocols = $suite['testSuite']->protocolVersions()->pluck('version')->toArray();
 
             if (count($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
                 continue;
