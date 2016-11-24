@@ -11,9 +11,9 @@ trait SlugTrait
     public static function generateCaseSuiteFullName($request)
     {
         $fullName = $request->get('name');
-        $fullName .= ' v' . (string)$request->get('version_major') . '-' . (string)$request->get('version_minor');
+        $fullName .= ' v' . (string)$request->get('version_major') . '.' . (string)$request->get('version_minor');
         if ($request->get('version_patch')) {
-            $fullName .= '-' . (string)$request->get('version_patch');
+            $fullName .= '.' . (string)$request->get('version_patch');
         }
         return $fullName;
     }
