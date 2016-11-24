@@ -9,7 +9,9 @@
                     <th>Profile Type</th>
                     <th>Created Date</th>
                     <th>Valid?</th>
-                    <th>Action</th>
+                    @if($community->isAdmin())
+                        <th>Action</th>
+                    @endif
                 </tr>
                 </thead>
                 <tbody>
@@ -30,44 +32,43 @@
                             </td>
                             <td class="text-center">{{ formatDate($instance->created_date) }}</td>
                             <td class="text-center"><span class="item-{{ strtolower($instance->validation_status) }}"></span></td>
-                            <td class="text-center text-nowrap">
-                                @if($community->isAdmin())
-                                    <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}"
-                                       class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile"
-                                       data-tooltip="tooltip" title="Edit Profile"></a>
-                                    <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip"
-                                       title="Delete Profile"></a>
+                            @if($community->isAdmin())
+                                <td class="text-center text-nowrap">
+                                        <a href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/edit/{{ $instance->id }}/{{ $instance->type_id }}"
+                                           class="btn btn-icon btn-primary btn-edit" data-toggle="modal" data-remote="true" data-ajax-modal data-target="#modalEditProfile"
+                                           data-tooltip="tooltip" title="Edit Profile"></a>
+                                        <a href="#modalRemoveProfile_{{ $instance->id }}" class="btn btn-icon btn-danger btn-delete" data-toggle="modal" data-tooltip="tooltip"
+                                           title="Delete Profile"></a>
 
-                                    {{-- Remove profile Confirmation Modal--}}
-                                    <div class="modal fade profile-modal" id="modalRemoveProfile_{{ $instance->id }}" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal"
-                                                            aria-label="Close">Close
-                                                    </button>
-                                                    Confirm Profile Deletion
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure that you want to delete {{ $instance->profile_name }}?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal"
-                                                       href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/{{ $instance->id }}"
-                                                       class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
-                                                    <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                        {{-- Remove profile Confirmation Modal--}}
+                                        <div class="modal fade profile-modal" id="modalRemoveProfile_{{ $instance->id }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left" data-dismiss="modal"
+                                                                aria-label="Close">Close
+                                                        </button>
+                                                        Confirm Profile Deletion
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure that you want to delete {{ $instance->profile_name }}?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a data-profile-id="{{ $instance->id }}" data-profile-name="{{ $instance->profile_name }}" data-dismiss="modal"
+                                                           href="{{ getSiteUrl() }}/communityprofiles/{{ $community->slug }}/{{ $instance->id }}"
+                                                           class="btn btn-success btn-with-icon btn-confirm removingProfile">Confirm</a>
+                                                        <a href="#" class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                @endif
-                            </td>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="6" class="text-center">No test data yet</td>
+                        <td colspan="{{ $community->isAdmin() ? 6 : 5 }}" class="text-center">No test data yet</td>
                     </tr>
                 @endif
                 </tbody>
