@@ -278,7 +278,7 @@ class ProductsController extends BaseApiController
             'name' => $productName,
             'slug' => $productId,
             'user_id' => \Auth::user()->ID,
-            'model' => $productModel,
+            'model' => (string) $productModel,
             'protocol_version' => $protocolVersion,
             'manufacturer' => $entity['Manufacturer'],
             'description' => $entity['Version']['Info'],
