@@ -392,7 +392,7 @@ function getUserSubscriptions($user_id = null, $all = false)
     else
         $query = $wpdb->prepare("SELECT s.*,p.*, p.full_name AS suite_title FROM " . $wpdb->prefix . "organisations_subscriptions AS s 
                                  LEFT JOIN test_suites AS p ON p.id=s.suite_minor_family_mark
-                                 WHERE s.user_id=%d AND os.status != 'Frozen'", $user_id);
+                                 WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);
     
     $query .= " ORDER BY suite_title";
 
@@ -460,7 +460,7 @@ function getAssignedSuiteIds($user_id = null)
         if(doesUserCommunityAdmin($user_id, $community->id) || doesUserCommunitySupport($user_id, $community->id))
         {
             //Get Group Suites
-            $query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='community_id' AND meta_value='$community->id'";            
+            $query = "SELECT minor_family_mark FROM test_suites WHERE community_id='$community->id'";
             $sid = $wpdb->get_col($query);
             if($sid)
                 $suite_ids = array_merge($sid, $suite_ids);
@@ -543,13 +543,12 @@ function getManagedCustomerWPIDs($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE p.status='Active' AND p.suite_id IN (" . implode(", ", $suite_ids) . ")";        
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM wp_organisations_subscriptions AS p WHERE p.status='Active' AND p.suite_minor_family_mark IN (" . implode(", ", $suite_ids) . ")";
     }else{
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM $wpdb->prefix" . "users_subscriptions AS p WHERE  p.status='Active'";
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM wp_organisations_subscriptions AS p WHERE  p.status='Active'";
     }
     
     $ids = $wpdb->get_col($query);
-    
     return $ids;
 }
 

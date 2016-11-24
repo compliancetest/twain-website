@@ -1665,6 +1665,12 @@ function getCommunityUrl($communityId){
     return '/communities/' . $community->slug;
 }
 
+function getTestSuiteLatestVersionByMinorFamilyMark($suiteMinorFamilyMark){
+    global $wpdb;
+
+    return $wpdb->get_row($wpdb->prepare("SELECT * FROM test_suites WHERE minor_family_mark = %s ORDER BY created_at DESC", $suiteMinorFamilyMark));
+}
+
 /**
  * Escape string
  * @param $string

@@ -110,13 +110,12 @@ function createSupportTicket()
             $card_id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}organisations_payment_methods WHERE organisation_id IN ( SELECT organisation_id FROM {$wpdb->prefix}users_subscriptions WHERE user_id = %d) AND is_default = 0", get_current_user_id() ) );
         }
     }
-    $community_id = $suite_id == 'general' ? 'general' : get_post_meta($suite_id, 'community_id', true);
+    $community_id = $suite_id == 'general' ? 'general' : getTestSuiteLatestVersionByMinorFamilyMark($suite_id)->community_id;
     $data = array(
         'customer_id' => $user_id,
         'support_id' => 0,
         'community_id' => $community_id,
-        'test_suite_id' => $suite_id,
-        'suite_id' => $suite_id,
+        'suite_minor_family_mark' => $suite_id == 'general' ? '' : $suite_id,
         'card_id' => !$card_id ? 0 : $card_id,
         'title' => $subject,
         'content' => $content,
@@ -236,7 +235,7 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
     }
     if($filterTestSuite !== null && $filterTestSuite != "")
     {
-        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+        $where[] = $wpdb->prepare(" t.suite_minor_family_mark = %s", $filterTestSuite);
     }
 
     if (!is_super_admin()) {
@@ -343,14 +342,14 @@ function getTestSuitesFilter($category_id = null, $status_id = null, $priority_i
     }
     if($filterTestSuite !== null && $filterTestSuite != "")
     {
-        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+        $where[] = $wpdb->prepare(" t.suite_minor_family_mark = %s", $filterTestSuite);
     }
 
     if (!is_super_admin()) {
         $where[] = $wpdb->prepare(" ( customer_id = %d OR t.community_id IN(SELECT community_id FROM communities_members WHERE user_id = %d AND (is_mod = 1 OR is_admin = 1))) ", get_current_user_id(), get_current_user_id());
     }
 
-    $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY test_suite_id";
+    $query .= " WHERE " . implode(" AND  ", $where) . " GROUP BY suite_minor_family_mark";
 
     return $wpdb->get_results($query);
 }
@@ -409,7 +408,7 @@ function getCommunitiesFilter($category_id = null, $status_id = null, $priority_
     }
     if($filterTestSuite !== null && $filterTestSuite != "")
     {
-        $where[] = $wpdb->prepare(" t.test_suite_id = %s", $filterTestSuite);
+        $where[] = $wpdb->prepare(" t.suite_minor_family_mark = %s", $filterTestSuite);
     }
 
     if (!is_super_admin()) {

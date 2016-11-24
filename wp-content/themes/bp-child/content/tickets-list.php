@@ -26,7 +26,6 @@ $testSuites = getTestSuitesFilter($filterCategory, $filterStatus, $filterPriorit
 $communitiesEntries = getCommunitiesFilter($filterCategory, $filterStatus, $filterPriority, $filterCommunity, $filterTestSuite, $page, $limit, $orderBy, $order);
 $tickets = $results['data'];
 $totalItems = $results['total'];
-
 $params = array();
 
 if($filterStatus)
@@ -76,8 +75,8 @@ $show_community = $is_support || is_super_admin() ? true : false;
                         <select name='test_suite' id='test_suite' class='select'>
                             <option value="">- All -</option>
                             <?php foreach($testSuites as $testSuite):?>
-                                <?php if(!$testSuite->test_suite_id) continue;?>
-                                <option value="<?php echo $testSuite->test_suite_id;?>" <?php if($filterTestSuite == $testSuite->test_suite_id):?>selected="selected"<?php endif;?>><?php echo get_the_title($testSuite->test_suite_id);?></option>
+                                <?php if(empty($testSuite->suite_minor_family_mark)) continue;?>
+                                <option value="<?php echo $testSuite->suite_minor_family_mark;?>" <?php if($filterTestSuite == $testSuite->suite_minor_family_mark):?>selected="selected"<?php endif;?>><?php echo getTestSuiteLatestVersionByMinorFamilyMark($testSuite->suite_minor_family_mark)->full_name;?></option>
                             <?php endforeach;?>
                         </select>
                     </li>
@@ -186,7 +185,7 @@ $show_community = $is_support || is_super_admin() ? true : false;
                             <div class="td td-ticket-type td-two-lines tocenter">
                                 <?php echo $ticket->category_title ?>
                                 <br><?php echo $ticket->community_id == 'general' ? 'General' : ctE(getCommunity($ticket->community_id)->title);?>
-                                <br><?php echo $ticket->test_suite_id ? ctE(get_the_title($ticket->test_suite_id)) : '-';?>
+                                <br><?php echo $ticket->suite_minor_family_mark ? ctE(getTestSuiteLatestVersionByMinorFamilyMark($ticket->suite_minor_family_mark)->full_name) : '-';?>
                             </div>
                             <div class="td td-ticket-status tocenter">
                                 <span class="ticket-status-<?php echo sanitize_title($ticket->status_title)?>-label">

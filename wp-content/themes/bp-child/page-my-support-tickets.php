@@ -15,7 +15,7 @@ if($ticket_id)
 {
     //Validate ticket id
     $ticket = getTicketById($ticket_id);
-    if(!$ticket)    
+    if(!$ticket)
     {
         addMessage("You do not have access to this ticket!", 'error');
         wp_redirect('/my-support-tickets');

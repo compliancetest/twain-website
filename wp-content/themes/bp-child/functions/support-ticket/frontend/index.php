@@ -53,5 +53,5 @@ function canEditTicket($ticket, $userId = false)
     if($ticket->community_id == 'general' && !(is_super_admin() || $ticket->customer_id == get_current_user_id())){
         return false;
     }
-    return !(!is_super_admin() && !(doesUserAdminInAnyCommunity($userId) || doesUserSupportInAnyCommunity($userId)) && $ticket->customer_id != $userId);
+    return is_super_admin() || (doesUserCommunityAdmin($userId, $ticket->community_id) || doesUserCommunitySupport($userId, $ticket->community_id)) || $ticket->customer_id == $userId;
 }

@@ -11,22 +11,8 @@ function showSumitTicketBox()
      
     $is_error = false;
     $error = null;
-    if(!ct_can_create_support_ticket($user_id))
-    {
-        $is_error = true;
-        $error = 'Sorry, you need to purchase at least one subscription to create a support ticket.';
-    }
 
-    if(!$is_error)
-    {
-        $subscriptions = getUserSubscriptions($user_id);
-        if(!$subscriptions)
-        {
-            $is_error = true;
-            $error = "Sorry, you have not any active subscriptions.";
-        }
-        
-    }
+    $subscriptions = getUserSubscriptions($user_id);
     
     if($is_error){
     ?>
@@ -56,9 +42,11 @@ function showSumitTicketBox()
                             <select name="suite_id" id="suite_id" class="select">
                                 <option value="">- Select -</option>
                                 <option value="general">General</option>
-                                <?php foreach($subscriptions as $s): ?>
-                                    <option value="<?php echo $s->suite_id?>"><?php echo $s->suite_title?></option>
-                                <?php endforeach; ?>
+                                <?php if(is_iterable($subscriptions)):?>
+                                    <?php foreach($subscriptions as $s): ?>
+                                        <option value="<?php echo $s->suite_minor_family_mark?>"><?php echo $s->suite_title?></option>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
                             </select>
                         </div>
                         <div class="clear"></div>
