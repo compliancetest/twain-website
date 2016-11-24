@@ -59,18 +59,28 @@ class TestSuiteSearch extends Model
         if (!is_super_admin()) {
             $q = (function ($q) {
                 foreach (Community::all() as $community) {
-                    if ($community->getActiveMember(Auth::user()->ID)) {
-                        if (!$community->isAdmin()) {
-                            $q->orWhere(function($join) use ($community){
-                                $join
-                                    ->whereIn('status', ['Active', 'Partial'])
-                                    ->where('community_id', $community->id);
-                            });
+                    if($community->visibility_status == 'private') {
+                        if ($community->getActiveMember(Auth::user()->ID)) {
+                            if (!$community->isAdmin()) {
+                                $q->orWhere(function ($join) use ($community) {
+                                    $join
+                                        ->whereIn('status', ['Active', 'Partial', 'Obsolete', 'Deprecated'])
+                                        ->where('community_id', $community->id);
+                                });
+                            } else {
+                                $q->orWhere(['community_id' => $community->id]);
+                            }
                         } else {
-                            $q->orWhere(['community_id' => $community->id]);
+                            $q->orWhere(['status' => null, 'community_id' => $community->id]);
                         }
                     } else {
-                        $q->orWhere(['status' => null, 'community_id' => $community->id]);
+                        if (!$community->isAdmin()) {
+                            $q->orWhere(function ($join) use ($community) {
+                                $join
+                                    ->whereIn('status', ['Active', 'Partial', 'Obsolete', 'Deprecated'])
+                                    ->where('community_id', $community->id);
+                            });
+                        }
                     }
 
                 }

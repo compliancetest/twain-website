@@ -7,7 +7,9 @@
         @include('pages.test-suites.partials.release-subscription')
     @else
         @if(Auth::user()->doesUserOrganisationApproved($testSuite))
-            @include('pages.test-suites.partials.assign-subscription')
+            @can('subscribeToTestSuite', $testSuite)
+                @include('pages.test-suites.partials.assign-subscription')
+            @endcan
         @else
             @include('pages.test-suites.partials.contact-us-button')
         @endif
