@@ -15929,11 +15929,11 @@ input.notify-changes {
   display: block;
 }
 
-/* line 98, ../scss/pages/_test-cases.scss */
+/* line 99, ../scss/pages/_test-cases.scss */
 .test-case-options-box .options-box-row .inline-options-list {
   overflow: hidden;
 }
-/* line 101, ../scss/pages/_test-cases.scss */
+/* line 102, ../scss/pages/_test-cases.scss */
 .test-case-options-box .options-box-row .inline-options-list li {
   width: 33%;
   vertical-align: top;
@@ -15942,10 +15942,20 @@ input.notify-changes {
   margin-right: -4px;
 }
 @media (max-width: 768px) {
-  /* line 101, ../scss/pages/_test-cases.scss */
+  /* line 102, ../scss/pages/_test-cases.scss */
   .test-case-options-box .options-box-row .inline-options-list li {
     width: 100%;
   }
+}
+/* line 114, ../scss/pages/_test-cases.scss */
+.test-case-options-box .options-box-row .inline-options-list.scenario-list {
+  padding: 8px 0 7px 0;
+}
+/* line 117, ../scss/pages/_test-cases.scss */
+.test-case-options-box .options-box-row .inline-options-list.scenario-list li {
+  width: 100%;
+  display: block;
+  line-height: normal;
 }
 
 /* line 2, ../scss/pages/_profile.scss */

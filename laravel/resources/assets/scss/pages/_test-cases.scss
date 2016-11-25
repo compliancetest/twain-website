@@ -95,19 +95,32 @@
 }
 
 .test-case-options-box{
-  .options-box-row .inline-options-list{
-    overflow: hidden;
-    
-    li{
-      width: 33%;
-      vertical-align: top;
-      line-height: 32px;
-      padding-right: 0;
-      margin-right: -4px;
+  .options-box-row{
+    .inline-options-list {
+      overflow: hidden;
 
-      @media (max-width: $screen-sm) {
-        width: 100%;
+      li {
+        width: 33%;
+        vertical-align: top;
+        line-height: 32px;
+        padding-right: 0;
+        margin-right: -4px;
+
+        @media (max-width: $screen-sm) {
+          width: 100%;
+        }
       }
+
+      &.scenario-list{
+        padding: 8px 0 7px 0;
+
+        li{
+          width: 100%;
+          display: block;
+          line-height: normal;
+        }
+      }
+
     }
   } 
 }
