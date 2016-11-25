@@ -50,13 +50,14 @@ class TestSuitesController extends Controller
 
     /**
      * Create new test suite page
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
         $pageTitle = 'Create Test Suite';
         $isAdmin = doesUserAdminInAnyCommunity() || is_super_admin();
-        return view('pages.test-suites.edit', compact('pageTitle', 'isAdmin'));
+        return view('pages.test-suites.edit', compact('pageTitle', 'isAdmin', 'request'));
     }
 
     public function store(Requests\TestSuiteRequest $request)

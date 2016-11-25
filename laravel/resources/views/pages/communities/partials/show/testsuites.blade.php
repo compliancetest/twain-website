@@ -65,7 +65,7 @@
         @if($isAdmin)
             <div class="col-md-3">
                 <div class="page-title-actions">
-                    <a href="{{ getSiteUrl() }}/test-suite/create/" class="btn btn-success btn-with-icon btn-add">Add new Test Suite</a>
+                    <a href="{{ getSiteUrl() }}/test-suite/create/?community_id={{ $community->id }}" class="btn btn-success btn-with-icon btn-add">Add new Test Suite</a>
                 </div>
             </div>
         @endif

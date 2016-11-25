@@ -23,7 +23,7 @@
                                         <select name="community_id" id="communityId" class="form-control">
                                             @foreach(\App\Community::all()->sortBy('title') as $community)
                                                 @if($community->isAdmin() || is_super_admin())
-                                                    <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                                    <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id || (!$testSuite && $request->get('community_id') == $community->id)) selected="selected" @endif>{{ $community->title }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
