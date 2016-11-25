@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Post;
+use App\Product;
 use Closure;
 
 class PostExists
@@ -16,7 +16,7 @@ class PostExists
      */
     public function handle($request, Closure $next)
     {
-        $product = Post::where(['post_name' => $request->route()->parameters()['productId'], 'post_type' => 'product-service'])->first();
+        $product = Product::findBySlug($request->route()->parameters()['productId']);
         if (!$product) {
             return response()->json(['messages' => ['Product id is invalid'], "status" => "error", 'code' => 404], 404);
         }

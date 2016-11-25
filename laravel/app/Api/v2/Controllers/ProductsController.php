@@ -452,17 +452,17 @@ class ProductsController extends BaseApiController
         }
 
         $result = [];
-        foreach (\Auth::user()->suiteSubscriptions as $suite) {
+        foreach (Auth::user()->suiteSubscriptions as $suite) {
 
-            if ($suite->testSuite->tester_role !== 'Application') {
+            if ($suite->testSuite->product_type !== 'Application') {
                 continue;
             }
 
-            $suiteFeatures = $suite->features;
+            $suiteFeatures = $suite->testSuite->features;
             $suiteData = [
-                'id' => $suite->slug,
-                'title' => $suite->full_name,
-                'status' => $product->features()->whereIn('test_suites_feature_id', $suite->features()->pluck('id'))->first() ? true : false,
+                'id' => $suite->testSuite->slug,
+                'title' => $suite->testSuite->full_name,
+                'status' => $product->features()->whereIn('test_suites_feature_id', $suite->testSuite->features()->pluck('id'))->first() ? true : false,
                 'features' => [],
             ];
 
@@ -470,7 +470,7 @@ class ProductsController extends BaseApiController
                 $suiteData['features'][] = [
                     'title' => $suiteFeature->name,
                     'description' => $suiteFeature->description,
-                    'status' => $product->features->where('test_suites_feature_id', $suiteFeature->id) ? true : false,
+                    'status' => count($product->features->where('test_suites_feature_id', $suiteFeature->id)) ? true : false,
                 ];
             }
             $result[] = $suiteData;
@@ -633,7 +633,7 @@ class ProductsController extends BaseApiController
             $testSuiteEntry = LaravelTestSuite::findBySlug($testSuite['id']);
             foreach ($testSuite['features'] as $feature) {
                 $testSuiteFeature = $testSuiteEntry->features->where('name', $feature);
-                if ($testSuiteFeature) {
+                if (count($testSuiteFeature)) {
                     $productFeatures = $testSuiteFeature->id;
                     $product->features->updateOrCreate(['test_suites_feature_id' => $testSuiteFeature->id]);
                 }
@@ -825,7 +825,7 @@ class ProductsController extends BaseApiController
 
         $query = Product::where(['organisation_id' => $userOrganisationId]);
         if ($request->has('product_type')) {
-            $query->type = $request->has('product_type');
+            $query->where('type',  $request->get('product_type'));
         }
 
         $response = [];
