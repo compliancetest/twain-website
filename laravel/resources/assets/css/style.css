@@ -15631,35 +15631,39 @@ input.notify-changes {
   padding: 0 19px 4px 0;
 }
 /* line 66, ../scss/pages/_products.scss */
+.product-page .product-description {
+  margin: 10px 0 0 0;
+}
+/* line 70, ../scss/pages/_products.scss */
 .product-page .product-info {
   border-bottom: 1px solid #e7e7e7;
   margin: 0 0 20px;
   padding: 0 0 10px;
 }
 
-/* line 77, ../scss/pages/_products.scss */
+/* line 81, ../scss/pages/_products.scss */
 .products-list .colored-box .colored-box-content {
   padding: 0;
 }
-/* line 80, ../scss/pages/_products.scss */
+/* line 84, ../scss/pages/_products.scss */
 .products-list .colored-box .colored-box-content.product-item-box-content {
   padding: 15px 15px 0 15px;
 }
-/* line 86, ../scss/pages/_products.scss */
+/* line 90, ../scss/pages/_products.scss */
 .products-list .colored-box .table {
   margin: 0;
 }
 
-/* line 94, ../scss/pages/_products.scss */
+/* line 98, ../scss/pages/_products.scss */
 .suite-checkboxes-group .checkbox {
   margin-left: 20px;
 }
-/* line 97, ../scss/pages/_products.scss */
+/* line 101, ../scss/pages/_products.scss */
 .suite-checkboxes-group .checkbox:first-child {
   margin-left: 10px;
 }
 
-/* line 104, ../scss/pages/_products.scss */
+/* line 108, ../scss/pages/_products.scss */
 .delete-product-claim-modal .modal-body {
   font-weight: 400;
   font-size: 12px;
@@ -15929,11 +15933,11 @@ input.notify-changes {
   display: block;
 }
 
-/* line 98, ../scss/pages/_test-cases.scss */
+/* line 99, ../scss/pages/_test-cases.scss */
 .test-case-options-box .options-box-row .inline-options-list {
   overflow: hidden;
 }
-/* line 101, ../scss/pages/_test-cases.scss */
+/* line 102, ../scss/pages/_test-cases.scss */
 .test-case-options-box .options-box-row .inline-options-list li {
   width: 33%;
   vertical-align: top;
@@ -15942,10 +15946,20 @@ input.notify-changes {
   margin-right: -4px;
 }
 @media (max-width: 768px) {
-  /* line 101, ../scss/pages/_test-cases.scss */
+  /* line 102, ../scss/pages/_test-cases.scss */
   .test-case-options-box .options-box-row .inline-options-list li {
     width: 100%;
   }
+}
+/* line 114, ../scss/pages/_test-cases.scss */
+.test-case-options-box .options-box-row .inline-options-list.scenario-list {
+  padding: 8px 0 7px 0;
+}
+/* line 117, ../scss/pages/_test-cases.scss */
+.test-case-options-box .options-box-row .inline-options-list.scenario-list li {
+  width: 100%;
+  display: block;
+  line-height: normal;
 }
 
 /* line 2, ../scss/pages/_profile.scss */

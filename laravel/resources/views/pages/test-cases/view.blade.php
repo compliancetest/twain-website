@@ -64,7 +64,7 @@
                 </div>
                 <div class="options-box-row">
                     <div class="options-box-row-title">Scenario:</div>
-                    <ul class="inline-options-list">
+                    <ul class="inline-options-list scenario-list">
                         <?php $scenarious = $request->get('suite_minor_family_mark') ? $testCase->scenarios->filter(function ($item) use ($request) {
                             return $item->testSuiteScenario->test_suite_id == $request->get('suite_minor_family_mark');
                         }) : $testCase->scenarios;?>
