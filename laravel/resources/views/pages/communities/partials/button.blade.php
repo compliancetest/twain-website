@@ -16,7 +16,7 @@
     </div>
 
     <!-- Community Join Modal -->
-    <div class="modal modal-small fade" id="confirmJoinCommunity{{ $community->slug}}" tabindex="-1" role="dialog">
+    <div class="modal fade" id="confirmJoinCommunity{{ $community->slug}}" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content block-loading-wrapper">
                 <div class="modal-header">
