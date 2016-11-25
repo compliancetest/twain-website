@@ -22,6 +22,9 @@
         <li>Visibility: <strong>{{ $product->visibility }}</strong></li>
         <li>Product Type: <strong>{{ $product->type }}</strong></li>
         <li>Protocol Version: <strong>{{ $product->protocol_version }}</strong></li>
+        @if($product->access_url)
+            <li>Access URL: <a href="{{ $product->access_url }}" target="_blank">{{ $product->access_url }}</a></li>
+        @endif
     </ul>
 
     @if($product->description)
