@@ -17,14 +17,14 @@ class LogAfterRequest
     public function terminate($request, $response)
     {
         if (!in_array($request->path(), ['api/v1/echo', 'api/v2/echo'])) {
-            ApiLog::create([
+            $apilog = ApiLog::create([
                 'user_id' => (integer)Auth::user()->ID,
                 'ip_address' => $request->getClientIp(),
                 'request_type' => $request->method(),
                 'uri' => $request->path(),
-                'request' => json_encode($request->all(), JSON_PRETTY_PRINT),
-                'response' => json_encode($response->getData(), JSON_PRETTY_PRINT),
             ]);
+            \Illuminate\Support\Facades\Storage::put('apilogs/' . $apilog->id . '/request.json', json_encode($request->all(), JSON_PRETTY_PRINT));
+            \Illuminate\Support\Facades\Storage::put('apilogs/' . $apilog->id . '/response.json', json_encode($response->getData(), JSON_PRETTY_PRINT));
         }
     }
 }

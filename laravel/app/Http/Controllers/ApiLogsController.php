@@ -6,6 +6,7 @@ use App\ApiLog;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ApiLogsController extends Controller
 {
@@ -54,7 +55,7 @@ class ApiLogsController extends Controller
     public function requestData($logId)
     {
         $apiLog = ApiLog::find($logId);
-        $data = $apiLog->request;
+        $data = $apiLog->getRequestData();
         return view('pages.api-logs.popups.request', compact('data', 'apiLog'));
     }
 
@@ -66,7 +67,7 @@ class ApiLogsController extends Controller
     public function responseData($logId)
     {
         $apiLog = ApiLog::find($logId);
-        $data = $apiLog->response;
+        $data = $apiLog->getResponseData();
         return view('pages.api-logs.popups.response', compact('data', 'apiLog'));
     }
 
@@ -74,7 +75,7 @@ class ApiLogsController extends Controller
     {
         $apiLog = ApiLog::find($logId);
         $fileData = '';
-        $request = json_decode($apiLog->request, true);
+        $request = json_decode($apiLog->getRequestData(), true);
         foreach($request as $key => $value){
             $fileData .= $key . ':' . $value . PHP_EOL;
         }
@@ -87,7 +88,7 @@ class ApiLogsController extends Controller
     public function downloadResponse($logId)
     {
         $apiLog = ApiLog::find($logId);
-        return response($apiLog->response, 200)->withHeaders([
+        return response($apiLog->getResponseData(), 200)->withHeaders([
             'Content-Type' => 'application/json',
             'Content-Disposition' => 'attachment; filename="responseData.json"'
         ]);

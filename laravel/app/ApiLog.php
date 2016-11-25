@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ApiLog extends Model
 {
     protected $fillable = [
-        'user_id', 'ip_address', 'request_type', 'uri',
-        'request', 'response'
+        'user_id', 'ip_address', 'request_type', 'uri'
     ];
 
     /**
@@ -67,5 +67,32 @@ class ApiLog extends Model
             'request_type' => $this->setWhereQuery($filters)->groupBy('request_type')->pluck('request_type'),
         ];
         return $arr;
+    }
+
+    /**
+     * Get request data from s3
+     * @return mixed
+     */
+    public function getRequestData()
+    {
+       return $this->getData('request');
+    }
+
+    /**
+     * Get response data from S3
+     * @return mixed
+     */
+    public function getResponseData()
+    {
+        return $this->getData('response');
+    }
+
+    public function getData($type = 'request')
+    {
+        try {
+            return Storage::get('apilogs/' . $this->id . '/'.$type.'.json');
+        } catch( \Exception $e){
+            return false;
+        }
     }
 }
