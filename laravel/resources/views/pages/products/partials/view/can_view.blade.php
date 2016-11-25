@@ -32,3 +32,5 @@
         @include('pages.products.partials.claims-list')
     </table>
 </div>
+
+@include('pages.products.partials.scripts')

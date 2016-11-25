@@ -10,7 +10,7 @@
                 Are you sure you want delete {{ $product->full_name }}?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success btn-with-icon btn-confirm deleteProduct" data-product-slug="{{ $productSlug }}" data-product-index="{{ $k }}">Confirm</button>
+                <button type="button" class="btn btn-success btn-with-icon btn-confirm deleteProduct" data-product-slug="{{ $product->slug }}" data-product-index="{{ $k }}">Confirm</button>
                 <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
             </div>
             <div class="block-loading" id="removingProductSpinner{{ $k }}">

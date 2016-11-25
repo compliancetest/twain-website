@@ -46,6 +46,21 @@ class Product extends Model
         return $this->hasMany('App\Claim');
     }
 
+    public function testPlans()
+    {
+        return $this->hasMany('App\TestPlan');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
+    }
+
+    public function verifyRequests()
+    {
+        return $this->hasMany('App\VerifyRequest');
+    }
+
     /**
      * Check that user can edit / delete permission
      * @param User $user

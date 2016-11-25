@@ -97,6 +97,9 @@ class ProductsController extends Controller
         if (Gate::denies('change', $product)) {
             return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
         }
+        if(count($product->claims) || count($product->testPlans) || count($product->transactions) || count($product->verifyRequests)){
+            return response()->json(['message' => 'Please remove product test plans/claims/transaction/verify requests'], 422);
+        }
         $product->delete();
         addMessage('Product was deleted successfully');
         return response()->json(array('success' => true));
