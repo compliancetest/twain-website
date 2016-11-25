@@ -567,9 +567,6 @@
             $(this).remove();
         });
 
-        @if(!$testSuite && !empty($request->get('community_id')))
-            $('#communityId').change();
-        @endif
         $('body').on('change', '#communityId', function(e){
             jQuery('.profileTypes.block-loading').show();
             jQuery.ajax({
@@ -611,6 +608,10 @@
                 }
             });
         });
+
+        @if(!$testSuite && !empty($request->get('community_id')))
+            $('#communityId').change();
+        @endif
 
 
         $('body').on('change', 'input[name="product_type"]', function(e){
