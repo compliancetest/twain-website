@@ -16,15 +16,45 @@
         <li>Organization: <strong>Panasonic</strong></li>
         <li>Manufacturer: <strong>{{ $product->manufacturer }}</strong></li>
         @if($product->released_at)
-            <li>Release Date: <strong>{{ $product->released_at->format('M Y') }}</strong></li>
+            <li>Release Date: <strong>{{ $product->released_at->format('Y-m-d') }}</strong></li>
         @endif
         <li>Version: <strong>{{ $product->version }}</strong></li>
         <li>Visibility: <strong>{{ $product->visibility }}</strong></li>
         <li>Product Type: <strong>{{ $product->type }}</strong></li>
         <li>Protocol Version: <strong>{{ $product->protocol_version }}</strong></li>
     </ul>
-    <div class="product description">{!! $product->descrition !!}</div>
+
+    @if($product->description)
+        <div class="product-description">
+            <strong>Description:</strong><br/>
+            {!! $product->description !!}
+        </div>
+    @endif
 </div>
+
+@if($product->getFeatures())
+    <h2 class="product-subtitle">Product Features</h2>
+    @foreach($product->getFeatures() as $testSuiteId => $features)
+        <div class="blue-colored-table-wrapper table-responsive">
+            <table class="table blue-colored-table">
+                <thead>
+                <tr>
+                    <th class="col-sm-4 text-left">Test Suite</th>
+                    <th class="text-left">Features</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>{{ \App\LaravelTestSuite::find($testSuiteId)->full_name }}</td>
+                    <td>
+                        @foreach($features as $feature)
+                        <span data-tooltip="tooltip" title="{{ $feature['description'] }}">{{ $feature['name'] }}</span>@if ($feature !== end($features)), @endif
+                        @endforeach
+                    </td>
+                </tr>
+            </table>
+        </div>
+    @endforeach
+@endif
 
 <h2 class="product-subtitle">Compliance Claims</h2>
 <div class="blue-colored-table-wrapper table-responsive">
