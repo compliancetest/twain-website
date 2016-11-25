@@ -632,10 +632,10 @@ class ProductsController extends BaseApiController
         foreach ($features as $testSuite) {
             $testSuiteEntry = LaravelTestSuite::findBySlug($testSuite['id']);
             foreach ($testSuite['features'] as $feature) {
-                $testSuiteFeature = $testSuiteEntry->features->where('name', $feature);
-                if (count($testSuiteFeature)) {
-                    $productFeatures = $testSuiteFeature->id;
-                    $product->features->updateOrCreate(['test_suites_feature_id' => $testSuiteFeature->id]);
+                $testSuiteFeature = $testSuiteEntry->features->where('name', $feature)->first();
+                if ($testSuiteFeature) {
+                    $productFeatures[] = $testSuiteFeature->id;
+                    $product->features()->updateOrCreate(['test_suites_feature_id' => $testSuiteFeature->id]);
                 }
             }
         }
@@ -659,7 +659,7 @@ class ProductsController extends BaseApiController
             /**
              * Skip test plan creation for a test suite if test suite doesnt support product's protocol version
              */
-            $testSuiteSupportedProtocols = json_decode($suite['testSuite']->getMetaByKey('protocol_versions'), true);
+            $testSuiteSupportedProtocols = $suite['testSuite']->protocolVersions()->pluck('version')->toArray();
 
             if (!empty($testSuiteSupportedProtocols) && !in_array($protocolVersion, $testSuiteSupportedProtocols)) {
                 continue;
