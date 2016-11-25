@@ -123,7 +123,7 @@ class TestPlansController extends BaseApiController
         }
         // we shouldn't show test plan's data to user without subscription
         if (!$hasSubscription) {
-            return $this->respondForbiddenError(sprintf("Please subscribe to Test Suite with '%s' Product Type", $productType));
+            return $this->respondForbiddenError(sprintf("Please subscribe to Test Suite with '%s' Product Type", $product->type));
         }
         if(!CommunityOrganisationsApprovedProducts::where('product_id', $product->id)->first()){
             return $this->setStatusCode(403)->respondWithDataAndMessage("The product registration has been not approved yet.", [], 'info');

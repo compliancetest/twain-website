@@ -104,7 +104,7 @@
                                             var table = $('#coverage-plan-' + testCoveragePlan.id).closest('table');
                                             $(this).remove();
                                             if (table.find('tbody tr').length == 0) {
-                                                table.find('tbody').html('<tr><td class="text-center" colspan="7">No Verify Requests yet</td></tr>')
+                                                table.find('tbody').html('<tr><td class="text-center" colspan="7">No Test Plans yet</td></tr>')
                                             }
                                             $('#testCoveragePlanList').prepend('<div class="success-message">Plan has been removed</div>');
                                             setTimeout(function () {
