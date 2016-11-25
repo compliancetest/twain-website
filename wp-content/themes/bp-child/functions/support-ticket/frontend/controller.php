@@ -207,8 +207,12 @@ function getUserTickets($category_id = null, $status_id = null, $priority_id = n
            . "LEFT JOIN " . $wpdb->usermeta . " AS um ON t.customer_id=um.user_id AND um.meta_key='user_organisation' "
            . "LEFT JOIN " . $wpdb->usermeta . " AS um1 ON t.customer_id=um1.user_id AND um1.meta_key='first_name' ";
 
-    $customer_ids[] = $user_id;
-    $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
+    $where[] = " true ";
+
+    if(!is_super_admin()) {
+        $customer_ids[] = $user_id;
+        $where[] = " t.customer_id IN (" . implode(", ", $customer_ids) . ")";
+    }
     
     if($category_id !== null && $category_id != "")
     {        

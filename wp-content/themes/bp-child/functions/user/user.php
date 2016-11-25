@@ -460,7 +460,7 @@ function getAssignedSuiteIds($user_id = null)
         if(doesUserCommunityAdmin($user_id, $community->id) || doesUserCommunitySupport($user_id, $community->id))
         {
             //Get Group Suites
-            $query = "SELECT minor_family_mark FROM test_suites WHERE community_id='$community->id'";
+            $query = "SELECT minor_family_mark FROM test_suites WHERE community_id = '$community->id'";
             $sid = $wpdb->get_col($query);
             if($sid)
                 $suite_ids = array_merge($sid, $suite_ids);
@@ -543,7 +543,7 @@ function getManagedCustomerWPIDs($user_id = null)
         if(!$suite_ids)
             return null;
             
-        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM wp_organisations_subscriptions AS p WHERE p.status='Active' AND p.suite_minor_family_mark IN (" . implode(", ", $suite_ids) . ")";
+        $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM wp_organisations_subscriptions AS p WHERE p.status='Active' AND p.suite_minor_family_mark IN ('" . implode("', '", $suite_ids) . "')";
     }else{
         $query = "SELECT DISTINCT(p.user_id) as CUSTOMER_ID FROM wp_organisations_subscriptions AS p WHERE  p.status='Active'";
     }

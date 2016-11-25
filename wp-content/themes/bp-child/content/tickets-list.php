@@ -140,10 +140,6 @@ $show_community = $is_support || is_super_admin() ? true : false;
                if($totalItems > 0){
                    foreach($tickets as $ticket)
                    {                       
-                       if(!is_admin() && !is_super_admin() && !doesUserAdminInAnyCommunity( get_current_user_id() ) && !doesUserSupportInAnyCommunity( get_current_user_id() ) && !$is_support && $ticket->customer_id != $user_id ) //Permission Denied
-                       {
-                           continue;
-                       }
                        $new_messages = false;
                        if($ticket->customer_id == get_current_user_id() && $ticket->customer_new_messages > 0)
                            $new_messages = $ticket->customer_new_messages;
