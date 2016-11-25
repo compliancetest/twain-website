@@ -3,7 +3,7 @@
         <div class="modal-content block-loading-wrapper">
             <div class="modal-header">
                 <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
-                Delete Test Suite
+                Delete Test Case
             </div>
             <div class="modal-body">
                 <div class="block-loading">

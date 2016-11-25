@@ -20,7 +20,7 @@
     jQuery('.delete-case').click(function (e) {
         e.preventDefault();
         jQuery.ajax({
-            url: '/test-case/{{ $testCase->slug }}',
+            url: '/test-case/{{ $testCase->slug }}@if($notRedirect){{ '/not_redirect' }}@endif',
             type: 'delete',
             dataType: 'json',
             success: function (rsp) {

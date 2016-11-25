@@ -159,10 +159,10 @@ class TestCasesController extends Controller
      * @param $testCaseSlug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function deletePopup($testCaseSlug)
+    public function deletePopup($testCaseSlug, $notRedirect = false)
     {
         $testCase = LaravelTestCase::findBySlug($testCaseSlug);
-        return view('pages.test-cases.partials.confirm-delete-popup', compact('testCase'));
+        return view('pages.test-cases.partials.confirm-delete-popup', compact('testCase', 'notRedirect'));
     }
 
     /**
@@ -170,7 +170,7 @@ class TestCasesController extends Controller
      * @param $testCaseSlug
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($testCaseSlug)
+    public function destroy($testCaseSlug, $notRedirect = false)
     {
         $testCase = LaravelTestCase::findBySlug($testCaseSlug);
         $community = Community::find($testCase->community_id);
@@ -188,6 +188,10 @@ class TestCasesController extends Controller
         }
 
         $testCase->delete();
-        return response()->json(['status' => 'success', 'redirect_to' => 'test-suites']);
+        $rsp = ['status' => 'success'];
+        if(!$notRedirect){
+            $rsp['redirect_to'] = 'test-suites';
+        }
+        return response()->json($rsp);
     }
 }

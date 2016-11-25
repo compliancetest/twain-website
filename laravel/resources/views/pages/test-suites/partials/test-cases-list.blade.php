@@ -50,7 +50,7 @@
                             <td class="text-center noprint">
                                 <a href="/test-case/{{ $testCase->slug }}/edit" class="btn btn-primary btn-icon btn-edit" data-tooltip="tooltip" title="Edit Case">Edit</a>
                                 <a data-target="#deleteTestCaseModal" class="btn btn-danger btn-icon btn-delete"
-                                   data-tooltip="tooltip" href="/test-case/{{ $testCase->slug }}/delete" data-toggle="modal"
+                                   data-tooltip="tooltip" href="/test-case/{{ $testCase->slug }}/delete/not_redirect" data-toggle="modal"
                                    data-remote="true" data-ajax-modal data-original-title="Delete Test Case">Delete
                                 </a>
                             </td>
