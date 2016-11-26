@@ -651,7 +651,7 @@ class ProductsController extends BaseApiController
 
         $user = Auth::user();
         foreach ($user->getUserTestPlans() as $suiteName => $suite) {
-            if ($suite['testSuite']->tester_role != 'Application' || !in_array($suite['testSuite']->slug, array_values(array_column($features, 'id')))) {
+            if ($suite['testSuite']->product_type != 'Application' || !in_array($suite['testSuite']->slug, array_values(array_column($features, 'id')))) {
                 continue;
             }
             $organisationSubscription = OrganisationSubscription::where(['user_id' => $user->ID, 'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark])->first();
@@ -667,10 +667,10 @@ class ProductsController extends BaseApiController
             foreach ($suite['testSuite']->conformanceLevels as $level) {
                 $testPlan = TestPlan::create([
                     'organisation_subscription_id' => $organisationSubscription->id,
-                    'product_id' => $product->ID,
+                    'product_id' => $product->id,
                     'suite_minor_family_mark' => $suite['testSuite']->minor_family_mark,
                     'creator_id' => $user->ID,
-                    'level' => $level->name,
+                    'level' => $level->code,
                     'role' => 'Application',
                 ]);
                 $testPlan->excludeTestCases('Application', $productFeatures);

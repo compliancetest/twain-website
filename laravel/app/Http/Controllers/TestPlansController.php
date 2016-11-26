@@ -76,7 +76,7 @@ class TestPlansController extends Controller
 
         $product = Product::find($request->get('product_id'));
         if ($request->get('role') == 'Application') {
-            $configuredTestSuites =  TestSuiteFeatures::find($product->features)->pluck('test_suite_id');
+            $configuredTestSuites =  TestSuiteFeatures::find($product->features->toArray())->pluck('test_suite_id')->toArray();
             if (!in_array($request->get('suite_id'), $configuredTestSuites)) {
                 return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool.'], 422);
             }
