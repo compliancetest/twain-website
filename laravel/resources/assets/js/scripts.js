@@ -1491,6 +1491,8 @@ function handleChangeTestSuiteResponse(jqXHR, form) {
                 divId = 'conformanceLevelsBox';
             } else if (v.indexOf('Scenario') != -1) {
                 divId = 'scenariosBox';
+             } else if (v.indexOf('outcome type') != -1) {
+                divId = 'testCasePropertyBox';
             } else if (v.indexOf('Role') != -1) {
                 divId = 'testSuitesRolesBox';
             } else if (v.indexOf('specificationDocuments') != -1) {
