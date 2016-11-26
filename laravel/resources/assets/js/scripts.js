@@ -1465,6 +1465,8 @@ function handleChangeTestCaseResponse(jqXHR, form){
                 divId = 'testCaseConformanceLevelsBox';
             } else if (index == 'scenario') {
                 divId = 'testCaseScenariosBox';
+            } else if (index == 'features') {
+                divId = 'testCaseFeaturesBox';
              } else if (index == 'tester_role' || index == 'harness_role' || index == 'initiator') {
                 divId = 'testCaseRolesBox';
             } else if (index == 'test_suite_id') {

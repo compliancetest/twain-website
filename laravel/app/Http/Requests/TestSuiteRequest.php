@@ -78,6 +78,7 @@ class TestSuiteRequest extends Request
             'conformanceLevels.*.required_with' => 'Please fill Conformance Level Code / Description',
             'roles.*.required_with' => 'Please fill Role Name / Description',
             'features.*.required_with' => 'Please fill Feature Name / Description',
+            'features.*.required_if' => 'Please define at least one Feature',
             'scenarios.*.required_with' => 'Please fill Scenario Code / Description / Sequence number',
             'specificationDocuments.*.required_with' => 'Please fill Specification Document Name / Description / Location',
         ];
