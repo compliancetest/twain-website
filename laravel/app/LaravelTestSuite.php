@@ -244,8 +244,14 @@ class LaravelTestSuite extends Model
      * Process request data and update all test suite relations
      * @param $request
      */
-    public function updateRelations($request, $versionUpdated = false)
+    public function updateRelations($request, $versionUpdated = false, $oldTestSuiteCases = false)
     {
+        if ($versionUpdated && $oldTestSuiteCases) {
+            foreach ($oldTestSuiteCases as $oldTestSuiteCase) {
+                $this->testCases()->attach($oldTestSuiteCase->id);
+            }
+        }
+
         $conformanceLevelCodes = [];
         if (is_array($request->get('conformanceLevels'))) {
             foreach ($request->get('conformanceLevels') as $subName => $conformanceLevel) {

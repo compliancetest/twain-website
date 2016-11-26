@@ -80,7 +80,6 @@ class TransactionsController extends BaseApiController
      */
     public function create(\Illuminate\Http\Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:zip',
             'test_case_id' => 'required|exists:test_cases,slug',

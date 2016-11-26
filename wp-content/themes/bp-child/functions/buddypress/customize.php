@@ -504,12 +504,16 @@ function getCommunityTestSuites($community_id)
     global $wpdb;
 
     if (doesUserCommunityAdmin(get_current_user_id(), $community_id) || is_super_admin()) {
-        return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE community_id = %s ORDER BY full_name", $community_id));
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE community_id = %s ORDER BY full_name", $community_id));
+    } else if (doesUserCommunityMember(get_current_user_id(), $community_id)) {
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status IN ('Active', 'Partial', 'Obsolete', 'Depreciated') AND community_id = %s GROUP BY minor_family_mark ORDER BY created_at DESC ", $community_id));
+    } else {
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status = 'Active' AND community_id = %s GROUP BY minor_family_mark ORDER BY created_at DESC", $community_id));
     }
-    if (doesUserCommunityMember(get_current_user_id(), $community_id)) {
-        return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status IN ('Active', 'Partial') AND community_id = %s ORDER BY full_name", $community_id));
-    }
-    return $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status = 'Active' AND community_id = %s ORDER BY full_name", $community_id));
+    usort($result, function ($a, $b) {
+        return strcmp(strtolower($a->full_name), strtolower($b->full_name));
+    });
+    return $result;
 }
 
 

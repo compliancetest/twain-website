@@ -3,10 +3,13 @@
 namespace App\Jobs;
 
 use App\Jobs\Job;
+use App\LaravelTestCase;
+use App\LaravelTestSuite;
 use App\OrganisationMember;
 use App\OrganisationSubscription;
 use App\Post;
 use App\PostMeta;
+use App\Product;
 use App\TestOutcomeStatus;
 use App\Transaction;
 use App\TransactionChangeLog;
@@ -103,21 +106,21 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         $za->close();
         @unlink($this->rootFolder . $fileName);
 
-        $product = Post::where(['post_name' => $this->productId, 'post_type' => 'product-service'])->first();
-        $testSuite = Post::where(['post_name' => $this->testSuiteId, 'post_type' => 'test-suite'])->first();
-        $testCase = Post::where(['post_name' => $this->testCaseId, 'post_type' => 'test-case'])->first();
+        $product = Product::findBySlug($this->productId);
+        $testSuite = LaravelTestSuite::findBySlug($this->testSuiteId);
+        $testCase = LaravelTestCase::findBySlug($this->testCaseId);
 
         $organisationMember = OrganisationMember::where(['user_id' => $this->userId])->first();
         $organisationSubscription = OrganisationSubscription::where(
             [
                 'user_id' => $this->userId,
                 'organisation_id' => $organisationMember->organisation_id,
-                'suite_family_mark' => $testSuite->ID,
+                'suite_minor_family_mark' => $testSuite->minor_family_mark,
             ]
         )->first();
         $transaction = Transaction::firstOrCreate([
             'execution_id' => $this->executionId,
-            'test_case_id' => $testCase->ID,
+            'test_case_id' => $testCase->id,
             'customer_id' => $this->userId,
         ]);
 
@@ -126,8 +129,8 @@ class ProcessTransactionLog extends Job implements ShouldQueue
             TransactionChangeLog::addLog($transaction, $this->userId, $this->testOutcome);
         }
 
-        $transaction->product_id = $product->ID;
-        $transaction->test_suite_id = $testSuite->ID;
+        $transaction->product_id = $product->id;
+        $transaction->suite_minor_family_mark = $testSuite->minor_family_mark;
         $transaction->audit_record = false;
         $transaction->test_outcome_status_id = $this->testOutcome ? TestOutcomeStatus::getIdByCode($this->testOutcome) : TestOutcomeStatus::getSuccessId();
         $transaction->reason = $this->reason;
@@ -252,7 +255,7 @@ class ProcessTransactionLog extends Job implements ShouldQueue
         }
 
 
-        if($testSuite->getMetaByKey('ts_tester_role') != 'Application' && ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
+        if($testSuite->product_type != 'Application' && ($transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PENDING') ||
             $transaction->test_outcome_status_id == TestOutcomeStatus::getIdByCode('PASS')) && isServerValidationEnabled()) {
             /*
              * Ensure that each TWRC_XFERDONE returs code has image
@@ -264,22 +267,22 @@ class ProcessTransactionLog extends Job implements ShouldQueue
                 $transaction->test_outcome_status_id = TestOutcomeStatus::getIdByCode('FAIL');
                 $transaction->reason = 'Condition "Each successful data transfer should have an associated image." was not met.';
             } else {
-                if ($testCase->post_name == 'ca-01-v1-0') {
+                if ($testCase->slug == 'ca-01-v1-0') {
                     $testCaseValidator = new \App\CA01($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
-                } else if($testCase->post_name == 'ca-03-v1-0'){
+                } else if($testCase->slug == 'ca-03-v1-0'){
                     $testCaseValidator = new \App\CA03($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
-                } else if($testCase->post_name == 'ca-04-v1-0'){
+                } else if($testCase->slug == 'ca-04-v1-0'){
                     $testCaseValidator = new \App\CA04($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
-                } else if($testCase->post_name == 'ca-05-v1-0'){
+                } else if($testCase->slug == 'ca-05-v1-0'){
                     $testCaseValidator = new \App\CA05($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
-                } else if ($testCase->post_name == 'ca-07-v1-0') {
+                } else if ($testCase->slug == 'ca-07-v1-0') {
                     $testCaseValidator = new \App\CA07($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
-                } else if ($testCase->post_name == 'ip-01-v1-0') {
+                } else if ($testCase->slug == 'ip-01-v1-0') {
                     $testCaseValidator = new \App\IP01($this->rootFolder, $transaction, $this->userId);
                     $testCaseValidator->validate();
                 }

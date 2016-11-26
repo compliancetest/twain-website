@@ -181,7 +181,7 @@ class TestSuitesController extends Controller
             $testSuite = $oldTestSuite;
             $testSuite->fill($request->all());
         }
-        $testSuite->updateRelations($request, $versionUpdated);
+        $testSuite->updateRelations($request, $versionUpdated, $oldTestSuite->testCases);
         $testSuite->save();
         if ($request->get('send-notification')) {
             $testSuite->notifySubscribers();

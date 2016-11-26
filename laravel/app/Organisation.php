@@ -107,6 +107,6 @@ class Organisation extends Model
 
     public function testSuiteIsApproved(LaravelTestSuite $testSuite)
     {
-        return $this->approvedSuites()->where('suite_major_family_mark', $testSuite->minor_family_mark)->first();
+        return $this->approvedSuites()->where('suite_major_family_mark', $testSuite->major_family_mark)->first();
     }
 }
