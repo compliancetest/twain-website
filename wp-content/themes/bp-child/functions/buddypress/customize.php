@@ -600,7 +600,8 @@ function getDashboardPages($type = 'page')
 
             if (count($subscriptions) > 0) {
                 foreach ($subscriptions as $row) {
-                    $item['subpages'][] = array('title' => $row->full_name, 'url' => '/test-suite/' . $row->slug);
+                    $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($row->suite_minor_family_mark);
+                    $item['subpages'][] = array('title' => $latestSuite->full_name, 'url' => '/test-suite/' . $latestSuite->slug);
                 }
             }
 
