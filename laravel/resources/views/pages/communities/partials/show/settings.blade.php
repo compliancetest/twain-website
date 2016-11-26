@@ -386,9 +386,7 @@
                     <div class="colored-box-content">
                         <div class="form-group">
                             <label for="user_email">User Email (required)</label>
-                            {{ Form::text('user_email', null, ['required' => 'required',
-                                'class' => 'form-control'
-                            ]) }}
+                            {{ Form::text('user_email', null, ['class' => 'form-control']) }}
                         </div>
 
                         <div class="form-group row">
