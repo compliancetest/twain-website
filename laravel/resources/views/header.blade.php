@@ -68,7 +68,7 @@
                                         <a data-title="Test Suites" href="{{ getSiteUrl() }}/my-test-suites/" class="menu-test-suites">Test Suites</a>
                                         <ul class="dropdown-menu">
                                             @foreach(getUserSubscriptions(null, true) as $subscription)
-                                                <li class="first"><a href="{{ get_permalink($subscription->suite_id) }}">{{ $subscription->suite_title }}</a></li>
+                                                <li class="first"><a href="/test-suite/{{ $subscription->slug }}">{{ $subscription->full_name }}</a></li>
                                             @endforeach
                                             <li class="action-link last"><a href="{{ getSiteUrl() }}/test-suites/" >+ Add</a></li>
                                         </ul>
