@@ -51,30 +51,15 @@ class TestSuitePolicy
     }
 
     /**
-     * Check that user can view Test Suite
+     * Check that user can subscribe to Test Suite
      * @param User $user
      * @param LaravelTestSuite $testSuite
      * @return bool
      */
     public function subscribeToTestSuite(User $user, LaravelTestSuite $testSuite)
     {
-        $community = Community::find($testSuite->community_id);
-        if ($community->visibility_status == 'private') {
-            if ($testSuite->status == 'Active' || $community->isAdmin()) {
-                return true;
-            }
-            if (($community->isModerator() || $community->getMember($user->ID)) && in_array($testSuite->status, ['Active', 'Partial', 'Obsolete', 'Deprecated'])) {
-                return true;
-            }
-        }
-        if ($community->visibility_status == 'public') {
-            //only community member can subscribe
-            if (!$community->getMember($user->ID)){
-                return false;
-            }
-            if ($testSuite->status == 'Active' || $community->isAdmin() || in_array($testSuite->status, ['Active', 'Partial', 'Obsolete', 'Deprecated'])) {
-                return true;
-            }
+        if ($testSuite->status == 'Active') {
+            return true;
         }
         return false;
     }
