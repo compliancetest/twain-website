@@ -59,6 +59,10 @@
                             $('#header_login_error_msg').fadeIn('fast');
                             document.location.href = '/login';
                         }
+                        else if(rsp['message'].indexOf('Your email is not verified yet') != -1){
+                             $('#header_login_error_msg').html('<span></span>' + rsp['message']);
+                            $('#header_login_error_msg').fadeIn('fast');
+                        }
                         else if(rsp['message'] == 'FAILED_CAPTCHA'){
                             $('#header_login_error_msg').html('<span></span>Captch value is incorrect!');
                             $('#header_login_error_msg').fadeIn('fast');

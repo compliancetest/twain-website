@@ -44,10 +44,9 @@ function compliancetest_login()
         $result['message'] = $user->get_error_message();
     } else {
         if ($user->user_status == 3) {
-            $result['redirect_to'] = home_url();
-            addMessage('Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).', 'notice');
             wp_logout();
-            $result['status'] = 'success';
+            $result['status'] = 'fail';
+            $result['message'] = 'Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).';
             exit(json_encode($result));
         }
         $result['status'] = 'success';

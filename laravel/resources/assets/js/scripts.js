@@ -199,8 +199,11 @@ var Page = {
                                 errorContainer.html('Attempts limit has been reached').fadeIn('fast');
                                 document.location.href = '/login';
                             }
-                            else if(rsp['message'] == 'FAILED_CAPTCHA'){
+                            else if(rsp['message'] == 'FAILED_CAPTCHA') {
                                 errorContainer.html('Captcha value is incorrect!').fadeIn('fast');
+                            }
+                             else if(rsp['message'].indexOf('Your email is not verified yet') != -1){
+                                errorContainer.html(rsp['message']).fadeIn('fast');
                             } else {
                                 errorContainer.html('Wrong username or password, please try again!').fadeIn('fast');
                             }
