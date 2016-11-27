@@ -39,8 +39,9 @@
                                                                     <ul class="dropdown-menu">
                                                                         @foreach ($testsuites as $k => $row)
                                                                             <li @if($k == 0) class="first" @endif>
-                                                                                <a href="/test-suite/{{ $row->slug }}">
-                                                                                    {{ $row->full_name }}
+                                                                                 <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($row->minor_family_mark);?>
+                                                                                <a href="/test-suite/{{ $latestSuite->slug }}">
+                                                                                    {{ $latestSuite->full_name }}
                                                                                 </a>
                                                                             </li>
                                                                         @endforeach

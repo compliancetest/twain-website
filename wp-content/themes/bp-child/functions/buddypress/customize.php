@@ -582,7 +582,8 @@ function getDashboardPages($type = 'page')
                     if (count($testsuites) > 0) {
                         $item2[0]['subpages'] = array();
                         foreach ($testsuites as $row) {
-                            $item2[0]['subpages'][] = array('title' => $row->full_name, 'url' => '/test-suite/' . $row->slug);
+                            $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($row->minor_family_mark);
+                            $item2[0]['subpages'][] = array('title' => $latestSuite->full_name, 'url' => '/test-suite/' . $latestSuite->slug);
                         }
                     }
                     $item1['subpages'] = $item2;
