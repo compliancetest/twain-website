@@ -9288,3 +9288,7 @@ input.inactive_s{
     margin: 5px 0 0 0;
     display: inline-block;
 }
+
+.btn.copyProfileLink{
+    cursor: pointer;
+}
