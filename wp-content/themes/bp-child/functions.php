@@ -651,8 +651,30 @@ function addMessage($message, $type = 'success')
 {
     global $wpdb;
     $wpdb->insert('flash_messages',
-        ['key' => md5($_SERVER['REMOTE_ADDR']), 'data' => json_encode(array('message' => $message, 'type' => $type))]
+        ['key' => md5(getClientIPAddress()), 'data' => json_encode(array('message' => $message, 'type' => $type))]
     );
+}
+
+function getClientIPAddress()
+{
+    if (isset($_SERVER)) {
+
+        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+
+        if (isset($_SERVER["HTTP_CLIENT_IP"]))
+            return $_SERVER["HTTP_CLIENT_IP"];
+
+        return $_SERVER["REMOTE_ADDR"];
+    }
+
+    if (getenv('HTTP_X_FORWARDED_FOR'))
+        return getenv('HTTP_X_FORWARDED_FOR');
+
+    if (getenv('HTTP_CLIENT_IP'))
+        return getenv('HTTP_CLIENT_IP');
+
+    return getenv('REMOTE_ADDR');
 }
 
 //Get get params for search filter
