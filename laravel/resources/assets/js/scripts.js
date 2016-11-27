@@ -89,7 +89,9 @@ jQuery(document).ready(function($) {
 
     if ($.fn.redactor){
         $('.redactor_editor').redactor({
-            minHeight: 80
+            minHeight: 80,
+            shortcuts: false,
+            pastePlainText: false
         });
     }
 

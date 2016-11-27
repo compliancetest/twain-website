@@ -33,6 +33,13 @@
             {!! $product->description !!}
         </div>
     @endif
+
+    @if(!empty($product->capabilities->pluck('capability')->toArray()))
+        <div class="product-description">
+            <strong>Capabilities:</strong><br/>
+            {{ implode(', ', $product->capabilities->pluck('capability')->toArray()) }}
+        </div>
+    @endif
 </div>
 
 @if($product->getFeatures())
