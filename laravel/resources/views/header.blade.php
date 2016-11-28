@@ -37,9 +37,11 @@
                                                             <?php $testsuites = getCommunityTestSuites($sub->community->id);?>
                                                                 @if(count($testsuites) > 0)
                                                                     <ul class="dropdown-menu">
-                                                                        @foreach ($testsuites as $k => $row)
+                                                                        @foreach ($testsuites as $k => $latestSuite)
                                                                             <li @if($k == 0) class="first" @endif>
-                                                                                 <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($row->minor_family_mark);?>
+                                                                                @if(!($community->isAdmin() || is_super_admin()))
+                                                                                    <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($latestSuite->minor_family_mark);?>
+                                                                                @endif
                                                                                 <a href="/test-suite/{{ $latestSuite->slug }}">
                                                                                     {{ $latestSuite->full_name }}
                                                                                 </a>

@@ -581,8 +581,10 @@ function getDashboardPages($type = 'page')
                     $testsuites = getCommunityTestSuites($community->id);
                     if (count($testsuites) > 0) {
                         $item2[0]['subpages'] = array();
-                        foreach ($testsuites as $row) {
-                            $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($row->minor_family_mark);
+                        foreach ($testsuites as $latestSuite) {
+                            if (!(doesUserCommunityAdmin(get_current_user_id(), $latestSuite->community_id) || is_super_admin())){
+                                $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($latestSuite->minor_family_mark);
+                            }
                             $item2[0]['subpages'][] = array('title' => $latestSuite->full_name, 'url' => '/test-suite/' . $latestSuite->slug);
                         }
                     }
