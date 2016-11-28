@@ -1476,6 +1476,8 @@ function handleChangeTestCaseResponse(jqXHR, form){
                 divId = 'testCaseRolesBox';
             } else if (index == 'test_suite_id') {
                 divId = 'testTestSuitesBox';
+             } else if (v.indexOf('outcome type') != -1) {
+                divId = 'testCasePropertyBox';
             } else if (v.indexOf('Expected Result') != -1) {
                 divId = 'testCaseStepsBoxContent';
             }
@@ -1496,8 +1498,6 @@ function handleChangeTestSuiteResponse(jqXHR, form) {
                 divId = 'conformanceLevelsBox';
             } else if (v.indexOf('Scenario') != -1) {
                 divId = 'scenariosBox';
-             } else if (v.indexOf('outcome type') != -1) {
-                divId = 'testCasePropertyBox';
             } else if (v.indexOf('Role') != -1) {
                 divId = 'testSuitesRolesBox';
             } else if (v.indexOf('specificationDocuments') != -1) {
