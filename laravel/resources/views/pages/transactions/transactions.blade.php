@@ -54,7 +54,8 @@
                             <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
                         </td>
                         <td class="text-center">
-                            <a class="text-nowrap" href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
+                            <?php $latestTestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuite->minor_family_mark);?>
+                            <a class="text-nowrap" href="/test-suite/{{ $latestTestSuite->slug }}/" target="_blank">{{ $latestTestSuite->full_name }}</a>
                             <br/>
                             <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->full_name }}</a>
                         </td>

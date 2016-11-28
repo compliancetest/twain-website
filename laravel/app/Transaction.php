@@ -30,6 +30,15 @@ class Transaction extends Model
     }
 
     /**
+     * Product relation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
+    }
+
+    /**
      * Transaction explanation logs relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

@@ -555,13 +555,14 @@
                 }
             });
 
-            $('body').on('change', '#suiteFrom, #suiteTo', function () {
+            $('body').on('change', '#suiteFrom, #suiteTo, #migration_product_id', function () {
                 jQuery('#migrateTransactionModal .block-loading').show();
                 jQuery.ajax({
                     url: '/transactions/migrate',
                     data: {
                         'suiteFrom': jQuery('#suiteFrom').val(),
                         'suiteTo': jQuery('#suiteTo').val(),
+                        'product_id': jQuery('#migration_product_id').val(),
                     },
                     type: 'get',
                     dataType: 'json',

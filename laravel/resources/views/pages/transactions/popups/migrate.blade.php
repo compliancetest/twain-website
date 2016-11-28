@@ -29,6 +29,19 @@
         </div>
     @endif
 
+    @if($selectedSuiteFrom && $selectedSuiteTo && $transactions)
+        <div class="form-group">
+            <label for="migration_product_id">Product:</label>
+            <select class="form-control" id="migration_product_id" name="migration_product_id">
+                <option value="">--Select Product--</option>
+                @foreach($products as $product)
+                    <option @if($selectedProduct == $product->product->id) selected="selected"
+                            @endif value="{{ $product->product->id }}">{{ $product->product->full_name }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-sm-12">
             @if($transactions)

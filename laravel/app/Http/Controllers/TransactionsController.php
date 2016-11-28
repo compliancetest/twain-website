@@ -79,7 +79,9 @@ class TransactionsController extends Controller
             'suitesTo' => $suitesTo,
             'selectedSuiteFrom' => $request->get('suiteFrom'),
             'selectedSuiteTo' => $request->get('suiteTo'),
-            'transactions' => false
+            'selectedProduct' => $request->get('product_id'),
+            'transactions' => false,
+            'products' => false,
         ];
         if($data['selectedSuiteFrom'] || $data['selectedSuiteTo']){
             if($data['selectedSuiteFrom']){
@@ -88,10 +90,14 @@ class TransactionsController extends Controller
                 });
             }
             if($data['selectedSuiteFrom'] && $data['selectedSuiteTo']){
-                $transactions = Transaction::where([
+                $transactionsWhere = [
                     'suite_minor_family_mark' => $data['selectedSuiteFrom'],
                     'audit_record' => 1,
-                ])->whereIn('subscription_id', Transaction::getUserSubscriptions())->get();
+                ];
+                if ($request->get('product_id')) {
+                    $transactionsWhere['product_id'] = $request->get('product_id');
+                }
+                $transactions = Transaction::where($transactionsWhere)->whereIn('subscription_id', Transaction::getUserSubscriptions())->get();
                 $selectedSuiteToEntry = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($data['selectedSuiteTo']);
                 $cases = $selectedSuiteToEntry->testCases()->pluck('test_cases.id')->toArray();
                 foreach($transactions as $transaction){
@@ -100,6 +106,10 @@ class TransactionsController extends Controller
                     }
                 }
             }
+            $data['products'] = $transactions = Transaction::where([
+                'suite_minor_family_mark' => $data['selectedSuiteFrom'],
+                'audit_record' => 1,
+            ])->whereIn('subscription_id', Transaction::getUserSubscriptions())->groupBy('product_id')->with('product')->get();
             return response()->json(['html' => view('pages.transactions.popups.migrate')->with($data)->render()]);
         }
         return view('pages.transactions.popups.migrate')->with($data);
