@@ -713,6 +713,12 @@
                             $(this).remove();
                         });
 
+                         $(thisParentId+' .grid-cell.in_input').each(function(){
+                           if ($(this).attr('data-type') == 'skip') {
+                                $(this).parent().show();
+                            }
+                        });
+
                         $(thisParentId+' .btn-row').hide();
 
                     } else {
