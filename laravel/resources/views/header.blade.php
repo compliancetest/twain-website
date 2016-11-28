@@ -39,7 +39,7 @@
                                                                     <ul class="dropdown-menu">
                                                                         @foreach ($testsuites as $k => $latestSuite)
                                                                             <li @if($k == 0) class="first" @endif>
-                                                                                @if(!($community->isAdmin() || is_super_admin()))
+                                                                                @if(!($sub->community->isAdmin() || is_super_admin()))
                                                                                     <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($latestSuite->minor_family_mark);?>
                                                                                 @endif
                                                                                 <a href="/test-suite/{{ $latestSuite->slug }}">
