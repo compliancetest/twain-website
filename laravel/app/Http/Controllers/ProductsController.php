@@ -34,7 +34,8 @@ class ProductsController extends Controller
     {
         $product = Product::findBySlug($productSlug);
         $pageTitle = $product->full_name;
-        return view('pages.products.view', compact('product', 'pageTitle'));
+        $features = $product->getFeatures();
+        return view('pages.products.view', compact('product', 'pageTitle', 'features'));
     }
 
     /**

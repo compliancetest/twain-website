@@ -42,28 +42,28 @@
     @endif
 </div>
 
-@if($product->getFeatures())
+@if($features)
     <h2 class="product-subtitle">Product Features</h2>
-    @foreach($product->getFeatures() as $testSuiteId => $features)
-        <div class="blue-colored-table-wrapper table-responsive">
-            <table class="table blue-colored-table">
-                <thead>
-                <tr>
-                    <th class="col-sm-4 text-left">Test Suite</th>
-                    <th class="text-left">Features</th>
-                </tr>
-                </thead>
+    <div class="blue-colored-table-wrapper table-responsive">
+        <table class="table blue-colored-table">
+            <thead>
+            <tr>
+                <th class="col-sm-4 text-left">Test Suite</th>
+                <th class="text-left">Features</th>
+            </tr>
+            </thead>
+            @foreach($features as $testSuiteId => $features)
                 <tr>
                     <td>{{ \App\LaravelTestSuite::find($testSuiteId)->full_name }}</td>
                     <td>
                         @foreach($features as $feature)
-                        <span data-tooltip="tooltip" title="{{ $feature['description'] }}">{{ $feature['name'] }}</span>@if ($feature !== end($features)), @endif
+                            <span data-tooltip="tooltip" title="{{ $feature['description'] }}">{{ $feature['name'] }}</span>@if ($feature !== end($features)), @endif
                         @endforeach
                     </td>
                 </tr>
-            </table>
-        </div>
-    @endforeach
+            @endforeach
+        </table>
+    </div>
 @endif
 
 <h2 class="product-subtitle">Compliance Claims</h2>
