@@ -49,7 +49,7 @@
                     <table class="table colored-table" style="margin-top: 20px;">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th><input type="checkbox" class="check_all_fo_migration"></th>
                             <th>Execution ID</th>
                             <th>Date</th>
                         </tr>
@@ -60,7 +60,7 @@
                                 <td colspan="4" class="caseIdList" data-id="{!! $testCase !!}">
                                     {{ \App\LaravelTestCase::find($testCase)->full_name }}
                                     @if(!\App\Transaction::where(['test_case_id' => $testCase, 'suite_minor_family_mark' => $caseTransactions[0]->suite_minor_family_mark])->get()->isEmpty())
-                                        <a href="/my-transaction-log/?audit_record=yes&test_case_id={{ $testCase }}&suite_minor_family_mark={{ $caseTransactions[0]->suite_minor_family_mark }}"
+                                        <a href="/my-transaction-log/?audit_record=yes&test_case_id={{ $testCase }}&suite_minor_family_mark={{ $caseTransactions[0]->suite_minor_family_mark }}@if($selectedProduct)&product_id={{ $selectedProduct }}@endif"
                                            target="_blank" style="float: right;">View Log</a>
                                     @endif
                                 </td>

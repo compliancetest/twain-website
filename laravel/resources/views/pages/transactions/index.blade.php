@@ -581,6 +581,10 @@
                 });
             });
 
+            $('body').on('change', '.check_all_fo_migration', function () {
+                $('.transaction').not(':disabled').prop('checked', $(this).is(':checked'));
+            });
+
             $('body').on('click', '.submit-migration', function () {
                 jQuery('#migrateTransactionModal .block-loading').show();
                 jQuery.ajax({
