@@ -120,7 +120,7 @@
                                         @endforeach
                                     </select>
                                 @else
-                                    <select name="community_id" id="communityId" class="form-control" disabled="disabled">
+                                    <select name="community_id" id="communityId" class="form-control">
                                         <option value="{{ $testCase->community_id }}" selected="selected">{{ $testCase->community->title }}</option>
                                     </select>
                                 @endif

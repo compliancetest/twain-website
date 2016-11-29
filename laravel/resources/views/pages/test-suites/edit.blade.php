@@ -29,7 +29,7 @@
                                                 @endforeach
                                             </select>
                                         @else
-                                            <select name="community_id" id="communityId" class="form-control" disabled="disabled">
+                                            <select name="community_id" id="communityId" class="form-control">
                                                 <option value="{{ $testSuite->community_id }}" selected="selected">{{ $testSuite->community->title }}</option>
                                             </select>
                                         @endif
