@@ -651,7 +651,7 @@ function addMessage($message, $type = 'success')
 {
     global $wpdb;
     $wpdb->insert('flash_messages',
-        ['key' => (getClientIPAddress()), 'data' => json_encode(array('message' => $message, 'type' => $type))]
+        ['key' => md5(getClientIPAddress()), 'data' => json_encode(array('message' => $message, 'type' => $type))]
     );
 }
 

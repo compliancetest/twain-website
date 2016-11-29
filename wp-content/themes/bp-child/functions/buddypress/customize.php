@@ -76,7 +76,7 @@ function save_group_terms_and_license($group_id)
 function flushMessages($class = '')
 {
     global $wpdb;
-    $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM flash_messages WHERE `key` = "%s"', md5($_SERVER['REMOTE_ADDR'])));
+    $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM flash_messages WHERE `key` = "%s"', md5(getClientIPAddress())));
     if ($row) {
         $data = json_decode($row->data, 1);
         if ($data) {
