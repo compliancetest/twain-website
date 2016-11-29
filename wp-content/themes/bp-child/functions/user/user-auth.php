@@ -46,7 +46,8 @@ function compliancetest_login()
         if ($user->user_status == 3) {
             wp_logout();
             $result['status'] = 'fail';
-            $result['message'] = 'Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).';
+//            $result['message'] = 'Your email is not verified yet, please check your email address! <span>(resend email <a id="resend_email_verification" href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">link verification</a>).';
+            $result['message'] = 'Your email is not verified yet, please check your email. To resend the email click <a href="' . get_site_url() . '?cp-action=' . wp_create_nonce('resend_email_verification') . '&uemail=' . $user->user_email . '">here</a>';
             exit(json_encode($result));
         }
         $result['status'] = 'success';
@@ -199,8 +200,8 @@ function resend_email_verification()
         cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'verify', $data);
     }
 
-    echo 'success';
-
+    addMessage('Email successfully sent! Please check your email address to verify your email', 'success');
+    wp_redirect(home_url());
     exit();
 }
 
