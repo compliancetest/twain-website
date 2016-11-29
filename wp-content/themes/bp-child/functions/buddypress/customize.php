@@ -76,14 +76,15 @@ function save_group_terms_and_license($group_id)
 function flushMessages($class = '')
 {
     global $wpdb;
-    $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM flash_messages WHERE `key` = "%s"', md5(getClientIPAddress())));
+    $keyStr = md5(getClientIPAddress());
+    $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM flash_messages WHERE `key` = "%s"', $keyStr));
     if ($row) {
         $data = json_decode($row->data, 1);
         if ($data) {
             echo '<div id="messages-wrapper"  class="' . $class . '" style="margin-bottom:20px;">';
             echo '<div class="message ' . $data['type'] . '">' . $data['message'] . "</div>";
             echo '</div>';
-            $wpdb->get_row($wpdb->prepare('DELETE FROM flash_messages WHERE `key` = %s', md5($_SERVER['REMOTE_ADDR'])));
+            $wpdb->get_row($wpdb->prepare('DELETE FROM flash_messages WHERE `key` = %s', $keyStr));
         }
     }
 }
