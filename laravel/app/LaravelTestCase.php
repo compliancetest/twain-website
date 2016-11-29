@@ -24,6 +24,11 @@ class LaravelTestCase extends Model
         return $this->hasMany('\App\Transaction', 'test_case_id');
     }
 
+    public function community()
+    {
+        return $this->belongsTo('\App\Community', 'community_id');
+    }
+
     public function testSuites()
     {
         return $this->belongsToMany('App\LaravelTestSuite', 'test_suite_test_case', 'test_case_id', 'test_suite_id');

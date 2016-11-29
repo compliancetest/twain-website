@@ -20,13 +20,19 @@
                             <div class="colored-box-body collapse in" id="chooseCommunityBox">
                                 <div class="colored-box-content">
                                     <div class="form-group">
-                                        <select name="community_id" id="communityId" class="form-control">
-                                            @foreach(\App\Community::all()->sortBy('title') as $community)
-                                                @if($community->isAdmin() || is_super_admin())
-                                                    <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id || (!$testSuite && $request->get('community_id') == $community->id)) selected="selected" @endif>{{ $community->title }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                        @if(!$testSuite)
+                                            <select name="community_id" id="communityId" class="form-control">
+                                                @foreach(\App\Community::all()->sortBy('title') as $community)
+                                                    @if($community->isAdmin() || is_super_admin())
+                                                        <option value="{{ $community->id }}" @if($community->id == $testSuite->community_id || (!$testSuite && $request->get('community_id') == $community->id)) selected="selected" @endif>{{ $community->title }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <select name="community_id" id="communityId" class="form-control" disabled="disabled">
+                                                <option value="{{ $testSuite->community_id }}" selected="selected">{{ $testSuite->community->title }}</option>
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

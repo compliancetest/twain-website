@@ -110,14 +110,21 @@
 
                             <div class="form-group">
                                 <label for="testCaseCommunity">Community:</label>
-                                <select name="community_id" id="communityId" class="form-control">
-                                    @foreach(\App\Community::all()->sortBy('title') as $community)
-                                        @if($community->isAdmin() || is_super_admin())
-                                            <option value="{{ $community->id }}"
-                                                    @if($community->id == $testCase->community_id) selected="selected" @endif>{{ $community->title }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                @if(!$testCase)
+                                    <select name="community_id" id="communityId" class="form-control">
+                                        @foreach(\App\Community::all()->sortBy('title') as $community)
+                                            @if($community->isAdmin() || is_super_admin())
+                                                <option value="{{ $community->id }}"
+                                                        @if($community->id == $testCase->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <select name="community_id" id="communityId" class="form-control" disabled="disabled">
+                                        <option value="{{ $testCase->community_id }}" selected="selected">{{ $testCase->community->title }}</option>
+                                    </select>
+                                @endif
+
                             </div>
                             <div class="form-group">
                                 <label for="testCaseDescription">Description:</label>
