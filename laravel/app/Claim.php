@@ -133,7 +133,7 @@ class Claim extends Model
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
-                $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->ID, 'audit_record' => true])->first();
+                $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->id, 'audit_record' => true])->first();
                 $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
                 $case->link = $tempTransaction->s3_link;
                 $generalCases[$case->scenarioID][] = $case;
@@ -157,7 +157,7 @@ class Claim extends Model
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell('', '', '', '', view('pages.my.claims._cert_info')->with([
             'product' => Product::find($this->product_id),
-            'testSuite' => LaravelTestSuite::find($this->suite_minor_family_mark),
+            'testSuite' => LaravelTestSuite::getLatestSuiteForMinorFamilyMark($this->suite_minor_family_mark),
             'claim' => $this,
             'passCount' => $countPassCases,
             'excludeCount' => $countExcludeCases,
@@ -212,7 +212,7 @@ class Claim extends Model
     public function sendNewClaimNotification()
     {
         $user = \Auth::user();
-        $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
+        $testSuite = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($this->suite_minor_family_mark);
         $product = Product::find($this->product_id);
         $emailData = array(
             '[claim_id]' => $this->id,
