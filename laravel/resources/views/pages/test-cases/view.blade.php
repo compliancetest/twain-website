@@ -124,7 +124,7 @@
                 </div>
             @endif
 
-            @if($testSuites)
+            @if(count($testCase->features))
                 <div class="colored-box">
                     <div class="colored-box-header">Features</div>
                     <div class="colored-box-content">
@@ -138,14 +138,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach($testSuites as $testSuite)
-                                        @if(count($testSuite->features))
+                                        <?php $selectedFeatures = $testCase->features()->whereIn('test_suites_feature_id', $testSuite->features()->pluck('id')->toArray())->with(['testSuiteFeature'])->get();?>
+                                        @if(count($testSuite->features) && count($selectedFeatures))
                                             <tr>
                                                 <td>{{ $testSuite->full_name }}</td>
                                                 <td>
-                                                    @foreach($testSuite->features as $feature)
-                                                        @if($testCase && count($testCase->features->where('test_suites_feature_id', $feature->id)))
-                                                            <span data-tooltip="tooltip" title="{{ $feature->description }}">{{ $feature->name }}</span>@if ($feature !== $testSuite->features->last()), @endif
-                                                        @endif
+                                                    @foreach($selectedFeatures as $k => $feature)
+                                                        <span data-tooltip="tooltip" title="{{ $feature->testSuiteFeature->description }}">{{ $feature->testSuiteFeature->name }}</span>@if ($k != count($selectedFeatures) - 1), @endif
                                                     @endforeach
                                                 </td>
                                             </tr>
