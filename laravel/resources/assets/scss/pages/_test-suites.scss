@@ -201,3 +201,24 @@
     }
   }
 }
+
+.test-case-features-table{
+  tbody{
+    tr:first-child{
+      td, th{
+        border-top: 0;
+      }
+    }
+    tr{
+      td, th{
+        padding: 7px 7px 7px 0;
+      }
+    }
+
+    th{
+      color: #2c80e8;
+      font-size: 13px;
+      font-weight: 400;
+    }
+  }
+}

@@ -45,6 +45,9 @@
                     @if(count($testSuite->specificationDocuments) > 0)
                         <li><a href="#ts-specification-documents">Specification Documents</a></li>
                     @endif
+                    @if(count($testSuite->features) > 0)
+                        <li><a href="#ts-features">Features</a></li>
+                    @endif
                 </ul>
                 <div class="tab-content simple-tab-content">
                     @if(count($testSuite->roles) > 0)
@@ -69,9 +72,9 @@
                     @endif
                     @if(count($testSuite->getProfileTypes()) > 0)
                         <div role="tabpanel" class="tab-pane" id="ts-profile-types">
-                           <ul>
+                           <ul class="row">
                                @foreach($testSuite->getProfileTypes() as $profileTypeId => $profileType)
-                                    <li><a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $profileType['id'] }}" data-toggle="modal" data-remote="true"
+                                    <li class="col-sm-6 col-md-4"><a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $profileType['id'] }}" data-toggle="modal" data-remote="true"
                                        data-ajax-modal data-target="#modalViewProfile">{{ $profileType['title'] }}</a></li>
                                @endforeach
                            </ul>
@@ -89,6 +92,22 @@
                             @endforeach
                         </ul>
                     </div>
+                    @endif
+
+
+                    @if(count($testSuite->features) > 0)
+                        <div role="tabpanel" class="tab-pane" id="ts-features">
+                            <table class="table test-case-features-table">
+                                <tbody>
+                                    @foreach($testSuite->features as $feature)
+                                        <tr>
+                                            <th class="text-nowrap">{{ $feature->name }}</th>
+                                            <td>{!! $feature->description !!}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @endif
                 </div>
             </div>

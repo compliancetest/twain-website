@@ -15871,6 +15871,21 @@ input.notify-changes {
   text-decoration: none;
 }
 
+/* line 208, ../scss/pages/_test-suites.scss */
+.test-case-features-table tbody tr:first-child td, .test-case-features-table tbody tr:first-child th {
+  border-top: 0;
+}
+/* line 213, ../scss/pages/_test-suites.scss */
+.test-case-features-table tbody tr td, .test-case-features-table tbody tr th {
+  padding: 7px 7px 7px 0;
+}
+/* line 218, ../scss/pages/_test-suites.scss */
+.test-case-features-table tbody th {
+  color: #2c80e8;
+  font-size: 13px;
+  font-weight: 400;
+}
+
 /* line 3, ../scss/pages/_test-cases.scss */
 .edit-test-case-page .initiator-role-group .checkbox-inline {
   padding-top: 7px;
