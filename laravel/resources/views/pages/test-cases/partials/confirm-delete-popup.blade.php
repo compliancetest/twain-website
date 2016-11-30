@@ -3,7 +3,17 @@
     Delete Test Case
 </div>
 <div class="modal-body">
-    Are you sure you want delete "{{ $testCase->full_name }}"?
+    @if(count($testCase->testSuites))
+        <div class="alert alert-danger">
+            Warning! This test case is currently included in the following test suites:
+            @foreach($testCase->testSuites as $testSuite)
+                <a href="/test-suite/{{ $testSuite->slug }}" target="_blank">{{ $testSuite->full_name }}</a><br>
+            @endforeach
+            Deleting the test case will remove it from all test suites. Do you wish to proceed?
+        </div>
+    @else
+        Are you sure you want delete "{{ $testCase->full_name }}"?
+    @endif
 </div>
 <div class="modal-footer">
     <button type="submit" class="btn btn-success btn-with-icon btn-confirm delete-case">Confirm</button>
