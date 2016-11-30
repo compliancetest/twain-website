@@ -25,7 +25,7 @@
     </tr>
     <tr>
         <th>Product</th>
-        <td><a href="{{ getSiteUrl() }}/product/{{ $product->slug }}">{{ $product->full_name }}</a></td>
+        <td><a href="{{ getSiteUrl() }}/product/{{ $product->slug }}">{{ $product->name }}</a></td>
     </tr>
     <tr>
         <th>Product Version</th>
