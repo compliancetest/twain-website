@@ -129,17 +129,11 @@ class Claim extends Model
         //Classify the results by Scenario
         $excludedCases = $skippedCases = $generalCases = array();
         foreach ($testSuite->getTestCases($testPlan->role, $testPlan->level) as $case) {
-            $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->id, 'audit_record' => true, 'suite_minor_family_mark' => $this->suite_minor_family_mark])->first();
-            if($tempTransaction){
-                $case->transaction_created_at = $tempTransaction->created_at;
-            } else {
-                $case->transaction_created_at = false;
-            }
-
             if (in_array($case->id, $successCases)) {
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
+                $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->id, 'audit_record' => true, 'suite_minor_family_mark' => $this->suite_minor_family_mark])->first();
                 $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
                 $case->link = $tempTransaction->s3_link;
                 $generalCases[$case->scenarioID][] = $case;

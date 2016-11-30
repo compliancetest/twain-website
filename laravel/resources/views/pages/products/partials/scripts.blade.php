@@ -24,7 +24,7 @@
                 var claimId = $(this).data('claim-id');
                 var productSlug = $(this).data('product-slug');
                 var claimRow = $('#claimRow' + claimId);
-                var claimContainer = claimRow.parents('.colored-box-content');
+                var claimContainer = claimRow.closest('.colored-box-content');
                 var claimSpinner = $('#removingProductClaimSpinner' + claimId);
 
                 claimSpinner.show();

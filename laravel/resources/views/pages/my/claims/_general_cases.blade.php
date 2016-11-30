@@ -72,8 +72,8 @@
                 @endif
                 <td class="test-case">{{ $testCase->full_name }}</td>
                 <td class="issued">
-                    @if($testCase->transaction_created_at)
-                        {{ date('Y-m-d', $testCase->transaction_created_at) }}
+                    @if($testCase->created_at)
+                        {{ date('Y-m-d', $testCase->created_at) }}
                     @else
                         -
                     @endif
