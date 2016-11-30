@@ -131,9 +131,9 @@ class Claim extends Model
         foreach ($testSuite->getTestCases($testPlan->role, $testPlan->level) as $case) {
             $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->id, 'audit_record' => true, 'suite_minor_family_mark' => $this->suite_minor_family_mark])->first();
             if($tempTransaction){
-                $case->created_at = $tempTransaction->created_at;
+                $case->transaction_created_at = $tempTransaction->created_at;
             } else {
-                $case->created_at = false;
+                $case->transaction_created_at = false;
             }
 
             if (in_array($case->id, $successCases)) {
