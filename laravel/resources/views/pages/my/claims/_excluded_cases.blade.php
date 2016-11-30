@@ -1,42 +1,50 @@
 <style>
     .test-cases-table th {
-        background-color:#5a75b6;
-        color:#fff;
-        font-size:7pt;
-        vertical-align:middle;
-        line-height:18pt;
-        text-align:center;
-        font-weight:bold;
+        background-color: #5a75b6;
+        color: #fff;
+        font-size: 7pt;
+        vertical-align: middle;
+        line-height: 18pt;
+        text-align: center;
+        font-weight: bold;
     }
+
     .test-cases-table tr td {
         height: 100px !important;
     }
-    .test-cases-table th.test-outcome{
-        line-height:10px;
-    }
-    .test-cases-table th.test-scenario{
-        text-align:left;
-    }
-    .test-cases-table td {
-        font-size:6pt;
-        line-height:6pt;
-        color:#000;
-    }
-    .test-cases-table .even td{
-        background-color:#f3f4f5;
-    }
-    .test-cases-table .odd td{
-        background-color:#ececed;
-    }
-    .test-cases-table td a{
-        font-size:10pt;
-    }
-    .test-cases-table td.test-scenario{
-        background-color:#e2e2e2;
+
+    .test-cases-table th.test-outcome {
+        line-height: 10px;
     }
 
-    .issued, .test-outcome, .supporting-evidence{
-        text-align:center;
+    .test-cases-table th.test-scenario {
+        text-align: left;
+    }
+
+    .test-cases-table td {
+        font-size: 6pt;
+        line-height: 6pt;
+        color: #000;
+    }
+
+    .test-cases-table .even td {
+        background-color: #f3f4f5;
+    }
+
+    .test-cases-table .odd td {
+        background-color: #ececed;
+    }
+
+    .test-cases-table td a {
+        font-size: 10pt;
+    }
+
+    .test-cases-table td.test-scenario {
+        background-color: #e2e2e2;
+    }
+
+    .issued, .test-outcome, .supporting-evidence {
+        text-align: center;
     }
 </style>
 
@@ -62,7 +70,13 @@
                     </td>
                 @endif
                 <td class="test-case">{{ $testCase->full_name }}</td>
-                <td class="issued">{{ date('Y-m-d', $testCase->published_at) }}</td>
+                <td class="issued">
+                    @if($testCase->created_at)
+                        {{ date('Y-m-d', $testCase->created_at) }}
+                    @else
+                        -
+                    @endif
+                </td>
                 <td class="test-intent">{!! $testCase->description !!}</td>
                 <td class="test-reason">{{ $testCase->reason }}</td>
             </tr>

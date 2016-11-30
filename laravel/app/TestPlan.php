@@ -65,14 +65,14 @@ class TestPlan extends Model
      */
     public function getSuccessCases($productId)
     {
-        $suiteId = $this->suite_id;
         return DB::table('transactions')
             ->select('transactions.*')
-            ->join('test_outcome_statuses AS TO', function ($join) use ($suiteId) {
+            ->join('test_outcome_statuses AS TO', function ($join){
                 $join->on('TO.id', '=', 'transactions.test_outcome_status_id')
                     ->where('TO.code', '=', 'PASS');
             })
             ->where('product_id', $productId)
+            ->where('suite_minor_family_mark', $this->suite_minor_family_mark)
             ->where('audit_record', true)
             ->lists('test_case_id');
     }
@@ -91,6 +91,7 @@ class TestPlan extends Model
                     ->where('TO.code', '=', 'FAIL');
             })
             ->where('product_id', $productId)
+            ->where('suite_minor_family_mark', $this->suite_minor_family_mark)
             ->where('audit_record', true)
             ->lists('test_case_id');
     }
@@ -122,6 +123,7 @@ class TestPlan extends Model
                     ->where('TO.code', '=', 'SKIP');
             })
             ->where('product_id', $this->product_id)
+            ->where('suite_minor_family_mark', $this->suite_minor_family_mark)
             ->where('audit_record', true)
             ->lists('test_case_id');
     }
