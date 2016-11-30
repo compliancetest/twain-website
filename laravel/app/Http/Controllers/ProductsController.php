@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\TestPlan;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -120,7 +121,10 @@ class ProductsController extends Controller
             return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
         }
         $claim = $product->claims()->where('id', $claimId)->first();
-        $claim->testPlan()->update(['is_claimed' => false]);
+        $testPlan = TestPlan::find($claim->test_plan_id);
+        if ($testPlan) {
+            $testPlan->update(['is_claimed' => 0]);
+        }
         $claim->delete();
         return response()->json(['Claim was deleted successfully.']);
     }
