@@ -179,6 +179,7 @@ class TestSuitesController extends Controller
             }
         } else {
             $testSuite = $oldTestSuite;
+            $testSuite->full_name = LaravelTestSuite::generateCaseSuiteFullName($request);
             $testSuite->fill($request->all());
         }
         $testSuite->updateRelations($request, $versionUpdated, $oldTestSuite->testCases);
