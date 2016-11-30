@@ -267,7 +267,7 @@ class TestSuitesController extends BaseApiController
 
         $cases = [];
 
-        $testCases = $suite->getOrderedCases(['execution_mode', $request->get('execution_mode')]);
+        $testCases = $suite->getOrderedCases(['execution_mode' => $request->get('execution_mode')]);
 
         if (!count($testCases)) {
             return $this->respondNotFound("Test Cases not found");

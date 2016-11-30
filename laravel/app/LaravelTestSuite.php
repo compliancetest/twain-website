@@ -42,7 +42,7 @@ class LaravelTestSuite extends Model
      */
     public function getOrderedCases($args = [], $isAdmin = false)
     {
-        return $this->getCases($args, $isAdmin)->get();
+        return $this->getCases($args, $isAdmin, true)->get();
     }
 
     public function types()
@@ -196,7 +196,7 @@ class LaravelTestSuite extends Model
      * @param bool $isAdmin
      * @return mixed
      */
-    public function getCases($args = [], $isAdmin = false)
+    public function getCases($args = [], $isAdmin = false, $onlyActive = false)
     {
         $query = $this->testCases()
             ->select('test_cases.*', 'test_suites_scenarios.code AS scenarioCode', 'test_suites_scenarios.description AS scenarioDescription', 'test_suites_scenarios.id AS scenarioId')
@@ -222,6 +222,9 @@ class LaravelTestSuite extends Model
             $query->where('execution_mode', $args['execution_mode']);
         }
         if(!$isAdmin){
+            $query->where('test_cases.status', '!=', 'Draft');
+        }
+        if($onlyActive){
             $query->where('test_cases.status', 'Active');
         }
         if (!empty($args['scenario'])) {
