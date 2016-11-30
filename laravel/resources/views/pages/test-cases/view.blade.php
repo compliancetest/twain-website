@@ -74,6 +74,17 @@
                     </ul>
                 </div>
 
+                @if(count($testCase->capabilities))
+                <div class="options-box-row">
+                    <div class="options-box-row-title">Capabilities:</div>
+                    <ul class="inline-options-list capabilities-list">
+                        @foreach($testCase->capabilities as $cap)
+                            <li>{{ $cap->capability }}@if ($cap !== $testCase->capabilities->last()), @endif</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 @if($testCase->test_execution_profile_id)
                     <div class="options-box-row noprint">
                         <div class="options-box-row-title">Test Execution:</div>
@@ -93,7 +104,6 @@
                         </ul>
                     </div>
                 @endif
-
             </div>
 
             @if(count($testCase->samples))
@@ -110,6 +120,40 @@
                                 </li>
                             @endforeach
                         </ul>
+                    </div>
+                </div>
+            @endif
+
+            @if($testSuites)
+                <div class="colored-box">
+                    <div class="colored-box-header">Features</div>
+                    <div class="colored-box-content">
+                        <div class="table-responsive">
+                            <table class="table colored-table steps-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-sm-4 text-left">Test Suite</th>
+                                        <th class="text-left">Features</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($testSuites as $testSuite)
+                                        @if(count($testSuite->features))
+                                            <tr>
+                                                <td>{{ $testSuite->full_name }}</td>
+                                                <td>
+                                                    @foreach($testSuite->features as $feature)
+                                                        @if($testCase && count($testCase->features->where('test_suites_feature_id', $feature->id)))
+                                                            <span data-tooltip="tooltip" title="{{ $feature->description }}">{{ $feature->name }}</span>@if ($feature !== $testSuite->features->last()), @endif
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -138,9 +182,7 @@
                     </table>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 

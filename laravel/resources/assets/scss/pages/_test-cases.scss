@@ -95,6 +95,8 @@
 }
 
 .test-case-options-box{
+  margin-bottom: 20px;
+
   .options-box-row{
     .inline-options-list {
       overflow: hidden;
@@ -104,6 +106,7 @@
         vertical-align: top;
         line-height: 32px;
         padding-right: 0;
+        padding-top: 0;
         margin-right: -4px;
 
         @media (max-width: $screen-sm) {
@@ -118,6 +121,13 @@
           width: 100%;
           display: block;
           line-height: normal;
+        }
+      }
+
+      &.capabilities-list{
+        li{
+          display: inline;
+          margin: 0;
         }
       }
 
