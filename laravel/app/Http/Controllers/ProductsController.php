@@ -123,7 +123,8 @@ class ProductsController extends Controller
         $claim = $product->claims()->where('id', $claimId)->first();
         $testPlan = TestPlan::find($claim->test_plan_id);
         if ($testPlan) {
-            $testPlan->update(['is_claimed' => 0]);
+            $testPlan->is_claimed = 0;
+            $testPlan->save();
         }
         $claim->delete();
         return response()->json(['Claim was deleted successfully.']);
