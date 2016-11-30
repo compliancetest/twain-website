@@ -178,15 +178,6 @@ class TestCasesController extends Controller
             return response()->json(['messages' => ['You do not have enough permissions for this action.']], 403);
         }
 
-        $messages = [];
-        if (count($testCase->transactions)) {
-            $messages[] = "The test case can't be deleted because " . count($testCase->transactions) . " transactions still reference it.";
-        }
-
-        if ($messages) {
-            return response()->json(['messages' => $messages], 422);
-        }
-
         $testCase->delete();
         $rsp = ['status' => 'success'];
         if(!$notRedirect){
