@@ -169,9 +169,21 @@ class TestPlansController extends Controller
             OrganisationSubscription::where(['user_id' => Auth::user()->ID, 'suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()->organisation_id
         ) {
 
+            $testPlanData = [
+                'product_id' => $request->get('product_id'),
+                'suite_minor_family_mark' => $testPlan->suite_minor_family_mark,
+                'level' => $request->get('level'),
+                'role' => $request->get('role'),
+                'is_claimed' => false,
+            ];
+            if (TestPlan::where($testPlanData)->where('id', '!=', $testPlanId)->first()) {
+                return JsonResponse::create(['message' => 'You already have test plan for this test suite'], 422);
+            }
+
             if ($testPlan->role == 'Application') {
                 $product = Product::find($testPlan->product_id);
-                $configuredTestSuites =  TestSuiteFeatures::find($product->features)->pluck('test_suite_id');
+                $testSuiteFeatures = TestSuiteFeatures::find($product->features);
+                $configuredTestSuites = $testSuiteFeatures ?  $testSuiteFeatures->pluck('test_suite_id') : [];
                 if (!in_array($testPlan->suite_minor_family_mark, $configuredTestSuites)) {
                     return JsonResponse::create(['message' => 'The product is not configured for the selected test suite. Please configure it in the test tool.'], 422);
                 }
