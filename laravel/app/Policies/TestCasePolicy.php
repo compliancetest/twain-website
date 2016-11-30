@@ -34,8 +34,15 @@ class TestCasePolicy
      * @param LaravelTestCase $testCase
      * @return bool
      */
-    public function view(User $user, LaravelTestCase $testCase)
+    public function viewTestCase(User $user, LaravelTestCase $testCase)
     {
+        $community = Community::find($testCase->community_id);
+        if (!$community->getMember($user->ID)) {
+            return false;
+        }
+        if ($testCase->status == 'Draft' && !$community->isAdmin()) {
+            return false;
+        }
         return true;
     }
 }

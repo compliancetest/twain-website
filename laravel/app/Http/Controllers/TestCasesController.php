@@ -31,6 +31,12 @@ class TestCasesController extends Controller
     public function view($testCaseSlug, Request $request)
     {
         $testCase = LaravelTestCase::findBySlugOrFail($testCaseSlug);
+
+        if (Gate::denies('viewTestCase', $testCase)) {
+            addMessage('You do not have enough permissions to see this test case. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.', 'error');
+            return redirect()->to('/communities');
+        }
+        
         $testSuites = $testCase->testSuites;
         if ($request->get('suite_minor_family_mark')) {
             $suiteExist = $testCase->testSuites()->where('minor_family_mark', $request->get('suite_minor_family_mark'))->orderBy('created_at', 'DESC')->limit(1)->get();
