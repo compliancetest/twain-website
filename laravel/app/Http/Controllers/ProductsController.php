@@ -119,7 +119,9 @@ class ProductsController extends Controller
         if (Gate::denies('change', $product)) {
             return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
         }
-        $product->claims()->where('id', $claimId)->delete();
+        $claim = $product->claims()->where('id', $claimId)->first();
+        $claim->testPlan()->update(['is_claimed' => false]);
+        $claim->delete();
         return response()->json(['Claim was deleted successfully.']);
     }
 }
