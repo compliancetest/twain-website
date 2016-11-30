@@ -70,7 +70,7 @@ class TestCasesController extends Controller
         $slug = LaravelTestCase::generateSlug($fullName);
 
         if (LaravelTestCase::findBySlug($slug)) {
-            return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
+            return response()->json(['messages' => ['Test case with provided versions already exist']], 422);
         }
 
         $testCase = LaravelTestCase::create($request->all());
@@ -95,7 +95,7 @@ class TestCasesController extends Controller
             $fullName = LaravelTestCase::generateCaseSuiteFullName($request);
             $slug = LaravelTestCase::generateSlug($fullName);
             if (LaravelTestCase::findBySlug($slug)) {
-                return response()->json(['messages' => ['Test suite with provided versions already exist']], 422);
+                return response()->json(['messages' => ['Test case with provided versions already exist']], 422);
             }
             $testCase = LaravelTestCase::create($request->all());
             $testCase->full_name = $fullName;
