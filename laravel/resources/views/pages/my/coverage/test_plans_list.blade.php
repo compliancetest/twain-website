@@ -1,3 +1,4 @@
+
 @if($userSuites)
     @foreach($userSuites as $suiteName => $userSuite)
         <div class="colored-box">
@@ -45,7 +46,7 @@
                                            data-tooltip="tooltip" data-container="body"
                                            title="Delete plan"></a>
                                         @if($userPlan['testPlan']->canBeClaimed() && !$userPlan['testPlan']->is_claimed)
-                                            <a href="/testplan/{{ $userPlan['testPlan']->id }}/claim" class="btn btn-success btn-icon btn-confirm" data-tooltip="tooltip"
+                                            <a href="/testplan/{{ $userPlan['testPlan']->id }}/claim" class="btn btn-success btn-icon btn-confirm claimLoader" data-tooltip="tooltip"
                                                title="Claim"></a>
                                     @endif
 
@@ -88,6 +89,7 @@
            class="btn btn-success btn-with-icon btn-add" style="margin-bottom: 20px;">Add</a>
 
     @endforeach
+    @include('loader', ['loaderClass' => 'claimLoader', 'loaderMessage' => 'CREATING A CLAIM'])
 @else
     <div class="colored-box">
         <div class="colored-box-header"></div>
@@ -104,3 +106,15 @@
         </div>
     </div>
 @endif
+
+@section('page-scripts')
+    <script>
+        jQuery(document).ready(function ($) {
+
+            $('body').on('click', '.claimLoader', function(e){
+                jQuery('.claimLoader.block-loading').show();
+            });
+
+        });
+    </script>
+@stop

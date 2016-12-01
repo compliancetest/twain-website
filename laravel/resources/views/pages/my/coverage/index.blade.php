@@ -9,7 +9,7 @@
         <div class="main-content">
 
             <div class="test-coverage" id="testCoveragePlanList">
-                <div id="testCoveragePlanListContent">
+                <div id="testCoveragePlanListContent" class="block-loading-wrapper">
                     {!! view('pages.my.coverage.test_plans_list', ['userSuites' => $userSuites]) !!}
                 </div>
 

@@ -183,6 +183,15 @@ body.modal-open,
 
         }
 
+        &.warning{
+            background: #e67070;
+            border: 1px solid #d96666;
+
+            &:before{
+                @include iconsSprite(warning-icon);
+            }
+
+        }
     }
 }
 
