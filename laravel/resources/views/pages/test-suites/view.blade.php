@@ -149,7 +149,7 @@
                             <select name="status" class="form-control">
                                 <option value="">-Status-</option>
                                 @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'], $isAdmin)->get()->sortBy('status')->pluck('status') as $status)
-                                    <option value="{{ $status }}" @if(empty($request->toArray()) && $status == 'Active') selected="selected" @endif>{{ $status }}</option>
+                                    <option value="{{ $status }}" @if($request->get('status') == 'Active') selected="selected" @endif>{{ $status }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -162,6 +162,7 @@
 
             <div class="block-loading-wrapper">
                 <div id="suiteCases">
+                    @include('pages.test-suites.partials.test-cases-list')
                 </div>
                 <div id="loadTestCasesResultsSpinner" class="block-loading">
                     <div class="loading-content"><span class="loader"></span>
@@ -215,8 +216,6 @@
         $('#suiteTestCasesForm').on('change', function(){
             loadTestCases($('#suiteTestCasesForm').serialize());
         });
-
-        loadTestCases($('#suiteTestCasesForm').serialize());
 
         $('body').on('click', '.pagination a', function(e){
             e.preventDefault();
