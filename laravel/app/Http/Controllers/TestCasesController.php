@@ -103,6 +103,7 @@ class TestCasesController extends Controller
         } else {
             $testCase = $oldTestCase;
             $oldTestCase->status = 'Obsolete';
+            $testCase->full_name = LaravelTestCase::generateCaseSuiteFullName($request);
             $oldTestCase->save();
         }
         $testCase->fill($request->all());
