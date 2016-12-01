@@ -34,8 +34,8 @@
                                         </div>
                                     </td>
                                     <td class="col-sm-1 text-nowrap text-center">
-                                        @if(!\App\Transaction::where(['product_id' => $userPlan['product']->id, 'suite_minor_family_mark' => $userSuite['testSuite']->id])->get()->isEmpty())
-                                            <a href="/my-transaction-log/?suite_minor_family_mark={{ $userSuite['testSuite']->id }}&product_id={{ $userPlan['product']->id }}" target="_blank"
+                                        @if(!\App\Transaction::where(['product_id' => $userPlan['product']->id, 'suite_minor_family_mark' => $userSuite['testSuite']->minor_family_mark])->get()->isEmpty())
+                                            <a href="/my-transaction-log/?suite_minor_family_mark={{ $userSuite['testSuite']->minor_family_mark }}&product_id={{ $userPlan['product']->id }}" target="_blank"
                                                class="btn btn-primary btn-icon btn-view" data-tooltip="tooltip" title="View log"></a>
                                         @endif
 

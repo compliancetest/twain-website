@@ -19,10 +19,10 @@
             <select class="form-control" id="filterSuite" name="suite_minor_family_mark">
                 <option value="">- All -</option>
                 @foreach($filters['suite_minor_family_mark'] as $testSuite)
-                    <option value="{{ $testSuite->id }}" @if($request->get('suite_minor_family_mark') == $testSuite->id) selected="selected" @endif>{{ $testSuite->full_name }}</option>
+                    <option value="{{ $testSuite->minor_family_mark }}" @if($request->get('suite_minor_family_mark') == $testSuite->minor_family_mark) selected="selected" @endif>{{ \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuite->minor_family_mark)->full_name }}</option>
                 @endforeach
             </select>
-            @if(($request->get('suite_minor_family_mark')) && ($request->get('suite_minor_family_mark') !== '') && ($request->get('suite_minor_family_mark') == $testSuite->id))<span class="clear-filter" title="Clear Filter">X</span>@endif
+            @if(($request->get('suite_minor_family_mark')) && ($request->get('suite_minor_family_mark') !== '') && ($request->get('suite_minor_family_mark') == $testSuite->minor_family_mark))<span class="clear-filter" title="Clear Filter">X</span>@endif
         </div>
 
         <div class="form-group col-sm-6 col-md-3">
