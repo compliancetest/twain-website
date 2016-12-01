@@ -441,6 +441,42 @@ class LaravelTestSuite extends Model
         }
     }
 
+    public function updateCases($oldSuite)
+    {
+        foreach($oldSuite->conformanceLevels as $oldSuiteConformanceLevel){
+            $newSuiteConformanceLevel = $this->conformanceLevels()->where('code', $oldSuiteConformanceLevel->code)->first();
+            $casesWithOldConformanceLevel = TestCaseConformanceLevel::where('conformance_level_id', $oldSuiteConformanceLevel->id)->get();
+            foreach($casesWithOldConformanceLevel as $caseWithOldConformanceLevel){
+                TestCaseConformanceLevel::create([
+                    'test_case_id' => $caseWithOldConformanceLevel->test_case_id,
+                    'conformance_level_id' => $newSuiteConformanceLevel->id,
+                ]);
+            }
+        }
+
+        foreach($oldSuite->scenarios as $oldSuiteScenario){
+            $newSuiteScenario = $this->scenarios()->where('code', $oldSuiteScenario->code)->first();
+            $casesWithOldScenario = TestCaseScenario::where('test_suites_scenario_id', $oldSuiteScenario->id)->get();
+            foreach($casesWithOldScenario as $caseWithOldScenario){
+                TestCaseScenario::create([
+                    'test_case_id' => $caseWithOldScenario->test_case_id,
+                    'test_suites_scenario_id' => $newSuiteScenario->id,
+                ]);
+            }
+        }
+
+        foreach($oldSuite->features as $oldSuiteFeature){
+            $newSuiteFeature = $this->features()->where('name', $oldSuiteFeature->name)->first();
+            $casesWithOldFeature = TestCaseFeature::where('test_suites_feature_id', $oldSuiteFeature->id)->get();
+            foreach($casesWithOldFeature as $caseWithOldFeature){
+                TestCaseScenario::create([
+                    'test_case_id' => $caseWithOldFeature->test_case_id,
+                    'test_suites_feature_id' => $newSuiteFeature->id,
+                ]);
+            }
+        }
+    }
+
     /**
      *
      * @param $request

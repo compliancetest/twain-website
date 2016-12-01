@@ -5,7 +5,7 @@
             @if(count($testSuite->features))
                 <div class="definition-box">
                     <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                    @foreach($testSuite->features as $feature)
+                    @foreach($testSuite->features->sortBy('name') as $feature)
                         <?php $dataExist = true;?>
                         <dl class="definition-list">
                             <dt>

@@ -12,7 +12,7 @@ class TestCaseFeature extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['test_suites_feature_id'];
+    protected $fillable = ['test_suites_feature_id', 'test_case_id'];
 
     public function testCase()
     {

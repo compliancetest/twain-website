@@ -12,7 +12,7 @@ class TestCaseConformanceLevel extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['conformance_level_id'];
+    protected $fillable = ['conformance_level_id', 'test_case_id'];
 
     public function testCase()
     {

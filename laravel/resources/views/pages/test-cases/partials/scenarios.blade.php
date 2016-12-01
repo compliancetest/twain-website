@@ -4,7 +4,7 @@
         @foreach($testSuites as $testSuite)
             <div class="definition-box">
                 <h4 class="test-item-subheader">{{ $testSuite->full_name }}</h4>
-                @foreach($testSuite->scenarios as $scenario)
+                @foreach($testSuite->scenarios->sortBy('code') as $scenario)
                     <?php $dataExist = true;?>
                     <dl class="definition-list">
                         <dt>
