@@ -34,6 +34,9 @@ class TestSuitePolicy
     public function viewTestSuite(User $user, LaravelTestSuite $testSuite)
     {
         $community = Community::find($testSuite->community_id);
+        if (!$community->getActiveMember($user->ID)) {
+            return false;
+        }
         if ($community->visibility_status == 'private') {
             if ($testSuite->status == 'Active' || $community->isAdmin()) {
                 return true;
