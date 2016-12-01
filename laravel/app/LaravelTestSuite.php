@@ -469,7 +469,7 @@ class LaravelTestSuite extends Model
             $newSuiteFeature = $this->features()->where('name', $oldSuiteFeature->name)->first();
             $casesWithOldFeature = TestCaseFeature::where('test_suites_feature_id', $oldSuiteFeature->id)->get();
             foreach($casesWithOldFeature as $caseWithOldFeature){
-                TestCaseScenario::create([
+                TestCaseFeature::create([
                     'test_case_id' => $caseWithOldFeature->test_case_id,
                     'test_suites_feature_id' => $newSuiteFeature->id,
                 ]);
