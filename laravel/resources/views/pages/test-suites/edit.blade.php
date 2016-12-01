@@ -238,6 +238,11 @@
                                             </div>
                                             @if($conformanceLevel->code != 'Default')
                                                 <div class="col-md-1 action-col">
+                                                    <?php $testPlans = \App\TestPlan::where(['suite_minor_family_mark' => $testSuite->minor_family_mark, 'level' => $conformanceLevel->code])->get();?>
+                                                    @if(count($testPlans))
+                                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+                                                              title="This conformance level is used in {{ count($testPlans) }} Test Plan(s) and they will be deleted"></span>
+                                                    @endif
                                                     <button class="btn btn-primary btn-icon btn-delete" data-delete-row="conformance-level-row">Delete Conformance Level</button>
                                                 </div>
                                             @endif
@@ -629,6 +634,7 @@
         });
          $('input[name="product_type"]').change();
 
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
 </script>

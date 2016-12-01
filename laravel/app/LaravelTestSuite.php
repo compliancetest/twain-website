@@ -281,6 +281,9 @@ class LaravelTestSuite extends Model
             }
         }
 
+        //delete test plans for non-existent conformance levels
+        TestPlan::where(['suite_minor_family_mark' => $this->minor_family_mark])->whereNotIn('level', $this->conformanceLevels()->pluck('code')->toArray())->delete();
+
         //roles
         $processedEntries = [];
         if (is_array($request->get('roles'))) {
@@ -441,6 +444,10 @@ class LaravelTestSuite extends Model
         }
     }
 
+    /**
+     * Copy cases levels / features / scenarios for new test suite
+     * @param $oldSuite
+     */
     public function updateCases($oldSuite)
     {
         foreach($oldSuite->conformanceLevels as $oldSuiteConformanceLevel){
