@@ -193,18 +193,27 @@
                             <div class="form-group">
                                 <label>Product Type:</label>
                                 <div class="radio-group">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="product_type" value="DataSource" @if($testSuite->product_type == 'DataSource') checked="checked" @endif>
-                                            DataSource
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="product_type" value="Application" @if($testSuite->product_type == 'Application') checked="checked" @endif>
-                                            Application
-                                        </label>
-                                    </div>
+                                    @if(!$testSuite)
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="product_type" value="DataSource">
+                                                DataSource
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="product_type" value="Application">
+                                                Application
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="product_type" value="{{ $testSuite->product_type }}" checked="checked">
+                                                {{ $testSuite->product_type }}
+                                            </label>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
