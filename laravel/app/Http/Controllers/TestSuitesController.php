@@ -40,6 +40,7 @@ class TestSuitesController extends Controller
         $data = [
             'testSuite' => $testSuite,
             'request' => $request,
+            'filters' => $request->all(),
             'community' => $community,
             'pageTitle' => 'View Test Suite | ' . $testSuite->full_name,
             'isAdmin' => $isAdmin,

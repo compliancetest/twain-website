@@ -149,7 +149,7 @@
                             <select name="status" class="form-control">
                                 <option value="">-Status-</option>
                                 @foreach($testSuite->getCases(['groupBy' => 'test_cases.status'], $isAdmin)->get()->sortBy('status')->pluck('status') as $status)
-                                    <option value="{{ $status }}" @if($request->get('status') == 'Active') selected="selected" @endif>{{ $status }}</option>
+                                    <option value="{{ $status }}" @if($status == $request->get('status')) selected="selected" @endif>{{ $status }}</option>
                                 @endforeach
                             </select>
                         </div>
