@@ -110,7 +110,10 @@ class User extends Authenticatable
      */
     public function suiteSubscriptions()
     {
-        return $this->hasMany('\App\OrganisationSubscription', 'user_id')->with('testSuite');
+        return $this->hasMany('\App\OrganisationSubscription', 'user_id')
+            ->join('test_suites', 'wp_organisations_subscriptions.suite_minor_family_mark', '=', 'test_suites.id')
+            ->orderBy('full_name')
+            ->with('testSuite');
     }
 
     public function getUserTestPlans()
