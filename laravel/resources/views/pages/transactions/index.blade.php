@@ -106,7 +106,7 @@
                     <button class="btn btn-success btn-with-icon btn-confirm confirm_change_status">Confirm</button>
                     <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
                 </div>
-                <div class="block-loading">
+                <div class="block-loading loading-shown">
                     <div class="loading-content"><span class="loader"></span>
                         <div class="loading-text">LOADING DATA</div>
                         <div class="loading-wait">Please wait...</div>
@@ -129,7 +129,7 @@
                         Are you sure you want change outcome status to "<span class="change_to_status"></span>" for selected test results?
 
                         <div class="form-group" id="transaction_reason" style="margin-top: 20px;">
-                            <label for="reason">Reason</label>
+                            <label for="reason_message">Reason</label>
                             <input name="reason" type="text" class="form-control" id="reason_message"/>
                         </div>
                         <input type="text" name="reason" id="transaction_reason" style="display: none;">
@@ -295,17 +295,17 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/bootstrap-datepicker.min.js"></script>
     <script>
         jQuery(document).ready(function ($) {
-
-            $('body').on('change', '#paginationLimit', function () {
+            var $body = $('body');
+            $body.on('change', '#paginationLimit', function () {
                 $('#perPage').val($(this).val());
                 $('#filterByForm').submit();
             });
 
-            $('body').on('change', '.checkAll', function () {
+            $body.on('change', '.checkAll', function () {
                 $('.checkTransaction').not(':disabled').prop('checked', $(this).is(':checked'));
             });
 
-            $('body').on('click', '.change_status', function () {
+            $body.on('click', '.change_status', function () {
                 $('.change_status_data_type').val($(this).attr('data-outcome'));
                 if ($(this).attr('data-outcome') == 'Pass') {
                     $('#transaction_reason').hide();
@@ -325,7 +325,7 @@
                 }
             });
 
-            $('body').on('click', '.bulk_audit', function () {
+            $body.on('click', '.bulk_audit', function () {
                 $.each($('input.checkTransaction:checked'), function (index, checkboxEntry) {
                     if ($(checkboxEntry).closest('tr').find('.auditRecordCheckbox').is(':disabled')) {
                         $(checkboxEntry).prop('checked', false);
@@ -357,7 +357,7 @@
                     },
                     type: 'post',
                     dataType: 'json',
-                    success: function (rsp) {
+                    success: function () {
                         $('.modal').modal('hide');
                         $('#bulkAuditModal .block-loading').hide();
                         $('#transactionSearchFilterByForm').submit();
@@ -374,7 +374,7 @@
                 });
             });
 
-            $('body').on('click', '.submit-new-message', function () {
+            $body.on('click', '.submit-new-message', function () {
                 jQuery('#viewExplanationLogs .block-loading').show();
                 var transactionId = $('#transactionId').val();
                 jQuery.ajax({
@@ -407,7 +407,7 @@
                 });
             });
 
-            $('body').on('click', '.delete_transactions', function () {
+            $body.on('click', '.delete_transactions', function () {
                 var checkboxes = $('input.checkTransaction:checked');
                 if (checkboxes.length == 0) {
                     $('.delete_message, .confirm_delete_transactions').hide();
@@ -430,10 +430,10 @@
                     url: '/transactions/batch-delete',
                     type: 'delete',
                     data: {
-                        'transactions': ids,
+                        'transactions': ids
                     },
                     dataType: 'json',
-                    success: function (rsp) {
+                    success: function () {
                         $('.modal').modal('hide');
                         $('#verifyAsModal .block-loading').hide();
                         $('#transactionSearchFilterByForm').submit();
@@ -467,7 +467,7 @@
                     },
                     type: 'post',
                     dataType: 'json',
-                    success: function (rsp) {
+                    success: function () {
                         $('.modal').modal('hide');
                         $('#verifyAsModal .block-loading').hide();
                         $('#transactionSearchFilterByForm').submit();
@@ -484,7 +484,7 @@
                 });
             });
 
-            $('body').on('change', '.auditRecordCheckbox', function (e) {
+            $body.on('change', '.auditRecordCheckbox', function (e) {
                 e.preventDefault();
                 $('#loadLogResultsSpinner').show();
                 var auditCheckbox = $(this);
@@ -493,10 +493,6 @@
                     type: 'post',
                     data: {
                         'audit_record': auditCheckbox.is(':checked')
-                    },
-                    error: function (jqXHR, status) {
-                    },
-                    success: function (rsp) {
                     },
                     complete: function () {
                         $('#loadLogResultsSpinner').hide();
@@ -510,7 +506,7 @@
             });
 
             //When open log, load transaction details
-            $('body').on('show.bs.collapse', '.logRow', function () {
+            $body.on('show.bs.collapse', '.logRow', function () {
                 var transactionId = $(this).data('transactionId');
                 var entry = $(this);
 
@@ -555,7 +551,7 @@
                 }
             });
 
-            $('body').on('change', '#suiteFrom, #suiteTo, #migration_product_id', function () {
+            $body.on('change', '#suiteFrom, #suiteTo, #migration_product_id', function () {
                 if($(this).attr('id') == 'suiteFrom'){
                     $('#suiteTo').val('');
                 }
@@ -565,7 +561,7 @@
                     data: {
                         'suiteFrom': jQuery('#suiteFrom').val(),
                         'suiteTo': jQuery('#suiteTo').val(),
-                        'product_id': jQuery('#migration_product_id').val(),
+                        'product_id': jQuery('#migration_product_id').val()
                     },
                     type: 'get',
                     dataType: 'json',
@@ -584,11 +580,11 @@
                 });
             });
 
-            $('body').on('change', '.check_all_fo_migration', function () {
+            $body.on('change', '.check_all_fo_migration', function () {
                 $('.transaction').not(':disabled').prop('checked', $(this).is(':checked'));
             });
 
-            $('body').on('click', '.submit-migration', function () {
+            $body.on('click', '.submit-migration', function () {
                 jQuery('#migrateTransactionModal .block-loading').show();
                 jQuery.ajax({
                     url: '/transactions/migrate',
@@ -621,6 +617,12 @@
                         }, 3000);
                     }
                 });
+            });
+
+            //Clear popup content from previous opening and showing loading block
+            $('#migrateTransactionModal').on('hidden.bs.modal', function () {
+                $(this).find('.modal-body').html('');
+                $(this).find('.block-loading').show();
             });
 
             Page.ajaxSearchForm.init();
