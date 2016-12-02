@@ -599,7 +599,7 @@
                     type: 'post',
                     dataType: 'json',
                     success: function (message) {
-                        $('#migrateTransactionModal .modal-body').append('<div class="success-message">Transactions has been copied successfully!</div>');
+                        $('#migrateTransactionModal .modal-body').append('<div class="success-message">Test Results have been copied successfully!</div>');
                         $('.submit-migration').hide();
                         $('#migrateTransactionModal .block-loading').hide();
                         $('#filterSuite').val(jQuery('#suiteTo').val());
