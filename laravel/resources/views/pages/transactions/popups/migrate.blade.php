@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    @if(count($suitesTo))
+    @if(count($suitesTo) && $selectedSuiteFrom)
         <div class="form-group">
             <label for="suiteFrom">To suite:</label>
             <select class="form-control" id="suiteTo" name="suiteTo">
