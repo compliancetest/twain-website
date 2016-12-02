@@ -556,6 +556,9 @@
             });
 
             $('body').on('change', '#suiteFrom, #suiteTo, #migration_product_id', function () {
+                if($(this).attr('id') == 'suiteFrom'){
+                    $('#suiteTo').val('');
+                }
                 jQuery('#migrateTransactionModal .block-loading').show();
                 jQuery.ajax({
                     url: '/transactions/migrate',

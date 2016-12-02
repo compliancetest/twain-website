@@ -72,8 +72,8 @@ class TransactionsController extends Controller
      */
     public function migrate(Request $request)
     {
-        $suitesFrom = Auth::user()->suiteSubscriptions;
-        $suitesTo = Auth::user()->suiteSubscriptions;
+        $suitesFrom = Auth::user()->suiteSubscriptions->sortBy('full_name');
+        $suitesTo = Auth::user()->suiteSubscriptions->sortBy('full_name');
         $data = [
             'suitesFrom' => $suitesFrom,
             'suitesTo' => $suitesTo,
@@ -109,7 +109,7 @@ class TransactionsController extends Controller
             $data['products'] = $transactions = Transaction::where([
                 'suite_minor_family_mark' => $data['selectedSuiteFrom'],
                 'audit_record' => 1,
-            ])->whereIn('subscription_id', Transaction::getUserSubscriptions())->groupBy('product_id')->with('product')->get();
+            ])->whereIn('subscription_id', Transaction::getUserSubscriptions())->groupBy('product_id')->with('product')->get()->sortBy('full_name');
             return response()->json(['html' => view('pages.transactions.popups.migrate')->with($data)->render()]);
         }
         return view('pages.transactions.popups.migrate')->with($data);
