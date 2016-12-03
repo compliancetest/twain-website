@@ -21,3 +21,8 @@
         </div>
     </div>
 </div>
+<script>
+    $('#modalViewProfile').on('hidden.bs.modal', function (e) {
+        $(this).find('.modal-body').html('<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>');
+    });
+</script>

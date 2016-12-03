@@ -13,10 +13,12 @@
                         <div class="checkbox">
                             <label>
                                 <input name="profile_types[{{ $profileType->id }}]" type="checkbox" @if(isset($testSuiteProfileType[$profileType->id])) checked="checked"@endif>
-                                <a href="javascript:void(0);">{{ $profileType->getTitle() }}</a>
+                                <a href="{{ getSiteUrl() }}/profiletypes/{{ $suiteCommunity->slug }}/viewprofiletype/{{ $profileType->id }}" data-toggle="modal" data-remote="true"
+                                           data-ajax-modal data-target="#modalViewProfile">{{ $profileType->getTitle() }}</a>
                             </label>
                         </div>
                     @endforeach
+                    @include('pages.communities.popups.view-profile-modal')
                 @else
                     <div class="text-center">
                         <span>Profile types not found</span>

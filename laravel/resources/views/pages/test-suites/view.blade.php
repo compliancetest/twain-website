@@ -74,8 +74,10 @@
                         <div role="tabpanel" class="tab-pane" id="ts-profile-types">
                            <ul class="row">
                                @foreach($testSuite->getProfileTypes() as $profileTypeId => $profileType)
-                                    <li class="col-sm-6 col-md-4"><a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $profileType['id'] }}" data-toggle="modal" data-remote="true"
-                                       data-ajax-modal data-target="#modalViewProfile">{{ $profileType['title'] }}</a></li>
+                                    <li class="col-sm-6 col-md-4">
+                                        <a href="{{ getSiteUrl() }}/profiletypes/{{ $community->slug }}/viewprofiletype/{{ $profileType['id'] }}" data-toggle="modal" data-remote="true"
+                                           data-ajax-modal data-target="#modalViewProfile">{{ $profileType['title'] }}</a>
+                                    </li>
                                @endforeach
                            </ul>
                         </div>
