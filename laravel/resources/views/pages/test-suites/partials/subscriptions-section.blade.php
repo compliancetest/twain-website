@@ -6,7 +6,7 @@
         </div>
         @include('pages.test-suites.partials.release-subscription')
     @else
-        @if(Auth::user()->doesUserOrganisationApproved($testSuite) && $community->getActiveMember(Auth::user()->ID))
+        @if(Auth::user()->doesUserOrganisationApproved($testSuite) && $testSuite->community->getActiveMember(Auth::user()->ID))
             @can('subscribeToTestSuite', $testSuite)
                 @include('pages.test-suites.partials.assign-subscription')
             @endcan
