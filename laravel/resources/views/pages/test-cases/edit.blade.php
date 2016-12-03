@@ -115,7 +115,7 @@
                                         @foreach(\App\Community::all()->sortBy('title') as $community)
                                             @if($community->isAdmin() || is_super_admin())
                                                 <option value="{{ $community->id }}"
-                                                        @if($community->id == $testCase->community_id) selected="selected" @endif>{{ $community->title }}</option>
+                                                        @if($community->id == $request->get('community_id')) selected="selected" @endif>{{ $community->title }}</option>
                                             @endif
                                         @endforeach
                                     </select>

@@ -21,11 +21,11 @@ class TestCasesController extends Controller
      * Create new test suite page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
         $pageTitle = 'Create Test Case';
         $isAdmin = doesUserAdminInAnyCommunity() || is_super_admin();
-        return view('pages.test-cases.edit', compact('pageTitle', 'isAdmin'));
+        return view('pages.test-cases.edit', compact('pageTitle', 'isAdmin', 'request'));
     }
 
     public function view($testCaseSlug, Request $request)
