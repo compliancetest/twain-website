@@ -97,7 +97,12 @@ class TransactionsController extends Controller
                 if ($request->get('product_id')) {
                     $transactionsWhere['product_id'] = $request->get('product_id');
                 }
-                $transactions = Transaction::where($transactionsWhere)->whereIn('subscription_id', Transaction::getUserSubscriptions())->get();
+                $transactions = Transaction::where($transactionsWhere)
+                    ->join('test_cases', 'transactions.test_case_id', '=', 'test_cases.id')
+                    ->with(['testCase'])
+                    ->whereIn('subscription_id', Transaction::getUserSubscriptions())
+                    ->orderBy('test_cases.full_name')
+                    ->get();
                 $selectedSuiteToEntry = LaravelTestSuite::getLatestSuiteForMinorFamilyMark($data['selectedSuiteTo']);
                 $cases = $selectedSuiteToEntry->testCases()->pluck('test_cases.id')->toArray();
                 foreach($transactions as $transaction){

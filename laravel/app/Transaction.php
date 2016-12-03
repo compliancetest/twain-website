@@ -39,6 +39,15 @@ class Transaction extends Model
     }
 
     /**
+     * Test Case relation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function testCase()
+    {
+        return $this->belongsTo('App\LaravelTestCase');
+    }
+
+    /**
      * Transaction explanation logs relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
