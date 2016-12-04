@@ -98,6 +98,7 @@ class TransactionsController extends Controller
                     $transactionsWhere['product_id'] = $request->get('product_id');
                 }
                 $transactions = Transaction::where($transactionsWhere)
+                    ->select('*', 'transactions.id as id')
                     ->join('test_cases', 'transactions.test_case_id', '=', 'test_cases.id')
                     ->with(['testCase'])
                     ->whereIn('subscription_id', Transaction::getUserSubscriptions())
@@ -144,10 +145,12 @@ class TransactionsController extends Controller
 
         $transactions  = Transaction::whereIn('id', $request->get('transactions'))->with('logs')->get();
         foreach($transactions as $transaction){
+            error_log($transaction->id);
             $newTransaction = $transaction->replicate();
             $newTransaction->suite_minor_family_mark = $request->get('suiteTo');
             $newTransaction->subscription_id = Auth::user()->suiteSubscriptions->where('suite_minor_family_mark', $request->get('suiteTo'))->first()->id;
             $newTransaction->save();
+            error_log($newTransaction->id);
             foreach ($transaction->getRelations() as $relation => $items) {
                 foreach ($items as $item) {
                     unset($item->id);
