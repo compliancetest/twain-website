@@ -337,7 +337,7 @@ class MigrateProductsCasesSuitesData extends Migration
                 foreach ($testCaseSuite as $caseSuite) {
                     if (!empty($caseSuite->meta_value)) {
                         $lSuite = \App\LaravelTestSuite::where('wp_id', $caseSuite->meta_value)->first();
-                        if ($lSuite && !\App\PostMeta::where(['post_id' => $testCase->ID, 'meta_key' => 'hide_case', 'meta_value' => 1])->first()) {
+                        if ($lSuite) {
                             $laravelTestCase->testSuites()->save($lSuite);
                         }
                     }
