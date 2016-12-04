@@ -60,6 +60,11 @@
         <th class="test-reason" style="width:25%;">Reason</th>
     </tr>
     @foreach($cases as $scenarioID => $testCases)
+         <?php
+            usort($testCases, function ($a, $b) {
+                return strcmp($a->full_name, $b->full_name);
+            });
+        ?>
         <?php $counter = 0;?>
         @foreach($testCases as $testCase)
             <tr class="{{ $counter++%2 == 0 ? 'odd' : 'even' }}">

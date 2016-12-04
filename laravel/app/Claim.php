@@ -130,8 +130,8 @@ class Claim extends Model
         $excludedCases = $skippedCases = $generalCases = array();
         foreach ($testSuite->getTestCases($testPlan->role, $testPlan->level) as $case) {
             if (in_array($case->id, $successCases)) {
-                if (!isset($generalCases[$case->scenarioID])) {
-                    $generalCases[$case->scenarioID] = array();
+                if (!isset($generalCases[$case->scenarioCode])) {
+                    $generalCases[$case->scenarioCode] = array();
                 }
                 $tempTransaction = Transaction::where([
                     'product_id' => $this->product_id,
@@ -142,16 +142,16 @@ class Claim extends Model
                 ])->first();
                 $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
                 $case->link = $tempTransaction->s3_link;
-                $generalCases[$case->scenarioID][] = $case;
+                $generalCases[$case->scenarioCode][] = $case;
             } elseif (!in_array($case->id, $optionalCases)) {
-                if (!isset($excludedCases[$case->scenarioID])) {
-                    $excludedCases[$case->scenarioID] = array();
+                if (!isset($excludedCases[$case->scenarioCode])) {
+                    $excludedCases[$case->scenarioCode] = array();
                 }
                 $case->reason = $excCases[$case->id]['reason'];
                 if($excCases[$case->id]['is_skipped'] == 1){
-                    $skippedCases[$case->scenarioID][] = $case;
+                    $skippedCases[$case->scenarioCode][] = $case;
                 } else {
-                    $excludedCases[$case->scenarioID][] = $case;
+                    $excludedCases[$case->scenarioCode][] = $case;
                 }
             }
 
