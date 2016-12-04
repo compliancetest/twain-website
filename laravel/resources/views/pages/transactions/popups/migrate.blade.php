@@ -49,7 +49,7 @@
                     <table class="table colored-table" style="margin-top: 20px;">
                         <thead>
                         <tr>
-                            <th><input type="checkbox" class="check_all_fo_migration"></th>
+                            <th><input type="checkbox" class="check_all_fo_migration" checked="checked"></th>
                             <th>Execution ID</th>
                             <th>Date</th>
                         </tr>
