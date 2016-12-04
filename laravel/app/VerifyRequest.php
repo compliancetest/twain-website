@@ -35,7 +35,7 @@ class VerifyRequest extends Model
             if ($isAdministrator) {
                 $userTestSuites = $community->getCommunityTestSuites();
             } else {
-                $userTestSuites = $user->suiteSubscriptions()->where(['status' => 'Active'])->get();
+                $userTestSuites = $user->suiteSubscriptions()->where(['wp_organisations_subscriptions.status' => 'Active'])->get();
             }
             foreach ($userTestSuites as $userTestSuite) {
                 if ($isAdministrator) {
