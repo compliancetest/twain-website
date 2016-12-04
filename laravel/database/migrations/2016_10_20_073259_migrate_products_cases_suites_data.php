@@ -338,7 +338,9 @@ class MigrateProductsCasesSuitesData extends Migration
                     if (!empty($caseSuite->meta_value)) {
                         $lSuite = \App\LaravelTestSuite::where('wp_id', $caseSuite->meta_value)->first();
                         if ($lSuite) {
-                            $laravelTestCase->testSuites()->save($lSuite);
+                            \Illuminate\Support\Facades\DB::table('test_suite_test_case')->insert([
+                                ['test_case_id' => $laravelTestCase->id, 'test_suite_id' => $lSuite->id]
+                            ]);
                         }
                     }
                 }
