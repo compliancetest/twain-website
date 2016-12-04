@@ -133,7 +133,13 @@ class Claim extends Model
                 if (!isset($generalCases[$case->scenarioID])) {
                     $generalCases[$case->scenarioID] = array();
                 }
-                $tempTransaction = Transaction::where(['product_id' => $this->product_id, 'test_case_id' => $case->id, 'audit_record' => true, 'suite_minor_family_mark' => $this->suite_minor_family_mark])->first();
+                $tempTransaction = Transaction::where([
+                    'product_id' => $this->product_id,
+                    'test_case_id' => $case->id,
+                    'test_outcome_status_id' => \App\TestOutcomeStatus::getIdByCode('PASS'),
+                    'audit_record' => true,
+                    'suite_minor_family_mark' => $this->suite_minor_family_mark
+                ])->first();
                 $this->transactions()->create(['transaction_id' => $tempTransaction->id]);
                 $case->link = $tempTransaction->s3_link;
                 $generalCases[$case->scenarioID][] = $case;
