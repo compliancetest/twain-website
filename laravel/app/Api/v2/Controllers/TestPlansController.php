@@ -231,7 +231,7 @@ class TestPlansController extends BaseApiController
         }
 
         // we shouldn't show test plan's data to user without subscription
-        if (!\Auth::user()->suiteSubscriptions()->where(['status' => 'Active', 'suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()) {
+        if (!\Auth::user()->suiteSubscriptions()->where(['suite_minor_family_mark' => $testPlan->suite_minor_family_mark])->first()) {
             return $this->respondForbiddenError("You don't have subscription to test plan's test suite");
         }
         $excludedCases = $testPlan->getExcludedCases();
