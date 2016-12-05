@@ -108,16 +108,14 @@ class Claim extends Model
 
         $pdf->setHtmlLinksStyle(array(91, 117, 182));
 
-        // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._title')->render(), 0, 1, 0, false, 'C', true);
 
 
         $pdf->SetFont('opensans', '', 13, '', true);
-        // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', view('pages.my.claims._description')->render(), 0, 1, 0, false, '', false);
 
         // define active area for signature appearance
-        $pdf->setSignatureAppearance(45, 72, 121, 29);
+        $pdf->setSignatureAppearance(0, 0, 121, 29);
 
         $testSuite = LaravelTestSuite::find($this->suite_minor_family_mark);
         $testPlan = TestPlan::find($this->test_plan_id);

@@ -15,7 +15,7 @@
 </thead>
 <tbody>
 @if(count($product->claims))
-    @foreach($product->claims as $claim)
+    @foreach($product->claims()->orderBy('created_at')->get() as $claim)
         <tr id="claimRow{{ $claim->id }}">
             <td>{{ $claim->id }}</td>
             <td class="text-center">
