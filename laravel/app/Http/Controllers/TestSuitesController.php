@@ -34,7 +34,7 @@ class TestSuitesController extends Controller
 
         $isAdmin = $community->isAdmin() || is_super_admin();
 
-        if (empty($request->toArray())) {
+        if (empty($request->toArray()) && count($testSuite->getCases([], $isAdmin, true)->get())) {
             $request->merge(array('status' => "Active"));
         }
         $data = [

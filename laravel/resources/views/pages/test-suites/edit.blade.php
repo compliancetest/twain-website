@@ -357,7 +357,7 @@
                                     @endforeach
                                 @endif
                             </ul>
-                            <a href="/test-case/create" target="_blank" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
+                            <a href="/test-case/create<?php if($testSuite):?>?community_id={{ $testSuite->community_id }}<?php endif;?>" target="_blank" class="btn btn-success btn-with-icon btn-add">New Test Case</a>
                         </div>
                     </div>
                 </div>
