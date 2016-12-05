@@ -80,10 +80,11 @@
         });
          $('#cancel-add-new-post').on('click', function(e){
              e.preventDefault();
-            $('#postTitle').val('');
-            $('#edit-post-section').hide();
-            $('#add-new-post-section').hide();
-            $('.add-new-item-default').show();
+             $('#postTitle').val('');
+             $('#edit-post-section').hide();
+             $('#add-new-post-section').hide();
+             $('.add-new-item-default').show();
+             $('.error-message').hide();
         });
 
         $('#newpostform').submit(function (e) {

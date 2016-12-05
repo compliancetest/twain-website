@@ -23,10 +23,11 @@
 {{ Form::close() }}
 
 <script>
-     $('#cancel-edit-new-post').on('click', function(){
+    $('#cancel-edit-new-post').on('click', function () {
         $('#edit-post-section').hide();
         $('#add-new-post-section').hide();
         $('.add-new-item-default').show();
+        $('.error-message').hide();
     });
     $('#editpostform').submit(function (e) {
         var form = $(this);

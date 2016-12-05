@@ -34,6 +34,7 @@
         $('#edit-thread-section').hide();
         $('#add-new-thread-section').hide();
         $('.add-new-item-default').show();
+        $('.error-message').hide();
     });
 
     $('#editthreadform').submit(function (e) {
