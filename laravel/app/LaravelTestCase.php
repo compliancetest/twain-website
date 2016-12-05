@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class LaravelTestCase extends Model
@@ -265,5 +266,35 @@ class LaravelTestCase extends Model
     public function getUrl()
     {
         return getSiteUrl() . '/test-case/' . $this->slug;
+    }
+
+    /**
+     * Send notification about change to subscribed users
+     */
+    public function notifySubscribers()
+    {
+        $community = $this->community;
+
+        foreach ($this->testSuites as $testSuite) {
+
+            $emailData = array(
+                '[community]' => $community->title,
+                '[community_url]' => $community->getUrl(),
+                '[suite_name]' => $testSuite->full_name,
+                '[suite_url]' => $testSuite->getUrl(),
+                '[case_name]' => $this->full_name,
+                '[case_url]' => $this->getUrl(),
+                '[editor_name]' => cp_get_user_fullname(Auth::user()->ID)
+            );
+
+            if (count($testSuite->changesSubscriptions)) {
+                foreach ($testSuite->changesSubscriptions as $member) {
+                    if ($member->user_id != Auth::user()->ID) {
+                        $emailData['[name]'] = cp_get_user_fullname($member->user_id);
+                        cp_send_email(array('name' => $emailData['[name]'], 'email' => $member->user->user_email), 'case_changed', $emailData);
+                    }
+                }
+            }
+        }
     }
 }

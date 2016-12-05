@@ -111,9 +111,7 @@ class TestCasesController extends Controller
         $testCase->save();
 
         if ($request->get('send-notification')) {
-            foreach ($testCase->testSuites as $testSuite) {
-                $testSuite->notifySubscribers();
-            }
+            $testCase->notifySubscribers();
         }
 
         return response()->json(['status' => 'success', 'redirect_to' => '/test-case/' . $testCase->slug]);
