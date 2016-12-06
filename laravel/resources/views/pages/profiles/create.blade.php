@@ -120,7 +120,7 @@
 
         jQuery('#createProfileUpload').on('click', function(e){
             e.preventDefault();
-            jQuery('#createProfileForm .error-message').remove();
+            jQuery('#modalCreateProfile .error-message').remove();
             if(!jQuery('#create_profile_instance_file').val()){
                 jQuery('#profile-type-id').after('<p class="message error-message">Please select file first!</p>');
                 return false;
@@ -153,32 +153,34 @@
         jQuery('.btn-confirm').on('click', function(e){
             e.preventDefault();
             $('.error-message').hide();
-            jQuery.ajax({
-                url: "/communityprofiles/{{ $community->slug }}/",
-                data: {
-                    'data': encodeURIComponent(JSON.stringify(profileData.value())),
-                    'profile-type-id': jQuery('#modalCreateProfile #profile-type-id').val()
-                },
-                type: 'POST',
-                success: function(rsp)
-                {
-                    if(rsp.status == 'success')
-                    {
-                        jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    }else{
-                        jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.msg + '</p>');
+            if(profileData) {
+                jQuery.ajax({
+                    url: "/communityprofiles/{{ $community->slug }}/",
+                    data: {
+                        'data': encodeURIComponent(JSON.stringify(profileData.value())),
+                        'profile-type-id': jQuery('#modalCreateProfile #profile-type-id').val()
+                    },
+                    type: 'POST',
+                    success: function (rsp) {
+                        if (rsp.status == 'success') {
+                            jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message success-message">Successfully saved!</p>');
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.msg + '</p>');
+                        }
+                    },
+                    error: function (rsp) {
+                        jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
+                    },
+                    complete: function (rsp) {
+                        jQuery('#create-profile-box .loading').hide();
                     }
-                },
-                error: function(rsp){
-                    jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">' + rsp.responseJSON.message + '</p>');
-                },
-                complete: function(rsp){
-                    jQuery('#create-profile-box .loading').hide();
-                }
-            })
+                })
+            } else {
+                jQuery('#modalCreateProfile .modal-footer').prepend('<p class="message error-message">Please choose a profile type</p>');
+            }
         });
 
         $('#modalCreateProfile').on('hidden.bs.modal', function (e) {
