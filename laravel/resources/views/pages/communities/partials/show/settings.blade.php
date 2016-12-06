@@ -450,7 +450,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="4" class="text-center">No data yet</td>
+                                        <td colspan="4" class="text-center">No invited users yet</td>
                                     </tr>
                                 @endif
                             </table>
