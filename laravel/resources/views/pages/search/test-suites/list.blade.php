@@ -33,7 +33,7 @@
                         <td><a href="/test-suite/{{ $entry->slug }}">{{ $entry->full_name }}</a></td>
                         <td class="text-center"><a href="/communities/{{ $entry->communitySlug }}">{{ $entry->communityTitle }}</a></td>
                         <td class="text-center">{{ $entry->issuer }}</td>
-                        <td class="text-center">{{ formatDate($entry->published_at) }}</td>
+                        <td class="text-center">{{ $entry->published_at }}</td>
                         <td class="text-center"><span class="status status-{{ strtolower($entry->status) }}">{{ $entry->status }}</span></td>
                     </tr>
                 @endforeach

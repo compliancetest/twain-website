@@ -14,6 +14,7 @@ class TestSuiteSearch extends Model
      */
     public function setWhereQuery($filters)
     {
+        $filters = $filters->toArray();
         $this->whereModel = LaravelTestSuite::from('test_suites as ts')->select('ts.*', 'c.slug as communitySlug', 'c.title as communityTitle', 'tst.type');
 
         $this->whereModel->join('communities AS c', function ($join) {
@@ -47,10 +48,10 @@ class TestSuiteSearch extends Model
             $this->whereModel->where('community_id', $filters['community_id']);
         }
         if ($filters['date_from']) {
-            $this->whereModel->whereRaw(" ( created_at > '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date_from'])) . "' ) ");
+            $this->whereModel->whereRaw(" ( published_at >= '" . $filters['date_from'] . "' ) ");
         }
         if ($filters['date_to']) {
-            $this->whereModel->whereRaw(" ( created_at < '" . date('Y-m-d H:i:s', getUTCTimeStamp($filters['date_to'] . ' 23:59:59')) . "' ) ");
+            $this->whereModel->whereRaw(" ( published_at <= '" . $filters['date_to'] . "' ) ");
         }
         if ($filters['orderby']) {
             $order = isset($filters['order']) ? $filters['order'] : 'asc';
@@ -65,7 +66,8 @@ class TestSuiteSearch extends Model
                                 $q->orWhere(function ($join) use ($community) {
                                     $join
                                         ->whereIn('status', ['Active', 'Partial', 'Obsolete', 'Deprecated'])
-                                        ->where('community_id', $community->id);
+                                        ->where('community_id', $community->id)
+                                        ->where('is_latest_version', true);
                                 });
                             } else {
                                 $q->orWhere(['community_id' => $community->id]);
@@ -78,6 +80,7 @@ class TestSuiteSearch extends Model
                             $q->orWhere(function ($join) use ($community) {
                                 $join
                                     ->whereIn('status', ['Active', 'Partial', 'Obsolete', 'Deprecated'])
+                                    ->where('is_latest_version', true)
                                     ->where('community_id', $community->id);
                             });
                         }
