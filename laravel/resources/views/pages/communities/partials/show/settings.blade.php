@@ -117,11 +117,11 @@
                         <div class="colored-box-header">Display Image</div>
                         <div class="colored-box-body">
                             {!! Form::model($community, ['id'=> 'group-details-image-form', 'class' => 'standard-form', 'data-validate' => 'validate', 'files' => true, 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
-                            <div class="colored-box-content community-image-management">
-                                <div class="community-image">
+                            <div class="colored-box-content image-management">
+                                <div class="avatar-image">
                                     <img src="{{ $community->getImageUrl() }}" alt="">
                                 </div>
-                                <div class="community-avatar-description">
+                                <div class="avatar-description">
                                     <p>Upload an image to use as an avatar for this community. The image will be shown on the main community page, and in search results.</p>
                                     <p>Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed.</p>
                                     <div class="upload-file-field">

@@ -11,6 +11,7 @@
     @include box-shadow(0 1px 1px rgba(255, 255, 255, 0.4) inset);
     @include border-radius(3px 3px 0 0);
     border: 1px solid #1d76c0;
+    position: relative;
 
     a{
       font-size: 14px;
@@ -65,15 +66,30 @@
         height: 29px;
         display: block;
         text-align: center;
-        padding: 8px 0 0 0;
+        padding: 0;
+        line-height: 29px;
         border-left: 1px solid #145489;
         background: rgba(0,0,0,0.1);
 
         .edit-icon{
           @include iconsSprite(btn-icon-edit);
+          vertical-align: middle;
         }
         .delete-icon{
           @include iconsSprite(btn-icon-delete);
+          vertical-align: middle;
+        }
+        .create-icon{
+          @include iconsSprite(btn-icon-create);
+          vertical-align: middle;
+        }
+        .join-icon{
+          @include iconsSprite(btn-icon-join);
+          vertical-align: middle;
+        }
+        .leave-icon{
+          @include iconsSprite(btn-icon-leave);
+          vertical-align: middle;
         }
       }
     }
