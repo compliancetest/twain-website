@@ -338,7 +338,7 @@
                                             if (table.find('tbody tr').length == 0) {
                                                 table.find('tbody').html('<tr><td class="text-center" colspan="7">No Verify Requests yet</td></tr>')
                                             }
-                                            $('#verifyRequestsList').prepend('<div class="success-message">Verify Request has been removed</div>');
+                                            $('#verifyRequestsList').prepend('<div class="success-message">Verify Request has been deleted</div>');
                                             setTimeout(function () {
                                                 $('#verifyRequestsList > .success-message').slideUp(function () {
                                                     $(this).remove();
