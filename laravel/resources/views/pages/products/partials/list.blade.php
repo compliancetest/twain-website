@@ -10,7 +10,7 @@
                 @foreach($products as $k => $product)
                     <div class="colored-box collapsible-box">
                         <div class="colored-box-header">
-                            <a href="#productItemBox{{ $k }}" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span
+                            <a href="#productItemBox{{ $productType }}{{ $k }}" class="collapse-arrow" data-toggle="collapse"><span class="glyphicon glyphicon-triangle-bottom"></span><span
                                         class="glyphicon glyphicon-triangle-right"></span></a>
                             Product: <a href="/product/{{ $product->slug }}"><strong>{{ $product->full_name }} ({{ $product->protocol_version }})</strong></a>
                             <ul class="colored-box-header-actions">
@@ -19,7 +19,7 @@
                             </ul>
                         </div>
                         @include('pages.products.partials.confirm-delete-product-modal', ['k' => $k, 'productSlug'=>$product->slug])
-                        <div class="colored-box-body collapse in" id="productItemBox{{ $k }}">
+                        <div class="colored-box-body collapse in" id="productItemBox{{ $productType }}{{ $k }}">
                             <div class="colored-box-content">
                                 <table class="table colored-table">
                                     @include('pages.products.partials.claims-list')
