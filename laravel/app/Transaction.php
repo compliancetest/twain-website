@@ -45,6 +45,15 @@ class Transaction extends Model
     public function testCase()
     {
         return $this->belongsTo('App\LaravelTestCase');
+    } 
+    
+    /**
+     * Test Suite relation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function testSuite()
+    {
+        return $this->belongsTo('\App\LaravelTestSuite', 'suite_minor_family_mark', 'minor_family_mark')->where('is_latest_version', '=', true);
     }
 
     /**
@@ -250,19 +259,19 @@ class Transaction extends Model
     /**
      * Get transactions data
      * @param $filters
-     * @param int $page
      * @param int $totalPerPage
      * @return mixed
      */
     public static function getUserTransactionLog($filters, $totalPerPage = 25)
     {
         $transaction = new Transaction();
-        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id", 't.created_at as created_at')->groupBy('t.id')->orderBy('t.created_at', 'desc')->paginate($totalPerPage);
+        return $transaction->setWhereQuery(self::getUserSubscriptions(), $filters)->select("*", "t.id", 't.created_at as created_at')->groupBy('t.id')->orderBy('t.created_at', 'desc')->with(['testSuite', 'testCase', 'product'])->paginate($totalPerPage);
     }
 
     /**
      * Get Filters list
      * @param $filters
+     * @return array
      */
     public static function getFilters($filters)
     {

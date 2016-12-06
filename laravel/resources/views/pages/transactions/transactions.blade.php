@@ -23,10 +23,10 @@
             @if(count($transactions))
                 @foreach($transactions AS $transaction)
                     <?php
-                    $eloquentTransaction = \App\Transaction::find($transaction->id);
-                    $product = \App\Product::find($transaction->product_id);
-                    $testCase = \App\LaravelTestCase::find($transaction->test_case_id);
-                    $testSuite = \App\LaravelTestSuite::find($transaction->suite_minor_family_mark);
+                    $eloquentTransaction = $transaction;
+                    $product = $eloquentTransaction->product;
+                    $testCase = $eloquentTransaction->testCase;
+                    $testSuite = $eloquentTransaction->testSuite;
                     $outcomeStatus = \App\TestOutcomeStatus::find($transaction->test_outcome_status_id);
                     $status = getOutcomeStatusClass($outcomeStatus->code);
                     if ($supportOrAdmin) {
@@ -54,8 +54,7 @@
                             <a href="/product/{{ $product->slug }}" class="product-name-link" target="_blank">{{ $product->full_name }}</a>
                         </td>
                         <td class="text-center">
-                            <?php $latestTestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuite->minor_family_mark);?>
-                            <a class="text-nowrap" href="/test-suite/{{ $latestTestSuite->slug }}/" target="_blank">{{ $latestTestSuite->full_name }}</a>
+                            <a class="text-nowrap" href="/test-suite/{{ $testSuite->slug }}/" target="_blank">{{ $testSuite->full_name }}</a>
                             <br/>
                             <a href="/test-case/{{ $testCase->slug }}/?suite_minor_family_mark={{ $testSuite->minor_family_mark }}" target="_blank">{{ $testCase->full_name }}</a>
                         </td>

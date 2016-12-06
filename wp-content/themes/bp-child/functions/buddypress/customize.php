@@ -507,13 +507,10 @@ function getCommunityTestSuites($community_id)
     if (doesUserCommunityAdmin(get_current_user_id(), $community_id) || is_super_admin()) {
         $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE community_id = %s ORDER BY full_name", $community_id));
     } else if (doesUserCommunityMember(get_current_user_id(), $community_id)) {
-        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status IN ('Active', 'Partial', 'Obsolete', 'Depreciated') AND community_id = %s GROUP BY minor_family_mark ORDER BY created_at DESC ", $community_id));
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status IN ('Active', 'Partial', 'Obsolete', 'Depreciated') AND community_id = %s AND is_latest_version = 1 ORDER BY full_name ", $community_id));
     } else {
-        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status = 'Active' AND community_id = %s GROUP BY minor_family_mark ORDER BY created_at DESC", $community_id));
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM test_suites WHERE status = 'Active' AND community_id = %s AND is_latest_version = 1 ORDER BY full_name", $community_id));
     }
-    usort($result, function ($a, $b) {
-        return strcmp(strtolower($a->full_name), strtolower($b->full_name));
-    });
     return $result;
 }
 
@@ -583,9 +580,6 @@ function getDashboardPages($type = 'page')
                     if (count($testsuites) > 0) {
                         $item2[0]['subpages'] = array();
                         foreach ($testsuites as $latestSuite) {
-                            if (!(doesUserCommunityAdmin(get_current_user_id(), $latestSuite->community_id) || is_super_admin())){
-                                $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($latestSuite->minor_family_mark);
-                            }
                             $item2[0]['subpages'][] = array('title' => $latestSuite->full_name, 'url' => '/test-suite/' . $latestSuite->slug);
                         }
                     }
@@ -604,8 +598,7 @@ function getDashboardPages($type = 'page')
 
             if (count($subscriptions) > 0) {
                 foreach ($subscriptions as $row) {
-                    $latestSuite = getTestSuiteLatestVersionByMinorFamilyMark($row->suite_minor_family_mark);
-                    $item['subpages'][] = array('title' => $latestSuite->full_name, 'url' => '/test-suite/' . $latestSuite->slug);
+                    $item['subpages'][] = array('title' => $row->full_name, 'url' => '/test-suite/' . $row->slug);
                 }
             }
 

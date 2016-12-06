@@ -25,7 +25,7 @@ class OrganisationSubscription extends Model
 
     public function testSuite()
     {
-        return $this->belongsTo('\App\LaravelTestSuite', 'suite_minor_family_mark')->orderBy('created_at');
+        return $this->belongsTo('\App\LaravelTestSuite', 'suite_minor_family_mark', 'minor_family_mark')->where('test_suites.is_latest_version', '=', true);
     }
 
     public static function getUniqueSlug($value)

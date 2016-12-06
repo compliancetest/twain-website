@@ -112,7 +112,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('\App\OrganisationSubscription', 'user_id')
             ->select('*', 'wp_organisations_subscriptions.id as id')
-            ->join('test_suites', 'wp_organisations_subscriptions.suite_minor_family_mark', '=', 'test_suites.id')
+            ->join('test_suites', function ($join) {
+                $join->on('wp_organisations_subscriptions.suite_minor_family_mark', '=', 'test_suites.minor_family_mark')
+                     ->where('is_latest_version', '=', true);
+            })
             ->orderBy('full_name')
             ->with('testSuite');
     }

@@ -24,9 +24,6 @@
 
                 @if($testSuites)
                     @foreach($testSuites as $kkk => $testSuite)
-                        @if(!$isAdmin)
-                            <?php $testSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($testSuite->minor_family_mark);?>
-                        @endif
                         <tr>
                             <td>
                                 <a href="{!! $testSuite->geturl() !!}"

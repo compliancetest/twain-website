@@ -83,6 +83,7 @@ class TestSuitesController extends Controller
         $testSuite->slug = $slug;
         $testSuite->major_family_mark = $testSuite->id;
         $testSuite->minor_family_mark = $testSuite->id;
+        $testSuite->is_latest_version = true;
 
         $testSuite->save();
 
@@ -191,6 +192,7 @@ class TestSuitesController extends Controller
             $testSuite->updateCases($oldTestSuite);
         }
         $testSuite->save();
+        LaravelTestSuite::setIsLatestVersionFlag($testSuite->minor_family_mark);
         if ($request->get('send-notification')) {
             $testSuite->notifySubscribers();
         }
@@ -326,7 +328,9 @@ class TestSuitesController extends Controller
             return response()->json(['messages' => $messages], 422);
         }
 
+        $suiteMinorFamilyMark = $testSuite->minor_family_mark;
         $testSuite->delete();
+        LaravelTestSuite::setIsLatestVersionFlag($suiteMinorFamilyMark);
         return response()->json(['status' => 'success']);
     }
 

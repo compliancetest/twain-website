@@ -55,9 +55,9 @@ class Community extends Model
             return $this->testSuites()->orderBy('full_name')->get();
         }
         if($this->isModerator() || $this->getMember(Auth::user()->ID)){
-            return $this->testSuites()->whereIn('status', ['Active', 'Partial'])->orderBy('full_name')->groupBy('minor_family_mark')->get();
+            return $this->testSuites()->whereIn('status', ['Active', 'Partial'])->where(['is_latest_version' => true])->orderBy('full_name')->get();
         }
-        return $this->testSuites()->where('status', 'Active')->orderBy('full_name')->groupBy('minor_family_mark')->get();
+        return $this->testSuites()->where(['status' => 'Active', 'is_latest_version' => true])->orderBy('full_name')->get();
     }
 
     public function getCommunityTestSuitesMajorVersions()

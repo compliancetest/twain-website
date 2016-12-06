@@ -39,9 +39,6 @@
                                                                     <ul class="dropdown-menu">
                                                                         @foreach ($testsuites as $k => $latestSuite)
                                                                             <li @if($k == 0) class="first" @endif>
-                                                                                @if(!($sub->community->isAdmin() || is_super_admin()))
-                                                                                    <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($latestSuite->minor_family_mark);?>
-                                                                                @endif
                                                                                 <a href="/test-suite/{{ $latestSuite->slug }}">
                                                                                     {{ $latestSuite->full_name }}
                                                                                 </a>
@@ -71,8 +68,7 @@
                                         <a data-title="Test Suites" href="{{ getSiteUrl() }}/my-test-suites/" class="menu-test-suites">Test Suites</a>
                                         <ul class="dropdown-menu">
                                             @foreach(getUserSubscriptions(null, true) as $subscription)
-                                                <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($subscription->suite_minor_family_mark);?>
-                                                <li class="first"><a href="/test-suite/{{ $latestSuite->slug }}">{{ $latestSuite->full_name }}</a></li>
+                                                <li class="first"><a href="/test-suite/{{ $subscription->slug }}">{{ $subscription->full_name }}</a></li>
                                             @endforeach
                                             <li class="action-link last"><a href="{{ getSiteUrl() }}/test-suites/" >+ Add</a></li>
                                         </ul>

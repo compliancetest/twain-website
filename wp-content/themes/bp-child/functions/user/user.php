@@ -387,17 +387,17 @@ function getUserSubscriptions($user_id = null, $all = false)
     
     if($all)
         $query = $wpdb->prepare("SELECT s.*, p.*, p.full_name AS suite_title FROM " . $wpdb->prefix . "organisations_subscriptions AS s 
-                                 LEFT JOIN test_suites AS p ON p.id=s.suite_minor_family_mark
+                                 LEFT JOIN test_suites AS p ON p.minor_family_mark=s.suite_minor_family_mark AND is_latest_version = 1
                                  WHERE s.user_id=%d", $user_id);
     else
         $query = $wpdb->prepare("SELECT s.*,p.*, p.full_name AS suite_title FROM " . $wpdb->prefix . "organisations_subscriptions AS s 
-                                 LEFT JOIN test_suites AS p ON p.id=s.suite_minor_family_mark
-                                 WHERE s.user_id=%d AND s.status != 'Frozen'", $user_id);
+                                 LEFT JOIN test_suites AS p ON p.minor_family_mark=s.suite_minor_family_mark AND is_latest_version = 1
+                                 WHERE  s.user_id=%d AND s.status != 'Frozen'", $user_id);
     
     $query .= " ORDER BY suite_title";
 
     $result = $wpdb->get_results($query);
-    
+
     return $result;
     
 }

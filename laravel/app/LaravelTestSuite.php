@@ -18,7 +18,7 @@ class LaravelTestSuite extends Model
     protected $fillable = [
         'community_id', 'slug', 'name', 'full_name', 'description', 'version_major', 'version_minor', 'version_patch',
         'short_name', 'issuer', 'revision_description', 'status', 'product_type', 'excerpt', 'minor_family_mark',
-        'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark', 'updated_at', 'created_at'
+        'major_family_mark', 'wp_id', 'published_at', 'minor_family_mark', 'updated_at', 'created_at', 'is_latest_version'
     ];
 
     public function getUrl()
@@ -241,6 +241,18 @@ class LaravelTestSuite extends Model
             ->orderBy('scenarioCode')
             ->orderBy('test_cases.full_name');
         return $query;
+    }
+
+    /**
+     * Set is_latest_version flag for minor_family_mark
+     * @param $suiteMinorFamilyMark
+     */
+    public static function setIsLatestVersionFlag($suiteMinorFamilyMark)
+    {
+        self::where('minor_family_mark', $suiteMinorFamilyMark)->update(['is_latest_version' => false]);
+        $latestSuite = self::getLatestSuiteForMinorFamilyMark($suiteMinorFamilyMark);
+        $latestSuite->is_latest_version = true;
+        $latestSuite->save();
     }
 
     /**

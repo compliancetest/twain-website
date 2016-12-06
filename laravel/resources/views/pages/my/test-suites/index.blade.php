@@ -16,7 +16,7 @@
                     <tbody>
                     @if(count($userSubscriptions))
                         @foreach($userSubscriptions as $index => $userSubscription)
-                            <?php $latestSuite = \App\LaravelTestSuite::getLatestSuiteForMinorFamilyMark($userSubscription->suite_minor_family_mark);?>
+                            <?php $latestSuite = $userSubscription->testSuite;?>
                             <tr class="{{ $latestSuite->slug }}">
                                 <td><a href="/communities/{{ $userSubscription->testSuite->community->slug }}">{{ $userSubscription->testSuite->community->title }}</a></td>
                                 <td><a target="_blank" href="/test-suite/{{ $latestSuite->slug }}">{{ $latestSuite->full_name }}</a></td>
