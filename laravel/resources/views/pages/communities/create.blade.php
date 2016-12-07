@@ -53,11 +53,11 @@
                             <div class="colored-box">
                                 <div class="colored-box-header">Display Image</div>
                                 <div class="colored-box-body">
-                                    <div class="colored-box-content community-image-management">
-                                        <div class="community-image">
+                                    <div class="colored-box-content image-management">
+                                        <div class="avatar-image">
                                             <img src="{{ getSiteUrl() }}/laravel/resources/assets/images/gravatar.jpg" alt="">
                                         </div>
-                                        <div class="community-avatar-description">
+                                        <div class="avatar-description">
                                             <p>Upload an image to use as an avatar for this community. The image
                                                 will be shown on the main community page, and in search results.</p>
 
