@@ -78,7 +78,6 @@ class ProductsController extends Controller
         if (Gate::denies('change', $product)) {
             return response()->json(['message' => 'You do not have enough permissions for this action. Please contact your organisation administrator for the ' . getSiteUrl() . ' site.'], 422);
         }
-
         $product->access_url = $request->get('access_url');
         $product->released_at = getUTCTimeStamp($request->get('release_date'));
         $product->visibility = $request->get('visibility');
