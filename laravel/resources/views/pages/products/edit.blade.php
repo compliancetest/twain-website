@@ -115,9 +115,9 @@
 
                                                         @foreach($features as $feature)
                                                             <div class="checkbox">
-                                                                <label data-tooltip="tooltip" title="UI image transfer">
+                                                                <label>
                                                                     <input type="checkbox" name="product_features[]" value="{{ $feature['description'] }}" checked="checked" disabled="disabled">
-                                                                    {{ $feature['name'] }}
+                                                                    <span data-tooltip="tooltip" title="UI image transfer">{{ $feature['name'] }}</span>
                                                                 </label>
                                                             </div>
                                                         @endforeach

@@ -662,7 +662,7 @@ var Page = {
                 url: form.attr('action'),
                 type: 'post',
                 data: formData,
-                async: false,
+                async: true,
                 cache: false,
                 contentType: false,
                 processData: false,

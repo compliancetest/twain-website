@@ -15632,6 +15632,11 @@ input.notify-changes {
   min-height: 90px;
 }
 
+/* line 85, ../scss/pages/_transaction-log.scss */
+#viewImagesModal .flexslider {
+  overflow: auto;
+}
+
 /* line 5, ../scss/pages/_products.scss */
 .products .edit-product .organization-group .checkbox {
   margin-bottom: 0;

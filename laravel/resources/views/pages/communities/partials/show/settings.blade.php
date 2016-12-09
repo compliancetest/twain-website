@@ -134,7 +134,7 @@
                         </div>
                     </div>
 
-                    {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                    {!! Form::model($community, ['id'=> 'privacy-options-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
                         <div class="colored-box-header">Privacy Options</div>
                         <div class="colored-box-body">
@@ -178,7 +178,7 @@
                     {!! Form::close() !!}
 
 
-                    {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                    {!! Form::model($community, ['id'=> 'community-articles-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
                         <div class="colored-box-header">Community Articles</div>
                         <div class="colored-box-body">
@@ -198,7 +198,7 @@
                     </div>
                     {!! Form::close() !!}
 
-                    {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                    {!! Form::model($community, ['id'=> 'community-surveys-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
                         <div class="colored-box-header">Community Surveys</div>
                         <div class="colored-box-body">
@@ -218,7 +218,7 @@
                     </div>
                     {!! Form::close() !!}
 
-                    {!! Form::model($community, ['id'=> 'group-details-form', 'class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
+                    {!! Form::model($community, ['class' => 'standard-form', 'files' => true, 'data-save-method' => 'ajax', 'method' => 'PATCH', 'url' => getSiteUrl() . '/communities/'.$community->slug]) !!}
                     <div class="colored-box">
                         <div class="colored-box-header">Certified products visibility</div>
                         <div class="colored-box-body">
