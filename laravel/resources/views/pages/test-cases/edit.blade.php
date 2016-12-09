@@ -326,13 +326,13 @@
                                         <div class="checkboxes-group">
                                             <div class="checkbox-inline">
                                                 <label>
-                                                    <input type="radio" name="is_optional" value="Yes" @if($testCase->is_optional) checked="checked" @endif>
+                                                    <input type="radio" name="is_optional" value="1" @if($testCase->is_optional) checked="checked" @endif>
                                                     Yes
                                                 </label>
                                             </div>
                                             <div class="checkbox-inline">
                                                 <label>
-                                                    <input type="radio" name="is_optional" value="No" @if(!$testCase->is_optional) checked="checked" @endif>
+                                                    <input type="radio" name="is_optional" value="0" @if(!$testCase->is_optional) checked="checked" @endif>
                                                     No
                                                 </label>
                                             </div>
