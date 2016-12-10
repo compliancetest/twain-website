@@ -158,9 +158,9 @@
                         <div class="colored-box-header">
                             My Organization
                             <ul class="colored-box-header-actions">
-                                <li><a href="#" data-tooltip="tooltip" data-container="body" title="Create Organization"><span class="create-icon"></span></a></li>
-                                <li><a href="#" data-tooltip="tooltip" data-container="body" title="Join Organization"><span class="join-icon"></span></a></li>
-                                <li><a href="#" data-tooltip="tooltip" data-container="body" title="Leave Organization"><span class="leave-icon"></span></a></li>
+                                <li><a href="#createOrganizationModal" data-toggle="modal" data-tooltip="tooltip" data-container="body" title="Create Organization"><span class="create-icon"></span></a></li>
+                                <li><a href="#joinOrganizationModal" data-toggle="modal" data-tooltip="tooltip" data-container="body" title="Join Organization"><span class="join-icon"></span></a></li>
+                                <li><a href="#leaveOrganizationModal" data-toggle="modal" data-tooltip="tooltip" data-container="body" title="Leave Organization"><span class="leave-icon"></span></a></li>
                             </ul>
                         </div>
                         <div class="colored-box-body">
@@ -189,4 +189,115 @@
 
         </div>
     </div>
+
+
+    <div class="modal fade" id="createOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content block-loading-wrapper">
+                {!! Form::model($community, ['id'=> 'createOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.create-error-box', 'data-redirect-after-submit' => '/laravel-my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/create/']) !!}
+                    <div class="modal-header">
+                        <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                        Create Organization
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="organizationName">Name</label>
+                            <input type="text" name="organization_name" class="form-control" id="organizationName" required="required" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="organizationWebsite">Website</label>
+                            <input type="text" name="organization_website" class="form-control" id="organizationWebsite" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="organizationDescription">Description</label>
+                            <textarea name="organization_description" class="form-control" id="organizationDescription"></textarea>
+                        </div>
+                        <div class="create-error-box"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+                        <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="block-loading form-loading">
+                        <div class="loading-content">
+                            <span class="loader"></span>
+                            <div class="loading-text">CREATING</div>
+                            <div class="loading-wait">Please wait...</div>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="joinOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static" data-save-method="ajax">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content block-loading-wrapper">
+                {!! Form::model('', ['id'=> 'joinOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.join-error-box', 'data-redirect-after-submit' => '/laravel-my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/join/']) !!}
+                    <div class="modal-header">
+                        <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                        Join Organization
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="organizationKey">Organization Key</label>
+                            <input type="text" name="organization_key" class="form-control" id="organizationKey" required="required" value="">
+                        </div>
+                        <div class="join-error-box"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+                        <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="block-loading form-loading">
+                        <div class="loading-content">
+                            <span class="loader"></span>
+                            <div class="loading-text">LOADING</div>
+                            <div class="loading-wait">Please wait...</div>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="leaveOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content block-loading-wrapper">
+                {!! Form::model('', ['id'=> 'leaveOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.leave-error-box', 'data-redirect-after-submit' => '/laravel-my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/leave']) !!}
+                    <div class="modal-header">
+                        <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
+                        Leave Organization
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to leave this organization?
+                        <div class="leave-error-box"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Confirm</button>
+                        <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="block-loading form-loading">
+                        <div class="loading-content">
+                            <span class="loader"></span>
+                            <div class="loading-text">CREATING</div>
+                            <div class="loading-wait">Please wait...</div>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+@stop
+
+@section('page-scripts')
+    <script>
+        jQuery(document).ready(function ($) {
+            $('.orgPopups').on('submit', function (e) {
+                e.preventDefault();
+                console.log('test');
+            })
+        });
+    </script>
 @stop

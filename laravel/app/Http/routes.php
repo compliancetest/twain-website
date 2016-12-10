@@ -101,9 +101,12 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('my-test-suites', 'TestSuitesController@userTestSuites');
         Route::get('my-communities', 'CommunitiesController@userCommunities');
-        Route::get('my-organisation', 'UserController@organisation');
-        Route::get('my-organisation/edit', 'UserController@organisation');
-        Route::get('my-profile', 'UserController@profile');
+        Route::get('laravel-my-organisation', 'UserController@organisation');
+        Route::get('laravel-my-organisation/edit', 'UserController@organisation');
+        Route::post('laravel-my-organisation/leave', 'UserController@leaveOrganisation');
+        Route::post('laravel-my-organisation/join', 'UserController@joinOrganisation');
+        Route::post('laravel-my-organisation/create', 'UserController@createOrganisation');
+        Route::get('laravel-my-profile', 'UserController@profile');
 
         Route::get('test-case/create', 'TestCasesController@create');
         Route::post('test-case', 'TestCasesController@store');

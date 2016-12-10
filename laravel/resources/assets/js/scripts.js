@@ -754,7 +754,9 @@ var Page = {
                     } else {
                         messageBox.append('<div class="message error-message">' + formatErrorMessage(jqXHR, status) + '</div>');
                     }
-                    $('.error-message:first').parents('.colored-box').goTo();
+                    if ($('.error-message').parents('.colored-box').length){
+                        $('.error-message:first').parents('.colored-box').goTo();
+                    }
                 },
 
                 success: function(rsp, status, jqXHR){

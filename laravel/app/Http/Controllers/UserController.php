@@ -18,4 +18,19 @@ class UserController extends Controller
     {
         return view('pages.my.profile.view');
     }
+
+    public function createOrganisation()
+    {
+        return response()->json(array('message' => 'Organisation successfully created '), 201);
+    }
+
+    public function joinOrganisation()
+    {
+        return response()->json(array('message' => 'Successfully joined to organisation'), 201);
+    }
+
+    public function leaveOrganisation()
+    {
+        return response()->json(array('message' => 'Successfully left organisation'), 201);
+    }
 }
