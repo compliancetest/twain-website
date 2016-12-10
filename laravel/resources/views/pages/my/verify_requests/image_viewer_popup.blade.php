@@ -3,16 +3,16 @@
     Image Viewer
 </div>
 <div class="modal-body">
-    <div class="flexslider">
-        <ul class="slides">
-            <?php $scannedImagesData = $transaction->getScannedImagesData();?>
-            @if($scannedImagesData)
-            @foreach($scannedImagesData AS $k => $scannedImageData)
-                <?php $showDetails = $canModerate || $scannedImageData['skipConditions'] || $scannedImageData['passConditions'];?>
-                {{--If both images available use this layout--}}
-                <li>
-                    @if($scannedImageData['expectedImage'])
-                        <div class="row">
+    <div class="flexslider-wrapper">
+        <div class="flexslider">
+            <ul class="slides">
+                <?php $scannedImagesData = $transaction->getScannedImagesData();?>
+                @if($scannedImagesData)
+                @foreach($scannedImagesData AS $k => $scannedImageData)
+                    <?php $showDetails = $canModerate || $scannedImageData['skipConditions'] || $scannedImageData['passConditions'];?>
+                    {{--If both images available use this layout--}}
+                    <li>
+                        @if($scannedImageData['expectedImage'])
                             <?php $colsNumber = $showDetails ? 4 : 6;?>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
@@ -44,15 +44,14 @@
                                     </span>
                                 </a>
                             </div>
-                                @if($showDetails)
-                                    <div class="col-md-4">
-                                        @include('pages.my.verify_requests._image_viewer_conditions_form', ['imageNumber' => $k])
-                                    </div>
-                                @endif
-                        </div>
-                    @else
-                        <?php $colsNumber = $showDetails ? 6 : 12;?>
-                        <div class="row">
+                            @if($showDetails)
+                                <div class="col-md-4">
+                                    @include('pages.my.verify_requests._image_viewer_conditions_form', ['imageNumber' => $k])
+                                </div>
+                            @endif
+
+                        @else
+                            <?php $colsNumber = $showDetails ? 6 : 12;?>
                             <div class="col-md-{{ $colsNumber }}">
                                 <h4>Scanned Image</h4>
                                 <a class="scanned-image is-loading" target="_blank" href="{{ $scannedImageData['image'] }}">
@@ -68,18 +67,16 @@
                                     </span>
                                 </a>
                             </div>
-                                @if($showDetails)
-                                    <div class="col-md-6">
-                                        @include('pages.my.verify_requests._image_viewer_conditions_form')
-                                    </div>
-                                @endif
-                        </div>
-                    @endif
-                </li>
-            @endforeach
-            @if($canModerate)
-                <li>
-                    <div class="row">
+                            @if($showDetails)
+                                <div class="col-md-6">
+                                    @include('pages.my.verify_requests._image_viewer_conditions_form')
+                                </div>
+                            @endif
+                        @endif
+                    </li>
+                @endforeach
+                @if($canModerate)
+                    <li>
                         <div class="col-md-12">
                             @foreach($scannedImagesData as $k => $scannedImageData)
                                 <h3>Image #{{ $k+1 }}:</h3>
@@ -95,13 +92,13 @@
                             <button class="verify_as_fail btn btn-danger btn-with-icon btn-trigger change_status" data-outcome="Fail" style="display: none;">Verify As Fail</button>
                             <button class="verify_as_skip btn btn-default btn-with-icon btn-trigger change_status" data-outcome="Skip" style="display: none;">Verify As Skip</button>
                         </div>
-                    </div>
-                </li>
-            @endif
-            @else
-                <div class="alert alert-warning text-center">This test result doesn't have any scan results.</div>
-            @endif
-        </ul>
+                    </li>
+                @endif
+                @else
+                    <div class="alert alert-warning text-center">This test result doesn't have any scan results.</div>
+                @endif
+            </ul>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
