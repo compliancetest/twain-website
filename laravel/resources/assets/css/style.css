@@ -15633,7 +15633,7 @@ input.notify-changes {
 }
 
 /* line 85, ../scss/pages/_transaction-log.scss */
-#viewImagesModal .flexslider {
+#viewImagesModal .slides {
   overflow: auto;
 }
 
