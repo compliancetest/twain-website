@@ -243,21 +243,22 @@
 
     <div class="modal fade viewImagesModal" id="viewImagesModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-fluid" role="document">
-            <div class="modal-content block-loading-wrapper">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
                     Image Viewer
                 </div>
-                <div class="modal-body"></div>
+                <div class="modal-body">
+                    <div class="block-loading">
+                        <div class="loading-content">
+                            <span class="loader"></span>
+                            <div class="loading-text">LOADING DATA</div>
+                            <div class="loading-wait">Please wait...</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-with-icon btn-cancel" data-dismiss="modal">Close</button>
-                </div>
-                <div class="block-loading loading-shown">
-                    <div class="loading-content"><span class="loader"></span>
-
-                        <div class="loading-text">LOADING DATA</div>
-                        <div class="loading-wait">Please wait...</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -274,7 +275,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="block-loading">
-                            <div class="loading-content"><span class="loader"></span>
+                            <div class="loading-content">
+                                <span class="loader"></span>
                                 <div class="loading-text">LOADING DATA</div>
                                 <div class="loading-wait">Please wait...</div>
                             </div>
@@ -284,7 +286,6 @@
             </div>
         </div>
     @endif
-
 
     @include('pages.popups.transaction_reason')
 
@@ -624,6 +625,12 @@
                 $(this).find('.modal-body').html('');
                 $(this).find('.block-loading').show();
             });
+
+
+            $('#viewImagesModal').on('hidden.bs.modal', function () {
+                $(this).find('.modal-body').html('<div class="block-loading"><div class="loading-content"><span class="loader"></span><div class="loading-text">LOADING DATA</div><div class="loading-wait">Please wait...</div></div></div>');
+            });
+
 
             Page.ajaxSearchForm.init();
 
