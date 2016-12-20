@@ -271,7 +271,6 @@
 
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success btn-with-icon btn-confirm">Save</button>
-                            <a href="javascript:history.back();" class="btn btn-default btn-with-icon btn-cancel">Cancel</a>
                         </div>
                         @include('loader', ['loaderClass' => 'form-loading', 'loaderMessage' => 'SAVING...'])
 
