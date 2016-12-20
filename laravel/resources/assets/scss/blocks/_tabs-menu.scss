@@ -181,7 +181,7 @@
         }
     }
 
-    .settings-tabs{
+    .settings-tabs, .organisation-tabs{
         li a{
            padding: 5px 10px;
         }
@@ -230,4 +230,11 @@
       color: $text-color;
     }
   }
+}
+
+.sub-tabs-content {
+    padding: 20px 10px;
+    border: 1px solid #e1e1e1;
+    background: #fff;
+    @include box-shadow(0 0 3px #ddd);
 }

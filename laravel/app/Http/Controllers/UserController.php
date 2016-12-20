@@ -189,5 +189,15 @@ class UserController extends Controller
             'user_id' => $user->ID,
         ])->delete();
         return response()->json(array('message' => 'Successfully left organisation'), 201);
+
+    }
+
+    /**
+     * save organisation
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveOrganisation()
+    {
+        return response()->json(array('message' => 'Successfully Saved!'), 201);
     }
 }
