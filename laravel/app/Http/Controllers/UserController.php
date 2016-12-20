@@ -28,7 +28,7 @@ class UserController extends Controller
     public function update(Requests\UserProfileRequest $request)
     {
         $user = Auth::user();
-        $messages = ['Changes saved successfullyю'];
+        $messages = ['Changes saved successfully.'];
 
         if ($request->get('password')) {
             if (!wp_check_password($request->get('current_password'), $user->user_pass, $user->ID)) {
