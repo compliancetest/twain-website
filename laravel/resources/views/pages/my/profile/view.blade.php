@@ -291,7 +291,6 @@
         jQuery(document).ready(function ($) {
             $('.orgPopups').on('submit', function (e) {
                 e.preventDefault();
-                console.log('test');
             })
         });
     </script>
