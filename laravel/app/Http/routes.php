@@ -106,7 +106,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('laravel-my-organisation/leave', 'UserController@leaveOrganisation');
         Route::post('laravel-my-organisation/join', 'UserController@joinOrganisation');
         Route::post('laravel-my-organisation/create', 'UserController@createOrganisation');
-        Route::get('laravel-my-profile', 'UserController@profile');
+        Route::get('my-profile', 'UserController@view');
+        Route::post('my-profile', 'UserController@update');
+        Route::post('my-profile/avatar', 'UserController@uploadAvatar');
 
         Route::get('test-case/create', 'TestCasesController@create');
         Route::post('test-case', 'TestCasesController@store');

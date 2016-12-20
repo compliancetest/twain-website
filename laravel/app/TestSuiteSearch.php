@@ -83,7 +83,8 @@ class TestSuiteSearch extends Model
                                     ->where('is_latest_version', true)
                                     ->where('community_id', $community->id);
                             });
-                        }
+                        } else {
+                            $q->orWhere(['community_id' => $community->id]); }
                     }
 
                 }

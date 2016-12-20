@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class Organisation extends Model
 {
+
+    protected $guarded = ['id'];
+
     protected $table = 'wp_organisations';
+
+    public $timestamps = false;
 
     /**
      * Organisation memebers relation
