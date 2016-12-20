@@ -688,8 +688,11 @@ var Page = {
                                             '<td class="text-center"></td>' +
                                         '</tr>');
                     }
+                    if(form.attr('id') == 'profile-details-form'){
+                        $('input[type="password"]').val('');
+                    }
                     if(jqXHR.status == 201){
-                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">'+rsp.message+'</div>');
+                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">'+rsp.message.join('<br>')+'</div>');
                     } else {
                         form.find('.colored-box-footer:last').prepend('<div class="message success-message">Changes saved successfully.</div>');
                     }

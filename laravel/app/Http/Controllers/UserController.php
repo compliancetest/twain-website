@@ -28,7 +28,7 @@ class UserController extends Controller
     public function update(Requests\UserProfileRequest $request)
     {
         $user = Auth::user();
-        $message = 'Changes saved successfully!';
+        $messages = ['Changes saved successfullyю'];
 
         if ($request->get('password')) {
             if (!wp_check_password($request->get('current_password'), $user->user_pass, $user->ID)) {
@@ -43,6 +43,7 @@ class UserController extends Controller
 
             cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'password_changed', $data);
             cp_send_email_to_admin('password_changed_admin', $data);
+            $messages[] = 'Your password has been updated successfully.';
         }
 
         $emailAlreadyUsed = User::where('user_email', $request->get('user_email'))->where('ID', '!=', $user->ID)->first();
@@ -72,7 +73,7 @@ class UserController extends Controller
 
             cp_send_email(array('name' => $data['[name]'], 'email' => $data['[email]']), 'email_changed', $data);
             cp_send_email_to_admin('email_changed_admin', $data);
-            $message = 'A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.';
+            $messages[] = 'A confirmation email has been sent to updated email address. Please confirm your new email address using the link it contains.';
         }
 
         wp_update_user([
@@ -85,7 +86,7 @@ class UserController extends Controller
         update_user_meta($user->ID, 'description', $request->get('biography'));
         update_user_meta($user->ID, 'phone_number', $request->get('phone_number'));
         update_user_meta($user->ID, 'timezone', $request->get('timezone_settings'));
-        return response()->json(['message' => $message], 201);
+        return response()->json(['message' => $messages], 201);
     }
 
     public function uploadAvatar(Request $request)
