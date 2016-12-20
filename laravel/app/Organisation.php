@@ -21,7 +21,7 @@ class Organisation extends Model
      */
     public function getProductsOrganisationsAttribute($value)
     {
-        return json_decode($value);
+        return (array) json_decode($value);
     }
 
     /**
