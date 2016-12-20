@@ -189,7 +189,7 @@
     <div class="modal fade" id="createOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content block-loading-wrapper">
-                {!! Form::model($community, ['id'=> 'createOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.create-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/create/']) !!}
+                {!! Form::model($community, ['id'=> 'createOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.create-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/my-organisation/create/']) !!}
                     <div class="modal-header">
                         <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
                         Create Organization
@@ -228,7 +228,7 @@
     <div class="modal fade" id="joinOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static" data-save-method="ajax">
         <div class="modal-dialog" role="document">
             <div class="modal-content block-loading-wrapper">
-                {!! Form::model('', ['id'=> 'joinOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.join-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/join/']) !!}
+                {!! Form::model('', ['id'=> 'joinOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.join-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/my-organisation/join/']) !!}
                     <div class="modal-header">
                         <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
                         Join Organization
@@ -259,7 +259,7 @@
     <div class="modal fade" id="leaveOrganizationModal" tabindex="-1" role="dialog" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content block-loading-wrapper">
-                {!! Form::model('', ['id'=> 'leaveOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.leave-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/laravel-my-organisation/leave']) !!}
+                {!! Form::model('', ['id'=> 'leaveOrganizationForm', 'data-ajax-form'=>'true', 'data-notification-container'=>'.leave-error-box', 'data-redirect-after-submit' => '/my-profile/', 'data-validate' => 'validate', 'method' => 'POST', 'url' => getSiteUrl() . '/my-organisation/leave']) !!}
                     <div class="modal-header">
                         <button type="button" class="close-modal" title="Close popup" data-dismiss="modal" aria-label="Close">Close</button>
                         Leave Organization

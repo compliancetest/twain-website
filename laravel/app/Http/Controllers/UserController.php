@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Organisation;
+use App\OrganisationMember;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -15,10 +16,6 @@ use App\Http\Requests;
 class UserController extends Controller
 {
 
-    public function organisation()
-    {
-        return view('pages.my.organisation.view');
-    }
 
     public function view()
     {
@@ -193,12 +190,35 @@ class UserController extends Controller
 
     }
 
+    public function organisation()
+    {
+        $organisation = Auth::user()->organisation[0];
+        return view('pages.my.organisation.view')->with(['organisation' => $organisation]);
+    }
+
     /**
      * save organisation
      * @return \Illuminate\Http\JsonResponse
      */
-    public function saveOrganisation()
+    public function saveOrganisation(Requests\OrganisationRequest $request)
     {
+        $organisation = Auth::user()->organisation[0];
+        $organisation->fill($request->all());
+        $organisation->save();
         return response()->json(array('message' => 'Successfully Saved!'), 201);
+    }
+
+    /**
+     * Delete organisation member by admin
+     * @param $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteUserFromOrganisation($userId)
+    {
+        if(is_organisation_admin()) {
+            $organisation = @Auth::user()->organisation[0];
+            OrganisationMember::where(['user_id' => $userId, 'organisation_id' => $organisation->id])->delete();
+        }
+        return response()->json(array('message' => 'Success'));
     }
 }

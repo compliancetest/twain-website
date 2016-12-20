@@ -23,6 +23,15 @@ class OrganisationSubscription extends Model
         return $this->belongsTo('\App\Organisation', 'wp_organisations');
     }
 
+    /**
+     * Relation with organisation record
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('\App\User', 'user_id', 'ID');
+    }
+
     public function testSuite()
     {
         return $this->belongsTo('\App\LaravelTestSuite', 'suite_minor_family_mark', 'minor_family_mark')->where('test_suites.is_latest_version', '=', true);

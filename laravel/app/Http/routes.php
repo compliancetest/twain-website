@@ -101,12 +101,13 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('my-test-suites', 'TestSuitesController@userTestSuites');
         Route::get('my-communities', 'CommunitiesController@userCommunities');
-        Route::get('laravel-my-organisation', 'UserController@organisation');
-        Route::get('laravel-my-organisation/edit', 'UserController@organisation');
-        Route::post('laravel-my-organisation/leave', 'UserController@leaveOrganisation');
-        Route::post('laravel-my-organisation/join', 'UserController@joinOrganisation');
-        Route::post('laravel-my-organisation/create', 'UserController@createOrganisation');
-        Route::post('laravel-my-organisation/save', 'UserController@saveOrganisation');
+        Route::get('my-organisation', 'UserController@organisation');
+        Route::get('my-organisation/edit', 'UserController@organisation');
+        Route::post('my-organisation/leave', 'UserController@leaveOrganisation');
+        Route::delete('my-organisation/delete_member/{id}', 'UserController@deleteUserFromOrganisation');
+        Route::post('my-organisation/join', 'UserController@joinOrganisation');
+        Route::post('my-organisation/create', 'UserController@createOrganisation');
+        Route::post('my-organisation/save', 'UserController@saveOrganisation');
         Route::get('my-profile', 'UserController@view');
         Route::post('my-profile', 'UserController@update');
         Route::post('my-profile/avatar', 'UserController@uploadAvatar');

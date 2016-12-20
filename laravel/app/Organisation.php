@@ -15,6 +15,25 @@ class Organisation extends Model
     public $timestamps = false;
 
     /**
+     * Get products_organisations mutator
+     * @param $value
+     * @return array|mixed
+     */
+    public function getProductsOrganisationsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Set products_organisations mutator
+     * @param $value
+     */
+    public function setProductsOrganisationsAttribute($value)
+    {
+        $this->attributes['products_organisations'] = json_encode(array_map('trim', explode(',', $value)));
+    }
+
+    /**
      * Organisation memebers relation
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -24,12 +43,21 @@ class Organisation extends Model
     }
 
     /**
+     * Organisation members list
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function membersList()
+    {
+        return $this->hasMany('App\OrganisationMember')->with(['user']);
+    }
+
+    /**
      * Organisation subscriptions relation
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscriptions()
     {
-        return $this->hasMany('App\OrganisationSubscription');
+        return $this->hasMany('App\OrganisationSubscription')->with(['testSuite']);
     }
 
     public function approvedSuites()
