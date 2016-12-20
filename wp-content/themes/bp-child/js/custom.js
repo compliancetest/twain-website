@@ -537,6 +537,9 @@ jQuery(document).ready(function($) {
         jQuery(this).addClass('open');
     }, function(){
         jQuery(this).removeClass('open');
+      if (jQuery(this).hasClass('leftmenu')){
+        jQuery('#top_access input').blur();
+      }
     });
     
     jQuery('.dropdown-menu li').hover(function(){
