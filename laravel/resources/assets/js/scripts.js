@@ -86,15 +86,7 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $($(this).data('toggle-block')).toggleClass('desktop-hide');
     });
-
-    if ($.fn.redactor){
-        $('.redactor_editor').redactor({
-            minHeight: 80,
-            shortcuts: false,
-            pastePlainText: false
-        });
-    }
-
+    
     //Change default options for bootsrtap datepicker
     if ($.fn.datepicker){
         $.fn.datepicker.defaults.autoclose = 'true';

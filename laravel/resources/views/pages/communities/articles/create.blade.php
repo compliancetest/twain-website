@@ -26,7 +26,7 @@
 
                                     <div class="form-group">
                                         {!! Form::label('content', 'Content:') !!}
-                                        {!! Form::textarea('content', null, ['cols' => '20', 'rows' => 5, 'class' => 'redactor_editor']) !!}
+                                        {!! Form::textarea('content', null, ['cols' => '20', 'rows' => 5, 'class' => 'form-control']) !!}
                                     </div>
                                 </div>
                             </div>

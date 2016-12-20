@@ -22,7 +22,6 @@
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/jquery.validate.js"></script>
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/jsonary-super-bundle.js"></script>
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/clipboard.js"></script>
-    <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/redactor.js"></script>
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/jquery.form.js"></script>
     <script src="{{ getSiteUrl() }}/laravel/resources/assets/js/scripts.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>

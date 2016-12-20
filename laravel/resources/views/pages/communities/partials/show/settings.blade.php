@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <label for="communityDescription">Community Description</label>
                                     {{ Form::textarea('description', null, ['required' => 'required',
-                                        'class' => 'form-control redactor_editor',
+                                        'class' => 'form-control',
                                         'data-air' => 'true',
                                         'id' => 'communityDescription',
                                         'rows' => '5',
@@ -43,7 +43,7 @@
                                 <div class="form-group">
                                     <label for="communityTermsAndConditions">Terms and Conditions</label>
                                     {{ Form::textarea('terms_and_conditions', @$communityMeta->get('terms_and_conditions')->meta_value, [
-                                       'class' => 'form-control redactor_editor',
+                                       'class' => 'form-control',
                                        'data-air' => 'true',
                                        'id' => 'communityTermsAndConditions',
                                        'rows' => '5',
@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     <label for="licenseAgreements">License Agreements</label>
                                     {{ Form::textarea('license_agreements', @$communityMeta->get('license_agreements')->meta_value, [
-                                       'class' => 'form-control redactor_editor',
+                                       'class' => 'form-control',
                                        'data-air' => 'true',
                                        'id' => 'licenseAgreements',
                                        'rows' => '5',
@@ -61,7 +61,7 @@
                                 <div class="form-group">
                                     <label for="communityObligationToClaim">Obligation to Claim</label>
                                     {{ Form::textarea('obligation_for_claim', @$communityMeta->get('obligation_for_claim')->meta_value, [
-                                       'class' => 'form-control redactor_editor',
+                                       'class' => 'form-control',
                                        'data-air' => 'true',
                                        'id' => 'communityObligationToClaim',
                                        'rows' => '5',
@@ -70,7 +70,7 @@
                                 <div class="form-group">
                                     <label for="communityNotificationEmailContent">Notification Email Content</label>
                                     {{ Form::textarea('notification_email_of_changes', @$communityMeta->get('notification_email_of_changes')->meta_value, [
-                                        'class' => 'form-control redactor_editor',
+                                        'class' => 'form-control',
                                         'data-air' => 'true',
                                         'id' => 'communityNotificationEmailContent',
                                         'rows' => '5',
