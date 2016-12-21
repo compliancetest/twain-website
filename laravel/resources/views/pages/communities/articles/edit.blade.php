@@ -30,7 +30,7 @@
 
                                     <div class="form-group">
                                         {!! Form::label('content', 'Content:') !!}
-                                        {!! Form::textarea('content', null, ['cols' => '20', 'rows' => 5, 'class' => 'form-control']) !!}
+                                        {!! Form::textarea('content', null, ['cols' => '20', 'rows' => 5, 'id' => 'article-content', 'class' => 'form-control redactor_editor']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -78,4 +78,19 @@
             </div>
         </div>
 
+@stop
+
+@section('page-scripts')
+<script src="{{ getSiteUrl() }}/laravel/resources/assets/js/vendor/redactor.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        if ($.fn.redactor){
+            $('.redactor_editor').redactor({
+                minHeight: 80,
+                shortcuts: false,
+                pastePlainText: false
+            });
+        }
+    });
+</script>
 @stop
