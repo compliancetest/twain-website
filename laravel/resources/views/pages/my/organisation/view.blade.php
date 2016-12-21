@@ -45,10 +45,10 @@
                                                                     <button type="button" class="close-modal" data-tooltip="tooltip" title="Close popup" data-placement="left"
                                                                             data-dismiss="modal" aria-label="Close">Close
                                                                     </button>
-                                                                    Confirm Profile Deletion
+                                                                    Confirm Membership Deletion
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Are you sure that you want to remove this person as a member of the organisation?
+                                                                    Are you sure that you want to delete this person as a member of the organization?
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <a href="/my-organisation/delete_member/{{ $member->user_id }}"
@@ -135,7 +135,7 @@
                                         <div class="form-group">
                                             <label for="organisationDescription">Description:</label>
                                             <textarea rows="5" class="form-control organisation-description" id="organisationDescription"
-                                                      name="organisation_description">{{ $organisation->organisation_description }}</textarea>
+                                                      name="organisation_description" required>{{ $organisation->organisation_description }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="organisationWebsite">Website:</label>

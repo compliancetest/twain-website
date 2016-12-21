@@ -206,6 +206,11 @@ class UserController extends Controller
     public function saveOrganisation(Requests\OrganisationRequest $request)
     {
         $organisation = Auth::user()->organisation[0];
+        $organisationByName = Organisation::where('organisation_name', $request->get('organisation_name'))->where('id', '!=', $organisation->id)->first();
+        if ($organisationByName) {
+            return response()->json(['Organization with provided name already exist'], 422);
+        }
+
         $organisation->fill($request->all());
         $organisation->save();
         return response()->json(array('message' => 'Successfully Saved!'), 201);
