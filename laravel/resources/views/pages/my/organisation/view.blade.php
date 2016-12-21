@@ -65,7 +65,7 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <button type="button" class="btn btn-disabled btn-icon btn-delete" data-tooltip="tooltip" disabled data-container="body" title="You can't delete the organisation admin from the organisation"></button>
+                                                    <button type="button" class="btn btn-disabled btn-icon btn-delete" data-tooltip="tooltip" data-container="body" title="You can't delete the organisation admin from the organisation"></button>
                                                 @endif
                                             </td>
                                         </tr>
