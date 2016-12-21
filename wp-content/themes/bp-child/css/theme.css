@@ -7829,9 +7829,14 @@ table.json-array-table>tbody>tr>td.json-array-table-move{
 }
 .dashboard-tabs .simple_tooltip {
     display: none !important;
-    margin-left: -36px;
-    width: 160px;
-    top: -25px !important;
+    margin-left: -86px;
+    width: 172px;
+    white-space: nowrap;
+    top: -29px !important;
+    left: 50%;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    border: 0;
 }
 #dashboard-pages {
     margin-top: 5px;
