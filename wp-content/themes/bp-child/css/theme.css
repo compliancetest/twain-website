@@ -9299,3 +9299,15 @@ input.inactive_s{
 .btn.copyProfileLink{
     cursor: pointer;
 }
+
+#question{
+    min-height: auto;
+    height: 55px;
+    resize: none;
+}
+
+.attachments-wrap{
+    max-height: 99px;
+    overflow: auto;
+    width: 340px;
+}
