@@ -28,11 +28,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password"  value="">
+                                    <input type="password" name="password" class="form-control" id="password"  value="" data-tooltip="tooltip" title="<ul><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
                                 </div>
                                 <div class="form-group">
                                     <label for="confirmPassword">Confirm Password</label>
-                                    <input type="password" name="confirm_password" class="form-control" id="confirmPassword"  value="">
+                                    <input type="password" name="confirm_password" class="form-control" id="confirmPassword"  value="" data-tooltip="tooltip" title="<ul><li>&#9679 8 characters long at minimum</li><li>&#9679 Includes upper and lowercase characters</li><li>&#9679 Includes at least 1 special character within the string</li><li>&#9679 Includes at least 1 number within the string</li></ul>">
                                 </div>
                                 <div class="form-group">
                                     <label for="currentPassword">Current Password</label>
@@ -90,7 +90,7 @@
                                         <option value="/verify-requests" @if($userFirstPage == '/verify-requests') selected="selected" @endif>Verify Requests</option>
                                         <option value="/my-transaction-log" @if($userFirstPage == '/my-transaction-log') selected="selected" @endif>Test Results</option>
                                         <option value="/my-support-tickets" @if($userFirstPage == '/my-support-tickets') selected="selected" @endif>Support</option>
-                                        <option value="/my-profile" @if($userFirstPage == '/my-profile') selected="selected" @endif>Profile</option>
+                                        <option value="/my-profile" @if($userFirstPage == '/my-profile' || !$userFirstPage) selected="selected" @endif>Profile</option>
                                     </select>
                                 </div>
                             </div>
@@ -205,7 +205,7 @@
                         </div>
                         <div class="form-group">
                             <label for="organizationDescription">Description</label>
-                            <textarea name="organization_description" class="form-control" id="organizationDescription"></textarea>
+                            <textarea name="organization_description" class="form-control" id="organizationDescription" required="required"></textarea>
                         </div>
                         <div class="create-error-box"></div>
                     </div>
@@ -292,6 +292,7 @@
             $('.orgPopups').on('submit', function (e) {
                 e.preventDefault();
             })
+            $('input[data-tooltip="tooltip"]').tooltip({html: true})
         });
     </script>
 @stop

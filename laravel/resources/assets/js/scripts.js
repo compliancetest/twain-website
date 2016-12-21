@@ -684,7 +684,7 @@ var Page = {
                         $('input[type="password"]').val('');
                     }
                     if(jqXHR.status == 201){
-                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">'+rsp.message.join('<br>')+'</div>');
+                        form.find('.colored-box-footer:last').prepend('<div class="message success-message">'+$.makeArray(rsp.message).join('<br>') +'</div>');
                     } else {
                         form.find('.colored-box-footer:last').prepend('<div class="message success-message">Changes saved successfully.</div>');
                     }

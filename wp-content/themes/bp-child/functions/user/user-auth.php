@@ -262,23 +262,12 @@ function cp_activate_email()
     $user = $wpdb->get_row($query);
 
     if ($user) {
-        //Integrate User to Mailchimp
-        $mailChimp = new Mailchimp(get_mailchimp_api_key(), array('ssl_verifypeer' => false));
-        $mailChimpList = new Mailchimp_Lists($mailChimp);
-        try {
-            $result = $mailChimpList->subscribe(DEFAULT_MAILCHIMP_LIST_ID, array('email' => $user->user_email), array('FNAME' => get_user_meta($user->ID, "first_name", true), 'LNAME' => get_user_meta($user->ID, "last_name", true)), 'html', false);
-        } catch (Exception $e) {
-
-        }
 
         $wpdb->query("UPDATE " . $wpdb->users . " SET user_status = 0, user_activation_key='' WHERE ID =" . $user->ID);
         if ($user->email_changed != '') {
             $wpdb->query("UPDATE " . $wpdb->users . " SET user_email='" . $user->email_changed . "' WHERE ID =" . $user->ID);
             $wpdb->query("DELETE FROM " . $wpdb->prefix . "users_changes WHERE user_id =" . $user->ID);
         }
-
-        $wpdb->query("INSERT INTO {$wpdb->prefix}bp_activity (user_id, component, type, action, primary_link, date_recorded,secondary_item_id)     
-                      VALUES({$user->ID},'xprofile','new_member',' <a href=\"" . get_bloginfo('url') . "/members/{$user->user_login}/\">{$user->display_name}</a> became a registered member','" . get_bloginfo('url') . "/{$user->user_login}/','{$current_date}','0')");
 
         $data = array(
             '[name]' => get_user_meta($user->ID, 'first_name', true) . " " . get_user_meta($user->ID, 'last_name', true),

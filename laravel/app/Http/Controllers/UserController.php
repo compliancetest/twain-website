@@ -31,7 +31,10 @@ class UserController extends Controller
             if (!wp_check_password($request->get('current_password'), $user->user_pass, $user->ID)) {
                 return response()->json(['Your current password is incorrect.'], 422);
             }
-            wp_update_user(array('ID' => $user->id, 'user_pass' => $request->get('password')));
+            if (!\User\User::isPasswordValid($request->get('password'))) {
+                return response()->json(['Use upper and lower case letters, numbers and symbols like ! " ? $ % ^ & ). Minimal password length is 8 symbols.'], 422);
+            }
+            wp_update_user(array('ID' => $user->ID, 'user_pass' => $request->get('password')));
             $data = array(
                 '[name]' => $request->get('first_name') . " " . $request->get('last_name'),
                 '[username]' => $user->user_login,
@@ -151,7 +154,7 @@ class UserController extends Controller
         cp_send_email_to_admin('send_organisation_signup_request_to_admin', $email_data);
         cp_send_email(['email' => $user->user_email, 'name' => $user->getFullName()], 'send_organisation_signup_request_to_user', $email_data);
 
-        return response()->json(array('message' => 'Organisation successfully created '), 201);
+        return response()->json(array('message' => 'Organization successfully created '), 201);
     }
 
     /**
@@ -171,7 +174,7 @@ class UserController extends Controller
             'created_date' => date('Y:m:d H:i:s'),
         ]);
 
-        return response()->json(array('message' => 'Successfully joined to organisation'), 201);
+        return response()->json(array('message' => 'Successfully joined to organization'), 201);
     }
 
     /**
@@ -186,7 +189,7 @@ class UserController extends Controller
             'organisation_id' => @$user->organisation[0]->id,
             'user_id' => $user->ID,
         ])->delete();
-        return response()->json(array('message' => 'Successfully left organisation'), 201);
+        return response()->json(array('message' => 'Successfully left organization'), 201);
 
     }
 
