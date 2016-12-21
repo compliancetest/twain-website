@@ -23,12 +23,13 @@
     }
   }
 
-  &:disabled{
+  &:disabled, &.btn-disabled{
     border-color: #9f9f9f;
     background: #8a8a8a;
     color: #fff;
     @include background-image(linear-gradient(top, #a5a5a5, #7a7979));
     @include box-shadow(0 1px 0 0 #b8b8b8 inset);
+    cursor: not-allowed;
 
     &:hover{
       border-color: #9f9f9f;

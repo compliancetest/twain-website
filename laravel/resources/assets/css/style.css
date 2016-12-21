@@ -9706,7 +9706,7 @@ select option.level-3 {
   outline: none;
 }
 /* line 26, ../scss/blocks/_buttons.scss */
-.btn:disabled {
+.btn:disabled, .btn.btn-disabled {
   border-color: #9f9f9f;
   background: #8a8a8a;
   color: #fff;
@@ -9718,9 +9718,10 @@ select option.level-3 {
   background-image: linear-gradient(to bottom, #a5a5a5, #7a7979);
   -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
   box-shadow: 0 1px 0 0 #b8b8b8 inset;
+  cursor: not-allowed;
 }
-/* line 33, ../scss/blocks/_buttons.scss */
-.btn:disabled:hover {
+/* line 34, ../scss/blocks/_buttons.scss */
+.btn:disabled:hover, .btn.btn-disabled:hover {
   border-color: #9f9f9f;
   background: #8a8a8a;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YTVhNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdhNzk3OSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
@@ -9731,7 +9732,7 @@ select option.level-3 {
   background-image: linear-gradient(to bottom, #a5a5a5, #7a7979);
 }
 
-/* line 42, ../scss/blocks/_buttons.scss */
+/* line 43, ../scss/blocks/_buttons.scss */
 .btn-default {
   border-color: #9f9f9f;
   background: #8a8a8a;
@@ -9745,12 +9746,12 @@ select option.level-3 {
   -webkit-box-shadow: 0 1px 0 0 #b8b8b8 inset;
   box-shadow: 0 1px 0 0 #b8b8b8 inset;
 }
-/* line 49, ../scss/blocks/_buttons.scss */
+/* line 50, ../scss/blocks/_buttons.scss */
 .btn-default:hover, .btn-default:active, .btn-default:focus {
   background: #a0a0a0;
 }
 
-/* line 54, ../scss/blocks/_buttons.scss */
+/* line 55, ../scss/blocks/_buttons.scss */
 .btn-primary {
   border-color: #3577ad;
   background: #2d83cd;
@@ -9766,13 +9767,13 @@ select option.level-3 {
   text-shadow: 0 -1px 0 #777778;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 63, ../scss/blocks/_buttons.scss */
+/* line 64, ../scss/blocks/_buttons.scss */
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
   background: #288ce2;
   border-color: #3577ad;
 }
 
-/* line 69, ../scss/blocks/_buttons.scss */
+/* line 70, ../scss/blocks/_buttons.scss */
 .btn-success {
   border-color: #369817;
   background: #39a517;
@@ -9785,13 +9786,13 @@ select option.level-3 {
   -webkit-box-shadow: 0 1px 0 0 #95d780 inset;
   box-shadow: 0 1px 0 0 #95d780 inset;
 }
-/* line 75, ../scss/blocks/_buttons.scss */
+/* line 76, ../scss/blocks/_buttons.scss */
 .btn-success:hover, .btn-success:active, .btn-success:focus {
   background: #3eb518;
   border-color: #369817;
 }
 
-/* line 81, ../scss/blocks/_buttons.scss */
+/* line 82, ../scss/blocks/_buttons.scss */
 .btn-danger {
   border-color: #c33a3a;
   background: #f47273;
@@ -9804,18 +9805,18 @@ select option.level-3 {
   -webkit-box-shadow: 0 1px 0 0 #e68080 inset;
   box-shadow: 0 1px 0 0 #e68080 inset;
 }
-/* line 87, ../scss/blocks/_buttons.scss */
+/* line 88, ../scss/blocks/_buttons.scss */
 .btn-danger:hover, .btn-danger:active, .btn-danger:focus {
   background: #d84f4f;
   border-color: #c33a3a;
 }
 
-/* line 93, ../scss/blocks/_buttons.scss */
+/* line 94, ../scss/blocks/_buttons.scss */
 .btn-logout {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 97, ../scss/blocks/_buttons.scss */
+/* line 98, ../scss/blocks/_buttons.scss */
 .btn-logout:before {
   position: absolute;
   display: inline-block;
@@ -9828,12 +9829,12 @@ select option.level-3 {
   top: 7px;
 }
 
-/* line 106, ../scss/blocks/_buttons.scss */
+/* line 107, ../scss/blocks/_buttons.scss */
 .btn-dropdown {
   padding-left: 22px;
   padding-right: 5px;
 }
-/* line 110, ../scss/blocks/_buttons.scss */
+/* line 111, ../scss/blocks/_buttons.scss */
 .btn-dropdown:before {
   position: absolute;
   display: inline-block;
@@ -9846,7 +9847,7 @@ select option.level-3 {
   top: 11px;
 }
 
-/* line 119, ../scss/blocks/_buttons.scss */
+/* line 120, ../scss/blocks/_buttons.scss */
 .btn-lg, .btn-group-lg > .btn {
   font-size: 16px;
   font-weight: 700;
@@ -9854,7 +9855,7 @@ select option.level-3 {
   height: 40px;
   line-height: 1;
 }
-/* line 126, ../scss/blocks/_buttons.scss */
+/* line 127, ../scss/blocks/_buttons.scss */
 .btn-lg.btn-danger, .btn-group-lg > .btn-danger.btn {
   color: #fff;
   background-color: #aa221e;
@@ -9868,7 +9869,7 @@ select option.level-3 {
   box-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) inset;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 133, ../scss/blocks/_buttons.scss */
+/* line 134, ../scss/blocks/_buttons.scss */
 .btn-lg.btn-danger:hover, .btn-group-lg > .btn-danger.btn:hover {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzk4MTcxNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NjMmUyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -9878,7 +9879,7 @@ select option.level-3 {
   background-image: linear-gradient(to bottom, #981716, #cc2e27);
 }
 
-/* line 139, ../scss/blocks/_buttons.scss */
+/* line 140, ../scss/blocks/_buttons.scss */
 .btn-sm, .btn-group-sm > .btn {
   font-size: 10px;
   height: 18px;
@@ -9887,12 +9888,12 @@ select option.level-3 {
   line-height: 16px;
 }
 
-/* line 148, ../scss/blocks/_buttons.scss */
+/* line 149, ../scss/blocks/_buttons.scss */
 .btn-with-icon {
   padding-left: 30px;
   padding-right: 6px;
 }
-/* line 152, ../scss/blocks/_buttons.scss */
+/* line 153, ../scss/blocks/_buttons.scss */
 .btn-with-icon:before {
   display: block;
   content: '';
@@ -10029,14 +10030,14 @@ select option.level-3 {
   width: 18px;
 }
 
-/* line 225, ../scss/blocks/_buttons.scss */
+/* line 226, ../scss/blocks/_buttons.scss */
 .btn-icon {
   width: 24px;
   height: 24px;
   padding: 0;
   text-indent: -999999px;
 }
-/* line 231, ../scss/blocks/_buttons.scss */
+/* line 232, ../scss/blocks/_buttons.scss */
 .btn-icon:before {
   content: '';
   display: block;
@@ -10089,7 +10090,7 @@ select option.level-3 {
   height: 9px;
   width: 12px;
 }
-/* line 259, ../scss/blocks/_buttons.scss */
+/* line 260, ../scss/blocks/_buttons.scss */
 .btn-icon.btn-details:before, .btn-icon.btn-view:before {
   top: 6px;
 }
@@ -10171,7 +10172,7 @@ select option.level-3 {
   width: 13px;
 }
 
-/* line 299, ../scss/blocks/_buttons.scss */
+/* line 300, ../scss/blocks/_buttons.scss */
 .view-products-btn {
   position: relative;
   padding: 0 5px 0 20px;
@@ -10196,7 +10197,7 @@ select option.level-3 {
   background-image: -webkit-linear-gradient(top, #fefefe, #f3f3f3);
   background-image: linear-gradient(to bottom, #fefefe, #f3f3f3);
 }
-/* line 316, ../scss/blocks/_buttons.scss */
+/* line 317, ../scss/blocks/_buttons.scss */
 .view-products-btn:before {
   content: '';
   display: inline-block;
@@ -10208,25 +10209,25 @@ select option.level-3 {
   left: 6px;
   top: 7px;
 }
-/* line 324, ../scss/blocks/_buttons.scss */
+/* line 325, ../scss/blocks/_buttons.scss */
 .view-products-btn:hover {
   text-decoration: none;
   color: #959595;
 }
 
-/* line 330, ../scss/blocks/_buttons.scss */
+/* line 331, ../scss/blocks/_buttons.scss */
 .custom-file-tag {
   display: inline-block;
   margin: 0 0 10px 0;
 }
-/* line 334, ../scss/blocks/_buttons.scss */
+/* line 335, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-file {
   overflow: hidden;
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 341, ../scss/blocks/_buttons.scss */
+/* line 342, ../scss/blocks/_buttons.scss */
 .custom-file-tag input {
   height: 100%;
   opacity: 0;
@@ -10238,18 +10239,18 @@ select option.level-3 {
   cursor: pointer;
   width: 76px;
 }
-/* line 352, ../scss/blocks/_buttons.scss */
+/* line 353, ../scss/blocks/_buttons.scss */
 .custom-file-tag ::-webkit-file-upload-button {
   cursor: pointer;
 }
-/* line 354, ../scss/blocks/_buttons.scss */
+/* line 355, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap {
   position: relative;
   padding: 7px 10px 0 30px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 360, ../scss/blocks/_buttons.scss */
+/* line 361, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap:before {
   display: block;
   position: absolute;
@@ -10257,15 +10258,15 @@ select option.level-3 {
   top: 0;
   left: 0;
 }
-/* line 368, ../scss/blocks/_buttons.scss */
+/* line 369, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-label-wrap.file-ext-restriction {
   padding-top: 0;
 }
-/* line 374, ../scss/blocks/_buttons.scss */
+/* line 375, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-extensions {
   display: block;
 }
-/* line 379, ../scss/blocks/_buttons.scss */
+/* line 380, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-default:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10273,7 +10274,7 @@ select option.level-3 {
   height: 28px;
   width: 21px;
 }
-/* line 385, ../scss/blocks/_buttons.scss */
+/* line 386, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-doc:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10281,7 +10282,7 @@ select option.level-3 {
   height: 28px;
   width: 21px;
 }
-/* line 391, ../scss/blocks/_buttons.scss */
+/* line 392, ../scss/blocks/_buttons.scss */
 .custom-file-tag .file-type-image:before {
   display: inline-block;
   background-image: url('../images/icons.png');
@@ -10289,19 +10290,19 @@ select option.level-3 {
   height: 28px;
   width: 21px;
 }
-/* line 396, ../scss/blocks/_buttons.scss */
+/* line 397, ../scss/blocks/_buttons.scss */
 .custom-file-tag .btn-browse {
   top: 3px;
 }
 
-/* line 402, ../scss/blocks/_buttons.scss */
+/* line 403, ../scss/blocks/_buttons.scss */
 .upload-file-field-additional-btn {
   display: inline-block;
   vertical-align: middle;
   padding: 5px 0 0 10px;
 }
 
-/* line 409, ../scss/blocks/_buttons.scss */
+/* line 410, ../scss/blocks/_buttons.scss */
 .btn-subscription {
   text-align: right;
   padding: 5px 35px 5px 25px;
@@ -10309,13 +10310,13 @@ select option.level-3 {
   font-size: 24px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
 }
-/* line 416, ../scss/blocks/_buttons.scss */
+/* line 417, ../scss/blocks/_buttons.scss */
 .btn-subscription .glyphicon {
   position: absolute;
   right: 5px;
   top: 15px;
 }
-/* line 422, ../scss/blocks/_buttons.scss */
+/* line 423, ../scss/blocks/_buttons.scss */
 .btn-subscription .subline {
   display: block;
   font-size: 12px;
@@ -10323,13 +10324,13 @@ select option.level-3 {
   margin: -5px 0 0 0;
 }
 
-/* line 430, ../scss/blocks/_buttons.scss */
+/* line 431, ../scss/blocks/_buttons.scss */
 .btn-pricing-contact-wrapper {
   text-align: center;
   padding: 0 16px;
   height: 53px;
 }
-/* line 435, ../scss/blocks/_buttons.scss */
+/* line 436, ../scss/blocks/_buttons.scss */
 .btn-pricing-contact-wrapper .btn-pricing-contact {
   position: relative;
   margin: -5px 0;
@@ -10352,11 +10353,11 @@ select option.level-3 {
   font-weight: 600;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.46);
 }
-/* line 450, ../scss/blocks/_buttons.scss */
+/* line 451, ../scss/blocks/_buttons.scss */
 .btn-pricing-contact-wrapper .btn-pricing-contact span {
   display: block;
 }
-/* line 456, ../scss/blocks/_buttons.scss */
+/* line 457, ../scss/blocks/_buttons.scss */
 .btn-pricing-contact-wrapper:hover .btn-pricing-contact {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI4NWQ4OSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzIzN2ZjZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
