@@ -350,8 +350,9 @@ class CommunityMembershipController extends Controller
                     $emailData['[name]'] = ' ' . $userName;
                 }
 
-                $emailData['[registration_link]'] = getSiteUrl() . '?GUID=' . $invitation->id;
+                $emailData['[registration_link]'] = getSiteUrl() . '/register/?GUID=' . $invitation->id;
 
+                error_log($emailData['[registration_link]']);
                 cp_send_email(array('name' => $userName, 'email' => $userEmail), 'membership_member_invited', $emailData);
                 sendEmails($admins, 'membership_member_invited_admin', $emailData);
 

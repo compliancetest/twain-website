@@ -146,7 +146,7 @@ class UserController extends Controller
         $email_data = array(
             '[requester_name]' => $user->getFullName(),
             '[requester_email]' => $user->user_email,
-            '[organisation]' => $organisation->organisation_name,
+            '[organization]' => $organisation->organisation_name,
             '[organisation_website]' => $organisation->organisation_website,
             '[organisation_description]' => $organisation->organisation_description,
         );
