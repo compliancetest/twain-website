@@ -287,7 +287,7 @@ function cp_activate_email()
         exit;
     }
 
-    addMessage('Invalid Request.', 'error');
+    addMessage('Link is expired.', 'error');
 }
 
 function cp_request_reset_password()

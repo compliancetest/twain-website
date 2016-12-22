@@ -78,12 +78,5 @@
         <a class="close_btn"></a>                
     </div>
     <div id="page-loader"><div class="spinner"></div></div>
-    <?php if(!is_user_logged_in() && isset($_GET['GUID']) && $wpdb->get_row($wpdb->prepare("SELECT * FROM community_invitations WHERE id = %s AND status = 1", $_GET['GUID']))):?>
-        <script>
-            jQuery(document).ready(function(){
-                jQuery('.signup-btn').click();
-            });
-        </script>
-    <?php endif;?>
 </body>
 </html>
